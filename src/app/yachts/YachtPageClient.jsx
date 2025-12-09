@@ -13,55 +13,59 @@ export default function YachtPageClient({ initialFilters, initialData }) {
   const [filters, setFilters] = useState(() => ({
     ...initialFilters,
     capacity: initialFilters.capacity || '',
-    priceMax: initialFilters.priceMax || '', // corrected 'maxPpriceMaxrice' to 'priceMax'
+    priceMax: initialFilters.priceMax || '',
   }));
 
   const filteredYachts = useMemo(() => {
     let result = [...initialData];
 
-    // Filtre par type
+    // Filter by type
     if (filters.type) {
       result = result.filter(y => y.type?.toLowerCase() === filters.type.toLowerCase());
     }
 
-    // Filtre par destination
+    // Filter by destination
     if (filters.destination) {
       result = result.filter(y => {
-        // yachts Ankor ont "destination" (string), locaux ont "destinations" (array)
+        // Ankor yachts use "destination" (string), local yachts use "destinations" (array)
         if (y.destination) {
           return y.destination.toLowerCase().includes(filters.destination.toLowerCase());
         } else if (y.destinations && Array.isArray(y.destinations)) {
-          return y.destinations.some(d => d.toLowerCase().includes(filters.destination.toLowerCase()));
+          return y.destinations.some(d =>
+            d.toLowerCase().includes(filters.destination.toLowerCase())
+          );
         }
-        return true; // si pas de destination, on garde
+        return true; // keep if no destination data
       });
     }
 
-    // Filtre par capacité
+    // Filter by capacity
     if (filters.capacity) {
       result = result.filter(y => (y.capacity || y.guests || 0) >= filters.capacity);
     }
 
-    // Filtre par prix max
+    // Filter by max price
     if (filters.priceMax) {
       result = result.filter(y => {
-        if (!y.price && !y.pricePerHour) return true; // si pas de prix, on garde
+        if (!y.price && !y.pricePerHour) return true;
         return parseFloat(y.price || y.pricePerHour || 0) <= filters.priceMax;
       });
     }
 
-    // Filtre options supplémentaires
+    // Extra filters
     if (filters.petFriendly) result = result.filter(y => y.petFriendly === true);
     if (filters.groupFriendly) result = result.filter(y => y.groupFriendly === true);
 
     return result;
   }, [initialData, filters]);
 
-  // Met à jour l'URL sans recharger la page
+  // Update URL without reloading
   const updateUrl = (newFilters) => {
     const params = new URLSearchParams();
-    Object.entries(newFilters).forEach(([k, v]) => {
-      if (v !== undefined && v !== null && v !== '' && v !== false) params.set(k, v.toString());
+    Object.entries(newFilters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '' && value !== false) {
+        params.set(key, value.toString());
+      }
     });
     const queryString = params.toString();
     router.replace(queryString ? `/yachts?${queryString}` : '/yachts', { scroll: false });
@@ -72,7 +76,7 @@ export default function YachtPageClient({ initialFilters, initialData }) {
     updateUrl(newFilters);
   };
 
-  // Synchroniser les filtres avec l'URL au montage
+  // Sync filters with URL on mount
   useEffect(() => {
     const urlFilters = {
       type: searchParams.get('type') || '',
@@ -86,15 +90,20 @@ export default function YachtPageClient({ initialFilters, initialData }) {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen bg-[#1b223d] pt-20 pb-24 md:pb-8"
-    style={{ backgroundImage: 'url(/images/nuagesAncien.png)', backgroundSize: 'contain', backgroundPosition: 'center' }} // corrected 'conyain' to 'contain'
+    <div
+      className="min-h-screen bg-[#1b223d] pt-20 pb-24 md:pb-8"
+      style={{
+        backgroundImage: 'url(/images/nuagesAncien.png)',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center',
+      }}
     >
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Notre Flotte de Yachts</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">Our Yacht Fleet</h1>
           <p className="text-gray-600">
-            {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} disponible{filteredYachts.length > 1 ? 's' : ''}
+            {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
           </p>
         </div>
 
@@ -108,8 +117,8 @@ export default function YachtPageClient({ initialFilters, initialData }) {
             {filteredYachts.length === 0 ? (
               <div className="text-center py-16 rounded-2xl shadow-lg">
                 <div className="text-6xl mb-4">⛵</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Aucun yacht trouvé</h3>
-                <p className="text-gray-600">Essayez de modifier vos critères de recherche</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">No yachts found</h3>
+                <p className="text-gray-600">Try adjusting your search filters</p>
               </div>
             ) : (
               <YachtList yachts={filteredYachts} />
