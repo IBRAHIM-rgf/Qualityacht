@@ -117,7 +117,7 @@ export default function YachtPageClient({ initialFilters, initialData }) {
             {filteredYachts.length === 0 ? (
               <div className="text-center py-16 rounded-2xl shadow-lg">
                 <div className="text-6xl mb-4">⛵</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Non yachts found</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">No yachts found</h3>
                 <p className="text-gray-600">Try adjusting your search filters</p>
               </div>
             ) : (
