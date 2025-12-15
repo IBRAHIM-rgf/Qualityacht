@@ -28,10 +28,10 @@ const managementSections = [
     content:
       "In today’s sophisticated maritime landscape, the sea has become a highly regulated domain, where legal navigation demands meticulous oversight. Yacht owners and their crews must adhere to a complex framework of international maritime conventions, safety protocols, and fiscal obligations tied to the vessel’s flag — all within an environment shaped by constant technological advancement.\n\nGiven the substantial financial stakes involved in the management of a yacht, enlisting a distinguished and experienced management company is not just a strategic advantage — it is an essential safeguard. We provide shipowners with a comprehensive operational vision, enabling them to optimize their expenditures with precision and confidence.\n\nOur role is equally strategic and protective: we stand as vigilant custodians of our clients’ interests and assets, ensuring every decision aligns with their long-term goals. Unbounded by geography, our operational reach extends across all seas, accompanying each vessel wherever it may voyage.",
     images: [
-      "/images/management/gros-plan-de-deux-femmes-d-affaires-se-serrant-la-main-et-assis-au-bureau.jpg",
-      "/images/management/ledger-1428230_1280.jpg",
-      "/images/management/new-year-1680905_1280.jpg",
-      "/images/management/photo-1586859392094-6f2017b22a03.jpeg"
+      "/images/management/Internatio 2 rempl  les deux femmes.png",
+      "/images/management/Interna2crempl le livre des comptes management.png",
+      "/images/management/International 2 rempl calcula.png",
+      "/images/management/International1.png"
     ],
     chooseSection: 1,
   },
