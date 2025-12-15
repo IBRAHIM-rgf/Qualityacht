@@ -77,7 +77,7 @@ const managementSections = [
       "The orchestration of your vessel’s repair and modernisation schedule is a key component of refined yacht management. At the close of each season, we compile a comprehensive and structured report — integrating insights from both crew and guest feedback — outlining all necessary upgrades, refinements, and technical interventions.\n\nEach recommendation is meticulously prioritised, empowering you to make informed decisions aligned with your vision, expectations, and investment strategy. From there, we craft a bespoke work schedule, balancing urgency, aesthetics, and budget — ensuring that your yacht continues to reflect the highest standards of comfort, safety, and sophistication.",
     images: [
       "/images/management/Modernisation.webp",
-      "/images/management/Modernisation2.jpeg",
+      "/images/management/Modernisation et refit à la place du bridge bureau.png",
       "/images/management/.jpeg",
       "/images/management/.jpeg"
     ],
