@@ -16,10 +16,10 @@ const managementSections = [
     content:
       "At the heart of every successful yacht acquisition lies a deep understanding of your lifestyle, aspirations, and specific expectations. That’s why we take the time to explore your preferences — from motor or sailing yacht, to size, performance, interior volume, and guest capacity. We also advise you on crew configuration and assist you in defining whether your yacht will be reserved exclusively for private use or entrusted to our refined charter management service. This highly personalised approach allows us to present only the most fitting opportunities — ensuring your future yacht is a true reflection of your world and the excellence you seek at sea.",
     images: [
-      "/images/management/first3.jpg",
-      "/images/management/first1.jpg",
-      "/images/management/first4.jpg",
-      "/images/management/first2.jpg",
+      "/images/management/International  la piscine.png",
+      "/images/management/International yacht blanc.png",
+      "/images/management/International port de bateau marron.png",
+      "/images/management/Internationale   voilier bleu reflet.png",
     ],
     chooseSection: 0,
   },
@@ -76,7 +76,7 @@ const managementSections = [
     content:
       "The orchestration of your vessel’s repair and modernisation schedule is a key component of refined yacht management. At the close of each season, we compile a comprehensive and structured report — integrating insights from both crew and guest feedback — outlining all necessary upgrades, refinements, and technical interventions.\n\nEach recommendation is meticulously prioritised, empowering you to make informed decisions aligned with your vision, expectations, and investment strategy. From there, we craft a bespoke work schedule, balancing urgency, aesthetics, and budget — ensuring that your yacht continues to reflect the highest standards of comfort, safety, and sophistication.",
     images: [
-      "/images/management/Modernisation.webp",
+      "/images/management/Modernisation et refit.png",
       "/images/management/Modernisation et refit à la place du bridge bureau.png",
       "/images/management/.jpeg",
       "/images/management/.jpeg"
@@ -88,8 +88,8 @@ const managementSections = [
     content:
       "At the heart of our yacht management philosophy lies a rigorous commitment to financial transparency and control. As trusted stewards of your vessel, we deliver precise, itemised accounting — offering you a comprehensive and real-time view of all expenditures.\n\nThis clarity empowers you to navigate your budget with confidence, ensuring that every financial decision aligns seamlessly with your strategic objectives. Our team remains at your disposal to provide guidance, answer any inquiries, and help you interpret the nuances of your yacht’s financial management, with the same discretion and professionalism that define all our services.",
     images: [
-      "/images/management/photo-1658899817643-0f1c74149717.jpeg",
-      "/images/management/Engine-Control-Room-768x512 (1).jpg",
+      "/images/management/Finacial oversight.png",
+      "/images/management/Finacial.png",
       "/images/management/FB_IMG_1757344921683.jpg",
       "/images/management/ai-generated-8585737_1280.jpg"
     ],
