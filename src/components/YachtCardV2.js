@@ -26,7 +26,7 @@ export default function YachtCardV2({ yacht }) {
     <div className="w-full max-w-md mx-auto overflow-hidden flex flex-col text-[#C0C0C0]">
       {/* Image Carousel Container */}
       <div className="relative group mb-4">
-        <div className="aspect-[4/3] bg-gray-200 overflow-hidden relative flex items-center justify-center rounded-lg">
+        <div className="aspect-[4/3] bg-gray-200 overflow-hidden relative flex items-center justify-center rounded-2xl">
           {images.length === 0 && (
             <div className="w-full h-full flex items-center justify-center text-gray-400">No image</div>
           )}

@@ -60,3 +60,6 @@ coverage/
 *.log
 texte.json
 texte.txt
+
+# Claude temporary files
+tmpclaude-*-cwd
