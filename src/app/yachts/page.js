@@ -43,9 +43,8 @@ async function fetchYachtsFromAnkor(filters, token) {
     params.set('yachtType', TYPE_MAP[filters.type]);
   }
 
-  if (filters.destination && REGION_MAP[filters.destination]) {
-    params.set('region', REGION_MAP[filters.destination]);
-  }
+  // ❌ IMPORTANT: L'API /website/search NE SUPPORTE PAS le paramètre 'region'
+  // Le filtrage par région se fait côté client après récupération des détails
 
   if (filters.capacity) {
     params.set('sleeps', filters.capacity.toString());
@@ -245,18 +244,21 @@ export default async function Page({ searchParams }) {
     const startTime = Date.now();
     const ANKOR_ACCESS_TOKEN = await fetchAnkorBearerToken();
 
+    // ✅ Next.js 15 : await searchParams avant utilisation
+    const params = await searchParams;
+
     // Tous les filtres disponibles
     const initialFilters = {
-      type: searchParams.type || '',
-      destination: searchParams.destination || '',
-      capacity: searchParams.capacity ? Number(searchParams.capacity) : null,
-      petFriendly: searchParams.petFriendly === 'true',
-      charterType: searchParams.charterType || '',
-      minLength: searchParams.minLength ? Number(searchParams.minLength) : null,
-      maxLength: searchParams.maxLength ? Number(searchParams.maxLength) : null,
-      currency: searchParams.currency || '',
-      priceMin: searchParams.priceMin ? Number(searchParams.priceMin) : null,
-      priceMax: searchParams.priceMax ? Number(searchParams.priceMax) : null,
+      type: params.type || '',
+      destination: params.destination || '',
+      capacity: params.capacity ? Number(params.capacity) : null,
+      petFriendly: params.petFriendly === 'true',
+      charterType: params.charterType || '',
+      minLength: params.minLength ? Number(params.minLength) : null,
+      maxLength: params.maxLength ? Number(params.maxLength) : null,
+      currency: params.currency || '',
+      priceMin: params.priceMin ? Number(params.priceMin) : null,
+      priceMax: params.priceMax ? Number(params.priceMax) : null,
     };
 
     // Étape 1 : Recherche des yachts
@@ -278,12 +280,41 @@ export default async function Page({ searchParams }) {
     const vesselDetails = await fetchVesselDetailsBatch(limitedVessels, ANKOR_ACCESS_TOKEN, 10);
 
     // Étape 3 : Mapping des données
-    const ankorYachts = limitedVessels.map((vessel, index) => 
+    const ankorYachts = limitedVessels.map((vessel, index) =>
       mapVesselSummaryToYachtCard(vessel, vesselDetails[index], initialFilters)
     );
 
+    // 📊 LOG DES RÉGIONS UNIQUES (pour debug)
+    const regions = new Set();
+    const destinations = new Set();
+    vesselDetails.forEach(details => {
+      if (details?.blueprint?.region) regions.add(details.blueprint.region);
+      if (details?.blueprint?.basePort?.region) regions.add(details.blueprint.basePort.region);
+      if (details?.blueprint?.basePort?.name) destinations.add(details.blueprint.basePort.name);
+    });
+    console.log('📊 RÉGIONS TROUVÉES:', Array.from(regions).sort());
+    console.log('📍 DESTINATIONS TROUVÉES:', Array.from(destinations).sort().slice(0, 10));
+
+    // Étape 4 : Filtrage par région côté client (car l'API ne le supporte pas)
+    let filteredYachts = ankorYachts;
+    if (initialFilters.destination && REGION_MAP[initialFilters.destination]) {
+      const targetRegion = REGION_MAP[initialFilters.destination];
+      filteredYachts = ankorYachts.filter(yacht => {
+        const region = yacht._rawBlueprint?.region || yacht._rawBlueprint?.basePort?.region;
+        // Normaliser les régions pour la comparaison
+        if (!region) return false;
+
+        // Comparaison flexible pour gérer les variations
+        const normalizedRegion = region.toLowerCase().trim();
+        const normalizedTarget = targetRegion.toLowerCase().trim();
+
+        return normalizedRegion.includes(normalizedTarget) || normalizedTarget.includes(normalizedRegion);
+      });
+      console.log(`🔍 Filtrage région "${targetRegion}": ${filteredYachts.length}/${ankorYachts.length} yachts`);
+    }
+
     // Fusion avec les yachts locaux (optionnel)
-    const allYachts = [...ankorYachts, ...localYachts];
+    const allYachts = [...filteredYachts, ...localYachts];
 
     const endTime = Date.now();
     const loadTime = ((endTime - startTime) / 1000).toFixed(2);
