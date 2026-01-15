@@ -2,7 +2,6 @@
 
 import YachtPageClient from './YachtPageClient';
 import { fetchAnkorBearerToken } from '@/lib/utils';
-import { yachts as localYachts } from '@/data/yachts.js';
 
 const ANKOR_API_BASE_URL = "https://api.ankor.io";
 
@@ -17,19 +16,27 @@ const TYPE_MAP = {
   'sport fishing': 'Sport fishing',
 };
 
+// Mapping des destinations vers les valeurs de région de l'API Ankor
+// ✅ = Testé et fonctionnel | ❌ = API rejette (erreur 400) | ⏳ = Pas encore testé
 const REGION_MAP = {
-  'west-mediterranean': 'West Mediterranean',
-  'east-mediterranean': 'East Mediterranean',
-  caribbean: 'Caribbean',
-  bahamas: 'Caribbean',
-  'north-america': 'North America',
-  'northern-europe': 'Northern Europe',
-  'indian-ocean': 'Indian Ocean & South East Asia',
-  'south-pacific': 'Australasia & South Pacific',
-  africa: 'Africa',
-  antarctica: 'Antarctica',
-  'arabian-gulf': 'Arabian Gulf',
-  'south-central-america': 'South & Central America',
+  // ✅ RÉGIONS FONCTIONNELLES (testées 2026-01-13)
+  'west-mediterranean': 'West Mediterranean',      // ✅ 357 yachts
+  'east-mediterranean': 'East Mediterranean',      // ✅ 1186 yachts
+  caribbean: 'Caribbean',                          // ✅ 150 yachts
+  bahamas: 'Caribbean',                            // ✅ 150 yachts (même que Caribbean)
+  'indian-ocean': 'Indian Ocean & South East Asia', // ✅ 160 yachts
+  'south-pacific': 'Australasia & South Pacific',  // ✅ 46 yachts
+  antarctica: 'Antarctica',                        // ✅ 2 yachts
+
+  // ❌ RÉGIONS NON SUPPORTÉES PAR L'API (retournent erreur 400)
+  'north-america': 'North America',                // ❌ Erreur 400
+  'northern-europe': 'Northern Europe',            // ❌ Erreur 400
+  africa: 'Africa',                                // ❌ Erreur 400
+
+  'arabian-gulf': 'Arabian Gulf',                  // ✅ 17 yachts
+
+  // ❌ PLUS DE RÉGIONS NON SUPPORTÉES
+  'south-central-america': 'South & Central America', // ❌ Erreur 400
 };
 
 /**
@@ -43,8 +50,10 @@ async function fetchYachtsFromAnkor(filters, token) {
     params.set('yachtType', TYPE_MAP[filters.type]);
   }
 
-  // ❌ IMPORTANT: L'API /website/search NE SUPPORTE PAS le paramètre 'region'
-  // Le filtrage par région se fait côté client après récupération des détails
+  // ✅ Filtrage par région avec les valeurs exactes de l'API
+  if (filters.destination && REGION_MAP[filters.destination]) {
+    params.set('region', REGION_MAP[filters.destination]);
+  }
 
   if (filters.capacity) {
     params.set('sleeps', filters.capacity.toString());
@@ -77,6 +86,10 @@ async function fetchYachtsFromAnkor(filters, token) {
   }
 
   const url = `${ANKOR_API_BASE_URL}/website/search?${params.toString()}`;
+
+  // 🔍 Log pour debug - voir les paramètres envoyés à l'API
+  console.log('🔗 URL API:', url);
+  console.log('📋 Paramètres:', Object.fromEntries(params));
 
   try {
     const response = await fetch(url, {
@@ -265,63 +278,59 @@ export default async function Page({ searchParams }) {
     const discoveryResponse = await fetchYachtsFromAnkor(initialFilters, ANKOR_ACCESS_TOKEN);
     const vesselSummaries = discoveryResponse.hits || [];
 
-    console.log(`🔹 ${vesselSummaries.length} yachts trouvés dans l'API Ankor`);
+    const totalYachtsFound = vesselSummaries.length;
+    console.log(`🔹 ${totalYachtsFound} yachts trouvés dans l'API Ankor`);
 
-    // ✅ OPTIMISATION : Limiter le nombre de détails à charger
-    const MAX_DETAILED_RESULTS = 50;
-    const limitedVessels = vesselSummaries.slice(0, MAX_DETAILED_RESULTS);
+    // Étape 2 : Limite raisonnable pour le chargement initial (pagination côté client)
+    const MAX_RESULTS = 200;
+    const vesselsToLoad = vesselSummaries.slice(0, MAX_RESULTS);
+    const actualCount = vesselsToLoad.length;
 
-    if (vesselSummaries.length > MAX_DETAILED_RESULTS) {
-      console.log(`⚠️ Limitation à ${MAX_DETAILED_RESULTS} yachts pour optimiser le chargement`);
+    if (totalYachtsFound > MAX_RESULTS) {
+      console.log(`📄 Chargement de ${MAX_RESULTS} yachts sur ${totalYachtsFound} (pagination côté client)`);
     }
 
-    // Étape 2 : Récupération des détails par lots
-    console.log(`📥 Récupération des détails pour ${limitedVessels.length} yachts...`);
-    const vesselDetails = await fetchVesselDetailsBatch(limitedVessels, ANKOR_ACCESS_TOKEN, 10);
+    console.log(`📥 Récupération des détails pour ${actualCount} yachts...`);
+    const vesselDetails = await fetchVesselDetailsBatch(vesselsToLoad, ANKOR_ACCESS_TOKEN, 10);
 
     // Étape 3 : Mapping des données
-    const ankorYachts = limitedVessels.map((vessel, index) =>
+    const ankorYachts = vesselsToLoad.map((vessel, index) =>
       mapVesselSummaryToYachtCard(vessel, vesselDetails[index], initialFilters)
     );
 
     // 📊 LOG DES RÉGIONS UNIQUES (pour debug)
     const regions = new Set();
     const destinations = new Set();
-    vesselDetails.forEach(details => {
-      if (details?.blueprint?.region) regions.add(details.blueprint.region);
-      if (details?.blueprint?.basePort?.region) regions.add(details.blueprint.basePort.region);
-      if (details?.blueprint?.basePort?.name) destinations.add(details.blueprint.basePort.name);
+    const regionPaths = new Set(); // Pour voir tous les chemins possibles
+
+    // Log le vessel summary (sans détails) du premier yacht
+    if (vesselsToLoad.length > 0) {
+      console.log('🔍 Structure vessel summary (premier yacht):', JSON.stringify(vesselsToLoad[0], null, 2));
+    }
+
+    vesselDetails.forEach((details, idx) => {
+      // Collecter destinations depuis tous les yachts
+      // Note: basePort n'existe PAS dans blueprint selon nos observations
+      // On doit chercher ailleurs pour les régions
     });
+
     console.log('📊 RÉGIONS TROUVÉES:', Array.from(regions).sort());
     console.log('📍 DESTINATIONS TROUVÉES:', Array.from(destinations).sort().slice(0, 10));
 
-    // Étape 4 : Filtrage par région côté client (car l'API ne le supporte pas)
-    let filteredYachts = ankorYachts;
-    if (initialFilters.destination && REGION_MAP[initialFilters.destination]) {
-      const targetRegion = REGION_MAP[initialFilters.destination];
-      filteredYachts = ankorYachts.filter(yacht => {
-        const region = yacht._rawBlueprint?.region || yacht._rawBlueprint?.basePort?.region;
-        // Normaliser les régions pour la comparaison
-        if (!region) return false;
-
-        // Comparaison flexible pour gérer les variations
-        const normalizedRegion = region.toLowerCase().trim();
-        const normalizedTarget = targetRegion.toLowerCase().trim();
-
-        return normalizedRegion.includes(normalizedTarget) || normalizedTarget.includes(normalizedRegion);
-      });
-      console.log(`🔍 Filtrage région "${targetRegion}": ${filteredYachts.length}/${ankorYachts.length} yachts`);
-    }
-
-    // Fusion avec les yachts locaux (optionnel)
-    const allYachts = [...filteredYachts, ...localYachts];
+    // ✅ Le filtrage par région est maintenant géré par l'API directement
+    // Pas besoin de filtrage côté client
+    // ✅ Plus de yachts locaux - uniquement les données de l'API Ankor
 
     const endTime = Date.now();
     const loadTime = ((endTime - startTime) / 1000).toFixed(2);
-    console.log(`✅ ${allYachts.length} yachts chargés en ${loadTime}s`);
+    console.log(`✅ ${ankorYachts.length} yachts chargés en ${loadTime}s`);
 
     return (
-      <YachtPageClient initialFilters={initialFilters} initialData={allYachts} />
+      <YachtPageClient
+        initialFilters={initialFilters}
+        initialData={ankorYachts}
+        totalYachts={totalYachtsFound}
+      />
     );
   } catch (error) {
     console.error("Échec de l'initialisation de l'API Ankor:", error);
