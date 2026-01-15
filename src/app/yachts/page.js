@@ -92,12 +92,18 @@ async function fetchYachtsFromAnkor(filters, token) {
   console.log('📋 Paramètres:', Object.fromEntries(params));
 
   try {
+    // Cache différent pour chaque combinaison de filtres
+    const cacheKey = `yachts-${params.toString() || 'all'}`;
+
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      // ✅ OPTIMISATION : Cache Next.js pendant 1 heure
-      next: { revalidate: 3600 }
+      // ✅ Cache Next.js avec tag unique par filtre
+      next: {
+        revalidate: 3600,
+        tags: [cacheKey]
+      }
     });
 
     if (response.status === 401) {
@@ -128,8 +134,11 @@ async function fetchVesselDetails(uri, token, retries = 2) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        // Cache pendant 1 heure
-        next: { revalidate: 3600 }
+        // Cache pendant 1 heure avec tag unique par yacht
+        next: {
+          revalidate: 3600,
+          tags: [`vessel-${uri}`]
+        }
       });
 
       if (!response.ok) {

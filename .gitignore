@@ -63,3 +63,8 @@ texte.txt
 
 # Claude temporary files
 tmpclaude-*-cwd
+.claude/
+RESULTATS_TESTS_REGIONS.txt
+RESULTATS_TESTS_REGIONS_FINAL.txt
+TESTS_COMPLETS_REGIONS.md
+nul
