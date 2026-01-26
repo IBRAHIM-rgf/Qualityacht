@@ -242,38 +242,66 @@ function mapVesselSummaryToYachtCard(vessel, vesselDetails, appliedFilters) {
  * Utilisée par les pages de destination
  */
 export async function fetchYachtsForDestination(destination) {
-  const token = await fetchAnkorBearerToken();
+  try {
+    const token = await fetchAnkorBearerToken();
 
-  const filters = {
-    destination: destination,
-    type: '',
-    capacity: null,
-    charterType: '',
-    minLength: null,
-    maxLength: null,
-    currency: '',
-    priceMin: null,
-    priceMax: null,
-  };
+    const filters = {
+      destination: destination,
+      type: '',
+      capacity: null,
+      charterType: '',
+      minLength: null,
+      maxLength: null,
+      currency: '',
+      priceMin: null,
+      priceMax: null,
+    };
 
-  const discoveryResponse = await fetchYachtsFromAnkor(filters, token);
-  const vesselSummaries = discoveryResponse.hits || [];
-  const totalYachtsFound = vesselSummaries.length;
+    const discoveryResponse = await fetchYachtsFromAnkor(filters, token);
+    const vesselSummaries = discoveryResponse.hits || [];
+    const totalYachtsFound = vesselSummaries.length;
 
-  const MAX_RESULTS = 200;
-  const vesselsToLoad = vesselSummaries.slice(0, MAX_RESULTS);
+    // Si aucun yacht trouvé, retourner un tableau vide
+    if (totalYachtsFound === 0) {
+      return {
+        yachts: [],
+        totalYachts: 0,
+        filters,
+      };
+    }
 
-  const vesselDetails = await fetchVesselDetailsBatch(vesselsToLoad, token, 10);
+    const MAX_RESULTS = 200;
+    const vesselsToLoad = vesselSummaries.slice(0, MAX_RESULTS);
 
-  const yachts = vesselsToLoad.map((vessel, index) =>
-    mapVesselSummaryToYachtCard(vessel, vesselDetails[index], filters)
-  );
+    const vesselDetails = await fetchVesselDetailsBatch(vesselsToLoad, token, 10);
 
-  return {
-    yachts,
-    totalYachts: totalYachtsFound,
-    filters,
-  };
+    const yachts = vesselsToLoad.map((vessel, index) =>
+      mapVesselSummaryToYachtCard(vessel, vesselDetails[index], filters)
+    );
+
+    return {
+      yachts,
+      totalYachts: totalYachtsFound,
+      filters,
+    };
+  } catch (error) {
+    console.error("Erreur fetchYachtsForDestination:", error);
+    return {
+      yachts: [],
+      totalYachts: 0,
+      filters: {
+        destination: destination,
+        type: '',
+        capacity: null,
+        charterType: '',
+        minLength: null,
+        maxLength: null,
+        currency: '',
+        priceMin: null,
+        priceMax: null,
+      },
+    };
+  }
 }
 
 /**
@@ -281,23 +309,38 @@ export async function fetchYachtsForDestination(destination) {
  * Utilisée par la page /yachts
  */
 export async function fetchYachtsWithFilters(filters) {
-  const token = await fetchAnkorBearerToken();
+  try {
+    const token = await fetchAnkorBearerToken();
 
-  const discoveryResponse = await fetchYachtsFromAnkor(filters, token);
-  const vesselSummaries = discoveryResponse.hits || [];
-  const totalYachtsFound = vesselSummaries.length;
+    const discoveryResponse = await fetchYachtsFromAnkor(filters, token);
+    const vesselSummaries = discoveryResponse.hits || [];
+    const totalYachtsFound = vesselSummaries.length;
 
-  const MAX_RESULTS = 200;
-  const vesselsToLoad = vesselSummaries.slice(0, MAX_RESULTS);
+    if (totalYachtsFound === 0) {
+      return {
+        yachts: [],
+        totalYachts: 0,
+      };
+    }
 
-  const vesselDetails = await fetchVesselDetailsBatch(vesselsToLoad, token, 10);
+    const MAX_RESULTS = 200;
+    const vesselsToLoad = vesselSummaries.slice(0, MAX_RESULTS);
 
-  const yachts = vesselsToLoad.map((vessel, index) =>
-    mapVesselSummaryToYachtCard(vessel, vesselDetails[index], filters)
-  );
+    const vesselDetails = await fetchVesselDetailsBatch(vesselsToLoad, token, 10);
 
-  return {
-    yachts,
-    totalYachts: totalYachtsFound,
-  };
+    const yachts = vesselsToLoad.map((vessel, index) =>
+      mapVesselSummaryToYachtCard(vessel, vesselDetails[index], filters)
+    );
+
+    return {
+      yachts,
+      totalYachts: totalYachtsFound,
+    };
+  } catch (error) {
+    console.error("Erreur fetchYachtsWithFilters:", error);
+    return {
+      yachts: [],
+      totalYachts: 0,
+    };
+  }
 }
