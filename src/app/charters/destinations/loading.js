@@ -1,4 +1,4 @@
-// src/app/yachts/loading.js
+// src/app/charters/destinations/loading.js
 import Image from 'next/image';
 
 export default function Loading() {
