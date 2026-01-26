@@ -1,6 +1,16 @@
-import { redirect } from "next/navigation";
+import YachtPageClient from '@/app/yachts/YachtPageClient';
+import { fetchYachtsForDestination } from '@/lib/yachts';
 
-export default function Page() {
-  redirect("/yachts");
-  return null;
+export const dynamic = 'force-dynamic';
+
+export default async function Page() {
+  const { yachts, totalYachts, filters } = await fetchYachtsForDestination('arabian-gulf');
+
+  return (
+    <YachtPageClient
+      initialFilters={filters}
+      initialData={yachts}
+      totalYachts={totalYachts}
+    />
+  );
 }
