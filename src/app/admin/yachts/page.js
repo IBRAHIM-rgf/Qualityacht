@@ -18,7 +18,22 @@ export default async function AdminYachtsPage({ searchParams }) {
 
   // Protection par token secret
   if (!token || token !== process.env.ADMIN_SECRET_TOKEN) {
-    redirect('/');
+    return (
+      <div className="min-h-screen bg-[#303135] flex items-center justify-center">
+        <div className="bg-[#1b223d] border border-red-700 rounded-xl p-8 max-w-md text-center">
+          <h1 className="text-2xl font-bold text-red-400 mb-4">Accès Refusé</h1>
+          <p className="text-gray-400 mb-4">
+            {!token ? 'Token manquant dans l\'URL' : 'Token invalide'}
+          </p>
+          <p className="text-gray-500 text-sm">
+            Utilisez : /admin/yachts?token=VOTRE_TOKEN
+          </p>
+          <p className="text-gray-600 text-xs mt-4">
+            Token attendu configuré : {process.env.ADMIN_SECRET_TOKEN ? 'Oui' : 'Non (variable manquante)'}
+          </p>
+        </div>
+      </div>
+    );
   }
 
   let allYachts = [];
