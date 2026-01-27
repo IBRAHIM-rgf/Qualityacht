@@ -76,6 +76,10 @@ export default function Footer() {
 
       <div className="mt-10 text-center text-gray-500 text-xs">
         © {new Date().getFullYear()} Qualityacht. All rights reserved.
+        <span className="mx-2">|</span>
+        <Link href="/admin/yachts" className="hover:text-gray-400 transition">
+          Admin
+        </Link>
       </div>
     </footer>
   );
