@@ -1,6 +1,7 @@
 // src/lib/yachts.js - Fonctions partagées pour le fetch des yachts
 
 import { fetchAnkorBearerToken } from '@/lib/utils';
+import { getVisibleYachtIds, getFeaturedYachtIds, getYachtSelections } from '@/lib/db';
 
 const ANKOR_API_BASE_URL = "https://api.ankor.io";
 
@@ -342,5 +343,121 @@ export async function fetchYachtsWithFilters(filters) {
       yachts: [],
       totalYachts: 0,
     };
+  }
+}
+
+/**
+ * Récupère les yachts visibles selon les présélections de la base de données
+ * Utilisé par les pages publiques pour n'afficher que les yachts sélectionnés
+ */
+export async function fetchVisibleYachts(filters = {}) {
+  try {
+    // 1. Récupérer les sélections depuis la base
+    const selections = await getYachtSelections();
+
+    // Si aucune sélection en DB, utiliser le comportement par défaut (tous les yachts)
+    if (!selections || selections.length === 0) {
+      return await fetchYachtsWithFilters(filters);
+    }
+
+    // 2. Créer les maps pour filtrage rapide
+    const visibleIds = new Set(
+      selections.filter(s => s.is_visible).map(s => s.yacht_id)
+    );
+    const featuredIds = new Set(
+      selections.filter(s => s.is_featured && s.is_visible).map(s => s.yacht_id)
+    );
+    const orderMap = new Map(
+      selections.map(s => [s.yacht_id, s.display_order])
+    );
+    const categoryMap = new Map(
+      selections.map(s => [s.yacht_id, s.category])
+    );
+
+    // 3. Fetch tous les yachts depuis Ankor
+    const { yachts: allYachts, totalYachts } = await fetchYachtsWithFilters(filters);
+
+    // 4. Filtrer et enrichir les yachts
+    const filteredYachts = allYachts
+      .filter(yacht => visibleIds.has(yacht.id))
+      .map(yacht => ({
+        ...yacht,
+        isFeatured: featuredIds.has(yacht.id),
+        displayOrder: orderMap.get(yacht.id) ?? 999,
+        category: categoryMap.get(yacht.id) || null,
+      }));
+
+    // 5. Trier : featured en premier, puis par ordre d'affichage
+    filteredYachts.sort((a, b) => {
+      // Featured en premier
+      if (a.isFeatured && !b.isFeatured) return -1;
+      if (!a.isFeatured && b.isFeatured) return 1;
+      // Puis par ordre
+      return (a.displayOrder || 999) - (b.displayOrder || 999);
+    });
+
+    return {
+      yachts: filteredYachts,
+      totalYachts: filteredYachts.length,
+      originalTotal: totalYachts,
+    };
+  } catch (error) {
+    console.error("Erreur fetchVisibleYachts:", error);
+    // En cas d'erreur DB, fallback sur le comportement par défaut
+    return await fetchYachtsWithFilters(filters);
+  }
+}
+
+/**
+ * Version de fetchYachtsForDestination qui respecte les présélections
+ */
+export async function fetchVisibleYachtsForDestination(destination) {
+  try {
+    // 1. Récupérer les sélections depuis la base
+    const selections = await getYachtSelections();
+
+    // 2. Fetch les yachts de la destination
+    const { yachts: allYachts, totalYachts, filters } = await fetchYachtsForDestination(destination);
+
+    // Si aucune sélection en DB, retourner tous les yachts
+    if (!selections || selections.length === 0) {
+      return { yachts: allYachts, totalYachts, filters };
+    }
+
+    // 3. Créer les maps
+    const visibleIds = new Set(
+      selections.filter(s => s.is_visible).map(s => s.yacht_id)
+    );
+    const featuredIds = new Set(
+      selections.filter(s => s.is_featured && s.is_visible).map(s => s.yacht_id)
+    );
+    const orderMap = new Map(
+      selections.map(s => [s.yacht_id, s.display_order])
+    );
+
+    // 4. Filtrer et enrichir
+    const filteredYachts = allYachts
+      .filter(yacht => visibleIds.has(yacht.id))
+      .map(yacht => ({
+        ...yacht,
+        isFeatured: featuredIds.has(yacht.id),
+        displayOrder: orderMap.get(yacht.id) ?? 999,
+      }));
+
+    // 5. Trier
+    filteredYachts.sort((a, b) => {
+      if (a.isFeatured && !b.isFeatured) return -1;
+      if (!a.isFeatured && b.isFeatured) return 1;
+      return (a.displayOrder || 999) - (b.displayOrder || 999);
+    });
+
+    return {
+      yachts: filteredYachts,
+      totalYachts: filteredYachts.length,
+      filters,
+    };
+  } catch (error) {
+    console.error("Erreur fetchVisibleYachtsForDestination:", error);
+    return await fetchYachtsForDestination(destination);
   }
 }

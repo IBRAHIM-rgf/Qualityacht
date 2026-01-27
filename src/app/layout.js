@@ -111,9 +111,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${michroma.variable} ${geistMono.variable} ${eurostileFont.variable} ${trajanRegular.variable} ${trajanBold.variable} `}>
-      <body className="bg-[#303135] text-gray-900 antialiased">
+      <body className="bg-[#303135] text-gray-900 antialiased flex flex-col min-h-screen">
         <Header />
-        <main className="">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>
