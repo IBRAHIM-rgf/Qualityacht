@@ -6,9 +6,12 @@ import { useState, useEffect, useMemo } from 'react';
 import YachtList from '@/components/YachtList';
 import YachtFilters from '@/components/YachtFilters';
 
-export default function YachtPageClient({ initialFilters, initialData }) {
+const YACHTS_PER_PAGE = 35;
+
+export default function YachtPageClient({ initialFilters, initialData, totalYachts }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [filters, setFilters] = useState(() => ({
     ...initialFilters,
@@ -59,6 +62,18 @@ export default function YachtPageClient({ initialFilters, initialData }) {
     return result;
   }, [initialData, filters]);
 
+  // Paginate filtered yachts
+  const totalPages = Math.ceil(filteredYachts.length / YACHTS_PER_PAGE);
+  const paginatedYachts = useMemo(() => {
+    const startIndex = (currentPage - 1) * YACHTS_PER_PAGE;
+    return filteredYachts.slice(startIndex, startIndex + YACHTS_PER_PAGE);
+  }, [filteredYachts, currentPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
   // Update URL without reloading
   const updateUrl = (newFilters) => {
     const params = new URLSearchParams();
@@ -102,8 +117,9 @@ export default function YachtPageClient({ initialFilters, initialData }) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">Our Yacht Fleet</h1>
-          <p className="text-gray-600">
-            {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
+          <p className="text-white">
+            {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} disponible{filteredYachts.length > 1 ? 's' : ''}
+            {totalYachts && totalYachts > filteredYachts.length && ` (${totalYachts} au total)`}
           </p>
         </div>
 
@@ -117,11 +133,66 @@ export default function YachtPageClient({ initialFilters, initialData }) {
             {filteredYachts.length === 0 ? (
               <div className="text-center py-16 rounded-2xl shadow-lg">
                 <div className="text-6xl mb-4">⛵</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">No yachts found</h3>
-                <p className="text-gray-600">Try adjusting your search filters</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Aucun yacht trouvé</h3>
+                <p className="text-gray-600">Essayez de modifier vos filtres</p>
               </div>
             ) : (
-              <YachtList yachts={filteredYachts} />
+              <>
+                <YachtList yachts={paginatedYachts} />
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex justify-center items-center gap-4 mt-8 mb-8">
+                    <button
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 bg-[#C0A060] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#A08040] transition-colors"
+                    >
+                      Précédent
+                    </button>
+
+                    <div className="flex gap-2">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`w-10 h-10 rounded-lg transition-colors ${
+                              currentPage === pageNum
+                                ? 'bg-[#C0A060] text-white'
+                                : 'bg-[#2a2a4a] text-gray-300 hover:bg-[#3a3a5a]'
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 bg-[#C0A060] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#A08040] transition-colors"
+                    >
+                      Suivant
+                    </button>
+                  </div>
+                )}
+
+                <p className="text-center text-gray-400 text-sm">
+                  Page {currentPage} sur {totalPages} - Affichage {((currentPage - 1) * YACHTS_PER_PAGE) + 1} à {Math.min(currentPage * YACHTS_PER_PAGE, filteredYachts.length)} sur {filteredYachts.length}
+                </p>
+              </>
             )}
           </main>
         </div>

@@ -228,7 +228,7 @@ function mapVesselSummaryToYachtCard(vessel, vesselDetails, appliedFilters) {
     refit: blueprint?.refitYear,
     location: blueprint?.basePort?.name || undefined,
     destinations: blueprint?.basePort?.name ? [blueprint.basePort.name] : undefined,
-    images: vessel.hero ? [vessel.hero] : (blueprint?.images || []),
+    images: [vessel.hero, ...(blueprint?.images || [])].filter(Boolean),
     type: vessel.yachtType ? vessel.yachtType.toLowerCase() : appliedFilters.type || undefined,
     destination: appliedFilters.destination || undefined,
     make: vessel.make || blueprint?.make,
@@ -270,7 +270,7 @@ export async function fetchYachtsForDestination(destination) {
       };
     }
 
-    const MAX_RESULTS = 200;
+    const MAX_RESULTS = 50;
     const vesselsToLoad = vesselSummaries.slice(0, MAX_RESULTS);
 
     const vesselDetails = await fetchVesselDetailsBatch(vesselsToLoad, token, 10);
@@ -323,7 +323,7 @@ export async function fetchYachtsWithFilters(filters) {
       };
     }
 
-    const MAX_RESULTS = 200;
+    const MAX_RESULTS = 50;
     const vesselsToLoad = vesselSummaries.slice(0, MAX_RESULTS);
 
     const vesselDetails = await fetchVesselDetailsBatch(vesselsToLoad, token, 10);
