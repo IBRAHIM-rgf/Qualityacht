@@ -1,9 +1,7 @@
-// src/app/admin/yachts/page.js - Page d'administration des yachts
+// src/app/admin/yachts/page.js - Page d'administration des yachts V2
 
-import { redirect } from 'next/navigation';
 import AdminYachtPanel from './AdminYachtPanel';
-import { fetchYachtsWithFilters } from '@/lib/yachts';
-import { getYachtSelections, getSelectionStats } from '@/lib/db';
+import { getSelectedYachtsWithData, getSelectionStats } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -14,7 +12,8 @@ export const metadata = {
 };
 
 export default async function AdminYachtsPage({ searchParams }) {
-  const token = searchParams?.token;
+  const params = await searchParams;
+  const token = params?.token;
 
   // Protection par token secret
   if (!token || token !== process.env.ADMIN_SECRET_TOKEN) {
@@ -36,30 +35,19 @@ export default async function AdminYachtsPage({ searchParams }) {
     );
   }
 
-  let allYachts = [];
   let selections = [];
   let stats = { total: 0, visible: 0, featured: 0, categories: 0 };
   let error = null;
 
   try {
-    // Fetch les yachts Ankor et les sélections en parallèle
-    const [ankorData, dbSelections, dbStats] = await Promise.all([
-      fetchYachtsWithFilters({}),
-      getYachtSelections(),
+    // Fetch les sélections et stats depuis la base de données
+    const [dbSelections, dbStats] = await Promise.all([
+      getSelectedYachtsWithData(),
       getSelectionStats()
     ]);
 
-    allYachts = ankorData.yachts || [];
     selections = dbSelections || [];
     stats = dbStats || { total: 0, visible: 0, featured: 0, categories: 0 };
-
-    // Merger les données Ankor avec les sélections
-    const selectionsMap = new Map(selections.map(s => [s.yacht_id, s]));
-
-    allYachts = allYachts.map(yacht => ({
-      ...yacht,
-      selection: selectionsMap.get(yacht.id) || null
-    }));
 
   } catch (err) {
     console.error('Erreur chargement admin:', err);
@@ -76,7 +64,7 @@ export default async function AdminYachtsPage({ searchParams }) {
               Gestion des Yachts
             </h1>
             <p className="text-gray-400 text-sm mt-1">
-              Présélection et organisation des yachts affichés sur le site
+              Recherchez dans Ankor et sélectionnez les yachts à afficher
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -98,12 +86,12 @@ export default async function AdminYachtsPage({ searchParams }) {
           <div className="bg-red-900/30 border border-red-700 rounded-xl p-6 text-center">
             <p className="text-red-300">Erreur de chargement : {error}</p>
             <p className="text-gray-400 text-sm mt-2">
-              Vérifiez la configuration de la base de données et de l'API Ankor.
+              Vérifiez la configuration de la base de données.
             </p>
           </div>
         ) : (
           <AdminYachtPanel
-            initialYachts={allYachts}
+            initialSelections={selections}
             initialStats={stats}
             token={token}
           />

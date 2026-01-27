@@ -1,14 +1,16 @@
-// src/app/api/admin/yachts/route.js - API Admin pour les présélections
+// src/app/api/admin/yachts/route.js - API Admin pour les présélections V2
 
 import { NextResponse } from 'next/server';
 import {
   getYachtSelections,
-  upsertYachtSelection,
-  updateYachtOrder,
+  getSelectionStats,
+  addYachtToSelection,
   updateYachtVisibility,
   updateYachtFeatured,
-  deleteYachtSelection,
-  getSelectionStats
+  updateYachtOrder,
+  updateYachtEnrichedData,
+  removeYachtFromSelection,
+  getSelectedYachtsWithData,
 } from '@/lib/db';
 
 /**
@@ -27,7 +29,7 @@ function checkAuth(request) {
 }
 
 /**
- * GET /api/admin/yachts - Récupère toutes les sélections
+ * GET /api/admin/yachts - Récupère toutes les sélections avec leurs données
  */
 export async function GET(request) {
   if (!checkAuth(request)) {
@@ -39,7 +41,7 @@ export async function GET(request) {
 
   try {
     const [selections, stats] = await Promise.all([
-      getYachtSelections(),
+      getSelectedYachtsWithData(),
       getSelectionStats()
     ]);
 
@@ -57,8 +59,8 @@ export async function GET(request) {
 }
 
 /**
- * POST /api/admin/yachts - Créer ou mettre à jour une sélection
- * Body: { yacht_id, yacht_name, is_visible, is_featured, display_order, category, notes }
+ * POST /api/admin/yachts - Ajouter un yacht à la sélection
+ * Body: { yacht_id, yacht_name, cached_data }
  */
 export async function POST(request) {
   if (!checkAuth(request)) {
@@ -78,7 +80,11 @@ export async function POST(request) {
       );
     }
 
-    const result = await upsertYachtSelection(data);
+    const result = await addYachtToSelection({
+      yacht_id: data.yacht_id,
+      yacht_name: data.yacht_name,
+      cached_data: data.cached_data || null,
+    });
 
     return NextResponse.json({
       success: true,
@@ -95,7 +101,7 @@ export async function POST(request) {
 
 /**
  * PATCH /api/admin/yachts - Mises à jour partielles
- * Body: { action: 'visibility' | 'featured' | 'order', ... }
+ * Body: { action: 'visibility' | 'featured' | 'order' | 'enrich', ... }
  */
 export async function PATCH(request) {
   if (!checkAuth(request)) {
@@ -137,6 +143,21 @@ export async function PATCH(request) {
         return NextResponse.json({ success: true });
       }
 
+      case 'enrich': {
+        const { yacht_id, custom_title, custom_description, custom_price, category, internal_notes } = data;
+        if (!yacht_id) {
+          return NextResponse.json({ error: 'yacht_id requis' }, { status: 400 });
+        }
+        const result = await updateYachtEnrichedData(yacht_id, {
+          custom_title,
+          custom_description,
+          custom_price,
+          category,
+          internal_notes,
+        });
+        return NextResponse.json({ success: true, selection: result });
+      }
+
       default:
         return NextResponse.json(
           { error: 'Action non reconnue' },
@@ -153,7 +174,7 @@ export async function PATCH(request) {
 }
 
 /**
- * DELETE /api/admin/yachts - Supprimer une sélection
+ * DELETE /api/admin/yachts - Supprimer un yacht de la sélection
  * Query: ?yacht_id=xxx
  */
 export async function DELETE(request) {
@@ -175,7 +196,7 @@ export async function DELETE(request) {
       );
     }
 
-    await deleteYachtSelection(yacht_id);
+    await removeYachtFromSelection(yacht_id);
 
     return NextResponse.json({ success: true });
   } catch (error) {
