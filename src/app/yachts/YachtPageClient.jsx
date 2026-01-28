@@ -6,7 +6,7 @@ import { useState, useEffect, useMemo } from 'react';
 import YachtList from '@/components/YachtList';
 import YachtFilters from '@/components/YachtFilters';
 
-const YACHTS_PER_PAGE = 35;
+const YACHTS_PER_PAGE = 40;
 
 export default function YachtPageClient({ initialFilters, initialData, totalYachts }) {
   const router = useRouter();
@@ -30,7 +30,6 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
     // Filter by destination
     if (filters.destination) {
       result = result.filter(y => {
-        // Ankor yachts use "destination" (string), local yachts use "destinations" (array)
         if (y.destination) {
           return y.destination.toLowerCase().includes(filters.destination.toLowerCase());
         } else if (y.destinations && Array.isArray(y.destinations)) {
@@ -38,7 +37,7 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
             d.toLowerCase().includes(filters.destination.toLowerCase())
           );
         }
-        return true; // keep if no destination data
+        return true;
       });
     }
 
@@ -47,11 +46,36 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
       result = result.filter(y => (y.capacity || y.guests || 0) >= filters.capacity);
     }
 
+    // Filter by length
+    if (filters.minLength) {
+      result = result.filter(y => {
+        const length = parseInt(y.length) || 0;
+        return length >= filters.minLength;
+      });
+    }
+
+    if (filters.maxLength) {
+      result = result.filter(y => {
+        const length = parseInt(y.length) || 0;
+        return length <= filters.maxLength;
+      });
+    }
+
     // Filter by max price
     if (filters.priceMax) {
       result = result.filter(y => {
         if (!y.price && !y.pricePerHour) return true;
-        return parseFloat(y.price || y.pricePerHour || 0) <= filters.priceMax;
+        const priceStr = (y.price || y.pricePerHour || '0').toString().replace(/[^0-9]/g, '');
+        return parseInt(priceStr) <= filters.priceMax;
+      });
+    }
+
+    // Filter by min price
+    if (filters.priceMin) {
+      result = result.filter(y => {
+        if (!y.price && !y.pricePerHour) return true;
+        const priceStr = (y.price || y.pricePerHour || '0').toString().replace(/[^0-9]/g, '');
+        return parseInt(priceStr) >= filters.priceMin;
       });
     }
 
@@ -97,7 +121,11 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
       type: searchParams.get('type') || '',
       destination: searchParams.get('destination') || '',
       capacity: searchParams.get('capacity') ? Number(searchParams.get('capacity')) : '',
+      minLength: searchParams.get('minLength') ? Number(searchParams.get('minLength')) : '',
+      maxLength: searchParams.get('maxLength') ? Number(searchParams.get('maxLength')) : '',
+      priceMin: searchParams.get('priceMin') ? Number(searchParams.get('priceMin')) : '',
       priceMax: searchParams.get('priceMax') ? Number(searchParams.get('priceMax')) : '',
+      currency: searchParams.get('currency') || '',
       petFriendly: searchParams.get('petFriendly') === 'true',
       groupFriendly: searchParams.get('groupFriendly') === 'true',
     };
@@ -115,87 +143,84 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
     >
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Our Yacht Fleet</h1>
-          <p className="text-white">
+        <div className="mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Our Yacht Fleet</h1>
+          <p className="text-gray-300">
             {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} disponible{filteredYachts.length > 1 ? 's' : ''}
             {totalYachts && totalYachts > filteredYachts.length && ` (${totalYachts} au total)`}
           </p>
         </div>
 
-        {/* Layout */}
-        <div className="flex flex-col md:flex-row gap-8">
-          <aside className="md:w-80 md:flex-shrink-0">
-            <YachtFilters filters={filters} onChange={handleFilterChange} />
-          </aside>
+        {/* Filters (horizontal, sticky) */}
+        <YachtFilters filters={filters} onChange={handleFilterChange} />
 
-          <main className="flex-1">
-            {filteredYachts.length === 0 ? (
-              <div className="text-center py-16 rounded-2xl shadow-lg">
-                <div className="text-6xl mb-4">⛵</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Aucun yacht trouvé</h3>
-                <p className="text-gray-600">Essayez de modifier vos filtres</p>
-              </div>
-            ) : (
-              <>
-                <YachtList yachts={paginatedYachts} />
+        {/* Yacht Grid */}
+        <main className="mt-6">
+          {filteredYachts.length === 0 ? (
+            <div className="text-center py-16 rounded-2xl bg-[#252540]/50">
+              <div className="text-6xl mb-4">⛵</div>
+              <h3 className="text-xl font-bold text-white mb-2">Aucun yacht trouvé</h3>
+              <p className="text-gray-400">Essayez de modifier vos filtres</p>
+            </div>
+          ) : (
+            <>
+              <YachtList yachts={paginatedYachts} />
 
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-4 mt-8 mb-8">
-                    <button
-                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                      disabled={currentPage === 1}
-                      className="px-4 py-2 bg-[#C0A060] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#A08040] transition-colors"
-                    >
-                      Précédent
-                    </button>
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-4 mt-8 mb-8">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 bg-orange-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-orange-600 transition-colors"
+                  >
+                    Précédent
+                  </button>
 
-                    <div className="flex gap-2">
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                        let pageNum;
-                        if (totalPages <= 5) {
-                          pageNum = i + 1;
-                        } else if (currentPage <= 3) {
-                          pageNum = i + 1;
-                        } else if (currentPage >= totalPages - 2) {
-                          pageNum = totalPages - 4 + i;
-                        } else {
-                          pageNum = currentPage - 2 + i;
-                        }
-                        return (
-                          <button
-                            key={pageNum}
-                            onClick={() => setCurrentPage(pageNum)}
-                            className={`w-10 h-10 rounded-lg transition-colors ${
-                              currentPage === pageNum
-                                ? 'bg-[#C0A060] text-white'
-                                : 'bg-[#2a2a4a] text-gray-300 hover:bg-[#3a3a5a]'
-                            }`}
-                          >
-                            {pageNum}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    <button
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                      disabled={currentPage === totalPages}
-                      className="px-4 py-2 bg-[#C0A060] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#A08040] transition-colors"
-                    >
-                      Suivant
-                    </button>
+                  <div className="flex gap-2">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      let pageNum;
+                      if (totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      } else {
+                        pageNum = currentPage - 2 + i;
+                      }
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => setCurrentPage(pageNum)}
+                          className={`w-10 h-10 rounded-lg transition-colors ${
+                            currentPage === pageNum
+                              ? 'bg-orange-500 text-white'
+                              : 'bg-[#252540] text-gray-300 hover:bg-[#353560]'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
                   </div>
-                )}
 
-                <p className="text-center text-gray-400 text-sm">
-                  Page {currentPage} sur {totalPages} - Affichage {((currentPage - 1) * YACHTS_PER_PAGE) + 1} à {Math.min(currentPage * YACHTS_PER_PAGE, filteredYachts.length)} sur {filteredYachts.length}
-                </p>
-              </>
-            )}
-          </main>
-        </div>
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 bg-orange-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-orange-600 transition-colors"
+                  >
+                    Suivant
+                  </button>
+                </div>
+              )}
+
+              <p className="text-center text-gray-400 text-sm">
+                Page {currentPage} sur {totalPages} - Affichage {((currentPage - 1) * YACHTS_PER_PAGE) + 1} à {Math.min(currentPage * YACHTS_PER_PAGE, filteredYachts.length)} sur {filteredYachts.length}
+              </p>
+            </>
+          )}
+        </main>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ function checkAuth(request) {
 
 /**
  * GET /api/admin/yachts/search - Recherche dans l'API Ankor
- * Query params: type, destination, capacity
+ * Query params: type, destination, capacity, minLength, maxLength, priceMin, priceMax
  */
 export async function GET(request) {
   if (!checkAuth(request)) {
@@ -37,6 +37,10 @@ export async function GET(request) {
       type: searchParams.get('type') || '',
       destination: searchParams.get('destination') || '',
       capacity: searchParams.get('capacity') ? parseInt(searchParams.get('capacity')) : null,
+      minLength: searchParams.get('minLength') ? parseInt(searchParams.get('minLength')) : null,
+      maxLength: searchParams.get('maxLength') ? parseInt(searchParams.get('maxLength')) : null,
+      priceMin: searchParams.get('priceMin') ? parseInt(searchParams.get('priceMin')) : null,
+      priceMax: searchParams.get('priceMax') ? parseInt(searchParams.get('priceMax')) : null,
     };
 
     const result = await fetchYachtsWithFilters(filters);

@@ -144,7 +144,19 @@ export async function PATCH(request) {
       }
 
       case 'enrich': {
-        const { yacht_id, custom_title, custom_description, custom_price, category, internal_notes } = data;
+        const {
+          yacht_id,
+          custom_title,
+          custom_description,
+          custom_price,
+          category,
+          internal_notes,
+          region,
+          pets_allowed,
+          groups_allowed,
+          water_toys,
+          extra_info,
+        } = data;
         if (!yacht_id) {
           return NextResponse.json({ error: 'yacht_id requis' }, { status: 400 });
         }
@@ -154,6 +166,11 @@ export async function PATCH(request) {
           custom_price,
           category,
           internal_notes,
+          region,
+          pets_allowed,
+          groups_allowed,
+          water_toys,
+          extra_info,
         });
         return NextResponse.json({ success: true, selection: result });
       }

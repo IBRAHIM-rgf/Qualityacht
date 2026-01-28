@@ -52,8 +52,8 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
         </button>
 
         {/* Image Gallery */}
-        <div className="relative group">
-          <div className="aspect-[16/9] bg-gray-200 overflow-hidden rounded-t-2xl">
+        <div className="relative group p-4 pb-2">
+          <div className="aspect-[16/9] bg-gray-200 overflow-hidden rounded-2xl">
             {images.length === 0 && (
               <div className="w-full h-full flex items-center justify-center text-gray-400">No image</div>
             )}
@@ -78,16 +78,9 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                     >
                       <ChevronRight className="w-6 h-6" />
                     </button>
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                      {images.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentImage(index)}
-                          className={`w-3 h-3 rounded-full transition-colors ${
-                            index === currentImage ? 'bg-white' : 'bg-white/50'
-                          }`}
-                        />
-                      ))}
+                    {/* Image Counter */}
+                    <div className="absolute bottom-4 right-4 bg-black/60 text-white text-sm font-medium px-3 py-1 rounded-lg">
+                      {currentImage + 1}/{images.length}
                     </div>
                   </>
                 )}
@@ -111,11 +104,11 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             </div>
             <div className="text-right">
               {yacht.pricePerHour && (
-                <p className="text-2xl font-bold text-[#D4AF37]">{yacht.pricePerHour}</p>
+                <p className="text-2xl font-bold text-[#f97316]">{yacht.pricePerHour}</p>
               )}
               {yacht.pricePerHour && <p className="text-sm text-gray-400">per week</p>}
               {yacht.price && !yacht.pricePerHour && (
-                <p className="text-2xl font-bold text-[#D4AF37]">{yacht.price}</p>
+                <p className="text-2xl font-bold text-[#f97316]">{yacht.price}</p>
               )}
             </div>
           </div>
@@ -124,28 +117,28 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#252540] rounded-xl">
             {yacht.length && (
               <div className="text-center">
-                <Ruler className="w-6 h-6 mx-auto mb-2 text-[#D4AF37]" />
+                <Ruler className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
                 <p className="text-lg font-semibold text-white">{yacht.length}</p>
                 <p className="text-sm text-gray-400">Length</p>
               </div>
             )}
             {(yacht.guests || yacht.capacity) && (
               <div className="text-center">
-                <Users className="w-6 h-6 mx-auto mb-2 text-[#D4AF37]" />
+                <Users className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
                 <p className="text-lg font-semibold text-white">{yacht.guests || yacht.capacity}</p>
                 <p className="text-sm text-gray-400">Guests</p>
               </div>
             )}
             {yacht.cabins && (
               <div className="text-center">
-                <BedDouble className="w-6 h-6 mx-auto mb-2 text-[#D4AF37]" />
+                <BedDouble className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
                 <p className="text-lg font-semibold text-white">{yacht.cabins}</p>
                 <p className="text-sm text-gray-400">Cabins</p>
               </div>
             )}
             {yacht.year && (
               <div className="text-center">
-                <Calendar className="w-6 h-6 mx-auto mb-2 text-[#D4AF37]" />
+                <Calendar className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
                 <p className="text-lg font-semibold text-white">{yacht.year}</p>
                 <p className="text-sm text-gray-400">Built</p>
               </div>
@@ -157,7 +150,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {/* Location */}
             {yacht.location && (
               <div className="flex items-center gap-3 p-4 bg-[#252540] rounded-xl">
-                <Map className="w-6 h-6 text-[#D4AF37]" />
+                <Map className="w-6 h-6 text-[#f97316]" />
                 <div>
                   <p className="text-sm text-gray-400">Base Port</p>
                   <p className="text-white font-medium">{yacht.location}</p>
@@ -168,7 +161,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {/* Refit Year */}
             {yacht.refit && (
               <div className="flex items-center gap-3 p-4 bg-[#252540] rounded-xl">
-                <Anchor className="w-6 h-6 text-[#D4AF37]" />
+                <Anchor className="w-6 h-6 text-[#f97316]" />
                 <div>
                   <p className="text-sm text-gray-400">Last Refit</p>
                   <p className="text-white font-medium">{yacht.refit}</p>
@@ -179,7 +172,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {/* Type */}
             {yacht.type && (
               <div className="flex items-center gap-3 p-4 bg-[#252540] rounded-xl">
-                <Ship className="w-6 h-6 text-[#D4AF37]" />
+                <Ship className="w-6 h-6 text-[#f97316]" />
                 <div>
                   <p className="text-sm text-gray-400">Type</p>
                   <p className="text-white font-medium capitalize">{yacht.type}</p>
@@ -206,7 +199,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                     key={idx}
                     className="px-3 py-1 bg-[#252540] rounded-full text-sm flex items-center gap-1"
                   >
-                    <MapPin className="w-4 h-4 text-[#D4AF37]" />
+                    <MapPin className="w-4 h-4 text-[#f97316]" />
                     {dest}
                   </span>
                 ))}
@@ -216,8 +209,33 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
           {/* Action Buttons */}
           <div className="flex gap-4 mt-8">
-            <button className="flex-1 bg-[#D4AF37] hover:bg-[#C4A030] text-black font-semibold py-3 px-6 rounded-xl transition-colors">
-              Request Quote
+            <button className="flex-1 relative overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded-xl transition-all group">
+              {/* Sparkle effects */}
+              <span className="absolute top-1 left-4 w-1 h-1 bg-white rounded-full animate-ping opacity-75" style={{ animationDuration: '1.5s' }} />
+              <span className="absolute top-2 right-8 w-1.5 h-1.5 bg-yellow-200 rounded-full animate-ping opacity-60" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
+              <span className="absolute bottom-2 left-12 w-1 h-1 bg-white rounded-full animate-ping opacity-50" style={{ animationDuration: '1.8s', animationDelay: '0.3s' }} />
+              <span className="absolute top-3 left-1/2 w-0.5 h-0.5 bg-yellow-100 rounded-full animate-ping opacity-70" style={{ animationDuration: '2.2s', animationDelay: '0.7s' }} />
+
+              {/* Boat and text container */}
+              <span className="relative flex items-center justify-center gap-2">
+                {/* Animated boat */}
+                <span className="inline-block transform group-hover:translate-x-1 transition-transform duration-300">
+                  <svg className="w-5 h-5 animate-bounce" style={{ animationDuration: '2s' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+                    <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76"/>
+                    <path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"/>
+                    <path d="M12 10V3"/>
+                    <path d="M12 3l4 2"/>
+                  </svg>
+                </span>
+                {/* Rope connecting boat to text */}
+                <span className="inline-block w-4 border-t-2 border-dashed border-white/50 group-hover:w-6 transition-all duration-300" />
+                {/* Text */}
+                <span className="tracking-wide">Request Quote</span>
+              </span>
+
+              {/* Wave effect at bottom */}
+              <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent transform translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
             </button>
             <button className="p-3 bg-[#252540] hover:bg-[#353560] rounded-xl transition-colors">
               <Heart className="w-6 h-6" />

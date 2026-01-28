@@ -79,6 +79,11 @@ export async function addYachtToSelection(data) {
     yacht_id,
     yacht_name,
     cached_data = null,
+    region = null,
+    pets_allowed = false,
+    groups_allowed = false,
+    water_toys = false,
+    extra_info = null,
   } = data;
 
   try {
@@ -89,11 +94,12 @@ export async function addYachtToSelection(data) {
     const rows = await sql`
       INSERT INTO yacht_selections (
         yacht_id, yacht_name, is_visible, is_featured, display_order,
-        cached_data, cached_at
+        cached_data, cached_at, region, pets_allowed, groups_allowed, water_toys, extra_info
       )
       VALUES (
         ${yacht_id}, ${yacht_name}, true, false, ${nextOrder},
-        ${cached_data ? JSON.stringify(cached_data) : null}, NOW()
+        ${cached_data ? JSON.stringify(cached_data) : null}, NOW(),
+        ${region}, ${pets_allowed}, ${groups_allowed}, ${water_toys}, ${extra_info}
       )
       ON CONFLICT (yacht_id) DO NOTHING
       RETURNING *
@@ -119,6 +125,11 @@ export async function updateYachtEnrichedData(yacht_id, data) {
     commission_rate = null,
     category = null,
     tags = null,
+    region = null,
+    pets_allowed = null,
+    groups_allowed = null,
+    water_toys = null,
+    extra_info = null,
   } = data;
 
   try {
@@ -134,6 +145,11 @@ export async function updateYachtEnrichedData(yacht_id, data) {
         commission_rate = COALESCE(${commission_rate}, commission_rate),
         category = COALESCE(${category}, category),
         tags = COALESCE(${tags}, tags),
+        region = COALESCE(${region}, region),
+        pets_allowed = COALESCE(${pets_allowed}, pets_allowed),
+        groups_allowed = COALESCE(${groups_allowed}, groups_allowed),
+        water_toys = COALESCE(${water_toys}, water_toys),
+        extra_info = COALESCE(${extra_info}, extra_info),
         updated_at = NOW()
       WHERE yacht_id = ${yacht_id}
       RETURNING *
@@ -226,13 +242,14 @@ export async function getSelectionStats() {
         COUNT(*) as total,
         COUNT(*) FILTER (WHERE is_visible = true) as visible,
         COUNT(*) FILTER (WHERE is_featured = true) as featured,
-        COUNT(DISTINCT category) FILTER (WHERE category IS NOT NULL) as categories
+        COUNT(DISTINCT category) FILTER (WHERE category IS NOT NULL) as categories,
+        COUNT(DISTINCT region) FILTER (WHERE region IS NOT NULL) as regions
       FROM yacht_selections
     `;
     return stats[0];
   } catch (error) {
     console.error('Erreur getSelectionStats:', error);
-    return { total: 0, visible: 0, featured: 0, categories: 0 };
+    return { total: 0, visible: 0, featured: 0, categories: 0, regions: 0 };
   }
 }
 
@@ -261,6 +278,7 @@ export async function getSelectedYachtsWithData() {
         yacht_id, yacht_name, is_visible, is_featured, display_order,
         category, tags, custom_title, custom_description, custom_price,
         custom_highlights, internal_notes, cached_data,
+        region, pets_allowed, groups_allowed, water_toys, extra_info,
         created_at, updated_at
       FROM yacht_selections
       ORDER BY display_order ASC

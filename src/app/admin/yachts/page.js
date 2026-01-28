@@ -73,7 +73,7 @@ export default async function AdminYachtsPage({ searchParams }) {
                 <span className="text-green-400 font-semibold">{stats.visible}</span> visibles
               </div>
               <div className="text-gray-400">
-                <span className="text-yellow-400 font-semibold">{stats.featured}</span> featured
+                <span className="text-orange-400 font-semibold">{stats.featured}</span> featured
               </div>
             </div>
           </div>
