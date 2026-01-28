@@ -1,6 +1,7 @@
 // src/app/admin/yachts/page.js - Page d'administration des yachts V2
 
 import AdminYachtPanel from './AdminYachtPanel';
+import AdminLogin from './AdminLogin';
 import { getSelectedYachtsWithData, getSelectionStats } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
@@ -15,21 +16,24 @@ export default async function AdminYachtsPage({ searchParams }) {
   const params = await searchParams;
   const token = params?.token;
 
-  // Protection par token secret
-  if (!token || token !== process.env.ADMIN_SECRET_TOKEN) {
+  // Si pas de token -> afficher le formulaire de login
+  if (!token) {
+    return <AdminLogin />;
+  }
+
+  // Si token invalide -> afficher erreur avec lien retour
+  if (token !== process.env.ADMIN_SECRET_TOKEN) {
     return (
       <div className="min-h-screen bg-[#303135] flex items-center justify-center">
         <div className="bg-[#1b223d] border border-red-700 rounded-xl p-8 max-w-md text-center">
-          <h1 className="text-2xl font-bold text-red-400 mb-4">Accès Refusé</h1>
-          <p className="text-gray-400 mb-4">
-            {!token ? 'Token manquant dans l\'URL' : 'Token invalide'}
-          </p>
-          <p className="text-gray-500 text-sm">
-            Utilisez : /admin/yachts?token=VOTRE_TOKEN
-          </p>
-          <p className="text-gray-600 text-xs mt-4">
-            Token attendu configuré : {process.env.ADMIN_SECRET_TOKEN ? 'Oui' : 'Non (variable manquante)'}
-          </p>
+          <h1 className="text-2xl font-bold text-red-400 mb-4">Token Invalide</h1>
+          <p className="text-gray-400 mb-4">Le token fourni n'est pas correct.</p>
+          <a
+            href="/admin/yachts"
+            className="inline-block mt-4 px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl transition-colors"
+          >
+            Reessayer
+          </a>
         </div>
       </div>
     );
