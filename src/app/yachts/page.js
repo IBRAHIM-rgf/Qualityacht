@@ -1,7 +1,7 @@
 // src/app/yachts/page.js
 
 import YachtPageClient from './YachtPageClient';
-import { fetchYachtsWithFilters } from '@/lib/yachts';
+import { fetchVisibleYachts } from '@/lib/yachts';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +22,7 @@ export default async function Page({ searchParams }) {
       priceMax: params.priceMax ? Number(params.priceMax) : null,
     };
 
-    const { yachts, totalYachts } = await fetchYachtsWithFilters(initialFilters);
+    const { yachts, totalYachts } = await fetchVisibleYachts(initialFilters);
 
     return (
       <YachtPageClient

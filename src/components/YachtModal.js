@@ -218,14 +218,23 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
               {/* Boat and text container */}
               <span className="relative flex items-center justify-center gap-2">
-                {/* Animated boat */}
-                <span className="inline-block transform group-hover:translate-x-1 transition-transform duration-300">
-                  <svg className="w-5 h-5 animate-bounce" style={{ animationDuration: '2s' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                    <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76"/>
-                    <path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"/>
-                    <path d="M12 10V3"/>
-                    <path d="M12 3l4 2"/>
+                {/* Animated boat - vue latérale */}
+                <span className="inline-block transform group-hover:translate-x-2 transition-transform duration-300">
+                  <svg className="w-6 h-5" viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    {/* Coque du bateau */}
+                    <path d="M2 14 L6 18 L26 18 L30 14 L24 14 L22 12 L10 12 L8 14 Z" fill="currentColor" opacity="0.3"/>
+                    <path d="M2 14 L6 18 L26 18 L30 14" />
+                    {/* Cabine */}
+                    <rect x="14" y="8" width="8" height="4" rx="1" fill="currentColor" opacity="0.2"/>
+                    <path d="M14 12 L14 8 L22 8 L22 12" />
+                    {/* Mât et voile */}
+                    <path d="M12 12 L12 2" />
+                    <path d="M12 2 L12 10 L4 10 Z" fill="currentColor" opacity="0.15"/>
+                    <path d="M12 2 L12 10 L4 10" />
+                    {/* Drapeau */}
+                    <path d="M12 2 L15 3.5 L12 5" fill="currentColor" opacity="0.4"/>
+                    {/* Vagues animées */}
+                    <path className="animate-pulse" style={{ animationDuration: '1.5s' }} d="M0 16 Q4 14 8 16 T16 16 T24 16 T32 16" strokeOpacity="0.4"/>
                   </svg>
                 </span>
                 {/* Rope connecting boat to text */}

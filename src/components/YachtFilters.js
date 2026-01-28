@@ -38,7 +38,11 @@ export default function YachtFilters({ filters, onChange }) {
       [key]: value === '' || value === null ? '' : value
     };
     setLocalFilters(newFilters);
-    onChange(newFilters);
+    // Ne pas appeler onChange ici - attendre le clic sur "Filtrer"
+  };
+
+  const applyFilters = () => {
+    onChange(localFilters);
   };
 
   const handleReset = () => {
@@ -53,7 +57,8 @@ export default function YachtFilters({ filters, onChange }) {
       charterType: '',
       currency: '',
       petFriendly: false,
-      groupFriendly: false
+      groupFriendly: false,
+      waterToys: false
     };
     setLocalFilters(emptyFilters);
     onChange(emptyFilters);
@@ -152,6 +157,15 @@ export default function YachtFilters({ filters, onChange }) {
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
+          {/* Bouton Filtrer */}
+          <button
+            onClick={applyFilters}
+            className="flex items-center gap-2 px-6 py-2.5 bg-orange-500 hover:bg-orange-600 rounded-xl text-white font-medium transition-colors"
+          >
+            <Filter className="w-4 h-4" />
+            <span className="text-sm">Filtrer</span>
+          </button>
+
           {/* Compteur actif + Reset */}
           {activeCount > 0 && (
             <button
@@ -200,6 +214,16 @@ export default function YachtFilters({ filters, onChange }) {
                 className="w-4 h-4 rounded border-white/20 bg-[#252540] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
               />
               Groupes acceptés
+            </label>
+
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-300">
+              <input
+                type="checkbox"
+                checked={localFilters.waterToys || false}
+                onChange={e => handleChange('waterToys', e.target.checked)}
+                className="w-4 h-4 rounded border-white/20 bg-[#252540] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
+              />
+              Water Toys
             </label>
           </div>
         )}
@@ -344,6 +368,15 @@ export default function YachtFilters({ filters, onChange }) {
                 />
                 <span className="text-white">Groupes acceptés</span>
               </label>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={localFilters.waterToys || false}
+                  onChange={e => handleChange('waterToys', e.target.checked)}
+                  className="w-5 h-5 rounded border-white/20 bg-[#252540] text-orange-500"
+                />
+                <span className="text-white">Water Toys</span>
+              </label>
             </div>
 
             {activeCount > 0 && (
@@ -358,10 +391,10 @@ export default function YachtFilters({ filters, onChange }) {
 
           <div className="sticky bottom-0 bg-[#1b223d] border-t border-white/10 p-6">
             <button
-              onClick={() => setIsMobileOpen(false)}
+              onClick={() => { applyFilters(); setIsMobileOpen(false); }}
               className="w-full bg-orange-500 text-white py-3 rounded-xl font-medium hover:bg-orange-600 transition"
             >
-              Voir les résultats
+              Filtrer
             </button>
           </div>
         </div>

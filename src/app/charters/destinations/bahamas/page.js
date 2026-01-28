@@ -1,10 +1,10 @@
 import YachtPageClient from '@/app/yachts/YachtPageClient';
-import { fetchYachtsForDestination } from '@/lib/yachts';
+import { fetchVisibleYachtsForDestination } from '@/lib/yachts';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
-  const { yachts, totalYachts, filters } = await fetchYachtsForDestination('bahamas');
+  const { yachts, totalYachts, filters } = await fetchVisibleYachtsForDestination('bahamas');
 
   return (
     <YachtPageClient
