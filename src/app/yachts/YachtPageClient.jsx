@@ -143,8 +143,8 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
     >
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Our Yacht Fleet</h1>
+        <div className="mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 text-center">Our Yacht Fleet</h1>
           <p className="text-gray-300">
             {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
             {totalYachts && totalYachts > filteredYachts.length && ` (${totalYachts} total)`}

@@ -97,7 +97,7 @@ export default function YachtFilters({ filters, onChange }) {
   return (
     <>
       {/* Desktop - Horizontal sticky filters */}
-      <div className="hidden md:block sticky top-20 z-40 bg-[#2e2f32]/95 backdrop-blur-sm py-4 -mx-4 px-4 border-b border-white/10">
+      <div className="hidden md:block sticky top-20 z-40 bg-[#3a3b3f]/95 backdrop-blur-sm py-4 px-6 rounded-2xl border border-white/10">
         {/* Main filter row */}
         <div className="flex items-center gap-4 flex-wrap">
           {/* Type */}
