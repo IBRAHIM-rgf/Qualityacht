@@ -134,7 +134,7 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
 
   return (
     <div
-      className="min-h-screen bg-[#1b223d] pt-20 pb-24 md:pb-8"
+      className="min-h-screen bg-[#2e2f32] pt-20 pb-24 md:pb-8"
       style={{
         backgroundImage: 'url(/images/nuagesAncien.png)',
         backgroundSize: 'contain',
@@ -143,11 +143,11 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
     >
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-6 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Our Yacht Fleet</h1>
           <p className="text-gray-300">
-            {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} disponible{filteredYachts.length > 1 ? 's' : ''}
-            {totalYachts && totalYachts > filteredYachts.length && ` (${totalYachts} au total)`}
+            {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
+            {totalYachts && totalYachts > filteredYachts.length && ` (${totalYachts} total)`}
           </p>
         </div>
 
@@ -157,10 +157,10 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
         {/* Yacht Grid */}
         <main className="mt-6">
           {filteredYachts.length === 0 ? (
-            <div className="text-center py-16 rounded-2xl bg-[#252540]/50">
+            <div className="text-center py-16 rounded-2xl bg-[#3a3b3f]/50">
               <div className="text-6xl mb-4">⛵</div>
-              <h3 className="text-xl font-bold text-white mb-2">Aucun yacht trouvé</h3>
-              <p className="text-gray-400">Essayez de modifier vos filtres</p>
+              <h3 className="text-xl font-bold text-white mb-2">No yachts found</h3>
+              <p className="text-gray-400">Try adjusting your filters</p>
             </div>
           ) : (
             <>
@@ -174,7 +174,7 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
                     disabled={currentPage === 1}
                     className="px-4 py-2 bg-orange-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-orange-600 transition-colors"
                   >
-                    Précédent
+                    Previous
                   </button>
 
                   <div className="flex gap-2">
@@ -196,7 +196,7 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
                           className={`w-10 h-10 rounded-lg transition-colors ${
                             currentPage === pageNum
                               ? 'bg-orange-500 text-white'
-                              : 'bg-[#252540] text-gray-300 hover:bg-[#353560]'
+                              : 'bg-[#3a3b3f] text-gray-300 hover:bg-[#4a4b4f]'
                           }`}
                         >
                           {pageNum}
@@ -210,13 +210,13 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
                     disabled={currentPage === totalPages}
                     className="px-4 py-2 bg-orange-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-orange-600 transition-colors"
                   >
-                    Suivant
+                    Next
                   </button>
                 </div>
               )}
 
               <p className="text-center text-gray-400 text-sm">
-                Page {currentPage} sur {totalPages} - Affichage {((currentPage - 1) * YACHTS_PER_PAGE) + 1} à {Math.min(currentPage * YACHTS_PER_PAGE, filteredYachts.length)} sur {filteredYachts.length}
+                Page {currentPage} of {totalPages} - Showing {((currentPage - 1) * YACHTS_PER_PAGE) + 1} to {Math.min(currentPage * YACHTS_PER_PAGE, filteredYachts.length)} of {filteredYachts.length}
               </p>
             </>
           )}

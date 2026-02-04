@@ -1,22 +1,22 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Filter, X, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
 
 const YACHT_TYPES = [
-  { value: '', label: 'Tous les types' },
-  { value: 'motor', label: 'Moteur' },
-  { value: 'sailing', label: 'Voilier' },
+  { value: '', label: 'All Types' },
+  { value: 'motor', label: 'Motor' },
+  { value: 'sailing', label: 'Sailing' },
 ];
 
 const DESTINATIONS = [
-  { value: '', label: 'Toutes destinations' },
-  { value: 'caribbean', label: 'Caraïbes' },
-  { value: 'west-mediterranean', label: 'Méditerranée Ouest' },
-  { value: 'east-mediterranean', label: 'Méditerranée Est' },
+  { value: '', label: 'All Destinations' },
+  { value: 'caribbean', label: 'Caribbean' },
+  { value: 'west-mediterranean', label: 'Western Mediterranean' },
+  { value: 'east-mediterranean', label: 'Eastern Mediterranean' },
   { value: 'bahamas', label: 'Bahamas' },
-  { value: 'indian-ocean', label: 'Océan Indien' },
-  { value: 'south-pacific', label: 'Pacifique Sud' },
+  { value: 'indian-ocean', label: 'Indian Ocean' },
+  { value: 'south-pacific', label: 'South Pacific' },
 ];
 
 const CURRENCIES = [
@@ -25,12 +25,21 @@ const CURRENCIES = [
   { value: 'GBP', label: '£ GBP' },
 ];
 
+const MAX_PRICE = 500000;
+
 export default function YachtFilters({ filters, onChange }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
+  const [priceRange, setPriceRange] = useState([0, MAX_PRICE]);
 
-  useEffect(() => setLocalFilters(filters), [filters]);
+  useEffect(() => {
+    setLocalFilters(filters);
+    setPriceRange([
+      filters.priceMin || 0,
+      filters.priceMax || MAX_PRICE
+    ]);
+  }, [filters]);
 
   const handleChange = (key, value) => {
     const newFilters = {
@@ -38,7 +47,14 @@ export default function YachtFilters({ filters, onChange }) {
       [key]: value === '' || value === null ? '' : value
     };
     setLocalFilters(newFilters);
-    // Ne pas appeler onChange ici - attendre le clic sur "Filtrer"
+  };
+
+  const handlePriceSliderChange = (e) => {
+    const value = Number(e.target.value);
+    const newRange = [...priceRange];
+    newRange[1] = value;
+    setPriceRange(newRange);
+    handleChange('priceMax', value === MAX_PRICE ? '' : value);
   };
 
   const applyFilters = () => {
@@ -58,9 +74,12 @@ export default function YachtFilters({ filters, onChange }) {
       currency: '',
       petFriendly: false,
       groupFriendly: false,
-      waterToys: false
+      waterToys: false,
+      startDate: '',
+      endDate: ''
     };
     setLocalFilters(emptyFilters);
+    setPriceRange([0, MAX_PRICE]);
     onChange(emptyFilters);
   };
 
@@ -69,121 +88,147 @@ export default function YachtFilters({ filters, onChange }) {
     return v && v !== '' && v !== false;
   }).length;
 
+  const formatPrice = (price) => {
+    if (price >= 1000000) return `${(price / 1000000).toFixed(1)}M`;
+    if (price >= 1000) return `${(price / 1000).toFixed(0)}k`;
+    return price.toString();
+  };
+
   return (
     <>
-      {/* Desktop - Filtres horizontaux sticky */}
-      <div className="hidden md:block sticky top-20 z-40 bg-[#1b223d]/95 backdrop-blur-sm py-4 -mx-4 px-4 border-b border-white/10">
-        {/* Ligne principale des filtres */}
+      {/* Desktop - Horizontal sticky filters */}
+      <div className="hidden md:block sticky top-20 z-40 bg-[#2e2f32]/95 backdrop-blur-sm py-4 -mx-4 px-4 border-b border-white/10">
+        {/* Main filter row */}
         <div className="flex items-center gap-4 flex-wrap">
           {/* Type */}
-          <div className="flex-1 min-w-[150px] max-w-[200px]">
+          <div className="flex-1 min-w-[150px] max-w-[180px]">
             <select
               value={localFilters.type}
               onChange={e => handleChange('type', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#252540] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
               {YACHT_TYPES.map(t => (
-                <option key={t.value} value={t.value} className="bg-[#252540]">{t.label}</option>
+                <option key={t.value} value={t.value} className="bg-[#3a3b3f]">{t.label}</option>
               ))}
             </select>
           </div>
 
           {/* Destination */}
-          <div className="flex-1 min-w-[180px] max-w-[220px]">
+          <div className="flex-1 min-w-[180px] max-w-[200px]">
             <select
               value={localFilters.destination}
               onChange={e => handleChange('destination', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#252540] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
               {DESTINATIONS.map(d => (
-                <option key={d.value} value={d.value} className="bg-[#252540]">{d.label}</option>
+                <option key={d.value} value={d.value} className="bg-[#3a3b3f]">{d.label}</option>
               ))}
             </select>
           </div>
 
-          {/* Longueur */}
+          {/* Date Picker */}
           <div className="flex items-center gap-2">
-            <input
-              type="number"
-              placeholder="Long. min"
-              value={localFilters.minLength || ''}
-              onChange={e => handleChange('minLength', e.target.value ? Number(e.target.value) : '')}
-              className="w-24 px-3 py-2.5 bg-[#252540] border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            />
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="date"
+                value={localFilters.startDate || ''}
+                onChange={e => handleChange('startDate', e.target.value)}
+                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent [color-scheme:dark]"
+              />
+            </div>
             <span className="text-gray-400">-</span>
             <input
-              type="number"
-              placeholder="max (m)"
-              value={localFilters.maxLength || ''}
-              onChange={e => handleChange('maxLength', e.target.value ? Number(e.target.value) : '')}
-              className="w-24 px-3 py-2.5 bg-[#252540] border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              type="date"
+              value={localFilters.endDate || ''}
+              onChange={e => handleChange('endDate', e.target.value)}
+              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent [color-scheme:dark]"
             />
           </div>
 
-          {/* Prix */}
-          <div className="flex items-center gap-2">
+          {/* Price Slider */}
+          <div className="flex items-center gap-3 min-w-[200px]">
             <select
               value={localFilters.currency || 'EUR'}
               onChange={e => handleChange('currency', e.target.value)}
-              className="w-20 px-2 py-2.5 bg-[#252540] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+              className="w-20 px-2 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
             >
               {CURRENCIES.map(c => (
-                <option key={c.value} value={c.value} className="bg-[#252540]">{c.label}</option>
+                <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>
               ))}
             </select>
-            <input
-              type="number"
-              placeholder="Prix min"
-              value={localFilters.priceMin || ''}
-              onChange={e => handleChange('priceMin', e.target.value ? Number(e.target.value) : '')}
-              className="w-24 px-3 py-2.5 bg-[#252540] border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            />
-            <span className="text-gray-400">-</span>
-            <input
-              type="number"
-              placeholder="max"
-              value={localFilters.priceMax || ''}
-              onChange={e => handleChange('priceMax', e.target.value ? Number(e.target.value) : '')}
-              className="w-24 px-3 py-2.5 bg-[#252540] border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            />
+            <div className="flex flex-col gap-1 w-32">
+              <input
+                type="range"
+                min="0"
+                max={MAX_PRICE}
+                step="10000"
+                value={priceRange[1]}
+                onChange={handlePriceSliderChange}
+                className="w-full h-2 bg-[#3a3b3f] rounded-lg appearance-none cursor-pointer accent-orange-500"
+              />
+              <span className="text-xs text-gray-400 text-center">
+                Max: {formatPrice(priceRange[1])}/week
+              </span>
+            </div>
           </div>
 
-          {/* Bouton Plus d'options */}
+          {/* More options button */}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="flex items-center gap-2 px-4 py-2.5 bg-transparent border border-white/20 rounded-xl text-white hover:bg-white/5 transition-colors"
           >
-            <span className="text-sm">Plus d'options</span>
+            <span className="text-sm">More Options</span>
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
-          {/* Bouton Filtrer */}
+          {/* Filter button */}
           <button
             onClick={applyFilters}
             className="flex items-center gap-2 px-6 py-2.5 bg-orange-500 hover:bg-orange-600 rounded-xl text-white font-medium transition-colors"
           >
             <Filter className="w-4 h-4" />
-            <span className="text-sm">Filtrer</span>
+            <span className="text-sm">Filter</span>
           </button>
 
-          {/* Compteur actif + Reset */}
+          {/* Active count + Reset */}
           {activeCount > 0 && (
             <button
               onClick={handleReset}
               className="flex items-center gap-2 px-4 py-2.5 bg-orange-500/20 border border-orange-500/50 rounded-xl text-orange-400 hover:bg-orange-500/30 transition-colors"
             >
               <X className="w-4 h-4" />
-              <span className="text-sm">{activeCount} filtre{activeCount > 1 ? 's' : ''}</span>
+              <span className="text-sm">{activeCount} filter{activeCount > 1 ? 's' : ''}</span>
             </button>
           )}
         </div>
 
-        {/* Options étendues */}
+        {/* Extended options */}
         {isExpanded && (
           <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-6 flex-wrap bg-transparent">
-            {/* Capacité */}
+            {/* Length */}
             <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-300">Passagers min:</label>
+              <label className="text-sm text-gray-300">Length (m):</label>
+              <input
+                type="number"
+                placeholder="Min"
+                value={localFilters.minLength || ''}
+                onChange={e => handleChange('minLength', e.target.value ? Number(e.target.value) : '')}
+                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              />
+              <span className="text-gray-400">-</span>
+              <input
+                type="number"
+                placeholder="Max"
+                value={localFilters.maxLength || ''}
+                onChange={e => handleChange('maxLength', e.target.value ? Number(e.target.value) : '')}
+                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Capacity */}
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-300">Min guests:</label>
               <input
                 type="number"
                 min="1"
@@ -191,7 +236,7 @@ export default function YachtFilters({ filters, onChange }) {
                 value={localFilters.capacity || ''}
                 onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
                 placeholder="8"
-                className="w-20 px-3 py-2 bg-[#252540] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
             </div>
 
@@ -201,9 +246,9 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.petFriendly || false}
                 onChange={e => handleChange('petFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#252540] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
               />
-              Animaux acceptés
+              Pet Friendly
             </label>
 
             <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-300">
@@ -211,9 +256,9 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.groupFriendly || false}
                 onChange={e => handleChange('groupFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#252540] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
               />
-              Groupes acceptés
+              Group Friendly
             </label>
 
             <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-300">
@@ -221,7 +266,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.waterToys || false}
                 onChange={e => handleChange('waterToys', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#252540] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
               />
               Water Toys
             </label>
@@ -229,26 +274,26 @@ export default function YachtFilters({ filters, onChange }) {
         )}
       </div>
 
-      {/* Mobile - Bouton fixe en bas */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1b223d] border-t border-white/10 shadow-lg">
+      {/* Mobile - Fixed button at bottom */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#2e2f32] border-t border-white/10 shadow-lg">
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           className="w-full flex items-center justify-center gap-2 py-4 px-6 text-white font-medium"
         >
           <Filter className="w-5 h-5" />
-          <span>Filtres</span>
+          <span>Filters</span>
           {activeCount > 0 && (
             <span className="ml-2 px-2 py-0.5 bg-orange-500 text-white text-xs rounded-full">{activeCount}</span>
           )}
         </button>
       </div>
 
-      {/* Mobile - Panel de filtres */}
+      {/* Mobile - Filter panel */}
       <div className={`md:hidden fixed inset-0 z-50 transition-transform duration-300 ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}>
         <div className="absolute inset-0 bg-black/50" onClick={() => setIsMobileOpen(false)} />
-        <div className="absolute bottom-0 left-0 right-0 bg-[#1b223d] rounded-t-3xl shadow-2xl max-h-[85vh] overflow-y-auto">
-          <div className="sticky top-0 bg-[#1b223d] border-b border-white/10 px-6 py-4 flex items-center justify-between rounded-t-3xl">
-            <h2 className="text-lg font-bold text-white">Filtres</h2>
+        <div className="absolute bottom-0 left-0 right-0 bg-[#2e2f32] rounded-t-3xl shadow-2xl max-h-[85vh] overflow-y-auto">
+          <div className="sticky top-0 bg-[#2e2f32] border-b border-white/10 px-6 py-4 flex items-center justify-between rounded-t-3xl">
+            <h2 className="text-lg font-bold text-white">Filters</h2>
             <button onClick={() => setIsMobileOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition">
               <X className="w-5 h-5 text-white" />
             </button>
@@ -257,11 +302,11 @@ export default function YachtFilters({ filters, onChange }) {
           <div className="p-6 space-y-6">
             {/* Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Type de yacht</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Yacht Type</label>
               <select
                 value={localFilters.type}
                 onChange={e => handleChange('type', e.target.value)}
-                className="w-full px-4 py-3 bg-[#252540] border border-white/20 rounded-xl text-white"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-white"
               >
                 {YACHT_TYPES.map(t => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -275,7 +320,7 @@ export default function YachtFilters({ filters, onChange }) {
               <select
                 value={localFilters.destination}
                 onChange={e => handleChange('destination', e.target.value)}
-                className="w-full px-4 py-3 bg-[#252540] border border-white/20 rounded-xl text-white"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-white"
               >
                 {DESTINATIONS.map(d => (
                   <option key={d.value} value={d.value}>{d.label}</option>
@@ -283,60 +328,79 @@ export default function YachtFilters({ filters, onChange }) {
               </select>
             </div>
 
-            {/* Longueur */}
+            {/* Dates */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Longueur (m)</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Charter Dates</label>
+              <div className="flex gap-2">
+                <input
+                  type="date"
+                  value={localFilters.startDate || ''}
+                  onChange={e => handleChange('startDate', e.target.value)}
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-white [color-scheme:dark]"
+                />
+                <input
+                  type="date"
+                  value={localFilters.endDate || ''}
+                  onChange={e => handleChange('endDate', e.target.value)}
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-white [color-scheme:dark]"
+                />
+              </div>
+            </div>
+
+            {/* Length */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Length (m)</label>
               <div className="flex gap-2">
                 <input
                   type="number"
                   placeholder="Min"
                   value={localFilters.minLength || ''}
                   onChange={e => handleChange('minLength', e.target.value ? Number(e.target.value) : '')}
-                  className="flex-1 px-4 py-3 bg-[#252540] border border-white/20 rounded-xl text-white"
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-white"
                 />
                 <input
                   type="number"
                   placeholder="Max"
                   value={localFilters.maxLength || ''}
                   onChange={e => handleChange('maxLength', e.target.value ? Number(e.target.value) : '')}
-                  className="flex-1 px-4 py-3 bg-[#252540] border border-white/20 rounded-xl text-white"
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-white"
                 />
               </div>
             </div>
 
-            {/* Prix */}
+            {/* Price Slider */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Prix par semaine</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Price per week</label>
               <select
                 value={localFilters.currency || 'EUR'}
                 onChange={e => handleChange('currency', e.target.value)}
-                className="w-full px-4 py-3 bg-[#252540] border border-white/20 rounded-xl text-white mb-2"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-white mb-3"
               >
                 {CURRENCIES.map(c => (
                   <option key={c.value} value={c.value}>{c.label}</option>
                 ))}
               </select>
-              <div className="flex gap-2">
+              <div className="px-2">
                 <input
-                  type="number"
-                  placeholder="Prix min"
-                  value={localFilters.priceMin || ''}
-                  onChange={e => handleChange('priceMin', e.target.value ? Number(e.target.value) : '')}
-                  className="flex-1 px-4 py-3 bg-[#252540] border border-white/20 rounded-xl text-white"
+                  type="range"
+                  min="0"
+                  max={MAX_PRICE}
+                  step="10000"
+                  value={priceRange[1]}
+                  onChange={handlePriceSliderChange}
+                  className="w-full h-3 bg-[#3a3b3f] rounded-lg appearance-none cursor-pointer accent-orange-500"
                 />
-                <input
-                  type="number"
-                  placeholder="Prix max"
-                  value={localFilters.priceMax || ''}
-                  onChange={e => handleChange('priceMax', e.target.value ? Number(e.target.value) : '')}
-                  className="flex-1 px-4 py-3 bg-[#252540] border border-white/20 rounded-xl text-white"
-                />
+                <div className="flex justify-between text-sm text-gray-400 mt-2">
+                  <span>0</span>
+                  <span className="text-orange-400 font-medium">Max: {formatPrice(priceRange[1])}</span>
+                  <span>{formatPrice(MAX_PRICE)}</span>
+                </div>
               </div>
             </div>
 
-            {/* Capacité */}
+            {/* Capacity */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Passagers minimum</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Minimum Guests</label>
               <input
                 type="number"
                 min="1"
@@ -344,7 +408,7 @@ export default function YachtFilters({ filters, onChange }) {
                 placeholder="8"
                 value={localFilters.capacity || ''}
                 onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
-                className="w-full px-4 py-3 bg-[#252540] border border-white/20 rounded-xl text-white"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-white"
               />
             </div>
 
@@ -355,25 +419,25 @@ export default function YachtFilters({ filters, onChange }) {
                   type="checkbox"
                   checked={localFilters.petFriendly || false}
                   onChange={e => handleChange('petFriendly', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#252540] text-orange-500"
+                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-orange-500"
                 />
-                <span className="text-white">Animaux acceptés</span>
+                <span className="text-white">Pet Friendly</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={localFilters.groupFriendly || false}
                   onChange={e => handleChange('groupFriendly', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#252540] text-orange-500"
+                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-orange-500"
                 />
-                <span className="text-white">Groupes acceptés</span>
+                <span className="text-white">Group Friendly</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={localFilters.waterToys || false}
                   onChange={e => handleChange('waterToys', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#252540] text-orange-500"
+                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-orange-500"
                 />
                 <span className="text-white">Water Toys</span>
               </label>
@@ -384,17 +448,17 @@ export default function YachtFilters({ filters, onChange }) {
                 onClick={handleReset}
                 className="w-full px-4 py-3 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition"
               >
-                Réinitialiser ({activeCount})
+                Reset ({activeCount})
               </button>
             )}
           </div>
 
-          <div className="sticky bottom-0 bg-[#1b223d] border-t border-white/10 p-6">
+          <div className="sticky bottom-0 bg-[#2e2f32] border-t border-white/10 p-6">
             <button
               onClick={() => { applyFilters(); setIsMobileOpen(false); }}
               className="w-full bg-orange-500 text-white py-3 rounded-xl font-medium hover:bg-orange-600 transition"
             >
-              Filtrer
+              Apply Filters
             </button>
           </div>
         </div>

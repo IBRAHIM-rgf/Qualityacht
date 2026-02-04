@@ -42,7 +42,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
       className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
       onClick={handleBackdropClick}
     >
-      <div className="bg-[#1a1a2e] rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+      <div className="bg-[#2e2f32] rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -114,7 +114,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#252540] rounded-xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#3a3b3f] rounded-xl">
             {yacht.length && (
               <div className="text-center">
                 <Ruler className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
@@ -149,7 +149,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             {/* Location */}
             {yacht.location && (
-              <div className="flex items-center gap-3 p-4 bg-[#252540] rounded-xl">
+              <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
                 <Map className="w-6 h-6 text-[#f97316]" />
                 <div>
                   <p className="text-sm text-gray-400">Base Port</p>
@@ -160,7 +160,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
             {/* Refit Year */}
             {yacht.refit && (
-              <div className="flex items-center gap-3 p-4 bg-[#252540] rounded-xl">
+              <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
                 <Anchor className="w-6 h-6 text-[#f97316]" />
                 <div>
                   <p className="text-sm text-gray-400">Last Refit</p>
@@ -171,7 +171,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
             {/* Type */}
             {yacht.type && (
-              <div className="flex items-center gap-3 p-4 bg-[#252540] rounded-xl">
+              <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
                 <Ship className="w-6 h-6 text-[#f97316]" />
                 <div>
                   <p className="text-sm text-gray-400">Type</p>
@@ -197,7 +197,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                 {yacht.destinations.map((dest, idx) => (
                   <span
                     key={idx}
-                    className="px-3 py-1 bg-[#252540] rounded-full text-sm flex items-center gap-1"
+                    className="px-3 py-1 bg-[#3a3b3f] rounded-full text-sm flex items-center gap-1"
                   >
                     <MapPin className="w-4 h-4 text-[#f97316]" />
                     {dest}
@@ -246,10 +246,10 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
               {/* Wave effect at bottom */}
               <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent transform translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
             </button>
-            <button className="p-3 bg-[#252540] hover:bg-[#353560] rounded-xl transition-colors">
+            <button className="p-3 bg-[#3a3b3f] hover:bg-[#4a4b4f] rounded-xl transition-colors">
               <Heart className="w-6 h-6" />
             </button>
-            <button className="p-3 bg-[#252540] hover:bg-[#353560] rounded-xl transition-colors">
+            <button className="p-3 bg-[#3a3b3f] hover:bg-[#4a4b4f] rounded-xl transition-colors">
               <Share2 className="w-6 h-6" />
             </button>
           </div>
