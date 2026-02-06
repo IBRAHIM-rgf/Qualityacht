@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, BedDouble, Ruler, Map, Anchor, Ship } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
 
@@ -205,12 +206,13 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           {/* Action Buttons - removed Share */}
           <div className="flex justify-center gap-4 mt-8">
             <button className="bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-orange-700/50 flex flex-col items-center justify-center gap-1 transition-colors">
-              <svg className="w-6 h-6 text-orange-400" viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M2 14 L6 18 L26 18 L30 14" />
-                <path d="M14 12 L14 8 L22 8 L22 12" />
-                <path d="M12 12 L12 2" />
-                <path d="M12 2 L12 10 L4 10" />
-              </svg>
+              <Image
+                src="/images/trans.png"
+                alt="Qualityacht"
+                width={28}
+                height={28}
+                className="object-contain"
+              />
               <span className="text-orange-400 text-sm font-medium">Request Quote</span>
             </button>
             <button className="bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-orange-700/50 transition-colors">
