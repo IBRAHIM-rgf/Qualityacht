@@ -105,7 +105,7 @@ export default function YachtFilters({ filters, onChange }) {
             <select
               value={localFilters.type}
               onChange={e => handleChange('type', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
             >
               {YACHT_TYPES.map(t => (
                 <option key={t.value} value={t.value} className="bg-[#3a3b3f]">{t.label}</option>
@@ -118,7 +118,7 @@ export default function YachtFilters({ filters, onChange }) {
             <select
               value={localFilters.destination}
               onChange={e => handleChange('destination', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
             >
               {DESTINATIONS.map(d => (
                 <option key={d.value} value={d.value} className="bg-[#3a3b3f]">{d.label}</option>
@@ -134,7 +134,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="date"
                 value={localFilters.startDate || ''}
                 onChange={e => handleChange('startDate', e.target.value)}
-                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-orange-500 focus:border-transparent [color-scheme:dark]"
+                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:dark]"
               />
             </div>
             <span className="text-gray-400">-</span>
@@ -142,7 +142,7 @@ export default function YachtFilters({ filters, onChange }) {
               type="date"
               value={localFilters.endDate || ''}
               onChange={e => handleChange('endDate', e.target.value)}
-              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-orange-500 focus:border-transparent [color-scheme:dark]"
+              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:dark]"
             />
           </div>
 
@@ -151,7 +151,7 @@ export default function YachtFilters({ filters, onChange }) {
             <select
               value={localFilters.currency || 'EUR'}
               onChange={e => handleChange('currency', e.target.value)}
-              className="w-20 px-2 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+              className="w-20 px-2 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent text-sm"
             >
               {CURRENCIES.map(c => (
                 <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>
@@ -165,7 +165,7 @@ export default function YachtFilters({ filters, onChange }) {
                 step="10000"
                 value={priceRange[1]}
                 onChange={handlePriceSliderChange}
-                className="w-full h-2 bg-[#3a3b3f] rounded-lg appearance-none cursor-pointer accent-orange-500"
+                className="w-full h-2 bg-[#3a3b3f] rounded-lg appearance-none cursor-pointer accent-[#d39478]"
               />
               <span className="text-xs text-gray-400 text-center">
                 Max: {formatPrice(priceRange[1])}/week
@@ -185,7 +185,7 @@ export default function YachtFilters({ filters, onChange }) {
           {/* Filter button */}
           <button
             onClick={applyFilters}
-            className="flex items-center gap-2 px-6 py-2.5 bg-orange-500 hover:bg-orange-600 rounded-xl text-[#C0C0C0] font-medium transition-colors"
+            className="flex items-center gap-2 px-6 py-2.5 bg-[#d39478] hover:bg-[#c4826a] rounded-xl text-[#C0C0C0] font-medium transition-colors"
           >
             <Filter className="w-4 h-4" />
             <span className="text-sm">Filter</span>
@@ -195,7 +195,7 @@ export default function YachtFilters({ filters, onChange }) {
           {activeCount > 0 && (
             <button
               onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 bg-orange-500/20 border border-orange-500/50 rounded-xl text-orange-400 hover:bg-orange-500/30 transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-[#d39478]/20 border border-[#d39478]/50 rounded-xl text-[#d39478] hover:bg-[#d39478]/30 transition-colors"
             >
               <X className="w-4 h-4" />
               <span className="text-sm">{activeCount} filter{activeCount > 1 ? 's' : ''}</span>
@@ -214,7 +214,7 @@ export default function YachtFilters({ filters, onChange }) {
                 placeholder="Min"
                 value={localFilters.minLength || ''}
                 onChange={e => handleChange('minLength', e.target.value ? Number(e.target.value) : '')}
-                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
               />
               <span className="text-gray-400">-</span>
               <input
@@ -222,7 +222,7 @@ export default function YachtFilters({ filters, onChange }) {
                 placeholder="Max"
                 value={localFilters.maxLength || ''}
                 onChange={e => handleChange('maxLength', e.target.value ? Number(e.target.value) : '')}
-                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
               />
             </div>
 
@@ -236,7 +236,7 @@ export default function YachtFilters({ filters, onChange }) {
                 value={localFilters.capacity || ''}
                 onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
                 placeholder="8"
-                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
               />
             </div>
 
@@ -246,7 +246,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.petFriendly || false}
                 onChange={e => handleChange('petFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#d39478] focus:ring-[#d39478] focus:ring-offset-0"
               />
               Pet Friendly
             </label>
@@ -256,7 +256,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.groupFriendly || false}
                 onChange={e => handleChange('groupFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#d39478] focus:ring-[#d39478] focus:ring-offset-0"
               />
               Group Friendly
             </label>
@@ -266,7 +266,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.waterToys || false}
                 onChange={e => handleChange('waterToys', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#d39478] focus:ring-[#d39478] focus:ring-offset-0"
               />
               Water Toys
             </label>
@@ -283,7 +283,7 @@ export default function YachtFilters({ filters, onChange }) {
           <Filter className="w-5 h-5" />
           <span>Filters</span>
           {activeCount > 0 && (
-            <span className="ml-2 px-2 py-0.5 bg-orange-500 text-[#C0C0C0] text-xs rounded-full">{activeCount}</span>
+            <span className="ml-2 px-2 py-0.5 bg-[#d39478] text-[#C0C0C0] text-xs rounded-full">{activeCount}</span>
           )}
         </button>
       </div>
@@ -388,11 +388,11 @@ export default function YachtFilters({ filters, onChange }) {
                   step="10000"
                   value={priceRange[1]}
                   onChange={handlePriceSliderChange}
-                  className="w-full h-3 bg-[#3a3b3f] rounded-lg appearance-none cursor-pointer accent-orange-500"
+                  className="w-full h-3 bg-[#3a3b3f] rounded-lg appearance-none cursor-pointer accent-[#d39478]"
                 />
                 <div className="flex justify-between text-sm text-gray-400 mt-2">
                   <span>0</span>
-                  <span className="text-orange-400 font-medium">Max: {formatPrice(priceRange[1])}</span>
+                  <span className="text-[#d39478] font-medium">Max: {formatPrice(priceRange[1])}</span>
                   <span>{formatPrice(MAX_PRICE)}</span>
                 </div>
               </div>
@@ -419,7 +419,7 @@ export default function YachtFilters({ filters, onChange }) {
                   type="checkbox"
                   checked={localFilters.petFriendly || false}
                   onChange={e => handleChange('petFriendly', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-orange-500"
+                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-[#d39478]"
                 />
                 <span className="text-[#C0C0C0]">Pet Friendly</span>
               </label>
@@ -428,7 +428,7 @@ export default function YachtFilters({ filters, onChange }) {
                   type="checkbox"
                   checked={localFilters.groupFriendly || false}
                   onChange={e => handleChange('groupFriendly', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-orange-500"
+                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-[#d39478]"
                 />
                 <span className="text-[#C0C0C0]">Group Friendly</span>
               </label>
@@ -437,7 +437,7 @@ export default function YachtFilters({ filters, onChange }) {
                   type="checkbox"
                   checked={localFilters.waterToys || false}
                   onChange={e => handleChange('waterToys', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-orange-500"
+                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-[#d39478]"
                 />
                 <span className="text-[#C0C0C0]">Water Toys</span>
               </label>
@@ -456,7 +456,7 @@ export default function YachtFilters({ filters, onChange }) {
           <div className="sticky bottom-0 bg-[#2e2f32] border-t border-white/10 p-6">
             <button
               onClick={() => { applyFilters(); setIsMobileOpen(false); }}
-              className="w-full bg-orange-500 text-[#C0C0C0] py-3 rounded-xl font-medium hover:bg-orange-600 transition"
+              className="w-full bg-[#d39478] text-[#C0C0C0] py-3 rounded-xl font-medium hover:bg-[#c4826a] transition"
             >
               Apply Filters
             </button>
