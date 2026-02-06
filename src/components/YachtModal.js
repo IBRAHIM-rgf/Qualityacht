@@ -203,33 +203,25 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           )}
 
           {/* Action Buttons - removed Share */}
-          <div className="flex gap-4 mt-8">
-            <button className="flex-1 bg-[#d39478]/20 hover:bg-[#d39478]/30 border border-[#d39478]/60 text-[#C0C0C0] font-medium py-4 px-6 rounded-lg transition-all group">
+          <div className="flex justify-center gap-4 mt-8">
+            <button className="bg-[#d39478]/20 hover:bg-[#d39478]/30 border border-[#d39478] text-[#C0C0C0] font-medium py-3 px-8 rounded-lg transition-all group">
               {/* Vertical layout: boat on top, text below */}
-              <span className="flex flex-col items-center justify-center gap-2">
+              <span className="flex flex-col items-center justify-center gap-1">
                 {/* Boat icon */}
-                <span className="text-[#d39478] transform group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-7 h-6" viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    {/* Coque du bateau */}
-                    <path d="M2 14 L6 18 L26 18 L30 14 L24 14 L22 12 L10 12 L8 14 Z" fill="currentColor" opacity="0.3"/>
+                <span className="text-[#d39478]">
+                  <svg className="w-5 h-4" viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M2 14 L6 18 L26 18 L30 14" />
-                    {/* Cabine */}
-                    <rect x="14" y="8" width="8" height="4" rx="1" fill="currentColor" opacity="0.2"/>
                     <path d="M14 12 L14 8 L22 8 L22 12" />
-                    {/* Mât et voile */}
                     <path d="M12 12 L12 2" />
-                    <path d="M12 2 L12 10 L4 10 Z" fill="currentColor" opacity="0.15"/>
                     <path d="M12 2 L12 10 L4 10" />
-                    {/* Drapeau */}
-                    <path d="M12 2 L15 3.5 L12 5" fill="currentColor" opacity="0.4"/>
                   </svg>
                 </span>
                 {/* Text */}
-                <span className="text-sm">Request Quote</span>
+                <span className="text-xs">Request Quote</span>
               </span>
             </button>
-            <button className="p-3 bg-[#3a3b3f] hover:bg-[#4a4b4f] rounded-xl transition-colors">
-              <Heart className="w-6 h-6" />
+            <button className="p-3 bg-[#3a3b3f] hover:bg-[#4a4b4f] rounded-lg transition-colors">
+              <Heart className="w-5 h-5" />
             </button>
           </div>
         </div>
