@@ -209,8 +209,8 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
               <Image
                 src="/images/trans.png"
                 alt="Qualityacht"
-                width={24}
-                height={24}
+                width={48}
+                height={48}
                 className="object-contain"
               />
               <span className="text-[#C0C0C0] text-sm font-medium">Request Quote</span>
