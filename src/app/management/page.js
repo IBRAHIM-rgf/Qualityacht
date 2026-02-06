@@ -196,8 +196,8 @@ const sectionComponents = [
 
 export default function ManagementPage() {
   return (
-    <main className="bg-[#0B132B] pt-9"
-    style={{ backgroundImage: 'url(/images/nuagesAncien.png)', backgroundSize: 'contain', backgroundPosition: 'center' }} // corrected 'conyain' to 'contain'
+    <main className="bg-[#2e2f32] pt-9"
+    style={{ backgroundImage: 'url(/images/nuagesAncien.png)', backgroundSize: 'contain', backgroundPosition: 'center' }}
     >
       {managementSections.map((section, idx) => {
         const SectionComponent = sectionComponents[section.chooseSection ?? (idx % sectionComponents.length)];
