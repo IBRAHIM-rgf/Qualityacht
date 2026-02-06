@@ -207,10 +207,10 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           <div className="mt-8">
             <button className="w-full bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-[#C0C0C0] flex items-center justify-center gap-3 transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
               <Image
-                src="/images/trans.png"
+                src="/images/logoFondTrans.png"
                 alt="Qualityacht"
-                width={48}
-                height={48}
+                width={32}
+                height={32}
                 className="object-contain"
               />
               <span className="text-[#acb0cd] text-sm font-medium">Request Quote</span>
