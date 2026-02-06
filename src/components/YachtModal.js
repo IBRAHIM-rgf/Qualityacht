@@ -205,7 +205,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
           {/* Action Button */}
           <div className="mt-8">
-            <button className="w-full bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-orange-700/50 flex items-center justify-center gap-3 transition-all shadow-[0_4px_15px_rgba(249,115,22,0.3)] hover:shadow-[0_6px_20px_rgba(249,115,22,0.4)]">
+            <button className="w-full bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-[#C0C0C0] flex items-center justify-center gap-3 transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
               <Image
                 src="/images/trans.png"
                 alt="Qualityacht"
@@ -213,7 +213,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                 height={48}
                 className="object-contain"
               />
-              <span className="text-[#C0C0C0] text-sm font-medium">Request Quote</span>
+              <span className="text-[#acb0cd] text-sm font-medium">Request Quote</span>
             </button>
           </div>
         </div>
