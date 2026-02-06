@@ -19,7 +19,7 @@ const managementSections = [
       "/images/management/International  la piscine.png",
       "/images/management/International yacht blanc.png",
       "/images/management/International port de bateau marron.png",
-      "/images/management/Internationale   voilier bleu reflet.png",
+      "/images/management/Internationale   voilier bleu reflet.webp",
     ],
     chooseSection: 0,
   },
