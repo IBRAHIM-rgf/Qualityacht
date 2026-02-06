@@ -213,7 +213,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                 height={28}
                 className="object-contain"
               />
-              <span className="text-orange-400 text-sm font-medium">Request Quote</span>
+              <span className="text-[#C0C0C0] text-sm font-medium">Request Quote</span>
             </button>
           </div>
         </div>
