@@ -204,17 +204,11 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
           {/* Action Buttons - removed Share */}
           <div className="flex gap-4 mt-8">
-            <button className="flex-1 relative overflow-hidden bg-gradient-to-r from-[#f97316] to-[#ea580c] hover:from-[#ea580c] hover:to-[#d97706] text-[#C0C0C0] font-semibold py-3 px-6 rounded-xl transition-all group">
-              {/* Sparkle effects */}
-              <span className="absolute top-1 left-4 w-1 h-1 bg-white rounded-full animate-ping opacity-75" style={{ animationDuration: '1.5s' }} />
-              <span className="absolute top-2 right-8 w-1.5 h-1.5 bg-yellow-200 rounded-full animate-ping opacity-60" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
-              <span className="absolute bottom-2 left-12 w-1 h-1 bg-white rounded-full animate-ping opacity-50" style={{ animationDuration: '1.8s', animationDelay: '0.3s' }} />
-              <span className="absolute top-3 left-1/2 w-0.5 h-0.5 bg-yellow-100 rounded-full animate-ping opacity-70" style={{ animationDuration: '2.2s', animationDelay: '0.7s' }} />
-
+            <button className="flex-1 bg-[#3a3b3f] hover:bg-[#4a4b4f] border border-[#d39478]/60 text-[#C0C0C0] font-semibold py-3 px-6 rounded-xl transition-all group">
               {/* Boat and text container */}
-              <span className="relative flex items-center justify-center gap-2">
+              <span className="flex items-center justify-center gap-3">
                 {/* Animated boat - vue latérale */}
-                <span className="inline-block transform group-hover:translate-x-2 transition-transform duration-300">
+                <span className="inline-block text-[#d39478] transform group-hover:translate-x-1 transition-transform duration-300">
                   <svg className="w-6 h-5" viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     {/* Coque du bateau */}
                     <path d="M2 14 L6 18 L26 18 L30 14 L24 14 L22 12 L10 12 L8 14 Z" fill="currentColor" opacity="0.3"/>
@@ -228,18 +222,11 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                     <path d="M12 2 L12 10 L4 10" />
                     {/* Drapeau */}
                     <path d="M12 2 L15 3.5 L12 5" fill="currentColor" opacity="0.4"/>
-                    {/* Vagues animées */}
-                    <path className="animate-pulse" style={{ animationDuration: '1.5s' }} d="M0 16 Q4 14 8 16 T16 16 T24 16 T32 16" strokeOpacity="0.4"/>
                   </svg>
                 </span>
-                {/* Rope connecting boat to text */}
-                <span className="inline-block w-4 border-t-2 border-dashed border-white/50 group-hover:w-6 transition-all duration-300" />
                 {/* Text */}
                 <span className="tracking-wide">Request Quote</span>
               </span>
-
-              {/* Wave effect at bottom */}
-              <span className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent transform translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
             </button>
             <button className="p-3 bg-[#3a3b3f] hover:bg-[#4a4b4f] rounded-xl transition-colors">
               <Heart className="w-6 h-6" />
