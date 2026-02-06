@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { X, ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, BedDouble, Ruler, Map, Anchor, Ship } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, MapPin, Calendar, Users, BedDouble, Ruler, Map, Anchor, Ship } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
 
 export default function YachtModal({ yacht, isOpen, onClose }) {
@@ -203,9 +203,9 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             </div>
           )}
 
-          {/* Action Buttons - removed Share */}
-          <div className="flex justify-center gap-4 mt-8">
-            <button className="bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-orange-700/50 flex flex-col items-center justify-center gap-1 transition-colors">
+          {/* Action Button */}
+          <div className="mt-8">
+            <button className="w-full bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-orange-700/50 flex flex-col items-center justify-center gap-1 transition-colors">
               <Image
                 src="/images/trans.png"
                 alt="Qualityacht"
@@ -214,9 +214,6 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                 className="object-contain"
               />
               <span className="text-orange-400 text-sm font-medium">Request Quote</span>
-            </button>
-            <button className="bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-orange-700/50 transition-colors">
-              <Heart className="w-6 h-6 text-orange-400" />
             </button>
           </div>
         </div>
