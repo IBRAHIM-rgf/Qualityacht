@@ -204,24 +204,17 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
           {/* Action Buttons - removed Share */}
           <div className="flex justify-center gap-4 mt-8">
-            <button className="bg-[#d39478]/20 hover:bg-[#d39478]/30 border border-[#d39478] text-[#C0C0C0] font-medium py-3 px-8 rounded-lg transition-all group">
-              {/* Vertical layout: boat on top, text below */}
-              <span className="flex flex-col items-center justify-center gap-1">
-                {/* Boat icon */}
-                <span className="text-[#d39478]">
-                  <svg className="w-5 h-4" viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 14 L6 18 L26 18 L30 14" />
-                    <path d="M14 12 L14 8 L22 8 L22 12" />
-                    <path d="M12 12 L12 2" />
-                    <path d="M12 2 L12 10 L4 10" />
-                  </svg>
-                </span>
-                {/* Text */}
-                <span className="text-xs">Request Quote</span>
-              </span>
+            <button className="bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-orange-700/50 flex flex-col items-center justify-center gap-1 transition-colors">
+              <svg className="w-6 h-6 text-orange-400" viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 14 L6 18 L26 18 L30 14" />
+                <path d="M14 12 L14 8 L22 8 L22 12" />
+                <path d="M12 12 L12 2" />
+                <path d="M12 2 L12 10 L4 10" />
+              </svg>
+              <span className="text-orange-400 text-sm font-medium">Request Quote</span>
             </button>
-            <button className="p-3 bg-[#3a3b3f] hover:bg-[#4a4b4f] rounded-lg transition-colors">
-              <Heart className="w-5 h-5" />
+            <button className="bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-orange-700/50 transition-colors">
+              <Heart className="w-6 h-6 text-orange-400" />
             </button>
           </div>
         </div>
