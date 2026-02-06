@@ -25,7 +25,7 @@ const CURRENCIES = [
   { value: 'GBP', label: '£ GBP' },
 ];
 
-const MAX_PRICE = 500000;
+const MAX_PRICE = 6000000; // 6M = unlimited
 
 export default function YachtFilters({ filters, onChange }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -88,7 +88,8 @@ export default function YachtFilters({ filters, onChange }) {
     return v && v !== '' && v !== false;
   }).length;
 
-  const formatPrice = (price) => {
+  const formatPrice = (price, showUnlimited = false) => {
+    if (showUnlimited && price >= MAX_PRICE) return 'Unlimited';
     if (price >= 1000000) return `${(price / 1000000).toFixed(1)}M`;
     if (price >= 1000) return `${(price / 1000).toFixed(0)}k`;
     return price.toString();
@@ -168,7 +169,7 @@ export default function YachtFilters({ filters, onChange }) {
                 className="w-full h-2 bg-[#3a3b3f] rounded-lg appearance-none cursor-pointer accent-[#d39478]"
               />
               <span className="text-xs text-gray-400 text-center">
-                Max: {formatPrice(priceRange[1])}/week
+                Max: {formatPrice(priceRange[1], true)}{priceRange[1] < MAX_PRICE ? '/week' : ''}
               </span>
             </div>
           </div>
@@ -392,8 +393,8 @@ export default function YachtFilters({ filters, onChange }) {
                 />
                 <div className="flex justify-between text-sm text-gray-400 mt-2">
                   <span>0</span>
-                  <span className="text-[#d39478] font-medium">Max: {formatPrice(priceRange[1])}</span>
-                  <span>{formatPrice(MAX_PRICE)}</span>
+                  <span className="text-[#d39478] font-medium">Max: {formatPrice(priceRange[1], true)}</span>
+                  <span>∞</span>
                 </div>
               </div>
             </div>
