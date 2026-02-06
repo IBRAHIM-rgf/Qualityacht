@@ -79,7 +79,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                       <ChevronRight className="w-6 h-6" />
                     </button>
                     {/* Image Counter */}
-                    <div className="absolute bottom-4 right-4 bg-black/60 text-white text-sm font-medium px-3 py-1 rounded-lg">
+                    <div className="absolute bottom-4 right-4 bg-black/60 text-[#C0C0C0] text-sm font-medium px-3 py-1 rounded-lg">
                       {currentImage + 1}/{images.length}
                     </div>
                   </>
@@ -94,7 +94,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           {/* Header */}
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h2 className="text-3xl font-bold text-white mb-2">{yacht.name}</h2>
+              <h2 className="text-3xl font-bold text-[#C0C0C0] mb-2">{yacht.name}</h2>
               {yacht.make && (
                 <p className="text-lg text-gray-400 flex items-center gap-2">
                   <Ship className="w-5 h-5" />
@@ -118,28 +118,28 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {yacht.length && (
               <div className="text-center">
                 <Ruler className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
-                <p className="text-lg font-semibold text-white">{yacht.length}</p>
+                <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.length}</p>
                 <p className="text-sm text-gray-400">Length</p>
               </div>
             )}
             {(yacht.guests || yacht.capacity) && (
               <div className="text-center">
                 <Users className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
-                <p className="text-lg font-semibold text-white">{yacht.guests || yacht.capacity}</p>
+                <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.guests || yacht.capacity}</p>
                 <p className="text-sm text-gray-400">Guests</p>
               </div>
             )}
             {yacht.cabins && (
               <div className="text-center">
                 <BedDouble className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
-                <p className="text-lg font-semibold text-white">{yacht.cabins}</p>
+                <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.cabins}</p>
                 <p className="text-sm text-gray-400">Cabins</p>
               </div>
             )}
             {yacht.year && (
               <div className="text-center">
                 <Calendar className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
-                <p className="text-lg font-semibold text-white">{yacht.year}</p>
+                <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.year}</p>
                 <p className="text-sm text-gray-400">Built</p>
               </div>
             )}
@@ -153,7 +153,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                 <Map className="w-6 h-6 text-[#f97316]" />
                 <div>
                   <p className="text-sm text-gray-400">Base Port</p>
-                  <p className="text-white font-medium">{yacht.location}</p>
+                  <p className="text-[#C0C0C0] font-medium">{yacht.location}</p>
                 </div>
               </div>
             )}
@@ -164,7 +164,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                 <Anchor className="w-6 h-6 text-[#f97316]" />
                 <div>
                   <p className="text-sm text-gray-400">Last Refit</p>
-                  <p className="text-white font-medium">{yacht.refit}</p>
+                  <p className="text-[#C0C0C0] font-medium">{yacht.refit}</p>
                 </div>
               </div>
             )}
@@ -175,7 +175,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                 <Ship className="w-6 h-6 text-[#f97316]" />
                 <div>
                   <p className="text-sm text-gray-400">Type</p>
-                  <p className="text-white font-medium capitalize">{yacht.type}</p>
+                  <p className="text-[#C0C0C0] font-medium capitalize">{yacht.type}</p>
                 </div>
               </div>
             )}
@@ -184,7 +184,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           {/* Description */}
           {yacht.description && (
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-white mb-3">Description</h3>
+              <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3">Description</h3>
               <p className="text-gray-300 leading-relaxed">{yacht.description}</p>
             </div>
           )}
@@ -192,7 +192,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           {/* Destinations */}
           {yacht.destinations && yacht.destinations.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-white mb-3">Destinations</h3>
+              <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3">Destinations</h3>
               <div className="flex flex-wrap gap-2">
                 {yacht.destinations.map((dest, idx) => (
                   <span
@@ -209,7 +209,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
           {/* Action Buttons */}
           <div className="flex gap-4 mt-8">
-            <button className="flex-1 relative overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded-xl transition-all group">
+            <button className="flex-1 relative overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-[#C0C0C0] font-semibold py-3 px-6 rounded-xl transition-all group">
               {/* Sparkle effects */}
               <span className="absolute top-1 left-4 w-1 h-1 bg-white rounded-full animate-ping opacity-75" style={{ animationDuration: '1.5s' }} />
               <span className="absolute top-2 right-8 w-1.5 h-1.5 bg-yellow-200 rounded-full animate-ping opacity-60" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />

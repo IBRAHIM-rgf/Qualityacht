@@ -144,7 +144,7 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 text-center">Our Yacht Fleet</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-[#C0C0C0] mb-2 text-center">Our Yacht Fleet</h1>
           <p className="text-gray-300">
             {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
             {totalYachts && totalYachts > filteredYachts.length && ` (${totalYachts} total)`}
@@ -159,7 +159,7 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
           {filteredYachts.length === 0 ? (
             <div className="text-center py-16 rounded-2xl bg-[#3a3b3f]/50">
               <div className="text-6xl mb-4">⛵</div>
-              <h3 className="text-xl font-bold text-white mb-2">No yachts found</h3>
+              <h3 className="text-xl font-bold text-[#C0C0C0] mb-2">No yachts found</h3>
               <p className="text-gray-400">Try adjusting your filters</p>
             </div>
           ) : (
