@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { X, ChevronLeft, ChevronRight, Heart, Share2, MapPin, Calendar, Users, BedDouble, Ruler, Map, Anchor, Ship } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, BedDouble, Ruler, Map, Anchor, Ship } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
 
 export default function YachtModal({ yacht, isOpen, onClose }) {
@@ -91,56 +91,51 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
         {/* Content */}
         <div className="p-6 text-[#C0C0C0]">
-          {/* Header */}
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h2 className="text-3xl font-bold text-[#C0C0C0] mb-2">{yacht.name}</h2>
-              {yacht.make && (
-                <p className="text-lg text-gray-400 flex items-center gap-2">
-                  <Ship className="w-5 h-5" />
-                  {yacht.make}
-                </p>
-              )}
-            </div>
-            <div className="text-right">
-              {yacht.pricePerHour && (
-                <p className="text-2xl font-bold text-[#d39478]">{yacht.pricePerHour}</p>
-              )}
-              {yacht.pricePerHour && <p className="text-sm text-gray-400">per week</p>}
-              {yacht.price && !yacht.pricePerHour && (
-                <p className="text-2xl font-bold text-[#d39478]">{yacht.price}</p>
-              )}
-            </div>
+          {/* Header - Name and Price */}
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold text-[#C0C0C0] mb-2">{yacht.name}</h2>
+            {yacht.make && (
+              <p className="text-lg text-gray-400 flex items-center gap-2 mb-2">
+                <Ship className="w-5 h-5" />
+                {yacht.make}
+              </p>
+            )}
+            {/* Price under name - all in orange */}
+            {(yacht.pricePerHour || yacht.price) && (
+              <p className="text-xl font-bold text-[#f97316]">
+                Price {yacht.pricePerHour || yacht.price}/week
+              </p>
+            )}
           </div>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#3a3b3f] rounded-xl">
             {yacht.length && (
               <div className="text-center">
-                <Ruler className="w-6 h-6 mx-auto mb-2 text-[#d39478]" />
+                <Ruler className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.length}</p>
-                <p className="text-sm text-gray-400">Length</p>
+                <p className="text-sm text-[#acb0cd]">Length</p>
               </div>
             )}
             {(yacht.guests || yacht.capacity) && (
               <div className="text-center">
-                <Users className="w-6 h-6 mx-auto mb-2 text-[#d39478]" />
+                <Users className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.guests || yacht.capacity}</p>
-                <p className="text-sm text-gray-400">Guests</p>
+                <p className="text-sm text-[#acb0cd]">Guests</p>
               </div>
             )}
             {yacht.cabins && (
               <div className="text-center">
-                <BedDouble className="w-6 h-6 mx-auto mb-2 text-[#d39478]" />
+                <BedDouble className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.cabins}</p>
-                <p className="text-sm text-gray-400">Cabins</p>
+                <p className="text-sm text-[#acb0cd]">Cabins</p>
               </div>
             )}
             {yacht.year && (
               <div className="text-center">
-                <Calendar className="w-6 h-6 mx-auto mb-2 text-[#d39478]" />
+                <Calendar className="w-6 h-6 mx-auto mb-2 text-[#f97316]" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.year}</p>
-                <p className="text-sm text-gray-400">Built</p>
+                <p className="text-sm text-[#acb0cd]">Built</p>
               </div>
             )}
           </div>
@@ -150,9 +145,9 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {/* Location */}
             {yacht.location && (
               <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
-                <Map className="w-6 h-6 text-[#d39478]" />
+                <Map className="w-6 h-6 text-[#f97316]" />
                 <div>
-                  <p className="text-sm text-gray-400">Base Port</p>
+                  <p className="text-sm text-[#acb0cd]">Base Port</p>
                   <p className="text-[#C0C0C0] font-medium">{yacht.location}</p>
                 </div>
               </div>
@@ -161,9 +156,9 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {/* Refit Year */}
             {yacht.refit && (
               <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
-                <Anchor className="w-6 h-6 text-[#d39478]" />
+                <Anchor className="w-6 h-6 text-[#f97316]" />
                 <div>
-                  <p className="text-sm text-gray-400">Last Refit</p>
+                  <p className="text-sm text-[#acb0cd]">Last Refit</p>
                   <p className="text-[#C0C0C0] font-medium">{yacht.refit}</p>
                 </div>
               </div>
@@ -172,34 +167,34 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {/* Type */}
             {yacht.type && (
               <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
-                <Ship className="w-6 h-6 text-[#d39478]" />
+                <Ship className="w-6 h-6 text-[#f97316]" />
                 <div>
-                  <p className="text-sm text-gray-400">Type</p>
+                  <p className="text-sm text-[#acb0cd]">Type</p>
                   <p className="text-[#C0C0C0] font-medium capitalize">{yacht.type}</p>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Description */}
+          {/* Description - centered */}
           {yacht.description && (
-            <div className="mb-6">
+            <div className="mb-6 text-center">
               <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3">Description</h3>
               <p className="text-[#acb0cd] leading-relaxed">{yacht.description}</p>
             </div>
           )}
 
-          {/* Destinations */}
+          {/* Destinations - centered */}
           {yacht.destinations && yacht.destinations.length > 0 && (
-            <div className="mb-6">
+            <div className="mb-6 text-center">
               <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3">Destinations</h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 justify-center">
                 {yacht.destinations.map((dest, idx) => (
                   <span
                     key={idx}
                     className="px-3 py-1 bg-[#3a3b3f] rounded-full text-sm flex items-center gap-1"
                   >
-                    <MapPin className="w-4 h-4 text-[#d39478]" />
+                    <MapPin className="w-4 h-4 text-[#f97316]" />
                     {dest}
                   </span>
                 ))}
@@ -207,9 +202,9 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             </div>
           )}
 
-          {/* Action Buttons */}
+          {/* Action Buttons - removed Share */}
           <div className="flex gap-4 mt-8">
-            <button className="flex-1 relative overflow-hidden bg-gradient-to-r from-[#d39478] to-[#c4826a] hover:from-[#c4826a] hover:to-[#b5735c] text-[#C0C0C0] font-semibold py-3 px-6 rounded-xl transition-all group">
+            <button className="flex-1 relative overflow-hidden bg-gradient-to-r from-[#f97316] to-[#ea580c] hover:from-[#ea580c] hover:to-[#d97706] text-[#C0C0C0] font-semibold py-3 px-6 rounded-xl transition-all group">
               {/* Sparkle effects */}
               <span className="absolute top-1 left-4 w-1 h-1 bg-white rounded-full animate-ping opacity-75" style={{ animationDuration: '1.5s' }} />
               <span className="absolute top-2 right-8 w-1.5 h-1.5 bg-yellow-200 rounded-full animate-ping opacity-60" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
@@ -248,9 +243,6 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             </button>
             <button className="p-3 bg-[#3a3b3f] hover:bg-[#4a4b4f] rounded-xl transition-colors">
               <Heart className="w-6 h-6" />
-            </button>
-            <button className="p-3 bg-[#3a3b3f] hover:bg-[#4a4b4f] rounded-xl transition-colors">
-              <Share2 className="w-6 h-6" />
             </button>
           </div>
         </div>
