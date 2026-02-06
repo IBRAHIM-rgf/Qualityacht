@@ -204,12 +204,12 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
           {/* Action Buttons - removed Share */}
           <div className="flex gap-4 mt-8">
-            <button className="flex-1 bg-[#3a3b3f] hover:bg-[#4a4b4f] border border-[#d39478]/60 text-[#C0C0C0] font-semibold py-3 px-6 rounded-xl transition-all group">
-              {/* Boat and text container */}
-              <span className="flex items-center justify-center gap-3">
-                {/* Animated boat - vue latérale */}
-                <span className="inline-block text-[#d39478] transform group-hover:translate-x-1 transition-transform duration-300">
-                  <svg className="w-6 h-5" viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <button className="flex-1 bg-[#3a3b3f] hover:bg-[#4a4b4f] border border-[#d39478]/60 text-[#C0C0C0] font-medium py-4 px-6 rounded-lg transition-all group">
+              {/* Vertical layout: boat on top, text below */}
+              <span className="flex flex-col items-center justify-center gap-2">
+                {/* Boat icon */}
+                <span className="text-[#d39478] transform group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-7 h-6" viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     {/* Coque du bateau */}
                     <path d="M2 14 L6 18 L26 18 L30 14 L24 14 L22 12 L10 12 L8 14 Z" fill="currentColor" opacity="0.3"/>
                     <path d="M2 14 L6 18 L26 18 L30 14" />
@@ -225,7 +225,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                   </svg>
                 </span>
                 {/* Text */}
-                <span className="tracking-wide">Request Quote</span>
+                <span className="text-sm">Request Quote</span>
               </span>
             </button>
             <button className="p-3 bg-[#3a3b3f] hover:bg-[#4a4b4f] rounded-xl transition-colors">
