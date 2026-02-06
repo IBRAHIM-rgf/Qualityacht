@@ -185,7 +185,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           {yacht.description && (
             <div className="mb-6">
               <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3">Description</h3>
-              <p className="text-gray-300 leading-relaxed">{yacht.description}</p>
+              <p className="text-[#B4A7D6] leading-relaxed">{yacht.description}</p>
             </div>
           )}
 
