@@ -205,7 +205,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
           {/* Action Button */}
           <div className="mt-8">
-            <button className="w-full bg-[#3a3b3f]/50 hover:bg-[#3a3b3f]/70 rounded-xl p-4 border border-[#C0C0C0] flex items-center justify-center gap-3 transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+            <button className="w-full bg-gradient-to-r from-[#3a3b3f]/60 via-[#d39478]/15 to-[#3a3b3f]/60 hover:from-[#3a3b3f]/70 hover:via-[#d39478]/25 hover:to-[#3a3b3f]/70 rounded-xl p-4 border border-[#C0C0C0] flex items-center justify-center gap-3 transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
               <Image
                 src="/images/logoFondTrans.png"
                 alt="Qualityacht"
