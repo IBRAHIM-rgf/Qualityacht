@@ -204,7 +204,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
           {/* Action Buttons - removed Share */}
           <div className="flex gap-4 mt-8">
-            <button className="flex-1 bg-[#3a3b3f] hover:bg-[#4a4b4f] border border-[#d39478]/60 text-[#C0C0C0] font-medium py-4 px-6 rounded-lg transition-all group">
+            <button className="flex-1 bg-[#d39478]/20 hover:bg-[#d39478]/30 border border-[#d39478]/60 text-[#C0C0C0] font-medium py-4 px-6 rounded-lg transition-all group">
               {/* Vertical layout: boat on top, text below */}
               <span className="flex flex-col items-center justify-center gap-2">
                 {/* Boat icon */}
