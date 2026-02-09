@@ -4,7 +4,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Heart, Share2, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
-import ProcessedYachtImage from './ProcessedYachtImage';
 
 export default function YachtCardV2({ yacht }) {
   // Utilise getAnkorImageUrl pour chaque image
@@ -32,31 +31,19 @@ export default function YachtCardV2({ yacht }) {
             <div className="w-full h-full flex items-center justify-center text-gray-400">No image</div>
           )}
           {images.length === 1 && (
-            <ProcessedYachtImage
+            <img
               src={images[0]}
               alt={yacht.name || 'Yacht'}
               className="w-full h-full object-cover"
-              enableProcessing={true}
-              yachtId={yacht.id}
-              savedProcessedUrl={yacht.processedHero || null}
             />
           )}
           {images.length > 1 && (
             <>
-              {currentImage === 0 ? (
-                <ProcessedYachtImage
-                  src={images[0]}
-                  alt={yacht.name || 'Yacht'}
-                  className="w-full h-full object-cover"
-                  enableProcessing={true}
-                />
-              ) : (
-                <img
-                  src={images[currentImage]}
-                  alt={yacht.name || 'Yacht'}
-                  className="w-full h-full object-cover"
-                />
-              )}
+              <img
+                src={images[currentImage]}
+                alt={yacht.name || 'Yacht'}
+                className="w-full h-full object-cover"
+              />
               {/* Navigation Arrows */}
               <button
                 onClick={prevImage}
