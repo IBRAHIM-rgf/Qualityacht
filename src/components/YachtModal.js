@@ -101,16 +101,16 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                 {yacht.make}
               </p>
             )}
-            {/* Price under name - all in orange */}
+            {/* Price under name - all in silver */}
             {(yacht.pricePerHour || yacht.price) && (
-              <p className="text-xl font-bold text-[#B87333]">
+              <p className="text-xl font-bold text-[#C0C0C0]">
                 Price {yacht.pricePerHour || yacht.price}/week
               </p>
             )}
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#7C6559] rounded-xl border border-[#C0C0C0]">
             {yacht.length && (
               <div className="text-center">
                 <Ruler className="w-6 h-6 mx-auto mb-2 text-[#B87333]" />
@@ -194,7 +194,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           {/* Description - centered */}
           {yacht.description && (
             <div className="mb-6 text-center">
-              <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3 underline decoration-[#B87333] underline-offset-8">Description</h3>
+              <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3 underline decoration-[#C0C0C0] underline-offset-8">Description</h3>
               <p className="text-[#acb0cd] leading-relaxed">{yacht.description}</p>
             </div>
           )}
@@ -202,12 +202,12 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           {/* Destinations - centered */}
           {yacht.destinations && yacht.destinations.length > 0 && (
             <div className="mb-6 text-center">
-              <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3 underline decoration-[#B87333] underline-offset-8">Destinations</h3>
+              <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3 underline decoration-[#C0C0C0] underline-offset-8">Destinations</h3>
               <div className="flex flex-wrap gap-2 justify-center">
                 {yacht.destinations.map((dest, idx) => (
                   <span
                     key={idx}
-                    className="px-3 py-1 bg-[#3a3b3f] rounded-full text-sm flex items-center gap-1"
+                    className="px-3 py-1 bg-[#3a3b3f] rounded-full text-sm flex items-center gap-1 border border-[#C0C0C0]"
                   >
                     <MapPin className="w-4 h-4 text-[#B87333]" />
                     {dest}
