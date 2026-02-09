@@ -5,8 +5,8 @@ import { Loader2 } from 'lucide-react';
 
 /**
  * Composant image avec détourage automatique et fond bleu #24445c
- * Affiche un loader pendant le traitement, puis l'image détourée
- * Fallback sur l'image originale en cas d'erreur
+ * Si savedProcessedUrl fourni (depuis DB), l'affiche directement sans traitement
+ * Sinon traite côté client et sauvegarde en DB pour la prochaine fois
  */
 export default function ProcessedYachtImage({
   src,
@@ -15,11 +15,14 @@ export default function ProcessedYachtImage({
   enableProcessing = true,
   showLoader = true,
   loaderClassName = '',
+  yachtId = null,
+  savedProcessedUrl = null,
 }) {
-  const { processedUrl, isProcessing, error } = useBackgroundRemoval(src, enableProcessing);
+  const { processedUrl, isProcessing, error } = useBackgroundRemoval(
+    src, enableProcessing, yachtId, savedProcessedUrl
+  );
   const [imgError, setImgError] = useState(false);
 
-  // Afficher l'image traitée si disponible, sinon l'originale
   const displayUrl = (processedUrl && !imgError) ? processedUrl : src;
 
   return (
@@ -31,7 +34,6 @@ export default function ProcessedYachtImage({
         onError={() => setImgError(true)}
       />
 
-      {/* Indicateur de chargement pendant le détourage */}
       {isProcessing && showLoader && (
         <div className={`absolute inset-0 flex items-center justify-center bg-[#24445c]/80 ${loaderClassName}`}>
           <div className="flex flex-col items-center gap-2">
@@ -41,7 +43,6 @@ export default function ProcessedYachtImage({
         </div>
       )}
 
-      {/* Indicateur d'erreur (optionnel, pour debug) */}
       {error && !imgError && (
         <div className="absolute bottom-2 right-2 bg-red-500/80 text-white text-xs px-2 py-1 rounded">
           Erreur détourage

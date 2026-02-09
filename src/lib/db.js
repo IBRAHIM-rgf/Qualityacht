@@ -305,4 +305,39 @@ export async function getSelectedYachtIds() {
   }
 }
 
+/**
+ * Sauvegarde l'image hero détourée d'un yacht
+ */
+export async function saveProcessedHero(yacht_id, processedHeroDataUrl) {
+  try {
+    const rows = await sql`
+      UPDATE yacht_selections
+      SET processed_hero = ${processedHeroDataUrl}, updated_at = NOW()
+      WHERE yacht_id = ${yacht_id}
+      RETURNING yacht_id, yacht_name
+    `;
+    return rows[0] || null;
+  } catch (error) {
+    console.error('Erreur saveProcessedHero:', error);
+    throw error;
+  }
+}
+
+/**
+ * Récupère les images hero détourées de tous les yachts sélectionnés
+ */
+export async function getProcessedHeroes() {
+  try {
+    const rows = await sql`
+      SELECT yacht_id, processed_hero
+      FROM yacht_selections
+      WHERE processed_hero IS NOT NULL AND is_visible = true
+    `;
+    return rows;
+  } catch (error) {
+    console.error('Erreur getProcessedHeroes:', error);
+    return [];
+  }
+}
+
 export default sql;

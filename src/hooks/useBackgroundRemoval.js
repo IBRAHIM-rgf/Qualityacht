@@ -3,25 +3,33 @@ import { useState, useEffect } from 'react';
 
 const BACKGROUND_COLOR = '#24445c';
 
-// Cache en mémoire pour éviter re-traitement
+// Cache en mémoire pour éviter re-fetch DB
 const processedImageCache = new Map();
 
 /**
- * Hook pour supprimer l'arrière-plan d'une image et ajouter un fond bleu
- * Utilise @imgly/background-removal (traitement côté client)
+ * Hook pour utiliser une image hero détourée.
+ * 1. Si savedUrl fourni (depuis DB) → l'utilise directement
+ * 2. Sinon traite côté client → sauvegarde en DB pour la prochaine fois
  */
-export function useBackgroundRemoval(imageUrl, enabled = true) {
-  const [processedUrl, setProcessedUrl] = useState(null);
+export function useBackgroundRemoval(imageUrl, enabled = true, yachtId = null, savedUrl = null) {
+  const [processedUrl, setProcessedUrl] = useState(savedUrl || null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Si on a déjà une URL sauvegardée (DB), l'utiliser directement
+    if (savedUrl) {
+      setProcessedUrl(savedUrl);
+      processedImageCache.set(imageUrl, savedUrl);
+      return;
+    }
+
     if (!imageUrl || !enabled) {
       setProcessedUrl(null);
       return;
     }
 
-    // Vérifier le cache
+    // Vérifier le cache mémoire
     if (processedImageCache.has(imageUrl)) {
       setProcessedUrl(processedImageCache.get(imageUrl));
       return;
@@ -36,14 +44,10 @@ export function useBackgroundRemoval(imageUrl, enabled = true) {
       try {
         console.log('[BG-Removal] Démarrage pour:', imageUrl.substring(0, 50) + '...');
 
-        // Import dynamique pour éviter le chargement initial (30MB de modèle)
-        console.log('[BG-Removal] Import du module imgly...');
         const { removeBackground } = await import('@imgly/background-removal');
-        console.log('[BG-Removal] Module importé avec succès');
 
-        // Utiliser le proxy pour éviter les erreurs CORS avec les images Ankor
+        // Fetch via proxy pour éviter CORS
         const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(imageUrl)}`;
-        console.log('[BG-Removal] Fetch via proxy...');
         const response = await fetch(proxyUrl);
         if (!response.ok) throw new Error('Impossible de charger l\'image via proxy');
 
@@ -74,89 +78,111 @@ export function useBackgroundRemoval(imageUrl, enabled = true) {
 
         if (cancelled) return;
 
-        // Supprimer le fond avec le modèle small (plus rapide et plus stable)
+        // Supprimer le fond
         console.log('[BG-Removal] Lancement removeBackground...');
         const resultBlob = await removeBackground(inputBlob, {
           model: 'small',
-          output: {
-            format: 'image/png',
-          },
+          output: { format: 'image/png' },
         });
         console.log('[BG-Removal] Détourage terminé, résultat:', resultBlob.size, 'bytes');
 
         if (cancelled) return;
 
-        // Créer canvas pour ajouter le fond bleu
+        // Ajouter le fond bleu via canvas
         const img = new Image();
         const objectUrl = URL.createObjectURL(resultBlob);
-
         await new Promise((resolve, reject) => {
           img.onload = resolve;
           img.onerror = reject;
           img.src = objectUrl;
         });
 
-        if (cancelled) {
-          URL.revokeObjectURL(objectUrl);
-          return;
-        }
+        if (cancelled) { URL.revokeObjectURL(objectUrl); return; }
 
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
-
-        // Dessiner le fond bleu
         ctx.fillStyle = BACKGROUND_COLOR;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Dessiner le yacht détouré par-dessus
         ctx.drawImage(img, 0, 0);
 
-        // Convertir en data URL (JPEG pour réduire la taille)
-        const finalUrl = canvas.toDataURL('image/jpeg', 0.9);
-
+        const finalUrl = canvas.toDataURL('image/jpeg', 0.85);
         URL.revokeObjectURL(objectUrl);
 
         if (!cancelled) {
-          // Mettre en cache
           processedImageCache.set(imageUrl, finalUrl);
           setProcessedUrl(finalUrl);
-          console.log('[BG-Removal] ✅ Succès! Image mise en cache');
+          console.log('[BG-Removal] Image traitée avec succès');
+
+          // Sauvegarder en DB si on a un yachtId
+          if (yachtId) {
+            saveToDb(yachtId, finalUrl);
+          }
         }
       } catch (err) {
         if (!cancelled) {
-          console.error('[BG-Removal] ❌ Erreur:', err.message);
-          console.error('[BG-Removal] Stack:', err.stack);
+          console.error('[BG-Removal] Erreur:', err.message);
           setError(err);
         }
       } finally {
-        if (!cancelled) {
-          setIsProcessing(false);
-        }
+        if (!cancelled) setIsProcessing(false);
       }
     }
 
     processImage();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [imageUrl, enabled]);
+    return () => { cancelled = true; };
+  }, [imageUrl, enabled, savedUrl]);
 
   return { processedUrl, isProcessing, error };
 }
 
 /**
- * Vide le cache des images traitées
+ * Sauvegarde silencieuse en DB (fire & forget)
  */
-export function clearBackgroundRemovalCache() {
-  processedImageCache.clear();
+async function saveToDb(yachtId, dataUrl) {
+  try {
+    const res = await fetch(`/api/admin/yachts/processed-hero?token=${getAdminToken()}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ yacht_id: yachtId, processed_hero: dataUrl }),
+    });
+    if (res.ok) {
+      console.log('[BG-Removal] Sauvegardé en DB pour', yachtId);
+    }
+  } catch (err) {
+    console.warn('[BG-Removal] Échec sauvegarde DB:', err.message);
+  }
 }
 
 /**
- * Vérifie si une image est déjà en cache
+ * Récupère le token admin depuis l'URL (page admin)
  */
-export function isImageCached(imageUrl) {
-  return processedImageCache.has(imageUrl);
+function getAdminToken() {
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('token') || '';
+  }
+  return '';
+}
+
+/**
+ * Charge les images hero détourées depuis la DB
+ * Retourne un Map { yacht_id → data_url }
+ */
+export async function fetchProcessedHeroes() {
+  try {
+    const res = await fetch('/api/admin/yachts/processed-hero');
+    if (!res.ok) return {};
+    const data = await res.json();
+    // Pré-remplir le cache mémoire
+    if (data.heroes) {
+      Object.entries(data.heroes).forEach(([id, url]) => {
+        processedImageCache.set(id, url);
+      });
+    }
+    return data.heroes || {};
+  } catch {
+    return {};
+  }
 }

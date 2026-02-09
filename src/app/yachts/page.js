@@ -22,6 +22,7 @@ export default async function Page({ searchParams }) {
       priceMax: params.priceMax ? Number(params.priceMax) : null,
     };
 
+    // processedHero déjà injecté par fetchVisibleYachts
     const { yachts, totalYachts } = await fetchVisibleYachts(initialFilters);
 
     return (

@@ -37,6 +37,8 @@ export default function YachtCardV2({ yacht }) {
               alt={yacht.name || 'Yacht'}
               className="w-full h-full object-cover"
               enableProcessing={true}
+              yachtId={yacht.id}
+              savedProcessedUrl={yacht.processedHero || null}
             />
           )}
           {images.length > 1 && (

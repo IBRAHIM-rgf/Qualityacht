@@ -67,6 +67,8 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                     alt={yacht.name || 'Yacht'}
                     className="w-full h-full object-cover"
                     enableProcessing={true}
+                    yachtId={yacht.id}
+                    savedProcessedUrl={yacht.processedHero || null}
                   />
                 ) : (
                   <img

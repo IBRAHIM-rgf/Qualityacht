@@ -1,7 +1,7 @@
 // src/lib/yachts.js - Fonctions partagées pour le fetch des yachts
 
 import { fetchAnkorBearerToken } from '@/lib/utils';
-import { getVisibleYachtIds, getFeaturedYachtIds, getYachtSelections } from '@/lib/db';
+import { getVisibleYachtIds, getFeaturedYachtIds, getYachtSelections, getProcessedHeroes } from '@/lib/db';
 
 const ANKOR_API_BASE_URL = "https://api.ankor.io";
 
@@ -281,7 +281,7 @@ export async function fetchYachtsForDestination(destination) {
     );
 
     // Trier par nom alphabétique
-    yachts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    yachts.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
 
     return {
       yachts,
@@ -335,7 +335,7 @@ export async function fetchYachtsWithFilters(filters) {
     );
 
     // Trier par nom alphabétique
-    yachts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    yachts.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
 
     return {
       yachts,
@@ -356,8 +356,11 @@ export async function fetchYachtsWithFilters(filters) {
  */
 export async function fetchVisibleYachts(filters = {}) {
   try {
-    // 1. Récupérer les sélections depuis la base
-    const selections = await getYachtSelections();
+    // 1. Récupérer les sélections et images détourées depuis la base
+    const [selections, processedHeroes] = await Promise.all([
+      getYachtSelections(),
+      getProcessedHeroes(),
+    ]);
 
     // Si aucune sélection en DB, utiliser le comportement par défaut (tous les yachts)
     if (!selections || selections.length === 0) {
@@ -377,11 +380,14 @@ export async function fetchVisibleYachts(filters = {}) {
     const categoryMap = new Map(
       selections.map(s => [s.yacht_id, s.category])
     );
+    const heroMap = new Map(
+      processedHeroes.map(h => [h.yacht_id, h.processed_hero])
+    );
 
     // 3. Fetch tous les yachts depuis Ankor
     const { yachts: allYachts, totalYachts } = await fetchYachtsWithFilters(filters);
 
-    // 4. Filtrer et enrichir les yachts
+    // 4. Filtrer et enrichir les yachts (avec image détourée si dispo)
     const filteredYachts = allYachts
       .filter(yacht => visibleIds.has(yacht.id))
       .map(yacht => ({
@@ -389,6 +395,7 @@ export async function fetchVisibleYachts(filters = {}) {
         isFeatured: featuredIds.has(yacht.id),
         displayOrder: orderMap.get(yacht.id) ?? 999,
         category: categoryMap.get(yacht.id) || null,
+        processedHero: heroMap.get(yacht.id) || null,
       }));
 
     // 5. Trier : featured en premier, puis par ordre d'affichage
@@ -417,8 +424,11 @@ export async function fetchVisibleYachts(filters = {}) {
  */
 export async function fetchVisibleYachtsForDestination(destination) {
   try {
-    // 1. Récupérer les sélections depuis la base
-    const selections = await getYachtSelections();
+    // 1. Récupérer sélections et images détourées en parallèle
+    const [selections, processedHeroes] = await Promise.all([
+      getYachtSelections(),
+      getProcessedHeroes(),
+    ]);
 
     // 2. Fetch les yachts de la destination
     const { yachts: allYachts, totalYachts, filters } = await fetchYachtsForDestination(destination);
@@ -438,14 +448,18 @@ export async function fetchVisibleYachtsForDestination(destination) {
     const orderMap = new Map(
       selections.map(s => [s.yacht_id, s.display_order])
     );
+    const heroMap = new Map(
+      processedHeroes.map(h => [h.yacht_id, h.processed_hero])
+    );
 
-    // 4. Filtrer et enrichir
+    // 4. Filtrer et enrichir (avec image détourée si dispo)
     const filteredYachts = allYachts
       .filter(yacht => visibleIds.has(yacht.id))
       .map(yacht => ({
         ...yacht,
         isFeatured: featuredIds.has(yacht.id),
         displayOrder: orderMap.get(yacht.id) ?? 999,
+        processedHero: heroMap.get(yacht.id) || null,
       }));
 
     // 5. Trier
