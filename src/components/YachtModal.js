@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { X, ChevronLeft, ChevronRight, MapPin, Calendar, Users, BedDouble, Ruler, Map, Anchor, Ship } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, MapPin, Users, BedDouble, Ruler, Map, Anchor, Ship, UserCircle2 } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
 import ProcessedYachtImage from './ProcessedYachtImage';
 
@@ -144,11 +144,11 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                 <p className="text-sm text-[#acb0cd]">Cabins</p>
               </div>
             )}
-            {yacht.year && (
+            {yacht.crew && (
               <div className="text-center">
-                <Calendar className="w-6 h-6 mx-auto mb-2 text-[#B87333]" />
-                <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.year}</p>
-                <p className="text-sm text-[#acb0cd]">Built</p>
+                <UserCircle2 className="w-6 h-6 mx-auto mb-2 text-[#B87333]" />
+                <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.crew}</p>
+                <p className="text-sm text-[#acb0cd]">Crew</p>
               </div>
             )}
           </div>
@@ -166,13 +166,27 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
               </div>
             )}
 
-            {/* Refit Year */}
-            {yacht.refit && (
+            {/* Built & Refit Year */}
+            {(yacht.year || yacht.refit) && (
               <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
                 <Anchor className="w-6 h-6 text-[#B87333]" />
                 <div>
-                  <p className="text-sm text-[#acb0cd]">Last Refit</p>
-                  <p className="text-[#C0C0C0] font-medium">{yacht.refit}</p>
+                  {yacht.year && yacht.refit ? (
+                    <>
+                      <p className="text-sm text-[#acb0cd]">Built / Last Refit</p>
+                      <p className="text-[#C0C0C0] font-medium">{yacht.year} / {yacht.refit}</p>
+                    </>
+                  ) : yacht.year ? (
+                    <>
+                      <p className="text-sm text-[#acb0cd]">Built</p>
+                      <p className="text-[#C0C0C0] font-medium">{yacht.year}</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm text-[#acb0cd]">Last Refit</p>
+                      <p className="text-[#C0C0C0] font-medium">{yacht.refit}</p>
+                    </>
+                  )}
                 </div>
               </div>
             )}
