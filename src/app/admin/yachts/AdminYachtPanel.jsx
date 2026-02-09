@@ -55,8 +55,15 @@ function EditModal({ yacht, onClose, onSave, token }) {
   const [loading, setLoading] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const cached = yacht.cached_data || {};
-  const images = cached.images || [];
+  let cached = {};
+  try {
+    cached = typeof yacht.cached_data === 'string'
+      ? JSON.parse(yacht.cached_data)
+      : (yacht.cached_data || {});
+  } catch (e) {
+    cached = yacht.cached_data || {};
+  }
+  const images = Array.isArray(cached.images) ? cached.images : [];
 
   const [form, setForm] = useState({
     custom_title: yacht.custom_title || '',
@@ -619,9 +626,16 @@ function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit }) {
     setLoading(false);
   };
 
-  const cached = yacht.cached_data || {};
-  const images = cached.images || [];
-  const imageUrl = images[0] ? getAnkorImageUrl(images[0], '320w') : '/placeholder.jpg';
+  let cached = {};
+  try {
+    cached = typeof yacht.cached_data === 'string'
+      ? JSON.parse(yacht.cached_data)
+      : (yacht.cached_data || {});
+  } catch (e) {
+    cached = yacht.cached_data || {};
+  }
+  const images = Array.isArray(cached.images) ? cached.images : [];
+  const imageUrl = images.length > 0 && images[0] ? getAnkorImageUrl(images[0], '320w') : '/placeholder.jpg';
 
   return (
     <div
@@ -687,8 +701,8 @@ function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit }) {
 // ============================================
 function AnkorYachtCard({ yacht, isSelected, onAdd, selectedRegion }) {
   const [loading, setLoading] = useState(false);
-  const images = yacht.images || [];
-  const imageUrl = images[0] ? getAnkorImageUrl(images[0], '320w') : '/placeholder.jpg';
+  const images = Array.isArray(yacht.images) ? yacht.images : [];
+  const imageUrl = images.length > 0 && images[0] ? getAnkorImageUrl(images[0], '320w') : '/placeholder.jpg';
 
   const handleAdd = async () => {
     setLoading(true);
