@@ -2,7 +2,7 @@
 
 "use client";
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Heart, Share2, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map, UserCircle2 } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
 
 export default function YachtCardV2({ yacht }) {
@@ -68,9 +68,6 @@ export default function YachtCardV2({ yacht }) {
             <button className="bg-white/80 hover:bg-white p-2 rounded-full transition-colors">
               <Heart className="w-5 h-5 " />
             </button>
-            <button className="bg-white/80 hover:bg-white p-2 rounded-full transition-colors">
-              <Share2 className="w-5 h-5 " />
-            </button>
           </div>
         </div>
       </div>
@@ -95,25 +92,22 @@ export default function YachtCardV2({ yacht }) {
         {/* Details */}
         <div className="flex flex-wrap gap-4 text-sm  mb-2 items-center">
           {yacht.length && (
-            <span className="flex items-center gap-1"><Ruler className="w-4 h-4" />{yacht.length}</span>
+            <span className="flex items-center gap-1"><Ruler className="w-4 h-4 text-[#B03E00]" />{yacht.length}</span>
           )}
           {yacht.guests && (
-            <span className="flex items-center gap-1"><Users className="w-4 h-4" />{yacht.guests} guests</span>
+            <span className="flex items-center gap-1"><Users className="w-4 h-4 text-[#B03E00]" />{yacht.guests} guests</span>
           )}
           {yacht.capacity && !yacht.guests && (
-            <span className="flex items-center gap-1"><Users className="w-4 h-4" />{yacht.capacity} guests</span>
+            <span className="flex items-center gap-1"><Users className="w-4 h-4 text-[#B03E00]" />{yacht.capacity} guests</span>
           )}
           {yacht.cabins && (
-            <span className="flex items-center gap-1"><BedDouble className="w-4 h-4" />{yacht.cabins} cabins</span>
+            <span className="flex items-center gap-1"><BedDouble className="w-4 h-4 text-[#B03E00]" />{yacht.cabins} cabins</span>
           )}
-          {yacht.year && (
-            <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />{yacht.year}</span>
-          )}
-          {yacht.refit && (
-            <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />Refit {yacht.refit}</span>
+          {yacht.crew && (
+            <span className="flex items-center gap-1"><UserCircle2 className="w-4 h-4 text-[#B03E00]" />{yacht.crew} crew</span>
           )}
           {yacht.location && (
-            <span className="flex items-center gap-1"><Map className="w-4 h-4" />{yacht.location}</span>
+            <span className="flex items-center gap-1"><Map className="w-4 h-4 text-[#B03E00]" />{yacht.location}</span>
           )}
         </div>
         {/* Destinations */}

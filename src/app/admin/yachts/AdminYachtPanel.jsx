@@ -179,8 +179,8 @@ function EditModal({ yacht, onClose, onSave, token }) {
                     <p className="text-[#C0C0C0]">{cached.cabins || '-'}</p>
                   </div>
                   <div>
-                    <span className="text-gray-500">Année:</span>
-                    <p className="text-[#C0C0C0]">{cached.year || '-'}</p>
+                    <span className="text-gray-500">Crew:</span>
+                    <p className="text-[#C0C0C0]">{cached.crew || '-'}</p>
                   </div>
                   <div>
                     <span className="text-gray-500">Prix Ankor:</span>
@@ -341,6 +341,7 @@ function CreateManualModal({ onClose, onSave, token }) {
     length: '',
     guests: '',
     cabins: '',
+    crew: '',
     year: '',
     price: '',
     location: '',
@@ -365,6 +366,7 @@ function CreateManualModal({ onClose, onSave, token }) {
         length: form.length ? `${form.length}m` : null,
         guests: form.guests ? parseInt(form.guests) : null,
         cabins: form.cabins ? parseInt(form.cabins) : null,
+        crew: form.crew ? parseInt(form.crew) : null,
         year: form.year ? parseInt(form.year) : null,
         pricePerHour: form.price,
         location: form.location,
@@ -464,13 +466,13 @@ function CreateManualModal({ onClose, onSave, token }) {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Année</label>
+              <label className="block text-sm text-gray-400 mb-1">Crew</label>
               <input
                 type="number"
-                value={form.year}
-                onChange={(e) => setForm({ ...form, year: e.target.value })}
+                value={form.crew}
+                onChange={(e) => setForm({ ...form, crew: e.target.value })}
                 className="w-full px-4 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0]"
-                placeholder="2022"
+                placeholder="8"
               />
             </div>
             <div>
@@ -664,6 +666,7 @@ function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit }) {
         <div className="flex flex-wrap gap-2 text-xs text-gray-400 mt-1">
           {cached.length && <span>{cached.length}</span>}
           {cached.guests && <span>• {cached.guests} guests</span>}
+          {cached.crew && <span>• {cached.crew} crew</span>}
           {yacht.region && (
             <span className="text-copper-400">• {REGIONS.find(r => r.value === yacht.region)?.label || yacht.region}</span>
           )}
