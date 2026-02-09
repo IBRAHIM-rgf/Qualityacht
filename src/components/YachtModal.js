@@ -113,28 +113,28 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
             {yacht.length && (
               <div className="text-center">
-                <Ruler className="w-6 h-6 mx-auto mb-2 text-[#B87333]" />
+                <Ruler className="w-6 h-6 mx-auto mb-2 text-[#CC5500]" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.length}</p>
                 <p className="text-sm text-[#acb0cd]">Length</p>
               </div>
             )}
             {(yacht.guests || yacht.capacity) && (
               <div className="text-center">
-                <Users className="w-6 h-6 mx-auto mb-2 text-[#B87333]" />
+                <Users className="w-6 h-6 mx-auto mb-2 text-[#B94600]" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.guests || yacht.capacity}</p>
                 <p className="text-sm text-[#acb0cd]">Guests</p>
               </div>
             )}
             {yacht.cabins && (
               <div className="text-center">
-                <BedDouble className="w-6 h-6 mx-auto mb-2 text-[#B87333]" />
+                <BedDouble className="w-6 h-6 mx-auto mb-2 text-[#B03E00]" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.cabins}</p>
                 <p className="text-sm text-[#acb0cd]">Cabins</p>
               </div>
             )}
             {yacht.crew && (
               <div className="text-center">
-                <UserCircle2 className="w-6 h-6 mx-auto mb-2 text-[#B87333]" />
+                <UserCircle2 className="w-6 h-6 mx-auto mb-2 text-[#CC5500]" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.crew}</p>
                 <p className="text-sm text-[#acb0cd]">Crew</p>
               </div>
@@ -146,7 +146,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {/* Location */}
             {yacht.location && (
               <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
-                <Map className="w-6 h-6 text-[#B87333]" />
+                <Map className="w-6 h-6 text-[#B94600]" />
                 <div>
                   <p className="text-sm text-[#acb0cd]">Base Port</p>
                   <p className="text-[#C0C0C0] font-medium">{yacht.location}</p>
@@ -157,7 +157,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {/* Built & Refit Year */}
             {(yacht.year || yacht.refit) && (
               <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
-                <Anchor className="w-6 h-6 text-[#B87333]" />
+                <Anchor className="w-6 h-6 text-[#B03E00]" />
                 <div>
                   {yacht.year && yacht.refit ? (
                     <>
@@ -182,7 +182,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {/* Type */}
             {yacht.type && (
               <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
-                <Ship className="w-6 h-6 text-[#B87333]" />
+                <Ship className="w-6 h-6 text-[#CC5500]" />
                 <div>
                   <p className="text-sm text-[#acb0cd]">Type</p>
                   <p className="text-[#C0C0C0] font-medium capitalize">{yacht.type}</p>
@@ -223,7 +223,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
                     key={idx}
                     className="px-3 py-1 bg-[#3a3b3f] rounded-full text-sm flex items-center gap-1 border border-[#C0C0C0]"
                   >
-                    <MapPin className="w-4 h-4 text-[#B87333]" />
+                    <MapPin className="w-4 h-4 text-[#B94600]" />
                     {dest}
                   </span>
                 ))}
