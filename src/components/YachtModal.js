@@ -110,7 +110,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#3a3b3f] rounded-xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
             {yacht.length && (
               <div className="text-center">
                 <Ruler className="w-6 h-6 mx-auto mb-2 text-[#B87333]" />
@@ -145,7 +145,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             {/* Location */}
             {yacht.location && (
-              <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
+              <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
                 <Map className="w-6 h-6 text-[#B87333]" />
                 <div>
                   <p className="text-sm text-[#acb0cd]">Base Port</p>
@@ -156,7 +156,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
             {/* Built & Refit Year */}
             {(yacht.year || yacht.refit) && (
-              <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
+              <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
                 <Anchor className="w-6 h-6 text-[#B87333]" />
                 <div>
                   {yacht.year && yacht.refit ? (
@@ -181,7 +181,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
             {/* Type */}
             {yacht.type && (
-              <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl">
+              <div className="flex items-center gap-3 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
                 <Ship className="w-6 h-6 text-[#B87333]" />
                 <div>
                   <p className="text-sm text-[#acb0cd]">Type</p>
