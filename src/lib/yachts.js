@@ -27,6 +27,8 @@ export const REGION_MAP = {
   'south-pacific': 'Australasia & South Pacific',
   antarctica: 'Antarctica',
   'arabian-gulf': 'Arabian Gulf',
+  'central-america': 'South & Central America',
+  'south-america': 'South & Central America',
 
   // RÉGIONS NON SUPPORTÉES PAR L'API (retournent erreur 400)
   'north-america': 'North America',
@@ -271,14 +273,15 @@ export async function fetchYachtsForDestination(destination) {
       };
     }
 
-    const MAX_RESULTS = 50;
-    const vesselsToLoad = vesselSummaries.slice(0, MAX_RESULTS);
+    // Charger TOUS les yachts (plus de limite)
+    const vesselDetails = await fetchVesselDetailsBatch(vesselSummaries, token, 20);
 
-    const vesselDetails = await fetchVesselDetailsBatch(vesselsToLoad, token, 10);
-
-    const yachts = vesselsToLoad.map((vessel, index) =>
+    const yachts = vesselSummaries.map((vessel, index) =>
       mapVesselSummaryToYachtCard(vessel, vesselDetails[index], filters)
     );
+
+    // Trier par nom alphabétique
+    yachts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
     return {
       yachts,
@@ -324,14 +327,15 @@ export async function fetchYachtsWithFilters(filters) {
       };
     }
 
-    const MAX_RESULTS = 50;
-    const vesselsToLoad = vesselSummaries.slice(0, MAX_RESULTS);
+    // Charger TOUS les yachts (plus de limite)
+    const vesselDetails = await fetchVesselDetailsBatch(vesselSummaries, token, 20);
 
-    const vesselDetails = await fetchVesselDetailsBatch(vesselsToLoad, token, 10);
-
-    const yachts = vesselsToLoad.map((vessel, index) =>
+    const yachts = vesselSummaries.map((vessel, index) =>
       mapVesselSummaryToYachtCard(vessel, vesselDetails[index], filters)
     );
+
+    // Trier par nom alphabétique
+    yachts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
     return {
       yachts,

@@ -28,6 +28,7 @@ const ANKOR_REGIONS = [
   { value: 'west-mediterranean', label: 'Méditerranée Ouest' },
   { value: 'east-mediterranean', label: 'Méditerranée Est' },
   { value: 'caribbean', label: 'Caraïbes' },
+  { value: 'central-america', label: 'Amérique Centrale' },
   { value: 'indian-ocean', label: 'Océan Indien' },
   { value: 'south-pacific', label: 'Pacifique Sud' },
   { value: 'arabian-gulf', label: 'Golfe Arabique' },
@@ -38,6 +39,7 @@ const ANKOR_REGIONS = [
 const REGIONS = [
   { value: '', label: 'Toutes régions' },
   { value: 'caribbean', label: 'Caraïbes' },
+  { value: 'central-america', label: 'Amérique Centrale' },
   { value: 'west-mediterranean', label: 'Méditerranée Ouest' },
   { value: 'east-mediterranean', label: 'Méditerranée Est' },
   { value: 'indian-ocean', label: 'Océan Indien' },

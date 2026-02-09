@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight, MapPin, Calendar, Users, BedDouble, Ruler, Map, Anchor, Ship } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
+import ProcessedYachtImage from './ProcessedYachtImage';
 
 export default function YachtModal({ yacht, isOpen, onClose }) {
   const [currentImage, setCurrentImage] = useState(0);
@@ -60,11 +61,20 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             )}
             {images.length > 0 && (
               <>
-                <img
-                  src={images[currentImage]}
-                  alt={yacht.name || 'Yacht'}
-                  className="w-full h-full object-cover"
-                />
+                {currentImage === 0 ? (
+                  <ProcessedYachtImage
+                    src={images[0]}
+                    alt={yacht.name || 'Yacht'}
+                    className="w-full h-full object-cover"
+                    enableProcessing={true}
+                  />
+                ) : (
+                  <img
+                    src={images[currentImage]}
+                    alt={yacht.name || 'Yacht'}
+                    className="w-full h-full object-cover"
+                  />
+                )}
                 {images.length > 1 && (
                   <>
                     <button
