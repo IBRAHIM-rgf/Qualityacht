@@ -195,7 +195,9 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           {yacht.description && (
             <div className="mb-6 text-center">
               <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3">Description</h3>
-              <div className="h-px bg-gradient-to-r from-transparent via-[#C0C0C0] to-transparent mb-4"></div>
+              <div className="flex justify-center mb-4">
+                <div className="h-px w-48 bg-gradient-to-r from-transparent via-[#C0C0C0] to-transparent"></div>
+              </div>
               <p className="text-[#acb0cd] leading-relaxed">{yacht.description}</p>
             </div>
           )}
@@ -204,7 +206,9 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
           {yacht.destinations && yacht.destinations.length > 0 && (
             <div className="mb-6 text-center">
               <h3 className="text-xl font-semibold text-[#C0C0C0] mb-3">Destinations</h3>
-              <div className="h-px bg-gradient-to-r from-transparent via-[#C0C0C0] to-transparent mb-4"></div>
+              <div className="flex justify-center mb-4">
+                <div className="h-px w-48 bg-gradient-to-r from-transparent via-[#C0C0C0] to-transparent"></div>
+              </div>
               <div className="flex flex-wrap gap-2 justify-center">
                 {yacht.destinations.map((dest, idx) => (
                   <span
