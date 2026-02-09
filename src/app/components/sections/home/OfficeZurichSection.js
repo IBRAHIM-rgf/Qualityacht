@@ -21,13 +21,9 @@ export default function OfficeZurichSection() {
           <h2 className="  text-3xl md:text-4xl font-light tracking-wide">
             OFFICE
           </h2>
-          <Image
-              src="/images/title-line.png"
-              alt="Decorative line"
-              width={200}
-              height={10}
-              className="mx-auto mb-6"
-            />
+          <div className="flex justify-center my-6">
+            <div className="h-px w-48 bg-gradient-to-r from-transparent via-[#C0C0C0] to-transparent"></div>
+          </div>
           </div>
         <h3 className="text-amber-200 text-3xl md:text-4xl font-light mb-16 tracking-wide">
           Zurich
