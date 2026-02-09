@@ -10,6 +10,12 @@ module.exports = {
   theme: {
   	extend: {
   		colors: {
+  			copper: {
+  				400: '#D4915A',
+  				500: '#B87333',
+  				600: '#9A5F28',
+  				700: '#7D4E20',
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

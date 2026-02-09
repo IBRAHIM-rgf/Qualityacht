@@ -30,7 +30,7 @@ export default async function AdminYachtsPage({ searchParams }) {
           <p className="text-gray-400 mb-4">Le token fourni n'est pas correct.</p>
           <a
             href="/admin/yachts"
-            className="inline-block mt-4 px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl transition-colors"
+            className="inline-block mt-4 px-6 py-2 bg-copper-500 hover:bg-copper-600 text-white rounded-xl transition-colors"
           >
             Reessayer
           </a>
@@ -77,7 +77,7 @@ export default async function AdminYachtsPage({ searchParams }) {
                 <span className="text-green-400 font-semibold">{stats.visible}</span> visibles
               </div>
               <div className="text-gray-400">
-                <span className="text-orange-400 font-semibold">{stats.featured}</span> featured
+                <span className="text-copper-400 font-semibold">{stats.featured}</span> featured
               </div>
             </div>
           </div>

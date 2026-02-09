@@ -31,7 +31,7 @@ export default function Choices() {
           className="absolute z-30 top-72 left-60 text-center group"
           prefetch={false}
         >
-          <span className="trajan-regular text-[#C0C0C0] text-xl md:text-xl transition-colors font-semibold group-hover:text-orange-500">
+          <span className="trajan-regular text-[#C0C0C0] text-xl md:text-xl transition-colors font-semibold group-hover:text-copper-500">
             YACHT SALES <br /> & <br /> ACQUISITIONS
           </span>
         </Link>
@@ -41,7 +41,7 @@ export default function Choices() {
           className="absolute z-30 bottom-56 left-64 text-center group"
           prefetch={false}
         >
-          <span className="trajan-regular text-[#C0C0C0] text-xl md:text-xl transition-colors font-semibold group-hover:text-orange-500">
+          <span className="trajan-regular text-[#C0C0C0] text-xl md:text-xl transition-colors font-semibold group-hover:text-copper-500">
             YACHT BOAT <br /> MANAGEMENT
           </span>
         </Link>
@@ -51,7 +51,7 @@ export default function Choices() {
           className="absolute z-30 top-72 right-72 text-center group"
           prefetch={false}
         >
-          <span className="trajan-regular text-[#C0C0C0] text-xl md:text-xl transition-colors font-semibold group-hover:text-orange-500">
+          <span className="trajan-regular text-[#C0C0C0] text-xl md:text-xl transition-colors font-semibold group-hover:text-copper-500">
             CHARTER <br /> FLEET
           </span>
         </Link>
@@ -61,7 +61,7 @@ export default function Choices() {
           className="absolute z-30 bottom-56 right-72 text-center group"
           prefetch={false}
         >
-          <span className="trajan-regular text-[#C0C0C0] text-xl md:text-xl transition-colors font-semibold group-hover:text-orange-500">
+          <span className="trajan-regular text-[#C0C0C0] text-xl md:text-xl transition-colors font-semibold group-hover:text-copper-500">
             CHARTER <br /> MANAGEMENT
           </span>
         </Link>

@@ -78,7 +78,7 @@ export default function Header() {
             
             {/* Services */}
             <div>
-              <h3 className="font-semibold mb-3 uppercase underline decoration-[#f97316] underline-offset-8 text-sm tracking-wider">Services</h3>
+              <h3 className="font-semibold mb-3 uppercase underline decoration-[#B87333] underline-offset-8 text-sm tracking-wider">Services</h3>
               <ul className="space-y-2">
                 <li><a href="/charters" className="hover:text-white transition">Yacht Charter</a></li>
                 <li><a href="/charters/destinations" className="hover:text-white transition">Destinations Charter</a></li>
@@ -91,7 +91,7 @@ export default function Header() {
 
             {/* On-Demand Charter */}
             <div>
-              <h3 className="font-semibold mb-3 uppercase underline decoration-[#f97316] underline-offset-8 text-sm tracking-wider">On-Demand Charter</h3>
+              <h3 className="font-semibold mb-3 uppercase underline decoration-[#B87333] underline-offset-8 text-sm tracking-wider">On-Demand Charter</h3>
               <ul className="space-y-2">
                 <li><a href="/charters" className="hover:text-white transition">On-Demand Yacht Charter</a></li>
                 <li><a href="/charters" className="hover:text-white transition">Pet-Friendly Yacht Charter</a></li>
@@ -103,7 +103,7 @@ export default function Header() {
 
             {/* Other Charters */}
             <div>
-              <h3 className="font-semibold mb-3 mt-2 uppercase underline decoration-[#f97316] underline-offset-8 text-sm tracking-wider">Other Charters</h3>
+              <h3 className="font-semibold mb-3 mt-2 uppercase underline decoration-[#B87333] underline-offset-8 text-sm tracking-wider">Other Charters</h3>
               <ul className="space-y-2">
                 <li><a href="/charters" className="hover:text-white transition">Group Yacht Charter</a></li>
                 <li><a href="/charters" className="hover:text-white transition">Sports Yacht Charter</a></li>
@@ -113,7 +113,7 @@ export default function Header() {
 
             {/* Destinations */}
             <div>
-              <h3 className="font-semibold mb-3 mt-2 uppercase underline decoration-[#f97316] underline-offset-8 text-sm tracking-wider">Destinations</h3>
+              <h3 className="font-semibold mb-3 mt-2 uppercase underline decoration-[#B87333] underline-offset-8 text-sm tracking-wider">Destinations</h3>
               <ul className="space-y-2">
                 <li><a href="/destinations/cities" className="hover:text-white transition">Cities</a></li>
                 <li><a href="/destinations/countries" className="hover:text-white transition">Countries</a></li>
@@ -125,7 +125,7 @@ export default function Header() {
 
             {/* Contact */}
             <div>
-              <h3 className="font-semibold mb-3 mt-2 uppercase underline decoration-[#f97316] underline-offset-8 text-sm tracking-wider">Contact</h3>
+              <h3 className="font-semibold mb-3 mt-2 uppercase underline decoration-[#B87333] underline-offset-8 text-sm tracking-wider">Contact</h3>
               <ul className="space-y-2">
                 <li>Email: <a href="mailto:info@gmail.com" className="underline hover:text-white">info@gmail.com</a></li>
                 <li>Office: Zurich</li>

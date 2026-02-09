@@ -42,7 +42,7 @@ export default function ItemsGrid({
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
-            <h2 className="text-lg font-semibold text-orange-500 mb-2 trajan-regular uppercase text-center break-words leading-tight w-full hyphens-auto">
+            <h2 className="text-lg font-semibold text-copper-500 mb-2 trajan-regular uppercase text-center break-words leading-tight w-full hyphens-auto">
               {item.title}
             </h2>
 

@@ -34,7 +34,7 @@ export default function SalesGrid({ title, bgImage, items }) {
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
-            <h2 className="text-lg font-semibold text-orange-500 mb-2 trajan-regular uppercase text-center break-words leading-tight">
+            <h2 className="text-lg font-semibold text-copper-500 mb-2 trajan-regular uppercase text-center break-words leading-tight">
               {item.title}
             </h2>
             <p className="text-[#C0C0C0] text-sm">{item.description}</p>

@@ -127,7 +127,7 @@ function EditModal({ yacht, onClose, onSave, token }) {
                           key={idx}
                           onClick={() => setCurrentImageIndex(idx)}
                           className={`relative flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 ${
-                            idx === currentImageIndex ? 'border-orange-500' : 'border-transparent'
+                            idx === currentImageIndex ? 'border-copper-500' : 'border-transparent'
                           }`}
                         >
                           <img
@@ -147,7 +147,7 @@ function EditModal({ yacht, onClose, onSave, token }) {
 
               {/* Infos Ankor */}
               <div className="bg-[#303135] rounded-xl p-4 space-y-3">
-                <h3 className="text-sm font-semibold text-orange-400 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-copper-400 flex items-center gap-2">
                   <Anchor className="w-4 h-4" /> Données Ankor
                 </h3>
                 <div className="grid grid-cols-2 gap-3 text-sm">
@@ -243,13 +243,13 @@ function EditModal({ yacht, onClose, onSave, token }) {
 
               {/* Options checkboxes */}
               <div className="bg-[#303135] rounded-xl p-4 space-y-3">
-                <h3 className="text-sm font-semibold text-orange-400">Options</h3>
+                <h3 className="text-sm font-semibold text-copper-400">Options</h3>
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={form.pets_allowed}
                     onChange={(e) => setForm({ ...form, pets_allowed: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-600 text-orange-500 focus:ring-orange-500"
+                    className="w-5 h-5 rounded border-gray-600 text-copper-500 focus:ring-copper-500"
                   />
                   <PawPrint className="w-4 h-4 text-gray-400" />
                   <span className="text-[#C0C0C0]">Animaux acceptés</span>
@@ -259,7 +259,7 @@ function EditModal({ yacht, onClose, onSave, token }) {
                     type="checkbox"
                     checked={form.groups_allowed}
                     onChange={(e) => setForm({ ...form, groups_allowed: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-600 text-orange-500 focus:ring-orange-500"
+                    className="w-5 h-5 rounded border-gray-600 text-copper-500 focus:ring-copper-500"
                   />
                   <Users className="w-4 h-4 text-gray-400" />
                   <span className="text-[#C0C0C0]">Adapté aux groupes</span>
@@ -269,7 +269,7 @@ function EditModal({ yacht, onClose, onSave, token }) {
                     type="checkbox"
                     checked={form.water_toys}
                     onChange={(e) => setForm({ ...form, water_toys: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-600 text-orange-500 focus:ring-orange-500"
+                    className="w-5 h-5 rounded border-gray-600 text-copper-500 focus:ring-copper-500"
                   />
                   <Waves className="w-4 h-4 text-gray-400" />
                   <span className="text-[#C0C0C0]">Water toys inclus</span>
@@ -312,7 +312,7 @@ function EditModal({ yacht, onClose, onSave, token }) {
           <button
             onClick={handleSave}
             disabled={loading}
-            className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex-1 px-4 py-2 bg-copper-500 text-white rounded-xl hover:bg-copper-600 disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
             Sauvegarder
@@ -396,7 +396,7 @@ function CreateManualModal({ onClose, onSave, token }) {
       <div className="bg-[#2a2a30] rounded-2xl w-full max-w-2xl border border-gray-700 max-h-[95vh] overflow-hidden flex flex-col">
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <h2 className="text-xl font-bold text-[#C0C0C0] flex items-center gap-2">
-            <Ship className="w-5 h-5 text-orange-400" /> Ajouter un yacht manuellement
+            <Ship className="w-5 h-5 text-copper-400" /> Ajouter un yacht manuellement
           </h2>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             <X className="w-6 h-6" />
@@ -512,7 +512,7 @@ function CreateManualModal({ onClose, onSave, token }) {
           </div>
 
           <div className="bg-[#303135] rounded-xl p-4 space-y-3">
-            <h3 className="text-sm font-semibold text-orange-400">Options</h3>
+            <h3 className="text-sm font-semibold text-copper-400">Options</h3>
             <div className="grid grid-cols-3 gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -565,7 +565,7 @@ function CreateManualModal({ onClose, onSave, token }) {
           <button
             onClick={handleSave}
             disabled={loading || !form.name}
-            className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex-1 px-4 py-2 bg-copper-500 text-white rounded-xl hover:bg-copper-600 disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
             Créer le yacht
@@ -629,7 +629,7 @@ function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit }) {
       style={style}
       className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
         !isVisible ? 'bg-[#252528] border-gray-800 opacity-60' :
-        isFeatured ? 'bg-[#2a2a30] border-orange-700/50' : 'bg-[#2a2a30] border-gray-700'
+        isFeatured ? 'bg-[#2a2a30] border-copper-700/50' : 'bg-[#2a2a30] border-gray-700'
       }`}
     >
       <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-1 text-gray-500">
@@ -651,7 +651,7 @@ function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit }) {
           {cached.length && <span>{cached.length}</span>}
           {cached.guests && <span>• {cached.guests} guests</span>}
           {yacht.region && (
-            <span className="text-orange-400">• {REGIONS.find(r => r.value === yacht.region)?.label || yacht.region}</span>
+            <span className="text-copper-400">• {REGIONS.find(r => r.value === yacht.region)?.label || yacht.region}</span>
           )}
         </div>
         <div className="flex gap-1 mt-1">
@@ -661,12 +661,12 @@ function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit }) {
         </div>
       </div>
 
-      <button onClick={() => onEdit(yacht)} className="p-2 text-gray-400 hover:text-orange-400">
+      <button onClick={() => onEdit(yacht)} className="p-2 text-gray-400 hover:text-copper-400">
         <Edit3 className="w-4 h-4" />
       </button>
 
       <button onClick={toggleFeatured} disabled={loading}
-        className={`p-2 rounded-lg ${isFeatured ? 'text-orange-400' : 'text-gray-500 hover:text-orange-400'}`}>
+        className={`p-2 rounded-lg ${isFeatured ? 'text-copper-400' : 'text-gray-500 hover:text-copper-400'}`}>
         <Star className="w-4 h-4" fill={isFeatured ? 'currentColor' : 'none'} />
       </button>
 
@@ -727,7 +727,7 @@ function AnkorYachtCard({ yacht, isSelected, onAdd, selectedRegion }) {
         <button
           onClick={handleAdd}
           disabled={loading}
-          className="px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm flex items-center gap-1 disabled:opacity-50"
+          className="px-3 py-1 bg-copper-500 hover:bg-copper-600 text-white rounded-lg text-sm flex items-center gap-1 disabled:opacity-50"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
           Ajouter
@@ -913,7 +913,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
           <div className="text-gray-400 text-sm">Visibles</div>
         </div>
         <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
-          <div className="text-2xl font-bold text-orange-400">{stats.featured}</div>
+          <div className="text-2xl font-bold text-copper-400">{stats.featured}</div>
           <div className="text-gray-400 text-sm">Featured</div>
         </div>
         <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
@@ -922,17 +922,17 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-orange-500/20 hover:bg-orange-500/30 rounded-xl p-4 border border-orange-700/50 flex flex-col items-center justify-center gap-1 transition-colors"
+          className="bg-copper-500/20 hover:bg-copper-500/30 rounded-xl p-4 border border-copper-700/50 flex flex-col items-center justify-center gap-1 transition-colors"
         >
-          <Plus className="w-6 h-6 text-orange-400" />
-          <span className="text-orange-400 text-sm font-medium">Créer manuel</span>
+          <Plus className="w-6 h-6 text-copper-400" />
+          <span className="text-copper-400 text-sm font-medium">Créer manuel</span>
         </button>
       </div>
 
       {/* Filtres Ankor */}
       <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
         <h3 className="text-[#C0C0C0] font-medium mb-4 flex items-center gap-2">
-          <Filter className="w-5 h-5 text-orange-400" /> Rechercher des yachts (API Ankor)
+          <Filter className="w-5 h-5 text-copper-400" /> Rechercher des yachts (API Ankor)
         </h3>
 
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-3">
@@ -963,7 +963,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
           <select
             value={selectedRegion}
             onChange={(e) => setSelectedRegion(e.target.value)}
-            className="px-3 py-2 bg-[#303135] border border-orange-700/50 rounded-xl text-orange-400 text-sm"
+            className="px-3 py-2 bg-[#303135] border border-copper-700/50 rounded-xl text-copper-400 text-sm"
           >
             <option value="">→ Ajouter à: Toutes</option>
             {REGIONS.slice(1).map(r => <option key={r.value} value={r.value}>→ {r.label}</option>)}
@@ -972,7 +972,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
           <button
             onClick={handleSearch}
             disabled={searching}
-            className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+            className="px-4 py-2 bg-copper-500 hover:bg-copper-600 text-white rounded-xl text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
             Rechercher
@@ -1056,11 +1056,11 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
       {activeTab === 'selections' ? (
         <div className="space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
-            <FolderOpen className="w-5 h-5 text-orange-400" />
+            <FolderOpen className="w-5 h-5 text-copper-400" />
             <button
               onClick={() => setFilterRegion('')}
               className={`px-3 py-1 rounded-lg text-sm transition-colors ${
-                filterRegion === '' ? 'bg-orange-500 text-white' : 'bg-[#303135] text-gray-400 hover:text-white'
+                filterRegion === '' ? 'bg-copper-500 text-white' : 'bg-[#303135] text-gray-400 hover:text-white'
               }`}
             >
               Toutes ({selections.length})
@@ -1072,7 +1072,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
                   key={region.value}
                   onClick={() => setFilterRegion(region.value)}
                   className={`px-3 py-1 rounded-lg text-sm transition-colors ${
-                    filterRegion === region.value ? 'bg-orange-500 text-white' : 'bg-[#303135] text-gray-400 hover:text-white'
+                    filterRegion === region.value ? 'bg-copper-500 text-white' : 'bg-[#303135] text-gray-400 hover:text-white'
                   }`}
                 >
                   {region.label} ({count})
@@ -1083,7 +1083,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
               <button
                 onClick={() => setFilterRegion('unassigned')}
                 className={`px-3 py-1 rounded-lg text-sm transition-colors ${
-                  filterRegion === 'unassigned' ? 'bg-orange-500 text-white' : 'bg-[#303135] text-gray-400 hover:text-white'
+                  filterRegion === 'unassigned' ? 'bg-copper-500 text-white' : 'bg-[#303135] text-gray-400 hover:text-white'
                 }`}
               >
                 Non classés ({selectionsByRegion['']?.length})

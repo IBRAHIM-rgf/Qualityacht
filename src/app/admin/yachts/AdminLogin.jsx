@@ -23,8 +23,8 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-[#303135] flex items-center justify-center p-4">
       <div className="bg-[#1b223d] border border-gray-700 rounded-2xl p-8 max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-8 h-8 text-orange-500" />
+          <div className="w-16 h-16 bg-copper-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-8 h-8 text-copper-500" />
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">Admin Qualityacht</h1>
           <p className="text-gray-400 text-sm">Entrez votre token pour acceder au panel</p>
@@ -38,7 +38,7 @@ export default function AdminLogin() {
               value={token}
               onChange={(e) => { setToken(e.target.value); setError(''); }}
               placeholder="Votre token secret..."
-              className="w-full px-4 py-3 bg-[#252540] border border-gray-600 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-[#252540] border border-gray-600 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-copper-500 focus:border-transparent transition"
               autoFocus
             />
             {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
@@ -46,7 +46,7 @@ export default function AdminLogin() {
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-copper-500 hover:bg-copper-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
           >
             <LogIn className="w-5 h-5" />
             Connexion

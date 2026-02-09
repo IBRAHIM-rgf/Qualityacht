@@ -26,24 +26,6 @@ const nextConfig = {
         },
       ],
     },
-    // Headers pour WASM et SharedArrayBuffer (requis par @imgly/background-removal)
-    async headers() {
-      return [
-        {
-          source: '/:path*',
-          headers: [
-            {
-              key: 'Cross-Origin-Opener-Policy',
-              value: 'same-origin',
-            },
-            {
-              key: 'Cross-Origin-Embedder-Policy',
-              value: 'require-corp',
-            },
-          ],
-        },
-      ];
-    },
   };
 
   export default nextConfig;
