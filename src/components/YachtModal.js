@@ -103,14 +103,14 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             )}
             {/* Price under name - all in silver */}
             {(yacht.pricePerHour || yacht.price) && (
-              <p className="text-xl font-bold text-[#C0C0C0]">
+              <p className="text-xl text-[#C0C0C0]">
                 Price {yacht.pricePerHour || yacht.price}/week
               </p>
             )}
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#7C6559] rounded-xl border border-[#C0C0C0]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#3a3b3f] rounded-xl border border-[#C0C0C0]">
             {yacht.length && (
               <div className="text-center">
                 <Ruler className="w-6 h-6 mx-auto mb-2 text-[#B87333]" />
