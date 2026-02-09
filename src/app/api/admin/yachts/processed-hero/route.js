@@ -26,12 +26,10 @@ export async function GET(request) {
 
 /**
  * POST - Sauvegarder une image hero détourée
+ * Pas d'auth requise : c'est un endpoint de cache qui ne modifie
+ * que le champ processed_hero sur des rows existantes
  */
 export async function POST(request) {
-  if (!checkAuth(request)) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
-  }
-
   try {
     const { yacht_id, processed_hero } = await request.json();
 

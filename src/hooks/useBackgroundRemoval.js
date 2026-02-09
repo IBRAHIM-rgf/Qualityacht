@@ -2,25 +2,65 @@
 import { useState, useEffect } from 'react';
 
 const BACKGROUND_COLOR = '#24445c';
+const LS_PREFIX = 'yacht-hero-';
 
-// Cache en mémoire pour éviter re-fetch DB
-const processedImageCache = new Map();
+// Cache mémoire (session courante)
+const memoryCache = new Map();
 
 /**
- * Hook pour utiliser une image hero détourée.
- * 1. Si savedUrl fourni (depuis DB) → l'utilise directement
- * 2. Sinon traite côté client → sauvegarde en DB pour la prochaine fois
+ * Lit le cache localStorage
+ */
+function getFromLS(yachtId) {
+  if (!yachtId || typeof window === 'undefined') return null;
+  try {
+    return localStorage.getItem(LS_PREFIX + yachtId);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Sauve dans localStorage
+ */
+function saveToLS(yachtId, dataUrl) {
+  if (!yachtId || typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(LS_PREFIX + yachtId, dataUrl);
+  } catch {
+    // localStorage plein → vider les anciennes entrées yacht-hero-*
+    try {
+      const keys = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(LS_PREFIX)) keys.push(k);
+      }
+      keys.slice(0, Math.ceil(keys.length / 2)).forEach(k => localStorage.removeItem(k));
+      localStorage.setItem(LS_PREFIX + yachtId, dataUrl);
+    } catch {}
+  }
+}
+
+/**
+ * Hook pour image hero détourée.
+ * Priorité : DB (savedUrl) → mémoire → localStorage → traitement client
+ * Après traitement : sauvegarde DB + localStorage + mémoire
  */
 export function useBackgroundRemoval(imageUrl, enabled = true, yachtId = null, savedUrl = null) {
-  const [processedUrl, setProcessedUrl] = useState(savedUrl || null);
+  const [processedUrl, setProcessedUrl] = useState(() => {
+    if (savedUrl) return savedUrl;
+    if (imageUrl && memoryCache.has(imageUrl)) return memoryCache.get(imageUrl);
+    if (yachtId) return getFromLS(yachtId);
+    return null;
+  });
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Si on a déjà une URL sauvegardée (DB), l'utiliser directement
+    // 1. DB → direct
     if (savedUrl) {
       setProcessedUrl(savedUrl);
-      processedImageCache.set(imageUrl, savedUrl);
+      if (imageUrl) memoryCache.set(imageUrl, savedUrl);
+      if (yachtId) saveToLS(yachtId, savedUrl);
       return;
     }
 
@@ -29,12 +69,23 @@ export function useBackgroundRemoval(imageUrl, enabled = true, yachtId = null, s
       return;
     }
 
-    // Vérifier le cache mémoire
-    if (processedImageCache.has(imageUrl)) {
-      setProcessedUrl(processedImageCache.get(imageUrl));
+    // 2. Cache mémoire
+    if (memoryCache.has(imageUrl)) {
+      setProcessedUrl(memoryCache.get(imageUrl));
       return;
     }
 
+    // 3. Cache localStorage
+    if (yachtId) {
+      const cached = getFromLS(yachtId);
+      if (cached) {
+        setProcessedUrl(cached);
+        memoryCache.set(imageUrl, cached);
+        return;
+      }
+    }
+
+    // 4. Traitement client-side
     let cancelled = false;
 
     async function processImage() {
@@ -42,24 +93,21 @@ export function useBackgroundRemoval(imageUrl, enabled = true, yachtId = null, s
       setError(null);
 
       try {
-        console.log('[BG-Removal] Démarrage pour:', imageUrl.substring(0, 50) + '...');
+        console.log('[BG-Removal] Traitement:', yachtId || imageUrl.substring(0, 50));
 
         const { removeBackground } = await import('@imgly/background-removal');
 
-        // Fetch via proxy pour éviter CORS
+        // Fetch via proxy CORS
         const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(imageUrl)}`;
         const response = await fetch(proxyUrl);
         if (!response.ok) throw new Error('Impossible de charger l\'image via proxy');
 
         const blob = await response.blob();
-        console.log('[BG-Removal] Image récupérée, taille:', blob.size, 'type:', blob.type);
-
         if (cancelled) return;
 
-        // Convertir AVIF/WebP en PNG car imgly ne supporte pas ces formats
+        // Convertir AVIF/WebP → PNG (imgly ne supporte pas ces formats)
         let inputBlob = blob;
-        if (blob.type === 'image/avif' || blob.type === 'image/webp' || !blob.type.startsWith('image/jpeg') && !blob.type.startsWith('image/png')) {
-          console.log('[BG-Removal] Conversion', blob.type, '→ PNG...');
+        if (blob.type === 'image/avif' || blob.type === 'image/webp' || (!blob.type.startsWith('image/jpeg') && !blob.type.startsWith('image/png'))) {
           const tempImg = new Image();
           const tempUrl = URL.createObjectURL(blob);
           await new Promise((resolve, reject) => {
@@ -73,18 +121,15 @@ export function useBackgroundRemoval(imageUrl, enabled = true, yachtId = null, s
           tempCanvas.getContext('2d').drawImage(tempImg, 0, 0);
           URL.revokeObjectURL(tempUrl);
           inputBlob = await new Promise(resolve => tempCanvas.toBlob(resolve, 'image/png'));
-          console.log('[BG-Removal] Converti en PNG, taille:', inputBlob.size);
         }
 
         if (cancelled) return;
 
         // Supprimer le fond
-        console.log('[BG-Removal] Lancement removeBackground...');
         const resultBlob = await removeBackground(inputBlob, {
           model: 'small',
           output: { format: 'image/png' },
         });
-        console.log('[BG-Removal] Détourage terminé, résultat:', resultBlob.size, 'bytes');
 
         if (cancelled) return;
 
@@ -111,11 +156,13 @@ export function useBackgroundRemoval(imageUrl, enabled = true, yachtId = null, s
         URL.revokeObjectURL(objectUrl);
 
         if (!cancelled) {
-          processedImageCache.set(imageUrl, finalUrl);
+          // Sauvegarder partout : mémoire + localStorage + DB
+          memoryCache.set(imageUrl, finalUrl);
+          if (yachtId) saveToLS(yachtId, finalUrl);
           setProcessedUrl(finalUrl);
-          console.log('[BG-Removal] Image traitée avec succès');
+          console.log('[BG-Removal] Traité et mis en cache:', yachtId);
 
-          // Sauvegarder en DB si on a un yachtId
+          // Sauvegarder en DB (fire & forget, sans auth)
           if (yachtId) {
             saveToDb(yachtId, finalUrl);
           }
@@ -132,23 +179,25 @@ export function useBackgroundRemoval(imageUrl, enabled = true, yachtId = null, s
 
     processImage();
     return () => { cancelled = true; };
-  }, [imageUrl, enabled, savedUrl]);
+  }, [imageUrl, enabled, savedUrl, yachtId]);
 
   return { processedUrl, isProcessing, error };
 }
 
 /**
- * Sauvegarde silencieuse en DB (fire & forget)
+ * Sauvegarde en DB (sans token admin)
  */
 async function saveToDb(yachtId, dataUrl) {
   try {
-    const res = await fetch(`/api/admin/yachts/processed-hero?token=${getAdminToken()}`, {
+    const res = await fetch('/api/admin/yachts/processed-hero', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ yacht_id: yachtId, processed_hero: dataUrl }),
     });
     if (res.ok) {
       console.log('[BG-Removal] Sauvegardé en DB pour', yachtId);
+    } else {
+      console.warn('[BG-Removal] DB save failed:', res.status);
     }
   } catch (err) {
     console.warn('[BG-Removal] Échec sauvegarde DB:', err.message);
@@ -156,29 +205,16 @@ async function saveToDb(yachtId, dataUrl) {
 }
 
 /**
- * Récupère le token admin depuis l'URL (page admin)
- */
-function getAdminToken() {
-  if (typeof window !== 'undefined') {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('token') || '';
-  }
-  return '';
-}
-
-/**
  * Charge les images hero détourées depuis la DB
- * Retourne un Map { yacht_id → data_url }
  */
 export async function fetchProcessedHeroes() {
   try {
     const res = await fetch('/api/admin/yachts/processed-hero');
     if (!res.ok) return {};
     const data = await res.json();
-    // Pré-remplir le cache mémoire
     if (data.heroes) {
       Object.entries(data.heroes).forEach(([id, url]) => {
-        processedImageCache.set(id, url);
+        memoryCache.set(id, url);
       });
     }
     return data.heroes || {};
