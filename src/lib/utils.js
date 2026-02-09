@@ -229,19 +229,20 @@ export async function searchAnkorVessels(filters = {}) {
  */
 export function getAnkorImageUrl(imageUrl, variant = '640w') {
   if (!imageUrl) return null;
-  
+
   // Les URLs Ankor sont relatives, on doit les préfixer avec l'URL de l'API
-  const baseUrl = process.env.ANKOR_API_URL || 'https://api.ankor.io';
-  
+  // Utilise process.env côté serveur et fallback en dur côté client
+  const baseUrl = (typeof window === 'undefined' ? process.env.ANKOR_API_URL : null) || 'https://api.ankor.io';
+
   // Remplacer {imageVariant} par le variant voulu
   // Variants: blur, 108w, 320w, 640w, 960w, 1280w, 2560w
   const urlWithVariant = imageUrl.replace('{imageVariant}', variant);
-  
+
   // Si l'URL commence déjà par http, la retourner telle quelle
   if (urlWithVariant.startsWith('http')) {
     return urlWithVariant;
   }
-  
+
   // Sinon, ajouter le baseUrl
   return `${baseUrl}${urlWithVariant}`;
 }
