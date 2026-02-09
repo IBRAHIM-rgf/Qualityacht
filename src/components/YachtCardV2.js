@@ -117,12 +117,12 @@ export default function YachtCardV2({ yacht }) {
           )}
         </div>
         {/* Destinations */}
-        {yacht.destinations && yacht.destinations.length > 0 && (
+        {/* {yacht.destinations && yacht.destinations.length > 0 && (
           <div className="flex flex-wrap gap-2 text-xs text-gray-500 mb-2 items-center">
             <MapPin className="w-4 h-4" />
             {yacht.destinations.join(", ")}
           </div>
-        )}
+        )} */}
         {/* Availability */}
         {/* {typeof yacht.available === 'boolean' && (
           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium mb-2 w-fit ${yacht.available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
