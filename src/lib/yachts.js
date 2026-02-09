@@ -227,7 +227,7 @@ function mapVesselSummaryToYachtCard(vessel, vesselDetails, appliedFilters) {
     guests: vessel.sleeps || blueprint?.sleeps,
     capacity: vessel.sleeps || blueprint?.sleeps,
     cabins: vessel.cabins || blueprint?.cabins,
-    crew: blueprint?.crew,
+    crew: blueprint?.maxCrew,
     year: vessel.builtYear || blueprint?.builtYear,
     refit: blueprint?.refitYear,
     location: blueprint?.basePort?.name || undefined,
