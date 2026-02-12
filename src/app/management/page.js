@@ -146,10 +146,10 @@ const managementSections = [
   {
     title: "Vessel Registration & Tax Optimization",
     content:
-      "The registration of your vessel, combined with the strategic optimisation of fiscal and administrative processes, demands vigilant expertise and an up-to-date understanding of maritime law and taxation frameworks.\n\nWe stand beside you at every step, guiding the registration process with precision while advising on the most advantageous fiscal and administrative structures tailored to your unique circumstances. Ensuring full compliance with prevailing regulations and standards, we meticulously manage all required documentation and certifications.\n\nOur dedicated support extends beyond administration — we remain readily available to address your queries and to facilitate a seamless and efficient management of your vessel’s legal and fiscal obligations.",
+      "The registration of your vessel, combined with the strategic optimisation of fiscal and administrative processes, demands vigilant expertise and an up-to-date understanding of maritime law and taxation frameworks.\n\nWe stand beside you at every step, guiding the registration process with precision while advising on the most advantageous fiscal and administrative structures tailored to your unique circumstances. Ensuring full compliance with prevailing regulations and standards, we meticulously manage all required documentation and certifications.\n\nOur dedicated support extends beyond administration — we remain readily available to address your queries and to facilitate a seamless and efficient management of your vessel's legal and fiscal obligations.",
     images: [
-      "/images/management/photo-1586859392094-6f2017b22a03 (1).jpeg",
-      "/images/management/photo-1632468168457-a4c82df30e8c.jpeg",
+      "/images/management/encre gauche.jpeg",
+      "/images/management/dashboard droit.jpeg",
       "/images/management/photo-1650006326113-7e83026a7f32.jpeg",
       "/images/management/photo-1650006326113-7e83026a7f32 (1).jpeg"
     ],
