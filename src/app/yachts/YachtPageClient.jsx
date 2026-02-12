@@ -24,64 +24,87 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
 
     // Filter by type
     if (filters.type) {
-      result = result.filter(y => y.type?.toLowerCase() === filters.type.toLowerCase());
+      result = result.filter(y => {
+        if (!y.type) return false;
+        return y.type.toLowerCase() === filters.type.toLowerCase();
+      });
     }
 
-    // Filter by destination
+    // Filter by destination/region
     if (filters.destination) {
       result = result.filter(y => {
-        if (y.destination) {
-          return y.destination.toLowerCase().includes(filters.destination.toLowerCase());
-        } else if (y.destinations && Array.isArray(y.destinations)) {
+        // Vérifier la région assignée dans la BDD
+        if (y.region === filters.destination) {
+          return true;
+        }
+        // Vérifier les destinations du yacht
+        if (y.destinations && Array.isArray(y.destinations)) {
           return y.destinations.some(d =>
             d.toLowerCase().includes(filters.destination.toLowerCase())
           );
         }
-        return true;
+        // Vérifier la location du yacht
+        if (y.location) {
+          return y.location.toLowerCase().includes(filters.destination.toLowerCase());
+        }
+        return false;
       });
     }
 
     // Filter by capacity
     if (filters.capacity) {
-      result = result.filter(y => (y.capacity || y.guests || 0) >= filters.capacity);
+      const requiredCapacity = Number(filters.capacity);
+      result = result.filter(y => {
+        const yachtCapacity = Number(y.capacity || y.guests || 0);
+        return yachtCapacity >= requiredCapacity;
+      });
     }
 
     // Filter by length
     if (filters.minLength) {
+      const minLen = Number(filters.minLength);
       result = result.filter(y => {
-        const length = parseInt(y.length) || 0;
-        return length >= filters.minLength;
+        const length = parseFloat(String(y.length).replace(/[^0-9.]/g, '')) || 0;
+        return length >= minLen;
       });
     }
 
     if (filters.maxLength) {
+      const maxLen = Number(filters.maxLength);
       result = result.filter(y => {
-        const length = parseInt(y.length) || 0;
-        return length <= filters.maxLength;
+        const length = parseFloat(String(y.length).replace(/[^0-9.]/g, '')) || 0;
+        return length <= maxLen;
       });
     }
 
-    // Filter by max price
+    // Filter by price
     if (filters.priceMax) {
+      const maxPrice = Number(filters.priceMax);
       result = result.filter(y => {
         if (!y.price && !y.pricePerHour) return true;
-        const priceStr = (y.price || y.pricePerHour || '0').toString().replace(/[^0-9]/g, '');
-        return parseInt(priceStr) <= filters.priceMax;
+        const priceStr = String(y.price || y.pricePerHour || '0').replace(/[^0-9]/g, '');
+        const price = parseInt(priceStr) || 0;
+        return price <= maxPrice;
       });
     }
 
-    // Filter by min price
     if (filters.priceMin) {
+      const minPrice = Number(filters.priceMin);
       result = result.filter(y => {
-        if (!y.price && !y.pricePerHour) return true;
-        const priceStr = (y.price || y.pricePerHour || '0').toString().replace(/[^0-9]/g, '');
-        return parseInt(priceStr) >= filters.priceMin;
+        if (!y.price && !y.pricePerHour) return false;
+        const priceStr = String(y.price || y.pricePerHour || '0').replace(/[^0-9]/g, '');
+        const price = parseInt(priceStr) || 0;
+        return price >= minPrice;
       });
     }
 
     // Extra filters
-    if (filters.petFriendly) result = result.filter(y => y.petFriendly === true);
-    if (filters.groupFriendly) result = result.filter(y => y.groupFriendly === true);
+    if (filters.petFriendly) {
+      result = result.filter(y => y.pets_allowed === true || y.petFriendly === true);
+    }
+    if (filters.groupFriendly) {
+      result = result.filter(y => y.groups_allowed === true || y.groupFriendly === true);
+    }
 
     return result;
   }, [initialData, filters]);

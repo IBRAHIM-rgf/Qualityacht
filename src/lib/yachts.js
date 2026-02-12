@@ -354,15 +354,16 @@ export async function fetchYachtsWithFilters(filters) {
 /**
  * Récupère les yachts visibles selon les présélections de la base de données
  * Utilisé par les pages publiques pour n'afficher que les yachts sélectionnés
+ * NOTE: Ne filtre PAS selon les filtres utilisateur - le filtrage se fait côté client
  */
 export async function fetchVisibleYachts(filters = {}) {
   try {
     // 1. Récupérer les sélections depuis la base
     const selections = await getYachtSelections();
 
-    // Si aucune sélection en DB, utiliser le comportement par défaut (tous les yachts)
+    // Si aucune sélection en DB, utiliser le comportement par défaut (tous les yachts sans filtre)
     if (!selections || selections.length === 0) {
-      return await fetchYachtsWithFilters(filters);
+      return await fetchYachtsWithFilters({});
     }
 
     // 2. Créer les maps pour filtrage rapide
@@ -378,11 +379,15 @@ export async function fetchVisibleYachts(filters = {}) {
     const categoryMap = new Map(
       selections.map(s => [s.yacht_id, s.category])
     );
+    const regionMap = new Map(
+      selections.map(s => [s.yacht_id, s.region])
+    );
 
-    // 3. Fetch tous les yachts depuis Ankor
-    const { yachts: allYachts, totalYachts } = await fetchYachtsWithFilters(filters);
+    // 3. Fetch TOUS les yachts depuis Ankor (SANS les filtres utilisateur)
+    // Le filtrage utilisateur sera fait côté client
+    const { yachts: allYachts, totalYachts } = await fetchYachtsWithFilters({});
 
-    // 4. Filtrer et enrichir les yachts
+    // 4. Filtrer UNIQUEMENT selon la présélection BDD
     const filteredYachts = allYachts
       .filter(yacht => visibleIds.has(yacht.id))
       .map(yacht => ({
@@ -390,6 +395,7 @@ export async function fetchVisibleYachts(filters = {}) {
         isFeatured: featuredIds.has(yacht.id),
         displayOrder: orderMap.get(yacht.id) ?? 999,
         category: categoryMap.get(yacht.id) || null,
+        region: regionMap.get(yacht.id) || null,
       }));
 
     // 5. Trier : featured en premier, puis par ordre d'affichage
@@ -409,7 +415,7 @@ export async function fetchVisibleYachts(filters = {}) {
   } catch (error) {
     console.error("Erreur fetchVisibleYachts:", error);
     // En cas d'erreur DB, fallback sur le comportement par défaut
-    return await fetchYachtsWithFilters(filters);
+    return await fetchYachtsWithFilters({});
   }
 }
 
