@@ -25,14 +25,22 @@ const YACHT_TYPES = [
 // Régions communes pour l'API Ankor ET le classement interne
 const REGIONS = [
   { value: '', label: 'Toutes régions' },
-  { value: 'west-mediterranean', label: 'Méditerranée Ouest' },
-  { value: 'east-mediterranean', label: 'Méditerranée Est' },
-  { value: 'caribbean', label: 'Caraïbes' },
+  { value: 'arctic', label: 'Arctique' },
+  { value: 'bahamas', label: 'Bahamas' },
   { value: 'central-america', label: 'Amérique Centrale' },
+  { value: 'east-asia', label: 'Asie de l\'Est' },
+  { value: 'east-mediterranean', label: 'Méditerranée Est' },
   { value: 'indian-ocean', label: 'Océan Indien' },
-  { value: 'south-pacific', label: 'Pacifique Sud' },
-  { value: 'arabian-gulf', label: 'Golfe Arabique' },
-  { value: 'antarctica', label: 'Antarctique' },
+  { value: 'indonesia', label: 'Indonésie' },
+  { value: 'north-america', label: 'Amérique du Nord' },
+  { value: 'pacific-ocean', label: 'Océan Pacifique' },
+  { value: 'arabian-gulf', label: 'Golfe d\'Oman' },
+  { value: 'south-east-asia', label: 'Asie du Sud-Est' },
+  { value: 'west-mediterranean', label: 'Méditerranée Ouest' },
+  { value: 'africa', label: 'Afrique' },
+  { value: 'northern-europe', label: 'Europe du Nord' },
+  { value: 'caribbean', label: 'Caraïbes' },
+  { value: 'oceania', label: 'Océanie' },
 ];
 
 // ============================================

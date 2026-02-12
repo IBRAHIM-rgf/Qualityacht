@@ -11,14 +11,22 @@ const YACHT_TYPES = [
 
 const DESTINATIONS = [
   { value: '', label: 'All Destinations' },
-  { value: 'west-mediterranean', label: 'Western Mediterranean' },
-  { value: 'east-mediterranean', label: 'Eastern Mediterranean' },
-  { value: 'caribbean', label: 'Caribbean' },
+  { value: 'arctic', label: 'Arctic' },
+  { value: 'bahamas', label: 'Bahamas' },
   { value: 'central-america', label: 'Central America' },
+  { value: 'east-asia', label: 'East Asia' },
+  { value: 'east-mediterranean', label: 'Eastern Mediterranean' },
   { value: 'indian-ocean', label: 'Indian Ocean' },
-  { value: 'south-pacific', label: 'South Pacific' },
-  { value: 'arabian-gulf', label: 'Arabian Gulf' },
-  { value: 'antarctica', label: 'Antarctica' },
+  { value: 'indonesia', label: 'Indonesia' },
+  { value: 'north-america', label: 'North America' },
+  { value: 'pacific-ocean', label: 'Pacific Ocean' },
+  { value: 'arabian-gulf', label: 'Oman Gulf' },
+  { value: 'south-east-asia', label: 'South East Asia' },
+  { value: 'west-mediterranean', label: 'Western Mediterranean' },
+  { value: 'africa', label: 'Africa' },
+  { value: 'northern-europe', label: 'Northern Europe' },
+  { value: 'caribbean', label: 'Caribbean' },
+  { value: 'oceania', label: 'Oceania' },
 ];
 
 const CURRENCIES = [
