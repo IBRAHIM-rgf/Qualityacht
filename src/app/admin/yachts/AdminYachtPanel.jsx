@@ -588,7 +588,7 @@ function CreateManualModal({ onClose, onSave, token }) {
 // ============================================
 // Carte Yacht Sélectionné (Draggable)
 // ============================================
-function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit }) {
+function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit, isSelectedForDeletion, onToggleSelect }) {
   const [loading, setLoading] = useState(false);
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: yacht.yacht_id });
@@ -644,10 +644,18 @@ function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit }) {
       ref={setNodeRef}
       style={style}
       className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+        isSelectedForDeletion ? 'bg-red-900/20 border-red-700' :
         !isVisible ? 'bg-[#252528] border-gray-800 opacity-60' :
         isFeatured ? 'bg-[#2a2a30] border-copper-700/50' : 'bg-[#2a2a30] border-gray-700'
       }`}
     >
+      <input
+        type="checkbox"
+        checked={isSelectedForDeletion}
+        onChange={() => onToggleSelect(yacht.yacht_id)}
+        className="w-5 h-5 rounded border-gray-600 text-red-500 focus:ring-red-500 cursor-pointer"
+      />
+
       <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-1 text-gray-500">
         <GripVertical className="w-5 h-5" />
       </button>
@@ -782,6 +790,9 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
   const [activeTab, setActiveTab] = useState('selections');
   const [filterRegion, setFilterRegion] = useState('');
 
+  // Sélection multiple pour suppression
+  const [selectedForDeletion, setSelectedForDeletion] = useState(new Set());
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -879,6 +890,44 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
       }
     } catch (err) {
       console.error('Erreur suppression:', err);
+    }
+  };
+
+  const toggleSelectForDeletion = (yacht_id) => {
+    setSelectedForDeletion(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(yacht_id)) {
+        newSet.delete(yacht_id);
+      } else {
+        newSet.add(yacht_id);
+      }
+      return newSet;
+    });
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedForDeletion.size === 0) return;
+    if (!confirm(`Supprimer ${selectedForDeletion.size} yacht(s) de la sélection ?`)) return;
+
+    try {
+      const promises = Array.from(selectedForDeletion).map(yacht_id =>
+        fetch(`/api/admin/yachts?token=${token}&yacht_id=${yacht_id}`, {
+          method: 'DELETE'
+        })
+      );
+
+      await Promise.all(promises);
+
+      setSelections(prev => prev.filter(s => !selectedForDeletion.has(s.yacht_id)));
+      setSelectedIds(prev => {
+        const newSet = new Set(prev);
+        selectedForDeletion.forEach(id => newSet.delete(id));
+        return newSet;
+      });
+      setStats(prev => ({ ...prev, total: prev.total - selectedForDeletion.size }));
+      setSelectedForDeletion(new Set());
+    } catch (err) {
+      console.error('Erreur suppression multiple:', err);
     }
   };
 
@@ -1072,6 +1121,45 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
 
       {activeTab === 'selections' ? (
         <div className="space-y-4">
+          {/* Barre d'actions sélection multiple */}
+          {selectedForDeletion.size > 0 && (
+            <div className="bg-red-900/20 border border-red-700 rounded-xl p-3 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={selectedForDeletion.size === filteredSelections.length}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedForDeletion(new Set(filteredSelections.map(s => s.yacht_id)));
+                    } else {
+                      setSelectedForDeletion(new Set());
+                    }
+                  }}
+                  className="w-5 h-5 rounded border-gray-600 text-red-500 focus:ring-red-500 cursor-pointer"
+                />
+                <span className="text-red-400 font-medium">
+                  {selectedForDeletion.size} yacht(s) sélectionné(s)
+                </span>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setSelectedForDeletion(new Set())}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-xl text-sm flex items-center gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  Annuler
+                </button>
+                <button
+                  onClick={handleBulkDelete}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm flex items-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Supprimer la sélection
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center gap-2 flex-wrap">
             <FolderOpen className="w-5 h-5 text-copper-400" />
             <button
@@ -1125,6 +1213,8 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
                       onUpdate={handleUpdate}
                       onRemove={handleRemoveYacht}
                       onEdit={setEditingYacht}
+                      isSelectedForDeletion={selectedForDeletion.has(yacht.yacht_id)}
+                      onToggleSelect={toggleSelectForDeletion}
                     />
                   ))
                 )}
