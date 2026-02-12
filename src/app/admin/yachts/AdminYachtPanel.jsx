@@ -22,8 +22,8 @@ const YACHT_TYPES = [
   { value: 'sailing', label: 'Voilier' },
 ];
 
-// Régions pour l'API Ankor (recherche)
-const ANKOR_REGIONS = [
+// Régions communes pour l'API Ankor ET le classement interne
+const REGIONS = [
   { value: '', label: 'Toutes régions' },
   { value: 'west-mediterranean', label: 'Méditerranée Ouest' },
   { value: 'east-mediterranean', label: 'Méditerranée Est' },
@@ -33,19 +33,6 @@ const ANKOR_REGIONS = [
   { value: 'south-pacific', label: 'Pacifique Sud' },
   { value: 'arabian-gulf', label: 'Golfe Arabique' },
   { value: 'antarctica', label: 'Antarctique' },
-];
-
-// Régions pour le classement interne (site)
-const REGIONS = [
-  { value: '', label: 'Toutes régions' },
-  { value: 'caribbean', label: 'Caraïbes' },
-  { value: 'central-america', label: 'Amérique Centrale' },
-  { value: 'west-mediterranean', label: 'Méditerranée Ouest' },
-  { value: 'east-mediterranean', label: 'Méditerranée Est' },
-  { value: 'indian-ocean', label: 'Océan Indien' },
-  { value: 'south-pacific', label: 'Pacifique Sud' },
-  { value: 'bahamas', label: 'Bahamas' },
-  { value: 'northern-europe', label: 'Europe du Nord' },
 ];
 
 // ============================================
@@ -1023,7 +1010,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
             onChange={(e) => setFilters({ ...filters, destination: e.target.value })}
             className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] text-sm"
           >
-            {ANKOR_REGIONS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
+            {REGIONS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
           </select>
 
           <select
