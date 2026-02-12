@@ -124,10 +124,10 @@ const managementSections = [
     content:
       "We handle the seamless coordination and supervision of all external service providers involved in the maintenance and repair of your vessel. From scheduling appointments to ensuring timely execution, we oversee each phase with diligence and discretion.\n\nFollowing every onboard intervention, we provide you with a detailed photographic report accompanied by clear explanations, allowing you to monitor progress remotely with full transparency. We ensure that every professional involved meets the highest standards of craftsmanship, adheres to deadlines, and delivers quality work consistent with your expectations.\n\nThroughout the process, we remain your dedicated point of contact — available to answer any questions and keep you continuously informed.",
     images: [
-      "/images/management/photo-1658899817643-0f1c74149717.jpeg",
-      "/images/management/Engine-Control-Room-768x512 (1).jpg",
-      "/images/management/FB_IMG_1757344921683.jpg",
-      "/images/management/ai-generated-8585737_1280.jpg"
+      "/images/coordination/Coordination en haut a gauche.jpeg",
+      "/images/coordination/Coordination en haut a droite.png",
+      "/images/coordination/coordination en bas agauche.jpeg",
+      "/images/coordination/coordination en bas a droite.jpg"
     ],
     chooseSection: 1,
   },
