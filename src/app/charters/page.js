@@ -51,6 +51,12 @@ const charterItems = [
 		image: "/images/new/photo-1722009040906-0fc91b7e2942.jpeg",
 		href: "/charters/group",
 	},
+	{
+		title: "Only Couple Charter",
+		description: "Intimate and romantic cruises exclusively for couples.",
+		image: "/images/charters/onlycouple.png",
+		href: "/charters/only-couple",
+	},
 ];
 
 export default function CharterPage() {
