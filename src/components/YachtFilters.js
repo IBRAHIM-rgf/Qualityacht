@@ -11,12 +11,14 @@ const YACHT_TYPES = [
 
 const DESTINATIONS = [
   { value: '', label: 'All Destinations' },
-  { value: 'caribbean', label: 'Caribbean' },
   { value: 'west-mediterranean', label: 'Western Mediterranean' },
   { value: 'east-mediterranean', label: 'Eastern Mediterranean' },
-  { value: 'bahamas', label: 'Bahamas' },
+  { value: 'caribbean', label: 'Caribbean' },
+  { value: 'central-america', label: 'Central America' },
   { value: 'indian-ocean', label: 'Indian Ocean' },
   { value: 'south-pacific', label: 'South Pacific' },
+  { value: 'arabian-gulf', label: 'Arabian Gulf' },
+  { value: 'antarctica', label: 'Antarctica' },
 ];
 
 const CURRENCIES = [
