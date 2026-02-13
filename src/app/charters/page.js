@@ -54,7 +54,7 @@ const charterItems = [
 	{
 		title: "Only Couple Charter",
 		description: "Intimate and romantic cruises exclusively for couples.",
-		image: "/images/charters/onlycouple.png",
+		image: "/images/management/only_couple.jpeg",
 		href: "/charters/only-couple",
 	},
 ];
