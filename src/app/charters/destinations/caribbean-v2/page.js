@@ -228,12 +228,12 @@ export default function CaribbeanV2Page() {
   return (
     <div className="min-h-screen bg-[#1a1b1e]">
       {/* Hero Section avec yatch2.jpeg */}
-      <div className="relative h-[70vh] min-h-[500px]">
+      <div className="relative h-[80vh] min-h-[600px]">
         <Image
           src="/images/yachts/yatch2.jpeg"
           alt="Caribbean Luxury Yacht Charter"
           fill
-          className="object-cover brightness-50"
+          className="object-cover object-top brightness-50"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#1a1b1e]" />
@@ -243,7 +243,7 @@ export default function CaribbeanV2Page() {
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#C0C0C0]">
               The Caribbean
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 font-light">
+            <p className="text-xl md:text-2xl text-[#C0C0C0] font-light">
               The Ultimate Luxury Yachting Destination
             </p>
           </div>
@@ -251,126 +251,62 @@ export default function CaribbeanV2Page() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-20">
-        {/* Description - Pyramid Style */}
-        <div className="mb-20">
-          <div className="text-center leading-relaxed space-y-6">
+      <div className="max-w-7xl mx-auto px-4 py-32">
+        {/* Description - Pyramid Style avec traits blancs et nuages PNG */}
+        <div className="mb-48 relative">
+          {/* Nuages PNG en fond */}
+          <div className="absolute inset-0 pointer-events-none opacity-10">
+            <Image
+              src="/images/nuagesAncien.png"
+              alt=""
+              fill
+              className="object-contain"
+            />
+          </div>
+
+          <div className="text-center leading-relaxed space-y-16 relative">
+            {/* Trait blanc du haut */}
+            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mb-16"></div>
+
             <p className="text-xl text-[#C0C0C0] max-w-5xl mx-auto">
-              A paradise of turquoise waters, powder-white beaches, vibrant coral reefs, and lush tropical forests,
-              the Caribbean stands as the world's premier destination for luxury yacht charters.
+              A paradise of <span className="text-[#8B9FFF] font-semibold">turquoise waters</span>, <span className="text-[#8B9FFF] font-semibold">powder-white beaches</span>, <span className="text-[#8B9FFF] font-semibold">vibrant coral reefs</span>, and <span className="text-[#8B9FFF] font-semibold">lush tropical forests</span>,
+              the Caribbean stands as <span className="text-[#8B9FFF] font-semibold">the world's premier destination</span> for luxury yacht charters.
             </p>
 
-            <p className="text-lg text-gray-300 max-w-4xl mx-auto">
+            <p className="text-lg text-[#C0C0C0] max-w-4xl mx-auto">
               From untamed natural beauty and pirate legends of the Leeward and Windward Islands to the opulence
               of Michelin-starred restaurants and ultra-luxury resorts in St. Martin and St. Barts, the Caribbean
               offers an unparalleled sailing experience.
             </p>
 
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-[#C0C0C0] max-w-3xl mx-auto">
               Comprising twenty-six countries and over seven hundred islands, cays, and islets—including the Greater
               and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
               cultural tapestry blending Creole, French, Dutch, and British influences.
             </p>
 
-            <p className="text-base text-gray-400 max-w-2xl mx-auto">
+            <p className="text-base text-[#C0C0C0] max-w-2xl mx-auto">
               For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
               of exclusivity and adventure. Whether it's the glamour of Turks and Caicos, the sophistication of
               St. Barts, or private island resorts accessible only by sea, this region promises an elite escape
               where every moment is crafted for the extraordinary.
             </p>
-          </div>
-        </div>
 
-        {/* Highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-          {highlights.map((highlight, index) => (
-            <div
-              key={index}
-              className="bg-[#2e2f32] border border-white/10 rounded-2xl p-8 text-center hover:border-[#B03E00]/30 transition-all"
-            >
-              <highlight.icon className="w-12 h-12 text-[#B03E00] mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-[#C0C0C0] mb-2">{highlight.title}</h3>
-              <p className="text-gray-400">{highlight.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Îles des Caraïbes - Cercles */}
-        <div className="mb-32">
-          <h2 className="text-4xl font-bold text-[#C0C0C0] mb-4 text-center tracking-wider">
-            CARIBBEAN ISLANDS
-          </h2>
-          <p className="text-center text-gray-300 mb-12 max-w-2xl mx-auto">
-            Discover the most sought-after islands for luxury yacht charters
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {caribbeanIslands.map((island, index) => (
-              <Link
-                key={index}
-                href={island.href}
-                className="group flex flex-col items-center"
-              >
-                <div className="relative aspect-square w-full rounded-full overflow-hidden border-2 border-white/20 hover:border-[#B03E00]/50 transition-all duration-300 mb-3">
-                  <Image
-                    src={island.image}
-                    alt={island.name}
-                    fill
-                    className="object-cover brightness-75 group-hover:brightness-100 group-hover:scale-110 transition-all duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60" />
-                </div>
-                <h3 className="w-full text-white font-bold text-center text-sm md:text-base uppercase tracking-wide group-hover:text-[#B03E00] transition-colors">
-                  {island.name}
-                </h3>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Destinations Populaires - Cercles */}
-        <div className="mb-32">
-          <h2 className="text-4xl font-bold text-[#C0C0C0] mb-4 text-center tracking-wider">
-            POPULAR DESTINATIONS
-          </h2>
-          <p className="text-center text-gray-300 mb-12 max-w-2xl mx-auto">
-            The most exclusive marinas and anchorages in the Caribbean
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {popularDestinations.map((destination, index) => (
-              <Link
-                key={index}
-                href={destination.href}
-                className="group flex flex-col items-center"
-              >
-                <div className="relative aspect-square w-full rounded-full overflow-hidden border-2 border-white/20 hover:border-[#B03E00]/50 transition-all duration-300 mb-3">
-                  <Image
-                    src={destination.image}
-                    alt={destination.name}
-                    fill
-                    className="object-cover brightness-75 group-hover:brightness-100 group-hover:scale-110 transition-all duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60" />
-                </div>
-                <h3 className="w-full text-white font-bold text-center text-sm md:text-base uppercase tracking-wide group-hover:text-[#B03E00] transition-colors">
-                  {destination.name}
-                </h3>
-              </Link>
-            ))}
+            {/* Trait blanc du bas */}
+            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-16"></div>
           </div>
         </div>
 
         {/* Régions avec Accordéons */}
-        <div className="mb-20">
-          <h2 className="text-4xl font-bold text-[#C0C0C0] mb-4 text-center tracking-wider">
+        <div className="mb-32">
+          <h2 className="text-2xl font-bold text-[#C0C0C0] mb-6 text-center tracking-wider">
             EXPLORE BY REGION
           </h2>
-          <p className="text-center text-gray-300 mb-12 max-w-2xl mx-auto">
+          <p className="text-center text-[#C0C0C0] mb-16 max-w-2xl mx-auto">
             Discover the cities and marinas in each Caribbean region
           </p>
 
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {caribbeanRegions.map((region) => (
               <RegionAccordion
                 key={region.id}
@@ -383,11 +319,8 @@ export default function CaribbeanV2Page() {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-r from-[#B03E00]/10 to-[#9333ea]/10 border border-[#B03E00]/20 rounded-2xl p-12 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#C0C0C0] mb-6">
-            Ready to Explore the Caribbean?
-          </h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+        <div className="bg-gradient-to-r from-[#B03E00]/10 to-[#9333ea]/10 border border-[#B03E00]/20 rounded-2xl p-16 text-center mt-32">
+          <p className="text-lg text-[#C0C0C0] mb-12 max-w-2xl mx-auto">
             Discover our exclusive collection of luxury yachts available for charter across the Caribbean's most prestigious destinations.
           </p>
           <Link

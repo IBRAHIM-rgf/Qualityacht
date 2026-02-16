@@ -198,9 +198,6 @@ export default function CaribbeanPage() {
 
         {/* CTA Section */}
         <div className="bg-gradient-to-r from-[#B03E00]/10 to-[#9333ea]/10 border border-[#B03E00]/20 rounded-2xl p-12 text-center relative">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#C0C0C0] mb-6">
-            Ready to Explore the Caribbean?
-          </h2>
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
             Discover our exclusive collection of luxury yachts available for charter across the Caribbean's most prestigious destinations.
           </p>
