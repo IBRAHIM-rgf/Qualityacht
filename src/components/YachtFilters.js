@@ -257,7 +257,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.petFriendly || false}
                 onChange={e => handleChange('petFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#d39478] focus:ring-[#d39478] focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#f97316] focus:ring-[#f97316] focus:ring-offset-0"
               />
               Pet Friendly
             </label>
@@ -267,7 +267,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.groupFriendly || false}
                 onChange={e => handleChange('groupFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#d39478] focus:ring-[#d39478] focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#f97316] focus:ring-[#f97316] focus:ring-offset-0"
               />
               Group Friendly
             </label>
@@ -277,7 +277,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.waterToys || false}
                 onChange={e => handleChange('waterToys', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#d39478] focus:ring-[#d39478] focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#f97316] focus:ring-[#f97316] focus:ring-offset-0"
               />
               Water Toys
             </label>
