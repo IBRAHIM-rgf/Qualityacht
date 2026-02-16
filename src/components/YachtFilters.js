@@ -352,30 +352,30 @@ export default function YachtFilters({ filters, onChange }) {
             <div className="flex items-center gap-4 flex-wrap">
               <button
                 onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.petFriendly
-                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
+                    ? 'text-[#B03E00]'
+                    : 'text-gray-400'
                 }`}
               >
                 Pet Friendly
               </button>
               <button
                 onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.groupFriendly
-                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
+                    ? 'text-[#B03E00]'
+                    : 'text-gray-400'
                 }`}
               >
                 Group Friendly
               </button>
               <button
                 onClick={() => handleChange('waterToys', !localFilters.waterToys)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.waterToys
-                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
+                    ? 'text-[#B03E00]'
+                    : 'text-gray-400'
                 }`}
               >
                 Water Toys
@@ -594,30 +594,30 @@ export default function YachtFilters({ filters, onChange }) {
             <div className="space-y-3">
               <button
                 onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition border ${
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.petFriendly
-                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
+                    ? 'text-[#B03E00]'
+                    : 'text-gray-400'
                 }`}
               >
                 Pet Friendly
               </button>
               <button
                 onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition border ${
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.groupFriendly
-                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
+                    ? 'text-[#B03E00]'
+                    : 'text-gray-400'
                 }`}
               >
                 Group Friendly
               </button>
               <button
                 onClick={() => handleChange('waterToys', !localFilters.waterToys)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition border ${
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.waterToys
-                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
+                    ? 'text-[#B03E00]'
+                    : 'text-gray-400'
                 }`}
               >
                 Water Toys
