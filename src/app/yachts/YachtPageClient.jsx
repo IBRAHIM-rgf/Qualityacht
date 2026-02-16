@@ -3,6 +3,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import YachtList from '@/components/YachtList';
 import YachtFilters from '@/components/YachtFilters';
 
@@ -180,8 +181,15 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
         {/* Yacht Grid */}
         <main className="mt-6">
           {filteredYachts.length === 0 ? (
-            <div className="text-center py-16 rounded-2xl bg-[#3a3b3f]/50">
-              <div className="text-6xl mb-4">⛵</div>
+            <div className="flex flex-col items-center justify-center py-20 rounded-2xl bg-[#3a3b3f]/50">
+              <div className="relative w-48 h-48 md:w-64 md:h-64 opacity-30 grayscale mb-6">
+                <Image
+                  src="/images/logoFondTrans.png"
+                  alt="Qualityacht"
+                  fill
+                  className="object-contain"
+                />
+              </div>
               <h3 className="text-xl font-bold text-[#C0C0C0] mb-2">No yachts found</h3>
               <p className="text-gray-400">Try adjusting your filters</p>
             </div>

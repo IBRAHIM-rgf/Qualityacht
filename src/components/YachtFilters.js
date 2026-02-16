@@ -246,7 +246,7 @@ export default function YachtFilters({ filters, onChange }) {
                 max="50"
                 value={localFilters.capacity || ''}
                 onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
-                placeholder="8"
+                placeholder=""
                 className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
               />
             </div>
@@ -416,7 +416,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="number"
                 min="1"
                 max="50"
-                placeholder="8"
+                placeholder=""
                 value={localFilters.capacity || ''}
                 onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
                 className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0]"
@@ -467,7 +467,7 @@ export default function YachtFilters({ filters, onChange }) {
           <div className="sticky bottom-0 bg-[#2e2f32] border-t border-white/10 p-6">
             <button
               onClick={() => { applyFilters(); setIsMobileOpen(false); }}
-              className="w-full bg-gradient-to-r from-[#3a3b3f]/50 via-[#d39478]/40 to-[#3a3b3f]/50 hover:from-[#3a3b3f]/60 hover:via-[#d39478]/55 hover:to-[#3a3b3f]/60 rounded-xl py-3 border border-[#C0C0C0] font-medium transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-[#acb0cd]"
+              className="w-full bg-gradient-to-r from-[#3a3b3f]/50 via-[#f97316] to-[#3a3b3f]/50 hover:from-[#3a3b3f]/60 hover:via-[#f97316]/90 hover:to-[#3a3b3f]/60 rounded-xl py-3 border border-[#C0C0C0] font-medium transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-white"
             >
               Apply Filters
             </button>
