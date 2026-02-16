@@ -288,20 +288,20 @@ export default function YachtFilters({ filters, onChange }) {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleUnitChange('meters')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition bg-[#3a3b3f] border border-white/20 ${
                       unitPreference === 'meters'
-                        ? 'bg-[#B03E00] text-[#C0C0C0]'
-                        : 'bg-[#3a3b3f] text-gray-400'
+                        ? 'text-[#B03E00]'
+                        : 'text-gray-400'
                     }`}
                   >
                     Meters
                   </button>
                   <button
                     onClick={() => handleUnitChange('feet')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition bg-[#3a3b3f] border border-white/20 ${
                       unitPreference === 'feet'
-                        ? 'bg-[#B03E00] text-[#C0C0C0]'
-                        : 'bg-[#3a3b3f] text-gray-400'
+                        ? 'text-[#B03E00]'
+                        : 'text-gray-400'
                     }`}
                   >
                     Feet
@@ -468,20 +468,20 @@ export default function YachtFilters({ filters, onChange }) {
                 <div className="flex gap-3">
                   <button
                     onClick={() => handleUnitChange('meters')}
-                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition ${
+                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                       unitPreference === 'meters'
-                        ? 'bg-[#B03E00] text-[#C0C0C0]'
-                        : 'bg-[#3a3b3f] text-gray-400'
+                        ? 'text-[#B03E00]'
+                        : 'text-gray-400'
                     }`}
                   >
                     Meters
                   </button>
                   <button
                     onClick={() => handleUnitChange('feet')}
-                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition ${
+                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                       unitPreference === 'feet'
-                        ? 'bg-[#B03E00] text-[#C0C0C0]'
-                        : 'bg-[#3a3b3f] text-gray-400'
+                        ? 'text-[#B03E00]'
+                        : 'text-gray-400'
                     }`}
                   >
                     Feet
