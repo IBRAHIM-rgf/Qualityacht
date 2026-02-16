@@ -184,7 +184,7 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
             <div className="flex flex-col items-center justify-center py-20 rounded-2xl bg-[#3a3b3f]/50">
               <div className="relative w-48 h-48 md:w-64 md:h-64 opacity-30 grayscale mb-6">
                 <Image
-                  src="/images/logoFondTrans.png"
+                  src="/images/trans.png"
                   alt="Qualityacht"
                   fill
                   className="object-contain"
