@@ -78,8 +78,8 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
       });
     }
 
-    // Filter by price
-    if (filters.priceMax) {
+    // Filter by price (with Infinity handling)
+    if (filters.priceMax && filters.priceMax !== Infinity) {
       const maxPrice = Number(filters.priceMax);
       result = result.filter(y => {
         if (!y.price && !y.pricePerHour) return true;

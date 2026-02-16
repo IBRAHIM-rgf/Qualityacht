@@ -37,11 +37,46 @@ const CURRENCIES = [
 
 const MAX_PRICE = 6000000; // 6M = unlimited
 
+// Paliers de prix
+const PRICE_TIERS = [
+  { value: 1000, label: '1k - 10k €', max: 10000 },
+  { value: 10000, label: '10k - 100k €', max: 100000 },
+  { value: 100000, label: '100k - 1M €', max: 1000000 },
+  { value: 1000000, label: '1M+ €', max: Infinity }
+];
+
+// Paliers de longueur en mètres
+const LENGTH_TIERS_M = [
+  { value: 0, label: 'Tous', max: Infinity },
+  { value: 10, label: '10-20m', max: 20 },
+  { value: 20, label: '20-30m', max: 30 },
+  { value: 30, label: '30-50m', max: 50 },
+  { value: 50, label: '50-80m', max: 80 },
+  { value: 80, label: '80m+', max: Infinity }
+];
+
+// Paliers de longueur en pieds
+const LENGTH_TIERS_FT = [
+  { value: 0, label: 'All', max: Infinity },
+  { value: 33, label: '33-66ft', max: 66 },
+  { value: 66, label: '66-98ft', max: 98 },
+  { value: 98, label: '98-164ft', max: 164 },
+  { value: 164, label: '164-262ft', max: 262 },
+  { value: 262, label: '262ft+', max: Infinity }
+];
+
 export default function YachtFilters({ filters, onChange }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
   const [priceRange, setPriceRange] = useState([0, MAX_PRICE]);
+
+  // Nouveaux états pour les paliers
+  const [priceMinTier, setPriceMinTier] = useState(0);
+  const [priceMaxTier, setPriceMaxTier] = useState(3);
+  const [unitPreference, setUnitPreference] = useState('meters');
+  const [minLengthTier, setMinLengthTier] = useState(0);
+  const [maxLengthTier, setMaxLengthTier] = useState(0);
 
   useEffect(() => {
     setLocalFilters(filters);
@@ -157,29 +192,33 @@ export default function YachtFilters({ filters, onChange }) {
             />
           </div>
 
-          {/* Price Slider */}
-          <div className="flex items-center gap-3 min-w-[200px]">
+          {/* Price Range - Slider style */}
+          <div className="flex items-center gap-3 min-w-[220px]">
             <select
               value={localFilters.currency || 'EUR'}
               onChange={e => handleChange('currency', e.target.value)}
-              className="w-20 px-2 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent text-sm"
+              className="w-16 px-2 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#f97316] focus:border-transparent text-xs"
             >
               {CURRENCIES.map(c => (
                 <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>
               ))}
             </select>
-            <div className="flex flex-col gap-1 w-32">
+            <div className="flex flex-col gap-1 flex-1">
               <input
                 type="range"
                 min="0"
                 max={MAX_PRICE}
                 step="10000"
                 value={priceRange[1]}
-                onChange={handlePriceSliderChange}
-                className="w-full h-2 bg-[#3a3b3f] rounded-lg appearance-none cursor-pointer accent-[#d39478]"
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  setPriceRange([0, value]);
+                  handleChange('priceMax', value === MAX_PRICE ? '' : value);
+                }}
+                className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-[#B03E00] [&::-webkit-slider-runnable-track]:bg-gray-600 [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-moz-range-track]:bg-gray-600 [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
               />
               <span className="text-xs text-gray-400 text-center">
-                Max: {formatPrice(priceRange[1], true)}{priceRange[1] < MAX_PRICE ? '/week' : ''}
+                {formatPrice(priceRange[1], true)}{priceRange[1] < MAX_PRICE ? '' : ''}
               </span>
             </div>
           </div>
@@ -196,7 +235,7 @@ export default function YachtFilters({ filters, onChange }) {
           {/* Filter button */}
           <button
             onClick={applyFilters}
-            className="flex items-center gap-2 px-6 py-2.5 bg-[#d39478] hover:bg-[#c4826a] rounded-xl text-[#C0C0C0] font-medium transition-colors"
+            className="flex items-center gap-2 px-6 py-2.5 bg-transparent border border-[#B03E00] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
           >
             <Filter className="w-4 h-4" />
             <span className="text-sm">Filter</span>
@@ -217,24 +256,32 @@ export default function YachtFilters({ filters, onChange }) {
         {/* Extended options */}
         {isExpanded && (
           <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-6 flex-wrap bg-transparent">
-            {/* Length */}
-            <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-300">Length (m):</label>
-              <input
-                type="number"
-                placeholder="Min"
-                value={localFilters.minLength || ''}
-                onChange={e => handleChange('minLength', e.target.value ? Number(e.target.value) : '')}
-                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
-              />
-              <span className="text-gray-400">-</span>
-              <input
-                type="number"
-                placeholder="Max"
-                value={localFilters.maxLength || ''}
-                onChange={e => handleChange('maxLength', e.target.value ? Number(e.target.value) : '')}
-                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
-              />
+            {/* Length with slider */}
+            <div className="flex items-center gap-2 min-w-[280px]">
+              <label className="text-sm text-gray-300">Length:</label>
+              <div className="flex flex-col gap-1 flex-1">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value={localFilters.maxLength || 100}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    handleChange('maxLength', value === 100 ? '' : value);
+                  }}
+                  className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-[#B03E00] [&::-webkit-slider-runnable-track]:bg-gray-600 [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-moz-range-track]:bg-gray-600 [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
+                />
+                <span className="text-xs text-gray-400 text-center">
+                  {localFilters.maxLength ? `${localFilters.maxLength}m` : '100m+'}
+                </span>
+              </div>
+              <button
+                onClick={() => setUnitPreference(unitPreference === 'meters' ? 'feet' : 'meters')}
+                className="px-2 py-1 bg-[#B03E00] text-[#C0C0C0] text-xs rounded"
+              >
+                {unitPreference === 'meters' ? 'Mètres' : 'Pieds'}
+              </button>
             </div>
 
             {/* Capacity */}
@@ -257,7 +304,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.petFriendly || false}
                 onChange={e => handleChange('petFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#f97316] focus:ring-[#f97316] focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
               />
               Pet Friendly
             </label>
@@ -267,7 +314,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.groupFriendly || false}
                 onChange={e => handleChange('groupFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#f97316] focus:ring-[#f97316] focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
               />
               Group Friendly
             </label>
@@ -277,7 +324,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="checkbox"
                 checked={localFilters.waterToys || false}
                 onChange={e => handleChange('waterToys', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] text-[#f97316] focus:ring-[#f97316] focus:ring-offset-0"
+                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
               />
               Water Toys
             </label>
@@ -358,30 +405,60 @@ export default function YachtFilters({ filters, onChange }) {
               </div>
             </div>
 
-            {/* Length */}
+            {/* Length with Slider */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Length (m)</label>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={localFilters.minLength || ''}
-                  onChange={e => handleChange('minLength', e.target.value ? Number(e.target.value) : '')}
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0]"
-                />
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={localFilters.maxLength || ''}
-                  onChange={e => handleChange('maxLength', e.target.value ? Number(e.target.value) : '')}
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0]"
-                />
+              <label className="block text-sm font-medium text-gray-300 mb-2">Longueur</label>
+              <div className="space-y-3">
+                <div className="px-2">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="5"
+                    value={localFilters.maxLength || 100}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      handleChange('maxLength', value === 100 ? '' : value);
+                    }}
+                    className="w-full h-3 bg-gray-600 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:bg-gray-600 [&::-webkit-slider-runnable-track]:h-3 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-moz-range-track]:bg-gray-600 [&::-moz-range-track]:h-3 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:h-6 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
+                  />
+                  <div className="flex justify-between text-sm text-gray-400 mt-2">
+                    <span>0m</span>
+                    <span className="text-[#B03E00] font-medium">
+                      {localFilters.maxLength ? `${localFilters.maxLength}m` : '100m+'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Toggle Unité */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setUnitPreference('meters')}
+                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition ${
+                      unitPreference === 'meters'
+                        ? 'bg-[#B03E00] text-[#C0C0C0]'
+                        : 'bg-[#3a3b3f] text-gray-400'
+                    }`}
+                  >
+                    Mètres
+                  </button>
+                  <button
+                    onClick={() => setUnitPreference('feet')}
+                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition ${
+                      unitPreference === 'feet'
+                        ? 'bg-[#B03E00] text-[#C0C0C0]'
+                        : 'bg-[#3a3b3f] text-gray-400'
+                    }`}
+                  >
+                    Pieds
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Price Slider */}
+            {/* Price Range with Slider */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Price per week</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Prix</label>
               <select
                 value={localFilters.currency || 'EUR'}
                 onChange={e => handleChange('currency', e.target.value)}
@@ -391,6 +468,7 @@ export default function YachtFilters({ filters, onChange }) {
                   <option key={c.value} value={c.value}>{c.label}</option>
                 ))}
               </select>
+
               <div className="px-2">
                 <input
                   type="range"
@@ -398,12 +476,18 @@ export default function YachtFilters({ filters, onChange }) {
                   max={MAX_PRICE}
                   step="10000"
                   value={priceRange[1]}
-                  onChange={handlePriceSliderChange}
-                  className="w-full h-3 bg-[#3a3b3f] rounded-lg appearance-none cursor-pointer accent-[#d39478]"
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    setPriceRange([0, value]);
+                    handleChange('priceMax', value === MAX_PRICE ? '' : value);
+                  }}
+                  className="w-full h-3 bg-gray-600 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:bg-gray-600 [&::-webkit-slider-runnable-track]:h-3 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-moz-range-track]:bg-gray-600 [&::-moz-range-track]:h-3 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:h-6 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
                 />
                 <div className="flex justify-between text-sm text-gray-400 mt-2">
                   <span>0</span>
-                  <span className="text-[#d39478] font-medium">Max: {formatPrice(priceRange[1], true)}</span>
+                  <span className="text-[#B03E00] font-medium">
+                    {formatPrice(priceRange[1], true)}
+                  </span>
                   <span>∞</span>
                 </div>
               </div>
@@ -430,7 +514,7 @@ export default function YachtFilters({ filters, onChange }) {
                   type="checkbox"
                   checked={localFilters.petFriendly || false}
                   onChange={e => handleChange('petFriendly', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-[#d39478]"
+                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
                 />
                 <span className="text-[#C0C0C0]">Pet Friendly</span>
               </label>
@@ -439,7 +523,7 @@ export default function YachtFilters({ filters, onChange }) {
                   type="checkbox"
                   checked={localFilters.groupFriendly || false}
                   onChange={e => handleChange('groupFriendly', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-[#d39478]"
+                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
                 />
                 <span className="text-[#C0C0C0]">Group Friendly</span>
               </label>
@@ -448,7 +532,7 @@ export default function YachtFilters({ filters, onChange }) {
                   type="checkbox"
                   checked={localFilters.waterToys || false}
                   onChange={e => handleChange('waterToys', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] text-[#d39478]"
+                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
                 />
                 <span className="text-[#C0C0C0]">Water Toys</span>
               </label>
@@ -467,7 +551,7 @@ export default function YachtFilters({ filters, onChange }) {
           <div className="sticky bottom-0 bg-[#2e2f32] border-t border-white/10 p-6">
             <button
               onClick={() => { applyFilters(); setIsMobileOpen(false); }}
-              className="w-full bg-gradient-to-r from-[#3a3b3f]/50 via-[#f97316] to-[#3a3b3f]/50 hover:from-[#3a3b3f]/60 hover:via-[#f97316]/90 hover:to-[#3a3b3f]/60 rounded-xl py-3 border border-[#C0C0C0] font-medium transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-white"
+              className="w-full bg-gradient-to-r from-[#3a3b3f]/50 via-[#f97316] to-[#3a3b3f]/50 hover:from-[#3a3b3f]/60 hover:via-[#f97316]/90 hover:to-[#3a3b3f]/60 rounded-xl py-3 border border-[#C0C0C0] font-medium transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-[#C0C0C0]"
             >
               Apply Filters
             </button>

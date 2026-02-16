@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map, UserCircle2 } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
+import { formatLength } from '@/lib/unitConversion';
 
 export default function YachtCardV2({ yacht }) {
   // Utilise getAnkorImageUrl pour chaque image
@@ -92,7 +93,7 @@ export default function YachtCardV2({ yacht }) {
         {/* Details */}
         <div className="flex flex-wrap gap-4 text-sm  mb-2 items-center">
           {yacht.length && (
-            <span className="flex items-center gap-1"><Ruler className="w-4 h-4 text-[#B03E00]" />{yacht.length}</span>
+            <span className="flex items-center gap-1"><Ruler className="w-4 h-4 text-[#B03E00]" />{formatLength(yacht.length, 'both')}</span>
           )}
           {yacht.guests && (
             <span className="flex items-center gap-1"><Users className="w-4 h-4 text-[#B03E00]" />{yacht.guests} guests</span>

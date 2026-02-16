@@ -7,6 +7,7 @@ import {
   Ship, Anchor, PawPrint, Users, Waves, FolderOpen
 } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
+import { formatLength } from '@/lib/unitConversion';
 import {
   DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors,
 } from '@dnd-kit/core';
@@ -733,7 +734,7 @@ function AnkorYachtCard({ yacht, isSelected, onAdd, selectedRegion }) {
         <h3 className="text-[#C0C0C0] font-medium truncate">{yacht.name}</h3>
         <div className="flex gap-2 text-xs text-gray-400 mt-1">
           {yacht.type && <span className="capitalize">{yacht.type}</span>}
-          {yacht.length && <span>• {yacht.length}</span>}
+          {yacht.length && <span>• {formatLength(yacht.length, 'both')}</span>}
           {yacht.guests && <span>• {yacht.guests} guests</span>}
           {yacht.pricePerHour && <span>• {yacht.pricePerHour}</span>}
         </div>

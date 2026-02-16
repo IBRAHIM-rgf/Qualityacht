@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight, MapPin, Users, BedDouble, Ruler, Map, Anchor, Ship, UserCircle2 } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
+import { formatLength } from '@/lib/unitConversion';
 
 export default function YachtModal({ yacht, isOpen, onClose }) {
   const [currentImage, setCurrentImage] = useState(0);
@@ -114,7 +115,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             {yacht.length && (
               <div className="text-center">
                 <Ruler className="w-6 h-6 mx-auto mb-2 text-[#B03E00]" />
-                <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.length}</p>
+                <p className="text-lg font-semibold text-[#C0C0C0]">{formatLength(yacht.length, 'both')}</p>
                 <p className="text-sm text-[#acb0cd]">Length</p>
               </div>
             )}
