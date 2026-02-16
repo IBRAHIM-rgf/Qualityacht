@@ -182,6 +182,7 @@ export default function YachtFilters({ filters, onChange }) {
                 type="date"
                 value={localFilters.startDate || ''}
                 onChange={e => handleChange('startDate', e.target.value)}
+                placeholder="mm/dd/yyyy"
                 className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
                 lang="en-US"
               />
@@ -191,6 +192,7 @@ export default function YachtFilters({ filters, onChange }) {
               type="date"
               value={localFilters.endDate || ''}
               onChange={e => handleChange('endDate', e.target.value)}
+              placeholder="mm/dd/yyyy"
               className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
               lang="en-US"
             />
@@ -447,6 +449,7 @@ export default function YachtFilters({ filters, onChange }) {
                   type="date"
                   value={localFilters.startDate || ''}
                   onChange={e => handleChange('startDate', e.target.value)}
+                  placeholder="mm/dd/yyyy"
                   className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:light]"
                   lang="en-US"
                 />
@@ -454,6 +457,7 @@ export default function YachtFilters({ filters, onChange }) {
                   type="date"
                   value={localFilters.endDate || ''}
                   onChange={e => handleChange('endDate', e.target.value)}
+                  placeholder="mm/dd/yyyy"
                   className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:light]"
                   lang="en-US"
                 />
