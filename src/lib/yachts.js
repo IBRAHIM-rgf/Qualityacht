@@ -25,10 +25,16 @@ export const REGION_MAP = {
   bahamas: 'Caribbean',
   'indian-ocean': 'Indian Ocean & South East Asia',
   'south-pacific': 'Australasia & South Pacific',
+  'south-east-asia': 'Indian Ocean & South East Asia',
   antarctica: 'Antarctica',
+  arctic: 'Antarctica', // Pas de région Arctic spécifique, utiliser Antarctica
   'arabian-gulf': 'Arabian Gulf',
   'central-america': 'South & Central America',
   'south-america': 'South & Central America',
+  indonesia: 'Indian Ocean & South East Asia',
+  'east-asia': 'Indian Ocean & South East Asia',
+  'pacific-ocean': 'Australasia & South Pacific',
+  oceania: 'Australasia & South Pacific',
 
   // RÉGIONS NON SUPPORTÉES PAR L'API (retournent erreur 400)
   'north-america': 'North America',
