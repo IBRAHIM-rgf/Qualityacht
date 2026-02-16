@@ -8,11 +8,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
-export const metadata = {
-  title: 'Yacht Charter Destinations (Accordion) | Qualityacht',
-  description: 'Explore luxury yacht charter destinations worldwide with expandable regions.',
-};
-
 const destinationRegions = [
   {
     id: 'caribbean',
