@@ -92,9 +92,14 @@ export default function CaribbeanPage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="max-w-7xl mx-auto px-4 py-16 relative">
+        {/* Nuages Background */}
+        <div className="absolute inset-0 pointer-events-none opacity-10">
+          <Image src="/images/nuagesAncien.png" alt="" fill className="object-contain" />
+        </div>
+
         {/* Description */}
-        <div className="prose prose-invert prose-lg max-w-none mb-20">
+        <div className="prose prose-invert prose-lg max-w-none mb-20 relative">
           <div className="text-[#C0C0C0] leading-relaxed space-y-6">
             <p className="text-xl">
               A paradise of turquoise waters, powder-white beaches, vibrant coral reefs, and lush tropical forests,
@@ -123,7 +128,7 @@ export default function CaribbeanPage() {
         </div>
 
         {/* Highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 relative">
           {highlights.map((highlight, index) => (
             <div
               key={index}
@@ -137,12 +142,12 @@ export default function CaribbeanPage() {
         </div>
 
         {/* Regions */}
-        <div className="mb-20">
+        <div className="mb-20 relative">
           <h2 className="text-4xl font-bold text-[#C0C0C0] mb-12 text-center">
             Explore Caribbean Regions
           </h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
             {caribbeanRegions.map((region, index) => (
               <div
                 key={index}
@@ -192,7 +197,7 @@ export default function CaribbeanPage() {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-r from-[#B03E00]/10 to-[#9333ea]/10 border border-[#B03E00]/20 rounded-2xl p-12 text-center">
+        <div className="bg-gradient-to-r from-[#B03E00]/10 to-[#9333ea]/10 border border-[#B03E00]/20 rounded-2xl p-12 text-center relative">
           <h2 className="text-3xl md:text-4xl font-bold text-[#C0C0C0] mb-6">
             Ready to Explore the Caribbean?
           </h2>

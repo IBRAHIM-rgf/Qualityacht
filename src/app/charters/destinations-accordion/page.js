@@ -303,9 +303,14 @@ export default function DestinationsPageAccordion() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-20">
+      <div className="max-w-7xl mx-auto px-4 py-20 relative">
+        {/* Nuages Background */}
+        <div className="absolute inset-0 pointer-events-none opacity-10">
+          <Image src="/images/nuagesAncien.png" alt="" fill className="object-contain" />
+        </div>
+
         {/* Accordion Regions */}
-        <div className="space-y-6">
+        <div className="space-y-6 relative">
           {destinationRegions.map((region) => (
             <DestinationAccordion
               key={region.id}
@@ -317,7 +322,7 @@ export default function DestinationsPageAccordion() {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-20 bg-gradient-to-r from-[#B03E00]/10 to-[#9333ea]/10 border border-[#B03E00]/20 rounded-2xl p-12 text-center">
+        <div className="mt-20 bg-gradient-to-r from-[#B03E00]/10 to-[#9333ea]/10 border border-[#B03E00]/20 rounded-2xl p-12 text-center relative">
           <h2 className="text-3xl md:text-4xl font-bold text-[#C0C0C0] mb-6">
             Ready to Start Your Journey?
           </h2>

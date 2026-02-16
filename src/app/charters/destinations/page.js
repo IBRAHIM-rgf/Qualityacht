@@ -100,9 +100,14 @@ export default function DestinationsPage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-20">
+      <div className="max-w-7xl mx-auto px-4 py-20 relative">
+        {/* Nuages Background */}
+        <div className="absolute inset-0 pointer-events-none opacity-10">
+          <Image src="/images/nuagesAncien.png" alt="" fill className="object-contain" />
+        </div>
+
         {/* Introduction */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 relative">
           <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Explore private yacht charter and brokerage services worldwide, tailored to local regulations,
             preferred marinas, and cultural nuances.
@@ -110,7 +115,7 @@ export default function DestinationsPage() {
         </div>
 
         {/* Destinations Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-32">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-32 relative">
           {destinations.map((destination, index) => (
             <Link
               key={index}
@@ -136,7 +141,7 @@ export default function DestinationsPage() {
         </div>
 
         {/* Popular Destinations Section */}
-        <div className="mb-20">
+        <div className="mb-20 relative">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-[#C0C0C0] mb-6 tracking-wider">
               POPULAR LUXURY YACHT
@@ -149,7 +154,7 @@ export default function DestinationsPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative">
             {popularDestinations.map((destination, index) => (
               <Link
                 key={index}
@@ -176,7 +181,7 @@ export default function DestinationsPage() {
         </div>
 
         {/* All Destinations Section */}
-        <div className="bg-gradient-to-r from-[#B03E00]/10 to-[#9333ea]/10 border border-[#B03E00]/20 rounded-2xl p-12 text-center">
+        <div className="bg-gradient-to-r from-[#B03E00]/10 to-[#9333ea]/10 border border-[#B03E00]/20 rounded-2xl p-12 text-center relative">
           <h2 className="text-3xl md:text-4xl font-bold text-[#C0C0C0] mb-6">
             Explore All Destinations
           </h2>
