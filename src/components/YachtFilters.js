@@ -210,7 +210,7 @@ export default function YachtFilters({ filters, onChange }) {
                 ))}
               </select>
             </div>
-            <div className="relative h-4 flex items-center">
+            <div className="relative h-5 flex items-center">
               <input
                 type="range"
                 min="0"
@@ -224,7 +224,7 @@ export default function YachtFilters({ filters, onChange }) {
                     handleChange('priceMin', value === 0 ? '' : value);
                   }
                 }}
-                className="absolute w-full appearance-none cursor-pointer pointer-events-none bg-transparent [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-transparent [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#9333ea] [&::-moz-range-track]:h-0.5 [&::-moz-range-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-transparent [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#9333ea]"
+                className="absolute w-full appearance-none cursor-pointer pointer-events-none bg-transparent [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#9333ea] [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-track]:h-0.5 [&::-moz-range-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#9333ea] [&::-moz-range-thumb]:shadow-md"
                 style={{ zIndex: priceRange[0] > MAX_PRICE * 0.5 ? 5 : 3 }}
               />
               <input
@@ -240,7 +240,7 @@ export default function YachtFilters({ filters, onChange }) {
                     handleChange('priceMax', value === MAX_PRICE ? '' : value);
                   }
                 }}
-                className="absolute w-full appearance-none cursor-pointer bg-transparent [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-[#B03E00] [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-transparent [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#9333ea] [&::-moz-range-track]:h-0.5 [&::-moz-range-track]:bg-[#B03E00] [&::-moz-range-track]:rounded-full [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-transparent [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#9333ea]"
+                className="absolute w-full appearance-none cursor-pointer bg-transparent [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-[#B03E00] [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#9333ea] [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-track]:h-0.5 [&::-moz-range-track]:bg-[#B03E00] [&::-moz-range-track]:rounded-full [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#9333ea] [&::-moz-range-thumb]:shadow-md"
               />
             </div>
             <span className="text-xs text-gray-400 text-center">
@@ -308,7 +308,7 @@ export default function YachtFilters({ filters, onChange }) {
                   </button>
                 </div>
               </div>
-              <div className="relative h-4 flex items-center min-w-[180px]">
+              <div className="relative h-5 flex items-center min-w-[180px]">
                 <input
                   type="range"
                   min={unitPreference === 'meters' ? MIN_LENGTH_M : MIN_LENGTH_FT}
@@ -316,7 +316,7 @@ export default function YachtFilters({ filters, onChange }) {
                   step={unitPreference === 'meters' ? 5 : 10}
                   value={lengthRange[0]}
                   onChange={(e) => handleLengthChange(0, e.target.value)}
-                  className="absolute w-full appearance-none cursor-pointer pointer-events-none bg-transparent [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-transparent [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#9333ea] [&::-moz-range-track]:h-0.5 [&::-moz-range-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-transparent [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#9333ea]"
+                  className="absolute w-full appearance-none cursor-pointer pointer-events-none bg-transparent [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#9333ea] [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-track]:h-0.5 [&::-moz-range-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#9333ea] [&::-moz-range-thumb]:shadow-md"
                   style={{ zIndex: 5 }}
                 />
                 <input
@@ -326,7 +326,7 @@ export default function YachtFilters({ filters, onChange }) {
                   step={unitPreference === 'meters' ? 5 : 10}
                   value={lengthRange[1]}
                   onChange={(e) => handleLengthChange(1, e.target.value)}
-                  className="absolute w-full appearance-none cursor-pointer bg-transparent [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-[#B03E00] [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-transparent [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#9333ea] [&::-moz-range-track]:h-0.5 [&::-moz-range-track]:bg-[#B03E00] [&::-moz-range-track]:rounded-full [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-transparent [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#9333ea]"
+                  className="absolute w-full appearance-none cursor-pointer bg-transparent [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-[#B03E00] [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#9333ea] [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-track]:h-0.5 [&::-moz-range-track]:bg-[#B03E00] [&::-moz-range-track]:rounded-full [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#9333ea] [&::-moz-range-thumb]:shadow-md"
                 />
               </div>
               <span className="text-xs text-gray-400 text-center">
@@ -352,30 +352,30 @@ export default function YachtFilters({ filters, onChange }) {
             <div className="flex items-center gap-4 flex-wrap">
               <button
                 onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
                   localFilters.petFriendly
-                    ? 'bg-[#B03E00] text-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
+                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
                 }`}
               >
                 Pet Friendly
               </button>
               <button
                 onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
                   localFilters.groupFriendly
-                    ? 'bg-[#B03E00] text-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
+                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
                 }`}
               >
                 Group Friendly
               </button>
               <button
                 onClick={() => handleChange('waterToys', !localFilters.waterToys)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
                   localFilters.waterToys
-                    ? 'bg-[#B03E00] text-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
+                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
                 }`}
               >
                 Water Toys
@@ -594,30 +594,30 @@ export default function YachtFilters({ filters, onChange }) {
             <div className="space-y-3">
               <button
                 onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition ${
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition border ${
                   localFilters.petFriendly
-                    ? 'bg-[#B03E00] text-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
+                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
                 }`}
               >
                 Pet Friendly
               </button>
               <button
                 onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition ${
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition border ${
                   localFilters.groupFriendly
-                    ? 'bg-[#B03E00] text-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
+                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
                 }`}
               >
                 Group Friendly
               </button>
               <button
                 onClick={() => handleChange('waterToys', !localFilters.waterToys)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition ${
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition border ${
                   localFilters.waterToys
-                    ? 'bg-[#B03E00] text-[#B03E00]'
-                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                    ? 'bg-[#3a3b3f] text-[#B03E00] border-[#B03E00]'
+                    : 'bg-[#3a3b3f] text-gray-400 border-white/20'
                 }`}
               >
                 Water Toys
