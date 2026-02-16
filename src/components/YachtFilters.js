@@ -627,7 +627,7 @@ export default function YachtFilters({ filters, onChange }) {
             {activeCount > 0 && (
               <button
                 onClick={handleReset}
-                className="w-full px-4 py-3 bg-white/10 text-[#C0C0C0] rounded-xl font-medium hover:bg-white/20 transition"
+                className="w-full px-4 py-3 bg-transparent border-2 border-[#C0C0C0] text-[#C0C0C0] rounded-xl font-medium hover:bg-white/5 transition"
               >
                 Reset ({activeCount})
               </button>
