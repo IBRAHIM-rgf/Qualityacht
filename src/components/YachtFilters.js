@@ -353,7 +353,7 @@ export default function YachtFilters({ filters, onChange }) {
                 onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                   localFilters.petFriendly
-                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    ? 'bg-transparent border-2 border-[#B03E00] text-[#B03E00]'
                     : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
                 }`}
               >
@@ -363,7 +363,7 @@ export default function YachtFilters({ filters, onChange }) {
                 onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                   localFilters.groupFriendly
-                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    ? 'bg-transparent border-2 border-[#B03E00] text-[#B03E00]'
                     : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
                 }`}
               >
@@ -373,7 +373,7 @@ export default function YachtFilters({ filters, onChange }) {
                 onClick={() => handleChange('waterToys', !localFilters.waterToys)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                   localFilters.waterToys
-                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    ? 'bg-transparent border-2 border-[#B03E00] text-[#B03E00]'
                     : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
                 }`}
               >
@@ -595,7 +595,7 @@ export default function YachtFilters({ filters, onChange }) {
                 onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
                 className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition ${
                   localFilters.petFriendly
-                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    ? 'bg-transparent border-2 border-[#B03E00] text-[#B03E00]'
                     : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
                 }`}
               >
@@ -605,7 +605,7 @@ export default function YachtFilters({ filters, onChange }) {
                 onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
                 className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition ${
                   localFilters.groupFriendly
-                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    ? 'bg-transparent border-2 border-[#B03E00] text-[#B03E00]'
                     : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
                 }`}
               >
@@ -615,7 +615,7 @@ export default function YachtFilters({ filters, onChange }) {
                 onClick={() => handleChange('waterToys', !localFilters.waterToys)}
                 className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition ${
                   localFilters.waterToys
-                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    ? 'bg-transparent border-2 border-[#B03E00] text-[#B03E00]'
                     : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
                 }`}
               >
