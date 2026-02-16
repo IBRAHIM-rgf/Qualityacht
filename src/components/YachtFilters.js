@@ -467,7 +467,7 @@ export default function YachtFilters({ filters, onChange }) {
           <div className="sticky bottom-0 bg-[#2e2f32] border-t border-white/10 p-6">
             <button
               onClick={() => { applyFilters(); setIsMobileOpen(false); }}
-              className="w-full bg-[#d39478] text-[#C0C0C0] py-3 rounded-xl font-medium hover:bg-[#c4826a] transition"
+              className="w-full bg-gradient-to-r from-[#3a3b3f]/50 via-[#d39478]/40 to-[#3a3b3f]/50 hover:from-[#3a3b3f]/60 hover:via-[#d39478]/55 hover:to-[#3a3b3f]/60 rounded-xl py-3 border border-[#C0C0C0] font-medium transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-[#acb0cd]"
             >
               Apply Filters
             </button>
