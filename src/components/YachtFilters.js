@@ -35,54 +35,29 @@ const CURRENCIES = [
   { value: 'GBP', label: '£ GBP' },
 ];
 
-const MAX_PRICE = 6000000; // 6M = unlimited
-
-// Paliers de prix
-const PRICE_TIERS = [
-  { value: 1000, label: '1k - 10k €', max: 10000 },
-  { value: 10000, label: '10k - 100k €', max: 100000 },
-  { value: 100000, label: '100k - 1M €', max: 1000000 },
-  { value: 1000000, label: '1M+ €', max: Infinity }
-];
-
-// Paliers de longueur en mètres
-const LENGTH_TIERS_M = [
-  { value: 0, label: 'Tous', max: Infinity },
-  { value: 10, label: '10-20m', max: 20 },
-  { value: 20, label: '20-30m', max: 30 },
-  { value: 30, label: '30-50m', max: 50 },
-  { value: 50, label: '50-80m', max: 80 },
-  { value: 80, label: '80m+', max: Infinity }
-];
-
-// Paliers de longueur en pieds
-const LENGTH_TIERS_FT = [
-  { value: 0, label: 'All', max: Infinity },
-  { value: 33, label: '33-66ft', max: 66 },
-  { value: 66, label: '66-98ft', max: 98 },
-  { value: 98, label: '98-164ft', max: 164 },
-  { value: 164, label: '164-262ft', max: 262 },
-  { value: 262, label: '262ft+', max: Infinity }
-];
+const MAX_PRICE = 6000000;
+const MIN_LENGTH_M = 10;
+const MAX_LENGTH_M = 140;
+const MIN_LENGTH_FT = 33; // ~10m
+const MAX_LENGTH_FT = 459; // ~140m
 
 export default function YachtFilters({ filters, onChange }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
   const [priceRange, setPriceRange] = useState([0, MAX_PRICE]);
-
-  // Nouveaux états pour les paliers
-  const [priceMinTier, setPriceMinTier] = useState(0);
-  const [priceMaxTier, setPriceMaxTier] = useState(3);
+  const [lengthRange, setLengthRange] = useState([MIN_LENGTH_M, MAX_LENGTH_M]);
   const [unitPreference, setUnitPreference] = useState('meters');
-  const [minLengthTier, setMinLengthTier] = useState(0);
-  const [maxLengthTier, setMaxLengthTier] = useState(0);
 
   useEffect(() => {
     setLocalFilters(filters);
     setPriceRange([
       filters.priceMin || 0,
       filters.priceMax || MAX_PRICE
+    ]);
+    setLengthRange([
+      filters.minLength || MIN_LENGTH_M,
+      filters.maxLength || MAX_LENGTH_M
     ]);
   }, [filters]);
 
@@ -94,12 +69,38 @@ export default function YachtFilters({ filters, onChange }) {
     setLocalFilters(newFilters);
   };
 
-  const handlePriceSliderChange = (e) => {
-    const value = Number(e.target.value);
-    const newRange = [...priceRange];
-    newRange[1] = value;
-    setPriceRange(newRange);
-    handleChange('priceMax', value === MAX_PRICE ? '' : value);
+  const metersToFeet = (meters) => Math.round(meters * 3.28084);
+  const feetToMeters = (feet) => Math.round(feet / 3.28084);
+
+  const handleUnitChange = (newUnit) => {
+    if (newUnit === unitPreference) return;
+
+    setUnitPreference(newUnit);
+
+    if (newUnit === 'feet') {
+      // Convert meters to feet
+      const minFt = metersToFeet(lengthRange[0]);
+      const maxFt = metersToFeet(lengthRange[1]);
+      setLengthRange([minFt, maxFt]);
+    } else {
+      // Convert feet to meters
+      const minM = feetToMeters(lengthRange[0]);
+      const maxM = feetToMeters(lengthRange[1]);
+      setLengthRange([minM, maxM]);
+    }
+  };
+
+  const handleLengthChange = (index, value) => {
+    const newRange = [...lengthRange];
+    newRange[index] = Number(value);
+    setLengthRange(newRange);
+
+    // Convert to meters for filters
+    if (unitPreference === 'feet') {
+      handleChange(index === 0 ? 'minLength' : 'maxLength', feetToMeters(Number(value)));
+    } else {
+      handleChange(index === 0 ? 'minLength' : 'maxLength', Number(value));
+    }
   };
 
   const applyFilters = () => {
@@ -125,6 +126,7 @@ export default function YachtFilters({ filters, onChange }) {
     };
     setLocalFilters(emptyFilters);
     setPriceRange([0, MAX_PRICE]);
+    setLengthRange([MIN_LENGTH_M, MAX_LENGTH_M]);
     onChange(emptyFilters);
   };
 
@@ -180,7 +182,8 @@ export default function YachtFilters({ filters, onChange }) {
                 type="date"
                 value={localFilters.startDate || ''}
                 onChange={e => handleChange('startDate', e.target.value)}
-                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:dark]"
+                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
+                lang="en-US"
               />
             </div>
             <span className="text-gray-400">-</span>
@@ -188,11 +191,12 @@ export default function YachtFilters({ filters, onChange }) {
               type="date"
               value={localFilters.endDate || ''}
               onChange={e => handleChange('endDate', e.target.value)}
-              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:dark]"
+              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
+              lang="en-US"
             />
           </div>
 
-          {/* Price Range - Slider style */}
+          {/* Price Range - Dual Slider */}
           <div className="flex items-center gap-3 min-w-[220px]">
             <select
               value={localFilters.currency || 'EUR'}
@@ -204,21 +208,41 @@ export default function YachtFilters({ filters, onChange }) {
               ))}
             </select>
             <div className="flex flex-col gap-1 flex-1">
-              <input
-                type="range"
-                min="0"
-                max={MAX_PRICE}
-                step="10000"
-                value={priceRange[1]}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  setPriceRange([0, value]);
-                  handleChange('priceMax', value === MAX_PRICE ? '' : value);
-                }}
-                className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-[#B03E00] [&::-webkit-slider-runnable-track]:bg-gray-600 [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-moz-range-track]:bg-gray-600 [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
-              />
+              <div className="relative">
+                <input
+                  type="range"
+                  min="0"
+                  max={MAX_PRICE}
+                  step="10000"
+                  value={priceRange[0]}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value < priceRange[1]) {
+                      setPriceRange([value, priceRange[1]]);
+                      handleChange('priceMin', value === 0 ? '' : value);
+                    }
+                  }}
+                  className="absolute w-full h-1 bg-transparent rounded-lg appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:border border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow-md"
+                  style={{ zIndex: priceRange[0] > MAX_PRICE * 0.5 ? 5 : 3 }}
+                />
+                <input
+                  type="range"
+                  min="0"
+                  max={MAX_PRICE}
+                  step="10000"
+                  value={priceRange[1]}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value > priceRange[0]) {
+                      setPriceRange([priceRange[0], value]);
+                      handleChange('priceMax', value === MAX_PRICE ? '' : value);
+                    }
+                  }}
+                  className="relative w-full h-1 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:bg-[#B03E00] [&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:border border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-track]:bg-[#B03E00] [&::-moz-range-track]:h-1 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow-md"
+                />
+              </div>
               <span className="text-xs text-gray-400 text-center">
-                {formatPrice(priceRange[1], true)}{priceRange[1] < MAX_PRICE ? '' : ''}
+                {formatPrice(priceRange[0])} - {formatPrice(priceRange[1], true)}
               </span>
             </div>
           </div>
@@ -255,38 +279,63 @@ export default function YachtFilters({ filters, onChange }) {
 
         {/* Extended options */}
         {isExpanded && (
-          <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-6 flex-wrap bg-transparent">
-            {/* Length with slider */}
-            <div className="flex items-center gap-2 min-w-[280px]">
-              <label className="text-sm text-gray-300">Length:</label>
+          <div className="mt-4 pt-4 border-t border-white/10 space-y-4 bg-transparent">
+            {/* Length with dual slider */}
+            <div className="flex items-center gap-4">
+              <label className="text-sm text-gray-300 min-w-[60px]">Length:</label>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleUnitChange('meters')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+                    unitPreference === 'meters'
+                      ? 'bg-[#B03E00] text-[#C0C0C0]'
+                      : 'bg-[#3a3b3f] text-gray-400'
+                  }`}
+                >
+                  Meters
+                </button>
+                <button
+                  onClick={() => handleUnitChange('feet')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+                    unitPreference === 'feet'
+                      ? 'bg-[#B03E00] text-[#C0C0C0]'
+                      : 'bg-[#3a3b3f] text-gray-400'
+                  }`}
+                >
+                  Feet
+                </button>
+              </div>
               <div className="flex flex-col gap-1 flex-1">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  step="5"
-                  value={localFilters.maxLength || 100}
-                  onChange={(e) => {
-                    const value = Number(e.target.value);
-                    handleChange('maxLength', value === 100 ? '' : value);
-                  }}
-                  className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-[#B03E00] [&::-webkit-slider-runnable-track]:bg-gray-600 [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-moz-range-track]:bg-gray-600 [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
-                />
+                <div className="relative">
+                  <input
+                    type="range"
+                    min={unitPreference === 'meters' ? MIN_LENGTH_M : MIN_LENGTH_FT}
+                    max={unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT}
+                    step={unitPreference === 'meters' ? 5 : 10}
+                    value={lengthRange[0]}
+                    onChange={(e) => handleLengthChange(0, e.target.value)}
+                    className="absolute w-full h-1 bg-transparent rounded-lg appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:border border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow-md"
+                    style={{ zIndex: 5 }}
+                  />
+                  <input
+                    type="range"
+                    min={unitPreference === 'meters' ? MIN_LENGTH_M : MIN_LENGTH_FT}
+                    max={unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT}
+                    step={unitPreference === 'meters' ? 5 : 10}
+                    value={lengthRange[1]}
+                    onChange={(e) => handleLengthChange(1, e.target.value)}
+                    className="relative w-full h-1 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:bg-[#B03E00] [&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:border border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-track]:bg-[#B03E00] [&::-moz-range-track]:h-1 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow-md"
+                  />
+                </div>
                 <span className="text-xs text-gray-400 text-center">
-                  {localFilters.maxLength ? `${localFilters.maxLength}m` : '100m+'}
+                  {lengthRange[0]}{unitPreference === 'meters' ? 'm' : 'ft'} - {lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}
                 </span>
               </div>
-              <button
-                onClick={() => setUnitPreference(unitPreference === 'meters' ? 'feet' : 'meters')}
-                className="px-2 py-1 bg-[#B03E00] text-[#C0C0C0] text-xs rounded"
-              >
-                {unitPreference === 'meters' ? 'Mètres' : 'Pieds'}
-              </button>
             </div>
 
             {/* Capacity */}
-            <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-300">Min guests:</label>
+            <div className="flex items-center gap-4">
+              <label className="text-sm text-gray-300 min-w-[60px]">Min guests:</label>
               <input
                 type="number"
                 min="1"
@@ -298,36 +347,39 @@ export default function YachtFilters({ filters, onChange }) {
               />
             </div>
 
-            {/* Checkboxes */}
-            <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-300">
-              <input
-                type="checkbox"
-                checked={localFilters.petFriendly || false}
-                onChange={e => handleChange('petFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
-              />
-              Pet Friendly
-            </label>
-
-            <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-300">
-              <input
-                type="checkbox"
-                checked={localFilters.groupFriendly || false}
-                onChange={e => handleChange('groupFriendly', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
-              />
-              Group Friendly
-            </label>
-
-            <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-300">
-              <input
-                type="checkbox"
-                checked={localFilters.waterToys || false}
-                onChange={e => handleChange('waterToys', e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
-              />
-              Water Toys
-            </label>
+            {/* Options as toggle buttons */}
+            <div className="flex items-center gap-4 flex-wrap">
+              <button
+                onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  localFilters.petFriendly
+                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                }`}
+              >
+                Pet Friendly
+              </button>
+              <button
+                onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  localFilters.groupFriendly
+                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                }`}
+              >
+                Group Friendly
+              </button>
+              <button
+                onClick={() => handleChange('waterToys', !localFilters.waterToys)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  localFilters.waterToys
+                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                }`}
+              >
+                Water Toys
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -394,71 +446,82 @@ export default function YachtFilters({ filters, onChange }) {
                   type="date"
                   value={localFilters.startDate || ''}
                   onChange={e => handleChange('startDate', e.target.value)}
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:dark]"
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:light]"
+                  lang="en-US"
                 />
                 <input
                   type="date"
                   value={localFilters.endDate || ''}
                   onChange={e => handleChange('endDate', e.target.value)}
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:dark]"
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:light]"
+                  lang="en-US"
                 />
               </div>
             </div>
 
-            {/* Length with Slider */}
+            {/* Length with Dual Slider */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Longueur</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Length</label>
               <div className="space-y-3">
-                <div className="px-2">
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    step="5"
-                    value={localFilters.maxLength || 100}
-                    onChange={(e) => {
-                      const value = Number(e.target.value);
-                      handleChange('maxLength', value === 100 ? '' : value);
-                    }}
-                    className="w-full h-3 bg-gray-600 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:bg-gray-600 [&::-webkit-slider-runnable-track]:h-3 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-moz-range-track]:bg-gray-600 [&::-moz-range-track]:h-3 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:h-6 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
-                  />
-                  <div className="flex justify-between text-sm text-gray-400 mt-2">
-                    <span>0m</span>
-                    <span className="text-[#B03E00] font-medium">
-                      {localFilters.maxLength ? `${localFilters.maxLength}m` : '100m+'}
-                    </span>
-                  </div>
-                </div>
-
                 {/* Toggle Unité */}
                 <div className="flex gap-3">
                   <button
-                    onClick={() => setUnitPreference('meters')}
+                    onClick={() => handleUnitChange('meters')}
                     className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition ${
                       unitPreference === 'meters'
                         ? 'bg-[#B03E00] text-[#C0C0C0]'
                         : 'bg-[#3a3b3f] text-gray-400'
                     }`}
                   >
-                    Mètres
+                    Meters
                   </button>
                   <button
-                    onClick={() => setUnitPreference('feet')}
+                    onClick={() => handleUnitChange('feet')}
                     className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition ${
                       unitPreference === 'feet'
                         ? 'bg-[#B03E00] text-[#C0C0C0]'
                         : 'bg-[#3a3b3f] text-gray-400'
                     }`}
                   >
-                    Pieds
+                    Feet
                   </button>
+                </div>
+
+                <div className="px-2">
+                  <div className="relative h-8">
+                    <input
+                      type="range"
+                      min={unitPreference === 'meters' ? MIN_LENGTH_M : MIN_LENGTH_FT}
+                      max={unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT}
+                      step={unitPreference === 'meters' ? 5 : 10}
+                      value={lengthRange[0]}
+                      onChange={(e) => handleLengthChange(0, e.target.value)}
+                      className="absolute w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-lg [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
+                      style={{ zIndex: 5 }}
+                    />
+                    <input
+                      type="range"
+                      min={unitPreference === 'meters' ? MIN_LENGTH_M : MIN_LENGTH_FT}
+                      max={unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT}
+                      step={unitPreference === 'meters' ? 5 : 10}
+                      value={lengthRange[1]}
+                      onChange={(e) => handleLengthChange(1, e.target.value)}
+                      className="absolute w-full h-2 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:bg-[#B03E00] [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-lg [&::-moz-range-track]:bg-[#B03E00] [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
+                    />
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-400 mt-2">
+                    <span>{lengthRange[0]}{unitPreference === 'meters' ? 'm' : 'ft'}</span>
+                    <span className="text-[#B03E00] font-medium">
+                      {lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Price Range with Slider */}
+            {/* Price Range with Dual Slider */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Prix</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Price</label>
               <select
                 value={localFilters.currency || 'EUR'}
                 onChange={e => handleChange('currency', e.target.value)}
@@ -470,25 +533,44 @@ export default function YachtFilters({ filters, onChange }) {
               </select>
 
               <div className="px-2">
-                <input
-                  type="range"
-                  min="0"
-                  max={MAX_PRICE}
-                  step="10000"
-                  value={priceRange[1]}
-                  onChange={(e) => {
-                    const value = Number(e.target.value);
-                    setPriceRange([0, value]);
-                    handleChange('priceMax', value === MAX_PRICE ? '' : value);
-                  }}
-                  className="w-full h-3 bg-gray-600 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:bg-gray-600 [&::-webkit-slider-runnable-track]:h-3 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-moz-range-track]:bg-gray-600 [&::-moz-range-track]:h-3 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:h-6 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
-                />
+                <div className="relative h-8">
+                  <input
+                    type="range"
+                    min="0"
+                    max={MAX_PRICE}
+                    step="10000"
+                    value={priceRange[0]}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (value < priceRange[1]) {
+                        setPriceRange([value, priceRange[1]]);
+                        handleChange('priceMin', value === 0 ? '' : value);
+                      }
+                    }}
+                    className="absolute w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-lg [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
+                    style={{ zIndex: 5 }}
+                  />
+                  <input
+                    type="range"
+                    min="0"
+                    max={MAX_PRICE}
+                    step="10000"
+                    value={priceRange[1]}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (value > priceRange[0]) {
+                        setPriceRange([priceRange[0], value]);
+                        handleChange('priceMax', value === MAX_PRICE ? '' : value);
+                      }
+                    }}
+                    className="absolute w-full h-2 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:bg-[#B03E00] [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-lg [&::-moz-range-track]:bg-[#B03E00] [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-lg [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
+                  />
+                </div>
                 <div className="flex justify-between text-sm text-gray-400 mt-2">
-                  <span>0</span>
+                  <span>{formatPrice(priceRange[0])}</span>
                   <span className="text-[#B03E00] font-medium">
                     {formatPrice(priceRange[1], true)}
                   </span>
-                  <span>∞</span>
                 </div>
               </div>
             </div>
@@ -507,35 +589,38 @@ export default function YachtFilters({ filters, onChange }) {
               />
             </div>
 
-            {/* Options */}
+            {/* Options as toggle buttons */}
             <div className="space-y-3">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={localFilters.petFriendly || false}
-                  onChange={e => handleChange('petFriendly', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
-                />
-                <span className="text-[#C0C0C0]">Pet Friendly</span>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={localFilters.groupFriendly || false}
-                  onChange={e => handleChange('groupFriendly', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
-                />
-                <span className="text-[#C0C0C0]">Group Friendly</span>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={localFilters.waterToys || false}
-                  onChange={e => handleChange('waterToys', e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-[#3a3b3f] checked:bg-[#B03E00] checked:border-[#B03E00] focus:ring-[#B03E00] focus:ring-offset-0"
-                />
-                <span className="text-[#C0C0C0]">Water Toys</span>
-              </label>
+              <button
+                onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition ${
+                  localFilters.petFriendly
+                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                }`}
+              >
+                Pet Friendly
+              </button>
+              <button
+                onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition ${
+                  localFilters.groupFriendly
+                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                }`}
+              >
+                Group Friendly
+              </button>
+              <button
+                onClick={() => handleChange('waterToys', !localFilters.waterToys)}
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition ${
+                  localFilters.waterToys
+                    ? 'bg-[#B03E00] text-[#C0C0C0]'
+                    : 'bg-[#3a3b3f] text-gray-400 border border-white/20'
+                }`}
+              >
+                Water Toys
+              </button>
             </div>
 
             {activeCount > 0 && (
