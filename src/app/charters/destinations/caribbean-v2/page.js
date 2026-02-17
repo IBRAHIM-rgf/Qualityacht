@@ -226,14 +226,14 @@ export default function CaribbeanV2Page() {
   };
 
   return (
-    <div className="min-h-screen bg-[#303135] relative">
+    <div className="min-h-screen bg-[#3d4047] relative">
       {/* Nuages en fond global toute la page */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <Image
           src="/images/nuagesAncien.png"
           alt=""
           fill
-          className="object-cover opacity-15"
+          className="object-cover opacity-40"
         />
       </div>
 
