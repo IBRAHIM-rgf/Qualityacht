@@ -268,27 +268,27 @@ export default function CaribbeanV2Page() {
             {/* Trait blanc du haut */}
             <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mb-16"></div>
 
-            <p className="text-xl text-[#C0C0C0] max-w-5xl mx-auto">
+            <p className="text-xl max-w-5xl mx-auto">
               A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>, <span className="text-[#d39478] font-semibold">powder-white beaches</span>, <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and <span className="text-[#d39478] font-semibold">lush tropical forests</span>,
               the Caribbean stands as <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
             </p>
 
-            <p className="text-lg text-[#C0C0C0] max-w-4xl mx-auto">
-              From untamed natural beauty and pirate legends of the Leeward and Windward Islands to the opulence
-              of Michelin-starred restaurants and ultra-luxury resorts in St. Martin and St. Barts, the Caribbean
+            <p className="text-lg max-w-4xl mx-auto">
+              From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
+              of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
               offers an unparalleled sailing experience.
             </p>
 
-            <p className="text-lg text-[#C0C0C0] max-w-3xl mx-auto">
-              Comprising twenty-six countries and over seven hundred islands, cays, and islets—including the Greater
+            <p className="text-lg max-w-3xl mx-auto">
+              Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
               and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
-              cultural tapestry blending Creole, French, Dutch, and British influences.
+              cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
             </p>
 
-            <p className="text-base text-[#C0C0C0] max-w-2xl mx-auto">
+            <p className="text-base max-w-2xl mx-auto">
               For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
-              of exclusivity and adventure. Whether it's the glamour of Turks and Caicos, the sophistication of
-              St. Barts, or private island resorts accessible only by sea, this region promises an elite escape
+              of exclusivity and adventure. Whether it's the glamour of <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of
+              <span className="text-[#d39478] font-semibold"> St. Barts</span>, or <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
               where every moment is crafted for the extraordinary.
             </p>
 
