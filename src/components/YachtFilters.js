@@ -37,9 +37,9 @@ const CURRENCIES = [
 
 const PRICE_TIERS = [
   { label: 'All prices', min: 0, max: null },
-  { label: '1 000 € – 10 000 €', min: 1000, max: 10000 },
-  { label: '10 000 € – 100 000 €', min: 10000, max: 100000 },
-  { label: '100 000 € – 1 000 000 €', min: 100000, max: 1000000 },
+  { label: '1k € – 10k €', min: 1000, max: 10000 },
+  { label: '10k € – 100k €', min: 10000, max: 100000 },
+  { label: '100k € – 1M €', min: 100000, max: 1000000 },
   { label: '1 000 000 € – ∞', min: 1000000, max: null },
 ];
 const MIN_LENGTH_M = 10;
@@ -54,6 +54,7 @@ export default function YachtFilters({ filters, onChange }) {
   const [selectedPriceTier, setSelectedPriceTier] = useState(0);
   const [lengthRange, setLengthRange] = useState([MIN_LENGTH_M, MAX_LENGTH_M]);
   const [unitPreference, setUnitPreference] = useState('meters');
+  const [activeThumb, setActiveThumb] = useState(null); // 0 = min, 1 = max
 
   useEffect(() => {
     setLocalFilters(filters);
@@ -277,9 +278,11 @@ export default function YachtFilters({ filters, onChange }) {
                         max={dlenMax}
                         step={unitPreference === 'meters' ? 5 : 10}
                         value={lengthRange[0]}
-                        onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1]))}
+                        onMouseDown={() => setActiveThumb(0)}
+                        onTouchStart={() => setActiveThumb(0)}
+                        onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 5))}
                         className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                        style={{ zIndex: pctDLL <= 50 ? 5 : 3 }}
+                        style={{ zIndex: activeThumb === 0 ? 5 : 3 }}
                       />
                       <input
                         type="range"
@@ -287,9 +290,11 @@ export default function YachtFilters({ filters, onChange }) {
                         max={dlenMax}
                         step={unitPreference === 'meters' ? 5 : 10}
                         value={lengthRange[1]}
-                        onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0]))}
+                        onMouseDown={() => setActiveThumb(1)}
+                        onTouchStart={() => setActiveThumb(1)}
+                        onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 5))}
                         className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                        style={{ zIndex: pctDLL <= 50 ? 3 : 5 }}
+                        style={{ zIndex: activeThumb === 0 ? 3 : 5 }}
                       />
                     </div>
                     {/* Labels under tick marks */}
@@ -491,9 +496,11 @@ export default function YachtFilters({ filters, onChange }) {
                             max={lenMax}
                             step={unitPreference === 'meters' ? 5 : 10}
                             value={lengthRange[0]}
-                            onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1]))}
+                            onMouseDown={() => setActiveThumb(0)}
+                            onTouchStart={() => setActiveThumb(0)}
+                            onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 5))}
                             className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                            style={{ zIndex: pctL <= 50 ? 5 : 3 }}
+                            style={{ zIndex: activeThumb === 0 ? 5 : 3 }}
                           />
                           <input
                             type="range"
@@ -501,9 +508,11 @@ export default function YachtFilters({ filters, onChange }) {
                             max={lenMax}
                             step={unitPreference === 'meters' ? 5 : 10}
                             value={lengthRange[1]}
-                            onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0]))}
+                            onMouseDown={() => setActiveThumb(1)}
+                            onTouchStart={() => setActiveThumb(1)}
+                            onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 5))}
                             className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                            style={{ zIndex: pctL <= 50 ? 3 : 5 }}
+                            style={{ zIndex: activeThumb === 1 ? 5 : 3 }}
                           />
                         </div>
                         {/* Labels under tick marks */}
