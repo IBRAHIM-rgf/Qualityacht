@@ -226,14 +226,14 @@ export default function CaribbeanV2Page() {
   };
 
   return (
-    <div className="min-h-screen bg-[#3d4047] relative">
+    <div className="min-h-screen bg-[#5a6070] relative">
       {/* Nuages en fond global toute la page */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <Image
           src="/images/nuagesAncien.png"
           alt=""
           fill
-          className="object-cover opacity-40"
+          className="object-cover opacity-70"
         />
       </div>
 
@@ -246,7 +246,7 @@ export default function CaribbeanV2Page() {
           className="object-cover object-top brightness-50"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#303135]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#5a6070]" />
 
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4 max-w-4xl">
@@ -268,24 +268,24 @@ export default function CaribbeanV2Page() {
             {/* Trait blanc du haut */}
             <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mb-16"></div>
 
-            <p className="text-xl max-w-5xl mx-auto">
+            <p className="text-xl max-w-5xl mx-auto text-[#C0C0C0]">
               A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>, <span className="text-[#d39478] font-semibold">powder-white beaches</span>, <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and <span className="text-[#d39478] font-semibold">lush tropical forests</span>,
               the Caribbean stands as <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
             </p>
 
-            <p className="text-lg max-w-4xl mx-auto">
+            <p className="text-lg max-w-4xl mx-auto text-[#C0C0C0]">
               From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
               of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
               offers an unparalleled sailing experience.
             </p>
 
-            <p className="text-lg max-w-3xl mx-auto">
+            <p className="text-lg max-w-3xl mx-auto text-[#C0C0C0]">
               Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
               and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
               cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
             </p>
 
-            <p className="text-base max-w-2xl mx-auto">
+            <p className="text-base max-w-2xl mx-auto text-[#C0C0C0]">
               For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
               of exclusivity and adventure. Whether it's the glamour of <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of
               <span className="text-[#d39478] font-semibold"> St. Barts</span>, or <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape

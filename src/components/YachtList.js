@@ -12,7 +12,7 @@ export default function YachtList({ yachts }) {
   if (!yachts.length) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <div className="relative w-48 h-48 md:w-64 md:h-64 opacity-30 grayscale mb-6">
+        <div className="relative w-48 h-48 md:w-64 md:h-64 mb-6">
           <Image
             src="/images/trans.png"
             alt="Qualityacht"
