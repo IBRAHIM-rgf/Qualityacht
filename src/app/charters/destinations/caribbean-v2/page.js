@@ -269,8 +269,8 @@ export default function CaribbeanV2Page() {
             <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mb-16"></div>
 
             <p className="text-xl text-[#C0C0C0] max-w-5xl mx-auto">
-              A paradise of <span className="text-[#8B9FFF] font-semibold">turquoise waters</span>, <span className="text-[#8B9FFF] font-semibold">powder-white beaches</span>, <span className="text-[#8B9FFF] font-semibold">vibrant coral reefs</span>, and <span className="text-[#8B9FFF] font-semibold">lush tropical forests</span>,
-              the Caribbean stands as <span className="text-[#8B9FFF] font-semibold">the world's premier destination</span> for luxury yacht charters.
+              A paradise of <span className="text-[#B03E00] font-semibold">turquoise waters</span>, <span className="text-[#B03E00] font-semibold">powder-white beaches</span>, <span className="text-[#B03E00] font-semibold">vibrant coral reefs</span>, and <span className="text-[#B03E00] font-semibold">lush tropical forests</span>,
+              the Caribbean stands as <span className="text-[#B03E00] font-semibold">the world's premier destination</span> for luxury yacht charters.
             </p>
 
             <p className="text-lg text-[#C0C0C0] max-w-4xl mx-auto">
