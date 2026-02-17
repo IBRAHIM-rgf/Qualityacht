@@ -5,6 +5,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import Footer from '@/app/components/Footer';
 
 // Îles principales des Caraïbes (en cercles)
 const caribbeanIslands = [
@@ -27,6 +28,11 @@ const caribbeanIslands = [
     name: 'BVI',
     image: '/images/yachts/yatch2.jpeg',
     href: '/yachts?destination=bvi',
+  },
+  {
+    name: 'West Med',
+    image: '/images/destinations/destnation-feature-west-med.webp',
+    href: '/yachts?destination=west-med',
   },
   {
     name: 'USVI',
@@ -87,9 +93,9 @@ export default function CaribbeanV2Page() {
           className="object-cover object-top brightness-75"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
         {/* Flou de transition bas */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 backdrop-blur-md bg-gradient-to-b from-transparent to-black" />
+        <div className="absolute bottom-0 left-0 right-0 h-40" style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.95))' }} />
         {/* Titre en bas de l'image, juste avant la transition */}
         <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center z-10 pb-2">
           <div className="text-center px-4 max-w-4xl mb-6">
@@ -104,6 +110,9 @@ export default function CaribbeanV2Page() {
         </div>
       </div> {/* fin bloc image 1 */}
 
+      {/* ── BANDE SÉPARATRICE ── */}
+      <div className="h-8 bg-gradient-to-b from-gray-900 via-gray-600 to-gray-900" />
+
       {/* ── BLOC IMAGE 2 : st-barth.jpg + texte description dessus ── */}
       <div className="relative">
         {/* Image sticky */}
@@ -114,9 +123,10 @@ export default function CaribbeanV2Page() {
             fill
             className="object-cover brightness-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black/80" />
           <div className="absolute inset-0 bg-amber-950/15" />
-          <div className="absolute bottom-0 left-0 right-0 h-32 backdrop-blur-md bg-gradient-to-b from-transparent to-black" />
+          <div className="absolute inset-0 bg-gray-400/5" />
+          <div className="absolute bottom-0 left-0 right-0 h-40" style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.95))' }} />
         </div>
         {/* Texte description qui défile par-dessus */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-24 text-center leading-relaxed space-y-6" style={{ marginTop: '-100vh' }}>
@@ -143,6 +153,9 @@ export default function CaribbeanV2Page() {
         </div>
       </div>
 
+      {/* ── BANDE SÉPARATRICE ── */}
+      <div className="h-8 bg-gradient-to-b from-gray-900 via-gray-600 to-gray-900" />
+
       {/* ── BLOC IMAGE 3 : carteCarab.jpeg + cercles îles dessus ── */}
       <div className="relative">
         {/* Image sticky */}
@@ -153,9 +166,10 @@ export default function CaribbeanV2Page() {
             fill
             className="object-cover brightness-40"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black/80" />
           <div className="absolute inset-0 bg-amber-950/15" />
-          <div className="absolute bottom-0 left-0 right-0 h-32 backdrop-blur-md bg-gradient-to-b from-transparent to-black" />
+          <div className="absolute inset-0 bg-gray-400/5" />
+          <div className="absolute bottom-0 left-0 right-0 h-40" style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.95))' }} />
         </div>
         {/* Cercles îles + destinations + accordéons par-dessus */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 py-24" style={{ marginTop: '-100vh' }}>
@@ -169,7 +183,7 @@ export default function CaribbeanV2Page() {
             Discover the most sought-after islands for luxury yacht charters
           </p>
 
-          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 md:grid md:grid-cols-3 md:overflow-visible lg:grid-cols-6">
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 -mx-4 px-4 scrollbar-hide md:grid md:grid-cols-3 md:mx-0 md:px-0 md:overflow-visible lg:grid-cols-6">
             {caribbeanIslands.map((island, index) => (
               <Link
                 key={index}
@@ -202,7 +216,7 @@ export default function CaribbeanV2Page() {
             The most exclusive marinas and anchorages in the Caribbean
           </p>
 
-          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 md:grid md:grid-cols-3 md:overflow-visible lg:grid-cols-6">
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 -mx-4 px-4 scrollbar-hide md:grid md:grid-cols-3 md:mx-0 md:px-0 md:overflow-visible lg:grid-cols-6">
             {popularDestinations.map((destination, index) => (
               <Link
                 key={index}
@@ -229,6 +243,7 @@ export default function CaribbeanV2Page() {
         </div> {/* fin contenu z-10 par-dessus image 3 */}
       </div> {/* fin bloc image 3 */}
 
+      <Footer />
     </div>
   );
 }
