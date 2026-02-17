@@ -154,7 +154,7 @@ export default function YachtFilters({ filters, onChange }) {
             <select
               value={localFilters.type}
               onChange={e => handleChange('type', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]"
             >
               {YACHT_TYPES.map(t => (
                 <option key={t.value} value={t.value} className="bg-[#3a3b3f]">{t.label}</option>
@@ -167,7 +167,7 @@ export default function YachtFilters({ filters, onChange }) {
             <select
               value={localFilters.destination}
               onChange={e => handleChange('destination', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]"
             >
               {DESTINATIONS.map(d => (
                 <option key={d.value} value={d.value} className="bg-[#3a3b3f]">{d.label}</option>
@@ -205,7 +205,7 @@ export default function YachtFilters({ filters, onChange }) {
             <select
               value={selectedPriceTier}
               onChange={e => handlePriceTierChange(Number(e.target.value))}
-              className="flex-1 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs"
+              className="flex-1 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs accent-[#B03E00]"
             >
               {PRICE_TIERS.map((tier, i) => (
                 <option key={i} value={i} className="bg-[#3a3b3f]">{tier.label}</option>
@@ -413,7 +413,7 @@ export default function YachtFilters({ filters, onChange }) {
               <select
                 value={localFilters.type}
                 onChange={e => handleChange('type', e.target.value)}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0]"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
               >
                 {YACHT_TYPES.map(t => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -427,7 +427,7 @@ export default function YachtFilters({ filters, onChange }) {
               <select
                 value={localFilters.destination}
                 onChange={e => handleChange('destination', e.target.value)}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0]"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
               >
                 {DESTINATIONS.map(d => (
                   <option key={d.value} value={d.value}>{d.label}</option>
@@ -557,7 +557,7 @@ export default function YachtFilters({ filters, onChange }) {
               <select
                 value={selectedPriceTier}
                 onChange={e => handlePriceTierChange(Number(e.target.value))}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0]"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
               >
                 {PRICE_TIERS.map((tier, i) => (
                   <option key={i} value={i} className="bg-[#3a3b3f]">{tier.label}</option>
