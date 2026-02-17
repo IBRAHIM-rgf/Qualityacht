@@ -209,10 +209,10 @@ export default function CaribbeanV2Page() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="bg-black">
 
-      {/* Image 1 : yatch2.jpeg — pleine hauteur d'écran */}
-      <div className="relative h-screen min-h-[600px]">
+      {/* ── BLOC IMAGE 1 : yatch2.jpeg ── */}
+      <div className="relative h-screen">
         <Image
           src="/images/yachts/yatch2.jpeg"
           alt=""
@@ -220,10 +220,9 @@ export default function CaribbeanV2Page() {
           className="object-cover object-top brightness-60"
           priority
         />
-        {/* Fondu noir en bas */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black" />
-        {/* Titre centré */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black" />
+        {/* Titre centré par-dessus */}
+        <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="text-center px-4 max-w-4xl">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#acb0cd]">
               The Caribbean
@@ -233,68 +232,61 @@ export default function CaribbeanV2Page() {
             </p>
           </div>
         </div>
-      </div>
+      </div> {/* fin bloc image 1 */}
 
-      {/* Image 2 : st-barth.jpg — pleine hauteur d'écran */}
-      <div className="relative h-screen">
-        {/* Fondu noir en haut (depuis yatch2) */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
-        <Image
-          src="/images/pagesCaraibes/st-barth.jpg"
-          alt=""
-          fill
-          className="object-cover"
-        />
-      </div>
-
-      {/* Image 3 : carteCarab.jpeg — pleine hauteur d'écran */}
-      <div className="relative h-screen">
-        {/* Fondu noir en haut (depuis st-barth) */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
-        <Image
-          src="/images/pagesCaraibes/carteCarab.jpeg"
-          alt=""
-          fill
-          className="object-cover"
-        />
-      </div>
-
-      {/* Main Content — par-dessus fond noir */}
-      <div className="max-w-7xl mx-auto px-4 py-32 relative z-10">
-        {/* Description - Pyramid Style avec traits blancs */}
-        <div className="mb-48 relative">
-          <div className="text-center leading-relaxed space-y-16 relative">
-            {/* Trait blanc du haut */}
-            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mb-16"></div>
-
-            <p className="text-xl max-w-5xl mx-auto text-[#acb0cd]">
-              A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>, <span className="text-[#d39478] font-semibold">powder-white beaches</span>, <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and <span className="text-[#d39478] font-semibold">lush tropical forests</span>,
-              the Caribbean stands as <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
-            </p>
-
-            <p className="text-lg max-w-4xl mx-auto text-[#acb0cd]">
-              From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
-              of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
-              offers an unparalleled sailing experience.
-            </p>
-
-            <p className="text-lg max-w-3xl mx-auto text-[#acb0cd]">
-              Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
-              and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
-              cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
-            </p>
-
-            <p className="text-base max-w-2xl mx-auto text-[#acb0cd]">
-              For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
-              of exclusivity and adventure. Whether it's the glamour of <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of
-              <span className="text-[#d39478] font-semibold"> St. Barts</span>, or <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
-              where every moment is crafted for the extraordinary.
-            </p>
-
-            {/* Trait blanc du bas */}
-            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-16"></div>
-          </div>
+      {/* ── BLOC IMAGE 2 : st-barth.jpg + texte description dessus ── */}
+      <div className="relative">
+        {/* Image sticky */}
+        <div className="sticky top-0 h-screen overflow-hidden -z-0">
+          <Image
+            src="/images/pagesCaraibes/st-barth.jpg"
+            alt=""
+            fill
+            className="object-cover brightness-50"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
         </div>
+        {/* Texte description qui défile par-dessus */}
+        <div className="relative z-10 -mt-screen max-w-4xl mx-auto px-4 py-48 text-center leading-relaxed space-y-16" style={{ marginTop: '-100vh' }}>
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto" />
+          <p className="text-xl text-[#acb0cd]">
+            A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>, <span className="text-[#d39478] font-semibold">powder-white beaches</span>, <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and <span className="text-[#d39478] font-semibold">lush tropical forests</span>,
+            the Caribbean stands as <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
+          </p>
+          <p className="text-lg max-w-3xl mx-auto text-[#acb0cd]">
+            From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
+            of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
+            offers an unparalleled sailing experience.
+          </p>
+          <p className="text-lg max-w-2xl mx-auto text-[#acb0cd]">
+            Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
+            and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
+            cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
+          </p>
+          <p className="text-base max-w-xl mx-auto text-[#acb0cd]">
+            For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
+            of exclusivity and adventure. Whether it's the glamour of <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of
+            <span className="text-[#d39478] font-semibold"> St. Barts</span>, or <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
+            where every moment is crafted for the extraordinary.
+          </p>
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto" />
+        </div>
+      </div>
+
+      {/* ── BLOC IMAGE 3 : carteCarab.jpeg + cercles îles dessus ── */}
+      <div className="relative">
+        {/* Image sticky */}
+        <div className="sticky top-0 h-screen overflow-hidden -z-0">
+          <Image
+            src="/images/pagesCaraibes/carteCarab.jpeg"
+            alt=""
+            fill
+            className="object-cover brightness-40"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
+        </div>
+        {/* Cercles îles + destinations + accordéons par-dessus */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 py-48" style={{ marginTop: '-100vh' }}>
 
         {/* Îles des Caraïbes - Cercles */}
         <div className="mb-48">
@@ -382,7 +374,9 @@ export default function CaribbeanV2Page() {
             ))}
           </div>
         </div>
-      </div>
+        </div> {/* fin contenu z-10 par-dessus image 3 */}
+      </div> {/* fin bloc image 3 */}
+
     </div>
   );
 }
