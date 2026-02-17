@@ -18,7 +18,7 @@ export default function NotFound() {
 
       {/* Logo centré */}
       <div className="relative z-10 flex flex-col items-center justify-center px-4">
-        <div className="mb-8 relative w-48 h-48 md:w-64 md:h-64 grayscale opacity-60 hover:opacity-80 transition-opacity duration-300">
+        <div className="mb-8 relative w-48 h-48 md:w-64 md:h-64 hover:opacity-80 transition-opacity duration-300">
           <Image
             src="/images/logoFondTrans.png"
             alt="Qualityacht Logo"

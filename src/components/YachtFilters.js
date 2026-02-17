@@ -35,7 +35,13 @@ const CURRENCIES = [
   { value: 'GBP', label: '£ GBP' },
 ];
 
-const MAX_PRICE = 6000000;
+const PRICE_TIERS = [
+  { label: 'All prices', min: 0, max: null },
+  { label: '1 000 € – 10 000 €', min: 1000, max: 10000 },
+  { label: '10 000 € – 100 000 €', min: 10000, max: 100000 },
+  { label: '100 000 € – 1 000 000 €', min: 100000, max: 1000000 },
+  { label: '1 000 000 € – ∞', min: 1000000, max: null },
+];
 const MIN_LENGTH_M = 10;
 const MAX_LENGTH_M = 140;
 const MIN_LENGTH_FT = 33; // ~10m
@@ -45,16 +51,12 @@ export default function YachtFilters({ filters, onChange }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
-  const [priceRange, setPriceRange] = useState([0, MAX_PRICE]);
+  const [selectedPriceTier, setSelectedPriceTier] = useState(0);
   const [lengthRange, setLengthRange] = useState([MIN_LENGTH_M, MAX_LENGTH_M]);
   const [unitPreference, setUnitPreference] = useState('meters');
 
   useEffect(() => {
     setLocalFilters(filters);
-    setPriceRange([
-      filters.priceMin || 0,
-      filters.priceMax || MAX_PRICE
-    ]);
     setLengthRange([
       filters.minLength || MIN_LENGTH_M,
       filters.maxLength || MAX_LENGTH_M
@@ -90,12 +92,18 @@ export default function YachtFilters({ filters, onChange }) {
     }
   };
 
+  const handlePriceTierChange = (idx) => {
+    const tier = PRICE_TIERS[idx];
+    setSelectedPriceTier(idx);
+    handleChange('priceMin', tier.min > 0 ? tier.min : '');
+    handleChange('priceMax', tier.max !== null ? tier.max : '');
+  };
+
   const handleLengthChange = (index, value) => {
     const newRange = [...lengthRange];
     newRange[index] = Number(value);
     setLengthRange(newRange);
 
-    // Convert to meters for filters
     if (unitPreference === 'feet') {
       handleChange(index === 0 ? 'minLength' : 'maxLength', feetToMeters(Number(value)));
     } else {
@@ -125,7 +133,7 @@ export default function YachtFilters({ filters, onChange }) {
       endDate: ''
     };
     setLocalFilters(emptyFilters);
-    setPriceRange([0, MAX_PRICE]);
+    setSelectedPriceTier(0);
     setLengthRange([MIN_LENGTH_M, MAX_LENGTH_M]);
     onChange(emptyFilters);
   };
@@ -198,66 +206,18 @@ export default function YachtFilters({ filters, onChange }) {
             />
           </div>
 
-          {/* Price Range - Dual Slider */}
-          <div className="flex flex-col gap-1 min-w-[240px]">
-            <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-300 whitespace-nowrap">Price:</label>
-              <select
-                value={localFilters.currency || 'EUR'}
-                onChange={e => handleChange('currency', e.target.value)}
-                className="w-20 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs"
-              >
-                {CURRENCIES.map(c => (
-                  <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>
-                ))}
-              </select>
-            </div>
-            {(() => {
-              const pctDL = (priceRange[0] / MAX_PRICE) * 100;
-              const pctDR = (priceRange[1] / MAX_PRICE) * 100;
-              return (
-                <div className="relative h-6 flex items-center">
-                  <div className="absolute w-full h-1 rounded-full" style={{
-                    background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pctDL}%, #B03E00 ${pctDL}%, #B03E00 ${pctDR}%, #4b5563 ${pctDR}%, #4b5563 100%)`
-                  }} />
-                  <input
-                    type="range"
-                    min="0"
-                    max={MAX_PRICE}
-                    step="10000"
-                    value={priceRange[0]}
-                    onChange={(e) => {
-                      const value = Number(e.target.value);
-                      if (value < priceRange[1]) {
-                        setPriceRange([value, priceRange[1]]);
-                        handleChange('priceMin', value === 0 ? '' : value);
-                      }
-                    }}
-                    className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                    style={{ zIndex: priceRange[0] >= MAX_PRICE * 0.9 ? 5 : 3 }}
-                  />
-                  <input
-                    type="range"
-                    min="0"
-                    max={MAX_PRICE}
-                    step="10000"
-                    value={priceRange[1]}
-                    onChange={(e) => {
-                      const value = Number(e.target.value);
-                      if (value > priceRange[0]) {
-                        setPriceRange([priceRange[0], value]);
-                        handleChange('priceMax', value === MAX_PRICE ? '' : value);
-                      }
-                    }}
-                    className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                    style={{ zIndex: 4 }}
-                  />
-                </div>
-              );
-            })()}
-            <span className="text-xs text-gray-400 text-center">
-              {formatPrice(priceRange[0])} - {formatPrice(priceRange[1], true)}
-            </span>
+          {/* Price Range - Select paliers */}
+          <div className="flex items-center gap-2 min-w-[220px]">
+            <label className="text-sm text-gray-300 whitespace-nowrap">Price:</label>
+            <select
+              value={selectedPriceTier}
+              onChange={e => handlePriceTierChange(Number(e.target.value))}
+              className="flex-1 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs"
+            >
+              {PRICE_TIERS.map((tier, i) => (
+                <option key={i} value={i} className="bg-[#3a3b3f]">{tier.label}</option>
+              ))}
+            </select>
           </div>
 
           {/* More options button */}
@@ -338,6 +298,22 @@ export default function YachtFilters({ filters, onChange }) {
               <span className="text-xs text-gray-400 text-center">
                 {lengthRange[0]}{unitPreference === 'meters' ? 'm' : 'ft'} - {lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}
               </span>
+              {/* Points tous les 10m */}
+              {unitPreference === 'meters' && (
+                <div className="relative flex items-center mt-1" style={{ minWidth: 180 }}>
+                  {Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                    const val = MIN_LENGTH_M + i * 10;
+                    const pct = ((val - MIN_LENGTH_M) / (MAX_LENGTH_M - MIN_LENGTH_M)) * 100;
+                    return (
+                      <div key={val} className="absolute flex flex-col items-center" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
+                        <div className="w-px h-1.5 bg-gray-500" />
+                        {i % 3 === 0 && <span className="text-[9px] text-gray-500 mt-0.5">{val}</span>}
+                      </div>
+                    );
+                  })}
+                  <div className="w-full h-3" />
+                </div>
+              )}
               <div className="flex gap-2 mt-1">
                 <button
                   onClick={() => handleUnitChange('meters')}
@@ -536,6 +512,22 @@ export default function YachtFilters({ filters, onChange }) {
                       {lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}
                     </span>
                   </div>
+                  {/* Points tous les 10m */}
+                  {unitPreference === 'meters' && (
+                    <div className="relative flex items-center mt-1">
+                      {Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                        const val = MIN_LENGTH_M + i * 10;
+                        const pct = ((val - MIN_LENGTH_M) / (MAX_LENGTH_M - MIN_LENGTH_M)) * 100;
+                        return (
+                          <div key={val} className="absolute flex flex-col items-center" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
+                            <div className="w-px h-1.5 bg-gray-500" />
+                            {i % 3 === 0 && <span className="text-[9px] text-gray-500 mt-0.5">{val}</span>}
+                          </div>
+                        );
+                      })}
+                      <div className="w-full h-3" />
+                    </div>
+                  )}
                 </div>
 
                 {/* Toggle Unité - après le slider */}
@@ -560,70 +552,16 @@ export default function YachtFilters({ filters, onChange }) {
               </div>
             </div>
 
-            {/* Price Range with Dual Slider */}
+            {/* Price - Select paliers */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Price</label>
-
-              <div className="px-2">
-                {(() => {
-                  const pctPL = (priceRange[0] / MAX_PRICE) * 100;
-                  const pctPR = (priceRange[1] / MAX_PRICE) * 100;
-                  return (
-                    <div className="relative h-6 flex items-center">
-                      <div className="absolute w-full h-1 rounded-full" style={{
-                        background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pctPL}%, #B03E00 ${pctPL}%, #B03E00 ${pctPR}%, #4b5563 ${pctPR}%, #4b5563 100%)`
-                      }} />
-                      <input
-                        type="range"
-                        min="0"
-                        max={MAX_PRICE}
-                        step="10000"
-                        value={priceRange[0]}
-                        onChange={(e) => {
-                          const value = Number(e.target.value);
-                          if (value < priceRange[1]) {
-                            setPriceRange([value, priceRange[1]]);
-                            handleChange('priceMin', value === 0 ? '' : value);
-                          }
-                        }}
-                        className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                        style={{ zIndex: priceRange[0] >= MAX_PRICE * 0.9 ? 5 : 3 }}
-                      />
-                      <input
-                        type="range"
-                        min="0"
-                        max={MAX_PRICE}
-                        step="10000"
-                        value={priceRange[1]}
-                        onChange={(e) => {
-                          const value = Number(e.target.value);
-                          if (value > priceRange[0]) {
-                            setPriceRange([priceRange[0], value]);
-                            handleChange('priceMax', value === MAX_PRICE ? '' : value);
-                          }
-                        }}
-                        className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                        style={{ zIndex: 4 }}
-                      />
-                    </div>
-                  );
-                })()}
-                <div className="flex justify-between text-sm text-gray-400 mt-1">
-                  <span>{formatPrice(priceRange[0])}</span>
-                  <span className="text-[#B03E00] font-medium">
-                    {formatPrice(priceRange[1], true)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Sélecteur devise - après le slider */}
               <select
-                value={localFilters.currency || 'EUR'}
-                onChange={e => handleChange('currency', e.target.value)}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] mt-3"
+                value={selectedPriceTier}
+                onChange={e => handlePriceTierChange(Number(e.target.value))}
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0]"
               >
-                {CURRENCIES.map(c => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
+                {PRICE_TIERS.map((tier, i) => (
+                  <option key={i} value={i} className="bg-[#3a3b3f]">{tier.label}</option>
                 ))}
               </select>
             </div>
