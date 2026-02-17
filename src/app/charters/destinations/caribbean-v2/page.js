@@ -226,9 +226,19 @@ export default function CaribbeanV2Page() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1b1e]">
+    <div className="min-h-screen bg-[#303135] relative">
+      {/* Nuages en fond global toute la page */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <Image
+          src="/images/nuagesAncien.png"
+          alt=""
+          fill
+          className="object-cover opacity-15"
+        />
+      </div>
+
       {/* Hero Section avec yatch2.jpeg */}
-      <div className="relative h-[80vh] min-h-[600px]">
+      <div className="relative h-[80vh] min-h-[600px] z-10">
         <Image
           src="/images/yachts/yatch2.jpeg"
           alt="Caribbean Luxury Yacht Charter"
@@ -236,7 +246,7 @@ export default function CaribbeanV2Page() {
           className="object-cover object-top brightness-50"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#1a1b1e]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#303135]" />
 
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4 max-w-4xl">
@@ -251,19 +261,9 @@ export default function CaribbeanV2Page() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-32">
-        {/* Description - Pyramid Style avec traits blancs et nuages PNG */}
+      <div className="max-w-7xl mx-auto px-4 py-32 relative z-10">
+        {/* Description - Pyramid Style avec traits blancs */}
         <div className="mb-48 relative">
-          {/* Nuages PNG en fond */}
-          <div className="absolute inset-0 pointer-events-none opacity-10">
-            <Image
-              src="/images/nuagesAncien.png"
-              alt=""
-              fill
-              className="object-contain"
-            />
-          </div>
-
           <div className="text-center leading-relaxed space-y-16 relative">
             {/* Trait blanc du haut */}
             <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mb-16"></div>
