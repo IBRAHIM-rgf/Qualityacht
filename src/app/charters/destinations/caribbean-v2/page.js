@@ -84,12 +84,14 @@ export default function CaribbeanV2Page() {
           src="/images/yachts/yatch2.jpeg"
           alt=""
           fill
-          className="object-cover object-top brightness-60 sepia"
+          className="object-cover object-top brightness-75"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black" />
+        {/* Flou de transition bas */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 backdrop-blur-md bg-gradient-to-b from-transparent to-black" />
         {/* Titre en bas de l'image, juste avant la transition */}
-        <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center z-10">
+        <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center z-10 pb-2">
           <div className="text-center px-4 max-w-4xl mb-6">
             <h1 className="text-5xl md:text-7xl font-bold mb-4 text-[#acb0cd]">
               The Caribbean
@@ -110,13 +112,14 @@ export default function CaribbeanV2Page() {
             src="/images/pagesCaraibes/st-barth.jpg"
             alt=""
             fill
-            className="object-cover brightness-50 sepia"
+            className="object-cover brightness-50"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
+          <div className="absolute inset-0 bg-amber-950/15" />
+          <div className="absolute bottom-0 left-0 right-0 h-32 backdrop-blur-md bg-gradient-to-b from-transparent to-black" />
         </div>
         {/* Texte description qui défile par-dessus */}
-        <div className="relative z-10 -mt-screen max-w-4xl mx-auto px-4 py-48 text-center leading-relaxed space-y-16" style={{ marginTop: '-100vh' }}>
-          <div className="w-24 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto" />
+        <div className="relative z-10 max-w-4xl mx-auto px-4 py-24 text-center leading-relaxed space-y-6" style={{ marginTop: '-100vh' }}>
           <p className="text-xl text-[#acb0cd]">
             A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>, <span className="text-[#d39478] font-semibold">powder-white beaches</span>, <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and <span className="text-[#d39478] font-semibold">lush tropical forests</span>,
             the Caribbean stands as <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
@@ -137,7 +140,6 @@ export default function CaribbeanV2Page() {
             <span className="text-[#d39478] font-semibold"> St. Barts</span>, or <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
             where every moment is crafted for the extraordinary.
           </p>
-          <div className="w-24 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto" />
         </div>
       </div>
 
@@ -149,28 +151,30 @@ export default function CaribbeanV2Page() {
             src="/images/pagesCaraibes/carteCarab.jpeg"
             alt=""
             fill
-            className="object-cover brightness-40 sepia"
+            className="object-cover brightness-40"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
+          <div className="absolute inset-0 bg-amber-950/15" />
+          <div className="absolute bottom-0 left-0 right-0 h-32 backdrop-blur-md bg-gradient-to-b from-transparent to-black" />
         </div>
         {/* Cercles îles + destinations + accordéons par-dessus */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 py-48" style={{ marginTop: '-100vh' }}>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 py-24" style={{ marginTop: '-100vh' }}>
 
         {/* Îles des Caraïbes - Cercles */}
-        <div className="mb-48">
-          <h2 className="text-2xl font-bold text-[#acb0cd] mb-6 text-center tracking-wider">
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold text-[#acb0cd] mb-4 text-center tracking-wider">
             CARIBBEAN ISLANDS
           </h2>
-          <p className="text-center text-[#acb0cd] mb-16 max-w-2xl mx-auto">
+          <p className="text-center text-[#acb0cd] mb-8 max-w-2xl mx-auto">
             Discover the most sought-after islands for luxury yacht charters
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 md:grid md:grid-cols-3 md:overflow-visible lg:grid-cols-6">
             {caribbeanIslands.map((island, index) => (
               <Link
                 key={index}
                 href={island.href}
-                className="group flex flex-col items-center"
+                className="group flex flex-col items-center shrink-0 min-w-[6rem] snap-center"
               >
                 <div className="relative aspect-square w-full rounded-full overflow-hidden border-2 border-white/20 hover:border-[#B03E00]/50 transition-all duration-300 mb-3">
                   <Image
@@ -190,20 +194,20 @@ export default function CaribbeanV2Page() {
         </div>
 
         {/* Destinations Populaires - Cercles */}
-        <div className="mb-48">
-          <h2 className="text-2xl font-bold text-[#acb0cd] mb-6 text-center tracking-wider">
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold text-[#acb0cd] mb-4 text-center tracking-wider">
             POPULAR DESTINATIONS
           </h2>
-          <p className="text-center text-[#acb0cd] mb-16 max-w-2xl mx-auto">
+          <p className="text-center text-[#acb0cd] mb-8 max-w-2xl mx-auto">
             The most exclusive marinas and anchorages in the Caribbean
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 md:grid md:grid-cols-3 md:overflow-visible lg:grid-cols-6">
             {popularDestinations.map((destination, index) => (
               <Link
                 key={index}
                 href={destination.href}
-                className="group flex flex-col items-center"
+                className="group flex flex-col items-center shrink-0 min-w-[6rem] snap-center"
               >
                 <div className="relative aspect-square w-full rounded-full overflow-hidden border-2 border-white/20 hover:border-[#B03E00]/50 transition-all duration-300 mb-3">
                   <Image
