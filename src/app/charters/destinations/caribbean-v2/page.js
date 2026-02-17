@@ -221,16 +221,18 @@ export default function CaribbeanV2Page() {
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black" />
-        {/* Titre centré par-dessus */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <div className="text-center px-4 max-w-4xl">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#acb0cd]">
+        {/* Titre en bas de l'image, juste avant la transition */}
+        <div className="absolute bottom-16 left-0 right-0 flex flex-col items-center z-10">
+          <div className="text-center px-4 max-w-4xl mb-8">
+            <h1 className="text-5xl md:text-7xl font-bold mb-4 text-[#acb0cd]">
               The Caribbean
             </h1>
             <p className="text-xl md:text-2xl text-[#acb0cd] font-light">
               The Ultimate Luxury Yachting Destination
             </p>
           </div>
+          {/* Trait fin — comme page d'accueil */}
+          <div className="w-px h-16 bg-gradient-to-b from-white/80 to-transparent" />
         </div>
       </div> {/* fin bloc image 1 */}
 
@@ -248,7 +250,7 @@ export default function CaribbeanV2Page() {
         </div>
         {/* Texte description qui défile par-dessus */}
         <div className="relative z-10 -mt-screen max-w-4xl mx-auto px-4 py-48 text-center leading-relaxed space-y-16" style={{ marginTop: '-100vh' }}>
-          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto" />
+          <div className="w-px h-16 bg-gradient-to-b from-white/80 to-transparent mx-auto" />
           <p className="text-xl text-[#acb0cd]">
             A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>, <span className="text-[#d39478] font-semibold">powder-white beaches</span>, <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and <span className="text-[#d39478] font-semibold">lush tropical forests</span>,
             the Caribbean stands as <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
@@ -269,7 +271,7 @@ export default function CaribbeanV2Page() {
             <span className="text-[#d39478] font-semibold"> St. Barts</span>, or <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
             where every moment is crafted for the extraordinary.
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto" />
+          <div className="w-px h-16 bg-gradient-to-b from-white/80 to-transparent mx-auto" />
         </div>
       </div>
 
