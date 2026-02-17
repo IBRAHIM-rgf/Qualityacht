@@ -143,13 +143,6 @@ export default function YachtFilters({ filters, onChange }) {
     return v && v !== '' && v !== false;
   }).length;
 
-  const formatPrice = (price, showUnlimited = false) => {
-    if (showUnlimited && price >= MAX_PRICE) return 'Unlimited';
-    if (price >= 1000000) return `${(price / 1000000).toFixed(1)}M`;
-    if (price >= 1000) return `${(price / 1000).toFixed(0)}k`;
-    return price.toString();
-  };
-
   return (
     <>
       {/* Desktop - Horizontal sticky filters */}
@@ -262,58 +255,61 @@ export default function YachtFilters({ filters, onChange }) {
                 const pctDLL = ((lengthRange[0] - dlenMin) / (dlenMax - dlenMin)) * 100;
                 const pctDLR = ((lengthRange[1] - dlenMin) / (dlenMax - dlenMin)) * 100;
                 return (
-                  <div className="relative h-6 flex items-center min-w-[180px]">
-                    <div className="absolute w-full h-1 rounded-full" style={{
-                      background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pctDLL}%, #B03E00 ${pctDLL}%, #B03E00 ${pctDLR}%, #4b5563 ${pctDLR}%, #4b5563 100%)`
-                    }} />
-                    <input
-                      type="range"
-                      min={dlenMin}
-                      max={dlenMax}
-                      step={unitPreference === 'meters' ? 5 : 10}
-                      value={lengthRange[0]}
-                      onChange={(e) => {
-                        const v = Number(e.target.value);
-                        if (v < lengthRange[1]) handleLengthChange(0, v);
-                      }}
-                      className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                      style={{ zIndex: lengthRange[0] >= dlenMax * 0.9 ? 5 : 3 }}
-                    />
-                    <input
-                      type="range"
-                      min={dlenMin}
-                      max={dlenMax}
-                      step={unitPreference === 'meters' ? 5 : 10}
-                      value={lengthRange[1]}
-                      onChange={(e) => {
-                        const v = Number(e.target.value);
-                        if (v > lengthRange[0]) handleLengthChange(1, v);
-                      }}
-                      className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                      style={{ zIndex: 4 }}
-                    />
+                  <div className="relative min-w-[180px]">
+                    {/* Track + tick marks container */}
+                    <div className="relative h-6 flex items-center">
+                      <div className="absolute w-full h-1 rounded-full" style={{
+                        background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pctDLL}%, #B03E00 ${pctDLL}%, #B03E00 ${pctDLR}%, #4b5563 ${pctDLR}%, #4b5563 100%)`
+                      }} />
+                      {/* Tick marks overlaid on the track */}
+                      {unitPreference === 'meters' && Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                        const val = MIN_LENGTH_M + i * 10;
+                        const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
+                        return (
+                          <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
+                            <div className="w-px h-3 bg-gray-400/70" />
+                          </div>
+                        );
+                      })}
+                      <input
+                        type="range"
+                        min={dlenMin}
+                        max={dlenMax}
+                        step={unitPreference === 'meters' ? 5 : 10}
+                        value={lengthRange[0]}
+                        onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1]))}
+                        className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
+                        style={{ zIndex: pctDLL <= 50 ? 5 : 3 }}
+                      />
+                      <input
+                        type="range"
+                        min={dlenMin}
+                        max={dlenMax}
+                        step={unitPreference === 'meters' ? 5 : 10}
+                        value={lengthRange[1]}
+                        onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0]))}
+                        className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
+                        style={{ zIndex: pctDLL <= 50 ? 3 : 5 }}
+                      />
+                    </div>
+                    {/* Labels under tick marks */}
+                    {unitPreference === 'meters' && (
+                      <div className="relative h-4">
+                        {Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                          const val = MIN_LENGTH_M + i * 10;
+                          const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
+                          return i % 3 === 0 ? (
+                            <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                          ) : null;
+                        })}
+                      </div>
+                    )}
                   </div>
                 );
               })()}
               <span className="text-xs text-gray-400 text-center">
                 {lengthRange[0]}{unitPreference === 'meters' ? 'm' : 'ft'} - {lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}
               </span>
-              {/* Points tous les 10m */}
-              {unitPreference === 'meters' && (
-                <div className="relative flex items-center mt-1" style={{ minWidth: 180 }}>
-                  {Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
-                    const val = MIN_LENGTH_M + i * 10;
-                    const pct = ((val - MIN_LENGTH_M) / (MAX_LENGTH_M - MIN_LENGTH_M)) * 100;
-                    return (
-                      <div key={val} className="absolute flex flex-col items-center" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
-                        <div className="w-px h-1.5 bg-gray-500" />
-                        {i % 3 === 0 && <span className="text-[9px] text-gray-500 mt-0.5">{val}</span>}
-                      </div>
-                    );
-                  })}
-                  <div className="w-full h-3" />
-                </div>
-              )}
               <div className="flex gap-2 mt-1">
                 <button
                   onClick={() => handleUnitChange('meters')}
@@ -473,36 +469,55 @@ export default function YachtFilters({ filters, onChange }) {
                     const pctL = ((lengthRange[0] - lenMin) / (lenMax - lenMin)) * 100;
                     const pctR = ((lengthRange[1] - lenMin) / (lenMax - lenMin)) * 100;
                     return (
-                      <div className="relative h-6 flex items-center">
-                        <div className="absolute w-full h-1 rounded-full" style={{
-                          background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pctL}%, #B03E00 ${pctL}%, #B03E00 ${pctR}%, #4b5563 ${pctR}%, #4b5563 100%)`
-                        }} />
-                        <input
-                          type="range"
-                          min={lenMin}
-                          max={lenMax}
-                          step={unitPreference === 'meters' ? 5 : 10}
-                          value={lengthRange[0]}
-                          onChange={(e) => {
-                            const v = Number(e.target.value);
-                            if (v < lengthRange[1]) handleLengthChange(0, v);
-                          }}
-                          className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                          style={{ zIndex: lengthRange[0] >= lenMax * 0.9 ? 5 : 3 }}
-                        />
-                        <input
-                          type="range"
-                          min={lenMin}
-                          max={lenMax}
-                          step={unitPreference === 'meters' ? 5 : 10}
-                          value={lengthRange[1]}
-                          onChange={(e) => {
-                            const v = Number(e.target.value);
-                            if (v > lengthRange[0]) handleLengthChange(1, v);
-                          }}
-                          className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                          style={{ zIndex: 4 }}
-                        />
+                      <div className="relative">
+                        {/* Track + tick marks container */}
+                        <div className="relative h-6 flex items-center">
+                          <div className="absolute w-full h-1 rounded-full" style={{
+                            background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pctL}%, #B03E00 ${pctL}%, #B03E00 ${pctR}%, #4b5563 ${pctR}%, #4b5563 100%)`
+                          }} />
+                          {/* Tick marks overlaid on the track */}
+                          {unitPreference === 'meters' && Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                            return (
+                              <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
+                                <div className="w-px h-3 bg-gray-400/70" />
+                              </div>
+                            );
+                          })}
+                          <input
+                            type="range"
+                            min={lenMin}
+                            max={lenMax}
+                            step={unitPreference === 'meters' ? 5 : 10}
+                            value={lengthRange[0]}
+                            onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1]))}
+                            className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
+                            style={{ zIndex: pctL <= 50 ? 5 : 3 }}
+                          />
+                          <input
+                            type="range"
+                            min={lenMin}
+                            max={lenMax}
+                            step={unitPreference === 'meters' ? 5 : 10}
+                            value={lengthRange[1]}
+                            onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0]))}
+                            className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
+                            style={{ zIndex: pctL <= 50 ? 3 : 5 }}
+                          />
+                        </div>
+                        {/* Labels under tick marks */}
+                        {unitPreference === 'meters' && (
+                          <div className="relative h-4">
+                            {Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                              const val = MIN_LENGTH_M + i * 10;
+                              const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                              return i % 3 === 0 ? (
+                                <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                              ) : null;
+                            })}
+                          </div>
+                        )}
                       </div>
                     );
                   })()}
@@ -512,22 +527,6 @@ export default function YachtFilters({ filters, onChange }) {
                       {lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}
                     </span>
                   </div>
-                  {/* Points tous les 10m */}
-                  {unitPreference === 'meters' && (
-                    <div className="relative flex items-center mt-1">
-                      {Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
-                        const val = MIN_LENGTH_M + i * 10;
-                        const pct = ((val - MIN_LENGTH_M) / (MAX_LENGTH_M - MIN_LENGTH_M)) * 100;
-                        return (
-                          <div key={val} className="absolute flex flex-col items-center" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
-                            <div className="w-px h-1.5 bg-gray-500" />
-                            {i % 3 === 0 && <span className="text-[9px] text-gray-500 mt-0.5">{val}</span>}
-                          </div>
-                        );
-                      })}
-                      <div className="w-full h-3" />
-                    </div>
-                  )}
                 </div>
 
                 {/* Toggle Unité - après le slider */}
