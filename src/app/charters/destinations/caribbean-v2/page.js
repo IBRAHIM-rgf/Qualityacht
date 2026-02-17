@@ -209,9 +209,10 @@ export default function CaribbeanV2Page() {
   };
 
   return (
-    <div className="min-h-screen bg-[#5a6070] relative">
-      {/* Couche 1 : yatch2.jpeg — pleine page en fond (bannière originale) */}
-      <div className="fixed inset-0 pointer-events-none z-0">
+    <div className="min-h-screen bg-black">
+
+      {/* Image 1 : yatch2.jpeg — pleine hauteur d'écran */}
+      <div className="relative h-screen min-h-[600px]">
         <Image
           src="/images/yachts/yatch2.jpeg"
           alt=""
@@ -219,45 +220,46 @@ export default function CaribbeanV2Page() {
           className="object-cover object-top brightness-60"
           priority
         />
-        {/* Fondu noir vers le bas (transition vers st-barth) */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent from-40% via-black/80 to-black" />
+        {/* Fondu noir en bas */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black" />
+        {/* Titre centré */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center px-4 max-w-4xl">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#acb0cd]">
+              The Caribbean
+            </h1>
+            <p className="text-xl md:text-2xl text-[#acb0cd] font-light">
+              The Ultimate Luxury Yachting Destination
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Couche 2 : st-barth.jpg — visible à partir du milieu de page */}
-      <div className="fixed inset-0 pointer-events-none z-0" style={{ top: '50%' }}>
+      {/* Image 2 : st-barth.jpg — pleine hauteur d'écran */}
+      <div className="relative h-screen">
+        {/* Fondu noir en haut (depuis yatch2) */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
         <Image
           src="/images/pagesCaraibes/st-barth.jpg"
           alt=""
           fill
           className="object-cover"
         />
-        {/* Fondu noir en haut (transition depuis yatch2) */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
       </div>
 
-      {/* Couche 3 : carteCarab.jpeg — fond discret en overlay sur toute la page */}
-      <div className="fixed inset-0 pointer-events-none z-0">
+      {/* Image 3 : carteCarab.jpeg — pleine hauteur d'écran */}
+      <div className="relative h-screen">
+        {/* Fondu noir en haut (depuis st-barth) */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
         <Image
           src="/images/pagesCaraibes/carteCarab.jpeg"
           alt=""
           fill
-          className="object-cover opacity-10 mix-blend-overlay"
+          className="object-cover"
         />
       </div>
 
-      {/* Hero titre centré */}
-      <div className="relative z-10 flex items-center justify-center h-[80vh] min-h-[600px]">
-        <div className="text-center px-4 max-w-4xl">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#acb0cd]">
-            The Caribbean
-          </h1>
-          <p className="text-xl md:text-2xl text-[#acb0cd] font-light">
-            The Ultimate Luxury Yachting Destination
-          </p>
-        </div>
-      </div>
-
-      {/* Main Content */}
+      {/* Main Content — par-dessus fond noir */}
       <div className="max-w-7xl mx-auto px-4 py-32 relative z-10">
         {/* Description - Pyramid Style avec traits blancs */}
         <div className="mb-48 relative">
