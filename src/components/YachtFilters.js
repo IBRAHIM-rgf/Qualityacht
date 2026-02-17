@@ -36,12 +36,21 @@ const CURRENCIES = [
 ];
 
 const PRICE_TIERS = [
-  { label: 'All prices', min: 0, max: null },
-  { label: '1k € – 10k €', min: 1000, max: 10000 },
-  { label: '10k € – 100k €', min: 10000, max: 100000 },
-  { label: '100k € – 1M €', min: 100000, max: 1000000 },
-  { label: '1 000 000 € – ∞', min: 1000000, max: null },
+  { min: 0, max: null },
+  { min: 1000, max: 10000 },
+  { min: 10000, max: 100000 },
+  { min: 100000, max: 1000000 },
+  { min: 1000000, max: null },
 ];
+
+const CURRENCY_SYMBOLS = { EUR: '€', USD: '$', GBP: '£' };
+
+function getPriceTierLabel(tier, symbol) {
+  if (tier.min === 0) return 'All prices';
+  if (tier.max === null) return `1M ${symbol}+`;
+  const fmt = (v) => v >= 1000000 ? `${v/1000000}M` : `${v/1000}k`;
+  return `${fmt(tier.min)} – ${fmt(tier.max)} ${symbol}`;
+}
 const MIN_LENGTH_M = 10;
 const MAX_LENGTH_M = 140;
 const MIN_LENGTH_FT = 33; // ~10m
@@ -55,6 +64,7 @@ export default function YachtFilters({ filters, onChange }) {
   const [lengthRange, setLengthRange] = useState([MIN_LENGTH_M, MAX_LENGTH_M]);
   const [unitPreference, setUnitPreference] = useState('meters');
   const [activeThumb, setActiveThumb] = useState(null); // 0 = min, 1 = max
+  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
 
   useEffect(() => {
     setLocalFilters(filters);
@@ -93,11 +103,19 @@ export default function YachtFilters({ filters, onChange }) {
     }
   };
 
-  const handlePriceTierChange = (idx) => {
+  const handlePriceTierChange = (idx, currency = selectedCurrency) => {
     const tier = PRICE_TIERS[idx];
     setSelectedPriceTier(idx);
     handleChange('priceMin', tier.min > 0 ? tier.min : '');
     handleChange('priceMax', tier.max !== null ? tier.max : '');
+    handleChange('currency', currency);
+  };
+
+  const handleCurrencyChange = (currency) => {
+    setSelectedCurrency(currency);
+    handleChange('currency', currency);
+    // Re-apply current tier with new currency symbol (values unchanged)
+    handlePriceTierChange(selectedPriceTier, currency);
   };
 
   const handleLengthChange = (index, value) => {
@@ -200,8 +218,8 @@ export default function YachtFilters({ filters, onChange }) {
             />
           </div>
 
-          {/* Price Range - Select paliers */}
-          <div className="flex items-center gap-2 min-w-[220px]">
+          {/* Price Range - Select paliers + Currency */}
+          <div className="flex items-center gap-2 min-w-[260px]">
             <label className="text-sm text-gray-300 whitespace-nowrap">Price:</label>
             <select
               value={selectedPriceTier}
@@ -209,7 +227,16 @@ export default function YachtFilters({ filters, onChange }) {
               className="flex-1 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs accent-[#B03E00]"
             >
               {PRICE_TIERS.map((tier, i) => (
-                <option key={i} value={i} className="bg-[#3a3b3f]">{tier.label}</option>
+                <option key={i} value={i} className="bg-[#3a3b3f]">{getPriceTierLabel(tier, CURRENCY_SYMBOLS[selectedCurrency])}</option>
+              ))}
+            </select>
+            <select
+              value={selectedCurrency}
+              onChange={e => handleCurrencyChange(e.target.value)}
+              className="px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs accent-[#B03E00]"
+            >
+              {CURRENCIES.map(c => (
+                <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>
               ))}
             </select>
           </div>
@@ -560,18 +587,29 @@ export default function YachtFilters({ filters, onChange }) {
               </div>
             </div>
 
-            {/* Price - Select paliers */}
+            {/* Price - Select paliers + Currency */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Price</label>
-              <select
-                value={selectedPriceTier}
-                onChange={e => handlePriceTierChange(Number(e.target.value))}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
-              >
-                {PRICE_TIERS.map((tier, i) => (
-                  <option key={i} value={i} className="bg-[#3a3b3f]">{tier.label}</option>
-                ))}
-              </select>
+              <div className="flex gap-2">
+                <select
+                  value={selectedPriceTier}
+                  onChange={e => handlePriceTierChange(Number(e.target.value))}
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
+                >
+                  {PRICE_TIERS.map((tier, i) => (
+                    <option key={i} value={i} className="bg-[#3a3b3f]">{getPriceTierLabel(tier, CURRENCY_SYMBOLS[selectedCurrency])}</option>
+                  ))}
+                </select>
+                <select
+                  value={selectedCurrency}
+                  onChange={e => handleCurrencyChange(e.target.value)}
+                  className="px-3 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
+                >
+                  {CURRENCIES.map(c => (
+                    <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Capacity */}
