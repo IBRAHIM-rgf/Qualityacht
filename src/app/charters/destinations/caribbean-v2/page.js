@@ -217,13 +217,13 @@ export default function CaribbeanV2Page() {
           src="/images/yachts/yatch2.jpeg"
           alt=""
           fill
-          className="object-cover object-top brightness-60"
+          className="object-cover object-top brightness-60 sepia"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black" />
         {/* Titre en bas de l'image, juste avant la transition */}
-        <div className="absolute bottom-16 left-0 right-0 flex flex-col items-center z-10">
-          <div className="text-center px-4 max-w-4xl mb-8">
+        <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center z-10">
+          <div className="text-center px-4 max-w-4xl mb-6">
             <h1 className="text-5xl md:text-7xl font-bold mb-4 text-[#acb0cd]">
               The Caribbean
             </h1>
@@ -231,8 +231,7 @@ export default function CaribbeanV2Page() {
               The Ultimate Luxury Yachting Destination
             </p>
           </div>
-          {/* Trait fin — comme page d'accueil */}
-          <div className="w-px h-16 bg-gradient-to-b from-white/80 to-transparent" />
+          <div className="w-24 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
         </div>
       </div> {/* fin bloc image 1 */}
 
@@ -244,13 +243,13 @@ export default function CaribbeanV2Page() {
             src="/images/pagesCaraibes/st-barth.jpg"
             alt=""
             fill
-            className="object-cover brightness-50"
+            className="object-cover brightness-50 sepia"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
         </div>
         {/* Texte description qui défile par-dessus */}
         <div className="relative z-10 -mt-screen max-w-4xl mx-auto px-4 py-48 text-center leading-relaxed space-y-16" style={{ marginTop: '-100vh' }}>
-          <div className="w-px h-16 bg-gradient-to-b from-white/80 to-transparent mx-auto" />
+          <div className="w-24 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto" />
           <p className="text-xl text-[#acb0cd]">
             A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>, <span className="text-[#d39478] font-semibold">powder-white beaches</span>, <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and <span className="text-[#d39478] font-semibold">lush tropical forests</span>,
             the Caribbean stands as <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
@@ -271,7 +270,7 @@ export default function CaribbeanV2Page() {
             <span className="text-[#d39478] font-semibold"> St. Barts</span>, or <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
             where every moment is crafted for the extraordinary.
           </p>
-          <div className="w-px h-16 bg-gradient-to-b from-white/80 to-transparent mx-auto" />
+          <div className="w-24 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto" />
         </div>
       </div>
 
@@ -283,7 +282,7 @@ export default function CaribbeanV2Page() {
             src="/images/pagesCaraibes/carteCarab.jpeg"
             alt=""
             fill
-            className="object-cover brightness-40"
+            className="object-cover brightness-40 sepia"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
         </div>
