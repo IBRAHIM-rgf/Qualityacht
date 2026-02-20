@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // ── Données ────────────────────────────────────────────────────────────────────
 const caribbeanIslands = [
@@ -45,22 +45,46 @@ function useReveal() {
 
 // ── Carte destination ──────────────────────────────────────────────────────────
 function DestCard({ name, image, href }) {
+  const [lit, setLit] = useState(false);
+  const timerRef = useRef(null);
+
+  function handleMouseEnter() {
+    clearTimeout(timerRef.current);
+    setLit(true);
+  }
+  function handleMouseLeave() {
+    timerRef.current = setTimeout(() => setLit(false), 1500);
+  }
+  function handleClick(e) {
+    e.preventDefault();
+    clearTimeout(timerRef.current);
+    setLit(true);
+    setTimeout(() => { window.location.href = href; }, 900);
+  }
+
   return (
-    <Link href={href} className="group relative overflow-hidden block" style={{ height: '280px' }}>
+    <a
+      href={href}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="relative overflow-hidden block cursor-pointer"
+      style={{ height: '280px' }}
+    >
       <Image
         src={image}
         alt={name}
         fill
-        className="object-cover brightness-70 grayscale group-hover:brightness-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+        className={`object-cover transition-all duration-700 ${lit ? 'brightness-90 grayscale-0 scale-105' : 'brightness-70 grayscale scale-100'}`}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-500 ${lit ? 'opacity-100' : 'opacity-0'}`} />
       <div className="absolute bottom-0 left-0 right-0 p-5">
-        <h3 className="trajan-regular text-[#acb0cd] text-sm uppercase tracking-[0.2em] group-hover:text-[#c2622a] transition-colors duration-300">
+        <h3 className={`trajan-regular text-sm uppercase tracking-[0.2em] transition-colors duration-300 ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
           {name}
         </h3>
       </div>
-    </Link>
+    </a>
   );
 }
 
