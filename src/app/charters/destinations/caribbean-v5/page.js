@@ -35,7 +35,7 @@ function useReveal() {
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { el.classList.add('revealed'); observer.disconnect(); } },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -48,11 +48,11 @@ function DestCard({ name, image, href }) {
   const [lit, setLit] = useState(false);
   const timerRef = useRef(null);
 
-  function handleMouseEnter() {
+  function activate() {
     clearTimeout(timerRef.current);
     setLit(true);
   }
-  function handleMouseLeave() {
+  function deactivate() {
     timerRef.current = setTimeout(() => setLit(false), 1500);
   }
   function handleClick(e) {
@@ -66,10 +66,12 @@ function DestCard({ name, image, href }) {
     <a
       href={href}
       onClick={handleClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={activate}
+      onMouseLeave={deactivate}
+      onTouchStart={activate}
+      onTouchEnd={deactivate}
       className="relative overflow-hidden block cursor-pointer"
-      style={{ height: '280px' }}
+      style={{ height: 'clamp(160px, 28vw, 280px)' }}
     >
       <Image
         src={image}
@@ -79,8 +81,8 @@ function DestCard({ name, image, href }) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
       <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-500 ${lit ? 'opacity-100' : 'opacity-0'}`} />
-      <div className="absolute bottom-0 left-0 right-0 p-5">
-        <h3 className={`trajan-regular text-sm uppercase tracking-[0.2em] transition-colors duration-300 ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
+      <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5">
+        <h3 className={`trajan-regular text-xs md:text-sm uppercase tracking-[0.15em] md:tracking-[0.2em] transition-colors duration-300 ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
           {name}
         </h3>
       </div>
@@ -90,28 +92,28 @@ function DestCard({ name, image, href }) {
 
 // ── Trait orange brûlé ─────────────────────────────────────────────────────────
 function BurntLine() {
-  return <div className="w-16 h-px bg-[#c2622a] mx-auto my-6" />;
+  return <div className="w-12 md:w-16 h-px bg-[#c2622a] mx-auto my-4 md:my-6" />;
 }
 
-// ── Bloc titre animé (label + h + trait) ──────────────────────────────────────
+// ── Bloc titre animé ───────────────────────────────────────────────────────────
 function RevealBlock({ label, title, sub }) {
   const ref = useReveal();
   return (
-    <div ref={ref} className="text-center mb-14 reveal-up">
-      <p className="text-[#c2622a] text-xs uppercase tracking-[0.35em] mb-3 font-light">{label}</p>
-      <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#acb0cd] mb-2">{title}</h2>
+    <div ref={ref} className="text-center mb-10 md:mb-14 reveal-up">
+      <p className="text-[#c2622a] text-[10px] md:text-xs uppercase tracking-[0.3em] mb-3 font-light">{label}</p>
+      <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] md:tracking-[0.12em] text-[#acb0cd] mb-2">{title}</h2>
       <BurntLine />
-      {sub && <p className="text-[#acb0cd]/50 text-xs uppercase tracking-[0.15em]">{sub}</p>}
+      {sub && <p className="text-[#acb0cd]/50 text-[10px] md:text-xs uppercase tracking-[0.1em] md:tracking-[0.15em] px-4">{sub}</p>}
     </div>
   );
 }
 
-// ── Bloc bandeau animé (label + citation/titre + trait) ───────────────────────
+// ── Bloc bandeau animé ─────────────────────────────────────────────────────────
 function RevealBandeau({ label, children }) {
   const ref = useReveal();
   return (
-    <div ref={ref} className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 reveal-up">
-      <p className="text-[#c2622a] text-xs uppercase tracking-[0.35em] mb-4">{label}</p>
+    <div ref={ref} className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 md:px-6 reveal-up">
+      <p className="text-[#c2622a] text-[10px] md:text-xs uppercase tracking-[0.3em] mb-3 md:mb-4">{label}</p>
       {children}
       <BurntLine />
     </div>
@@ -120,7 +122,6 @@ function RevealBandeau({ label, children }) {
 
 // ── Page principale ────────────────────────────────────────────────────────────
 export default function CaribbeanV5Page() {
-  // Hero : titre animé au chargement
   const heroRef = useRef(null);
   useEffect(() => {
     const el = heroRef.current;
@@ -161,13 +162,13 @@ export default function CaribbeanV5Page() {
               background: 'linear-gradient(180deg, rgba(38,39,42,0.85) 0%, rgba(38,39,42,0) 40%, rgba(38,39,42,0.85) 100%)',
             }}
           />
-          <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-16 z-10">
-            <div ref={heroRef} className="reveal-up flex flex-col items-center">
-              <h1 className="trajan-regular text-4xl md:text-6xl lg:text-7xl uppercase tracking-[0.15em] text-[#acb0cd] text-center px-4">
+          <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
+            <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
+              <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
                 The Caribbean
               </h1>
               <BurntLine />
-              <p className="text-[#acb0cd] text-sm uppercase tracking-[0.25em] font-light">
+              <p className="text-[#acb0cd] text-[10px] md:text-sm uppercase tracking-[0.15em] md:tracking-[0.25em] font-light text-center">
                 The Ultimate Luxury Yachting Destination
               </p>
             </div>
@@ -175,11 +176,11 @@ export default function CaribbeanV5Page() {
         </div>
 
         {/* ══════════════════════════════════════════════════════════
-            DESCRIPTION — texte complet v3
+            DESCRIPTION
         ══════════════════════════════════════════════════════════ */}
-        <section className="bg-[#26272a] py-28 px-6 md:px-20">
-          <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-6">
-            <p className="text-xl text-[#acb0cd]">
+        <section className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20">
+          <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6">
+            <p className="text-base md:text-xl text-[#acb0cd]">
               A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>,{' '}
               <span className="text-[#d39478] font-semibold">powder-white beaches</span>,{' '}
               <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and{' '}
@@ -187,19 +188,19 @@ export default function CaribbeanV5Page() {
               the Caribbean stands as{' '}
               <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
             </p>
-            <p className="text-lg max-w-3xl mx-auto text-[#acb0cd]">
+            <p className="text-sm md:text-lg max-w-3xl mx-auto text-[#acb0cd]">
               From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
               of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and{' '}
               <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
               offers an unparalleled sailing experience.
             </p>
-            <p className="text-lg max-w-2xl mx-auto text-[#acb0cd]">
+            <p className="text-sm md:text-lg max-w-2xl mx-auto text-[#acb0cd]">
               Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over{' '}
               <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
               and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
               cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
             </p>
-            <p className="text-base max-w-xl mx-auto text-[#acb0cd]">
+            <p className="text-xs md:text-base max-w-xl mx-auto text-[#acb0cd]">
               For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
               of exclusivity and adventure. Whether it's the glamour of{' '}
               <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of{' '}
@@ -211,9 +212,9 @@ export default function CaribbeanV5Page() {
         </section>
 
         {/* ══════════════════════════════════════════════════════════
-            BANDEAU PHOTO — cocomer
+            BANDEAU — cocomer
         ══════════════════════════════════════════════════════════ */}
-        <div className="relative h-[70vh] overflow-hidden">
+        <div className="relative h-[45vh] md:h-[70vh] overflow-hidden">
           <Image
             src="/images/pagesCaraibes/cocomer.jpeg"
             alt=""
@@ -221,23 +222,18 @@ export default function CaribbeanV5Page() {
             className="object-cover brightness-40 grayscale"
             style={{ objectPosition: 'center 40%' }}
           />
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)',
-            }}
-          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)' }} />
           <RevealBandeau label="The Experience">
-            <p className="trajan-regular text-xl md:text-3xl text-[#acb0cd] max-w-2xl leading-relaxed">
+            <p className="trajan-regular text-base md:text-3xl text-[#acb0cd] max-w-xs md:max-w-2xl leading-relaxed px-2">
               "Where every horizon promises a new discovery"
             </p>
           </RevealBandeau>
         </div>
 
         {/* ══════════════════════════════════════════════════════════
-            CARIBBEAN ISLANDS — grille cartes
+            CARIBBEAN ISLANDS
         ══════════════════════════════════════════════════════════ */}
-        <section className="bg-[#26272a] py-20 px-6 md:px-16">
+        <section className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock
               label="Explore"
@@ -253,32 +249,27 @@ export default function CaribbeanV5Page() {
         </section>
 
         {/* ══════════════════════════════════════════════════════════
-            BANDEAU PHOTO — palmiers
+            BANDEAU — palmiers
         ══════════════════════════════════════════════════════════ */}
-        <div className="relative h-[65vh] overflow-hidden">
+        <div className="relative h-[40vh] md:h-[65vh] overflow-hidden">
           <Image
             src="/images/pagesCaraibes/palmierscaraibes.jpeg"
             alt=""
             fill
             className="object-cover brightness-40 grayscale"
           />
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)',
-            }}
-          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)' }} />
           <RevealBandeau label="Popular Anchorages">
-            <h2 className="trajan-regular text-xl md:text-3xl text-[#acb0cd] uppercase tracking-[0.12em]">
+            <h2 className="trajan-regular text-base md:text-3xl text-[#acb0cd] uppercase tracking-[0.08em] md:tracking-[0.12em]">
               Where to Drop Anchor
             </h2>
           </RevealBandeau>
         </div>
 
         {/* ══════════════════════════════════════════════════════════
-            POPULAR DESTINATIONS — grille cartes
+            POPULAR DESTINATIONS
         ══════════════════════════════════════════════════════════ */}
-        <section className="bg-[#26272a] py-20 px-6 md:px-16">
+        <section className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock
               label="Anchorages & Marinas"
@@ -294,31 +285,26 @@ export default function CaribbeanV5Page() {
         </section>
 
         {/* ══════════════════════════════════════════════════════════
-            BANDEAU PHOTO — st-barth + CTA
+            BANDEAU — st-barth + CTA
         ══════════════════════════════════════════════════════════ */}
-        <div className="relative h-[75vh] overflow-hidden">
+        <div className="relative h-[55vh] md:h-[75vh] overflow-hidden">
           <Image
             src="/images/pagesCaraibes/st-barth.jpg"
             alt=""
             fill
             className="object-cover brightness-50"
           />
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)',
-            }}
-          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)' }} />
           <RevealBandeau label="Ready to Sail">
-            <h2 className="trajan-regular text-3xl md:text-5xl text-[#acb0cd] uppercase tracking-[0.12em] mb-4 max-w-xl mx-auto leading-tight">
+            <h2 className="trajan-regular text-xl md:text-5xl text-[#acb0cd] uppercase tracking-[0.08em] md:tracking-[0.12em] mb-3 md:mb-4 max-w-xs md:max-w-xl mx-auto leading-tight">
               Plan Your Caribbean Charter
             </h2>
-            <p className="text-[#acb0cd]/60 text-sm max-w-md mx-auto mb-6 leading-relaxed">
+            <p className="text-[#acb0cd]/60 text-xs md:text-sm max-w-xs md:max-w-md mx-auto mb-5 md:mb-6 leading-relaxed">
               Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.
             </p>
             <Link
               href="/charters"
-              className="trajan-regular text-xs uppercase tracking-[0.3em] px-10 py-4 border border-[#c2622a] text-[#c2622a] hover:bg-[#c2622a] hover:text-white transition-all duration-300"
+              className="trajan-regular text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border border-[#c2622a] text-[#c2622a] hover:bg-[#c2622a] hover:text-white transition-all duration-300"
             >
               Explore Yachts
             </Link>
