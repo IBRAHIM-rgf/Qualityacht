@@ -70,8 +70,7 @@ function DestCard({ name, image, href }) {
       onMouseLeave={deactivate}
       onTouchStart={activate}
       onTouchEnd={deactivate}
-      className="relative overflow-hidden block cursor-pointer"
-      style={{ height: 'clamp(160px, 28vw, 280px)' }}
+      className="relative overflow-hidden block cursor-pointer h-[220px] md:h-[280px]"
     >
       <Image
         src={image}
