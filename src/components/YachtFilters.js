@@ -63,7 +63,6 @@ export default function YachtFilters({ filters, onChange }) {
   const [selectedPriceTier, setSelectedPriceTier] = useState(0);
   const [lengthRange, setLengthRange] = useState([MIN_LENGTH_M, MAX_LENGTH_M]);
   const [unitPreference, setUnitPreference] = useState('meters');
-  const [activeThumb, setActiveThumb] = useState(null); // 0 = min, 1 = max
   const [selectedCurrency, setSelectedCurrency] = useState('EUR');
 
   useEffect(() => {
@@ -290,26 +289,36 @@ export default function YachtFilters({ filters, onChange }) {
                         background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pctDLL}%, #B03E00 ${pctDLL}%, #B03E00 ${pctDLR}%, #4b5563 ${pctDLR}%, #4b5563 100%)`
                       }} />
                       {/* Tick marks overlaid on the track */}
-                      {unitPreference === 'meters' && Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
-                        const val = MIN_LENGTH_M + i * 10;
-                        const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
-                        return (
-                          <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
-                            <div className="w-px h-3 bg-gray-400/70" />
-                          </div>
-                        );
-                      })}
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
+                            return (
+                              <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
+                                <div className="w-px h-3 bg-gray-400/70" />
+                              </div>
+                            );
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
+                            return (
+                              <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
+                                <div className="w-px h-3 bg-gray-400/70" />
+                              </div>
+                            );
+                          })
+                      }
                       <input
                         type="range"
                         min={dlenMin}
                         max={dlenMax}
                         step={unitPreference === 'meters' ? 5 : 10}
                         value={lengthRange[0]}
-                        onMouseDown={() => setActiveThumb(0)}
-                        onTouchStart={() => setActiveThumb(0)}
-                        onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 5))}
-                        className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                        style={{ zIndex: activeThumb === 0 ? 5 : 3 }}
+                        onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 10))}
+                        className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-gray-300 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:relative [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:bg-gray-300 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
+                        style={{ zIndex: 5 }}
                       />
                       <input
                         type="range"
@@ -317,25 +326,31 @@ export default function YachtFilters({ filters, onChange }) {
                         max={dlenMax}
                         step={unitPreference === 'meters' ? 5 : 10}
                         value={lengthRange[1]}
-                        onMouseDown={() => setActiveThumb(1)}
-                        onTouchStart={() => setActiveThumb(1)}
-                        onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 5))}
-                        className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                        style={{ zIndex: activeThumb === 0 ? 3 : 5 }}
+                        onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 10))}
+                        className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-gray-300 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:relative [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:bg-gray-300 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
+                        style={{ zIndex: 5 }}
                       />
                     </div>
                     {/* Labels under tick marks */}
-                    {unitPreference === 'meters' && (
-                      <div className="relative h-4">
-                        {Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
-                          const val = MIN_LENGTH_M + i * 10;
-                          const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
-                          return i % 3 === 0 ? (
-                            <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
-                          ) : null;
-                        })}
-                      </div>
-                    )}
+                    <div className="relative h-4">
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
+                            return i % 3 === 0 ? (
+                              <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                            ) : null;
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
+                            return i % 2 === 0 ? (
+                              <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                            ) : null;
+                          })
+                      }
+                    </div>
                   </div>
                 );
               })()}
@@ -422,7 +437,7 @@ export default function YachtFilters({ filters, onChange }) {
           <Filter className="w-5 h-5" />
           <span>Filters</span>
           {activeCount > 0 && (
-            <span className="ml-2 px-2 py-0.5 bg-[#d39478] text-[#C0C0C0] text-xs rounded-full">{activeCount}</span>
+            <span className="ml-2 px-2 py-0.5 border border-[#C0C0C0] text-[#C0C0C0] text-xs rounded-full font-semibold">{activeCount}</span>
           )}
         </button>
       </div>
@@ -508,26 +523,36 @@ export default function YachtFilters({ filters, onChange }) {
                             background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pctL}%, #B03E00 ${pctL}%, #B03E00 ${pctR}%, #4b5563 ${pctR}%, #4b5563 100%)`
                           }} />
                           {/* Tick marks overlaid on the track */}
-                          {unitPreference === 'meters' && Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
-                            const val = MIN_LENGTH_M + i * 10;
-                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
-                            return (
-                              <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
-                                <div className="w-px h-3 bg-gray-400/70" />
-                              </div>
-                            );
-                          })}
+                          {unitPreference === 'meters'
+                            ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                                const val = MIN_LENGTH_M + i * 10;
+                                const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                                return (
+                                  <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
+                                    <div className="w-px h-3 bg-gray-400/70" />
+                                  </div>
+                                );
+                              })
+                            : Array.from({ length: 14 }, (_, i) => {
+                                const val = MIN_LENGTH_FT + i * 30;
+                                if (val > MAX_LENGTH_FT) return null;
+                                const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                                return (
+                                  <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
+                                    <div className="w-px h-3 bg-gray-400/70" />
+                                  </div>
+                                );
+                              })
+                          }
                           <input
                             type="range"
                             min={lenMin}
                             max={lenMax}
                             step={unitPreference === 'meters' ? 5 : 10}
                             value={lengthRange[0]}
-                            onMouseDown={() => setActiveThumb(0)}
-                            onTouchStart={() => setActiveThumb(0)}
-                            onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 5))}
-                            className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                            style={{ zIndex: activeThumb === 0 ? 5 : 3 }}
+                            onChange={(e) => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 10))}
+                            className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-gray-300 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:relative [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:bg-gray-300 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
+                            style={{ zIndex: 5 }}
                           />
                           <input
                             type="range"
@@ -535,25 +560,31 @@ export default function YachtFilters({ filters, onChange }) {
                             max={lenMax}
                             step={unitPreference === 'meters' ? 5 : 10}
                             value={lengthRange[1]}
-                            onMouseDown={() => setActiveThumb(1)}
-                            onTouchStart={() => setActiveThumb(1)}
-                            onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 5))}
-                            className="absolute w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-gray-400 [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:bg-gray-400 [&::-moz-range-track]:bg-transparent"
-                            style={{ zIndex: activeThumb === 1 ? 5 : 3 }}
+                            onChange={(e) => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 10))}
+                            className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-gray-300 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:relative [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:bg-gray-300 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
+                            style={{ zIndex: 5 }}
                           />
                         </div>
                         {/* Labels under tick marks */}
-                        {unitPreference === 'meters' && (
-                          <div className="relative h-4">
-                            {Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
-                              const val = MIN_LENGTH_M + i * 10;
-                              const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
-                              return i % 3 === 0 ? (
-                                <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
-                              ) : null;
-                            })}
-                          </div>
-                        )}
+                        <div className="relative h-4">
+                          {unitPreference === 'meters'
+                            ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                                const val = MIN_LENGTH_M + i * 10;
+                                const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                                return i % 3 === 0 ? (
+                                  <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                                ) : null;
+                              })
+                            : Array.from({ length: 14 }, (_, i) => {
+                                const val = MIN_LENGTH_FT + i * 30;
+                                if (val > MAX_LENGTH_FT) return null;
+                                const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                                return i % 2 === 0 ? (
+                                  <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                                ) : null;
+                              })
+                          }
+                        </div>
                       </div>
                     );
                   })()}
