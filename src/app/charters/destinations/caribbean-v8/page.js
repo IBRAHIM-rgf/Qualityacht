@@ -115,11 +115,13 @@ function CircleCard({ name, image, href }) {
     <a href={href} onClick={handleClick} onMouseEnter={activate} onMouseLeave={deactivate}
       onTouchStart={activate} onTouchEnd={deactivate}
       className="flex flex-col items-center shrink-0 snap-center cursor-pointer" style={{ width: '130px' }}>
-      <div className={`relative w-[110px] h-[110px] md:w-[130px] md:h-[130px] rounded-full overflow-hidden border-2 transition-all duration-300 mb-3 ${lit ? 'border-[#c2622a]/70 scale-105' : 'border-white/20'}`}>
+      <div className={`relative w-[110px] h-[110px] md:w-[130px] md:h-[130px] rounded-full overflow-hidden border-2 transition-all duration-300 ${lit ? 'border-[#c2622a]/70 scale-105' : 'border-white/20'}`}>
         <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
+        <div className="absolute inset-0 flex items-end justify-center pb-3 px-1">
+          <h3 className={`trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide transition-colors duration-300 leading-tight ${lit ? 'text-[#c2622a]' : 'text-white'}`}>{name}</h3>
+        </div>
       </div>
-      <h3 className={`text-xs font-bold text-center uppercase tracking-wide transition-colors duration-300 ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>{name}</h3>
     </a>
   );
 }
@@ -131,11 +133,11 @@ function IslandGroup({ group, defaultOpen }) {
     <div className="border-b border-white/10">
       <button onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between py-4 text-left group">
-        <div>
+        <div className="text-center">
           <span className="trajan-regular text-[#acb0cd] text-xs md:text-sm uppercase tracking-[0.2em] group-hover:text-[#c2622a] transition-colors duration-300">
             {group.name}
           </span>
-          <div className="w-6 h-px bg-[#c2622a] mt-2" />
+          <div className="w-6 h-[2px] bg-[#c2622a] mt-2 mx-auto" />
         </div>
         <span className={`text-[#c2622a] transition-transform duration-300 text-2xl leading-none ${open ? 'rotate-180' : ''}`}>▾</span>
       </button>
@@ -323,7 +325,7 @@ export default function CaribbeanV8Page() {
               Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.
             </p>
             <a href="/charters" className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border border-[#c2622a] text-[#c2622a] hover:bg-[#c2622a] hover:text-white transition-all duration-300">
-              Explore Yachts
+              Explorer les Yachts
             </a>
           </div>
         </div>
