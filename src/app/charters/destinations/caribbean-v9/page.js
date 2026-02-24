@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 
 // ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
 const caribbeanIslands = [
-  { name: 'Greater Antilles',   image: '/images/destinations/destnation-feature-caribbean.webp',       href: '/yachts?destination=greater-antilles' },
-  { name: 'Leeward Islands',    image: '/images/destinations/destnation-feature-indian-ocean.webp',    href: '/yachts?destination=leeward-islands' },
-  { name: 'Leeward Antilles',   image: '/images/destinations/animals/caraibes.jpg',                    href: '/yachts?destination=leeward-antilles' },
-  { name: 'Windward Islands',   image: '/images/destinations/destnation-feature-east-med.webp',        href: '/yachts?destination=windward-islands' },
-  { name: 'Turks & Caicos',     image: '/images/destinations/destnation-feature-south-east-asia.webp', href: '/yachts?destination=turks-caicos' },
-  { name: 'Trinidad & Tobago',  image: '/images/destinations/animals/Bahamas.jpg',                     href: '/yachts?destination=trinidad-tobago' },
-  { name: 'Grand Cayman',       image: '/images/destinations/destnation-feature-west-med.webp',        href: '/yachts?destination=grand-cayman' },
+  { name: 'Greater Antilles',   image: '/images/destinations/destnation-feature-caribbean.webp',   href: '/yachts?destination=greater-antilles' },
+  { name: 'Leeward Islands',    image: '/images/destinations/Leeward Islands.jpg',                 href: '/yachts?destination=leeward-islands' },
+  { name: 'Leeward Antilles',   image: '/images/destinations/animals/caraibes.jpg',                href: '/yachts?destination=leeward-antilles' },
+  { name: 'Windward Islands',   image: '/images/destinations/the Windward Islands.jpg',            href: '/yachts?destination=windward-islands' },
+  { name: 'Turks & Caicos',     image: '/images/destinations/Turks and Caicos.jpg',                href: '/yachts?destination=turks-caicos' },
+  { name: 'Trinidad & Tobago',  image: '/images/destinations/Trinidad and Tobago.jpg',             href: '/yachts?destination=trinidad-tobago' },
+  { name: 'Grand Cayman',       image: '/images/destinations/Cayman Islands.jpg',                  href: '/yachts?destination=grand-cayman' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────
@@ -311,7 +311,7 @@ export default function CaribbeanV9Page() {
 
         {/* ══ HERO ══ */}
         <div className="relative h-screen">
-          <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
+          <Image src="/images/destinations/Caraibes_charters.png" alt="" fill priority className="object-cover object-center" />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.6) 0%, transparent 25%, transparent 70%, rgba(38,39,42,0.8) 100%)' }} />
           <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
             <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
