@@ -28,9 +28,6 @@ const islandGroups = [
 // ── Données cercles ────────────────────────────────────────────────────────────
 // nameBelow: true = nom affiché sous le rond (nouvelles destinations avec photo flowers)
 const popularDestinations = [
-  { name: 'Gustavia',                         image: '/images/destinations/destnation-feature-indian-ocean.webp',         href: '/yachts?destination=gustavia',    nameBelow: false },
-  { name: 'St. John',                         image: '/images/destinations/destnation-feature-caribbean.webp',            href: '/yachts?destination=st-john',     nameBelow: false },
-  { name: 'Nassau',                           image: '/images/destinations/destnation-feature-south-east-asia.webp',      href: '/yachts?destination=nassau',      nameBelow: false },
   { name: 'Saint-Vincent-et-les-Grenadines', image: '/images/destinations/flowers/Saint-Vincent-et-les-Grenadines.jpg',  href: '/yachts?destination=saint-vincent', nameBelow: true },
   { name: 'Antigua et Barbuda',               image: '/images/destinations/flowers/Antigua et Barbuda.jpeg',              href: '/yachts?destination=antigua',     nameBelow: true },
   { name: 'British Virgin Islands',           image: '/images/destinations/flowers/British Virgin Islands.jpg',           href: '/yachts?destination=bvi',         nameBelow: true },
