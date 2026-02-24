@@ -3,45 +3,51 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
-// ── Données îles ───────────────────────────────────────────────────────────────
+// ── Données rectangles ─────────────────────────────────────────────────────────
+const caribbeanIslands = [
+  { name: 'St. Barts',   image: '/images/destinations/animals/caraibes.jpg',                    href: '/yachts?destination=st-barts' },
+  { name: 'St. Martin',  image: '/images/destinations/destnation-feature-caribbean.webp',        href: '/yachts?destination=st-martin' },
+  { name: 'Antigua',     image: '/images/destinations/animals/Bahamas.jpg',                      href: '/yachts?destination=antigua' },
+  { name: 'BVI',         image: '/images/yachts/yatch2.jpeg',                                    href: '/yachts?destination=bvi' },
+  { name: 'West Med',    image: '/images/destinations/destnation-feature-west-med.webp',          href: '/yachts?destination=west-med' },
+  { name: 'USVI',        image: '/images/destinations/destnation-feature-south-pacific.webp',     href: '/yachts?destination=usvi' },
+  { name: 'Bahamas',     image: '/images/destinations/animals/Ocean-Pacific.jpeg',               href: '/yachts?destination=bahamas' },
+  { name: 'Martinique',  image: '/images/destinations/destnation-feature-east-med.webp',          href: '/yachts?destination=martinique' },
+];
+
+// ── Groupes accordéon ──────────────────────────────────────────────────────────
 const islandGroups = [
   {
-    id: 1,
-    name: 'Greater Antilles',
+    id: 1, name: 'Greater Antilles',
     islands: ['Cuba', 'Hispaniola', 'Jamaica', 'Puerto Rico'],
   },
   {
-    id: 2,
-    name: 'Leeward Islands',
+    id: 2, name: 'Leeward Islands',
     islands: ['Anguilla', 'Saint-Martin / Sint Maarten', 'Saint-Barthélemy', 'Saba & Saint-Eustache', 'Saint-Kitts & Nevis', 'Antigua & Barbuda', 'Montserrat', 'Guadeloupe'],
   },
   {
-    id: 3,
-    name: 'Leeward Antilles',
+    id: 3, name: 'Leeward Antilles',
     islands: ['Aruba', 'Bonaire', 'Curaçao'],
   },
   {
-    id: 4,
-    name: 'Windward Islands',
+    id: 4, name: 'Windward Islands',
     islands: ['Dominica', 'Martinique', 'Saint Lucia', 'Saint Vincent & the Grenadines', 'Mustique', 'Canouan', 'Bequia', 'Tobago Cays', 'Grenada', 'Carriacou', 'Barbados'],
   },
   {
-    id: 5,
-    name: 'Turks & Caicos',
+    id: 5, name: 'Turks & Caicos',
     islands: ['Providenciales', 'Grand Turk', 'South Caicos', 'West Caicos'],
   },
   {
-    id: 6,
-    name: 'Trinidad & Tobago',
+    id: 6, name: 'Trinidad & Tobago',
     islands: ['Trinidad', 'Tobago'],
   },
   {
-    id: 7,
-    name: 'Emerging Destinations',
+    id: 7, name: 'Emerging Destinations',
     islands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero Island'],
   },
 ];
 
+// ── Données cercles ────────────────────────────────────────────────────────────
 const popularDestinations = [
   { name: 'Gustavia',        image: '/images/destinations/destnation-feature-indian-ocean.webp',    href: '/yachts?destination=gustavia' },
   { name: 'Marigot',         image: '/images/destinations/animals/caraibes.jpg',                    href: '/yachts?destination=marigot' },
@@ -69,7 +75,34 @@ function useReveal() {
   return ref;
 }
 
-// ── Cercle Popular Destinations ────────────────────────────────────────────────
+// ── Carte rectangulaire ────────────────────────────────────────────────────────
+function DestCard({ name, image, href }) {
+  const [lit, setLit] = useState(false);
+  const timerRef = useRef(null);
+  function activate() { clearTimeout(timerRef.current); setLit(true); }
+  function deactivate() { timerRef.current = setTimeout(() => setLit(false), 1500); }
+  function handleClick(e) {
+    e.preventDefault(); clearTimeout(timerRef.current); setLit(true);
+    setTimeout(() => { window.location.href = href; }, 900);
+  }
+  return (
+    <a href={href} onClick={handleClick} onMouseEnter={activate} onMouseLeave={deactivate}
+      onTouchStart={activate} onTouchEnd={deactivate}
+      className="relative overflow-hidden block cursor-pointer h-[220px] md:h-[280px]">
+      <Image src={image} alt={name} fill
+        className={`object-cover transition-all duration-700 ${lit ? 'brightness-90 grayscale-0 scale-105' : 'brightness-70 grayscale scale-100'}`} />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+      <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-500 ${lit ? 'opacity-100' : 'opacity-0'}`} />
+      <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5">
+        <h3 className={`trajan-regular text-xs md:text-sm uppercase tracking-[0.15em] transition-colors duration-300 ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
+          {name}
+        </h3>
+      </div>
+    </a>
+  );
+}
+
+// ── Cercle ─────────────────────────────────────────────────────────────────────
 function CircleCard({ name, image, href }) {
   const [lit, setLit] = useState(false);
   const timerRef = useRef(null);
@@ -92,35 +125,23 @@ function CircleCard({ name, image, href }) {
   );
 }
 
-// ── Trait orange brûlé ─────────────────────────────────────────────────────────
-function BurntLine() {
-  return <div className="w-12 md:w-16 h-px bg-[#c2622a] mx-auto my-4 md:my-6" />;
-}
-
-// ── Trait or fin (sous titre accordéon) ───────────────────────────────────────
-function GoldThin() {
-  return <div className="w-8 h-px bg-[#c2622a] mt-2 mx-auto" />;
-}
-
-// ── Accordéon groupe d'îles ───────────────────────────────────────────────────
+// ── Accordéon groupe ───────────────────────────────────────────────────────────
 function IslandGroup({ group, defaultOpen }) {
   const [open, setOpen] = useState(defaultOpen || false);
   return (
     <div className="border-b border-white/10">
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between py-4 px-0 text-left group"
-      >
+      <button onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between py-4 text-left group">
         <div>
-          <span className="trajan-regular text-[#acb0cd] text-sm md:text-base uppercase tracking-[0.2em] group-hover:text-[#c2622a] transition-colors duration-300">
+          <span className="trajan-regular text-[#acb0cd] text-xs md:text-sm uppercase tracking-[0.2em] group-hover:text-[#c2622a] transition-colors duration-300">
             {group.name}
           </span>
-          <GoldThin />
+          <div className="w-6 h-px bg-[#c2622a] mt-1" />
         </div>
-        <span className={`text-[#c2622a] text-lg transition-transform duration-300 ${open ? 'rotate-180' : ''}`}>▾</span>
+        <span className={`text-[#c2622a] transition-transform duration-300 text-base ${open ? 'rotate-180' : ''}`}>▾</span>
       </button>
       {open && (
-        <div className="pb-5 flex flex-wrap gap-x-6 gap-y-2 px-2">
+        <div className="pb-5 flex flex-wrap gap-x-5 gap-y-2 px-1">
           {group.islands.map((island, i) => (
             <span key={i} className="text-[#acb0cd]/70 text-sm flex items-center gap-2">
               <span className="text-[#c2622a] text-[8px]">›</span>
@@ -131,6 +152,11 @@ function IslandGroup({ group, defaultOpen }) {
       )}
     </div>
   );
+}
+
+// ── Trait orange ───────────────────────────────────────────────────────────────
+function BurntLine() {
+  return <div className="w-12 md:w-16 h-px bg-[#c2622a] mx-auto my-4 md:my-6" />;
 }
 
 // ── Section nuages ─────────────────────────────────────────────────────────────
@@ -157,7 +183,7 @@ function RevealBlock({ label, title, sub }) {
   );
 }
 
-// ── Page principale ────────────────────────────────────────────────────────────
+// ── Page ───────────────────────────────────────────────────────────────────────
 export default function CaribbeanV8Page() {
   const heroRef = useRef(null);
   useEffect(() => {
@@ -177,17 +203,10 @@ export default function CaribbeanV8Page() {
 
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
-        {/* ══ HERO — photo entière visible ══ */}
+        {/* ══ HERO ══ */}
         <div className="relative h-screen">
-          <Image
-            src="/images/yachts/yatch2.jpeg"
-            alt="" fill priority
-            className="object-cover object-center"
-          />
-          {/* Dégradé léger haut et bas sans flou */}
-          <div className="absolute inset-0" style={{
-            background: 'linear-gradient(180deg, rgba(38,39,42,0.6) 0%, transparent 25%, transparent 70%, rgba(38,39,42,0.8) 100%)',
-          }} />
+          <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.6) 0%, transparent 25%, transparent 70%, rgba(38,39,42,0.8) 100%)' }} />
           <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
             <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
               <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
@@ -201,7 +220,7 @@ export default function CaribbeanV8Page() {
           </div>
         </div>
 
-        {/* ══ DESCRIPTION — fond nuages ══ */}
+        {/* ══ DESCRIPTION ══ */}
         <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20">
           <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6">
             <p className="text-lg md:text-2xl text-[#acb0cd]">
@@ -235,29 +254,36 @@ export default function CaribbeanV8Page() {
           </div>
         </CloudSection>
 
-        {/* ══ BANDEAU — cocomer ══ */}
+        {/* ══ BANDEAU cocomer ══ */}
         <div className="relative h-[45vh] md:h-[70vh] overflow-hidden">
           <Image src="/images/pagesCaraibes/cocomer.jpeg" alt="" fill className="object-cover brightness-40 grayscale" style={{ objectPosition: 'center 40%' }} />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 18%, transparent 62%, #26272a 100%)' }} />
         </div>
 
-        {/* ══ CARIBBEAN ISLANDS — accordéons ══ */}
+        {/* ══ CARIBBEAN ISLANDS — rectangles photos ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
-          <div className="max-w-5xl mx-auto">
-            <RevealBlock
-              label="Explore"
-              title="Caribbean Islands"
-              sub="Seven archipelagos — over 700 islands"
-            />
-            <div className="divide-y divide-white/10">
+          <div className="max-w-7xl mx-auto">
+            <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
+              {caribbeanIslands.map((island, i) => <DestCard key={i} {...island} />)}
+            </div>
+          </div>
+        </CloudSection>
+
+        {/* ══ ACCORDÉONS — grille 3 colonnes, sur fond nuages ══ */}
+        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
+          <div className="max-w-7xl mx-auto">
+            <RevealBlock label="Archipelagos" title="Destinations by Region" sub="Seven groups — over 700 islands" />
+            {/* Grille 1 col mobile / 3 col desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-0">
               {islandGroups.map((group, i) => (
-                <IslandGroup key={group.id} group={group} defaultOpen={i === 0} />
+                <IslandGroup key={group.id} group={group} defaultOpen={i < 3} />
               ))}
             </div>
           </div>
         </CloudSection>
 
-        {/* ══ BANDEAU — palmiers ══ */}
+        {/* ══ BANDEAU palmiers ══ */}
         <div className="relative h-[40vh] md:h-[65vh] overflow-hidden">
           <Image src="/images/pagesCaraibes/palmierscaraibes.jpeg" alt="" fill className="object-cover brightness-40 grayscale" />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 18%, transparent 62%, #26272a 100%)' }} />
@@ -266,11 +292,7 @@ export default function CaribbeanV8Page() {
         {/* ══ POPULAR DESTINATIONS — cercles slider ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
-            <RevealBlock
-              label="Anchorages & Marinas"
-              title="Popular Destinations"
-              sub="The most exclusive marinas and anchorages in the Caribbean"
-            />
+            <RevealBlock label="Anchorages & Marinas" title="Popular Destinations" sub="The most exclusive marinas and anchorages in the Caribbean" />
             <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
               {popularDestinations.map((dest, i) => <CircleCard key={i} {...dest} />)}
             </div>
