@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 
 // ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
 const caribbeanIslands = [
-  { name: 'Gustavia',        image: '/images/destinations/destnation-feature-indian-ocean.webp',    href: '/yachts?destination=gustavia' },
-  { name: 'Marigot',         image: '/images/destinations/animals/caraibes.jpg',                    href: '/yachts?destination=marigot' },
-  { name: 'English Harbour', image: '/images/destinations/destnation-feature-east-med.webp',        href: '/yachts?destination=english-harbour' },
-  { name: 'Tortola',         image: '/images/destinations/animals/Bahamas.jpg',                     href: '/yachts?destination=tortola' },
-  { name: 'St. John',        image: '/images/destinations/destnation-feature-caribbean.webp',       href: '/yachts?destination=st-john' },
-  { name: 'Nassau',          image: '/images/destinations/destnation-feature-south-east-asia.webp', href: '/yachts?destination=nassau' },
-  { name: 'Grand Cayman',    image: '/images/destinations/destnation-feature-west-med.webp',        href: '/yachts?destination=grand-cayman' },
+  { name: 'Greater Antilles',   image: '/images/destinations/destnation-feature-caribbean.webp',       href: '/yachts?destination=greater-antilles' },
+  { name: 'Leeward Islands',    image: '/images/destinations/destnation-feature-indian-ocean.webp',    href: '/yachts?destination=leeward-islands' },
+  { name: 'Leeward Antilles',   image: '/images/destinations/animals/caraibes.jpg',                    href: '/yachts?destination=leeward-antilles' },
+  { name: 'Windward Islands',   image: '/images/destinations/destnation-feature-east-med.webp',        href: '/yachts?destination=windward-islands' },
+  { name: 'Turks & Caicos',     image: '/images/destinations/destnation-feature-south-east-asia.webp', href: '/yachts?destination=turks-caicos' },
+  { name: 'Trinidad & Tobago',  image: '/images/destinations/animals/Bahamas.jpg',                     href: '/yachts?destination=trinidad-tobago' },
+  { name: 'Grand Cayman',       image: '/images/destinations/destnation-feature-west-med.webp',        href: '/yachts?destination=grand-cayman' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────
@@ -135,9 +135,9 @@ function IslandGroup({ group, defaultOpen }) {
           <span className="trajan-regular text-[#acb0cd] text-xs md:text-sm uppercase tracking-[0.2em] group-hover:text-[#c2622a] transition-colors duration-300">
             {group.name}
           </span>
-          <div className="w-6 h-px bg-[#c2622a] mt-1" />
+          <div className="w-6 h-px bg-[#c2622a] mt-2" />
         </div>
-        <span className={`text-[#c2622a] transition-transform duration-300 text-base ${open ? 'rotate-180' : ''}`}>▾</span>
+        <span className={`text-[#c2622a] transition-transform duration-300 text-2xl leading-none ${open ? 'rotate-180' : ''}`}>▾</span>
       </button>
       {open && (
         <div className="pb-5 flex flex-wrap gap-x-5 gap-y-2 px-1">
@@ -159,11 +159,11 @@ function BurntLine() {
 }
 
 // ── Section nuages ─────────────────────────────────────────────────────────────
-function CloudSection({ children, className = '' }) {
+function CloudSection({ children, className = '', bg = '/images/services-bg.png' }) {
   return (
     <div className={`relative ${className}`}>
       <div className="absolute inset-0 z-0">
-        <Image src="/images/services-bg.png" alt="" fill className="object-cover opacity-55" />
+        <Image src={bg} alt="" fill className="object-cover opacity-55" />
       </div>
       <div className="relative z-10">{children}</div>
     </div>
@@ -220,7 +220,7 @@ export default function CaribbeanV8Page() {
         </div>
 
         {/* ══ DESCRIPTION ══ */}
-        <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20">
+        <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">
           <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6">
             <p className="text-lg md:text-2xl text-[#acb0cd]">
               A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>,{' '}
