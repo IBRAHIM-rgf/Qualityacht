@@ -311,7 +311,7 @@ export default function CaribbeanV9Page() {
 
         {/* ══ HERO ══ */}
         <div className="relative h-screen">
-          <Image src="/images/destinations/Caraibes_charters.png" alt="" fill priority className="object-cover object-center" />
+          <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.6) 0%, transparent 25%, transparent 70%, rgba(38,39,42,0.8) 100%)' }} />
           <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
             <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
@@ -412,7 +412,7 @@ export default function CaribbeanV9Page() {
 
         {/* ══ BANDEAU st-barth + CTA ══ */}
         <div className="relative h-[55vh] md:h-[75vh] overflow-hidden">
-          <Image src="/images/pagesCaraibes/st-barth.jpg" alt="" fill className="object-cover brightness-50" />
+          <Image src="/images/destinations/Caraibes_charters.png" alt="" fill className="object-cover brightness-50" />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 30%, transparent 55%, #26272a 100%)' }} />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 md:px-6">
             <p className="text-[#c2622a] text-[10px] md:text-xs uppercase tracking-[0.3em] mb-3 md:mb-4">Ready to Sail</p>
