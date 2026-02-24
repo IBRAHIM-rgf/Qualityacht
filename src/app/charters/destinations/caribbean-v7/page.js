@@ -111,7 +111,7 @@ function CloudSection({ children, className = '' }) {
   return (
     <div className={`relative ${className}`}>
       <div className="absolute inset-0 z-0">
-        <Image src="/images/nuagesAncien.png" alt="" fill className="object-cover opacity-70" />
+        <Image src="/images/nuagesAncien.png" alt="" fill className="object-cover opacity-55" />
       </div>
       <div className="relative z-10">{children}</div>
     </div>
@@ -204,6 +204,8 @@ export default function CaribbeanV7Page() {
         <div className="relative h-[45vh] md:h-[70vh] overflow-hidden">
           <Image src="/images/pagesCaraibes/cocomer.jpeg" alt="" fill className="object-cover brightness-40 grayscale" style={{ objectPosition: 'center 40%' }} />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)' }} />
+          <div className="absolute bottom-0 left-0 right-0 h-20" style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', background: 'linear-gradient(to bottom, transparent, rgba(38,39,42,0.95))' }} />
+          <div className="absolute top-0 left-0 right-0 h-20" style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', background: 'linear-gradient(to top, transparent, rgba(38,39,42,0.95))' }} />
         </div>
 
         {/* CARIBBEAN ISLANDS — rectangles, fond nuages */}
@@ -224,6 +226,8 @@ export default function CaribbeanV7Page() {
         <div className="relative h-[40vh] md:h-[65vh] overflow-hidden">
           <Image src="/images/pagesCaraibes/palmierscaraibes.jpeg" alt="" fill className="object-cover brightness-40 grayscale" />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)' }} />
+          <div className="absolute bottom-0 left-0 right-0 h-20" style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', background: 'linear-gradient(to bottom, transparent, rgba(38,39,42,0.95))' }} />
+          <div className="absolute top-0 left-0 right-0 h-20" style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', background: 'linear-gradient(to top, transparent, rgba(38,39,42,0.95))' }} />
         </div>
 
         {/* POPULAR DESTINATIONS — cercles slider horizontal, fond nuages */}
