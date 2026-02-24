@@ -26,15 +26,16 @@ const islandGroups = [
 ];
 
 // ── Données cercles ────────────────────────────────────────────────────────────
+// nameBelow: true = nom affiché sous le rond (nouvelles destinations avec photo flowers)
 const popularDestinations = [
-  { name: 'Gustavia',                           image: '/images/destinations/destnation-feature-indian-ocean.webp',         href: '/yachts?destination=gustavia' },
-  { name: 'St. John',                           image: '/images/destinations/destnation-feature-caribbean.webp',            href: '/yachts?destination=st-john' },
-  { name: 'Nassau',                             image: '/images/destinations/destnation-feature-south-east-asia.webp',      href: '/yachts?destination=nassau' },
-  { name: 'Saint-Vincent-et-les-Grenadines',   image: '/images/destinations/flowers/Saint-Vincent-et-les-Grenadines.jpg',  href: '/yachts?destination=saint-vincent' },
-  { name: 'Antigua et Barbuda',                 image: '/images/destinations/flowers/Antigua et Barbuda.jpeg',              href: '/yachts?destination=antigua' },
-  { name: 'British Virgin Islands',             image: '/images/destinations/flowers/British Virgin Islands.jpg',           href: '/yachts?destination=bvi' },
-  { name: 'Saint-Martin / Sint Maarten',        image: '/images/destinations/flowers/Saint-Martin  Sint Maarten.jpg',       href: '/yachts?destination=saint-martin' },
-  { name: 'St Barth Allamanda',                 image: '/images/destinations/flowers/St barth Allamanda.jpg',               href: '/yachts?destination=st-barts' },
+  { name: 'Gustavia',                         image: '/images/destinations/destnation-feature-indian-ocean.webp',         href: '/yachts?destination=gustavia',    nameBelow: false },
+  { name: 'St. John',                         image: '/images/destinations/destnation-feature-caribbean.webp',            href: '/yachts?destination=st-john',     nameBelow: false },
+  { name: 'Nassau',                           image: '/images/destinations/destnation-feature-south-east-asia.webp',      href: '/yachts?destination=nassau',      nameBelow: false },
+  { name: 'Saint-Vincent-et-les-Grenadines', image: '/images/destinations/flowers/Saint-Vincent-et-les-Grenadines.jpg',  href: '/yachts?destination=saint-vincent', nameBelow: true },
+  { name: 'Antigua et Barbuda',               image: '/images/destinations/flowers/Antigua et Barbuda.jpeg',              href: '/yachts?destination=antigua',     nameBelow: true },
+  { name: 'British Virgin Islands',           image: '/images/destinations/flowers/British Virgin Islands.jpg',           href: '/yachts?destination=bvi',         nameBelow: true },
+  { name: 'Saint-Martin / Sint Maarten',      image: '/images/destinations/flowers/Saint-Martin  Sint Maarten.jpg',       href: '/yachts?destination=saint-martin', nameBelow: true },
+  { name: 'St Barth Allamanda',               image: '/images/destinations/flowers/St barth Allamanda.jpg',               href: '/yachts?destination=st-barts',    nameBelow: true },
 ];
 
 // ── FAQ ────────────────────────────────────────────────────────────────────────
@@ -165,13 +166,13 @@ function BandeauPhoto({ src, position = 'center' }) {
       <Image src={src} alt="" fill
         className={`object-cover transition-all duration-1000 ${lit ? 'brightness-75 grayscale-0' : 'brightness-40 grayscale'}`}
         style={{ objectPosition: position }} />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 18%, transparent 62%, #26272a 100%)' }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
     </div>
   );
 }
 
 // ── Cercle ─────────────────────────────────────────────────────────────────────
-function CircleCard({ name, image, href }) {
+function CircleCard({ name, image, href, nameBelow = false }) {
   const [lit, setLit] = useState(false);
   const timerRef = useRef(null);
   function activate() { clearTimeout(timerRef.current); setLit(true); }
@@ -180,17 +181,28 @@ function CircleCard({ name, image, href }) {
     e.preventDefault(); clearTimeout(timerRef.current); setLit(true);
     setTimeout(() => { window.location.href = href; }, 900);
   }
+  // Taille : plus grande pour les nouvelles destinations (nameBelow)
+  const size = nameBelow
+    ? 'w-[130px] h-[130px] md:w-[155px] md:h-[155px]'
+    : 'w-[110px] h-[110px] md:w-[130px] md:h-[130px]';
+  const wrapper = nameBelow ? '155px' : '130px';
   return (
     <a href={href} onClick={handleClick} onMouseEnter={activate} onMouseLeave={deactivate}
       onTouchStart={activate} onTouchEnd={deactivate}
-      className="flex flex-col items-center shrink-0 snap-center cursor-pointer" style={{ width: '130px' }}>
-      <div className={`relative w-[110px] h-[110px] md:w-[130px] md:h-[130px] rounded-full overflow-hidden border-2 transition-all duration-300 ${lit ? 'border-white/40 scale-105' : 'border-white/20'}`}>
+      className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2"
+      style={{ width: wrapper }}>
+      <div className={`relative ${size} rounded-full overflow-hidden border-2 transition-all duration-300 ${lit ? 'border-white/40 scale-105' : 'border-white/20'}`}>
         <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
-        <div className="absolute inset-0 flex items-end justify-center pb-3 px-1">
-          <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-white">{name}</h3>
-        </div>
+        {!nameBelow && (
+          <div className="absolute inset-0 flex items-end justify-center pb-3 px-1">
+            <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-white">{name}</h3>
+          </div>
+        )}
       </div>
+      {nameBelow && (
+        <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-[#acb0cd] px-1">{name}</h3>
+      )}
     </a>
   );
 }
@@ -401,7 +413,7 @@ export default function CaribbeanV9Page() {
         {/* ══ BANDEAU st-barth + CTA ══ */}
         <div className="relative h-[55vh] md:h-[75vh] overflow-hidden">
           <Image src="/images/pagesCaraibes/st-barth.jpg" alt="" fill className="object-cover brightness-50" />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 18%, transparent 62%, #26272a 100%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 30%, transparent 55%, #26272a 100%)' }} />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 md:px-6">
             <p className="text-[#c2622a] text-[10px] md:text-xs uppercase tracking-[0.3em] mb-3 md:mb-4">Ready to Sail</p>
             <h2 className="trajan-regular text-xl md:text-5xl text-[#acb0cd] uppercase tracking-[0.08em] md:tracking-[0.12em] mb-3 md:mb-4 max-w-xs md:max-w-xl mx-auto leading-tight">
