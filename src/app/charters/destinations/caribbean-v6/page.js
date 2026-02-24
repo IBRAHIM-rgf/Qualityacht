@@ -155,6 +155,12 @@ export default function CaribbeanV6Page() {
           </div>
         </section>
 
+        {/* BANDEAU — cocomer (sans texte) */}
+        <div className="relative h-[45vh] md:h-[70vh] overflow-hidden">
+          <Image src="/images/pagesCaraibes/cocomer.jpeg" alt="" fill className="object-cover brightness-40 grayscale" style={{ objectPosition: 'center 40%' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)' }} />
+        </div>
+
         {/* CARIBBEAN ISLANDS */}
         <section className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
@@ -168,6 +174,12 @@ export default function CaribbeanV6Page() {
             </div>
           </div>
         </section>
+
+        {/* BANDEAU — palmiers (sans texte) */}
+        <div className="relative h-[40vh] md:h-[65vh] overflow-hidden">
+          <Image src="/images/pagesCaraibes/palmierscaraibes.jpeg" alt="" fill className="object-cover brightness-40 grayscale" />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)' }} />
+        </div>
 
         {/* POPULAR DESTINATIONS */}
         <section className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
