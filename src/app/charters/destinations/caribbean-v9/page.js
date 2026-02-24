@@ -27,14 +27,14 @@ const islandGroups = [
 
 // ── Données cercles ────────────────────────────────────────────────────────────
 const popularDestinations = [
-  { name: 'Gustavia',        image: '/images/destinations/destnation-feature-indian-ocean.webp',    href: '/yachts?destination=gustavia' },
-  { name: 'Marigot',         image: '/images/destinations/animals/caraibes.jpg',                    href: '/yachts?destination=marigot' },
-  { name: 'English Harbour', image: '/images/destinations/destnation-feature-east-med.webp',        href: '/yachts?destination=english-harbour' },
-  { name: 'Tortola',         image: '/images/destinations/animals/Bahamas.jpg',                     href: '/yachts?destination=tortola' },
-  { name: 'St. John',        image: '/images/destinations/destnation-feature-caribbean.webp',       href: '/yachts?destination=st-john' },
-  { name: 'Nassau',          image: '/images/destinations/destnation-feature-south-east-asia.webp', href: '/yachts?destination=nassau' },
-  { name: 'Grand Cayman',    image: '/images/destinations/destnation-feature-west-med.webp',        href: '/yachts?destination=grand-cayman' },
-  { name: 'Barbados',        image: '/images/destinations/destnation-feature-south-pacific.webp',   href: '/yachts?destination=barbados' },
+  { name: 'Gustavia',                           image: '/images/destinations/destnation-feature-indian-ocean.webp',         href: '/yachts?destination=gustavia' },
+  { name: 'St. John',                           image: '/images/destinations/destnation-feature-caribbean.webp',            href: '/yachts?destination=st-john' },
+  { name: 'Nassau',                             image: '/images/destinations/destnation-feature-south-east-asia.webp',      href: '/yachts?destination=nassau' },
+  { name: 'Saint-Vincent-et-les-Grenadines',   image: '/images/destinations/flowers/Saint-Vincent-et-les-Grenadines.jpg',  href: '/yachts?destination=saint-vincent' },
+  { name: 'Antigua et Barbuda',                 image: '/images/destinations/flowers/Antigua et Barbuda.jpeg',              href: '/yachts?destination=antigua' },
+  { name: 'British Virgin Islands',             image: '/images/destinations/flowers/British Virgin Islands.jpg',           href: '/yachts?destination=bvi' },
+  { name: 'Saint-Martin / Sint Maarten',        image: '/images/destinations/flowers/Saint-Martin  Sint Maarten.jpg',       href: '/yachts?destination=saint-martin' },
+  { name: 'St Barth Allamanda',                 image: '/images/destinations/flowers/St barth Allamanda.jpg',               href: '/yachts?destination=st-barts' },
 ];
 
 // ── FAQ ────────────────────────────────────────────────────────────────────────
