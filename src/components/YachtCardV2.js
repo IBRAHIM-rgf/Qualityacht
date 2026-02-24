@@ -2,7 +2,8 @@
 
 "use client";
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map, UserCircle2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map } from 'lucide-react';
+import Image from 'next/image';
 import { getAnkorImageUrl } from '@/lib/utils';
 import { formatLength } from '@/lib/unitConversion';
 
@@ -105,7 +106,7 @@ export default function YachtCardV2({ yacht }) {
             <span className="flex items-center gap-1"><BedDouble className="w-4 h-4 text-[#B03E00]" />{yacht.cabins} cabins</span>
           )}
           {yacht.crew && (
-            <span className="flex items-center gap-1"><UserCircle2 className="w-4 h-4 text-[#B03E00]" />{yacht.crew} crew</span>
+            <span className="flex items-center gap-1"><Image src="/casquette-capitaine.png" alt="crew" width={16} height={16} className="text-[#B03E00]" />{yacht.crew} crew</span>
           )}
           {yacht.location && (
             <span className="flex items-center gap-1"><Map className="w-4 h-4 text-[#B03E00]" />{yacht.location}</span>

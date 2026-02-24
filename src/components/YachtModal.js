@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { X, ChevronLeft, ChevronRight, MapPin, Users, BedDouble, Ruler, Map, Anchor, Ship, UserCircle2 } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, MapPin, Users, BedDouble, Ruler, Map, Anchor, Ship } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
 import { formatLength } from '@/lib/unitConversion';
 
@@ -135,7 +135,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             )}
             {yacht.crew && (
               <div className="text-center">
-                <UserCircle2 className="w-6 h-6 mx-auto mb-2 text-[#B03E00]" />
+                <Image src="/casquette-capitaine.png" alt="crew" width={24} height={24} className="mx-auto mb-2" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.crew}</p>
                 <p className="text-sm text-[#acb0cd]">Crew</p>
               </div>
