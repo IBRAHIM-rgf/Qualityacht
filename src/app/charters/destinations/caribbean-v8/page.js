@@ -324,8 +324,8 @@ export default function CaribbeanV8Page() {
             <p className="text-[#acb0cd]/60 text-sm md:text-base max-w-xs md:max-w-md mx-auto mb-5 md:mb-6 leading-relaxed">
               Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.
             </p>
-            <a href="/charters" className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border border-[#c2622a] text-[#c2622a] hover:bg-[#c2622a] hover:text-white transition-all duration-300">
-              Explorer les Yachts
+            <a href="/charters" style={{ color: '#c2622a', borderColor: '#c2622a' }} className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border hover:bg-[#c2622a] hover:text-white transition-all duration-300">
+              Explore Yachts
             </a>
           </div>
         </div>
