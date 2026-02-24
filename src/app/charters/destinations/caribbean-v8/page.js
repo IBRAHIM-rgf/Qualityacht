@@ -3,16 +3,15 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
-// ── Données rectangles ─────────────────────────────────────────────────────────
+// ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
 const caribbeanIslands = [
-  { name: 'St. Barts',   image: '/images/destinations/animals/caraibes.jpg',                    href: '/yachts?destination=st-barts' },
-  { name: 'St. Martin',  image: '/images/destinations/destnation-feature-caribbean.webp',        href: '/yachts?destination=st-martin' },
-  { name: 'Antigua',     image: '/images/destinations/animals/Bahamas.jpg',                      href: '/yachts?destination=antigua' },
-  { name: 'BVI',         image: '/images/yachts/yatch2.jpeg',                                    href: '/yachts?destination=bvi' },
-  { name: 'West Med',    image: '/images/destinations/destnation-feature-west-med.webp',          href: '/yachts?destination=west-med' },
-  { name: 'USVI',        image: '/images/destinations/destnation-feature-south-pacific.webp',     href: '/yachts?destination=usvi' },
-  { name: 'Bahamas',     image: '/images/destinations/animals/Ocean-Pacific.jpeg',               href: '/yachts?destination=bahamas' },
-  { name: 'Martinique',  image: '/images/destinations/destnation-feature-east-med.webp',          href: '/yachts?destination=martinique' },
+  { name: 'Gustavia',        image: '/images/destinations/destnation-feature-indian-ocean.webp',    href: '/yachts?destination=gustavia' },
+  { name: 'Marigot',         image: '/images/destinations/animals/caraibes.jpg',                    href: '/yachts?destination=marigot' },
+  { name: 'English Harbour', image: '/images/destinations/destnation-feature-east-med.webp',        href: '/yachts?destination=english-harbour' },
+  { name: 'Tortola',         image: '/images/destinations/animals/Bahamas.jpg',                     href: '/yachts?destination=tortola' },
+  { name: 'St. John',        image: '/images/destinations/destnation-feature-caribbean.webp',       href: '/yachts?destination=st-john' },
+  { name: 'Nassau',          image: '/images/destinations/destnation-feature-south-east-asia.webp', href: '/yachts?destination=nassau' },
+  { name: 'Grand Cayman',    image: '/images/destinations/destnation-feature-west-med.webp',        href: '/yachts?destination=grand-cayman' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────
@@ -164,7 +163,7 @@ function CloudSection({ children, className = '' }) {
   return (
     <div className={`relative ${className}`}>
       <div className="absolute inset-0 z-0">
-        <Image src="/images/nuagesAncien.png" alt="" fill className="object-cover opacity-55" />
+        <Image src="/images/services-bg.png" alt="" fill className="object-cover opacity-55" />
       </div>
       <div className="relative z-10">{children}</div>
     </div>
@@ -260,12 +259,21 @@ export default function CaribbeanV8Page() {
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 18%, transparent 62%, #26272a 100%)' }} />
         </div>
 
-        {/* ══ CARIBBEAN ISLANDS — rectangles photos ══ */}
+        {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 3 centré ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
-              {caribbeanIslands.map((island, i) => <DestCard key={i} {...island} />)}
+            {/* Ligne 1 : 4 cartes */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
+              {caribbeanIslands.slice(0, 4).map((island, i) => <DestCard key={i} {...island} />)}
+            </div>
+            {/* Ligne 2 : 3 cartes centrées */}
+            <div className="flex justify-center gap-px bg-white/10">
+              {caribbeanIslands.slice(4).map((island, i) => (
+                <div key={i} className="w-1/2 md:w-1/4">
+                  <DestCard {...island} />
+                </div>
+              ))}
             </div>
           </div>
         </CloudSection>
@@ -274,10 +282,12 @@ export default function CaribbeanV8Page() {
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Archipelagos" title="Destinations by Region" sub="Seven groups — over 700 islands" />
-            {/* Grille 1 col mobile / 3 col desktop */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-0">
+            {/* Grille 1 col mobile / 3 col desktop — 3+3+1 centré */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
               {islandGroups.map((group, i) => (
-                <IslandGroup key={group.id} group={group} defaultOpen={i < 3} />
+                <div key={group.id} className={i === islandGroups.length - 1 ? 'md:col-start-2' : ''}>
+                  <IslandGroup group={group} defaultOpen={i < 3} />
+                </div>
               ))}
             </div>
           </div>
