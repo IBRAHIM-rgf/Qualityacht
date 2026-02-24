@@ -111,7 +111,7 @@ function CloudSection({ children, className = '' }) {
   return (
     <div className={`relative ${className}`}>
       <div className="absolute inset-0 z-0">
-        <Image src="/images/nuagesAncien.png" alt="" fill className="object-cover opacity-50" />
+        <Image src="/images/nuagesAncien.png" alt="" fill className="object-cover opacity-70" />
       </div>
       <div className="relative z-10">{children}</div>
     </div>
