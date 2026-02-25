@@ -70,7 +70,7 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
       {/* ══ HERO ══ */}
       <div className="relative h-[60vh] md:h-[75vh]">
         <Image
-          src="/images/destinations/destnation-feature-caribbean.webp"
+          src="/images/destinations/greater antillesNB.jpg"
           alt="Greater Antilles"
           fill
           priority

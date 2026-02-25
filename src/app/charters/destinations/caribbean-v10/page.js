@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 // ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
 const caribbeanIslands = [
-  { name: 'Greater Antilles',   image: '/images/destinations/destnation-feature-caribbean.webp',   href: '/charters/destinations/greater-antilles' },
+  { name: 'Greater Antilles',   image: '/images/destinations/gretar antilles.jpg',                  href: '/charters/destinations/greater-antilles' },
   { name: 'Leeward Islands',    image: '/images/destinations/Leeward Islands.jpg',                 href: '/yachts?destination=leeward-islands' },
   { name: 'Leeward Antilles',   image: '/images/destinations/The Leeward Antilles.jpg',          href: '/yachts?destination=leeward-antilles' },
   { name: 'Windward Islands',   image: '/images/destinations/the Windward Islands.jpg',            href: '/yachts?destination=windward-islands' },
