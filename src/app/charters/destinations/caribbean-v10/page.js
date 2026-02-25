@@ -191,7 +191,7 @@ function CircleCard({ name, image, nameBelow = false }) {
         style={{ borderColor: lit ? '#c2622a' : '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'border-color 0.3s, transform 0.3s' }}>
         <div className={`relative ${size} rounded-full overflow-hidden`}>
           <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
-          <div className="absolute inset-0" style={{ background: lit ? 'linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.6))' : 'linear-gradient(to bottom, rgba(192,192,192,0.15) 0%, rgba(192,192,192,0.35) 50%, rgba(192,192,192,0.55) 100%)' }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
           {!nameBelow && (
             <div className="absolute inset-0 flex items-end justify-center pb-3 px-1">
               <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-white">{name}</h3>
@@ -425,7 +425,7 @@ export default function CaribbeanV10Page() {
               Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.
             </p>
             <a href="/charters"
-              style={{ color: '#c2622a', borderColor: '#C0C0C0' }}
+              style={{ color: '#c2622a', backgroundColor: '#C0C0C0', borderColor: '#C0C0C0' }}
               className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border rounded-full hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-all duration-300">
               Explore Yachts
             </a>
