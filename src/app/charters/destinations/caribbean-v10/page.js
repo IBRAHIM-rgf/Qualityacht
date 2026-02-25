@@ -169,41 +169,40 @@ function BandeauPhoto({ src, position = 'center' }) {
 }
 
 // ── Cercle ─────────────────────────────────────────────────────────────────────
-function CircleCard({ name, image, href, nameBelow = false }) {
+function CircleCard({ name, image, nameBelow = false }) {
   const [lit, setLit] = useState(false);
   const timerRef = useRef(null);
   function activate() { clearTimeout(timerRef.current); setLit(true); }
   function deactivate() { timerRef.current = setTimeout(() => setLit(false), 1500); }
-  function handleClick(e) {
-    e.preventDefault(); clearTimeout(timerRef.current); setLit(true);
-    setTimeout(() => { window.location.href = href; }, 900);
-  }
   // Taille : plus grande pour les nouvelles destinations (nameBelow)
   const size = nameBelow
     ? 'w-[130px] h-[130px] md:w-[155px] md:h-[155px]'
     : 'w-[110px] h-[110px] md:w-[130px] md:h-[130px]';
   const wrapper = nameBelow ? '175px' : '150px';
   return (
-    <a href={href} onClick={handleClick} onMouseEnter={activate} onMouseLeave={deactivate}
+    <div
+      onClick={activate} onMouseEnter={activate} onMouseLeave={deactivate}
       onTouchStart={activate} onTouchEnd={deactivate}
-      className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2 px-2"
+      className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2 px-2 py-1"
       style={{ width: wrapper }}>
       {/* border séparé de overflow-hidden pour ne pas être coupé */}
-      <div className={`rounded-full border-4 transition-all duration-300 p-0.5 ${lit ? 'border-white/40 scale-105' : 'border-[#COCOCO]'}`} style={!lit ? { borderColor: '#C0C0C0' } : {}}>
+      <div
+        className="rounded-full border-4 transition-all duration-300 p-0.5"
+        style={{ borderColor: lit ? '#c2622a' : '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'border-color 0.3s, transform 0.3s' }}>
         <div className={`relative ${size} rounded-full overflow-hidden`}>
-        <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
-        {!nameBelow && (
-          <div className="absolute inset-0 flex items-end justify-center pb-3 px-1">
-            <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-white">{name}</h3>
-          </div>
-        )}
+          <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
+          {!nameBelow && (
+            <div className="absolute inset-0 flex items-end justify-center pb-3 px-1">
+              <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-white">{name}</h3>
+            </div>
+          )}
         </div>
       </div>
       {nameBelow && (
         <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-[#acb0cd] px-1">{name}</h3>
       )}
-    </a>
+    </div>
   );
 }
 
@@ -406,7 +405,7 @@ export default function CaribbeanV10Page() {
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Anchorages & Marinas" title="Popular Destinations" sub="The most exclusive marinas and anchorages in the Caribbean" />
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pt-2 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
               {popularDestinations.map((dest, i) => <CircleCard key={i} {...dest} />)}
             </div>
           </div>
