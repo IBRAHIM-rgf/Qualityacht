@@ -191,7 +191,7 @@ function CircleCard({ name, image, nameBelow = false }) {
         style={{ borderColor: lit ? '#c2622a' : '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'border-color 0.3s, transform 0.3s' }}>
         <div className={`relative ${size} rounded-full overflow-hidden`}>
           <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
+          <div className="absolute inset-0" style={{ background: lit ? 'linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.6))' : 'linear-gradient(to bottom, rgba(192,192,192,0.15) 0%, rgba(192,192,192,0.35) 50%, rgba(192,192,192,0.55) 100%)' }} />
           {!nameBelow && (
             <div className="absolute inset-0 flex items-end justify-center pb-3 px-1">
               <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-white">{name}</h3>
@@ -416,7 +416,7 @@ export default function CaribbeanV10Page() {
           <Image src="/images/destinations/Caraibes_charters.png" alt="" fill className="object-cover brightness-50" />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 30%, transparent 55%, #26272a 100%)' }} />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 md:px-6">
-            <p className="text-[#c2622a] text-[10px] md:text-xs uppercase tracking-[0.3em] mb-3 md:mb-4">Ready to Sail</p>
+            <p className="text-[10px] md:text-sm uppercase tracking-[0.3em] mb-3 md:mb-4" style={{ color: '#C0C0C0' }}>Ready to Sail</p>
             <h2 className="trajan-regular text-xl md:text-5xl text-[#acb0cd] uppercase tracking-[0.08em] md:tracking-[0.12em] mb-3 md:mb-4 max-w-xs md:max-w-xl mx-auto leading-tight">
               Plan Your Caribbean Charter
             </h2>
@@ -425,8 +425,8 @@ export default function CaribbeanV10Page() {
               Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.
             </p>
             <a href="/charters"
-              style={{ color: '#acb0cd', borderColor: '#c2622a' }}
-              className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border rounded-full hover:bg-[#c2622a] hover:text-white transition-all duration-300">
+              style={{ color: '#c2622a', borderColor: '#C0C0C0' }}
+              className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border rounded-full hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-all duration-300">
               Explore Yachts
             </a>
           </div>
