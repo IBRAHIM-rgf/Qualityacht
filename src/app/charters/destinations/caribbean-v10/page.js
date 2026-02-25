@@ -276,13 +276,16 @@ function CloudSection({ children, className = '', bg = '/images/services-bg.png'
   );
 }
 
-function RevealBlock({ label, title, sub }) {
+function RevealBlock({ label, title, sub, useTitleLine = false }) {
   const ref = useReveal();
   return (
     <div ref={ref} className="text-center mb-10 md:mb-14 reveal-up">
       <p className="text-[#c2622a] text-xs md:text-sm uppercase tracking-[0.3em] mb-3 font-light">{label}</p>
       <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] md:tracking-[0.12em] text-[#acb0cd] mb-2">{title}</h2>
-      <BurntLine />
+      {useTitleLine
+        ? <div className="relative w-32 h-7 mx-auto my-4 md:my-6"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
+        : <BurntLine />
+      }
       {sub && <p className="text-[#acb0cd]/50 text-sm md:text-base uppercase tracking-[0.1em] px-4">{sub}</p>}
     </div>
   );
@@ -437,6 +440,7 @@ export default function CaribbeanV10Page() {
               label="Frequently Asked Questions"
               title="Your Luxury Yacht Charter, Explained"
               sub=""
+              useTitleLine
             />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
               {faqItems.map((item, i) => (
