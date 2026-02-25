@@ -189,7 +189,7 @@ function CircleCard({ name, image, href, nameBelow = false }) {
       className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2 px-2"
       style={{ width: wrapper }}>
       {/* border séparé de overflow-hidden pour ne pas être coupé */}
-      <div className={`rounded-full border-4 transition-all duration-300 p-0.5 ${lit ? 'border-white/40 scale-105' : 'border-white/20'}`}>
+      <div className={`rounded-full border-4 transition-all duration-300 p-0.5 ${lit ? 'border-white/40 scale-105' : 'border-[#COCOCO]'}`} style={!lit ? { borderColor: '#C0C0C0' } : {}}>
         <div className={`relative ${size} rounded-full overflow-hidden`}>
         <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
