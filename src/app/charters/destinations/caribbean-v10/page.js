@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 const caribbeanIslands = [
   { name: 'Greater Antilles',   image: '/images/destinations/destnation-feature-caribbean.webp',   href: '/yachts?destination=greater-antilles' },
   { name: 'Leeward Islands',    image: '/images/destinations/Leeward Islands.jpg',                 href: '/yachts?destination=leeward-islands' },
-  { name: 'Leeward Antilles',   image: '/images/destinations/animals/caraibes.jpg',                href: '/yachts?destination=leeward-antilles' },
+  { name: 'Leeward Antilles',   image: '/images/destinations/The Leeward Antilles.jpg',          href: '/yachts?destination=leeward-antilles' },
   { name: 'Windward Islands',   image: '/images/destinations/the Windward Islands.jpg',            href: '/yachts?destination=windward-islands' },
   { name: 'Turks & Caicos',     image: '/images/destinations/Turks and Caicos.jpg',                href: '/yachts?destination=turks-caicos' },
   { name: 'Trinidad & Tobago',  image: '/images/destinations/Trinidad and Tobago.jpg',             href: '/yachts?destination=trinidad-tobago' },
