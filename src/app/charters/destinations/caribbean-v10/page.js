@@ -244,9 +244,6 @@ function FaqItem({ q, a }) {
           <span className="trajan-regular text-[#acb0cd] text-xs md:text-sm uppercase tracking-[0.15em] group-hover:text-[#c2622a] transition-colors duration-300 leading-snug block">
             {q}
           </span>
-          <div className="relative w-14 h-3 mt-2">
-            <Image src="/images/title-line.png" alt="" fill className="object-contain object-left" />
-          </div>
         </div>
         <span className={`text-[#B87333] transition-transform duration-300 text-xl leading-none mt-1 shrink-0 ${open ? 'rotate-45' : ''}`}>+</span>
       </button>
