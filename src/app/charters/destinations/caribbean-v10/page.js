@@ -182,13 +182,15 @@ function CircleCard({ name, image, href, nameBelow = false }) {
   const size = nameBelow
     ? 'w-[130px] h-[130px] md:w-[155px] md:h-[155px]'
     : 'w-[110px] h-[110px] md:w-[130px] md:h-[130px]';
-  const wrapper = nameBelow ? '155px' : '130px';
+  const wrapper = nameBelow ? '175px' : '150px';
   return (
     <a href={href} onClick={handleClick} onMouseEnter={activate} onMouseLeave={deactivate}
       onTouchStart={activate} onTouchEnd={deactivate}
-      className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2"
+      className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2 px-2"
       style={{ width: wrapper }}>
-      <div className={`relative ${size} rounded-full overflow-hidden border-4 transition-all duration-300 ${lit ? 'border-white/40 scale-105' : 'border-white/20'}`}>
+      {/* border séparé de overflow-hidden pour ne pas être coupé */}
+      <div className={`rounded-full border-4 transition-all duration-300 p-0.5 ${lit ? 'border-white/40 scale-105' : 'border-white/20'}`}>
+        <div className={`relative ${size} rounded-full overflow-hidden`}>
         <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
         {!nameBelow && (
@@ -196,6 +198,7 @@ function CircleCard({ name, image, href, nameBelow = false }) {
             <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-white">{name}</h3>
           </div>
         )}
+        </div>
       </div>
       {nameBelow && (
         <h3 className="trajan-regular text-[9px] md:text-[10px] font-bold text-center uppercase tracking-wide leading-tight text-[#acb0cd] px-1">{name}</h3>
