@@ -156,7 +156,7 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
           <button
             onClick={() => setShowMore(v => !v)}
             className="inline-flex items-center px-6 py-2 border text-[10px] uppercase tracking-[0.3em] transition-all duration-300 hover:opacity-80 cursor-pointer rounded-full"
-            style={{ color: '#c2622a', borderColor: '#C0C0C0', backgroundColor: '#C0C0C0' }}
+            style={{ color: '#c2622a', borderColor: '#C0C0C0', backgroundColor: '#26272a' }}
           >
             {showMore ? 'See less' : 'See more'}
           </button>
