@@ -241,7 +241,7 @@ function FaqItem({ q, a }) {
       <button onClick={() => setOpen(o => !o)}
         className="w-full flex items-start justify-between py-5 text-left group cursor-pointer gap-3">
         <div className="flex-1">
-          <span className="trajan-regular text-[#acb0cd] text-xs md:text-sm uppercase tracking-[0.15em] group-hover:text-[#c2622a] transition-colors duration-300 leading-snug block">
+          <span className="trajan-regular text-[#acb0cd] text-xs md:text-sm uppercase tracking-[0.15em] group-hover:text-[#c2622a] transition-colors duration-300 leading-snug block text-center md:text-left">
             {q}
           </span>
         </div>
