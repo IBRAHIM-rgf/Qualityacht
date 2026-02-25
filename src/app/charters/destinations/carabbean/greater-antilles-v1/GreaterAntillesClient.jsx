@@ -155,10 +155,10 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
           {/* Bouton See More / See Less */}
           <button
             onClick={() => setShowMore(v => !v)}
-            className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] transition-colors duration-300 hover:opacity-80 cursor-pointer"
-            style={{ color: '#c2622a' }}
+            className="inline-flex items-center px-6 py-2 border text-[10px] uppercase tracking-[0.3em] transition-all duration-300 hover:opacity-80 cursor-pointer"
+            style={{ color: '#c2622a', borderColor: '#c2622a' }}
           >
-            <span>{showMore ? '▲ See less' : '▼ See more'}</span>
+            {showMore ? 'See less' : 'See more'}
           </button>
         </div>
       </div>
@@ -181,7 +181,7 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
             <h2 className="trajan-regular text-xl md:text-3xl text-[#acb0cd] uppercase tracking-[0.1em]">
               Yachts in the Caribbean
             </h2>
-            <p className="text-xs text-[#acb0cd]/60 mt-3">
+            <p className="text-base md:text-xl mt-3 font-semibold" style={{ color: '#c2622a' }}>
               {filteredYachts.length} yacht{filteredYachts.length !== 1 ? 's' : ''} available
             </p>
           </div>
