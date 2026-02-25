@@ -214,7 +214,7 @@ function IslandGroup({ group, defaultOpen }) {
         <span className="trajan-regular text-[#acb0cd] text-xs md:text-sm uppercase tracking-[0.2em] group-hover:text-[#c2622a] transition-colors duration-300 text-center w-full">
           {group.name}
         </span>
-        <div className="relative w-16 h-4 my-1">
+        <div className="relative w-24 h-6 my-1">
           <Image src="/images/title-line.png" alt="" fill className="object-contain" />
         </div>
         <span className={`text-[#c2622a] transition-transform duration-300 text-2xl leading-none ${open ? 'rotate-180' : ''}`}>▾</span>
