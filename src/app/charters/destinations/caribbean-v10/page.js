@@ -188,7 +188,7 @@ function CircleCard({ name, image, href, nameBelow = false }) {
       onTouchStart={activate} onTouchEnd={deactivate}
       className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2"
       style={{ width: wrapper }}>
-      <div className={`relative ${size} rounded-full overflow-hidden border-2 transition-all duration-300 ${lit ? 'border-white/40 scale-105' : 'border-white/20'}`}>
+      <div className={`relative ${size} rounded-full overflow-hidden border-4 transition-all duration-300 ${lit ? 'border-white/40 scale-105' : 'border-white/20'}`}>
         <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
         {!nameBelow && (
