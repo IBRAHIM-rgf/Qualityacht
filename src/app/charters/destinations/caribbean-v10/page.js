@@ -245,7 +245,7 @@ function FaqItem({ q, a }) {
             {q}
           </span>
         </div>
-        <span className={`text-[#B87333] transition-transform duration-300 text-xl leading-none mt-1 shrink-0 ${open ? 'rotate-45' : ''}`}>+</span>
+        <span className={`text-[#B87333] transition-transform duration-300 text-3xl leading-none mt-1 shrink-0 font-light ${open ? 'rotate-45' : ''}`}>+</span>
       </button>
       {open && (
         <div className="pb-5 px-1">
