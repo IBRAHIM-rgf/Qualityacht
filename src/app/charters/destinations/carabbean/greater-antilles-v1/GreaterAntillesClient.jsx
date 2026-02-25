@@ -81,14 +81,10 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
           style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.5) 0%, transparent 30%, transparent 55%, rgba(38,39,42,0.95) 100%)' }}
         />
         <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] mb-3" style={{ color: '#C0C0C0' }}>
-            Caribbean · Charter Destinations
-          </p>
           <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
             Greater Antilles
           </h1>
-          <BurntLine />
-          <p className="text-[#acb0cd] text-xs md:text-base uppercase tracking-[0.2em] md:tracking-[0.3em] font-light text-center">
+          <p className="text-[#acb0cd] text-xs md:text-base uppercase tracking-[0.2em] md:tracking-[0.3em] font-light text-center mt-3">
             Cuba &nbsp;·&nbsp; Puerto Rico &nbsp;·&nbsp; Jamaica &nbsp;·&nbsp; Cayman Islands
           </p>
         </div>
@@ -185,8 +181,7 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
             <h2 className="trajan-regular text-xl md:text-3xl text-[#acb0cd] uppercase tracking-[0.1em]">
               Yachts in the Caribbean
             </h2>
-            <BurntLine />
-            <p className="text-xs text-[#acb0cd]/60 mt-1">
+            <p className="text-xs text-[#acb0cd]/60 mt-3">
               {filteredYachts.length} yacht{filteredYachts.length !== 1 ? 's' : ''} available
             </p>
           </div>
