@@ -96,27 +96,25 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
         </div>
       </div>
 
-      {/* ══ DESCRIPTION ══ */}
-      <div className="relative">
+      {/* ══ DESCRIPTION + FILTRES + YACHTS — même fond ══ */}
       <div
-        className="py-20 md:py-28 px-5 md:px-20"
+        className="min-h-screen pb-24 md:pb-8 px-4"
         style={{
           backgroundImage: 'url(/images/nuagesAncien.png)',
           backgroundSize: 'contain',
           backgroundPosition: 'center',
-          backgroundColor: '#26272a',
+          backgroundColor: '#2e2f32',
         }}
       >
-        <div className="max-w-3xl mx-auto text-center leading-relaxed space-y-6">
+        {/* Description */}
+        <div className="max-w-3xl mx-auto text-center leading-relaxed space-y-6 py-16 md:py-24">
 
-          {/* Titre principal */}
           <h2 className="trajan-regular text-lg md:text-2xl text-[#acb0cd] leading-snug">
             The Ultimate Yacht Charter Guide to the{' '}
             <span style={{ color: '#d39478' }}>Greater Antilles</span>:{' '}
             Where Culture Meets Adventure
           </h2>
 
-          {/* Paragraphe 1 — visible jusqu'à "destination" */}
           <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
             The <span style={{ color: '#d39478' }}>Greater Antilles</span>—home to{' '}
             <span style={{ color: '#d39478' }}>Cuba, Puerto Rico, Jamaica</span>, and the{' '}
@@ -124,7 +122,6 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
             <span style={{ color: '#d39478' }}>destination</span>.
           </p>
 
-          {/* Partie cachée — à partir de "This archipelago..." */}
           {showMore && (
             <div className="space-y-6">
               <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
@@ -162,28 +159,14 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
             </div>
           )}
 
-          {/* Bouton See More / See Less */}
           <button
             onClick={() => setShowMore(v => !v)}
             className="inline-flex items-center px-6 py-2 border text-[10px] uppercase tracking-[0.3em] transition-all duration-300 hover:opacity-80 cursor-pointer rounded-full"
-            style={{ color: '#c2622a', borderColor: '#C0C0C0', backgroundColor: '#26272a' }}
+            style={{ color: '#c2622a', borderColor: '#C0C0C0', backgroundColor: '#2e2f32' }}
           >
             {showMore ? 'See less' : 'See more'}
           </button>
         </div>
-      </div>
-      </div>{/* fin relative description */}
-
-      {/* ══ FILTRES + YACHTS ══ */}
-      <div
-        className="min-h-screen pb-24 md:pb-8 px-4"
-        style={{
-          backgroundImage: 'url(/images/nuagesAncien.png)',
-          backgroundSize: 'contain',
-          backgroundPosition: 'center',
-          backgroundColor: '#2e2f32',
-        }}
-      >
         <div className="max-w-7xl mx-auto pt-10">
           <div className="mb-8 text-center">
             <p className="text-[10px] uppercase tracking-[0.3em] mb-2" style={{ color: '#C0C0C0' }}>
