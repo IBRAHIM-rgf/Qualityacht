@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import YachtFiltersCaribbean from './YachtFiltersCaribbean';
 import YachtList from '@/components/YachtList';
 
@@ -19,10 +19,6 @@ function BurntLine() {
 // ── Page client ─────────────────────────────────────────────────────────────
 export default function GreaterAntillesClient({ initialData, totalYachts }) {
   const [showMore, setShowMore] = useState(false);
-  const [heroLit, setHeroLit] = useState(false);
-  const heroTimerRef = useRef(null);
-  function heroActivate() { clearTimeout(heroTimerRef.current); setHeroLit(true); }
-  function heroDeactivate() { heroTimerRef.current = setTimeout(() => setHeroLit(false), 4000); }
 
   const [filters, setFilters] = useState({
     type: '',
@@ -72,15 +68,13 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
       {/* ══ HERO ══ */}
-      <div className="relative h-[60vh] md:h-[75vh] cursor-pointer"
-        onMouseEnter={heroActivate} onMouseLeave={heroDeactivate}
-        onTouchStart={heroActivate} onTouchEnd={heroDeactivate}>
+      <div className="relative h-[60vh] md:h-[75vh]">
         <Image
           src="/images/destinations/greater antillesNB.jpg"
           alt="Greater Antilles"
           fill
           priority
-          className={`object-cover object-center transition-all duration-1000 ${heroLit ? 'brightness-75 grayscale-0' : 'brightness-40 grayscale'}`}
+          className="object-cover object-center"
         />
         <div
           className="absolute inset-0"
