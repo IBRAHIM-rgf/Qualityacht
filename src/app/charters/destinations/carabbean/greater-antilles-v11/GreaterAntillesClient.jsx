@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import YachtFiltersCaribbean from './YachtFiltersCaribbean';
 import YachtList from '@/components/YachtList';
 
@@ -19,6 +19,10 @@ function BurntLine() {
 // ── Page client ─────────────────────────────────────────────────────────────
 export default function GreaterAntillesClient({ initialData, totalYachts }) {
   const [showMore, setShowMore] = useState(false);
+  const [heroLit, setHeroLit] = useState(false);
+  const heroTimerRef = useRef(null);
+  function heroActivate() { clearTimeout(heroTimerRef.current); setHeroLit(true); }
+  function heroDeactivate() { heroTimerRef.current = setTimeout(() => setHeroLit(false), 4000); }
 
   const [filters, setFilters] = useState({
     type: '',
@@ -68,15 +72,16 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
       {/* ══ HERO ══ */}
-      <div className="relative h-[60vh] md:h-[75vh]">
+      <div className="relative h-[60vh] md:h-[75vh] cursor-pointer"
+        onMouseEnter={heroActivate} onMouseLeave={heroDeactivate}
+        onTouchStart={heroActivate} onTouchEnd={heroDeactivate}>
         <Image
           src="/images/destinations/greater antillesNB.jpg"
           alt="Greater Antilles"
           fill
           priority
-          className="object-cover object-center"
+          className={`object-cover object-center transition-all duration-1000 ${heroLit ? 'brightness-75 grayscale-0' : 'brightness-40 grayscale'}`}
         />
-        {/* Overlay général + fondu total en bas vers #26272a */}
         <div
           className="absolute inset-0"
           style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }}
@@ -190,17 +195,6 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
             <p className="text-xl md:text-3xl mt-3" style={{ color: '#B03E00' }}>
               {filteredYachts.length} yacht{filteredYachts.length !== 1 ? 's' : ''} available
             </p>
-          </div>
-
-          {/* ══ BANDEAU photo après le compteur ══ */}
-          <div className="relative h-[35vh] md:h-[45vh] overflow-hidden rounded-2xl mb-8">
-            <Image
-              src="/images/destinations/greater antillesNB.jpg"
-              alt="Greater Antilles"
-              fill
-              className="object-cover object-center"
-            />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #2e2f32 0%, rgba(46,47,50,0.3) 20%, transparent 40%, transparent 60%, rgba(46,47,50,0.3) 80%, #2e2f32 100%)' }} />
           </div>
 
           <YachtFiltersCaribbean filters={filters} onChange={setFilters} />
