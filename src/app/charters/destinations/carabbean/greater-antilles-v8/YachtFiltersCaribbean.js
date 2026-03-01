@@ -213,7 +213,6 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-gray-300 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:bg-gray-300 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
                         style={{ zIndex: 5 }} />
                     </div>
-                    <span className="text-xs text-gray-400">{lengthRange[0]}{unitPreference === 'meters' ? 'm' : 'ft'} - {lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}</span>
                   </div>
                 );
               })()}
@@ -312,10 +311,6 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                         onChange={e => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 10))}
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-gray-300 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:bg-gray-300 [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
                         style={{ zIndex: 5 }} />
-                    </div>
-                    <div className="flex justify-between text-sm text-gray-400">
-                      <span>{lengthRange[0]}{unitPreference === 'meters' ? 'm' : 'ft'}</span>
-                      <span style={{ color: '#B03E00' }}>{lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}</span>
                     </div>
                     <div className="flex gap-3 mt-2">
                       {['meters', 'feet'].map(u => (
