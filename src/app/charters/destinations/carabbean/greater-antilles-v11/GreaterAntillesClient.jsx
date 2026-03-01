@@ -84,8 +84,15 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
           <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
             Greater Antilles
           </h1>
-          <p className="text-[#acb0cd] text-xs md:text-base uppercase tracking-[0.2em] md:tracking-[0.3em] font-light text-center mt-3">
-            Cuba &nbsp;·&nbsp; Puerto Rico &nbsp;·&nbsp; Jamaica &nbsp;·&nbsp; Cayman Islands
+          <p className="text-[#acb0cd] text-xs md:text-base uppercase tracking-[0.2em] md:tracking-[0.3em] font-light text-center mt-3 flex items-center justify-center flex-wrap gap-2">
+            <span>Cuba</span>
+            <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
+            <span>Puerto Rico</span>
+            <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
+            <span>Jamaica</span>
+            <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
+            <span>Cayman Islands</span>
+            <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
           </p>
         </div>
       </div>
