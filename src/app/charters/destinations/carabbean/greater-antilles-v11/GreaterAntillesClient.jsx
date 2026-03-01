@@ -86,14 +86,17 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
           </h1>
           <div className="text-[#acb0cd] text-xs md:text-base uppercase tracking-[0.2em] md:tracking-[0.3em] font-light text-center mt-3 flex flex-col items-center gap-1">
             <div className="flex items-center justify-center gap-2">
+              <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
               <span>Cuba</span>
               <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
               <span>Puerto Rico</span>
+              <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
             </div>
             <div className="flex items-center justify-center gap-2">
               <span>Jamaica</span>
               <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
               <span>Cayman Islands</span>
+              <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
             </div>
           </div>
         </div>
