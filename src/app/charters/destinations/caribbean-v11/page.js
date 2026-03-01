@@ -425,7 +425,7 @@ export default function CaribbeanV11Page() {
               Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.
             </p>
             <a href="/charters"
-              style={{ color: '#c2622a', backgroundColor: '#C0C0C0', borderColor: '#C0C0C0' }}
+              style={{ color: '#c2622a', backgroundColor: '#26272a', borderColor: '#C0C0C0' }}
               className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border rounded-full hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-all duration-300">
               Explore Yachts
             </a>
