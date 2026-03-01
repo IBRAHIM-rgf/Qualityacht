@@ -106,7 +106,7 @@ export default function YachtCardV2({ yacht }) {
             <span className="flex items-center gap-1"><BedDouble className="w-4 h-4 text-[#B03E00]" />{yacht.cabins} cabins</span>
           )}
           {yacht.crew && (
-            <span className="flex items-center gap-1"><Image src="/casquette-capitaine.png" alt="crew" width={16} height={16} style={{ filter: 'brightness(0) saturate(100%) invert(28%) sepia(80%) saturate(800%) hue-rotate(10deg) brightness(90%)' }} />{yacht.crew} crew</span>
+            <span className="flex items-center gap-1"><Image src="/casquette-capitaine.png" alt="crew" width={16} height={16} style={{ filter: 'brightness(0) saturate(100%) invert(20%) sepia(90%) saturate(700%) hue-rotate(5deg) brightness(85%)' }} />{yacht.crew} crew</span>
           )}
           {yacht.location && (
             <span className="flex items-center gap-1"><Map className="w-4 h-4 text-[#B03E00]" />{yacht.location}</span>

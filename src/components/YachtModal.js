@@ -135,7 +135,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             )}
             {yacht.crew && (
               <div className="text-center">
-                <Image src="/casquette-capitaine.png" alt="crew" width={24} height={24} className="mx-auto mb-2" style={{ filter: 'brightness(0) saturate(100%) invert(28%) sepia(80%) saturate(800%) hue-rotate(10deg) brightness(90%)' }} />
+                <Image src="/casquette-capitaine.png" alt="crew" width={24} height={24} className="mx-auto mb-2" style={{ filter: 'brightness(0) saturate(100%) invert(20%) sepia(90%) saturate(700%) hue-rotate(5deg) brightness(85%)' }} />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.crew}</p>
                 <p className="text-sm text-[#acb0cd]">Crew</p>
               </div>
