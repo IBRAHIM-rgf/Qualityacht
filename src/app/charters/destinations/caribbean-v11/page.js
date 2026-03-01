@@ -313,7 +313,7 @@ export default function CaribbeanV11Page() {
         {/* ══ HERO ══ */}
         <div className="relative h-screen">
           <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.6) 0%, transparent 25%, transparent 70%, rgba(38,39,42,0.8) 100%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
           <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
             <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
               <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
