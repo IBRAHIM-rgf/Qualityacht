@@ -126,7 +126,7 @@ export default function PrivatJetPage() {
       {/* ══ HERO ══ */}
       <div className="relative h-[60vh] md:h-[75vh]">
         <Image
-          src="/images/airport/photo-1762818084167-5124352f667b.jpeg"
+          src="/images/private_jet/jet_hero.jpeg"
           alt="Private Jet"
           fill
           priority
