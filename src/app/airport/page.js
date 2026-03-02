@@ -3,11 +3,11 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-// ── Données aéroports par région ───────────────────────────────────────────────
+// ── Données aéroports par destination ─────────────────────────────────────────
 const regions = [
   {
-    name: 'Greater Antilles',
-    image: '/images/destinations/gretar antilles.jpg',
+    name: 'Caribbean',
+    image: '/images/destinations/destnation-feature-caribbean.webp',
     groups: [
       {
         island: 'Cuba',
@@ -23,7 +23,6 @@ const regions = [
           'Punta Cana International Airport (PUJ)',
           'Las Américas International Airport (SDQ)',
           'La Romana International Airport (LRM)',
-          'Casa de Campo International Airport (LRM)',
         ],
       },
       {
@@ -49,69 +48,128 @@ const regions = [
           'Mercedita Airport (PSE)',
         ],
       },
+      {
+        island: 'Anguilla',
+        airports: ['Clayton J. Lloyd International Airport (AXA)'],
+      },
+      {
+        island: 'Antigua & Barbuda',
+        airports: ['V.C. Bird International Airport (ANU)', 'Barbuda Codrington Airport (BBQ)'],
+      },
+      {
+        island: 'Saint-Martin / Sint Maarten',
+        airports: ['Princess Juliana International Airport (SXM)'],
+      },
+      {
+        island: 'Saint-Barthélemy',
+        airports: ['Gustavia Airport (SBH)'],
+      },
+      {
+        island: 'Saba',
+        airports: ['Juancho E. Yrausquin Airport (SAB)'],
+      },
+      {
+        island: 'Saint-Eustache',
+        airports: ['F.D. Roosevelt Airport (EUX)'],
+      },
+      {
+        island: 'Saint-Kitts & Nevis',
+        airports: ['Robert L. Bradshaw International Airport (SKB)', 'Vance W. Amory International Airport (NEV)'],
+      },
+      {
+        island: 'Montserrat',
+        airports: ['John A. Osborne Airport (MNI)'],
+      },
+      {
+        island: 'Guadeloupe',
+        airports: ['Pointe-à-Pitre International Airport (PTP)'],
+      },
+      {
+        island: 'Aruba',
+        airports: ['Queen Beatrix International Airport (AUA)'],
+      },
+      {
+        island: 'Bonaire',
+        airports: ['Flamingo International Airport (BON)'],
+      },
+      {
+        island: 'Curaçao',
+        airports: ['Curaçao International Airport (CUR)'],
+      },
+      {
+        island: 'Dominica',
+        airports: ['Douglas-Charles Airport (DOM)', 'Canefield Airport (DCF)'],
+      },
+      {
+        island: 'Martinique',
+        airports: ['Martinique Aimé Césaire International Airport (FDF)'],
+      },
+      {
+        island: 'Saint Lucia',
+        airports: ['Hewanorra International Airport (UVF)', 'George F. L. Charles Airport (SLU)'],
+      },
+      {
+        island: 'Saint Vincent & the Grenadines',
+        airports: ['Argyle International Airport (SVD)', 'Mustique Airport (MQS)', 'Canouan Airport (CIW)'],
+      },
+      {
+        island: 'Grenada',
+        airports: ['Maurice Bishop International Airport (GND)', 'Lauriston Airport (CRU) — Carriacou'],
+      },
+      {
+        island: 'Barbados',
+        airports: ['Grantley Adams International Airport (BGI)'],
+      },
+      {
+        island: 'Turks & Caicos',
+        airports: ['Providenciales International Airport (PLS)', 'Grand Turk International Airport (GDT)'],
+      },
+      {
+        island: 'Trinidad & Tobago',
+        airports: ['Piarco International Airport (POS)', 'A.N.R. Robinson International Airport (TAB)'],
+      },
     ],
   },
   {
-    name: 'Leeward Islands',
-    image: '/images/destinations/Leeward Islands.jpg',
+    name: 'East Mediterranean',
+    image: '/images/destinations/destnation-feature-east-med.webp',
     groups: [
-      { island: 'Anguilla', airports: ['Clayton J. Lloyd International Airport (AXA)'] },
-      { island: 'Antigua & Barbuda', airports: ['V.C. Bird International Airport (ANU)', 'Barbuda Codrington Airport (BBQ)'] },
-      { island: 'Saint-Martin / Sint Maarten', airports: ['Princess Juliana International Airport (SXM)'] },
-      { island: 'Saint-Barthélemy', airports: ['Gustavia Airport (SBH)'] },
-      { island: 'Saba', airports: ['Juancho E. Yrausquin Airport (SAB)'] },
-      { island: 'Saint-Eustache', airports: ['F.D. Roosevelt Airport (EUX)'] },
-      { island: 'Saint-Kitts & Nevis', airports: ['Robert L. Bradshaw International Airport (SKB)', 'Vance W. Amory International Airport (NEV)'] },
-      { island: 'Montserrat', airports: ['John A. Osborne Airport (MNI)'] },
-      { island: 'Guadeloupe', airports: ['Pointe-à-Pitre International Airport (PTP)'] },
+      { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
-    name: 'Leeward Antilles',
-    image: '/images/destinations/The Leeward Antilles.jpg',
+    name: 'Indian Ocean',
+    image: '/images/destinations/destnation-feature-indian-ocean.webp',
     groups: [
-      { island: 'Aruba', airports: ['Queen Beatrix International Airport (AUA)'] },
-      { island: 'Bonaire', airports: ['Flamingo International Airport (BON)'] },
-      { island: 'Curaçao', airports: ['Curaçao International Airport (CUR)'] },
+      { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
-    name: 'Windward Islands',
-    image: '/images/destinations/the Windward Islands.jpg',
+    name: 'North America',
+    image: '/images/destinations/destnation-feature-north-america.webp',
     groups: [
-      { island: 'Dominica', airports: ['Douglas-Charles Airport (DOM)', 'Canefield Airport (DCF)'] },
-      { island: 'Martinique', airports: ['Martinique Aimé Césaire International Airport (FDF)'] },
-      { island: 'Saint Lucia', airports: ['Hewanorra International Airport (UVF)', 'George F. L. Charles Airport (SLU)'] },
-      { island: 'Saint Vincent & the Grenadines', airports: ['Argyle International Airport (SVD)', 'Mustique Airport (MQS)', 'Canouan Airport (CIW)'] },
-      { island: 'Grenada', airports: ['Maurice Bishop International Airport (GND)', 'Lauriston Airport (CRU) — Carriacou'] },
-      { island: 'Barbados', airports: ['Grantley Adams International Airport (BGI)'] },
+      { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
-    name: 'Turks & Caicos',
-    image: '/images/destinations/Turks and Caicos.jpg',
+    name: 'South East Asia',
+    image: '/images/destinations/destnation-feature-south-east-asia.webp',
     groups: [
-      { island: 'Turks & Caicos', airports: ['Providenciales International Airport (PLS)', 'Grand Turk International Airport (GDT)'] },
+      { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
-    name: 'Trinidad & Tobago',
-    image: '/images/destinations/Trinidad and Tobago.jpg',
+    name: 'South Pacific',
+    image: '/images/destinations/destnation-feature-south-pacific.webp',
     groups: [
-      { island: 'Trinidad & Tobago', airports: ['Piarco International Airport (POS)', 'A.N.R. Robinson International Airport (TAB)'] },
+      { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
-    name: 'Secondary Islands',
-    image: '/images/destinations/Cayman Islands.jpg',
+    name: 'West Mediterranean',
+    image: '/images/destinations/destnation-feature-west-med.webp',
     groups: [
-      { island: 'Barbuda', airports: ['Barbuda Codrington Airport (BBQ)'] },
-      { island: 'Carriacou (Grenada)', airports: ['Lauriston Airport (CRU)'] },
-      { island: 'Petite Martinique', airports: ['No airport — accessible by boat from Guadeloupe only'] },
-      { island: 'Redonda (Antigua)', airports: ['No airport'] },
-      { island: 'Aves Island (Venezuela)', airports: ['No airport'] },
-      { island: 'Navassa Island (USA)', airports: ['No airport'] },
-      { island: 'Sombrero Island (Anguilla)', airports: ['No airport'] },
+      { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
 ];
@@ -178,7 +236,7 @@ function AirportModal({ region, onClose }) {
         </button>
 
         {/* Titre */}
-        <p className="text-[10px] uppercase tracking-[0.3em] mb-1" style={{ color: '#C0C0C0' }}>Caribbean Airports</p>
+        <p className="text-[10px] uppercase tracking-[0.3em] mb-1" style={{ color: '#C0C0C0' }}>Airports</p>
         <h2 className="trajan-regular text-xl md:text-2xl text-[#acb0cd] uppercase tracking-[0.1em] mb-1">{region.name}</h2>
         <div className="w-8 h-px mb-6" style={{ backgroundColor: '#c2622a' }} />
 
@@ -240,9 +298,9 @@ export default function AirportPage() {
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
-            <p className="text-[10px] uppercase tracking-[0.3em] mb-2" style={{ color: '#C0C0C0' }}>Select a Region</p>
+            <p className="text-[10px] uppercase tracking-[0.3em] mb-2" style={{ color: '#C0C0C0' }}>Select a Destination</p>
             <h2 className="trajan-regular text-xl md:text-3xl text-[#acb0cd] uppercase tracking-[0.1em]">
-              Caribbean Airports by Region
+              Airports by Destination
             </h2>
             <div className="w-12 h-px mx-auto mt-4" style={{ backgroundColor: '#c2622a' }} />
           </div>
