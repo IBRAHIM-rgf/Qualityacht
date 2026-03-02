@@ -174,41 +174,25 @@ const regions = [
   },
 ];
 
-// ── Carte région ───────────────────────────────────────────────────────────────
+// ── Carte région (style ItemsGrid) ────────────────────────────────────────────
 function RegionCard({ region, onClick }) {
-  const [lit, setLit] = useState(false);
-  const timerRef = { current: null };
-
-  function activate() { clearTimeout(timerRef.current); setLit(true); }
-  function deactivate() { timerRef.current = setTimeout(() => setLit(false), 1500); }
-  function handleClick(e) {
-    e.preventDefault();
-    activate();
-    onClick(region);
-  }
-
   return (
     <div
-      onClick={handleClick}
-      onMouseEnter={activate}
-      onMouseLeave={deactivate}
-      onTouchStart={activate}
-      onTouchEnd={deactivate}
-      className="relative overflow-hidden cursor-pointer h-[220px] md:h-[280px]"
+      onClick={() => onClick(region)}
+      className="min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform cursor-pointer"
     >
-      <Image
-        src={region.image}
-        alt={region.name}
-        fill
-        className={`object-cover transition-all duration-700 ${lit ? 'brightness-90 grayscale-0 scale-105' : 'brightness-70 grayscale scale-100'}`}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-      <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-500 ${lit ? 'opacity-100' : 'opacity-0'}`} />
-      <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5">
-        <h3 className={`trajan-regular text-xs md:text-sm uppercase tracking-[0.15em] transition-colors duration-300 ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
-          {region.name}
-        </h3>
+      <div className="w-full relative mb-6 overflow-hidden h-48 rounded-xl">
+        <Image
+          src={region.image}
+          alt={region.name}
+          fill
+          className="object-cover rounded-xl"
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
       </div>
+      <h2 className="text-lg font-semibold text-[#acb0cd] mb-2 trajan-regular uppercase text-center break-words leading-tight w-full hyphens-auto hover:text-[#c2622a] transition-colors duration-300">
+        {region.name}
+      </h2>
     </div>
   );
 }
@@ -291,37 +275,27 @@ export default function AirportPage() {
         </div>
       </div>
 
-      {/* ══ GRILLE RÉGIONS ══ */}
-      <div
-        className="py-14 md:py-20 px-4 md:px-16"
-        style={{ backgroundImage: 'url(/images/nuagesAncien.png)', backgroundSize: 'contain', backgroundPosition: 'center', backgroundColor: '#2e2f32' }}
+      {/* ══ GRILLE DESTINATIONS ══ */}
+      <section
+        className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat py-24 px-4"
+        style={{ backgroundImage: "url('/images/services-bg.png')" }}
       >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-[10px] uppercase tracking-[0.3em] mb-2" style={{ color: '#C0C0C0' }}>Select a Destination</p>
-            <h2 className="trajan-regular text-xl md:text-3xl text-[#acb0cd] uppercase tracking-[0.1em]">
-              Airports by Destination
-            </h2>
-            <div className="w-12 h-px mx-auto mt-4" style={{ backgroundColor: '#c2622a' }} />
-          </div>
-
-          {/* Ligne 1 : 2 col mobile / 4 col desktop */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
-            {regions.slice(0, 4).map((region, i) => (
-              <RegionCard key={i} region={region} onClick={setSelectedRegion} />
-            ))}
-          </div>
-          {/* Ligne 2 : 2 col mobile / 3 centré desktop */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
-            {regions.slice(4, 6).map((region, i) => (
-              <RegionCard key={i} region={region} onClick={setSelectedRegion} />
-            ))}
-            <div className="col-span-2 md:col-span-1">
-              <RegionCard region={regions[6]} onClick={setSelectedRegion} />
-            </div>
-          </div>
+        <h2 className="text-3xl md:text-5xl font-bold text-white trajan-regular mb-4 text-center uppercase tracking-wide">
+          Airports
+        </h2>
+        <Image
+          src="/images/title-line.png"
+          alt=""
+          width={200}
+          height={10}
+          className="mx-auto mb-12"
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
+          {regions.map((region, i) => (
+            <RegionCard key={i} region={region} onClick={setSelectedRegion} />
+          ))}
         </div>
-      </div>
+      </section>
 
       {/* ══ MODAL ══ */}
       <AirportModal region={selectedRegion} onClose={() => setSelectedRegion(null)} />
