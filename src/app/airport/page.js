@@ -3,11 +3,114 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
+// ── Données communes Caribbean (airports) ─────────────────────────────────────
+const caribbeanGroups = [
+  { island: 'Cuba', airports: ['José Martí International Airport (HAV)', 'Juan Gualberto Gómez Airport (VRA)', 'Cayo Largo Airport (CYL)'] },
+  { island: 'Dominican Republic', airports: ['Punta Cana International Airport (PUJ)', 'Las Américas International Airport (SDQ)', 'La Romana International Airport (LRM)'] },
+  { island: 'Haiti', airports: ['Toussaint Louverture International Airport (PAP)', 'Cap-Haïtien International Airport (CAP)'] },
+  { island: 'Jamaica', airports: ['Sangster International Airport (MBJ)', 'Norman Manley International Airport (KIN)', 'Ian Fleming International Airport (OCJ)'] },
+  { island: 'Puerto Rico', airports: ['Luis Muñoz Marín International Airport (SJU)', 'Fernando Luis Ribas Dominicci Airport (SIG)', 'Mercedita Airport (PSE)'] },
+  { island: 'Anguilla', airports: ['Clayton J. Lloyd International Airport (AXA)'] },
+  { island: 'Antigua & Barbuda', airports: ['V.C. Bird International Airport (ANU)', 'Barbuda Codrington Airport (BBQ)'] },
+  { island: 'Saint-Martin / Sint Maarten', airports: ['Princess Juliana International Airport (SXM)'] },
+  { island: 'Saint-Barthélemy', airports: ['Gustavia Airport (SBH)'] },
+  { island: 'Saba', airports: ['Juancho E. Yrausquin Airport (SAB)'] },
+  { island: 'Saint-Eustache', airports: ['F.D. Roosevelt Airport (EUX)'] },
+  { island: 'Saint-Kitts & Nevis', airports: ['Robert L. Bradshaw International Airport (SKB)', 'Vance W. Amory International Airport (NEV)'] },
+  { island: 'Montserrat', airports: ['John A. Osborne Airport (MNI)'] },
+  { island: 'Guadeloupe', airports: ['Pointe-à-Pitre International Airport (PTP)'] },
+  { island: 'Aruba', airports: ['Queen Beatrix International Airport (AUA)'] },
+  { island: 'Bonaire', airports: ['Flamingo International Airport (BON)'] },
+  { island: 'Curaçao', airports: ['Curaçao International Airport (CUR)'] },
+  { island: 'Dominica', airports: ['Douglas-Charles Airport (DOM)', 'Canefield Airport (DCF)'] },
+  { island: 'Martinique', airports: ['Martinique Aimé Césaire International Airport (FDF)'] },
+  { island: 'Saint Lucia', airports: ['Hewanorra International Airport (UVF)', 'George F. L. Charles Airport (SLU)'] },
+  { island: 'Saint Vincent & the Grenadines', airports: ['Argyle International Airport (SVD)', 'Mustique Airport (MQS)', 'Canouan Airport (CIW)'] },
+  { island: 'Grenada', airports: ['Maurice Bishop International Airport (GND)', 'Lauriston Airport (CRU) — Carriacou'] },
+  { island: 'Barbados', airports: ['Grantley Adams International Airport (BGI)'] },
+  { island: 'Turks & Caicos', airports: ['Providenciales International Airport (PLS)', 'Grand Turk International Airport (GDT)'] },
+  { island: 'Trinidad & Tobago', airports: ['Piarco International Airport (POS)', 'A.N.R. Robinson International Airport (TAB)'] },
+];
+
 // ── Données aéroports par destination ─────────────────────────────────────────
 const regions = [
   {
     name: 'Caribbean',
     image: '/images/destinations/animals/caraibes.jpg',
+    groups: caribbeanGroups,
+  },
+  { name: 'Arctic', image: '/images/destinations/animals/Arctic.png', groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }] },
+  {
+    name: 'Bahamas',
+    image: '/images/destinations/animals/Bahamas.jpg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Central America',
+    image: '/images/destinations/animals/Central-America.jpg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'East Asia',
+    image: '/images/destinations/animals/EAST-ASIA.jpg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Eastern Mediterranean',
+    image: '/images/destinations/animals/Eastern-Mediterranean.jpg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Indian Ocean',
+    image: '/images/destinations/animals/Indian-Ocean.jpg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Indonesia',
+    image: '/images/destinations/animals/Indonesia.jpg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'North America',
+    image: '/images/destinations/animals/Nord-America.jpg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Pacific Ocean',
+    image: '/images/destinations/animals/Ocean-Pacific.jpeg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Oman Gulf',
+    image: '/images/destinations/animals/Oman-Gulf.jpeg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'South East Asia',
+    image: '/images/destinations/animals/SOUTH-EAST-ASIA.jpeg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Western Mediterranean',
+    image: '/images/destinations/animals/Western-Mediterranean.webp',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Africa',
+    image: '/images/destinations/animals/africa.jpeg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Northern Europe',
+    image: '/images/destinations/animals/articbynortherneurope.jpg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+  {
+    name: 'Oceania',
+    image: '/images/destinations/animals/oceania.jpeg',
+    groups: [{ island: 'Coming Soon', airports: ['Airport information coming soon'] }],
+  },
+];
     groups: [
       {
         island: 'Cuba',
