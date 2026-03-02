@@ -7,7 +7,7 @@ import { useState } from 'react';
 const regions = [
   {
     name: 'Caribbean',
-    image: '/images/destinations/destnation-feature-caribbean.webp',
+    image: '/images/destinations/animals/caraibes.jpg',
     groups: [
       {
         island: 'Cuba',
@@ -132,42 +132,42 @@ const regions = [
   },
   {
     name: 'East Mediterranean',
-    image: '/images/destinations/destnation-feature-east-med.webp',
+    image: '/images/destinations/animals/Eastern-Mediterranean.jpg',
     groups: [
       { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
     name: 'Indian Ocean',
-    image: '/images/destinations/destnation-feature-indian-ocean.webp',
+    image: '/images/destinations/animals/Indian-Ocean.jpg',
     groups: [
       { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
     name: 'North America',
-    image: '/images/destinations/destnation-feature-north-america.webp',
+    image: '/images/destinations/animals/Nord-America.jpg',
     groups: [
       { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
     name: 'South East Asia',
-    image: '/images/destinations/destnation-feature-south-east-asia.webp',
+    image: '/images/destinations/animals/SOUTH-EAST-ASIA.jpeg',
     groups: [
       { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
     name: 'South Pacific',
-    image: '/images/destinations/destnation-feature-south-pacific.webp',
+    image: '/images/destinations/animals/Ocean-Pacific.jpeg',
     groups: [
       { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
   },
   {
     name: 'West Mediterranean',
-    image: '/images/destinations/destnation-feature-west-med.webp',
+    image: '/images/destinations/animals/Western-Mediterranean.webp',
     groups: [
       { island: 'Coming Soon', airports: ['Airport information coming soon'] },
     ],
