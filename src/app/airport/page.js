@@ -206,8 +206,14 @@ function AirportModal({ region, onClose }) {
       style={{ backgroundColor: 'rgba(38,39,42,0.92)' }}
       onClick={onClose}
     >
+      <style>{`
+        .modal-scroll::-webkit-scrollbar { width: 4px; }
+        .modal-scroll::-webkit-scrollbar-track { background: transparent; }
+        .modal-scroll::-webkit-scrollbar-thumb { background: #c2622a; border-radius: 2px; }
+        .modal-scroll { scrollbar-width: thin; scrollbar-color: #c2622a transparent; }
+      `}</style>
       <div
-        className="relative w-full max-w-lg max-h-[80vh] overflow-y-auto rounded-2xl border border-white/10 px-6 py-8 md:px-10 md:py-10"
+        className="modal-scroll relative w-full max-w-lg max-h-[80vh] overflow-y-auto rounded-2xl border border-white/10 px-6 py-8 md:px-10 md:py-10"
         style={{ backgroundColor: '#2e2f32', backgroundImage: 'url(/images/nuagesAncien.png)', backgroundSize: 'contain' }}
         onClick={e => e.stopPropagation()}
       >
