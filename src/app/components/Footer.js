@@ -55,7 +55,7 @@ export default function Footer() {
           <ul className="space-y-2 text-[#acb0cd]">
             <li><Link href="/destinations/cities">Cities</Link></li>
             <li><Link href="/destinations/countries">Countries</Link></li>
-            <li><Link href="/destinations/airports">Airports</Link></li>
+            <li><Link href="/airport">Airports</Link></li>
             <li><Link href="/destinations/routes">Routes</Link></li>
             <li><Link href="/events">Events</Link></li>
           </ul>
