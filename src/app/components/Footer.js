@@ -56,6 +56,7 @@ export default function Footer() {
             <li><Link href="/destinations/cities">Cities</Link></li>
             <li><Link href="/destinations/countries">Countries</Link></li>
             <li><Link href="/airport">Airports</Link></li>
+            <li><Link href="/privat-jet">Private Jet</Link></li>
             <li><Link href="/destinations/routes">Routes</Link></li>
             <li><Link href="/events">Events</Link></li>
           </ul>

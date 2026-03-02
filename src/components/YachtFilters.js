@@ -147,6 +147,7 @@ export default function YachtFilters({ filters, onChange }) {
       petFriendly: false,
       groupFriendly: false,
       waterToys: false,
+      couplesFriendly: false,
       startDate: '',
       endDate: ''
     };
@@ -423,6 +424,16 @@ export default function YachtFilters({ filters, onChange }) {
               >
                 Water Toys
               </button>
+              <button
+                onClick={() => handleChange('couplesFriendly', !localFilters.couplesFriendly)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
+                  localFilters.couplesFriendly
+                    ? 'text-[#B03E00]'
+                    : 'text-gray-400'
+                }`}
+              >
+                Couples Friendly
+              </button>
             </div>
           </div>
         )}
@@ -688,6 +699,16 @@ export default function YachtFilters({ filters, onChange }) {
                 }`}
               >
                 Water Toys
+              </button>
+              <button
+                onClick={() => handleChange('couplesFriendly', !localFilters.couplesFriendly)}
+                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
+                  localFilters.couplesFriendly
+                    ? 'text-[#B03E00]'
+                    : 'text-gray-400'
+                }`}
+              >
+                Couples Friendly
               </button>
             </div>
 

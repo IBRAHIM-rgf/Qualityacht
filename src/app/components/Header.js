@@ -118,6 +118,7 @@ export default function Header() {
                 <li><a href="/destinations/cities" className="hover:text-white transition">Cities</a></li>
                 <li><a href="/destinations/countries" className="hover:text-white transition">Countries</a></li>
                 <li><a href="/airport" className="hover:text-white transition">Airports</a></li>
+                <li><a href="/privat-jet" className="hover:text-white transition">Private Jet</a></li>
                 <li><a href="/destinations/routes" className="hover:text-white transition">Routes</a></li>
                 <li><a href="/events" className="hover:text-white transition">Events</a></li>
               </ul>
