@@ -80,30 +80,28 @@ function DestCard({ dest, onClick }) {
 function JetModal({ dest, onClose }) {
   if (!dest) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ backgroundColor: 'rgba(38,39,42,0.92)' }} onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ backgroundColor: 'rgba(10,20,50,0.92)' }} onClick={onClose}>
       <style>{`
         .modal-scroll::-webkit-scrollbar { width: 4px; }
         .modal-scroll::-webkit-scrollbar-track { background: transparent; }
-        .modal-scroll::-webkit-scrollbar-thumb { background: #c2622a; border-radius: 2px; }
-        .modal-scroll { scrollbar-width: thin; scrollbar-color: #c2622a transparent; }
+        .modal-scroll::-webkit-scrollbar-thumb { background: #acb0cd; border-radius: 2px; }
+        .modal-scroll { scrollbar-width: thin; scrollbar-color: #acb0cd transparent; }
       `}</style>
       <div
         className="modal-scroll relative w-full max-w-lg max-h-[80vh] overflow-y-auto rounded-2xl border border-white/10 px-6 py-8 md:px-10 md:py-10"
-        style={{ backgroundColor: '#2e2f32', backgroundImage: 'url(/images/nuagesAncien.png)', backgroundSize: 'contain' }}
+        style={{ backgroundColor: '#0a1432' }}
         onClick={e => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-5 text-[#acb0cd]/50 hover:text-[#c2622a] text-2xl transition-colors duration-200 cursor-pointer">×</button>
-        <p className="text-[10px] uppercase tracking-[0.3em] mb-1" style={{ color: '#C0C0C0' }}>Private Jet Access</p>
-        <h2 className="trajan-regular text-xl md:text-2xl text-[#acb0cd] uppercase tracking-[0.1em] mb-1">{dest.name}</h2>
-        <div className="w-8 h-px mb-6" style={{ backgroundColor: '#c2622a' }} />
+        <button onClick={onClose} className="absolute top-4 right-5 text-[#acb0cd]/50 hover:text-white text-2xl transition-colors duration-200 cursor-pointer">×</button>
+        <h2 className="trajan-regular text-xl md:text-2xl text-[#acb0cd] uppercase tracking-[0.1em] mb-6 text-center">{dest.name}</h2>
         <div className="space-y-6">
           {dest.groups.map((group, i) => (
             <div key={i}>
-              <p className="text-[10px] uppercase tracking-[0.25em] mb-2" style={{ color: '#c2622a' }}>{group.island}</p>
+              <p className="text-sm md:text-base font-bold uppercase tracking-[0.2em] mb-2 text-center" style={{ color: '#acb0cd' }}>{group.island}</p>
               <ul className="space-y-1.5">
                 {group.airports.map((airport, j) => (
-                  <li key={j} className="flex items-start gap-2 text-sm text-[#acb0cd]/80">
-                    <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: '#c2622a' }} />
+                  <li key={j} className="flex items-start gap-2 text-sm md:text-base text-[#acb0cd]">
+                    <span className="mt-1 w-1.5 h-1.5 rotate-45 shrink-0 inline-block" style={{ backgroundColor: '#acb0cd' }} />
                     {airport}
                   </li>
                 ))}
@@ -130,7 +128,7 @@ export default function PrivatJetPage() {
           alt="Private Jet"
           fill
           priority
-          className="object-contain object-center"
+          className="object-cover object-center"
         />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.5) 20%, transparent 38%, transparent 52%, rgba(38,39,42,0.5) 78%, #26272a 100%)' }} />
         <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">

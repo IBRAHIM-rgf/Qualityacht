@@ -135,7 +135,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
             )}
             {yacht.crew && (
               <div className="text-center">
-                <Image src="/casquette-capitaine.svg" alt="crew" width={24} height={24} className="mx-auto mb-2" />
+                <Image src="/casquette-capitaine.svg" alt="crew" width={32} height={32} className="mx-auto mb-2" />
                 <p className="text-lg font-semibold text-[#C0C0C0]">{yacht.crew}</p>
                 <p className="text-sm text-[#acb0cd]">Crew</p>
               </div>

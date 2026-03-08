@@ -362,7 +362,7 @@ export default function YachtFilters({ filters, onChange }) {
                 <button
                   onClick={() => handleUnitChange('meters')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                    unitPreference === 'meters' ? 'text-[#B03E00]' : 'text-gray-400'
+                    unitPreference === 'meters' ? 'text-[#B03E00]' : 'text-[#B03E00]'
                   }`}
                 >
                   Meters
@@ -370,7 +370,7 @@ export default function YachtFilters({ filters, onChange }) {
                 <button
                   onClick={() => handleUnitChange('feet')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                    unitPreference === 'feet' ? 'text-[#B03E00]' : 'text-gray-400'
+                    unitPreference === 'feet' ? 'text-[#B03E00]' : 'text-[#B03E00]'
                   }`}
                 >
                   Feet
@@ -399,7 +399,7 @@ export default function YachtFilters({ filters, onChange }) {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.petFriendly
                     ? 'text-[#B03E00]'
-                    : 'text-gray-400'
+                    : 'text-[#B03E00]'
                 }`}
               >
                 Pet Friendly
@@ -409,7 +409,7 @@ export default function YachtFilters({ filters, onChange }) {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.groupFriendly
                     ? 'text-[#B03E00]'
-                    : 'text-gray-400'
+                    : 'text-[#B03E00]'
                 }`}
               >
                 Group Friendly
@@ -419,7 +419,7 @@ export default function YachtFilters({ filters, onChange }) {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.waterToys
                     ? 'text-[#B03E00]'
-                    : 'text-gray-400'
+                    : 'text-[#B03E00]'
                 }`}
               >
                 Water Toys
@@ -429,7 +429,7 @@ export default function YachtFilters({ filters, onChange }) {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.couplesFriendly
                     ? 'text-[#B03E00]'
-                    : 'text-gray-400'
+                    : 'text-[#B03E00]'
                 }`}
               >
                 Couples Friendly
@@ -612,7 +612,7 @@ export default function YachtFilters({ filters, onChange }) {
                   <button
                     onClick={() => handleUnitChange('meters')}
                     className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                      unitPreference === 'meters' ? 'text-[#B03E00]' : 'text-gray-400'
+                      unitPreference === 'meters' ? 'text-[#B03E00]' : 'text-[#B03E00]'
                     }`}
                   >
                     Meters
@@ -620,7 +620,7 @@ export default function YachtFilters({ filters, onChange }) {
                   <button
                     onClick={() => handleUnitChange('feet')}
                     className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                      unitPreference === 'feet' ? 'text-[#B03E00]' : 'text-gray-400'
+                      unitPreference === 'feet' ? 'text-[#B03E00]' : 'text-[#B03E00]'
                     }`}
                   >
                     Feet
@@ -675,7 +675,7 @@ export default function YachtFilters({ filters, onChange }) {
                 className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.petFriendly
                     ? 'text-[#B03E00]'
-                    : 'text-gray-400'
+                    : 'text-[#B03E00]'
                 }`}
               >
                 Pet Friendly
@@ -685,7 +685,7 @@ export default function YachtFilters({ filters, onChange }) {
                 className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.groupFriendly
                     ? 'text-[#B03E00]'
-                    : 'text-gray-400'
+                    : 'text-[#B03E00]'
                 }`}
               >
                 Group Friendly
@@ -695,7 +695,7 @@ export default function YachtFilters({ filters, onChange }) {
                 className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.waterToys
                     ? 'text-[#B03E00]'
-                    : 'text-gray-400'
+                    : 'text-[#B03E00]'
                 }`}
               >
                 Water Toys
@@ -705,7 +705,7 @@ export default function YachtFilters({ filters, onChange }) {
                 className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
                   localFilters.couplesFriendly
                     ? 'text-[#B03E00]'
-                    : 'text-gray-400'
+                    : 'text-[#B03E00]'
                 }`}
               >
                 Couples Friendly
