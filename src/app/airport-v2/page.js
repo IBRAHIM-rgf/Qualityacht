@@ -92,11 +92,11 @@ function AirportModal({ region, onClose }) {
         <div className="space-y-6">
           {region.groups.map((group, i) => (
             <div key={i}>
-              <p className="text-sm md:text-base font-bold uppercase tracking-[0.2em] mb-2 text-center" style={{ color: '#acb0cd' }}>{group.island}</p>
+              <p className="text-sm md:text-base font-bold uppercase tracking-[0.2em] mb-2 text-center" style={{ color: '#c2622a' }}>{group.island}</p>
               <ul className="space-y-1.5">
                 {group.airports.map((airport, j) => (
                   <li key={j} className="flex items-start gap-2 text-sm md:text-base text-[#acb0cd]">
-                    <span className="mt-1 w-1.5 h-1.5 rotate-45 shrink-0 inline-block" style={{ backgroundColor: '#acb0cd' }} />
+                    <span className="mt-1 w-1.5 h-1.5 rotate-45 shrink-0 inline-block" style={{ backgroundColor: '#c2622a' }} />
                     {airport}
                   </li>
                 ))}
@@ -135,7 +135,8 @@ export default function AirportPage() {
         className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat py-24 px-4"
         style={{ backgroundImage: "url('/images/services-bg.png')" }}
       >
-        <h2 className="text-3xl md:text-5xl font-bold trajan-regular mb-12 text-center uppercase tracking-wide" style={{ color: '#acb0cd', textDecoration: 'underline', textDecorationColor: '#acb0cd', textUnderlineOffset: '10px' }}>Airports</h2>
+        <h2 className="text-3xl md:text-5xl font-bold trajan-regular mb-4 text-center uppercase tracking-wide" style={{ color: '#acb0cd' }}>Airports</h2>
+        <Image src="/images/title-line.png" alt="" width={200} height={10} className="mx-auto mb-12" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
           {regions.map((region, i) => (
             <RegionCard key={i} region={region} onClick={setSelectedRegion} />

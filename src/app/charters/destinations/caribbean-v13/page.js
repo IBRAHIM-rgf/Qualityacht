@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 
 // ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
 const caribbeanIslands = [
-  { name: 'Greater Antilles',   image: '/images/destinations/gretar antilles.jpg',                  href: '/charters/destinations/greater-antilles' },
-  { name: 'Leeward Islands',    image: '/images/destinations/Leeward Islands.jpg',                 href: '/yachts?destination=leeward-islands' },
-  { name: 'Leeward Antilles',   image: '/images/destinations/The Leeward Antilles.jpg',          href: '/yachts?destination=leeward-antilles' },
-  { name: 'Windward Islands',   image: '/images/destinations/the Windward Islands.jpg',            href: '/yachts?destination=windward-islands' },
-  { name: 'Turks & Caicos',     image: '/images/destinations/Turks and Caicos.jpg',                href: '/yachts?destination=turks-caicos' },
-  { name: 'Trinidad & Tobago',  image: '/images/destinations/Trinidad and Tobago.jpg',             href: '/yachts?destination=trinidad-tobago' },
-  { name: 'Grand Cayman',       image: '/images/destinations/Cayman Islands.jpg',                  href: '/yachts?destination=grand-cayman' },
+  { name: 'Greater Antilles',   image: '/images/destinations/gretar antilles.jpg',         href: '/charters/destinations/greater-antilles' },
+  { name: 'Leeward Islands',    image: '/images/destinations/Leeward Islands.jpg',          href: '/yachts?destination=leeward-islands' },
+  { name: 'Leeward Antilles',   image: '/images/destinations/The Leeward Antilles.jpg',     href: '/yachts?destination=leeward-antilles' },
+  { name: 'Windward Islands',   image: '/images/destinations/the Windward Islands.jpg',     href: '/yachts?destination=windward-islands' },
+  { name: 'Turks & Caicos',     image: '/images/destinations/Turks and Caicos.jpg',         href: '/yachts?destination=turks-caicos' },
+  { name: 'Trinidad & Tobago',  image: '/images/destinations/Trinidad and Tobago.jpg',      href: '/yachts?destination=trinidad-tobago' },
+  { name: 'Grand Cayman',       image: '/images/destinations/Cayman Islands.jpg',           href: '/yachts?destination=grand-cayman' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────
@@ -26,13 +26,48 @@ const islandGroups = [
 ];
 
 // ── Données cercles ────────────────────────────────────────────────────────────
-// nameBelow: true = nom affiché sous le rond (nouvelles destinations avec photo flowers)
 const popularDestinations = [
   { name: 'Saint-Vincent-et-les-Grenadines', image: '/images/destinations/flowers/Saint-Vincent-et-les-Grenadines.jpg',  href: '/yachts?destination=saint-vincent', nameBelow: true },
-  { name: 'Antigua et Barbuda',               image: '/images/destinations/flowers/Antigua et Barbuda.jpeg',              href: '/yachts?destination=antigua',     nameBelow: true },
-  { name: 'British Virgin Islands',           image: '/images/destinations/flowers/British Virgin Islands.jpg',           href: '/yachts?destination=bvi',         nameBelow: true },
-  { name: 'Saint-Martin / Sint Maarten',      image: '/images/destinations/flowers/Saint-Martin  Sint Maarten.jpg',       href: '/yachts?destination=saint-martin', nameBelow: true },
-  { name: 'St Barthélémy',                     image: '/images/destinations/flowers/St barth Allamanda.jpg',               href: '/yachts?destination=st-barts',    nameBelow: true },
+  { name: 'Antigua et Barbuda',               image: '/images/destinations/flowers/Antigua et Barbuda.jpeg',              href: '/yachts?destination=antigua',        nameBelow: true },
+  { name: 'British Virgin Islands',           image: '/images/destinations/flowers/British Virgin Islands.jpg',           href: '/yachts?destination=bvi',            nameBelow: true },
+  { name: 'Saint-Martin / Sint Maarten',      image: '/images/destinations/flowers/Saint-Martin  Sint Maarten.jpg',       href: '/yachts?destination=saint-martin',   nameBelow: true },
+  { name: 'St Barthélémy',                     image: '/images/destinations/flowers/St barth Allamanda.jpg',               href: '/yachts?destination=st-barts',       nameBelow: true },
+];
+
+// ── Chiffres clés ──────────────────────────────────────────────────────────────
+const keyStats = [
+  { value: '700+', label: 'Islands & Cays' },
+  { value: '26',   label: 'Countries' },
+  { value: '12',   label: 'Months of Sun' },
+  { value: '1,000+', label: 'Luxury Yachts' },
+];
+
+// ── Meilleures saisons ─────────────────────────────────────────────────────────
+const seasons = [
+  {
+    months: 'Dec — Apr',
+    title: 'High Season',
+    label: 'Winter Escape',
+    desc: 'Peak season with dry, sunny weather and steady trade winds. The most popular time for Caribbean charters with the best sailing conditions across all regions.',
+    ideal: 'All regions',
+    accent: '#c2622a',
+  },
+  {
+    months: 'May — Jul',
+    title: 'Shoulder Season',
+    label: 'Spring Sailing',
+    desc: 'Warm temperatures, fewer crowds, and lower rates. Exceptional visibility for diving and snorkelling. A wonderful time to explore the islands before hurricane season.',
+    ideal: 'Southern Caribbean',
+    accent: '#acb0cd',
+  },
+  {
+    months: 'Aug — Nov',
+    title: 'Low Season',
+    label: 'Tropical Adventure',
+    desc: 'Hurricane season brings occasional rain to the north, but the southern Caribbean — Grenada, Trinidad and the ABC Islands — remains largely unaffected with the best rates.',
+    ideal: 'Grenada · Trinidad · ABC Islands',
+    accent: '#6b7280',
+  },
 ];
 
 // ── FAQ ────────────────────────────────────────────────────────────────────────
@@ -174,7 +209,6 @@ function CircleCard({ name, image, nameBelow = false }) {
   const timerRef = useRef(null);
   function activate() { clearTimeout(timerRef.current); setLit(true); }
   function deactivate() { timerRef.current = setTimeout(() => setLit(false), 1500); }
-  // Taille : plus grande pour les nouvelles destinations (nameBelow)
   const size = nameBelow
     ? 'w-[130px] h-[130px] md:w-[155px] md:h-[155px]'
     : 'w-[110px] h-[110px] md:w-[130px] md:h-[130px]';
@@ -185,10 +219,9 @@ function CircleCard({ name, image, nameBelow = false }) {
       onTouchStart={activate} onTouchEnd={deactivate}
       className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2 px-2 py-1"
       style={{ width: wrapper }}>
-      {/* border séparé de overflow-hidden pour ne pas être coupé */}
       <div
         className="rounded-full border-4 transition-all duration-300 p-0.5"
-        style={{ borderColor: lit ? '#c2622a' : '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'border-color 0.3s, transform 0.3s' }}>
+        style={{ borderColor: '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.3s' }}>
         <div className={`relative ${size} rounded-full overflow-hidden`}>
           <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
@@ -206,7 +239,7 @@ function CircleCard({ name, image, nameBelow = false }) {
   );
 }
 
-// ── Accordéon groupe (destinations by region) ─────────────────────────────────
+// ── Accordéon groupe ───────────────────────────────────────────────────────────
 function IslandGroup({ group, defaultOpen }) {
   const [open, setOpen] = useState(defaultOpen || false);
   return (
@@ -235,7 +268,7 @@ function IslandGroup({ group, defaultOpen }) {
   );
 }
 
-// ── Accordéon FAQ ─────────────────────────────────────────────────────────────
+// ── Accordéon FAQ ──────────────────────────────────────────────────────────────
 function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
@@ -263,7 +296,7 @@ function BurntLine() {
   return <div className="w-12 md:w-16 h-px bg-[#c2622a] mx-auto my-4 md:my-6" />;
 }
 
-// ── Section fond ───────────────────────────────────────────────────────────────
+// ── Section fond nuage ─────────────────────────────────────────────────────────
 function CloudSection({ children, className = '', bg = '/images/services-bg.png' }) {
   return (
     <div className={`relative ${className}`}>
@@ -290,9 +323,43 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
   );
 }
 
+// ── Carte saison ───────────────────────────────────────────────────────────────
+function SeasonCard({ season }) {
+  const ref = useReveal();
+  return (
+    <div ref={ref} className="reveal-up border border-white/10 rounded-xl p-6 md:p-8 flex flex-col gap-4 hover:border-[#c2622a]/40 transition-colors duration-500">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="trajan-regular text-[10px] uppercase tracking-[0.3em] mb-1" style={{ color: season.accent }}>{season.label}</p>
+          <h3 className="trajan-regular text-base md:text-lg uppercase tracking-[0.1em] text-[#acb0cd]">{season.title}</h3>
+        </div>
+        <span className="trajan-regular text-[10px] uppercase tracking-[0.15em] text-[#acb0cd]/40 text-right shrink-0 pt-1">{season.months}</span>
+      </div>
+      <div className="h-px w-full" style={{ backgroundColor: season.accent, opacity: 0.3 }} />
+      <p className="text-[#acb0cd]/60 text-sm leading-relaxed">{season.desc}</p>
+      <div className="mt-auto pt-2 flex items-center gap-2">
+        <span className="text-[8px] uppercase tracking-[0.2em] text-[#acb0cd]/40">Ideal for</span>
+        <span className="text-[10px] uppercase tracking-[0.15em]" style={{ color: season.accent }}>{season.ideal}</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Stat ───────────────────────────────────────────────────────────────────────
+function StatItem({ value, label }) {
+  return (
+    <div className="flex flex-col items-center gap-2 px-4">
+      <span className="trajan-regular text-3xl md:text-5xl text-[#c2622a]">{value}</span>
+      <span className="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#acb0cd]/50">{label}</span>
+    </div>
+  );
+}
+
 // ── Page ───────────────────────────────────────────────────────────────────────
-export default function CaribbeanV12Page() {
+export default function CaribbeanV13Page() {
   const heroRef = useRef(null);
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
+
   useEffect(() => {
     const el = heroRef.current;
     if (!el) return;
@@ -306,7 +373,63 @@ export default function CaribbeanV12Page() {
         .reveal-up.revealed { opacity: 1; transform: translateY(0); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .quote-scroll::-webkit-scrollbar { width: 4px; }
+        .quote-scroll::-webkit-scrollbar-track { background: transparent; }
+        .quote-scroll::-webkit-scrollbar-thumb { background: #acb0cd; border-radius: 2px; }
+        .quote-scroll { scrollbar-width: thin; scrollbar-color: #acb0cd transparent; }
       `}</style>
+
+      {/* ══ MODAL DEVIS ══ */}
+      {showQuoteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ backgroundColor: 'rgba(10,20,50,0.95)' }} onClick={() => setShowQuoteModal(false)}>
+          <div className="quote-scroll relative w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl border border-white/10 px-6 py-8 md:px-10 md:py-10" style={{ backgroundColor: '#0a1432' }} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowQuoteModal(false)} className="absolute top-4 right-5 text-[#acb0cd]/50 hover:text-white text-2xl transition-colors cursor-pointer">×</button>
+            <p className="text-[10px] uppercase tracking-[0.3em] mb-1 text-center" style={{ color: '#C0C0C0' }}>Caribbean Charter</p>
+            <h2 className="trajan-regular text-xl md:text-2xl text-[#acb0cd] uppercase tracking-[0.1em] mb-6 text-center">Request a Quote</h2>
+            <form className="space-y-4" onSubmit={e => { e.preventDefault(); setShowQuoteModal(false); }}>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-1">First Name</label>
+                  <input type="text" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[#acb0cd] text-sm focus:outline-none focus:border-[#acb0cd]/50" />
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-1">Last Name</label>
+                  <input type="text" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[#acb0cd] text-sm focus:outline-none focus:border-[#acb0cd]/50" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-1">Email</label>
+                <input type="email" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[#acb0cd] text-sm focus:outline-none focus:border-[#acb0cd]/50" />
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-1">Phone</label>
+                <input type="tel" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[#acb0cd] text-sm focus:outline-none focus:border-[#acb0cd]/50" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-1">Departure Date</label>
+                  <input type="date" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[#acb0cd] text-sm focus:outline-none focus:border-[#acb0cd]/50" />
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-1">Return Date</label>
+                  <input type="date" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[#acb0cd] text-sm focus:outline-none focus:border-[#acb0cd]/50" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-1">Number of Guests</label>
+                <input type="number" min="1" max="50" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[#acb0cd] text-sm focus:outline-none focus:border-[#acb0cd]/50" />
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-1">Message</label>
+                <textarea rows={3} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[#acb0cd] text-sm focus:outline-none focus:border-[#acb0cd]/50 resize-none" />
+              </div>
+              <button type="submit" className="w-full trajan-regular text-xs uppercase tracking-[0.2em] py-3 rounded-full border transition-all duration-300 hover:bg-[#acb0cd] hover:text-[#0a1432]" style={{ color: '#acb0cd', borderColor: '#acb0cd' }}>
+                Send Request
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
@@ -316,6 +439,7 @@ export default function CaribbeanV12Page() {
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
           <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
             <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
+              <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-4 font-light">Luxury Yacht Charters</p>
               <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
                 The Caribbean
               </h1>
@@ -323,7 +447,29 @@ export default function CaribbeanV12Page() {
               <p className="text-[#acb0cd] text-sm md:text-xl uppercase tracking-[0.15em] md:tracking-[0.25em] font-light text-center">
                 The Ultimate Luxury Yachting Destination
               </p>
+              <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
+                <button
+                  onClick={() => setShowQuoteModal(true)}
+                  className="trajan-regular text-xs uppercase tracking-[0.2em] px-8 py-3 rounded-full border transition-all duration-300 hover:bg-[#acb0cd] hover:text-[#0a1432]"
+                  style={{ color: '#acb0cd', borderColor: '#acb0cd', backgroundColor: 'transparent' }}
+                >
+                  Request Quotes
+                </button>
+                <a href="/contact"
+                  className="trajan-regular text-xs uppercase tracking-[0.2em] px-8 py-3 rounded-full border transition-all duration-300 hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a]"
+                  style={{ color: '#c2622a', borderColor: '#c2622a', backgroundColor: 'transparent' }}
+                >
+                  Contact Us
+                </a>
+              </div>
             </div>
+          </div>
+        </div>
+
+        {/* ══ CHIFFRES CLÉS ══ */}
+        <div className="bg-[#1e1f22] py-10 md:py-14 px-4 border-y border-white/5">
+          <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x md:divide-white/10">
+            {keyStats.map((stat, i) => <StatItem key={i} {...stat} />)}
           </div>
         </div>
 
@@ -361,21 +507,19 @@ export default function CaribbeanV12Page() {
           </div>
         </CloudSection>
 
-        {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
+        {/* ══ BANDEAU cocomer ══ */}
         <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" position="center 40%" />
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 3 centré ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
-            {/* Ligne 1 : 2 col mobile / 4 col desktop */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
               {caribbeanIslands.slice(0, 4).map((island, i) => <DestCard key={i} {...island} />)}
             </div>
-            {/* Ligne 2 : 3 cards centrées sous les 4 */}
             <div className="flex justify-center gap-px bg-white/10">
               {caribbeanIslands.slice(4, 7).map((island, i) => (
-                <div key={i} className="w-1/4">
+                <div key={i} className="w-1/2 md:w-1/4">
                   <DestCard {...island} />
                 </div>
               ))}
@@ -387,7 +531,6 @@ export default function CaribbeanV12Page() {
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Archipelagos" title="Destinations by Region" sub="Seven groups — over 700 islands" />
-            {/* 3+3+1 centré — noms îles centrés sur mobile */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
               {islandGroups.map((group, i) => (
                 <div key={group.id} className={i === islandGroups.length - 1 ? 'md:col-start-2' : ''}>
@@ -398,8 +541,18 @@ export default function CaribbeanV12Page() {
           </div>
         </CloudSection>
 
-        {/* ══ BANDEAU palmiers — couleur au hover 4s ══ */}
+        {/* ══ BANDEAU palmiers ══ */}
         <BandeauPhoto src="/images/pagesCaraibes/palmierscaraibes.jpeg" />
+
+        {/* ══ MEILLEURES SAISONS ══ */}
+        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg="/images/nuagesAncien.png">
+          <div className="max-w-7xl mx-auto">
+            <RevealBlock label="Planning Your Charter" title="Best Time to Visit" sub="When to sail — season by season" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {seasons.map((season, i) => <SeasonCard key={i} season={season} />)}
+            </div>
+          </div>
+        </CloudSection>
 
         {/* ══ POPULAR DESTINATIONS — cercles slider ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
@@ -411,7 +564,7 @@ export default function CaribbeanV12Page() {
           </div>
         </CloudSection>
 
-        {/* ══ BANDEAU st-barth + CTA ══ */}
+        {/* ══ BANDEAU CTA ══ */}
         <div className="relative h-[55vh] md:h-[75vh] overflow-hidden">
           <Image src="/images/destinations/Caraibes_charters.png" alt="" fill className="object-cover brightness-50" />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 30%, transparent 55%, #26272a 100%)' }} />
