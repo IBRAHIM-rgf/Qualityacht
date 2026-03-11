@@ -451,13 +451,6 @@ export default function CaribbeanV13Page() {
           </div>
         </div>
 
-        {/* ══ CHIFFRES CLÉS ══ */}
-        <div className="bg-[#1e1f22] py-10 md:py-14 px-4 border-y border-white/5">
-          <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x md:divide-white/10">
-            {keyStats.map((stat, i) => <StatItem key={i} {...stat} />)}
-          </div>
-        </div>
-
         {/* ══ DESCRIPTION ══ */}
         <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">
           <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6">
