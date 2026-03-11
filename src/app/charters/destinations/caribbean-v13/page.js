@@ -447,21 +447,6 @@ export default function CaribbeanV13Page() {
               <p className="text-[#acb0cd] text-sm md:text-xl uppercase tracking-[0.15em] md:tracking-[0.25em] font-light text-center">
                 The Ultimate Luxury Yachting Destination
               </p>
-              <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
-                <button
-                  onClick={() => setShowQuoteModal(true)}
-                  className="trajan-regular text-xs uppercase tracking-[0.2em] px-8 py-3 rounded-full border transition-all duration-300 hover:bg-[#acb0cd] hover:text-[#0a1432]"
-                  style={{ color: '#acb0cd', borderColor: '#acb0cd', backgroundColor: 'transparent' }}
-                >
-                  Request Quotes
-                </button>
-                <a href="/contact"
-                  className="trajan-regular text-xs uppercase tracking-[0.2em] px-8 py-3 rounded-full border transition-all duration-300 hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a]"
-                  style={{ color: '#c2622a', borderColor: '#c2622a', backgroundColor: 'transparent' }}
-                >
-                  Contact Us
-                </a>
-              </div>
             </div>
           </div>
         </div>
@@ -517,12 +502,19 @@ export default function CaribbeanV13Page() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
               {caribbeanIslands.slice(0, 4).map((island, i) => <DestCard key={i} {...island} />)}
             </div>
+            <div className="grid grid-cols-2 md:hidden gap-px bg-white/10 mb-px">
+              {caribbeanIslands.slice(4, 6).map((island, i) => <DestCard key={i} {...island} />)}
+            </div>
             <div className="flex justify-center gap-px bg-white/10">
-              {caribbeanIslands.slice(4, 7).map((island, i) => (
-                <div key={i} className="w-1/2 md:w-1/4">
-                  <DestCard {...island} />
-                </div>
-              ))}
+              <div className="hidden md:block md:w-1/4">
+                <DestCard {...caribbeanIslands[4]} />
+              </div>
+              <div className="hidden md:block md:w-1/4">
+                <DestCard {...caribbeanIslands[5]} />
+              </div>
+              <div className="w-full md:w-1/4">
+                <DestCard {...caribbeanIslands[6]} />
+              </div>
             </div>
           </div>
         </CloudSection>
