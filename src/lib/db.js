@@ -80,6 +80,7 @@ export async function addYachtToSelection(data) {
     yacht_name,
     cached_data = null,
     region = null,
+    sub_region = null,
     pets_allowed = false,
     groups_allowed = false,
     water_toys = false,
@@ -94,12 +95,12 @@ export async function addYachtToSelection(data) {
     const rows = await sql`
       INSERT INTO yacht_selections (
         yacht_id, yacht_name, is_visible, is_featured, display_order,
-        cached_data, cached_at, region, pets_allowed, groups_allowed, water_toys, extra_info
+        cached_data, cached_at, region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info
       )
       VALUES (
         ${yacht_id}, ${yacht_name}, true, false, ${nextOrder},
         ${cached_data ? JSON.stringify(cached_data) : null}, NOW(),
-        ${region}, ${pets_allowed}, ${groups_allowed}, ${water_toys}, ${extra_info}
+        ${region}, ${sub_region}, ${pets_allowed}, ${groups_allowed}, ${water_toys}, ${extra_info}
       )
       ON CONFLICT (yacht_id) DO NOTHING
       RETURNING *
@@ -126,6 +127,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
     category = null,
     tags = null,
     region = null,
+    sub_region = null,
     pets_allowed = null,
     groups_allowed = null,
     water_toys = null,
@@ -146,6 +148,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
         category = COALESCE(${category}, category),
         tags = COALESCE(${tags}, tags),
         region = COALESCE(${region}, region),
+        sub_region = COALESCE(${sub_region}, sub_region),
         pets_allowed = COALESCE(${pets_allowed}, pets_allowed),
         groups_allowed = COALESCE(${groups_allowed}, groups_allowed),
         water_toys = COALESCE(${water_toys}, water_toys),
@@ -278,7 +281,7 @@ export async function getSelectedYachtsWithData() {
         yacht_id, yacht_name, is_visible, is_featured, display_order,
         category, tags, custom_title, custom_description, custom_price,
         custom_highlights, internal_notes, cached_data,
-        region, pets_allowed, groups_allowed, water_toys, extra_info,
+        region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info,
         created_at, updated_at
       FROM yacht_selections
       ORDER BY display_order ASC

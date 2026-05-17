@@ -84,6 +84,12 @@ export async function POST(request) {
       yacht_id: data.yacht_id,
       yacht_name: data.yacht_name,
       cached_data: data.cached_data || null,
+      region: data.region || null,
+      sub_region: data.sub_region || null,
+      pets_allowed: data.pets_allowed || false,
+      groups_allowed: data.groups_allowed || false,
+      water_toys: data.water_toys || false,
+      extra_info: data.extra_info || null,
     });
 
     return NextResponse.json({
@@ -152,6 +158,7 @@ export async function PATCH(request) {
           category,
           internal_notes,
           region,
+          sub_region,
           pets_allowed,
           groups_allowed,
           water_toys,
@@ -167,6 +174,7 @@ export async function PATCH(request) {
           category,
           internal_notes,
           region,
+          sub_region,
           pets_allowed,
           groups_allowed,
           water_toys,

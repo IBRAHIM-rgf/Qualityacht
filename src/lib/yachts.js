@@ -426,6 +426,65 @@ export async function fetchVisibleYachts(filters = {}) {
 }
 
 /**
+ * Récupère les yachts visibles d'une sous-région donnée
+ * Fallback : si la BDD ne contient aucune sélection, retourne tous les yachts de la région
+ * (cohérent avec le comportement de fetchVisibleYachts).
+ */
+export async function fetchVisibleYachtsForSubRegion(region, subRegion) {
+  try {
+    const selections = await getYachtSelections();
+
+    // Pas de sélection en BDD → fallback : tous les yachts Ankor pour la région
+    if (!selections || selections.length === 0) {
+      return await fetchYachtsForDestination(region);
+    }
+
+    // IDs des yachts visibles taggés sur cette sous-région ET cette région
+    const matchingSelections = selections.filter(s =>
+      s.is_visible
+      && s.region === region
+      && s.sub_region === subRegion
+    );
+
+    // Aucun yacht taggé pour cette sous-région → fallback : tous les yachts visibles de la région
+    if (matchingSelections.length === 0) {
+      return await fetchVisibleYachtsForDestination(region);
+    }
+
+    const visibleIds = new Set(matchingSelections.map(s => s.yacht_id));
+    const featuredIds = new Set(matchingSelections.filter(s => s.is_featured).map(s => s.yacht_id));
+    const orderMap = new Map(matchingSelections.map(s => [s.yacht_id, s.display_order]));
+
+    const { yachts: allYachts, totalYachts, filters } = await fetchYachtsForDestination(region);
+
+    const filteredYachts = allYachts
+      .filter(y => visibleIds.has(y.id))
+      .map(y => ({
+        ...y,
+        isFeatured: featuredIds.has(y.id),
+        displayOrder: orderMap.get(y.id) ?? 999,
+        region,
+        subRegion,
+      }));
+
+    filteredYachts.sort((a, b) => {
+      if (a.isFeatured && !b.isFeatured) return -1;
+      if (!a.isFeatured && b.isFeatured) return 1;
+      return (a.displayOrder || 999) - (b.displayOrder || 999);
+    });
+
+    return {
+      yachts: filteredYachts,
+      totalYachts: filteredYachts.length,
+      filters,
+    };
+  } catch (error) {
+    console.error("Erreur fetchVisibleYachtsForSubRegion:", error);
+    return await fetchYachtsForDestination(region);
+  }
+}
+
+/**
  * Version de fetchYachtsForDestination qui respecte les présélections
  */
 export async function fetchVisibleYachtsForDestination(destination) {

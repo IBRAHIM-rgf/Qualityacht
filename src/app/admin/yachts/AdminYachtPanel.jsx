@@ -44,6 +44,31 @@ const REGIONS = [
   { value: 'oceania', label: 'Océanie' },
 ];
 
+// Sous-régions par région principale (cascade dans le dropdown sub_region)
+const SUB_REGIONS_BY_REGION = {
+  caribbean: [
+    { value: 'greater-antilles', label: 'Greater Antilles (Cuba, Puerto Rico, Jamaica, Cayman)' },
+    { value: 'leeward-islands', label: 'Leeward Islands (Anguilla, St-Martin, St-Barth, Antigua…)' },
+    { value: 'windward-islands', label: 'Windward Islands (Martinique, St Lucia, Grenada…)' },
+    { value: 'leeward-antilles', label: 'Leeward Antilles (Aruba, Bonaire, Curaçao)' },
+    { value: 'turks-caicos', label: 'Turks & Caicos' },
+    { value: 'trinidad-tobago', label: 'Trinidad & Tobago' },
+    { value: 'bvi', label: 'British Virgin Islands' },
+    { value: 'grand-cayman', label: 'Grand Cayman' },
+  ],
+  bahamas: [
+    { value: 'nassau', label: 'Nassau & New Providence' },
+    { value: 'exumas', label: 'Exumas' },
+    { value: 'abacos', label: 'Abacos' },
+    { value: 'eleuthera', label: 'Eleuthera & Harbour Island' },
+  ],
+  // Les autres meta-régions n'ont pas encore de sous-régions définies
+};
+
+function getSubRegionsFor(region) {
+  return SUB_REGIONS_BY_REGION[region] || [];
+}
+
 // ============================================
 // Modal d'édition enrichie
 // ============================================
@@ -67,11 +92,14 @@ function EditModal({ yacht, onClose, onSave, token }) {
     custom_price: yacht.custom_price || '',
     internal_notes: yacht.internal_notes || '',
     region: yacht.region || '',
+    sub_region: yacht.sub_region || '',
     pets_allowed: yacht.pets_allowed || false,
     groups_allowed: yacht.groups_allowed || false,
     water_toys: yacht.water_toys || false,
     extra_info: yacht.extra_info || '',
   });
+
+  const availableSubRegions = getSubRegionsFor(form.region);
 
   const handleSave = async () => {
     setLoading(true);
@@ -202,7 +230,7 @@ function EditModal({ yacht, onClose, onSave, token }) {
                 <label className="block text-sm text-gray-400 mb-1">Région d'affichage</label>
                 <select
                   value={form.region}
-                  onChange={(e) => setForm({ ...form, region: e.target.value })}
+                  onChange={(e) => setForm({ ...form, region: e.target.value, sub_region: '' })}
                   className="w-full px-4 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0]"
                 >
                   {REGIONS.map(r => (
@@ -210,6 +238,22 @@ function EditModal({ yacht, onClose, onSave, token }) {
                   ))}
                 </select>
               </div>
+
+              {availableSubRegions.length > 0 && (
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Sous-région</label>
+                  <select
+                    value={form.sub_region}
+                    onChange={(e) => setForm({ ...form, sub_region: e.target.value })}
+                    className="w-full px-4 py-2 bg-[#303135] border border-copper-700/50 rounded-xl text-copper-400"
+                  >
+                    <option value="">— Aucune sous-région —</option>
+                    {availableSubRegions.map(sr => (
+                      <option key={sr.value} value={sr.value}>{sr.label}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Titre personnalisé</label>
@@ -343,11 +387,14 @@ function CreateManualModal({ onClose, onSave, token }) {
     location: '',
     description: '',
     region: '',
+    sub_region: '',
     pets_allowed: false,
     groups_allowed: false,
     water_toys: false,
     extra_info: '',
   });
+
+  const availableSubRegions = getSubRegionsFor(form.region);
 
   const handleSave = async () => {
     if (!form.name) return alert('Le nom est requis');
@@ -378,6 +425,7 @@ function CreateManualModal({ onClose, onSave, token }) {
           yacht_name: form.name,
           cached_data: cachedData,
           region: form.region,
+          sub_region: form.sub_region,
           pets_allowed: form.pets_allowed,
           groups_allowed: form.groups_allowed,
           water_toys: form.water_toys,
@@ -497,7 +545,7 @@ function CreateManualModal({ onClose, onSave, token }) {
             <label className="block text-sm text-gray-400 mb-1">Région d'affichage</label>
             <select
               value={form.region}
-              onChange={(e) => setForm({ ...form, region: e.target.value })}
+              onChange={(e) => setForm({ ...form, region: e.target.value, sub_region: '' })}
               className="w-full px-4 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0]"
             >
               {REGIONS.map(r => (
@@ -505,6 +553,22 @@ function CreateManualModal({ onClose, onSave, token }) {
               ))}
             </select>
           </div>
+
+          {availableSubRegions.length > 0 && (
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Sous-région</label>
+              <select
+                value={form.sub_region}
+                onChange={(e) => setForm({ ...form, sub_region: e.target.value })}
+                className="w-full px-4 py-2 bg-[#303135] border border-copper-700/50 rounded-xl text-copper-400"
+              >
+                <option value="">— Aucune sous-région —</option>
+                {availableSubRegions.map(sr => (
+                  <option key={sr.value} value={sr.value}>{sr.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div>
             <label className="block text-sm text-gray-400 mb-1">Description</label>
@@ -674,6 +738,9 @@ function SelectedYachtCard({ yacht, token, onUpdate, onRemove, onEdit, isSelecte
           {yacht.region && (
             <span className="text-copper-400">• {REGIONS.find(r => r.value === yacht.region)?.label || yacht.region}</span>
           )}
+          {yacht.sub_region && (
+            <span className="text-copper-300/80">› {getSubRegionsFor(yacht.region).find(sr => sr.value === yacht.sub_region)?.label?.split(' (')[0] || yacht.sub_region}</span>
+          )}
         </div>
         <div className="flex gap-1 mt-1">
           {yacht.pets_allowed && <PawPrint className="w-3 h-3 text-green-400" />}
@@ -785,6 +852,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
 
   const [activeTab, setActiveTab] = useState('selections');
   const [filterRegion, setFilterRegion] = useState('');
+  const [filterSubRegion, setFilterSubRegion] = useState('');
 
   // Sélection multiple pour suppression
   const [selectedForDeletion, setSelectedForDeletion] = useState(new Set());
@@ -794,17 +862,29 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const filteredSelections = filterRegion === 'unassigned'
-    ? selections.filter(s => !s.region)
-    : filterRegion
-      ? selections.filter(s => s.region === filterRegion)
-      : selections;
+  const filteredSelections = (() => {
+    let result = filterRegion === 'unassigned'
+      ? selections.filter(s => !s.region)
+      : filterRegion
+        ? selections.filter(s => s.region === filterRegion)
+        : selections;
+    if (filterSubRegion === 'unassigned') {
+      result = result.filter(s => !s.sub_region);
+    } else if (filterSubRegion) {
+      result = result.filter(s => s.sub_region === filterSubRegion);
+    }
+    return result;
+  })();
 
   const selectionsByRegion = REGIONS.slice(1).reduce((acc, region) => {
     acc[region.value] = selections.filter(s => s.region === region.value);
     return acc;
   }, {});
   selectionsByRegion[''] = selections.filter(s => !s.region);
+
+  const subRegionsForFilter = filterRegion && filterRegion !== 'unassigned'
+    ? getSubRegionsFor(filterRegion)
+    : [];
 
   const handleSearch = async () => {
     setSearching(true);
@@ -1159,7 +1239,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
           <div className="flex items-center gap-2 flex-wrap">
             <FolderOpen className="w-5 h-5 text-copper-400" />
             <button
-              onClick={() => setFilterRegion('')}
+              onClick={() => { setFilterRegion(''); setFilterSubRegion(''); }}
               className={`px-3 py-1 rounded-lg text-sm transition-colors ${
                 filterRegion === '' ? 'bg-copper-500 text-white' : 'bg-[#303135] text-gray-400 hover:text-white'
               }`}
@@ -1171,7 +1251,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
               return (
                 <button
                   key={region.value}
-                  onClick={() => setFilterRegion(region.value)}
+                  onClick={() => { setFilterRegion(region.value); setFilterSubRegion(''); }}
                   className={`px-3 py-1 rounded-lg text-sm transition-colors ${
                     filterRegion === region.value ? 'bg-copper-500 text-white' : 'bg-[#303135] text-gray-400 hover:text-white'
                   }`}
@@ -1182,7 +1262,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
             })}
             {selectionsByRegion['']?.length > 0 && (
               <button
-                onClick={() => setFilterRegion('unassigned')}
+                onClick={() => { setFilterRegion('unassigned'); setFilterSubRegion(''); }}
                 className={`px-3 py-1 rounded-lg text-sm transition-colors ${
                   filterRegion === 'unassigned' ? 'bg-copper-500 text-white' : 'bg-[#303135] text-gray-400 hover:text-white'
                 }`}
@@ -1191,6 +1271,44 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
               </button>
             )}
           </div>
+
+          {subRegionsForFilter.length > 0 && (
+            <div className="flex items-center gap-2 flex-wrap pl-7 border-l-2 border-copper-700/30">
+              <span className="text-xs text-gray-500 uppercase tracking-wider">Sous-région :</span>
+              <button
+                onClick={() => setFilterSubRegion('')}
+                className={`px-3 py-1 rounded-lg text-xs transition-colors ${
+                  filterSubRegion === '' ? 'bg-copper-400 text-white' : 'bg-[#2a2a30] text-gray-400 hover:text-white border border-gray-700'
+                }`}
+              >
+                Toutes
+              </button>
+              {subRegionsForFilter.map(sr => {
+                const count = selections.filter(s => s.region === filterRegion && s.sub_region === sr.value).length;
+                return (
+                  <button
+                    key={sr.value}
+                    onClick={() => setFilterSubRegion(sr.value)}
+                    className={`px-3 py-1 rounded-lg text-xs transition-colors ${
+                      filterSubRegion === sr.value ? 'bg-copper-400 text-white' : 'bg-[#2a2a30] text-gray-400 hover:text-white border border-gray-700'
+                    }`}
+                  >
+                    {sr.label.split(' (')[0]} ({count})
+                  </button>
+                );
+              })}
+              {selections.some(s => s.region === filterRegion && !s.sub_region) && (
+                <button
+                  onClick={() => setFilterSubRegion('unassigned')}
+                  className={`px-3 py-1 rounded-lg text-xs transition-colors ${
+                    filterSubRegion === 'unassigned' ? 'bg-copper-400 text-white' : 'bg-[#2a2a30] text-gray-400 hover:text-white border border-gray-700'
+                  }`}
+                >
+                  Non classés ({selections.filter(s => s.region === filterRegion && !s.sub_region).length})
+                </button>
+              )}
+            </div>
+          )}
 
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={filteredSelections.map(s => s.yacht_id)} strategy={verticalListSortingStrategy}>
