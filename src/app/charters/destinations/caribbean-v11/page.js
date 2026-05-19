@@ -161,7 +161,7 @@ function BandeauPhoto({ src, position = 'center' }) {
       onMouseEnter={activate} onMouseLeave={deactivate}
       onTouchStart={activate} onTouchEnd={deactivate}>
       <Image src={src} alt="" fill
-        className={`object-cover transition-all duration-1000 ${lit ? 'brightness-75 grayscale-0' : 'brightness-40 grayscale'}`}
+        className={`object-cover transition-all duration-1000 ${lit ? 'brightness-100' : 'brightness-90'}`}
         style={{ objectPosition: position }} />
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
     </div>
