@@ -439,14 +439,16 @@ export async function fetchVisibleYachtsForSubRegion(region, subRegion) {
       return await fetchYachtsForDestination(region);
     }
 
-    // IDs des yachts visibles taggés sur cette sous-région ET cette région
-    const matchingSelections = selections.filter(s =>
-      s.is_visible
-      && s.region === region
-      && s.sub_region === subRegion
-    );
+    // IDs des yachts visibles taggés sur cette région.
+    // subRegion null → pas de filtre sous-région (utile pour pages meta-region type Bahamas).
+    // subRegion fourni → filtre supplémentaire sur sub_region exact.
+    const matchingSelections = selections.filter(s => {
+      if (!s.is_visible || s.region !== region) return false;
+      if (subRegion === null || subRegion === undefined) return true;
+      return s.sub_region === subRegion;
+    });
 
-    // Aucun yacht taggé pour cette sous-région → fallback : tous les yachts visibles de la région
+    // Aucun yacht taggé → fallback : tous les yachts visibles de la région
     if (matchingSelections.length === 0) {
       return await fetchVisibleYachtsForDestination(region);
     }

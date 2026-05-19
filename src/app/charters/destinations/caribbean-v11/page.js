@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 
 // ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
 const caribbeanIslands = [
-  { name: 'Greater Antilles',   image: '/images/destinations/gretar antilles.jpg',                  href: '/charters/destinations/greater-antilles' },
-  { name: 'Leeward Islands',    image: '/images/destinations/Leeward Islands.jpg',                 href: '/yachts?destination=leeward-islands' },
-  { name: 'Leeward Antilles',   image: '/images/destinations/The Leeward Antilles.jpg',          href: '/yachts?destination=leeward-antilles' },
-  { name: 'Windward Islands',   image: '/images/destinations/the Windward Islands.jpg',            href: '/yachts?destination=windward-islands' },
-  { name: 'Turks & Caicos',     image: '/images/destinations/Turks and Caicos.jpg',                href: '/yachts?destination=turks-caicos' },
-  { name: 'Trinidad & Tobago',  image: '/images/destinations/Trinidad and Tobago.jpg',             href: '/yachts?destination=trinidad-tobago' },
-  { name: 'Grand Cayman',       image: '/images/destinations/Cayman Islands.jpg',                  href: '/yachts?destination=grand-cayman' },
+  { name: 'Greater Antilles',   image: '/images/pagesCaraibes/greater_antilles.png',  href: '/charters/destinations/greater-antilles' },
+  { name: 'Leeward Islands',    image: '/images/pagesCaraibes/leeward_island.png',    href: '/yachts?destination=leeward-islands' },
+  { name: 'Leeward Antilles',   image: '/images/pagesCaraibes/leeward_antilles.png',  href: '/yachts?destination=leeward-antilles' },
+  { name: 'Windward Islands',   image: '/images/pagesCaraibes/windward_island.png',   href: '/yachts?destination=windward-islands' },
+  { name: 'Turks & Caicos',     image: '/images/pagesCaraibes/turks_caicos.png',      href: '/yachts?destination=turks-caicos' },
+  { name: 'Trinidad & Tobago',  image: '/images/pagesCaraibes/unnamed.jpg',           href: '/yachts?destination=trinidad-tobago' },
+  { name: 'Grand Cayman',       image: '/images/pagesCaraibes/grand_cayman.png',      href: '/yachts?destination=grand-cayman' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────
@@ -138,7 +138,7 @@ function DestCard({ name, image, href }) {
       onTouchStart={activate} onTouchEnd={deactivate}
       className="relative overflow-hidden block cursor-pointer h-[220px] md:h-[280px]">
       <Image src={image} alt={name} fill
-        className={`object-cover transition-all duration-700 ${lit ? 'brightness-90 grayscale-0 scale-105' : 'brightness-70 grayscale scale-100'}`} />
+        className={`object-cover transition-all duration-700 ${lit ? 'brightness-100 scale-105' : 'brightness-90 scale-100'}`} />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
       <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-500 ${lit ? 'opacity-100' : 'opacity-0'}`} />
       <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5">
@@ -188,7 +188,7 @@ function CircleCard({ name, image, nameBelow = false }) {
       {/* border séparé de overflow-hidden pour ne pas être coupé */}
       <div
         className="rounded-full border-4 transition-all duration-300 p-0.5"
-        style={{ borderColor: lit ? '#c2622a' : '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'border-color 0.3s, transform 0.3s' }}>
+        style={{ borderColor: '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.3s' }}>
         <div className={`relative ${size} rounded-full overflow-hidden`}>
           <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
