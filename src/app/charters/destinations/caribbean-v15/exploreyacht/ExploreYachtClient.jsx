@@ -107,7 +107,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
         {/* Header */}
         <div className="mb-6">
           <h1 className="trajan-regular text-3xl md:text-4xl text-[#C0C0C0] mb-2 text-center uppercase tracking-[0.1em]">
-            Caribbean — Our Yacht Fleet
+            Caribbean<br />Our Yacht Fleet
           </h1>
           <p className="text-[#acb0cd] text-center">
             {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
@@ -138,7 +138,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
                   <button
                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 rounded-lg border border-[#C0C0C0] text-[#acb0cd] bg-transparent transition-colors hover:border-[#B03E00] hover:text-[#B03E00] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#C0C0C0] disabled:hover:text-[#acb0cd]"
+                    className="px-4 py-2 rounded-lg border border-[#C0C0C0] text-[#acb0cd] bg-[#3a3b3f] transition-colors hover:border-[#B03E00] hover:text-[#B03E00] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#C0C0C0] disabled:hover:text-[#acb0cd]"
                   >
                     Previous
                   </button>
@@ -158,7 +158,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
                           className={`w-10 h-10 rounded-lg border transition-colors ${
                             isActive
                               ? 'bg-[#B03E00] border-[#B03E00] text-white'
-                              : 'bg-transparent border-[#C0C0C0] text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00]'
+                              : 'bg-[#3a3b3f] border-[#C0C0C0] text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00]'
                           }`}
                         >
                           {pageNum}
@@ -170,7 +170,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
                   <button
                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
-                    className="px-4 py-2 rounded-lg border border-[#C0C0C0] text-[#acb0cd] bg-transparent transition-colors hover:border-[#B03E00] hover:text-[#B03E00] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#C0C0C0] disabled:hover:text-[#acb0cd]"
+                    className="px-4 py-2 rounded-lg border border-[#C0C0C0] text-[#acb0cd] bg-[#3a3b3f] transition-colors hover:border-[#B03E00] hover:text-[#B03E00] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#C0C0C0] disabled:hover:text-[#acb0cd]"
                   >
                     Next
                   </button>
