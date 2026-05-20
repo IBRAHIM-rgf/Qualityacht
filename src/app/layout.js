@@ -48,7 +48,7 @@ export const metadata = {
   openGraph: {
     title: "Qualityacht - Luxury Yacht Charters",
     description: "Explore the world of luxury yacht charters with Qualityacht. Experience bespoke services, adrenaline, elegance, and discovery.",
-    url: "https://qualityacht.com",
+    url: "https://mamzellehazel.vercel.app",
     siteName: "Qualityacht",
     images: [
       {
@@ -88,10 +88,10 @@ export const metadata = {
   category: "Travel & Leisure", 
   description: "Explore the world of luxury yacht charters with Qualityacht. Experience bespoke services, adrenaline, elegance, and discovery.",
   alternates: {
-    canonical: "https://qualityacht.com",
+    canonical: "https://mamzellehazel.vercel.app",
     languages: {
-      "en-US": "https://qualityacht.com/en",
-      "fr-FR": "https://qualityacht.com/fr",
+      "en-US": "https://mamzellehazel.vercel.app/en",
+      "fr-FR": "https://mamzellehazel.vercel.app/fr",
     },
   },
   verification: {

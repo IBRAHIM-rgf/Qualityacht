@@ -85,7 +85,7 @@ export default function LeewardIslandsClient({ yachts, totalYachts }) {
   return (
     <SubRegionPage
       title="Leeward Islands"
-      heroImage="/images/destinations/Leeward Islands.jpg"
+      heroImage="/images/destinations/Leeward Islands-original.jpg"
       heroIslands={HERO_ISLANDS}
       shortDescription={<ShortDescription />}
       longDescription={<LongDescription />}

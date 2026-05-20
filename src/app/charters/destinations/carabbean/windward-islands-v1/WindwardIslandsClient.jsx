@@ -87,7 +87,7 @@ export default function WindwardIslandsClient({ yachts, totalYachts }) {
   return (
     <SubRegionPage
       title="Windward Islands"
-      heroImage="/images/destinations/the Windward Islands.jpg"
+      heroImage="/images/destinations/the Windward Islands-original.jpg"
       heroIslands={HERO_ISLANDS}
       shortDescription={<ShortDescription />}
       longDescription={<LongDescription />}

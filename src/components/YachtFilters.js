@@ -56,7 +56,7 @@ const MAX_LENGTH_M = 140;
 const MIN_LENGTH_FT = 33; // ~10m
 const MAX_LENGTH_FT = 459; // ~140m
 
-export default function YachtFilters({ filters, onChange }) {
+export default function YachtFilters({ filters, onChange, mobileButtonClass = 'text-[#C0C0C0]' }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
@@ -443,7 +443,7 @@ export default function YachtFilters({ filters, onChange }) {
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#2e2f32] border-t border-white/10 shadow-lg">
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="w-full flex items-center justify-center gap-2 py-4 px-6 text-[#C0C0C0] font-medium"
+          className={`w-full flex items-center justify-center gap-2 py-4 px-6 font-medium ${mobileButtonClass}`}
         >
           <Filter className="w-5 h-5" />
           <span>Filters</span>

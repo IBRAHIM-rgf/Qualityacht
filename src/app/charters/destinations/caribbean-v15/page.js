@@ -4,14 +4,15 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 // ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
+// image = nouvelle (repos) ; imageOld = ancienne colorée (apparaît au survol)
 const caribbeanIslands = [
-  { name: 'Greater Antilles',   image: '/images/destinations/gretar antilles-original.jpg',                  href: '/charters/destinations/greater-antilles' },
-  { name: 'Leeward Islands',    image: '/images/destinations/Leeward Islands-original.jpg',                 href: '/yachts?destination=leeward-islands' },
-  { name: 'Leeward Antilles',   image: '/images/destinations/The Leeward Antilles-original.jpg',          href: '/yachts?destination=leeward-antilles' },
-  { name: 'Windward Islands',   image: '/images/destinations/the Windward Islands-original.jpg',            href: '/yachts?destination=windward-islands' },
-  { name: 'Turks & Caicos',     image: '/images/destinations/Turks and Caicos-original.jpg',                href: '/yachts?destination=turks-caicos' },
-  { name: 'Trinidad & Tobago',  image: '/images/destinations/Trinidad and Tobago-original.jpg',             href: '/yachts?destination=trinidad-tobago' },
-  { name: 'Grand Cayman',       image: '/images/destinations/Cayman Islands-original.jpg',                  href: '/yachts?destination=grand-cayman' },
+  { name: 'Greater Antilles',   image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/greater-antilles' },
+  { name: 'Leeward Islands',    image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/yachts?destination=leeward-islands' },
+  { name: 'Leeward Antilles',   image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/yachts?destination=leeward-antilles' },
+  { name: 'Windward Islands',   image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/yachts?destination=windward-islands' },
+  { name: 'Turks & Caicos',     image: '/images/pagesCaraibes/turks_caicos.png',      imageOld: '/images/destinations/Turks and Caicos-original.jpg',    href: '/yachts?destination=turks-caicos' },
+  { name: 'Trinidad & Tobago',  image: '/images/pagesCaraibes/unnamed.jpg',           imageOld: '/images/destinations/Trinidad and Tobago-original.jpg', href: '/yachts?destination=trinidad-tobago' },
+  { name: 'Grand Cayman',       image: '/images/pagesCaraibes/grand_cayman.png',      imageOld: '/images/destinations/Cayman Islands-original.jpg',      href: '/yachts?destination=grand-cayman' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────
@@ -32,7 +33,7 @@ const popularDestinations = [
   { name: 'Antigua et Barbuda',               image: '/images/destinations/flowers/Antigua et Barbuda.jpeg',              href: '/yachts?destination=antigua',     nameBelow: true },
   { name: 'British Virgin Islands',           image: '/images/destinations/flowers/British Virgin Islands.jpg',           href: '/yachts?destination=bvi',         nameBelow: true },
   { name: 'Saint-Martin / Sint Maarten',      image: '/images/destinations/flowers/Saint-Martin  Sint Maarten.jpg',       href: '/yachts?destination=saint-martin', nameBelow: true },
-  { name: 'St Barth Allamanda',               image: '/images/destinations/flowers/St barth Allamanda.jpg',               href: '/yachts?destination=st-barts',    nameBelow: true },
+  { name: 'St Barthélémy',                     image: '/images/destinations/flowers/St barth Allamanda.jpg',               href: '/yachts?destination=st-barts',    nameBelow: true },
 ];
 
 // ── FAQ ────────────────────────────────────────────────────────────────────────
@@ -124,21 +125,28 @@ function useReveal() {
 }
 
 // ── Carte rectangulaire ────────────────────────────────────────────────────────
-function DestCard({ name, image, href }) {
+// Repos : nouvelle image. Survol : l'ancienne image colorée apparaît (cross-fade).
+function DestCard({ name, image, imageOld, href }) {
   const [lit, setLit] = useState(false);
   const timerRef = useRef(null);
   function activate() { clearTimeout(timerRef.current); setLit(true); }
-  function deactivate() { timerRef.current = setTimeout(() => setLit(false), 1500); }
+  function deactivate() { timerRef.current = setTimeout(() => setLit(false), 200); }
   function handleClick(e) {
     e.preventDefault(); clearTimeout(timerRef.current); setLit(true);
-    setTimeout(() => { window.location.href = href; }, 900);
+    setTimeout(() => { window.location.href = href; }, 600);
   }
   return (
     <a href={href} onClick={handleClick} onMouseEnter={activate} onMouseLeave={deactivate}
       onTouchStart={activate} onTouchEnd={deactivate}
       className="relative overflow-hidden block cursor-pointer h-[220px] md:h-[280px]">
+      {/* Nouvelle image (repos) */}
       <Image src={image} alt={name} fill
-        className={`object-cover transition-all duration-700 ${lit ? 'brightness-90 grayscale-0 scale-105' : 'brightness-70 grayscale scale-100'}`} />
+        className={`object-cover transition-opacity duration-300 ease-out ${lit ? 'opacity-0' : 'opacity-100'}`} />
+      {/* Ancienne image colorée (survol) */}
+      {imageOld && (
+        <Image src={imageOld} alt={name} fill
+          className={`object-cover transition-opacity duration-300 ease-out ${lit ? 'opacity-100' : 'opacity-0'}`} />
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
       <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-500 ${lit ? 'opacity-100' : 'opacity-0'}`} />
       <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5">
@@ -150,19 +158,26 @@ function DestCard({ name, image, href }) {
   );
 }
 
-// ── Bandeau photo avec couleur au hover (4s) ──────────────────────────────────
-function BandeauPhoto({ src, position = 'center' }) {
+// ── Bandeau photo : repos = nouvelle, survol = ancienne (cross-fade 4s) ─────────
+function BandeauPhoto({ src, srcOld, position = 'center' }) {
   const [lit, setLit] = useState(false);
   const timerRef = useRef(null);
   function activate() { clearTimeout(timerRef.current); setLit(true); }
-  function deactivate() { timerRef.current = setTimeout(() => setLit(false), 4000); }
+  function deactivate() { timerRef.current = setTimeout(() => setLit(false), 300); }
   return (
     <div className="relative h-[45vh] md:h-[70vh] overflow-hidden cursor-pointer"
       onMouseEnter={activate} onMouseLeave={deactivate}
       onTouchStart={activate} onTouchEnd={deactivate}>
+      {/* Nouvelle image (repos) */}
       <Image src={src} alt="" fill
-        className={`object-cover transition-all duration-1000 ${lit ? 'brightness-75 grayscale-0' : 'brightness-40 grayscale'}`}
+        className={`object-cover transition-opacity duration-500 ease-out ${lit && srcOld ? 'opacity-0' : 'opacity-100'}`}
         style={{ objectPosition: position }} />
+      {/* Ancienne image (survol) */}
+      {srcOld && (
+        <Image src={srcOld} alt="" fill
+          className={`object-cover transition-opacity duration-500 ease-out ${lit ? 'opacity-100' : 'opacity-0'}`}
+          style={{ objectPosition: position }} />
+      )}
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
     </div>
   );
@@ -188,7 +203,7 @@ function CircleCard({ name, image, nameBelow = false }) {
       {/* border séparé de overflow-hidden pour ne pas être coupé */}
       <div
         className="rounded-full border-4 transition-all duration-300 p-0.5"
-        style={{ borderColor: lit ? '#c2622a' : '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'border-color 0.3s, transform 0.3s' }}>
+        style={{ borderColor: '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.3s' }}>
         <div className={`relative ${size} rounded-full overflow-hidden`}>
           <Image src={image} alt={name} fill className={`object-cover transition-all duration-500 ${lit ? 'brightness-100 grayscale-0 scale-110' : 'brightness-75 grayscale'}`} />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
@@ -291,7 +306,7 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
 }
 
 // ── Page ───────────────────────────────────────────────────────────────────────
-export default function CaribbeanV10Page() {
+export default function CaribbeanV15Page() {
   const heroRef = useRef(null);
   useEffect(() => {
     const el = heroRef.current;
@@ -313,7 +328,7 @@ export default function CaribbeanV10Page() {
         {/* ══ HERO ══ */}
         <div className="relative h-screen">
           <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.6) 0%, transparent 25%, transparent 70%, rgba(38,39,42,0.8) 100%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
           <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
             <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
               <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
@@ -362,7 +377,7 @@ export default function CaribbeanV10Page() {
         </CloudSection>
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
-        <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" position="center 40%" />
+        <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 3 centré ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
@@ -399,7 +414,7 @@ export default function CaribbeanV10Page() {
         </CloudSection>
 
         {/* ══ BANDEAU palmiers — couleur au hover 4s ══ */}
-        <BandeauPhoto src="/images/pagesCaraibes/palmierscaraibes.jpeg" />
+        <BandeauPhoto src="/images/pagesCaraibes/palmierscaraibes.jpeg" srcOld="/images/pagesCaraibes/palmierscaraibes-original.jpeg" />
 
         {/* ══ POPULAR DESTINATIONS — cercles slider ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
@@ -424,8 +439,8 @@ export default function CaribbeanV10Page() {
             <p className="text-[#acb0cd]/60 text-sm md:text-base max-w-xs md:max-w-md mx-auto mb-5 md:mb-6 leading-relaxed">
               Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.
             </p>
-            <a href="/charters"
-              style={{ color: '#c2622a', backgroundColor: '#C0C0C0', borderColor: '#C0C0C0' }}
+            <a href="/charters/destinations/caribbean-v15/exploreyacht"
+              style={{ color: '#c2622a', backgroundColor: '#26272a', borderColor: '#C0C0C0' }}
               className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border rounded-full hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-all duration-300">
               Explore Yachts
             </a>
