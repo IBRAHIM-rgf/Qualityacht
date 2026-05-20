@@ -116,7 +116,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
         </div>
 
         {/* Filters (mobile bouton orange) */}
-        <YachtFilters filters={filters} onChange={setFilters} mobileButtonClass="text-[#B03E00]" />
+        <YachtFilters filters={filters} onChange={setFilters} mobileButtonClass="text-[#B03E00]" mobileLabelClass="border border-[#C0C0C0] rounded-full px-5 py-2" />
 
         {/* Yacht Grid */}
         <main className="mt-6">
@@ -157,7 +157,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
                           onClick={() => setCurrentPage(pageNum)}
                           className={`w-10 h-10 rounded-lg border transition-colors ${
                             isActive
-                              ? 'bg-[#B03E00] border-[#B03E00] text-white'
+                              ? 'bg-[#B03E00] border-[#C0C0C0] text-white'
                               : 'bg-[#3a3b3f] border-[#C0C0C0] text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00]'
                           }`}
                         >
