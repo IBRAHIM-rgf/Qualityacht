@@ -85,7 +85,18 @@ export default function RequestQuoteWizard() {
   const goBack = () => setStep(s => Math.max(0, s - 1));
 
   return (
-    <div className="min-h-screen bg-[#26272a] text-[#acb0cd] pt-24 pb-20 px-4 overflow-x-hidden">
+    <div className="relative min-h-screen text-[#acb0cd] pt-24 pb-20 px-4 overflow-x-hidden">
+      {/* Fond de base */}
+      <div className="fixed inset-0 -z-20 bg-[#26272a]" />
+      {/* Fond plein écran Thank You — photo voilier filtre sépia (esprit Global Jet) */}
+      {step === 2 && (
+        <div className="fixed inset-0 -z-10">
+          <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover"
+            style={{ filter: 'grayscale(1) sepia(0.85) contrast(1.05) brightness(0.85)' }} />
+          <div className="absolute inset-0 bg-black/45" />
+        </div>
+      )}
+
       <h1 className="trajan-regular text-2xl md:text-4xl text-center uppercase tracking-[0.15em] mb-10 md:mb-14" style={{ color: '#c2622a' }}>
         Request Your Charter
       </h1>
@@ -228,31 +239,22 @@ export default function RequestQuoteWizard() {
             </div>
           </section>
 
-          {/* ══ ÉTAPE 3 — THANK YOU ══ */}
+          {/* ══ ÉTAPE 3 — THANK YOU (fond plein écran géré au niveau page) ══ */}
           <section className="w-full shrink-0 px-1">
-            <div className="relative overflow-hidden rounded-sm min-h-[65vh] flex items-center justify-center">
-              {/* Fond photo + filtre noir & blanc / rouge clair (duotone) */}
-              <div className="absolute inset-0">
-                <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover" style={{ filter: 'grayscale(1) contrast(1.08)' }} />
-                <div className="absolute inset-0" style={{ backgroundColor: '#e34b4b', mixBlendMode: 'multiply', opacity: 0.55 }} />
-                <div className="absolute inset-0" style={{ backgroundColor: '#26272a', opacity: 0.55 }} />
+            <div className="max-w-2xl mx-auto text-center py-12 md:py-24 px-4">
+              <div className="w-16 h-16 rounded-full border border-[#c2622a] bg-black/30 flex items-center justify-center mx-auto mb-6">
+                <Check className="w-8 h-8 text-[#c2622a]" />
               </div>
-              {/* Contenu */}
-              <div className="relative z-10 max-w-2xl mx-auto text-center py-12 md:py-20 px-4">
-                <div className="w-16 h-16 rounded-full border border-[#c2622a] bg-[#26272a]/40 flex items-center justify-center mx-auto mb-6">
-                  <Check className="w-8 h-8 text-[#c2622a]" />
-                </div>
-                <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-white mb-4">Thank You!</h2>
-                <div className="w-12 h-px bg-[#c2622a] mx-auto mb-6" />
-                <p className="text-white/90 leading-relaxed mb-8">
-                  Your request for <span className="text-[#d39478]">{yacht.name}</span> has been received.
-                  One of our charter experts will contact you shortly to craft your bespoke itinerary.
-                </p>
-                <a href="/charters/destinations/caribbean-v15"
-                  className="inline-block px-10 py-4 border border-[#C0C0C0] bg-[#26272a]/40 text-[#c2622a] text-sm uppercase tracking-[0.2em] hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-colors">
-                  Back to Caribbean
-                </a>
-              </div>
+              <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-white mb-4">Thank You!</h2>
+              <div className="w-12 h-px bg-[#c2622a] mx-auto mb-6" />
+              <p className="text-white/90 leading-relaxed mb-8">
+                Your request for <span className="text-[#d39478]">{yacht.name}</span> has been received.
+                One of our charter experts will contact you shortly to craft your bespoke itinerary.
+              </p>
+              <a href="/charters/destinations/caribbean-v15"
+                className="inline-block px-10 py-4 border border-[#C0C0C0] bg-black/30 text-[#c2622a] text-sm uppercase tracking-[0.2em] hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-colors">
+                Back to Caribbean
+              </a>
             </div>
           </section>
 
