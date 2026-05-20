@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { X, ChevronLeft, ChevronRight, MapPin, Users, BedDouble, Ruler, Map, Anchor, Ship } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
 import { formatLength } from '@/lib/unitConversion';
 
 export default function YachtModal({ yacht, isOpen, onClose }) {
+  const router = useRouter();
   const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
@@ -37,6 +39,18 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
     if (e.target === e.currentTarget) {
       onClose();
     }
+  };
+
+  const handleRequestQuote = () => {
+    const params = new URLSearchParams();
+    if (yacht.name) params.set('name', yacht.name);
+    if (images[0]) params.set('image', images[0]);
+    const guests = yacht.guests || yacht.capacity;
+    if (guests) params.set('guests', String(guests));
+    if (yacht.type) params.set('type', yacht.type);
+    if (yacht.region) params.set('region', yacht.region);
+    if (yacht.pricePerHour || yacht.price) params.set('price', yacht.pricePerHour || yacht.price);
+    router.push(`/request-quote?${params.toString()}`);
   };
 
   return (
@@ -234,7 +248,7 @@ export default function YachtModal({ yacht, isOpen, onClose }) {
 
           {/* Action Button */}
           <div className="mt-8">
-            <button className="w-full bg-gradient-to-r from-[#3a3b3f]/50 via-[#d39478]/40 to-[#3a3b3f]/50 hover:from-[#3a3b3f]/60 hover:via-[#d39478]/55 hover:to-[#3a3b3f]/60 rounded-xl p-4 border border-[#C0C0C0] flex items-center justify-center gap-3 transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+            <button onClick={handleRequestQuote} className="w-full bg-gradient-to-r from-[#3a3b3f]/50 via-[#d39478]/40 to-[#3a3b3f]/50 hover:from-[#3a3b3f]/60 hover:via-[#d39478]/55 hover:to-[#3a3b3f]/60 rounded-xl p-4 border border-[#C0C0C0] flex items-center justify-center gap-3 transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
               <Image
                 src="/images/logoFondTrans.png"
                 alt="Qualityacht"
