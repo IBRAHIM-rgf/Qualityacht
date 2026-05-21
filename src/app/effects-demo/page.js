@@ -39,7 +39,7 @@ const EFFECTS = [
 
 const css = `
   .fxbox { position:relative; overflow:hidden; border-radius:0.75rem; border:1px solid #C0C0C0; background:#000; aspect-ratio:2/3; perspective:700px; cursor:pointer; }
-  .fxbox img { width:100%; height:100%; object-fit:cover; display:block; transform-origin:center;
+  .fxbox .fxphoto { width:100%; height:100%; object-fit:cover; display:block; transform-origin:center;
     animation-duration:2.8s; animation-iteration-count:1; animation-fill-mode:both; animation-timing-function:ease; }
 
   .fx1{animation-name:k1}  @keyframes k1{0%{opacity:0}100%{opacity:1}}
@@ -102,7 +102,7 @@ export default function Page() {
             <p className="text-[11px] uppercase tracking-[0.15em] text-[#acb0cd] mb-2">{name}</p>
             <div className="fxbox" onClick={() => replay(cls)} title="Cliquer pour rejouer">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img key={`${cls}-${allTick}-${ticks[cls] || 0}`} src={IMG} alt={name} className={cls} />
+              <img key={`${cls}-${allTick}-${ticks[cls] || 0}`} src={IMG} alt={name} className={`fxphoto ${cls}`} />
               {/* Overlay texte Thank You par-dessus la photo */}
               <div className="absolute inset-0 bg-black/35 pointer-events-none" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
