@@ -22,8 +22,9 @@ const combinedItems = [...activeItems, ...activeItems2];
 
 export default function Luxuryandcontactsection() {
   return (
-    <section 
-      className="relative min-h-screen  flex items-center -mt-16 justify-center bg-cover bg-center bg-no-repeat"
+    <section
+      id="discovery"
+      className="relative min-h-screen  flex items-center -mt-16 justify-center bg-cover bg-center bg-no-repeat scroll-mt-24"
       style={{
         backgroundImage: "url('/images/testvague.png')",
         backgroundPositionY: 'top',
