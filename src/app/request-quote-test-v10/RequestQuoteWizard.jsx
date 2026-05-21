@@ -684,7 +684,7 @@ export default function RequestQuoteWizard() {
           <section className="w-full shrink-0 px-1">
             <div className="max-w-2xl mx-auto text-center px-2 md:px-4 pt-24 pb-10 md:py-24 min-h-[80vh] md:min-h-0 flex flex-col items-center justify-between md:justify-center gap-20 md:gap-0">
               <div className="flex flex-col items-center w-full">
-                <h2 className="trajan-regular font-bold text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#B03E00] mb-8 md:mb-4">Grateful</h2>
+                <div className="trajan-regular font-bold text-2xl md:text-3xl uppercase tracking-[0.12em] mb-8 md:mb-4" style={{ color: '#B03E00' }}>Grateful</div>
                 <div className="relative w-44 h-10 mx-auto mb-10 md:mb-6 overflow-hidden">
                   <Image src="/images/title-line.png" alt="" fill className="object-contain scale-x-150 scale-y-[3]" />
                 </div>
