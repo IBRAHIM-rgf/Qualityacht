@@ -106,7 +106,7 @@ export default function Page() {
               {/* Overlay texte Thank You par-dessus la photo */}
               <div className="absolute inset-0 bg-black/35 pointer-events-none" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/trans.png" alt="" className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-10 object-contain z-10 pointer-events-none" />
+              <img src="/images/trans.png" alt="" className="absolute top-2 left-1/2 -translate-x-1/2 w-6 h-6 object-contain z-10 pointer-events-none" />
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-3 pointer-events-none">
                 <h3 className="trajan-regular font-bold uppercase tracking-[0.12em] text-[#C0C0C0] text-sm md:text-base">Grateful</h3>
                 <div className="w-8 h-px bg-[#c2622a] my-2" />
