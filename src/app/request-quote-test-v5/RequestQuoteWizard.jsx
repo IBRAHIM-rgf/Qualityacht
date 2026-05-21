@@ -494,12 +494,15 @@ export default function RequestQuoteWizard() {
     <div className="relative min-h-screen text-[#acb0cd] pt-24 pb-20 px-4 overflow-x-hidden">
       {/* Fond de base */}
       <div className="fixed inset-0 -z-20 bg-[#26272a]" />
-      {/* Fond plein écran Thank You — photo voilier SANS filtre, défile avec le contenu */}
+      {/* Fond plein écran Thank You — la photo arrive APRES un temps de lecture (transition douce) */}
       {step === 2 && (
-        <div className="absolute inset-0 -z-10">
-          <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover object-top" />
-          <div className="absolute inset-0 bg-black/35" />
-        </div>
+        <>
+          <style>{`@keyframes thankPhotoIn{0%{opacity:0;transform:scale(1.08)}40%{opacity:0;transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}`}</style>
+          <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 5s ease forwards' }}>
+            <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover object-top" />
+            <div className="absolute inset-0 bg-black/35" />
+          </div>
+        </>
       )}
 
       <h1 className="trajan-regular font-bold text-2xl md:text-4xl text-center uppercase tracking-[0.15em] mb-10 md:mb-14 text-[#C0C0C0]">
