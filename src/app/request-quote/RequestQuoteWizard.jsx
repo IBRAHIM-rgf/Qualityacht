@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Calendar, Users, Ship, Plane, ArrowLeft, Check } from 'lucide-react';
 
-const STEPS = ['Charter Details', 'Contact Information', 'Thank You!'];
+const STEPS = ['Charter Details', 'Contact Info', 'Thank You!'];
 
 const TITLES = ['', 'Mr', 'Mrs', 'Ms', 'Miss', 'Dr', 'Prof', 'Sir', 'Lady'];
 
@@ -55,7 +55,7 @@ function StepIndicator({ step }) {
                 src={i < step ? '/images/logoFondTrans.png' : '/images/trans.png'}
                 alt=""
                 fill
-                className={`object-contain transition-opacity duration-500 ${i <= step ? 'opacity-100' : 'opacity-50'}`}
+                className={`object-cover scale-110 transition-opacity duration-500 ${i <= step ? 'opacity-100' : 'opacity-50'}`}
               />
             </div>
             <span
@@ -107,8 +107,20 @@ function GhostButton({ children, onClick, className = '' }) {
   );
 }
 
+// Bouton primaire identique au "Apply Filters" du filtre mobile /yachts
+function PrimaryButton({ children, onClick, className = '' }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`border-2 border-[#C0C0C0] rounded-xl text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
 const inputClass =
-  'w-full bg-transparent border border-[#C0C0C0] rounded-xl px-4 py-3 text-[#acb0cd] text-sm placeholder-[#6a6b6e] focus:outline-none focus:border-[#c2622a] transition-colors';
+  'w-full bg-[#3a3b3f] border border-[#C0C0C0] rounded-xl px-4 py-3 text-[#acb0cd] text-sm placeholder-[#6a6b6e] focus:outline-none focus:border-[#c2622a] transition-colors';
 
 // Créneaux de rappel : 30 min de 09:00 à 19:00
 const CALLBACK_SLOTS = (() => {
@@ -124,20 +136,20 @@ function CountryInput({ country, onCountry, value, onValue, placeholder, type = 
   return (
     <div className="flex">
       <select value={country} onChange={e => onCountry(e.target.value)}
-        className="bg-[#26272a] border border-[#C0C0C0] border-r-0 rounded-l-xl px-2 py-3 text-[#acb0cd] text-sm max-w-[120px] focus:outline-none focus:border-[#c2622a]">
+        className="bg-[#3a3b3f] border border-[#C0C0C0] border-r-0 rounded-l-xl px-2 py-3 text-[#acb0cd] text-sm max-w-[120px] focus:outline-none focus:border-[#c2622a]">
         {COUNTRIES.map(c => (
           <option key={c.name} value={c.name} className="bg-[#2e2f32]">{c.flag} {c.name} {c.code}</option>
         ))}
       </select>
       {options ? (
         <select value={value} onChange={e => onValue(e.target.value)}
-          className="w-full bg-[#26272a] border border-[#C0C0C0] rounded-r-xl px-4 py-3 text-[#acb0cd] text-sm focus:outline-none focus:border-[#c2622a]">
+          className="w-full bg-[#3a3b3f] border border-[#C0C0C0] rounded-r-xl px-4 py-3 text-[#acb0cd] text-sm focus:outline-none focus:border-[#c2622a]">
           <option value="" className="bg-[#2e2f32]">Select a time</option>
           {options.map(o => <option key={o} value={o} className="bg-[#2e2f32]">{o}</option>)}
         </select>
       ) : (
         <input type={type} value={value} onChange={e => onValue(e.target.value)} placeholder={placeholder}
-          className={`w-full bg-transparent border border-[#C0C0C0] rounded-r-xl px-4 py-3 text-[#acb0cd] text-sm placeholder-[#6a6b6e] focus:outline-none focus:border-[#c2622a] transition-colors ${extra}`} />
+          className={`w-full bg-[#3a3b3f] border border-[#C0C0C0] rounded-r-xl px-4 py-3 text-[#acb0cd] text-sm placeholder-[#6a6b6e] focus:outline-none focus:border-[#c2622a] transition-colors ${extra}`} />
       )}
     </div>
   );
@@ -206,17 +218,17 @@ export default function RequestQuoteWizard() {
                 <h2 className="trajan-regular text-xl md:text-2xl text-[#acb0cd] uppercase tracking-[0.1em] mt-4">{yacht.name}</h2>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {yacht.type && (
-                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 text-[#acb0cd] capitalize">
+                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd] capitalize">
                       <Ship className="w-3 h-3 text-[#c2622a]" /> {yacht.type}
                     </span>
                   )}
                   {yacht.region && (
-                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 text-[#acb0cd]">
+                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
                       {yacht.region}
                     </span>
                   )}
                   {yacht.price && (
-                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 text-[#acb0cd]">
+                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
                       {yacht.price}/week
                     </span>
                   )}
@@ -252,7 +264,7 @@ export default function RequestQuoteWizard() {
                 </Field>
 
                 {/* Confirmation infos filtre — tout en lavande */}
-                <div className="border border-[#C0C0C0] rounded-xl p-4">
+                <div className="border border-[#C0C0C0] rounded-xl p-4 bg-[#3a3b3f]">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd] mb-2">Your selection</p>
                   <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-[#acb0cd]">
                     <span>Yacht: {yacht.name}</span>
@@ -272,7 +284,7 @@ export default function RequestQuoteWizard() {
                 </label>
 
                 <div className="pt-2">
-                  <GhostButton onClick={goNext} className="w-full md:w-auto px-12 py-4">Continue</GhostButton>
+                  <PrimaryButton onClick={goNext} className="w-full md:w-auto px-12 py-4">Continue</PrimaryButton>
                 </div>
               </div>
             </div>
@@ -344,7 +356,7 @@ export default function RequestQuoteWizard() {
                 <GhostButton onClick={goBack} className="inline-flex items-center gap-3 px-6 py-3">
                   <ArrowLeft className="w-5 h-5" /> Go Back
                 </GhostButton>
-                <GhostButton onClick={goNext} className="px-12 py-4">Confirm</GhostButton>
+                <PrimaryButton onClick={goNext} className="px-12 py-4">Confirm</PrimaryButton>
               </div>
             </div>
           </section>
