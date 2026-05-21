@@ -244,7 +244,7 @@ const COUNTRIES = [
 
 function StepIndicator({ step }) {
   return (
-    <div className="flex items-center justify-start md:justify-center gap-0 max-w-3xl mx-auto px-4 mb-12 md:mb-16 overflow-hidden md:overflow-visible">
+    <div className={`flex items-center ${step === 0 ? 'justify-start' : step === 1 ? 'justify-center' : 'justify-end'} md:justify-center gap-0 max-w-3xl mx-auto px-4 mb-12 md:mb-16 overflow-hidden md:overflow-visible`}>
       {STEPS.map((label, i) => (
         <div key={i} className="flex items-center shrink-0 md:flex-1 last:flex-none">
           <div className="flex flex-col items-center">
@@ -512,19 +512,19 @@ export default function RequestQuoteWizard() {
 
               {/* Détails charter */}
               <div className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Field label="Departure Date" required>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none" />
+                    <div className="relative min-w-0">
+                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none z-10" />
                       <input type="date" value={charter.startDate} onChange={e => setCharter({ ...charter, startDate: e.target.value })}
-                        className={`${inputClass} pl-10 [color-scheme:dark]`} />
+                        className={`${inputClass} pl-10 min-w-0 max-w-full [color-scheme:dark]`} />
                     </div>
                   </Field>
                   <Field label="Return Date" required>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none" />
+                    <div className="relative min-w-0">
+                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none z-10" />
                       <input type="date" value={charter.endDate} onChange={e => setCharter({ ...charter, endDate: e.target.value })}
-                        className={`${inputClass} pl-10 [color-scheme:dark]`} />
+                        className={`${inputClass} pl-10 min-w-0 max-w-full [color-scheme:dark]`} />
                     </div>
                   </Field>
                 </div>
