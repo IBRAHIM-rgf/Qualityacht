@@ -177,9 +177,9 @@ export default function RequestQuoteWizard() {
     <div className="relative min-h-screen text-[#acb0cd] pt-24 pb-20 px-4 overflow-x-hidden">
       {/* Fond de base */}
       <div className="fixed inset-0 -z-20 bg-[#26272a]" />
-      {/* Fond plein écran Thank You — photo voilier SANS filtre */}
+      {/* Fond plein écran Thank You — photo voilier SANS filtre, défile avec le contenu */}
       {step === 2 && (
-        <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 -z-10">
           <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover" />
           <div className="absolute inset-0 bg-black/35" />
         </div>
