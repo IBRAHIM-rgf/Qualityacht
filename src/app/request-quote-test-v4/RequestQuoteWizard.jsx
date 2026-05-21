@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown } from 'lucide-react';
@@ -243,21 +243,45 @@ const COUNTRIES = [
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 function StepIndicator({ step }) {
+  const containerRef = useRef(null);
+  const activeRef = useRef(null);
+
+  useEffect(() => {
+    const c = containerRef.current;
+    const a = activeRef.current;
+    if (!c) return;
+    // Charter (1ère étape) reste calé à gauche ; sinon on centre l'étape active
+    if (step === 0 || !a) {
+      c.scrollTo({ left: 0, behavior: 'smooth' });
+      return;
+    }
+    const offset = a.offsetLeft - c.clientWidth / 2 + a.clientWidth / 2;
+    c.scrollTo({ left: Math.max(0, offset), behavior: 'smooth' });
+  }, [step]);
+
   return (
-    <div className={`flex items-center ${step === 0 ? 'justify-start' : step === 1 ? 'justify-center' : 'justify-end'} md:justify-center gap-0 max-w-3xl mx-auto px-4 mb-12 md:mb-16 overflow-hidden md:overflow-visible`}>
-      {STEPS.map((label, i) => (
-        <div key={i} className="flex items-center shrink-0 md:flex-1 last:flex-none">
+    <div
+      ref={containerRef}
+      className="flex items-center justify-start md:justify-center gap-0 max-w-3xl mx-auto px-4 mb-12 md:mb-16 overflow-x-auto md:overflow-visible [&::-webkit-scrollbar]:hidden"
+      style={{ scrollbarWidth: 'none' }}
+    >
+      {STEPS.map((label, i) => {
+        // Une étape est "validée" si elle est avant l'étape courante,
+        // OU si on est sur la dernière étape (Thank You) → tout est complété (suite logique)
+        const done = i < step || step === STEPS.length - 1;
+        return (
+        <div key={i} ref={i === step ? activeRef : null} className="flex items-center shrink-0 md:flex-1 last:flex-none">
           <div className="flex flex-col items-center">
-            {/* Rond : logo transparent (en attente) → logo normal (validé) */}
+            {/* Rond : logo transparent (en attente) → médaillon (validé) */}
             <div
               className="relative w-10 h-10 md:w-12 md:h-12 rounded-full border flex items-center justify-center overflow-hidden transition-all duration-500"
-              style={{ borderColor: i < step ? '#C0C0C0' : 'transparent' }}
+              style={{ borderColor: done ? '#C0C0C0' : 'transparent' }}
             >
               <Image
-                src={i < step ? '/images/logoFondTrans.png' : '/images/trans.png'}
+                src={done ? '/images/logoFondTrans.png' : '/images/trans.png'}
                 alt=""
                 fill
-                className={`object-cover transition-opacity duration-500 ${i < step ? 'scale-110' : 'scale-150'} ${i <= step ? 'opacity-100' : 'opacity-50'}`}
+                className={`object-cover transition-opacity duration-500 ${done ? 'scale-110' : 'scale-150'} ${i <= step ? 'opacity-100' : 'opacity-50'}`}
               />
             </div>
             <span
@@ -268,10 +292,11 @@ function StepIndicator({ step }) {
             </span>
           </div>
           {i < STEPS.length - 1 && (
-            <div className="w-10 md:flex-1 h-px mx-2 md:mx-4 -mt-6" style={{ backgroundColor: '#C0C0C0', opacity: i < step ? 1 : 0.3 }} />
+            <div className="w-10 md:flex-1 h-px mx-2 md:mx-4 -mt-6" style={{ backgroundColor: '#C0C0C0', opacity: done ? 1 : 0.3 }} />
           )}
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -450,9 +475,9 @@ export default function RequestQuoteWizard() {
   const [contact, setContact] = useState({
     company: '', title: '', firstName: '', lastName: '',
     email: '', email2: '',
-    phoneCountry: 'France', phone: '',
-    waCountry: 'France', whatsapp: '',
-    callbackCountry: 'France', callbackTime: '',
+    phoneCountry: 'Switzerland', phone: '',
+    waCountry: 'Switzerland', whatsapp: '',
+    callbackCountry: 'Switzerland', callbackTime: '',
     contactMethod: 'Email',
     message: '', acceptPolicy: false,
   });
