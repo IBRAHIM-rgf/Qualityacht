@@ -110,7 +110,17 @@ function GhostButton({ children, onClick, className = '' }) {
 const inputClass =
   'w-full bg-transparent border border-[#C0C0C0] rounded-xl px-4 py-3 text-[#acb0cd] text-sm placeholder-[#6a6b6e] focus:outline-none focus:border-[#c2622a] transition-colors';
 
-function PhoneInput({ country, onCountry, value, onValue, placeholder }) {
+// Créneaux de rappel : 30 min de 09:00 à 19:00
+const CALLBACK_SLOTS = (() => {
+  const slots = [];
+  for (let h = 9; h <= 19; h++) {
+    slots.push(`${String(h).padStart(2, '0')}:00`);
+    if (h < 19) slots.push(`${String(h).padStart(2, '0')}:30`);
+  }
+  return slots;
+})();
+
+function CountryInput({ country, onCountry, value, onValue, placeholder, type = 'tel', extra = '', options = null }) {
   return (
     <div className="flex">
       <select value={country} onChange={e => onCountry(e.target.value)}
@@ -119,8 +129,16 @@ function PhoneInput({ country, onCountry, value, onValue, placeholder }) {
           <option key={c.name} value={c.name} className="bg-[#2e2f32]">{c.flag} {c.name} {c.code}</option>
         ))}
       </select>
-      <input type="tel" value={value} onChange={e => onValue(e.target.value)} placeholder={placeholder}
-        className="w-full bg-transparent border border-[#C0C0C0] rounded-r-xl px-4 py-3 text-[#acb0cd] text-sm placeholder-[#6a6b6e] focus:outline-none focus:border-[#c2622a] transition-colors" />
+      {options ? (
+        <select value={value} onChange={e => onValue(e.target.value)}
+          className="w-full bg-[#26272a] border border-[#C0C0C0] rounded-r-xl px-4 py-3 text-[#acb0cd] text-sm focus:outline-none focus:border-[#c2622a]">
+          <option value="" className="bg-[#2e2f32]">Select a time</option>
+          {options.map(o => <option key={o} value={o} className="bg-[#2e2f32]">{o}</option>)}
+        </select>
+      ) : (
+        <input type={type} value={value} onChange={e => onValue(e.target.value)} placeholder={placeholder}
+          className={`w-full bg-transparent border border-[#C0C0C0] rounded-r-xl px-4 py-3 text-[#acb0cd] text-sm placeholder-[#6a6b6e] focus:outline-none focus:border-[#c2622a] transition-colors ${extra}`} />
+      )}
     </div>
   );
 }
@@ -147,6 +165,8 @@ export default function RequestQuoteWizard() {
     email: '', email2: '',
     phoneCountry: 'France', phone: '',
     waCountry: 'France', whatsapp: '',
+    callbackCountry: 'France', callbackTime: '',
+    contactMethod: 'Email',
     message: '', acceptPolicy: false,
   });
 
@@ -279,12 +299,34 @@ export default function RequestQuoteWizard() {
 
               <div className="grid md:grid-cols-2 gap-4">
                 <Field label="Phone" required>
-                  <PhoneInput country={contact.phoneCountry} onCountry={v => setContact({ ...contact, phoneCountry: v })}
+                  <CountryInput country={contact.phoneCountry} onCountry={v => setContact({ ...contact, phoneCountry: v })}
                     value={contact.phone} onValue={v => setContact({ ...contact, phone: v })} placeholder="Phone number" />
                 </Field>
                 <Field label="WhatsApp Number">
-                  <PhoneInput country={contact.waCountry} onCountry={v => setContact({ ...contact, waCountry: v })}
+                  <CountryInput country={contact.waCountry} onCountry={v => setContact({ ...contact, waCountry: v })}
                     value={contact.whatsapp} onValue={v => setContact({ ...contact, whatsapp: v })} placeholder="WhatsApp number" />
+                </Field>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <Field label="Preferred Callback Time">
+                  <CountryInput country={contact.callbackCountry} onCountry={v => setContact({ ...contact, callbackCountry: v })}
+                    value={contact.callbackTime} onValue={v => setContact({ ...contact, callbackTime: v })}
+                    options={CALLBACK_SLOTS} />
+                </Field>
+                <Field label="Preferred Contact Method">
+                  <div className="flex gap-2">
+                    {['Email', 'Phone', 'WhatsApp'].map(m => (
+                      <button key={m} onClick={() => setContact({ ...contact, contactMethod: m })}
+                        className={`flex-1 rounded-xl border px-3 py-3 text-xs uppercase tracking-[0.1em] transition-colors ${
+                          contact.contactMethod === m
+                            ? 'border-[#B03E00] text-[#B03E00]'
+                            : 'border-[#C0C0C0] text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00]'
+                        }`}>
+                        {m}
+                      </button>
+                    ))}
+                  </div>
                 </Field>
               </div>
 
