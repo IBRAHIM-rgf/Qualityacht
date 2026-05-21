@@ -497,7 +497,7 @@ export default function RequestQuoteWizard() {
       {/* Fond plein écran Thank You — photo voilier SANS filtre, défile avec le contenu */}
       {step === 2 && (
         <div className="absolute inset-0 -z-10">
-          <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-contain object-top" />
+          <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover object-top" />
           <div className="absolute inset-0 bg-black/35" />
         </div>
       )}
@@ -679,10 +679,10 @@ export default function RequestQuoteWizard() {
 
           {/* ══ ÉTAPE 3 — THANK YOU ══ */}
           <section className="w-full shrink-0 px-1">
-            <div className="max-w-2xl mx-auto text-center py-12 md:py-24 px-4">
+            <div className="max-w-2xl mx-auto text-center py-12 md:py-24 px-1 md:px-4">
               <h2 className="trajan-regular font-bold text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0] mb-4">Grateful</h2>
               <div className="w-12 h-px bg-[#c2622a] mx-auto mb-6" />
-              <p className="text-[#acb0cd] leading-relaxed mb-8">
+              <p className="text-[#acb0cd] leading-relaxed mb-8 px-1">
                 Your request for <span className="text-[#d39478]">{yacht.name}</span> has been received.
                 One of our charter experts will contact you shortly to craft your bespoke itinerary.
               </p>
