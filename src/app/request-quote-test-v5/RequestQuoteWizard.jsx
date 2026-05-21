@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown } from 'lucide-react';
 
-const STEPS = ['Charter Details', 'Contact Info', 'Grateful'];
+const STEPS = ['Charter Details', 'Contact Info', 'Thank You!'];
 
 const TITLES = ['', 'Mr', 'Mrs', 'Ms', 'Miss', 'Dr', 'Prof', 'Sir', 'Lady'];
 
@@ -497,7 +497,7 @@ export default function RequestQuoteWizard() {
       {/* Fond plein écran Thank You — photo voilier SANS filtre, défile avec le contenu */}
       {step === 2 && (
         <div className="absolute inset-0 -z-10">
-          <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-contain object-top md:object-cover" />
+          <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-contain object-top" />
           <div className="absolute inset-0 bg-black/35" />
         </div>
       )}
