@@ -497,8 +497,8 @@ export default function RequestQuoteWizard() {
       {/* Fond plein écran Thank You — la photo arrive APRES un temps de lecture (transition douce) */}
       {step === 2 && (
         <>
-          <style>{`@keyframes thankPhotoIn{0%{opacity:0;filter:blur(14px);transform:scale(1.15)}40%{opacity:0;filter:blur(14px);transform:scale(1.15)}100%{opacity:1;filter:blur(0);transform:scale(1)}}`}</style>
-          <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 5s ease forwards' }}>
+          <style>{`@keyframes thankPhotoIn{0%{opacity:0;filter:blur(14px);transform:scale(1.15)}50%{opacity:0;filter:blur(14px);transform:scale(1.15)}100%{opacity:1;filter:blur(0);transform:scale(1)}}`}</style>
+          <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 6s ease forwards' }}>
             <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover object-top" />
             <div className="absolute inset-0 bg-black/35" />
           </div>
