@@ -482,6 +482,11 @@ export default function RequestQuoteWizard() {
     message: '', acceptPolicy: false,
   });
 
+  // Remonter en haut de page à chaque changement d'étape
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [step]);
+
   const goNext = () => setStep(s => Math.min(2, s + 1));
   const goBack = () => setStep(s => Math.max(0, s - 1));
 
