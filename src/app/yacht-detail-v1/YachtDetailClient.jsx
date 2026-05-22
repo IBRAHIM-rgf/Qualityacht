@@ -48,8 +48,8 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
     <div className="bg-[#26272a] text-[#acb0cd]">
 
       {/* ══ HERO ══ */}
-      <div className="relative h-[70vh] md:h-[85vh]">
-        <Image src={hero} alt={yacht.name} fill priority className="object-cover" />
+      <div className="relative h-[58vh] md:h-[85vh]">
+        <Image src={hero} alt={yacht.name} fill priority className="object-contain md:object-cover object-center" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.4) 0%, transparent 30%, transparent 55%, #26272a 100%)' }} />
         <div className="absolute bottom-0 left-0 right-0 px-5 md:px-16 pb-10 md:pb-14">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-3">Luxury Yacht Charter</p>
