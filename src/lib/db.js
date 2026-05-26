@@ -294,6 +294,26 @@ export async function getSelectedYachtsWithData() {
 }
 
 /**
+ * Récupère les yachts de test (table test_yachts, séparée des sélections prod).
+ * Utilisée par les pages de test pour éviter de re-fetch Ankor à chaque rendu.
+ * Données seedées via scripts/seed-test-yachts.js.
+ */
+export async function getTestYachts() {
+  try {
+    const rows = await sql`
+      SELECT yacht_id, cached_data FROM test_yachts ORDER BY created_at ASC
+    `;
+    return rows.map((r) => {
+      const cached = typeof r.cached_data === 'string' ? JSON.parse(r.cached_data) : (r.cached_data || {});
+      return { id: r.yacht_id, ...cached };
+    });
+  } catch (error) {
+    console.error('Erreur getTestYachts:', error);
+    return [];
+  }
+}
+
+/**
  * Récupère les IDs des yachts déjà sélectionnés
  */
 export async function getSelectedYachtIds() {
