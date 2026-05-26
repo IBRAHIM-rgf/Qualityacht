@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { getAnkorImageUrl } from '@/lib/utils';
-import { Ruler, Users, BedDouble, Anchor, Ship, Calendar, ChevronLeft, ChevronRight, X, Map } from 'lucide-react';
+import { Ruler, Users, BedDouble, Anchor, Calendar, ChevronLeft, ChevronRight, X, Map } from 'lucide-react';
 
 const SECTIONS = [
   { t: 'Interior Design & Engineering', d: 'A timeless combination of refined interiors and impeccable engineering. The most recent refit brought a contemporary freshness to the salons and staterooms while preserving the vessel’s classic character, with full stabilisation underway and at anchor for absolute comfort.' },
@@ -16,11 +16,15 @@ const RATES = [
   { season: 'Winter 2026 — 2027', region: 'Caribbean', from: 'From €140,000 / week' },
 ];
 
-function Spec({ icon: Icon, label, value }) {
+function Spec({ icon: Icon, img, label, value }) {
   if (!value) return null;
   return (
     <div className="flex flex-col items-center text-center px-3 py-4">
-      <Icon className="w-6 h-6 text-[#c2622a] mb-2" />
+      {img ? (
+        <Image src={img} alt={label} width={24} height={24} className="mb-2" />
+      ) : (
+        <Icon className="w-6 h-6 text-[#c2622a] mb-2" />
+      )}
       <span className="text-[#acb0cd] text-base">{value}</span>
       <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/50 mt-1">{label}</span>
     </div>
@@ -84,7 +88,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             <Spec icon={Calendar} label="Year" value={year} />
             <Spec icon={Users} label="Guests" value={yacht.guests || yacht.capacity} />
             <Spec icon={BedDouble} label="Cabins" value={yacht.cabins} />
-            <Spec icon={Ship} label="Crew" value={yacht.crew} />
+            <Spec img="/casquette-capitaine.svg" label="Crew" value={yacht.crew} />
           </div>
         </div>
       </div>
