@@ -72,12 +72,9 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
               Enquire about {yacht.name}
             </a>
             {yacht.location && (
-              <div className="mt-5 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-5 py-4 flex items-center gap-4">
+              <div className="mt-5 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-5 py-4 flex items-center gap-3">
                 <Map className="w-7 h-7 text-[#B03E00] shrink-0" strokeWidth={2} />
-                <div className="min-w-0">
-                  <p className="text-sm text-[#acb0cd]">Base Port</p>
-                  <p className="text-lg md:text-xl text-[#C0C0C0] font-bold truncate">{yacht.location}</p>
-                </div>
+                <p className="text-base md:text-lg min-w-0 truncate"><span className="text-[#acb0cd]">Base Port&nbsp;:</span> <span className="text-[#C0C0C0] font-bold">{yacht.location}</span></p>
               </div>
             )}
           </div>
