@@ -244,6 +244,7 @@ function mapVesselSummaryToYachtCard(vessel, vesselDetails, appliedFilters) {
     make: vessel.make || blueprint?.make,
     _rawPricing: pricing,
     _rawBlueprint: blueprint,
+    _rawEntity: vesselDetails,
   };
 }
 

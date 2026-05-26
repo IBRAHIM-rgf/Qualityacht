@@ -51,6 +51,7 @@ export async function POST(request) {
       yacht_name: y.name,
       cached_data: null,
       light_data: extractLightData(y),
+      full_data: y._rawEntity || null,
       ankor_region: inferAnkorRegion(y) || region,
     }));
 

@@ -318,6 +318,46 @@ export async function getTestYachts() {
 }
 
 /**
+ * Récupère un yacht de la sélection prod (yacht_selections) avec full_data.
+ * Source de vérité utilisée par les fiches publiques yacht-detail-v6.
+ */
+export async function getSelectionYachtFullByName(name) {
+  try {
+    const pattern = `%${name}%`;
+    const rows = await sql`
+      SELECT yacht_id, yacht_name, cached_data, light_data, full_data, region, sub_region
+      FROM yacht_selections
+      WHERE yacht_name ILIKE ${pattern}
+         OR cached_data->>'name' ILIKE ${pattern}
+         OR light_data->>'name' ILIKE ${pattern}
+      LIMIT 1
+    `;
+    if (!rows[0]) return null;
+    const r = rows[0];
+    const cached = typeof r.cached_data === 'string' ? JSON.parse(r.cached_data) : (r.cached_data || {});
+    const light = typeof r.light_data === 'string' ? JSON.parse(r.light_data) : (r.light_data || {});
+    const full = typeof r.full_data === 'string' ? JSON.parse(r.full_data) : (r.full_data || null);
+    // Reconstruire le mapping affichable (priorité cached > light)
+    const merged = { ...light, ...cached };
+    return {
+      id: r.yacht_id,
+      name: r.yacht_name || merged.name,
+      region: r.region,
+      subRegion: r.sub_region,
+      ...merged,
+      // L'image principale et la galerie viennent de full.blueprint.images si dispo
+      images: full?.blueprint?.images?.length
+        ? [full.blueprint.images[0], ...full.blueprint.images.slice(1)]
+        : (merged.images || (light.hero_image ? [light.hero_image] : [])),
+      full,
+    };
+  } catch (error) {
+    console.error('Erreur getSelectionYachtFullByName:', error);
+    return null;
+  }
+}
+
+/**
  * Récupère un yacht test avec ses données Ankor complètes (full_data).
  * Cherche par nom (ILIKE). Utilisé par yacht-detail-v6 pour exploiter
  * description, blueprint, amenities, toys, entertainment, tenders, crew, pricing.
@@ -379,12 +419,13 @@ export async function bulkUpsertYachts(yachts) {
       const result = await sql`
         INSERT INTO yacht_selections (
           yacht_id, yacht_name, is_visible, is_featured, display_order,
-          cached_data, light_data, cached_at, ankor_region, region
+          cached_data, light_data, full_data, cached_at, ankor_region, region
         )
         VALUES (
           ${y.yacht_id}, ${y.yacht_name}, true, false, ${nextOrder},
           ${y.cached_data ? JSON.stringify(y.cached_data) : null},
           ${y.light_data ? JSON.stringify(y.light_data) : null},
+          ${y.full_data ? JSON.stringify(y.full_data) : null},
           NOW(), ${y.ankor_region}, ${y.ankor_region}
         )
         ON CONFLICT (yacht_id) DO UPDATE
@@ -392,6 +433,7 @@ export async function bulkUpsertYachts(yachts) {
           yacht_name = EXCLUDED.yacht_name,
           cached_data = COALESCE(EXCLUDED.cached_data, yacht_selections.cached_data),
           light_data = COALESCE(EXCLUDED.light_data, yacht_selections.light_data),
+          full_data = COALESCE(EXCLUDED.full_data, yacht_selections.full_data),
           ankor_region = COALESCE(EXCLUDED.ankor_region, yacht_selections.ankor_region),
           cached_at = NOW(),
           updated_at = NOW()
@@ -419,6 +461,7 @@ export async function bulkUpsertYachts(yachts) {
 export async function ensureV3Schema() {
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS ankor_region VARCHAR(50)`;
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS light_data JSONB`;
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS full_data JSONB`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_ankor_region ON yacht_selections(ankor_region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_region ON yacht_selections(region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_sub_region ON yacht_selections(sub_region)`;
