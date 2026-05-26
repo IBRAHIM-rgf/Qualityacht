@@ -101,13 +101,18 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       </div>
 
       {/* ══ DESCRIPTION ══ */}
-      <div className="max-w-4xl mx-auto px-5 md:px-10 py-14 md:py-20 text-center">
+      <div className="max-w-4xl mx-auto px-5 md:px-10 py-14 md:py-20 text-left">
         <div className="relative w-40 h-7 mx-auto mb-8">
           <Image src="/images/title-line.png" alt="" fill className="object-contain" />
         </div>
-        <p className="text-lg md:text-xl leading-relaxed text-[#acb0cd]">
-          {yacht.description || `${yacht.name} offers a classic combination of elegant interiors, generous outdoor spaces and an exceptional crew — the perfect canvas for an unforgettable charter across the world’s most beautiful waters.`}
-        </p>
+        <div className="text-lg md:text-xl leading-relaxed text-[#acb0cd] space-y-3">
+          {(yacht.description || `${yacht.name} offers a classic combination of elegant interiors, generous outdoor spaces and an exceptional crew — the perfect canvas for an unforgettable charter across the world’s most beautiful waters.`)
+            .split(/(?<=\.)\s+/)
+            .filter(Boolean)
+            .map((sentence, i) => (
+              <p key={i}>{sentence}</p>
+            ))}
+        </div>
       </div>
 
       {/* ══ SECTIONS ══ */}
