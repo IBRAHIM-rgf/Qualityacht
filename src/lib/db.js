@@ -318,6 +318,31 @@ export async function getTestYachts() {
 }
 
 /**
+ * Récupère un yacht test avec ses données Ankor complètes (full_data).
+ * Cherche par nom (ILIKE). Utilisé par yacht-detail-v6 pour exploiter
+ * description, blueprint, amenities, toys, entertainment, tenders, crew, pricing.
+ */
+export async function getTestYachtFullByName(name) {
+  try {
+    const pattern = `%${name}%`;
+    const rows = await sql`
+      SELECT yacht_id, cached_data, full_data
+      FROM test_yachts
+      WHERE cached_data->>'name' ILIKE ${pattern}
+      LIMIT 1
+    `;
+    if (!rows[0]) return null;
+    const r = rows[0];
+    const cached = typeof r.cached_data === 'string' ? JSON.parse(r.cached_data) : (r.cached_data || {});
+    const full = typeof r.full_data === 'string' ? JSON.parse(r.full_data) : (r.full_data || null);
+    return { id: r.yacht_id, ...cached, full };
+  } catch (error) {
+    console.error('Erreur getTestYachtFullByName:', error);
+    return null;
+  }
+}
+
+/**
  * Récupère les IDs des yachts déjà sélectionnés
  */
 export async function getSelectedYachtIds() {
