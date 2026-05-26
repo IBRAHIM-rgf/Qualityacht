@@ -23,7 +23,7 @@ function Spec({ icon: Icon, img, label, value }) {
       {img ? (
         <Image src={img} alt={label} width={24} height={24} className="mb-2" />
       ) : (
-        <Icon className="w-6 h-6 text-[#c2622a] mb-2" />
+        <Icon className="w-6 h-6 text-[#B03E00] mb-2" />
       )}
       <span className="text-[#acb0cd] text-base">{value}</span>
       <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/50 mt-1">{label}</span>
@@ -61,26 +61,23 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         </div>
       </div>
 
-      {/* ══ NOM DU YACHT (sous la photo) ══ */}
-      <div className="max-w-6xl mx-auto px-5 md:px-10 pt-6 pb-2 text-center">
-        <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-3">Luxury Yacht Charter</p>
+      {/* ══ NOM DU YACHT (sous la photo, calé à gauche) + FROM juste en dessous ══ */}
+      <div className="max-w-6xl mx-auto px-5 md:px-10 pt-6 pb-2 text-left">
         <h1 className="trajan-regular text-3xl md:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0]">{yacht.name}</h1>
+        {price && (
+          <p className="trajan-regular text-2xl md:text-3xl text-[#acb0cd] mt-2">
+            From {price}<span className="text-sm text-[#acb0cd]/50"> / week</span>
+          </p>
+        )}
       </div>
 
-      {/* ══ BLOC ENTÊTE : prix + enquire + specs ══ */}
+      {/* ══ BLOC ENTÊTE : enquire + specs ══ */}
       <div className="border-b border-[#C0C0C0]/20">
         <div className="max-w-6xl mx-auto px-5 md:px-10 py-8 flex flex-col lg:flex-row lg:items-center gap-8">
           <div className="flex-1">
-            {price && <p className="trajan-regular text-2xl md:text-3xl text-[#acb0cd]">From {price}<span className="text-sm text-[#acb0cd]/50"> / week</span></p>}
-            <a href="/request-quote-test-v10" className="inline-block mt-4 rounded-xl border-2 border-[#C0C0C0] px-8 py-3 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+            <a href="/request-quote-test-v10" className="inline-block rounded-xl border-2 border-[#C0C0C0] px-8 py-3 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
               Enquire about {yacht.name}
             </a>
-            {yacht.location && (
-              <div className="mt-5 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-5 py-4 flex items-center gap-3">
-                <Map className="w-7 h-7 text-[#B03E00] shrink-0" strokeWidth={2} />
-                <p className="text-base md:text-lg min-w-0 truncate"><span className="text-[#acb0cd]">Base Port&nbsp;:</span> <span className="text-[#C0C0C0] font-bold">{yacht.location}</span></p>
-              </div>
-            )}
           </div>
           <div className="lg:flex-[1.4] grid grid-cols-3 sm:grid-cols-6 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] divide-x divide-[#C0C0C0]/20">
             <Spec icon={Anchor} label="Builder" value={yacht.make} />
@@ -91,6 +88,16 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             <Spec img="/casquette-capitaine.svg" label="Crew" value={yacht.crew} />
           </div>
         </div>
+
+        {/* ══ BASE PORT (compacte, sous le bloc Builder/Crew) ══ */}
+        {yacht.location && (
+          <div className="max-w-6xl mx-auto px-5 md:px-10 pb-6">
+            <div className="inline-flex items-center gap-3 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-4 py-2">
+              <Map className="w-5 h-5 text-[#B03E00] shrink-0" strokeWidth={2} />
+              <p className="text-base md:text-lg leading-none"><span className="text-[#acb0cd]">Base Port&nbsp;:</span> <span className="text-[#C0C0C0] font-bold">{yacht.location}</span></p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ══ DESCRIPTION ══ */}
@@ -132,7 +139,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             <div className="relative">
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 {slice.map((src, i) => {
-                  const gi = start + i; // index global dans gallery
+                  const gi = start + i;
                   return (
                     <button key={gi} onClick={() => setLightbox(gi + 1)} className="relative aspect-[4/3] rounded-lg overflow-hidden border border-[#C0C0C0] group">
                       <Image src={src} alt={`${yacht.name} ${gi + 2}`} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
@@ -156,10 +163,10 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             </div>
 
             {totalPages > 1 && (
-              <div className="flex justify-center gap-2 mt-6">
+              <div className="flex justify-center gap-4 mt-6">
                 {Array.from({ length: totalPages }, (_, p) => (
                   <button key={p} onClick={() => setGalleryPage(p)} aria-label={`Page ${p + 1}`}
-                    className={`w-3 h-3 rotate-45 transition-colors ${p === safe ? 'bg-[#B03E00]' : 'bg-[#C0C0C0]/40 hover:bg-[#C0C0C0]'}`} />
+                    className={`w-2 h-2 rotate-45 transition-colors ${p === safe ? 'bg-[#B03E00]' : 'bg-[#C0C0C0]/40 hover:bg-[#C0C0C0]'}`} />
                 ))}
               </div>
             )}
