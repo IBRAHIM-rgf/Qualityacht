@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { getAnkorImageUrl } from '@/lib/utils';
-import { Ruler, Users, BedDouble, Anchor, Ship, Calendar, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Ruler, Users, BedDouble, Anchor, Ship, Calendar, ChevronLeft, ChevronRight, X, MapPin } from 'lucide-react';
 
 const SECTIONS = [
   { t: 'Interior Design & Engineering', d: 'A timeless combination of refined interiors and impeccable engineering. The most recent refit brought a contemporary freshness to the salons and staterooms while preserving the vessel’s classic character, with full stabilisation underway and at anchor for absolute comfort.' },
@@ -50,17 +50,18 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
 
-      {/* ══ HERO (photo en card) ══ */}
+      {/* ══ HERO (photo en card, aucun texte par-dessus) ══ */}
       <div className="pt-24 pb-6 px-4 md:px-10">
         <div className="max-w-6xl mx-auto relative aspect-[16/10] md:aspect-[21/9] rounded-xl overflow-hidden border border-[#C0C0C0] bg-[#3a3b3f]">
           <Image src={hero} alt={yacht.name} fill priority className="object-contain md:object-cover object-center" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 px-5 md:px-10 pb-6 md:pb-10">
-            <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-2">Luxury Yacht Charter</p>
-            <h1 className="trajan-regular text-3xl md:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0]">{yacht.name}</h1>
-            {yacht.location && <p className="text-[#acb0cd]/80 text-sm mt-1">{yacht.location}</p>}
-          </div>
         </div>
+      </div>
+
+      {/* ══ NOM DU YACHT (sous la photo) ══ */}
+      <div className="max-w-6xl mx-auto px-5 md:px-10 pt-6 pb-2 text-center">
+        <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-3">Luxury Yacht Charter</p>
+        <h1 className="trajan-regular text-3xl md:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0]">{yacht.name}</h1>
+        {yacht.location && <p className="text-[#acb0cd]/80 text-sm mt-2">{yacht.location}</p>}
       </div>
 
       {/* ══ BLOC ENTÊTE : prix + enquire + specs ══ */}
@@ -116,7 +117,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             <div className="text-center mb-10">
               <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Gallery</h2>
               <div className="relative w-32 h-6 mx-auto mt-4"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
-              <p className="text-[10px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mt-3">{start + 1}–{Math.min(start + GALLERY_PAGE, gallery.length)} / {gallery.length}</p>
+              <p className="text-base md:text-lg font-bold tracking-[0.15em] text-[#acb0cd] mt-3">{start + 1}–{Math.min(start + GALLERY_PAGE, gallery.length)} / {gallery.length}</p>
             </div>
 
             <div className="relative">
@@ -149,7 +150,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
               <div className="flex justify-center gap-2 mt-6">
                 {Array.from({ length: totalPages }, (_, p) => (
                   <button key={p} onClick={() => setGalleryPage(p)} aria-label={`Page ${p + 1}`}
-                    className={`w-2.5 h-2.5 rounded-full transition-colors ${p === safe ? 'bg-[#B03E00]' : 'bg-[#C0C0C0]/40 hover:bg-[#C0C0C0]'}`} />
+                    className={`w-3 h-3 rotate-45 transition-colors ${p === safe ? 'bg-[#B03E00]' : 'bg-[#C0C0C0]/40 hover:bg-[#C0C0C0]'}`} />
                 ))}
               </div>
             )}
@@ -161,21 +162,25 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       <div className="max-w-4xl mx-auto px-5 md:px-10 pb-14 md:pb-20">
         <div className="text-center mb-8">
           <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Specifications</h2>
+          <div className="relative w-32 h-6 mx-auto mt-4"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
         </div>
-        <div className="rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] divide-y divide-[#C0C0C0]/20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
-            ['Builder', yacht.make],
-            ['Length', yacht.length],
-            ['Year built / refit', year],
-            ['Guests', yacht.guests || yacht.capacity],
-            ['Cabins', yacht.cabins],
-            ['Crew', yacht.crew],
-            ['Type', yacht.type && yacht.type.charAt(0).toUpperCase() + yacht.type.slice(1)],
-            ['Base port', yacht.location],
-          ].filter(([, v]) => v).map(([k, v]) => (
-            <div key={k} className="flex items-center justify-between px-5 py-3.5 text-sm">
-              <span className="text-[#acb0cd]/50 uppercase tracking-[0.15em] text-[11px]">{k}</span>
-              <span className="text-[#acb0cd]">{v}</span>
+            { icon: Anchor,     label: 'Builder',            value: yacht.make },
+            { icon: Ruler,      label: 'Length',             value: yacht.length },
+            { icon: Calendar,   label: 'Year built / refit', value: year },
+            { icon: Users,      label: 'Guests',             value: yacht.guests || yacht.capacity },
+            { icon: BedDouble,  label: 'Cabins',             value: yacht.cabins },
+            { icon: Ship,       label: 'Crew',               value: yacht.crew },
+            { icon: Ship,       label: 'Type',               value: yacht.type && yacht.type.charAt(0).toUpperCase() + yacht.type.slice(1) },
+            { icon: MapPin,     label: 'Base Port',          value: yacht.location },
+          ].filter((s) => s.value).map(({ icon: Icon, label, value }) => (
+            <div key={label} className="rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-5 py-4 flex items-center gap-4">
+              <Icon className="w-8 h-8 text-[#B03E00] shrink-0" strokeWidth={2} />
+              <div className="min-w-0">
+                <p className="text-sm text-[#acb0cd]">{label}</p>
+                <p className="text-lg md:text-xl text-[#C0C0C0] font-bold truncate">{value}</p>
+              </div>
             </div>
           ))}
         </div>
