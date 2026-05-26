@@ -388,6 +388,9 @@ export async function fetchVisibleYachts(filters = {}) {
     const regionMap = new Map(
       selections.map(s => [s.yacht_id, s.region])
     );
+    const subRegionMap = new Map(
+      selections.map(s => [s.yacht_id, s.sub_region])
+    );
 
     // 3. Fetch TOUS les yachts depuis Ankor (SANS les filtres utilisateur)
     // Le filtrage utilisateur sera fait côté client
@@ -402,6 +405,7 @@ export async function fetchVisibleYachts(filters = {}) {
         displayOrder: orderMap.get(yacht.id) ?? 999,
         category: categoryMap.get(yacht.id) || null,
         region: regionMap.get(yacht.id) || null,
+        subRegion: subRegionMap.get(yacht.id) || null,
       }));
 
     // 5. Trier : featured en premier, puis par ordre d'affichage

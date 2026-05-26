@@ -52,6 +52,11 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
       });
     }
 
+    // Filter by sub-region (cascade depuis destination)
+    if (filters.subRegion) {
+      result = result.filter(y => y.subRegion === filters.subRegion);
+    }
+
     // Filter by capacity
     if (filters.capacity) {
       const requiredCapacity = Number(filters.capacity);
@@ -144,6 +149,7 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
     const urlFilters = {
       type: searchParams.get('type') || '',
       destination: searchParams.get('destination') || '',
+      subRegion: searchParams.get('subRegion') || '',
       capacity: searchParams.get('capacity') ? Number(searchParams.get('capacity')) : '',
       minLength: searchParams.get('minLength') ? Number(searchParams.get('minLength')) : '',
       maxLength: searchParams.get('maxLength') ? Number(searchParams.get('maxLength')) : '',

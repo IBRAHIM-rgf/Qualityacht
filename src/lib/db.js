@@ -79,6 +79,8 @@ export async function addYachtToSelection(data) {
     yacht_id,
     yacht_name,
     cached_data = null,
+    light_data = null,
+    ankor_region = null,
     region = null,
     sub_region = null,
     pets_allowed = false,
@@ -88,18 +90,20 @@ export async function addYachtToSelection(data) {
   } = data;
 
   try {
-    // Compter les yachts existants pour l'ordre
     const countResult = await sql`SELECT COUNT(*) as count FROM yacht_selections`;
     const nextOrder = parseInt(countResult[0].count) || 0;
 
     const rows = await sql`
       INSERT INTO yacht_selections (
         yacht_id, yacht_name, is_visible, is_featured, display_order,
-        cached_data, cached_at, region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info
+        cached_data, light_data, cached_at, ankor_region,
+        region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info
       )
       VALUES (
         ${yacht_id}, ${yacht_name}, true, false, ${nextOrder},
-        ${cached_data ? JSON.stringify(cached_data) : null}, NOW(),
+        ${cached_data ? JSON.stringify(cached_data) : null},
+        ${light_data ? JSON.stringify(light_data) : null},
+        NOW(), ${ankor_region},
         ${region}, ${sub_region}, ${pets_allowed}, ${groups_allowed}, ${water_toys}, ${extra_info}
       )
       ON CONFLICT (yacht_id) DO NOTHING
@@ -280,7 +284,7 @@ export async function getSelectedYachtsWithData() {
       SELECT
         yacht_id, yacht_name, is_visible, is_featured, display_order,
         category, tags, custom_title, custom_description, custom_price,
-        custom_highlights, internal_notes, cached_data,
+        custom_highlights, internal_notes, cached_data, light_data, ankor_region,
         region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info,
         created_at, updated_at
       FROM yacht_selections
@@ -326,6 +330,74 @@ export async function getSelectedYachtIds() {
     console.error('Erreur getSelectedYachtIds:', error);
     return [];
   }
+}
+
+/**
+ * Bulk upsert : insère ou met à jour plusieurs yachts d'un coup.
+ * Idempotent : si yacht_id existe déjà, on met à jour light_data + ankor_region
+ * sans toucher aux choix admin (region, sub_region, custom_*).
+ */
+export async function bulkUpsertYachts(yachts) {
+  let inserted = 0;
+  let updated = 0;
+  let skipped = 0;
+
+  const countResult = await sql`SELECT COUNT(*) as count FROM yacht_selections`;
+  let nextOrder = parseInt(countResult[0].count) || 0;
+
+  for (const y of yachts) {
+    if (!y.yacht_id || !y.yacht_name) {
+      skipped++;
+      continue;
+    }
+    try {
+      const result = await sql`
+        INSERT INTO yacht_selections (
+          yacht_id, yacht_name, is_visible, is_featured, display_order,
+          cached_data, light_data, cached_at, ankor_region, region
+        )
+        VALUES (
+          ${y.yacht_id}, ${y.yacht_name}, true, false, ${nextOrder},
+          ${y.cached_data ? JSON.stringify(y.cached_data) : null},
+          ${y.light_data ? JSON.stringify(y.light_data) : null},
+          NOW(), ${y.ankor_region}, ${y.ankor_region}
+        )
+        ON CONFLICT (yacht_id) DO UPDATE
+        SET
+          yacht_name = EXCLUDED.yacht_name,
+          cached_data = COALESCE(EXCLUDED.cached_data, yacht_selections.cached_data),
+          light_data = COALESCE(EXCLUDED.light_data, yacht_selections.light_data),
+          ankor_region = COALESCE(EXCLUDED.ankor_region, yacht_selections.ankor_region),
+          cached_at = NOW(),
+          updated_at = NOW()
+        RETURNING (xmax = 0) AS inserted
+      `;
+      if (result[0]?.inserted) {
+        inserted++;
+        nextOrder++;
+      } else {
+        updated++;
+      }
+    } catch (err) {
+      console.error(`bulkUpsertYachts erreur sur ${y.yacht_id}:`, err.message);
+      skipped++;
+    }
+  }
+
+  return { inserted, updated, skipped, total: yachts.length };
+}
+
+/**
+ * Migration : ajoute ankor_region + light_data si elles n'existent pas.
+ * Safe à appeler plusieurs fois.
+ */
+export async function ensureV3Schema() {
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS ankor_region VARCHAR(50)`;
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS light_data JSONB`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_ankor_region ON yacht_selections(ankor_region)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_region ON yacht_selections(region)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_sub_region ON yacht_selections(sub_region)`;
+  return { ok: true };
 }
 
 export default sql;

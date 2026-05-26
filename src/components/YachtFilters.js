@@ -29,6 +29,30 @@ const DESTINATIONS = [
   { value: 'oceania', label: 'Oceania' },
 ];
 
+// Sous-régions par région principale (cascade dans le dropdown subRegion)
+const SUB_REGIONS_BY_REGION = {
+  caribbean: [
+    { value: '', label: 'All Caribbean sub-regions' },
+    { value: 'greater-antilles', label: 'Greater Antilles' },
+    { value: 'leeward-islands', label: 'Leeward Islands' },
+    { value: 'windward-islands', label: 'Windward Islands' },
+    { value: 'leeward-antilles', label: 'Leeward Antilles (ABC)' },
+    { value: 'turks-caicos', label: 'Turks & Caicos' },
+    { value: 'trinidad-tobago', label: 'Trinidad & Tobago' },
+    { value: 'bvi', label: 'British Virgin Islands' },
+    { value: 'grand-cayman', label: 'Grand Cayman' },
+  ],
+  bahamas: [
+    { value: '', label: 'All Bahamas sub-regions' },
+    { value: 'nassau', label: 'Nassau & New Providence' },
+    { value: 'exumas', label: 'Exumas' },
+    { value: 'abacos', label: 'Abacos' },
+    { value: 'eleuthera', label: 'Eleuthera & Harbour Island' },
+  ],
+};
+
+const getSubRegionsFor = (region) => SUB_REGIONS_BY_REGION[region] || [];
+
 const CURRENCIES = [
   { value: 'EUR', label: '€ EUR' },
   { value: 'USD', label: '$ USD' },
@@ -78,8 +102,14 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
       ...localFilters,
       [key]: value === '' || value === null ? '' : value
     };
+    // Changer de destination réinitialise la sous-région
+    if (key === 'destination') {
+      newFilters.subRegion = '';
+    }
     setLocalFilters(newFilters);
   };
+
+  const availableSubRegions = getSubRegionsFor(localFilters.destination);
 
   const metersToFeet = (meters) => Math.round(meters * 3.28084);
   const feetToMeters = (feet) => Math.round(feet / 3.28084);
@@ -137,6 +167,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
     const emptyFilters = {
       type: '',
       destination: '',
+      subRegion: '',
       capacity: '',
       priceMax: '',
       priceMin: '',
@@ -193,6 +224,21 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
               ))}
             </select>
           </div>
+
+          {/* Sub-region (cascade quand destination a des sous-régions) */}
+          {availableSubRegions.length > 0 && (
+            <div className="flex-1 min-w-[180px] max-w-[220px]">
+              <select
+                value={localFilters.subRegion || ''}
+                onChange={e => handleChange('subRegion', e.target.value)}
+                className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-[#B87333]/40 rounded-xl text-[#d39478] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]"
+              >
+                {availableSubRegions.map(sr => (
+                  <option key={sr.value} value={sr.value} className="bg-[#3a3b3f]">{sr.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Date Picker */}
           <div className="flex items-center gap-2">
@@ -494,6 +540,22 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                 ))}
               </select>
             </div>
+
+            {/* Sub-region (cascade quand destination a des sous-régions) */}
+            {availableSubRegions.length > 0 && (
+              <div>
+                <label className="block text-sm font-medium text-[#d39478] mb-2">Sub-region</label>
+                <select
+                  value={localFilters.subRegion || ''}
+                  onChange={e => handleChange('subRegion', e.target.value)}
+                  className="w-full px-4 py-3 bg-[#3a3b3f] border border-[#B87333]/40 rounded-xl text-[#d39478] accent-[#B03E00]"
+                >
+                  {availableSubRegions.map(sr => (
+                    <option key={sr.value} value={sr.value}>{sr.label}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* Dates */}
             <div>

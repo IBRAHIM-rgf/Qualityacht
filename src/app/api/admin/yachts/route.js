@@ -12,6 +12,7 @@ import {
   removeYachtFromSelection,
   getSelectedYachtsWithData,
 } from '@/lib/db';
+import { extractLightData, inferAnkorRegion } from '@/lib/yachtCache';
 
 /**
  * Vérifie le token d'authentification admin
@@ -80,11 +81,17 @@ export async function POST(request) {
       );
     }
 
+    const lightData = data.light_data ?? extractLightData(data.cached_data);
+    const ankorRegion = data.ankor_region ?? inferAnkorRegion(data.cached_data);
+    const finalRegion = data.region || ankorRegion || null;
+
     const result = await addYachtToSelection({
       yacht_id: data.yacht_id,
       yacht_name: data.yacht_name,
       cached_data: data.cached_data || null,
-      region: data.region || null,
+      light_data: lightData,
+      ankor_region: ankorRegion,
+      region: finalRegion,
       sub_region: data.sub_region || null,
       pets_allowed: data.pets_allowed || false,
       groups_allowed: data.groups_allowed || false,
