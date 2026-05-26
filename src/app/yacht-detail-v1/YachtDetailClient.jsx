@@ -47,14 +47,16 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
 
-      {/* ══ HERO ══ */}
-      <div className="relative h-[58vh] md:h-[85vh]">
-        <Image src={hero} alt={yacht.name} fill priority className="object-contain md:object-cover object-center" />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.4) 0%, transparent 30%, transparent 55%, #26272a 100%)' }} />
-        <div className="absolute bottom-0 left-0 right-0 px-5 md:px-16 pb-10 md:pb-14">
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-3">Luxury Yacht Charter</p>
-          <h1 className="trajan-regular text-4xl md:text-7xl uppercase tracking-[0.12em] text-[#C0C0C0]">{yacht.name}</h1>
-          {yacht.location && <p className="text-[#acb0cd]/80 text-sm md:text-base mt-2">{yacht.location}</p>}
+      {/* ══ HERO (photo en card) ══ */}
+      <div className="pt-24 pb-6 px-4 md:px-10">
+        <div className="max-w-6xl mx-auto relative aspect-[16/10] md:aspect-[21/9] rounded-xl overflow-hidden border border-[#C0C0C0] bg-[#3a3b3f]">
+          <Image src={hero} alt={yacht.name} fill priority className="object-contain md:object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 px-5 md:px-10 pb-6 md:pb-10">
+            <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-2">Luxury Yacht Charter</p>
+            <h1 className="trajan-regular text-3xl md:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0]">{yacht.name}</h1>
+            {yacht.location && <p className="text-[#acb0cd]/80 text-sm mt-1">{yacht.location}</p>}
+          </div>
         </div>
       </div>
 
