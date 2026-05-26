@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { getAnkorImageUrl } from '@/lib/utils';
-import { Ruler, Users, BedDouble, Anchor, Ship, Calendar, ChevronLeft, ChevronRight, X, MapPin } from 'lucide-react';
+import { Ruler, Users, BedDouble, Anchor, Ship, Calendar, ChevronLeft, ChevronRight, X, Map } from 'lucide-react';
 
 const SECTIONS = [
   { t: 'Interior Design & Engineering', d: 'A timeless combination of refined interiors and impeccable engineering. The most recent refit brought a contemporary freshness to the salons and staterooms while preserving the vessel’s classic character, with full stabilisation underway and at anchor for absolute comfort.' },
@@ -61,7 +61,6 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       <div className="max-w-6xl mx-auto px-5 md:px-10 pt-6 pb-2 text-center">
         <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-3">Luxury Yacht Charter</p>
         <h1 className="trajan-regular text-3xl md:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0]">{yacht.name}</h1>
-        {yacht.location && <p className="text-[#acb0cd]/80 text-sm mt-2">{yacht.location}</p>}
       </div>
 
       {/* ══ BLOC ENTÊTE : prix + enquire + specs ══ */}
@@ -72,6 +71,15 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             <a href="/request-quote-test-v10" className="inline-block mt-4 rounded-xl border-2 border-[#C0C0C0] px-8 py-3 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
               Enquire about {yacht.name}
             </a>
+            {yacht.location && (
+              <div className="mt-5 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-5 py-4 flex items-center gap-4">
+                <Map className="w-7 h-7 text-[#B03E00] shrink-0" strokeWidth={2} />
+                <div className="min-w-0">
+                  <p className="text-sm text-[#acb0cd]">Base Port</p>
+                  <p className="text-lg md:text-xl text-[#C0C0C0] font-bold truncate">{yacht.location}</p>
+                </div>
+              </div>
+            )}
           </div>
           <div className="lg:flex-[1.4] grid grid-cols-3 sm:grid-cols-6 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] divide-x divide-[#C0C0C0]/20">
             <Spec icon={Anchor} label="Builder" value={yacht.make} />
@@ -97,9 +105,9 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       {/* ══ SECTIONS ══ */}
       <div className="max-w-5xl mx-auto px-5 md:px-10 pb-10 grid md:grid-cols-3 gap-6">
         {SECTIONS.map((s, i) => (
-          <div key={i} className="rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] p-6">
-            <h3 className="trajan-regular text-sm uppercase tracking-[0.15em] text-[#C0C0C0] mb-3">{s.t}</h3>
-            <p className="text-sm text-[#acb0cd]/80 leading-relaxed">{s.d}</p>
+          <div key={i} className="rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] p-7 md:p-8">
+            <h3 className="trajan-regular text-lg md:text-xl uppercase tracking-[0.15em] text-[#C0C0C0] mb-4">{s.t}</h3>
+            <p className="text-base md:text-lg text-[#acb0cd]/90 leading-relaxed">{s.d}</p>
           </div>
         ))}
       </div>
@@ -158,34 +166,6 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         );
       })()}
 
-      {/* ══ SPECIFICATIONS ══ */}
-      <div className="max-w-4xl mx-auto px-5 md:px-10 pb-14 md:pb-20">
-        <div className="text-center mb-8">
-          <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Specifications</h2>
-          <div className="relative w-32 h-6 mx-auto mt-4"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[
-            { icon: Anchor,     label: 'Builder',            value: yacht.make },
-            { icon: Ruler,      label: 'Length',             value: yacht.length },
-            { icon: Calendar,   label: 'Year built / refit', value: year },
-            { icon: Users,      label: 'Guests',             value: yacht.guests || yacht.capacity },
-            { icon: BedDouble,  label: 'Cabins',             value: yacht.cabins },
-            { icon: Ship,       label: 'Crew',               value: yacht.crew },
-            { icon: Ship,       label: 'Type',               value: yacht.type && yacht.type.charAt(0).toUpperCase() + yacht.type.slice(1) },
-            { icon: MapPin,     label: 'Base Port',          value: yacht.location },
-          ].filter((s) => s.value).map(({ icon: Icon, label, value }) => (
-            <div key={label} className="rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-5 py-4 flex items-center gap-4">
-              <Icon className="w-8 h-8 text-[#B03E00] shrink-0" strokeWidth={2} />
-              <div className="min-w-0">
-                <p className="text-sm text-[#acb0cd]">{label}</p>
-                <p className="text-lg md:text-xl text-[#C0C0C0] font-bold truncate">{value}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* ══ REGIONS & RATES ══ */}
       <div className="max-w-4xl mx-auto px-5 md:px-10 pb-14 md:pb-20">
         <div className="text-center mb-8">
@@ -238,12 +218,12 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       {/* ══ LIGHTBOX ══ */}
       {lightbox >= 0 && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={closeLb}>
-          <button onClick={closeLb} className="absolute top-5 right-5 text-[#C0C0C0] hover:text-[#B03E00]"><X className="w-7 h-7" /></button>
-          <button onClick={(e) => { e.stopPropagation(); prevLb(); }} className="absolute left-4 text-[#C0C0C0] hover:text-[#B03E00]"><ChevronLeft className="w-9 h-9" /></button>
-          <div className="relative w-[90vw] h-[80vh]" onClick={(e) => e.stopPropagation()}>
+          <button onClick={closeLb} aria-label="Close" className="absolute top-4 right-4 z-10 w-11 h-11 rounded-full border-2 border-[#C0C0C0] bg-[#26272a] text-[#B03E00] flex items-center justify-center shadow-[0_4px_15px_rgba(192,192,192,0.3)]"><X className="w-5 h-5" strokeWidth={2.5} /></button>
+          <button onClick={(e) => { e.stopPropagation(); prevLb(); }} aria-label="Previous" className="absolute left-2 md:left-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full border-2 border-[#C0C0C0] bg-[#26272a] text-[#B03E00] flex items-center justify-center shadow-[0_4px_15px_rgba(192,192,192,0.3)]"><ChevronLeft className="w-5 h-5" strokeWidth={2.5} /></button>
+          <div className="relative w-[88vw] md:w-[85vw] h-[75vh] md:h-[80vh]" onClick={(e) => e.stopPropagation()}>
             <Image src={imgs[lightbox]} alt="" fill className="object-contain" />
           </div>
-          <button onClick={(e) => { e.stopPropagation(); nextLb(); }} className="absolute right-4 text-[#C0C0C0] hover:text-[#B03E00]"><ChevronRight className="w-9 h-9" /></button>
+          <button onClick={(e) => { e.stopPropagation(); nextLb(); }} aria-label="Next" className="absolute right-2 md:right-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full border-2 border-[#C0C0C0] bg-[#26272a] text-[#B03E00] flex items-center justify-center shadow-[0_4px_15px_rgba(192,192,192,0.3)]"><ChevronRight className="w-5 h-5" strokeWidth={2.5} /></button>
         </div>
       )}
     </div>
