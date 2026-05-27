@@ -211,7 +211,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
 
         {/* Zone 1 — Description */}
         {description && (
-          <Collapsible title="Description" defaultOpen>
+          <Collapsible title="Description">
             <p className="text-lg md:text-xl leading-relaxed text-[#acb0cd]">
               {description
                 .split(/(?<=\.)\s+/)
