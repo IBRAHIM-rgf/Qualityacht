@@ -25,6 +25,24 @@ function formatDateRange(d) {
   return `${f.toLocaleDateString('en-GB', opts)} → ${t.toLocaleDateString('en-GB', opts)}`;
 }
 
+function seasonGroup(s) {
+  const name = (s?.name || '').toLowerCase();
+  if (/(summer|high|été|haute|été)/.test(name)) return 'summer';
+  if (/(winter|low|hiver|basse)/.test(name)) return 'winter';
+  const zones = (s?.inclusionZones || []).map((z) => (z?.label || '').toLowerCase()).join(' ');
+  if (/(caribbean|bahamas|antille|antill)/.test(zones)) return 'winter';
+  const dates = (s?.effectiveDates || []).filter((d) => d?.from && d?.to);
+  if (dates.length) {
+    const months = dates.map((d) => {
+      const mid = (new Date(d.from).getTime() + new Date(d.to).getTime()) / 2;
+      return new Date(mid).getUTCMonth() + 1;
+    });
+    const avg = months.reduce((a, b) => a + b, 0) / months.length;
+    return avg >= 5 && avg <= 9 ? 'summer' : 'winter';
+  }
+  return 'summer';
+}
+
 function Spec({ icon: Icon, img, label, value }) {
   if (value === undefined || value === null || value === '') return null;
   return (
@@ -333,84 +351,104 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         </div>
       )}
 
-      {/* ══ REGIONS AND RATES (pricingInfo[] — une card par saison) ══ */}
-      {seasons.length > 0 && (
-        <div className="max-w-5xl mx-auto px-5 md:px-10 pb-12 md:pb-16">
-          <div className="text-center mb-8">
-            <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Regions and Rates</h2>
-            <div className="relative w-32 h-6 mx-auto mt-3"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
-          </div>
-          <div className="grid md:grid-cols-2 gap-5">
-            {seasons.map((s, i) => {
-              const p = s.pricing || {};
-              const total = formatMoney(p.total, p.currency);
-              const unit = p.unit === 'DAY' ? '/ day' : '/ week';
-              const zones = (s.inclusionZones || [])
-                .filter((z) => z?.label)
-                .filter((z, idx, arr) => arr.findIndex((zz) => zz.label === z.label) === idx);
-              const dates = (s.effectiveDates || []).map(formatDateRange).filter(Boolean);
-              const items = Array.isArray(p.lineItems) ? p.lineItems : [];
-              return (
-                <div key={i} className="rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] p-6 flex flex-col gap-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="trajan-regular text-base md:text-lg uppercase tracking-[0.12em] text-[#C0C0C0]">{s.name}</h3>
-                    {s.petsAllowed && (
-                      <span className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] border border-[#B03E00]/40 rounded-full px-2 py-1 shrink-0">Pets OK</span>
-                    )}
+      {/* ══ REGIONS AND RATES (saisons regroupées Summer / Winter) ══ */}
+      {seasons.length > 0 && (() => {
+        const grouped = { summer: [], winter: [] };
+        seasons.forEach((s) => grouped[seasonGroup(s)].push(s));
+        const renderCard = (s, i) => {
+          const p = s.pricing || {};
+          const total = formatMoney(p.total, p.currency);
+          const unit = p.unit === 'DAY' ? '/ day' : '/ week';
+          const zones = (s.inclusionZones || [])
+            .filter((z) => z?.label)
+            .filter((z, idx, arr) => arr.findIndex((zz) => zz.label === z.label) === idx);
+          const dates = (s.effectiveDates || []).map(formatDateRange).filter(Boolean);
+          const items = Array.isArray(p.lineItems) ? p.lineItems : [];
+          return (
+            <div key={i} className="rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] p-6 flex flex-col gap-4">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="trajan-regular text-base md:text-lg uppercase tracking-[0.12em] text-[#C0C0C0]">{s.name}</h3>
+                {s.petsAllowed && (
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] border border-[#B03E00]/40 rounded-full px-2 py-1 shrink-0">Pets OK</span>
+                )}
+              </div>
+              {total && (
+                <p className="trajan-regular text-2xl md:text-3xl text-[#C0C0C0]">
+                  {total}<span className="text-sm text-[#acb0cd]/50"> {unit}</span>
+                </p>
+              )}
+              {zones.length > 0 && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-[#B03E00] mb-2">Zones</p>
+                  <div className="flex flex-wrap gap-2">
+                    {zones.map((z, zi) => (
+                      <Badge key={zi}>{z.label}</Badge>
+                    ))}
                   </div>
-                  {total && (
-                    <p className="trajan-regular text-2xl md:text-3xl text-[#C0C0C0]">
-                      {total}<span className="text-sm text-[#acb0cd]/50"> {unit}</span>
-                    </p>
-                  )}
-                  {zones.length > 0 && (
-                    <div>
-                      <p className="text-[10px] uppercase tracking-[0.25em] text-[#B03E00] mb-2">Zones</p>
-                      <div className="flex flex-wrap gap-2">
-                        {zones.map((z, zi) => (
-                          <Badge key={zi}>{z.label}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {dates.length > 0 && (
-                    <div>
-                      <p className="text-[10px] uppercase tracking-[0.25em] text-[#B03E00] mb-2 flex items-center gap-2">
-                        <Calendar className="w-4 h-4" /> Effective periods
-                      </p>
-                      <ul className="space-y-1">
-                        {dates.map((d, di) => (
-                          <li key={di} className="text-sm text-[#acb0cd]">{d}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {items.length > 0 && (
-                    <Collapsible title="Price breakdown">
-                      <ul className="space-y-2">
-                        {items.map((it, ii) => {
-                          const amt = formatMoney(it.amount, p.currency);
-                          return (
-                            <li key={ii} className="flex items-center justify-between gap-3 py-2 border-b border-[#C0C0C0]/10 last:border-b-0">
-                              <div className="min-w-0">
-                                <p className="text-sm text-[#C0C0C0] font-medium">{it.item}</p>
-                                {it.conditions && (
-                                  <p className="text-[10px] text-[#acb0cd]/60">{it.conditions}</p>
-                                )}
-                              </div>
-                              {amt && <span className="text-sm text-[#acb0cd] shrink-0">{amt}</span>}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </Collapsible>
-                  )}
                 </div>
-              );
-            })}
+              )}
+              {dates.length > 0 && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-[#B03E00] mb-2 flex items-center gap-2">
+                    <Calendar className="w-4 h-4" /> Effective periods
+                  </p>
+                  <ul className="space-y-1">
+                    {dates.map((d, di) => (
+                      <li key={di} className="text-sm text-[#acb0cd]">{d}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {items.length > 0 && (
+                <Collapsible title="Price breakdown">
+                  <ul className="space-y-2">
+                    {items.map((it, ii) => {
+                      const amt = formatMoney(it.amount, p.currency);
+                      return (
+                        <li key={ii} className="flex items-center justify-between gap-3 py-2 border-b border-[#C0C0C0]/10 last:border-b-0">
+                          <div className="min-w-0">
+                            <p className="text-sm text-[#C0C0C0] font-medium">{it.item}</p>
+                            {it.conditions && (
+                              <p className="text-[10px] text-[#acb0cd]/60">{it.conditions}</p>
+                            )}
+                          </div>
+                          {amt && <span className="text-sm text-[#acb0cd] shrink-0">{amt}</span>}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </Collapsible>
+              )}
+            </div>
+          );
+        };
+        return (
+          <div className="max-w-5xl mx-auto px-5 md:px-10 pb-12 md:pb-16">
+            <div className="text-center mb-8">
+              <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Regions and Rates</h2>
+              <div className="relative w-32 h-6 mx-auto mt-3"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
+            </div>
+            <div className="space-y-10">
+              {grouped.summer.length > 0 && (
+                <div>
+                  <p className="trajan-regular text-lg md:text-xl uppercase tracking-[0.2em] text-[#B03E00] mb-4 text-center">Summer</p>
+                  <div className="grid md:grid-cols-2 gap-5">
+                    {grouped.summer.map(renderCard)}
+                  </div>
+                </div>
+              )}
+              {grouped.winter.length > 0 && (
+                <div>
+                  <p className="trajan-regular text-lg md:text-xl uppercase tracking-[0.2em] text-[#B03E00] mb-4 text-center">Winter</p>
+                  <div className="grid md:grid-cols-2 gap-5">
+                    {grouped.winter.map(renderCard)}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* ══ GALERIE (v5 design : dots petits espacés) ══ */}
       {gallery.length > 0 && (() => {
