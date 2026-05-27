@@ -173,10 +173,10 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       {/* ══ ENTÊTE : enquire + specs grid ══ */}
       <div className="border-b border-[#C0C0C0]/20">
         <div className="max-w-6xl mx-auto px-5 md:px-10 py-8 flex flex-col lg:flex-row lg:items-center gap-8">
-          <div className="flex-1 flex flex-col items-center text-center">
-            <a href="/request-quote-test-v10" className="inline-flex flex-col items-center rounded-xl border-2 border-[#C0C0C0] px-8 py-3 transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+          <div className="flex-1 w-full">
+            <a href="/request-quote-test-v10" className="flex flex-col items-start w-full lg:w-auto lg:inline-flex lg:items-center rounded-xl border-2 border-[#C0C0C0] px-8 py-3 transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-left lg:text-center">
               <span className="text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00]">Enquire about</span>
-              <span className="text-base md:text-lg uppercase tracking-[0.15em] font-medium text-[#B03E00] mt-1">{yacht.name}</span>
+              <span className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] mt-1" style={{ color: '#B03E00' }}>{yacht.name}</span>
             </a>
           </div>
           <div className="lg:flex-[1.4] grid grid-cols-3 sm:grid-cols-6 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] divide-x divide-y sm:divide-y-0 divide-[#C0C0C0]/20">
@@ -359,7 +359,11 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
           const zones = (s.inclusionZones || [])
             .filter((z) => z?.label)
             .filter((z, idx, arr) => arr.findIndex((zz) => zz.label === z.label) === idx);
-          const parts = (s.name || '').split(/\s*[:\-–—]\s+/);
+          const expandName = (n) => (n || '')
+            .replace(/\bMed\b/gi, 'Mediterranean')
+            .replace(/\bCarib\b/gi, 'Caribbean')
+            .replace(/\bBaha\b/gi, 'Bahamas');
+          const parts = expandName(s.name).split(/\s*[:\-–—]\s+/);
           const titleMain = parts[0] || s.name;
           const titleInfo = parts.slice(1).join(' — ');
           return (
