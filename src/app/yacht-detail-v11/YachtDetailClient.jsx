@@ -495,7 +495,9 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             <div className="w-full">
               <p className="text-[10px] uppercase tracking-[0.25em] text-[#B03E00] mb-2">Zones</p>
               <div className="flex flex-wrap gap-2 justify-center">
-                {zones.map((z, zi) => (<Badge key={zi}>{z.label}</Badge>))}
+                {zones.map((z, zi) => (
+                  <span key={zi} className="inline-block px-3 py-1.5 rounded-full border border-[#C0C0C0]/40 bg-[#26272a] text-[#acb0cd] text-xs">{z.label}</span>
+                ))}
               </div>
             </div>
           );
