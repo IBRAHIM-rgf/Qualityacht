@@ -234,12 +234,12 @@ function CircleCard({ name, image, nameBelow = false }) {
   const size = nameBelow
     ? 'w-[130px] h-[130px] md:w-[155px] md:h-[155px]'
     : 'w-[110px] h-[110px] md:w-[130px] md:h-[130px]';
-  const wrapper = nameBelow ? '175px' : '150px';
+  const wrapper = nameBelow ? '160px' : '135px';
   return (
     <div
       onClick={activate} onMouseEnter={activate} onMouseLeave={deactivate}
       onTouchStart={activate} onTouchEnd={deactivate}
-      className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2 px-2 py-1"
+      className="flex flex-col items-center shrink-0 snap-center cursor-pointer gap-2 px-0 py-1"
       style={{ width: wrapper }}>
       {/* border séparé de overflow-hidden pour ne pas être coupé */}
       <div
@@ -461,7 +461,7 @@ export default function CaribbeanV15Page() {
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Anchorages & Marinas" title="Popular Destinations" sub="The most exclusive marinas and anchorages in the Caribbean" />
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pt-2 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-0 md:gap-1 pt-2 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
               {popularDestinations.map((dest, i) => <CircleCard key={i} {...dest} />)}
             </div>
           </div>

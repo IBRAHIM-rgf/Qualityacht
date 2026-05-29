@@ -2,12 +2,6 @@ import ItemsGrid from "../../components/ItemsGrid";
 
 const destinations = [
   {
-    title: "Caraibes",
-    description: "Discover more species in the Caribbean regions.",
-    image: "/images/destinations/animals/caraibes.jpg",
-    href: "/charters/destinations/caribbean-v15",
-  },
-  {
     title: "Arctic",
     description: "Discover these unique creatures in the cold waters of the Arctic.",
     image: "/images/destinations/animals/Arctic.png",
@@ -90,6 +84,12 @@ const destinations = [
     description: "Meet these animals in the icy waters of Northern Europe.",
     image: "/images/destinations/animals/articbynortherneurope.jpg",
     href: "/charters/destinations/arctic-northern-europe",
+  },
+  {
+    title: "Caraïbes",
+    description: "Discover more species in the Caribbean regions.",
+    image: "/images/destinations/animals/caraibes.jpg",
+    href: "/charters/destinations/caribbean-v15",
   },
   {
     title: "Oceania",

@@ -173,6 +173,15 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
             {showMore ? 'See less' : 'See more'}
           </button>
         </div>
+        <div className="max-w-3xl mx-auto flex justify-end pr-2 md:pr-6 mt-10 md:mt-12">
+          <a
+            href="/request-quote-test-v10"
+            className="inline-flex items-center px-6 py-2 border text-[10px] uppercase tracking-[0.3em] transition-all duration-300 hover:opacity-80 cursor-pointer rounded-full"
+            style={{ color: '#c2622a', borderColor: '#C0C0C0', backgroundColor: '#2e2f32' }}
+          >
+            Contact broker
+          </a>
+        </div>
         <div className="max-w-7xl mx-auto pt-10">
           <div className="mb-8 text-center">
             <p className="text-[10px] uppercase tracking-[0.3em] mb-2" style={{ color: '#C0C0C0' }}>
