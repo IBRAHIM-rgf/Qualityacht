@@ -128,7 +128,7 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
           {/* Type */}
           <div className="flex-1 min-w-[150px] max-w-[180px]">
             <select value={localFilters.type} onChange={e => handleChange('type', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]">
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]">
               {YACHT_TYPES.map(t => <option key={t.value} value={t.value} className="bg-[#3a3b3f]">{t.label}</option>)}
             </select>
           </div>
@@ -136,7 +136,7 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
           {/* Destination Caribbean seulement */}
           <div className="flex-1 min-w-[180px] max-w-[220px]">
             <select value={localFilters.destination} onChange={e => handleChange('destination', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]">
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]">
               {DESTINATIONS.map(d => <option key={d.value} value={d.value} className="bg-[#3a3b3f]">{d.label}</option>)}
             </select>
           </div>
@@ -146,29 +146,29 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
             <div className="relative">
               <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input type="date" value={localFilters.startDate || ''} onChange={e => handleChange('startDate', e.target.value)}
-                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] [color-scheme:light]" />
+                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] [color-scheme:light]" />
             </div>
             <span className="text-gray-400">-</span>
             <input type="date" value={localFilters.endDate || ''} onChange={e => handleChange('endDate', e.target.value)}
-              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] [color-scheme:light]" />
+              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] [color-scheme:light]" />
           </div>
 
           {/* Prix */}
           <div className="flex items-center gap-2 min-w-[260px]">
-            <label className="text-sm text-gray-300 whitespace-nowrap">Price:</label>
+            <label className="text-sm text-[#C0C0C0] whitespace-nowrap">Price:</label>
             <select value={selectedPriceTier} onChange={e => handlePriceTierChange(Number(e.target.value))}
-              className="flex-1 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs accent-[#B03E00]">
+              className="flex-1 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#acb0cd] text-xs accent-[#B03E00]">
               {PRICE_TIERS.map((tier, i) => <option key={i} value={i} className="bg-[#3a3b3f]">{getPriceTierLabel(tier, CURRENCY_SYMBOLS[selectedCurrency])}</option>)}
             </select>
             <select value={selectedCurrency} onChange={e => handleCurrencyChange(e.target.value)}
-              className="px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs accent-[#B03E00]">
+              className="px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#acb0cd] text-xs accent-[#B03E00]">
               {CURRENCIES.map(c => <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>)}
             </select>
           </div>
 
           {/* More Options */}
           <button onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-transparent border border-white/20 rounded-xl text-[#C0C0C0] hover:bg-white/5 transition-colors">
+            className="flex items-center gap-2 px-4 py-2.5 bg-transparent border border-white/20 rounded-xl text-[#acb0cd] hover:bg-white/5 transition-colors">
             <span className="text-sm">More Options</span>
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
@@ -194,7 +194,7 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
         {isExpanded && (
           <div className="mt-4 pt-4 border-t border-white/10 space-y-4">
             <div className="flex flex-col gap-1">
-              <label className="text-sm text-gray-300">Length:</label>
+              <label className="text-sm text-[#C0C0C0]">Length:</label>
               {(() => {
                 const dMin = unitPreference === 'meters' ? MIN_LENGTH_M : MIN_LENGTH_FT;
                 const dMax = unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT;
@@ -204,6 +204,20 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                   <div className="relative min-w-[180px]">
                     <div className="relative h-6 flex items-center">
                       <div className="absolute w-full h-1 rounded-full" style={{ background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pL}%, #B03E00 ${pL}%, #B03E00 ${pR}%, #4b5563 ${pR}%, #4b5563 100%)` }} />
+                      {/* Tick marks */}
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
+                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
+                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
+                          })
+                      }
                       <input type="range" min={dMin} max={dMax} step={unitPreference === 'meters' ? 5 : 10} value={lengthRange[0]}
                         onChange={e => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 10))}
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [[&::-moz-range-thumb]:bg-[#B03E00]::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
@@ -212,6 +226,22 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                         onChange={e => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 10))}
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [[&::-moz-range-thumb]:bg-[#B03E00]::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
                         style={{ zIndex: 5 }} />
+                    </div>
+                    {/* Labels under tick marks */}
+                    <div className="relative h-4">
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
+                            return i % 3 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
+                            return i % 2 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
+                          })
+                      }
                     </div>
                   </div>
                 );
@@ -226,9 +256,9 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <label className="text-sm text-gray-300 min-w-[60px]">Min guests:</label>
+              <label className="text-sm text-[#C0C0C0] min-w-[60px]">Min guests:</label>
               <input type="number" min="1" max="50" value={localFilters.capacity || ''} onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
-                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478]" />
+                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478]" />
             </div>
             <div className="flex items-center gap-4 flex-wrap">
               {[['petFriendly', 'Pet Friendly'], ['groupFriendly', 'Group Friendly']].map(([key, label]) => (
@@ -268,34 +298,34 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
           </div>
           <div className="p-6 space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Yacht Type</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Yacht Type</label>
               <select value={localFilters.type} onChange={e => handleChange('type', e.target.value)}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]">
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
                 {YACHT_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Caribbean Destination</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Caribbean Destination</label>
               <select value={localFilters.destination} onChange={e => handleChange('destination', e.target.value)}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]">
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
                 {DESTINATIONS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Price</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Price</label>
               <div className="flex gap-2">
                 <select value={selectedPriceTier} onChange={e => handlePriceTierChange(Number(e.target.value))}
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]">
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
                   {PRICE_TIERS.map((tier, i) => <option key={i} value={i}>{getPriceTierLabel(tier, CURRENCY_SYMBOLS[selectedCurrency])}</option>)}
                 </select>
                 <select value={selectedCurrency} onChange={e => handleCurrencyChange(e.target.value)}
-                  className="px-3 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]">
+                  className="px-3 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
                   {CURRENCIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                 </select>
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Length</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Length</label>
               {(() => {
                 const lenMin = unitPreference === 'meters' ? MIN_LENGTH_M : MIN_LENGTH_FT;
                 const lenMax = unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT;
@@ -303,8 +333,22 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                 const pR = ((lengthRange[1] - lenMin) / (lenMax - lenMin)) * 100;
                 return (
                   <div className="px-2">
-                    <div className="relative h-6 flex items-center mb-2">
+                    <div className="relative h-6 flex items-center mb-1">
                       <div className="absolute w-full h-1 rounded-full" style={{ background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pL}%, #B03E00 ${pL}%, #B03E00 ${pR}%, #4b5563 ${pR}%, #4b5563 100%)` }} />
+                      {/* Tick marks mobile */}
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
+                          })
+                      }
                       <input type="range" min={lenMin} max={lenMax} step={unitPreference === 'meters' ? 5 : 10} value={lengthRange[0]}
                         onChange={e => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 10))}
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [[&::-moz-range-thumb]:bg-[#B03E00]::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
@@ -313,6 +357,22 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                         onChange={e => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 10))}
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [[&::-moz-range-thumb]:bg-[#B03E00]::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
                         style={{ zIndex: 5 }} />
+                    </div>
+                    {/* Labels under tick marks mobile */}
+                    <div className="relative h-4 mb-2">
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                            return i % 3 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                            return i % 2 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
+                          })
+                      }
                     </div>
                     <div className="flex gap-3 mt-2">
                       {['meters', 'feet'].map(u => (
@@ -327,9 +387,9 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
               })()}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Minimum Guests</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Minimum Guests</label>
               <input type="number" min="1" max="50" value={localFilters.capacity || ''} onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0]" />
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd]" />
             </div>
             {activeCount > 0 && (
               <button onClick={handleReset} className="w-full px-4 py-3 bg-transparent border-2 border-[#C0C0C0] text-[#C0C0C0] rounded-xl font-medium hover:bg-white/5 transition">

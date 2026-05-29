@@ -195,6 +195,19 @@ export default function YachtFiltersRegion({
                   <div className="relative min-w-[180px]">
                     <div className="relative h-6 flex items-center">
                       <div className="absolute w-full h-1 rounded-full" style={{ background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pL}%, #B03E00 ${pL}%, #B03E00 ${pR}%, #4b5563 ${pR}%, #4b5563 100%)` }} />
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
+                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
+                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
+                          })
+                      }
                       <input type="range" min={dMin} max={dMax} step={unitPreference === 'meters' ? 5 : 10} value={lengthRange[0]}
                         onChange={e => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 10))}
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
@@ -203,6 +216,21 @@ export default function YachtFiltersRegion({
                         onChange={e => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 10))}
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
                         style={{ zIndex: 5 }} />
+                    </div>
+                    <div className="relative h-4">
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
+                            return i % 3 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
+                            return i % 2 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
+                          })
+                      }
                     </div>
                   </div>
                 );
@@ -292,8 +320,21 @@ export default function YachtFiltersRegion({
                 const pR = ((lengthRange[1] - lenMin) / (lenMax - lenMin)) * 100;
                 return (
                   <div className="px-2">
-                    <div className="relative h-6 flex items-center mb-2">
+                    <div className="relative h-6 flex items-center mb-1">
                       <div className="absolute w-full h-1 rounded-full" style={{ background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pL}%, #B03E00 ${pL}%, #B03E00 ${pR}%, #4b5563 ${pR}%, #4b5563 100%)` }} />
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
+                          })
+                      }
                       <input type="range" min={lenMin} max={lenMax} step={unitPreference === 'meters' ? 5 : 10} value={lengthRange[0]}
                         onChange={e => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 10))}
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
@@ -302,6 +343,21 @@ export default function YachtFiltersRegion({
                         onChange={e => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 10))}
                         className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
                         style={{ zIndex: 5 }} />
+                    </div>
+                    <div className="relative h-4 mb-2">
+                      {unitPreference === 'meters'
+                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
+                            const val = MIN_LENGTH_M + i * 10;
+                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                            return i % 3 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
+                          })
+                        : Array.from({ length: 14 }, (_, i) => {
+                            const val = MIN_LENGTH_FT + i * 30;
+                            if (val > MAX_LENGTH_FT) return null;
+                            const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
+                            return i % 2 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
+                          })
+                      }
                     </div>
                     <div className="flex gap-3 mt-2">
                       {['meters', 'feet'].map(u => (

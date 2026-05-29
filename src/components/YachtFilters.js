@@ -205,7 +205,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
             <select
               value={localFilters.type}
               onChange={e => handleChange('type', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]"
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]"
             >
               {YACHT_TYPES.map(t => (
                 <option key={t.value} value={t.value} className="bg-[#3a3b3f]">{t.label}</option>
@@ -218,7 +218,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
             <select
               value={localFilters.destination}
               onChange={e => handleChange('destination', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]"
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]"
             >
               {destinationsList.map(d => (
                 <option key={d.value} value={d.value} className="bg-[#3a3b3f]">{d.label}</option>
@@ -250,7 +250,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                 value={(localFilters.startDate || '').slice(0, 7)}
                 onChange={e => handleChange('startDate', e.target.value)}
                 placeholder="yyyy-mm"
-                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
+                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
                 lang="en-US"
               />
             </div>
@@ -260,18 +260,18 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
               value={(localFilters.endDate || '').slice(0, 7)}
               onChange={e => handleChange('endDate', e.target.value)}
               placeholder="yyyy-mm"
-              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
+              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
               lang="en-US"
             />
           </div>
 
           {/* Price Range - Select paliers + Currency */}
           <div className="flex items-center gap-2 min-w-[260px]">
-            <label className="text-sm text-gray-300 whitespace-nowrap">Price:</label>
+            <label className="text-sm text-[#C0C0C0] whitespace-nowrap">Price:</label>
             <select
               value={selectedPriceTier}
               onChange={e => handlePriceTierChange(Number(e.target.value))}
-              className="flex-1 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs accent-[#B03E00]"
+              className="flex-1 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#acb0cd] text-xs accent-[#B03E00]"
             >
               {PRICE_TIERS.map((tier, i) => (
                 <option key={i} value={i} className="bg-[#3a3b3f]">{getPriceTierLabel(tier, CURRENCY_SYMBOLS[selectedCurrency])}</option>
@@ -280,7 +280,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
             <select
               value={selectedCurrency}
               onChange={e => handleCurrencyChange(e.target.value)}
-              className="px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs accent-[#B03E00]"
+              className="px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#acb0cd] text-xs accent-[#B03E00]"
             >
               {CURRENCIES.map(c => (
                 <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>
@@ -323,7 +323,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
           <div className="mt-4 pt-4 border-t border-white/10 space-y-4 bg-transparent">
             {/* Length with dual slider */}
             <div className="flex flex-col gap-1">
-              <label className="text-sm text-gray-300">Length:</label>
+              <label className="text-sm text-[#C0C0C0]">Length:</label>
               {(() => {
                 const dlenMin = unitPreference === 'meters' ? MIN_LENGTH_M : MIN_LENGTH_FT;
                 const dlenMax = unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT;
@@ -343,7 +343,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                             const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
                             return (
                               <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
-                                <div className="w-px h-3 bg-gray-400/70" />
+                                <div className="w-px h-3 bg-[#C0C0C0]/80" />
                               </div>
                             );
                           })
@@ -353,7 +353,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                             const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
                             return (
                               <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
-                                <div className="w-px h-3 bg-gray-400/70" />
+                                <div className="w-px h-3 bg-[#C0C0C0]/80" />
                               </div>
                             );
                           })
@@ -386,7 +386,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                             const val = MIN_LENGTH_M + i * 10;
                             const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
                             return i % 3 === 0 ? (
-                              <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                              <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
                             ) : null;
                           })
                         : Array.from({ length: 14 }, (_, i) => {
@@ -394,7 +394,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                             if (val > MAX_LENGTH_FT) return null;
                             const pct = ((val - dlenMin) / (dlenMax - dlenMin)) * 100;
                             return i % 2 === 0 ? (
-                              <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                              <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
                             ) : null;
                           })
                       }
@@ -427,7 +427,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
             {/* Capacity */}
             <div className="flex items-center gap-4">
-              <label className="text-sm text-gray-300 min-w-[60px]">Min guests:</label>
+              <label className="text-sm text-[#C0C0C0] min-w-[60px]">Min guests:</label>
               <input
                 type="number"
                 min="1"
@@ -435,7 +435,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                 value={localFilters.capacity || ''}
                 onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
                 placeholder=""
-                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
+                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
               />
             </div>
 
@@ -516,11 +516,11 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
           <div className="p-6 space-y-6">
             {/* Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Yacht Type</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Yacht Type</label>
               <select
                 value={localFilters.type}
                 onChange={e => handleChange('type', e.target.value)}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]"
               >
                 {YACHT_TYPES.map(t => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -530,11 +530,11 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
             {/* Destination */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Destination</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Destination</label>
               <select
                 value={localFilters.destination}
                 onChange={e => handleChange('destination', e.target.value)}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]"
               >
                 {DESTINATIONS.map(d => (
                   <option key={d.value} value={d.value}>{d.label}</option>
@@ -560,14 +560,14 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
             {/* Dates */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Charter Dates</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Charter Dates</label>
               <div className="flex gap-2">
                 <input
                   type="month"
                   value={(localFilters.startDate || '').slice(0, 7)}
                   onChange={e => handleChange('startDate', e.target.value)}
                   placeholder="yyyy-mm"
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:light]"
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] [color-scheme:light]"
                   lang="en-US"
                 />
                 <input
@@ -575,7 +575,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                   value={(localFilters.endDate || '').slice(0, 7)}
                   onChange={e => handleChange('endDate', e.target.value)}
                   placeholder="yyyy-mm"
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:light]"
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] [color-scheme:light]"
                   lang="en-US"
                 />
               </div>
@@ -583,7 +583,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
             {/* Length with Dual Slider */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Length</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Length</label>
               <div className="space-y-3">
                 <div className="px-2">
                   {(() => {
@@ -605,7 +605,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                                 const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
                                 return (
                                   <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
-                                    <div className="w-px h-3 bg-gray-400/70" />
+                                    <div className="w-px h-3 bg-[#C0C0C0]/80" />
                                   </div>
                                 );
                               })
@@ -615,7 +615,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                                 const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
                                 return (
                                   <div key={val} className="absolute flex flex-col items-center pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>
-                                    <div className="w-px h-3 bg-gray-400/70" />
+                                    <div className="w-px h-3 bg-[#C0C0C0]/80" />
                                   </div>
                                 );
                               })
@@ -648,7 +648,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                                 const val = MIN_LENGTH_M + i * 10;
                                 const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
                                 return i % 3 === 0 ? (
-                                  <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                                  <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
                                 ) : null;
                               })
                             : Array.from({ length: 14 }, (_, i) => {
@@ -656,7 +656,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                                 if (val > MAX_LENGTH_FT) return null;
                                 const pct = ((val - lenMin) / (lenMax - lenMin)) * 100;
                                 return i % 2 === 0 ? (
-                                  <span key={val} className="absolute text-[9px] text-gray-500" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
+                                  <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span>
                                 ) : null;
                               })
                           }
@@ -696,12 +696,12 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
             {/* Price - Select paliers + Currency */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Price</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Price</label>
               <div className="flex gap-2">
                 <select
                   value={selectedPriceTier}
                   onChange={e => handlePriceTierChange(Number(e.target.value))}
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]"
                 >
                   {PRICE_TIERS.map((tier, i) => (
                     <option key={i} value={i} className="bg-[#3a3b3f]">{getPriceTierLabel(tier, CURRENCY_SYMBOLS[selectedCurrency])}</option>
@@ -710,7 +710,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                 <select
                   value={selectedCurrency}
                   onChange={e => handleCurrencyChange(e.target.value)}
-                  className="px-3 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] accent-[#B03E00]"
+                  className="px-3 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]"
                 >
                   {CURRENCIES.map(c => (
                     <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>
@@ -721,7 +721,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
             {/* Capacity */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Minimum Guests</label>
+              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Minimum Guests</label>
               <input
                 type="number"
                 min="1"
@@ -729,7 +729,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                 placeholder=""
                 value={localFilters.capacity || ''}
                 onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0]"
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd]"
               />
             </div>
 
