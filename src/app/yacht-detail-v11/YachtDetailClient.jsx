@@ -110,10 +110,15 @@ function EnquireButton({ yacht, bp, full, imgs }) {
       if (cart.find((y) => y.id === yacht.id || y.name === yacht.name)) setState('added');
     } catch {}
   }, [yacht.id, yacht.name]);
-  const add = () => {
+  const toggle = () => {
     try {
       const cart = JSON.parse(localStorage.getItem('quote_cart') || '[]');
-      if (!cart.find((y) => y.id === yacht.id || y.name === yacht.name)) {
+      const idx = cart.findIndex((y) => y.id === yacht.id || y.name === yacht.name);
+      if (idx >= 0) {
+        cart.splice(idx, 1);
+        localStorage.setItem('quote_cart', JSON.stringify(cart));
+        setState('idle');
+      } else {
         cart.push({
           id: yacht.id,
           name: yacht.name,
@@ -125,18 +130,18 @@ function EnquireButton({ yacht, bp, full, imgs }) {
           price: yacht.pricePerHour || yacht.price || null,
         });
         localStorage.setItem('quote_cart', JSON.stringify(cart));
+        setState('added');
       }
     } catch {}
-    setState('added');
   };
   return (
     <button
       type="button"
-      onClick={add}
+      onClick={toggle}
       className={`flex flex-col items-start w-full lg:w-auto lg:inline-flex lg:items-center rounded-lg border-2 px-2 py-0.5 transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-left lg:text-center ${state === 'added' ? 'border-[#B03E00] bg-[#B03E00]/10' : 'border-[#C0C0C0] hover:bg-[#B03E00]/10'}`}
     >
       <span className="text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00]">
-        {state === 'added' ? '✓ Added to cart' : 'Add to cart — Enquire about'}
+        {state === 'added' ? '✓ Added to cart' : 'Add to cart'}
       </span>
       <span className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] mt-1" style={{ color: '#C0C0C0' }}>{yacht.name}</span>
     </button>
@@ -241,8 +246,11 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       {/* ══ ENTÊTE : enquire + specs grid ══ */}
       <div className="border-b border-[#C0C0C0]/20">
         <div className="max-w-6xl mx-auto px-5 md:px-10 py-8 flex flex-col lg:flex-row lg:items-center gap-8">
-          <div className="flex-1 w-full">
+          <div className="flex-1 w-full flex flex-col items-stretch lg:items-center gap-3">
             <EnquireButton yacht={yacht} bp={bp} full={full} imgs={imgs} />
+            <a href="/contact" className="flex items-center justify-center w-full lg:w-auto rounded-lg border-2 border-[#C0C0C0] px-3 py-1.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+              Contact a broker
+            </a>
           </div>
           <div className="lg:flex-[1.4] grid grid-cols-3 sm:grid-cols-6 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] divide-x divide-y sm:divide-y-0 divide-[#C0C0C0]/20">
             <Spec icon={Anchor} label="Builder" value={yacht.make || bp.make} />

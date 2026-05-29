@@ -664,7 +664,10 @@ export default function RequestQuoteWizard() {
                 </label>
               </div>
 
-              <div className="pt-2 flex justify-end">
+              <div className="pt-2 flex items-center justify-between gap-4">
+                <GhostButton onClick={() => { if (typeof window !== 'undefined') window.history.back(); }} className="inline-flex items-center gap-3 px-6 py-3">
+                  <ArrowLeft className="w-5 h-5" /> Go Back
+                </GhostButton>
                 <PrimaryButton onClick={goNext} className="w-full md:w-auto px-12 py-4">Continue</PrimaryButton>
               </div>
             </div>
