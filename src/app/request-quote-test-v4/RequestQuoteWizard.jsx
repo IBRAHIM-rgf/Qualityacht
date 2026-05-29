@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown } from 'lucide-react';
+import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown, X as XIcon, RotateCcw, PawPrint, Accessibility } from 'lucide-react';
 
 const STEPS = ['Charter Details', 'Contact Info', 'Thank You!'];
 
@@ -469,8 +469,56 @@ export default function RequestQuoteWizard() {
   const [step, setStep] = useState(0);
 
   const [charter, setCharter] = useState({
-    startDate: '', endDate: '', guests: yacht.guests || '', proposeJets: false,
+    startMonth: '', endMonth: '', guests: yacht.guests || '',
+    proposeJets: false, pets: false, accessible: false,
   });
+
+  // Panier de yachts (rempli par yacht-detail-v11 via Add to cart Enquire).
+  // Si vide, on retombe sur le yacht passé en query params.
+  const [boats, setBoats] = useState([]);
+  const [initialBoats, setInitialBoats] = useState([]);
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('quote_cart') || '[]');
+      const list = stored.length > 0
+        ? stored.map((b, idx) => ({
+            id: b.id || `yacht-${idx}`,
+            name: b.name || 'Yacht',
+            image: b.image || '/images/yachts/yatch2.jpeg',
+            length: b.length || null,
+            guests: b.guests || null,
+            type: b.type || null,
+            price: b.price || null,
+          }))
+        : [{
+            id: 'query',
+            name: yacht.name,
+            image: yacht.image,
+            length: null,
+            guests: yacht.guests || null,
+            type: yacht.type || null,
+            price: yacht.price || null,
+          }];
+      setInitialBoats(list);
+      setBoats(list);
+    } catch {}
+  }, [yacht.name, yacht.image, yacht.guests, yacht.type, yacht.price]);
+  const removeBoat = (id) => setBoats((bs) => bs.filter((b) => b.id !== id));
+  const restartBoats = () => setBoats(initialBoats);
+  const removedBoats = initialBoats.filter((ib) => !boats.find((b) => b.id === ib.id));
+
+  // 24 mois glissants pour les selects Departure / Return
+  const months = (() => {
+    const out = [];
+    const now = new Date();
+    for (let i = 0; i < 24; i++) {
+      const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+      const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      const label = d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+      out.push({ value, label });
+    }
+    return out;
+  })();
 
   const [contact, setContact] = useState({
     company: '', title: '', firstName: '', lastName: '',
@@ -512,53 +560,69 @@ export default function RequestQuoteWizard() {
       <div className="overflow-hidden max-w-5xl mx-auto">
         <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${step * 100}%)` }}>
 
-          {/* ══ ÉTAPE 1 — CHARTER DETAILS ══ */}
+          {/* ══ ÉTAPE 1 — CHARTER DETAILS (vignettes panier + mois + checkboxes) ══ */}
           <section className="w-full shrink-0 px-1">
-            <div className="grid md:grid-cols-2 gap-8 items-start">
-              {/* Photo yacht choisi */}
-              <div>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-[#C0C0C0]">
-                  <Image src={yacht.image} alt={yacht.name} fill className="object-cover" />
-                </div>
-                <h2 className="trajan-regular text-xl md:text-2xl text-[#acb0cd] uppercase tracking-[0.1em] mt-4">{yacht.name}</h2>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {yacht.type && (
-                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd] capitalize">
-                      <Ship className="w-3 h-3 text-[#c2622a]" /> {yacht.type}
-                    </span>
-                  )}
-                  {yacht.region && (
-                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
-                      {yacht.region}
-                    </span>
-                  )}
-                  {yacht.price && (
-                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
-                      {yacht.price}/week
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Détails charter */}
-              <div className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Field label="Departure Date" required>
-                    <div className="relative min-w-0">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none z-10" />
-                      <input type="date" value={charter.startDate} onChange={e => setCharter({ ...charter, startDate: e.target.value })}
-                        className={`${inputClass} pl-10 min-w-0 max-w-full [color-scheme:dark]`} />
+            <div className="space-y-6">
+              {/* Vignettes des yachts du panier */}
+              {boats.length === 0 ? (
+                <p className="text-center text-sm text-[#acb0cd]/70">Your quote is empty.</p>
+              ) : (
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  {boats.map((b) => (
+                    <div key={b.id} className="relative rounded-xl overflow-hidden border border-[#C0C0C0]">
+                      <div className="relative aspect-[3/4]">
+                        <Image src={b.image} alt={b.name} fill className="object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                        <button onClick={() => removeBoat(b.id)} title="Remove from quote"
+                          className="absolute top-2 right-2 w-7 h-7 rounded-full border border-[#C0C0C0] bg-black/40 text-[#C0C0C0] flex items-center justify-center hover:text-[#B03E00] hover:border-[#B03E00] transition-colors">
+                          <XIcon className="w-3.5 h-3.5" />
+                        </button>
+                        <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                          <h3 className="trajan-regular text-sm text-[#C0C0C0] uppercase tracking-[0.1em]">{b.name}</h3>
+                          <p className="text-[10px] text-[#acb0cd]/80 mt-1">
+                            {[b.length, b.guests && `${b.guests} guests`, b.type].filter(Boolean).join(' · ')}
+                          </p>
+                          {b.price && <p className="text-[10px] text-[#acb0cd]">{b.price}/wk</p>}
+                        </div>
+                      </div>
                     </div>
-                  </Field>
-                  <Field label="Return Date" required>
-                    <div className="relative min-w-0">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none z-10" />
-                      <input type="date" value={charter.endDate} onChange={e => setCharter({ ...charter, endDate: e.target.value })}
-                        className={`${inputClass} pl-10 min-w-0 max-w-full [color-scheme:dark]`} />
-                    </div>
-                  </Field>
+                  ))}
                 </div>
+              )}
 
+              {/* Restart yachts (réapparaît les bateaux supprimés) */}
+              {removedBoats.length > 0 && (
+                <div className="flex justify-center">
+                  <button onClick={restartBoats}
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#C0C0C0] px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] font-medium text-[#B03E00] hover:bg-[#B03E00]/10 transition-colors">
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    Restart yachts ({removedBoats.length})
+                  </button>
+                </div>
+              )}
+
+              {/* Trip details : mois uniquement (24 mois glissants) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <Field label="Departure month" required>
+                  <div className="relative min-w-0">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none z-10" />
+                    <select value={charter.startMonth} onChange={e => setCharter({ ...charter, startMonth: e.target.value })}
+                      className={`${inputClass} pl-10`}>
+                      <option value="" className="bg-[#2e2f32]">— select —</option>
+                      {months.map(m => <option key={m.value} value={m.value} className="bg-[#2e2f32]">{m.label}</option>)}
+                    </select>
+                  </div>
+                </Field>
+                <Field label="Return month" required>
+                  <div className="relative min-w-0">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none z-10" />
+                    <select value={charter.endMonth} onChange={e => setCharter({ ...charter, endMonth: e.target.value })}
+                      className={`${inputClass} pl-10`}>
+                      <option value="" className="bg-[#2e2f32]">— select —</option>
+                      {months.map(m => <option key={m.value} value={m.value} className="bg-[#2e2f32]">{m.label}</option>)}
+                    </select>
+                  </div>
+                </Field>
                 <Field label="Number of Guests" required>
                   <div className="relative">
                     <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none" />
@@ -567,18 +631,26 @@ export default function RequestQuoteWizard() {
                       className={`${inputClass} pl-10`} />
                   </div>
                 </Field>
+              </div>
 
-                {/* Confirmation infos filtre — tout en lavande */}
-                <div className="border border-[#C0C0C0] rounded-xl p-4 bg-[#3a3b3f]">
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd] mb-2">Your selection</p>
-                  <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-[#acb0cd]">
-                    <span>Yacht: {yacht.name}</span>
-                    {yacht.type && <span className="capitalize">Type: {yacht.type}</span>}
-                    {yacht.region && <span>Region: {yacht.region}</span>}
-                  </div>
-                </div>
-
-                {/* Case proposer des jets */}
+              {/* Checkboxes options — style CocoCheckbox (logo Qualityacht quand coché) */}
+              <div className="space-y-2.5">
+                <label onClick={() => setCharter({ ...charter, pets: !charter.pets })}
+                  className="flex items-center gap-3 cursor-pointer select-none">
+                  <CocoCheckbox checked={charter.pets} />
+                  <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
+                    <PawPrint className="w-4 h-4 text-[#c2622a]" />
+                    Bringing pets on board
+                  </span>
+                </label>
+                <label onClick={() => setCharter({ ...charter, accessible: !charter.accessible })}
+                  className="flex items-center gap-3 cursor-pointer select-none">
+                  <CocoCheckbox checked={charter.accessible} />
+                  <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
+                    <Accessibility className="w-4 h-4 text-[#c2622a]" />
+                    Reduced mobility access required
+                  </span>
+                </label>
                 <label onClick={() => setCharter({ ...charter, proposeJets: !charter.proposeJets })}
                   className="flex items-center gap-3 cursor-pointer select-none">
                   <CocoCheckbox checked={charter.proposeJets} />
@@ -587,10 +659,10 @@ export default function RequestQuoteWizard() {
                     Also propose matching private jets for my trip
                   </span>
                 </label>
+              </div>
 
-                <div className="pt-2">
-                  <PrimaryButton onClick={goNext} className="w-full md:w-auto px-12 py-4">Continue</PrimaryButton>
-                </div>
+              <div className="pt-2 flex justify-end">
+                <PrimaryButton onClick={goNext} className="w-full md:w-auto px-12 py-4">Continue</PrimaryButton>
               </div>
             </div>
           </section>
