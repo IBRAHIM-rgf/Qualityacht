@@ -232,7 +232,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             From {price}<span className="text-sm text-[#acb0cd]/50"> / {heroUnit}</span>
           </p>
         )}
-        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 mt-2 text-sm text-[#3b6f9c] hover:text-[#B03E00] transition-colors">
+        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 mt-2 text-sm text-[#acb0cd] hover:text-[#B03E00] transition-colors">
           <Info className="w-4 h-4" />
           <span className="underline-offset-2 hover:underline">Charter Costs Explained</span>
         </a>
@@ -614,6 +614,14 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         );
       })()}
 
+      {/* ══ LIEN CHARTER COSTS — entre Regions and Rates et Gallery ══ */}
+      <div className="max-w-5xl mx-auto px-5 md:px-10 pb-8 text-center">
+        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 text-sm text-[#acb0cd] hover:text-[#B03E00] transition-colors">
+          <Info className="w-4 h-4" />
+          <span className="underline-offset-2 hover:underline">Charter Costs Explained</span>
+        </a>
+      </div>
+
       {/* ══ GALERIE (v5 design : dots petits espacés) ══ */}
       {gallery.length > 0 && (() => {
         const totalPages = Math.ceil(gallery.length / GALLERY_PAGE);
@@ -667,14 +675,6 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
           </div>
         );
       })()}
-
-      {/* ══ LIEN CHARTER COSTS — entre Gallery et la suite ══ */}
-      <div className="max-w-5xl mx-auto px-5 md:px-10 pb-8 text-center">
-        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 text-sm text-[#3b6f9c] hover:text-[#B03E00] transition-colors">
-          <Info className="w-4 h-4" />
-          <span className="underline-offset-2 hover:underline">Charter Costs Explained</span>
-        </a>
-      </div>
 
       {/* ══ CREW (collapsible fermé, après la galerie) ══ */}
       {crew.length > 0 && (
