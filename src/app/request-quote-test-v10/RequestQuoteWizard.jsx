@@ -791,7 +791,7 @@ export default function RequestQuoteWizard() {
                   </p>
                 </div>
               </div>
-              <a href="/#services"
+              <a href="/#discovery"
                 className="block w-full text-center rounded-xl px-10 py-4 border-2 border-[#C0C0C0] bg-black/40 text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
                 Back to Homepage
               </a>
