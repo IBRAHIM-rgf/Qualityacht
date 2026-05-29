@@ -545,8 +545,8 @@ export default function RequestQuoteWizard() {
       {/* Fond plein écran Thank You — la photo arrive APRES un temps de lecture (transition douce) */}
       {step === 2 && (
         <>
-          <style>{`@keyframes thankPhotoIn{0%{opacity:0;filter:blur(14px);transform:scale(1.15)}50%{opacity:0;filter:blur(14px);transform:scale(1.15)}100%{opacity:1;filter:blur(0);transform:scale(1)}}`}</style>
-          <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 6s ease forwards' }}>
+          <style>{`@keyframes thankPhotoIn{0%{opacity:0;filter:blur(10px);transform:scale(1.08)}100%{opacity:1;filter:blur(0);transform:scale(1)}}`}</style>
+          <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 2s ease-out forwards' }}>
             <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover object-top md:object-contain" />
             <div className="absolute inset-0 bg-black/35" />
           </div>
@@ -770,7 +770,7 @@ export default function RequestQuoteWizard() {
                   </p>
                 </div>
               </div>
-              <a href="/#discovery"
+              <a href="/#services"
                 className="block w-full text-center rounded-xl px-10 py-4 border-2 border-[#C0C0C0] bg-black/40 text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
                 Back to Homepage
               </a>

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { getAnkorImageUrl } from '@/lib/utils';
 import {
   Ruler, Users, BedDouble, Anchor, Calendar, ChevronLeft, ChevronRight, X, Map as MapIcon,
-  Gauge, Fuel, Wrench, Building2, Sparkles, Tv, Ship, UserCircle2, ChevronDown,
+  Gauge, Fuel, Wrench, Building2, Sparkles, Tv, Ship, UserCircle2, ChevronDown, Info,
 } from 'lucide-react';
 
 const GALLERY_PAGE = 6;
@@ -138,7 +138,7 @@ function EnquireButton({ yacht, bp, full, imgs }) {
     <button
       type="button"
       onClick={toggle}
-      className={`flex flex-col items-start w-full lg:w-auto lg:inline-flex lg:items-center rounded-lg border-2 px-2 py-0.5 transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-left lg:text-center ${state === 'added' ? 'border-[#B03E00] bg-[#B03E00]/10' : 'border-[#C0C0C0] hover:bg-[#B03E00]/10'}`}
+      className={`flex flex-col items-start w-full lg:w-auto lg:inline-flex lg:items-center rounded-lg border-2 border-[#C0C0C0] px-2 py-0.5 transition-all text-left lg:text-center ${state === 'added' ? 'shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]' : 'shadow-none'}`}
     >
       <span className="text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00]">
         {state === 'added' ? '✓ Added to cart' : 'Add to cart'}
@@ -232,6 +232,10 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             From {price}<span className="text-sm text-[#acb0cd]/50"> / {heroUnit}</span>
           </p>
         )}
+        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 mt-2 text-sm text-[#3b6f9c] hover:text-[#B03E00] transition-colors">
+          <Info className="w-4 h-4" />
+          <span className="underline-offset-2 hover:underline">Charter Costs Explained</span>
+        </a>
         {(() => {
           const cabinsCount = Number(yacht.cabins) || Number(bp.cabins) || 0;
           if (cabinsCount < 35) return null;
@@ -246,9 +250,9 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       {/* ══ ENTÊTE : enquire + specs grid ══ */}
       <div className="border-b border-[#C0C0C0]/20">
         <div className="max-w-6xl mx-auto px-5 md:px-10 py-8 flex flex-col lg:flex-row lg:items-center gap-8">
-          <div className="flex-1 w-full flex flex-col items-stretch lg:items-center gap-3">
+          <div className="flex-1 w-full flex flex-col items-stretch lg:items-center gap-6">
             <EnquireButton yacht={yacht} bp={bp} full={full} imgs={imgs} />
-            <a href="/contact" className="flex items-center justify-center w-full lg:w-auto rounded-lg border-2 border-[#C0C0C0] px-3 py-1.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+            <a href="/request-quote-test-v10" className="flex items-center justify-center w-full lg:w-auto rounded-lg border-2 border-[#C0C0C0] px-3 py-1.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
               Contact a broker
             </a>
           </div>
@@ -663,6 +667,14 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
           </div>
         );
       })()}
+
+      {/* ══ LIEN CHARTER COSTS — entre Gallery et la suite ══ */}
+      <div className="max-w-5xl mx-auto px-5 md:px-10 pb-8 text-center">
+        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 text-sm text-[#3b6f9c] hover:text-[#B03E00] transition-colors">
+          <Info className="w-4 h-4" />
+          <span className="underline-offset-2 hover:underline">Charter Costs Explained</span>
+        </a>
+      </div>
 
       {/* ══ CREW (collapsible fermé, après la galerie) ══ */}
       {crew.length > 0 && (

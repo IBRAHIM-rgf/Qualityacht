@@ -80,7 +80,7 @@ const MAX_LENGTH_M = 140;
 const MIN_LENGTH_FT = 33; // ~10m
 const MAX_LENGTH_FT = 459; // ~140m
 
-export default function YachtFilters({ filters, onChange, mobileButtonClass = 'text-[#C0C0C0]', mobileLabelClass = '', customDestinations = null }) {
+export default function YachtFilters({ filters, onChange, mobileButtonClass = 'text-[#B03E00]', mobileLabelClass = 'border border-[#C0C0C0] rounded-full px-5 py-2', customDestinations = null }) {
   const destinationsList = customDestinations || DESTINATIONS;
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);

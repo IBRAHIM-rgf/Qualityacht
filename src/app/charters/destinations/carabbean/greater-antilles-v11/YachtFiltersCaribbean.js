@@ -245,9 +245,11 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
       {/* Mobile — bouton fixe en bas */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#2e2f32] border-t border-white/10 shadow-lg">
         <button onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="w-full flex items-center justify-center gap-2 py-4 px-6 text-[#C0C0C0] font-medium">
-          <Filter className="w-5 h-5" />
-          <span>Filters</span>
+          className="w-full flex items-center justify-center gap-2 py-4 px-6 text-[#B03E00] font-medium">
+          <span className="inline-flex items-center gap-2 border border-[#C0C0C0] rounded-full px-5 py-2">
+            <Filter className="w-5 h-5" />
+            <span>Filters</span>
+          </span>
           {activeCount > 0 && (
             <span className="ml-2 px-2 py-0.5 border border-[#C0C0C0] text-[#C0C0C0] text-xs rounded-full font-semibold">{activeCount}</span>
           )}

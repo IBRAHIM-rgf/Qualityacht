@@ -124,33 +124,61 @@ function useReveal() {
   return ref;
 }
 
-// ── Carte rectangulaire ────────────────────────────────────────────────────────
-// Repos : nouvelle image. Survol : l'ancienne image colorée apparaît (cross-fade).
-function DestCard({ name, image, imageOld, href }) {
+// Hook : déclenche `lit=true` quand l'élément entre dans le viewport.
+// Si `replay=true`, se rejoue à chaque entrée/sortie ; sinon, état permanent.
+function useScrollLit(delayMs = 0, replay = false) {
+  const ref = useRef(null);
   const [lit, setLit] = useState(false);
-  const timerRef = useRef(null);
-  function activate() { clearTimeout(timerRef.current); setLit(true); }
-  function deactivate() { timerRef.current = setTimeout(() => setLit(false), 200); }
+  useEffect(() => {
+    if (!ref.current) return;
+    const el = ref.current;
+    const timerRef = { current: null };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          clearTimeout(timerRef.current);
+          timerRef.current = setTimeout(() => setLit(true), delayMs);
+          if (!replay) io.disconnect();
+        } else if (replay) {
+          clearTimeout(timerRef.current);
+          setLit(false);
+        }
+      });
+    }, { threshold: 0.25 });
+    io.observe(el);
+    return () => { clearTimeout(timerRef.current); io.disconnect(); };
+  }, [delayMs, replay]);
+  return [ref, lit, setLit];
+}
+
+// ── Carte rectangulaire ────────────────────────────────────────────────────────
+// Au scroll : cascade aléatoire harmonieuse (delay 0-1200ms) qui bascule sur
+// l'image originale colorée. Se rejoue à chaque passage (re-trigger).
+function DestCard({ name, image, imageOld, href }) {
+  // Délai aléatoire stable pour effet cascade (0 à 1200ms)
+  const delay = useRef(Math.floor(Math.random() * 1200)).current;
+  const [ref, lit, setLit] = useScrollLit(delay, true);
   function handleClick(e) {
-    e.preventDefault(); clearTimeout(timerRef.current); setLit(true);
-    setTimeout(() => { window.location.href = href; }, 600);
+    e.preventDefault(); setLit(true);
+    setTimeout(() => { window.location.href = href; }, 800);
   }
   return (
-    <a href={href} onClick={handleClick} onMouseEnter={activate} onMouseLeave={deactivate}
-      onTouchStart={activate} onTouchEnd={deactivate}
+    <a ref={ref} href={href} onClick={handleClick}
+      onMouseEnter={() => setLit(true)}
+      onTouchStart={() => setLit(true)}
       className="relative overflow-hidden block cursor-pointer h-[220px] md:h-[280px]">
       {/* Nouvelle image (repos) */}
       <Image src={image} alt={name} fill
-        className={`object-cover transition-opacity duration-300 ease-out ${lit ? 'opacity-0' : 'opacity-100'}`} />
-      {/* Ancienne image colorée (survol) */}
+        className={`object-cover transition-opacity duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-0' : 'opacity-100'}`} />
+      {/* Ancienne image colorée (originale, finale) */}
       {imageOld && (
         <Image src={imageOld} alt={name} fill
-          className={`object-cover transition-opacity duration-300 ease-out ${lit ? 'opacity-100' : 'opacity-0'}`} />
+          className={`object-cover transition-opacity duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100' : 'opacity-0'}`} />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-      <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-500 ${lit ? 'opacity-100' : 'opacity-0'}`} />
+      <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-[2000ms] ${lit ? 'opacity-100' : 'opacity-0'}`} />
       <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5">
-        <h3 className={`trajan-regular text-xs md:text-sm uppercase tracking-[0.15em] transition-colors duration-300 ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
+        <h3 className={`trajan-regular text-xs md:text-sm uppercase tracking-[0.15em] transition-colors duration-[2000ms] ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
           {name}
         </h3>
       </div>
@@ -158,24 +186,37 @@ function DestCard({ name, image, imageOld, href }) {
   );
 }
 
-// ── Bandeau photo : repos = nouvelle, survol = ancienne (cross-fade 4s) ─────────
-function BandeauPhoto({ src, srcOld, position = 'center' }) {
-  const [lit, setLit] = useState(false);
-  const timerRef = useRef(null);
-  function activate() { clearTimeout(timerRef.current); setLit(true); }
-  function deactivate() { timerRef.current = setTimeout(() => setLit(false), 300); }
+// ── Bandeau st-barth + CTA — brightness filtré au début, couleur normale au scroll
+function StBarthBandeau({ children }) {
+  const [ref, lit] = useScrollLit(200);
   return (
-    <div className="relative h-[45vh] md:h-[70vh] overflow-hidden cursor-pointer"
-      onMouseEnter={activate} onMouseLeave={deactivate}
-      onTouchStart={activate} onTouchEnd={deactivate}>
-      {/* Nouvelle image (repos) */}
+    <div ref={ref} className="relative h-[55vh] md:h-[75vh] overflow-hidden">
+      <Image
+        src="/images/destinations/Caraibes_charters.png"
+        alt=""
+        fill
+        className={`object-cover transition-[filter] duration-[1500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'brightness-100' : 'brightness-50'}`}
+      />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 30%, transparent 55%, #26272a 100%)' }} />
+      {children}
+    </div>
+  );
+}
+
+// ── Bandeau photo : commence en version filtrée puis bascule en couleur
+// (originale) au scroll, et reste ainsi à la fin. Transition fluide 1.5s.
+function BandeauPhoto({ src, srcOld, position = 'center' }) {
+  const [ref, lit] = useScrollLit(200);
+  return (
+    <div ref={ref} className="relative h-[45vh] md:h-[70vh] overflow-hidden">
+      {/* Nouvelle image (filtrée, état initial) */}
       <Image src={src} alt="" fill
-        className={`object-cover transition-opacity duration-500 ease-out ${lit && srcOld ? 'opacity-0' : 'opacity-100'}`}
+        className={`object-cover transition-opacity duration-[1500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit && srcOld ? 'opacity-0' : 'opacity-100'}`}
         style={{ objectPosition: position }} />
-      {/* Ancienne image (survol) */}
+      {/* Ancienne image (originale, finale) */}
       {srcOld && (
         <Image src={srcOld} alt="" fill
-          className={`object-cover transition-opacity duration-500 ease-out ${lit ? 'opacity-100' : 'opacity-0'}`}
+          className={`object-cover transition-opacity duration-[1500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100' : 'opacity-0'}`}
           style={{ objectPosition: position }} />
       )}
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
@@ -426,10 +467,8 @@ export default function CaribbeanV15Page() {
           </div>
         </CloudSection>
 
-        {/* ══ BANDEAU st-barth + CTA ══ */}
-        <div className="relative h-[55vh] md:h-[75vh] overflow-hidden">
-          <Image src="/images/destinations/Caraibes_charters.png" alt="" fill className="object-cover brightness-50" />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 30%, transparent 55%, #26272a 100%)' }} />
+        {/* ══ BANDEAU st-barth + CTA — filtré au début, original à la fin ══ */}
+        <StBarthBandeau>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 md:px-6">
             <p className="text-[10px] md:text-sm uppercase tracking-[0.3em] mb-3 md:mb-4" style={{ color: '#C0C0C0' }}>Ready to Sail</p>
             <h2 className="trajan-regular text-xl md:text-5xl text-[#acb0cd] uppercase tracking-[0.08em] md:tracking-[0.12em] mb-3 md:mb-4 max-w-xs md:max-w-xl mx-auto leading-tight">
@@ -445,7 +484,7 @@ export default function CaribbeanV15Page() {
               Explore Yachts
             </a>
           </div>
-        </div>
+        </StBarthBandeau>
 
         {/* ══ FAQ ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg="/images/nuagesAncien.png">

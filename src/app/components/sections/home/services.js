@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function ServicesGrid() {
   return (
-    <section className=" text-white py-32 px-4 text-center"
+    <section id="services" className=" text-white py-32 px-4 text-center scroll-mt-24"
     style={{
       backgroundImage: "url('/images/nuagesAncien.png')",
       backgroundSize: 'cover',
