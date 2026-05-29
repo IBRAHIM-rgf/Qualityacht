@@ -499,7 +499,8 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
           const p = s.pricing || {};
           const zones = (s.inclusionZones || [])
             .filter((z) => z?.label)
-            .filter((z, idx, arr) => arr.findIndex((zz) => zz.label === z.label) === idx);
+            .filter((z, idx, arr) => arr.findIndex((zz) => zz.label === z.label) === idx)
+            .sort((a, b) => a.label.localeCompare(b.label));
           const parts = expandName(s.name).split(/\s*[:\-–—]\s+/);
           const titleMain = parts[0] || s.name;
           const titleInfo = parts.slice(1).join(' — ');
@@ -727,14 +728,15 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
                 {similar.map((s) => {
                   const simg = (s.images || []).filter(Boolean).map((i) => getAnkorImageUrl(i, '640w'))[0] || '/images/yachts/yatch2.jpeg';
                   return (
-                    <div key={s.id} className="shrink-0 w-64 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] overflow-hidden">
+                    <a key={s.id} href={`/yacht-detail-v11?name=${encodeURIComponent(s.name || '')}`}
+                      className="shrink-0 w-64 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] overflow-hidden hover:border-[#B03E00] transition-colors cursor-pointer">
                       <div className="relative aspect-[4/3]"><Image src={simg} alt={s.name} fill className="object-cover" /></div>
                       <div className="p-4">
                         <h3 className="trajan-regular text-sm text-[#C0C0C0] uppercase tracking-[0.1em] truncate">{s.name}</h3>
                         <p className="text-xs text-[#acb0cd]/70 mt-1">{[s.length, s.guests && `${s.guests} guests`, s.type].filter(Boolean).join(' · ')}</p>
                         {(s.pricePerHour || s.price) && <p className="text-xs text-[#acb0cd] mt-1">From {s.pricePerHour || s.price}/wk</p>}
                       </div>
-                    </div>
+                    </a>
                   );
                 })}
               </div>

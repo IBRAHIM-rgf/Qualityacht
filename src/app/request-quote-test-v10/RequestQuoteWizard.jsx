@@ -515,8 +515,17 @@ export default function RequestQuoteWizard() {
       setBoats(list);
     } catch {}
   }, [yacht.name, yacht.image, yacht.guests, yacht.type, yacht.price]);
-  const removeBoat = (id) => setBoats((bs) => bs.filter((b) => b.id !== id));
-  const restartBoats = () => setBoats(initialBoats);
+  const removeBoat = (id) => {
+    setBoats((bs) => {
+      const next = bs.filter((b) => b.id !== id);
+      try { localStorage.setItem('quote_cart', JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+  const restartBoats = () => {
+    setBoats(initialBoats);
+    try { localStorage.setItem('quote_cart', JSON.stringify(initialBoats)); } catch {}
+  };
   const removedBoats = initialBoats.filter((ib) => !boats.find((b) => b.id === ib.id));
 
   // 24 mois glissants pour les selects Departure / Return
