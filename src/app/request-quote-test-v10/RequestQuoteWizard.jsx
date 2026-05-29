@@ -7,7 +7,19 @@ import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown, X as XIcon, Rotat
 
 const STEPS = ['Charter Details', 'Contact Info', 'Thank You!'];
 
-const TITLES = ['', 'Mr', 'Mrs', 'Ms', 'Miss', 'Dr', 'Prof', 'Sir', 'Lady'];
+const TITLES = [
+  '',
+  'Mr', 'Mrs', 'Ms', 'Miss', 'Captain', 'Dr', 'Monsieur', 'Mme',
+  'Ambassador', 'Avv.', 'Baron', 'Baroness', 'Chief', 'Colonel', 'Commander',
+  'Count', 'Countess', 'Crown Prince', 'Dame', 'Dott.', 'Dott.ssa',
+  'Duke', 'Earl', 'Frau', 'HE Dr', 'HE Sheikh', 'HE Sheikha', 'Herr',
+  'HH Prince', 'HH Princess', 'HH Sheikh', 'HH Sheikha',
+  'His Excellency', 'His Highness',
+  'HRH', 'HRH Prince', 'HRH Princess', 'HRH Sheikh', 'HRH Sheikha',
+  'Khun', 'Lady', 'Lord', 'M. et Mme', 'Maître', 'Major', 'Messieurs', 'Mlle',
+  'Mr & Mrs', 'President', 'Prince', 'Professor',
+  'Senor', 'Senora', 'Sheikh', 'Sheikha', 'Signor', 'Signora', 'Sir',
+];
 
 // Drapeau dérivé du code ISO2 (impossible d'avoir un drapeau qui ne matche pas le pays)
 const flagFromIso = (iso) =>

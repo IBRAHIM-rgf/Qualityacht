@@ -4,7 +4,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Info, ArrowLeft } from 'lucide-react';
+import { Info } from 'lucide-react';
+import BackButton from './BackButton';
 
 export const metadata = {
   title: 'Charter Costs Explained — Qualityacht',
@@ -47,9 +48,7 @@ export default function Page() {
     <div className="min-h-screen bg-[#26272a] text-[#acb0cd] pt-24 pb-20 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#acb0cd] hover:text-[#B03E00] transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Back
-          </Link>
+          <BackButton />
         </div>
 
         <div className="flex items-center gap-3 mb-3">
