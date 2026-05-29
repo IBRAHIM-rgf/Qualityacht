@@ -643,7 +643,7 @@ export default function RequestQuoteWizard() {
                   <CocoCheckbox checked={charter.pets} />
                   <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
                     <PawPrint className="w-4 h-4 text-[#c2622a]" />
-                    Bringing pets on board
+                    Pet friendly
                   </span>
                 </label>
                 <label onClick={() => setCharter({ ...charter, accessible: !charter.accessible })}

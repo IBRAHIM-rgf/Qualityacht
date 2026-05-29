@@ -138,7 +138,7 @@ function EnquireButton({ yacht, bp, full, imgs }) {
       <span className="text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00]">
         {state === 'added' ? '✓ Added to cart' : 'Add to cart — Enquire about'}
       </span>
-      <span className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] mt-1" style={{ color: '#B03E00' }}>{yacht.name}</span>
+      <span className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] mt-1" style={{ color: '#C0C0C0' }}>{yacht.name}</span>
     </button>
   );
 }
