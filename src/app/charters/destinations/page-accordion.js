@@ -36,7 +36,7 @@ const destinationRegions = [
         href: '/yachts?destination=bahamas',
       },
     ],
-    mainHref: '/charters/destinations/caribbean',
+    mainHref: '/charters/destinations/caribbean-v15',
   },
   {
     id: 'mediterranean',

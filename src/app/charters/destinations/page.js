@@ -89,7 +89,7 @@ const destinations = [
     title: "Caraibes",
     description: "Discover more species in the Caribbean regions.",
     image: "/images/destinations/animals/caraibes.jpg",
-    href: "/charters/destinations/arctic-northern-europe-2",
+    href: "/charters/destinations/caribbean-v15",
   },
   {
     title: "Oceania",

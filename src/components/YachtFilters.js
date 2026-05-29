@@ -80,7 +80,8 @@ const MAX_LENGTH_M = 140;
 const MIN_LENGTH_FT = 33; // ~10m
 const MAX_LENGTH_FT = 459; // ~140m
 
-export default function YachtFilters({ filters, onChange, mobileButtonClass = 'text-[#C0C0C0]', mobileLabelClass = '' }) {
+export default function YachtFilters({ filters, onChange, mobileButtonClass = 'text-[#C0C0C0]', mobileLabelClass = '', customDestinations = null }) {
+  const destinationsList = customDestinations || DESTINATIONS;
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
@@ -219,7 +220,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
               onChange={e => handleChange('destination', e.target.value)}
               className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]"
             >
-              {DESTINATIONS.map(d => (
+              {destinationsList.map(d => (
                 <option key={d.value} value={d.value} className="bg-[#3a3b3f]">{d.label}</option>
               ))}
             </select>
@@ -240,25 +241,25 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
             </div>
           )}
 
-          {/* Date Picker */}
+          {/* Date Picker (mois uniquement) */}
           <div className="flex items-center gap-2">
             <div className="relative">
               <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
-                type="date"
-                value={localFilters.startDate || ''}
+                type="month"
+                value={(localFilters.startDate || '').slice(0, 7)}
                 onChange={e => handleChange('startDate', e.target.value)}
-                placeholder="mm/dd/yyyy"
+                placeholder="yyyy-mm"
                 className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
                 lang="en-US"
               />
             </div>
             <span className="text-gray-400">-</span>
             <input
-              type="date"
-              value={localFilters.endDate || ''}
+              type="month"
+              value={(localFilters.endDate || '').slice(0, 7)}
               onChange={e => handleChange('endDate', e.target.value)}
-              placeholder="mm/dd/yyyy"
+              placeholder="yyyy-mm"
               className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
               lang="en-US"
             />
@@ -562,18 +563,18 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
               <label className="block text-sm font-medium text-gray-300 mb-2">Charter Dates</label>
               <div className="flex gap-2">
                 <input
-                  type="date"
-                  value={localFilters.startDate || ''}
+                  type="month"
+                  value={(localFilters.startDate || '').slice(0, 7)}
                   onChange={e => handleChange('startDate', e.target.value)}
-                  placeholder="mm/dd/yyyy"
+                  placeholder="yyyy-mm"
                   className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:light]"
                   lang="en-US"
                 />
                 <input
-                  type="date"
-                  value={localFilters.endDate || ''}
+                  type="month"
+                  value={(localFilters.endDate || '').slice(0, 7)}
                   onChange={e => handleChange('endDate', e.target.value)}
-                  placeholder="mm/dd/yyyy"
+                  placeholder="yyyy-mm"
                   className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] [color-scheme:light]"
                   lang="en-US"
                 />

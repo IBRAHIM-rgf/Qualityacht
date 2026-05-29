@@ -1,13 +1,12 @@
 // src/components/YachtList.js
 
 "use client";
-import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import YachtCardV2 from "./YachtCardV2";
-import YachtModal from "./YachtModal";
 
 export default function YachtList({ yachts }) {
-  const [selectedYacht, setSelectedYacht] = useState(null);
+  const router = useRouter();
 
   if (!yachts.length) {
     return (
@@ -26,24 +25,16 @@ export default function YachtList({ yachts }) {
   }
 
   return (
-    <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {yachts.map((yacht) => (
-          <div
-            key={yacht.id}
-            onClick={() => setSelectedYacht(yacht)}
-            className="cursor-pointer transition-transform hover:scale-[1.02]"
-          >
-            <YachtCardV2 yacht={yacht} />
-          </div>
-        ))}
-      </div>
-
-      <YachtModal
-        yacht={selectedYacht}
-        isOpen={!!selectedYacht}
-        onClose={() => setSelectedYacht(null)}
-      />
-    </>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {yachts.map((yacht) => (
+        <div
+          key={yacht.id}
+          onClick={() => router.push(`/yacht-detail-v11?name=${encodeURIComponent(yacht.name || '')}`)}
+          className="cursor-pointer transition-transform hover:scale-[1.02]"
+        >
+          <YachtCardV2 yacht={yacht} />
+        </div>
+      ))}
+    </div>
   );
 }

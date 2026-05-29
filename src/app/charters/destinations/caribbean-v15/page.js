@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 // ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
 // image = nouvelle (repos) ; imageOld = ancienne colorée (apparaît au survol)
 const caribbeanIslands = [
-  { name: 'Greater Antilles',   image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/greater-antilles' },
+  { name: 'Greater Antilles',   image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/carabbean/greater-antilles-v11' },
   { name: 'Leeward Islands',    image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/yachts?destination=leeward-islands' },
   { name: 'Leeward Antilles',   image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/yachts?destination=leeward-antilles' },
   { name: 'Windward Islands',   image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/yachts?destination=windward-islands' },

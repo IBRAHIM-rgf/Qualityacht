@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Fragment } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import Image from 'next/image';
 import { getAnkorImageUrl } from '@/lib/utils';
 import {
@@ -42,7 +42,7 @@ function seasonGroup(s) {
 }
 
 function Spec({ icon: Icon, img, label, value }) {
-  if (value === undefined || value === null || value === '') return null;
+  const hasValue = !(value === undefined || value === null || value === '');
   return (
     <div className="flex flex-col items-center text-center px-3 py-4">
       {img ? (
@@ -50,7 +50,7 @@ function Spec({ icon: Icon, img, label, value }) {
       ) : (
         <Icon className="w-6 h-6 text-[#B03E00] mb-2" />
       )}
-      <span className="text-[#acb0cd] text-base">{value}</span>
+      <span className="text-[#acb0cd] text-base">{hasValue ? value : '—'}</span>
       <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/50 mt-1">{label}</span>
     </div>
   );
@@ -100,6 +100,49 @@ function Collapsible({ title, defaultOpen = false, children }) {
   );
 }
 
+// Bouton Enquire — ajoute le yacht au panier (localStorage) sans quitter la page.
+// Affiche un feedback "Added to cart" pendant 2s puis bascule sur "View cart".
+function EnquireButton({ yacht, bp, full, imgs }) {
+  const [state, setState] = useState('idle'); // 'idle' | 'added'
+  useEffect(() => {
+    try {
+      const cart = JSON.parse(localStorage.getItem('quote_cart') || '[]');
+      if (cart.find((y) => y.id === yacht.id || y.name === yacht.name)) setState('added');
+    } catch {}
+  }, [yacht.id, yacht.name]);
+  const add = () => {
+    try {
+      const cart = JSON.parse(localStorage.getItem('quote_cart') || '[]');
+      if (!cart.find((y) => y.id === yacht.id || y.name === yacht.name)) {
+        cart.push({
+          id: yacht.id,
+          name: yacht.name,
+          image: imgs[0] || null,
+          length: yacht.length || (bp.length ? `${bp.length} m` : null),
+          guests: yacht.guests || yacht.capacity || (yacht.cabins ? yacht.cabins * 2 : null),
+          type: yacht.type || (Array.isArray(full.yachtType) ? full.yachtType[0] : null),
+          cabins: yacht.cabins || bp.cabins || null,
+          price: yacht.pricePerHour || yacht.price || null,
+        });
+        localStorage.setItem('quote_cart', JSON.stringify(cart));
+      }
+    } catch {}
+    setState('added');
+  };
+  return (
+    <button
+      type="button"
+      onClick={add}
+      className={`flex flex-col items-start w-full lg:w-auto lg:inline-flex lg:items-center rounded-lg border-2 px-2 py-0.5 transition-all shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-left lg:text-center ${state === 'added' ? 'border-[#B03E00] bg-[#B03E00]/10' : 'border-[#C0C0C0] hover:bg-[#B03E00]/10'}`}
+    >
+      <span className="text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00]">
+        {state === 'added' ? '✓ Added to cart' : 'Add to cart — Enquire about'}
+      </span>
+      <span className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] mt-1" style={{ color: '#B03E00' }}>{yacht.name}</span>
+    </button>
+  );
+}
+
 export default function YachtDetailClient({ yacht, similar = [] }) {
   const [lightbox, setLightbox] = useState(-1);
   const [galleryPage, setGalleryPage] = useState(0);
@@ -138,6 +181,16 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
   const crew = Array.isArray(full.crew) ? full.crew : [];
   const seasons = Array.isArray(pricing.pricingInfo) ? pricing.pricingInfo : [];
 
+  // Détecte l'unité dominante pour le label "From X / week|day|hour" du hero.
+  // Si le yacht n'a que des saisons en DAY → "/ day", que des HOUR → "/ day" aussi
+  // (regroupé sous "Day Charter"), sinon "/ week" par défaut.
+  const heroUnit = (() => {
+    const units = new Set(seasons.map((s) => s?.pricing?.unit).filter(Boolean));
+    if (units.has('WEEK')) return 'week';
+    if (units.has('DAY') || units.has('HOUR')) return 'day';
+    return 'week';
+  })();
+
   const specsTech = [
     { icon: Ruler, label: 'Length overall', value: bp.length ? `${bp.length} m` : null },
     { icon: Ruler, label: 'Beam', value: bp.beam ? `${bp.beam} m` : null },
@@ -171,22 +224,25 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         <h1 className="trajan-regular text-3xl md:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0]">{yacht.name}</h1>
         {price && (
           <p className="trajan-regular text-2xl md:text-3xl text-[#acb0cd] mt-2">
-            From {price}<span className="text-sm text-[#acb0cd]/50"> / week</span>
+            From {price}<span className="text-sm text-[#acb0cd]/50"> / {heroUnit}</span>
           </p>
         )}
-        <p className="text-xs md:text-sm italic text-[#acb0cd]/70 mt-2 max-w-2xl">
-          Also: Yacht cabins available upon request — single or multiple. Contact your broker.
-        </p>
+        {(() => {
+          const cabinsCount = Number(yacht.cabins) || Number(bp.cabins) || 0;
+          if (cabinsCount < 35) return null;
+          return (
+            <p className="text-xs md:text-sm italic text-[#acb0cd]/70 mt-2 max-w-2xl">
+              Also: Yacht cabins available upon request — single or multiple. Contact your broker.
+            </p>
+          );
+        })()}
       </div>
 
       {/* ══ ENTÊTE : enquire + specs grid ══ */}
       <div className="border-b border-[#C0C0C0]/20">
         <div className="max-w-6xl mx-auto px-5 md:px-10 py-8 flex flex-col lg:flex-row lg:items-center gap-8">
           <div className="flex-1 w-full">
-            <a href="/request-quote-test-v10" className="flex flex-col items-start w-full lg:w-auto lg:inline-flex lg:items-center rounded-lg border-2 border-[#C0C0C0] px-2 py-0.5 transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] text-left lg:text-center">
-              <span className="text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00]">Enquire about</span>
-              <span className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] mt-1" style={{ color: '#B03E00' }}>{yacht.name}</span>
-            </a>
+            <EnquireButton yacht={yacht} bp={bp} full={full} imgs={imgs} />
           </div>
           <div className="lg:flex-[1.4] grid grid-cols-3 sm:grid-cols-6 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] divide-x divide-y sm:divide-y-0 divide-[#C0C0C0]/20">
             <Spec icon={Anchor} label="Builder" value={yacht.make || bp.make} />
@@ -199,41 +255,53 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         </div>
 
         {/* Base port compacte sous le bloc Builder/Crew */}
-        {(bp.basePort?.name || yacht.location) && (
-          <div className="max-w-6xl mx-auto px-5 md:px-10 pb-6">
-            <div className="inline-flex items-center gap-3 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-4 py-2">
-              <MapIcon className="w-5 h-5 text-[#B03E00] shrink-0" strokeWidth={2} />
-              <p className="text-base md:text-lg leading-none">
-                <span className="text-[#acb0cd]">Base Port&nbsp;:</span>{' '}
-                <span className="text-[#C0C0C0] font-bold">
-                  {bp.basePort?.name || yacht.location}
-                  {bp.basePort?.country && ` (${bp.basePort.country})`}
-                </span>
-              </p>
+        {(() => {
+          const rawName = bp.basePort?.name || yacht.location || '';
+          const trimmed = rawName.trim();
+          // Fallback "French Riviera" si vide ou si juste "French" (cas Ankor mal renseigné).
+          const displayName = !trimmed || /^french$/i.test(trimmed) ? 'French Riviera' : trimmed;
+          return (
+            <div className="max-w-6xl mx-auto px-5 md:px-10 pb-6">
+              <div className="inline-flex items-center gap-3 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-4 py-2">
+                <MapIcon className="w-5 h-5 text-[#B03E00] shrink-0" strokeWidth={2} />
+                <p className="text-base md:text-lg leading-none">
+                  <span className="text-[#acb0cd]">Base Port&nbsp;:</span>{' '}
+                  <span className="text-[#C0C0C0] font-bold">
+                    {displayName}
+                    {bp.basePort?.country && ` (${bp.basePort.country})`}
+                  </span>
+                </p>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
 
       {/* ══ 4 ZONES COLLAPSIBLES ══ */}
       <div className="max-w-5xl mx-auto px-5 md:px-10 py-12 md:py-16 space-y-4">
 
         {/* Zone 1 — Description */}
-        {description && (
-          <Collapsible title="Description">
-            <p className="text-lg md:text-xl leading-relaxed text-[#acb0cd]">
-              {description
-                .split(/(?<=\.)\s+/)
-                .filter(Boolean)
-                .map((sentence, i, arr) => (
-                  <span key={i}>
-                    {sentence}
-                    {i < arr.length - 1 && <br />}
-                  </span>
-                ))}
-            </p>
-          </Collapsible>
-        )}
+        {(() => {
+          const cabinsCount = Number(yacht.cabins) || Number(bp.cabins) || 0;
+          const cabinSentence = cabinsCount > 0 ? `${cabinsCount} cabin${cabinsCount > 1 ? 's' : ''} available on board.` : '';
+          const fullDesc = [description, cabinSentence].filter(Boolean).join(' ');
+          if (!fullDesc) return null;
+          return (
+            <Collapsible title="Description">
+              <p className="text-lg md:text-xl leading-relaxed text-[#acb0cd]">
+                {fullDesc
+                  .split(/(?<=\.)\s+/)
+                  .filter(Boolean)
+                  .map((sentence, i, arr) => (
+                    <span key={i}>
+                      {sentence}
+                      {i < arr.length - 1 && <br />}
+                    </span>
+                  ))}
+              </p>
+            </Collapsible>
+          );
+        })()}
 
         {/* Zone 2 — Specifications */}
         {hasSpecs && (
@@ -432,7 +500,6 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             </div>
           );
           if (s._tier) {
-            const sym = { EUR: '€', USD: '$', GBP: '£' }[p.currency] || p.currency || '€';
             return (
               <div key={i} className="rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] p-6 flex flex-col items-center gap-4 relative text-center">
                 {s.petsAllowed && (
@@ -446,25 +513,15 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
                   <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mt-2">Rates by guests</p>
                 </div>
                 <div className="w-full">
-                  <div className="grid grid-cols-[auto_1fr_auto] gap-x-4 gap-y-2 items-center">
+                  <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 items-center">
                     <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/50">Guests</span>
                     <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/50 text-right">Price {unitLabel[p.unit] || ''}</span>
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/50 text-right">Δ</span>
-                    {s.tiers.map((t, ti) => {
-                      const prev = ti > 0 ? s.tiers[ti - 1].total : null;
-                      const delta = prev != null ? t.total - prev : null;
-                      const dGuests = ti > 0 ? Math.max(1, parseInt(t.guests, 10) - parseInt(s.tiers[ti - 1].guests, 10)) : 1;
-                      const perGuest = delta != null && dGuests > 0 ? delta / dGuests : null;
-                      return (
-                        <Fragment key={ti}>
-                          <span className="text-[#C0C0C0] font-bold">{t.guests}</span>
-                          <span className="text-[#C0C0C0] text-right">{formatMoney(t.total, t.currency || p.currency)}</span>
-                          <span className="text-xs text-[#acb0cd]/60 text-right">
-                            {perGuest != null ? `+${new Intl.NumberFormat('fr-FR').format(perGuest / 100)} ${sym}/pax` : '—'}
-                          </span>
-                        </Fragment>
-                      );
-                    })}
+                    {s.tiers.map((t, ti) => (
+                      <Fragment key={ti}>
+                        <span className="text-[#C0C0C0] font-bold">{t.guests}</span>
+                        <span className="text-[#C0C0C0] text-right">{formatMoney(t.total, t.currency || p.currency)}</span>
+                      </Fragment>
+                    ))}
                   </div>
                 </div>
                 {ZonesBlock}
@@ -530,19 +587,11 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
                   </div>
                 );
               })()}
-              {byUnit.DAY.length > 0 && (
+              {(byUnit.DAY.length > 0 || byUnit.HOUR.length > 0) && (
                 <div>
-                  <p className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#C0C0C0] text-center mb-6">Daily Charter</p>
+                  <p className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#C0C0C0] text-center mb-6">Day Charter</p>
                   <div className="grid md:grid-cols-2 gap-5">
-                    {byUnit.DAY.map(renderCard)}
-                  </div>
-                </div>
-              )}
-              {byUnit.HOUR.length > 0 && (
-                <div>
-                  <p className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#C0C0C0] text-center mb-6">Hourly Rates</p>
-                  <div className="grid md:grid-cols-2 gap-5">
-                    {byUnit.HOUR.map(renderCard)}
+                    {[...byUnit.DAY, ...byUnit.HOUR].map(renderCard)}
                   </div>
                 </div>
               )}
@@ -639,32 +688,42 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
 
       {/* ══ CTA ══ */}
       <div className="max-w-4xl mx-auto px-5 md:px-10 pb-16 text-center">
-        <a href="/request-quote-test-v10" className="inline-block rounded-xl border-2 border-[#C0C0C0] px-12 py-4 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+        <a href="/charter-multi-v1" className="inline-block rounded-xl border-2 border-[#C0C0C0] px-12 py-4 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
           Request a Quote
         </a>
       </div>
 
-      {/* ══ SIMILAR YACHTS ══ */}
+      {/* ══ SIMILAR YACHTS (avec flèches orange pour scroll lateral) ══ */}
       {similar.length > 0 && (
         <div className="border-t border-[#C0C0C0]/20 py-14 md:py-20">
           <div className="max-w-6xl mx-auto px-5 md:px-10">
             <div className="text-center mb-10">
               <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Similar Yachts</h2>
             </div>
-            <div className="flex gap-5 overflow-x-auto pb-4 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none' }}>
-              {similar.map((s) => {
-                const simg = (s.images || []).filter(Boolean).map((i) => getAnkorImageUrl(i, '640w'))[0] || '/images/yachts/yatch2.jpeg';
-                return (
-                  <div key={s.id} className="shrink-0 w-64 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] overflow-hidden">
-                    <div className="relative aspect-[4/3]"><Image src={simg} alt={s.name} fill className="object-cover" /></div>
-                    <div className="p-4">
-                      <h3 className="trajan-regular text-sm text-[#C0C0C0] uppercase tracking-[0.1em] truncate">{s.name}</h3>
-                      <p className="text-xs text-[#acb0cd]/70 mt-1">{[s.length, s.guests && `${s.guests} guests`, s.type].filter(Boolean).join(' · ')}</p>
-                      {(s.pricePerHour || s.price) && <p className="text-xs text-[#acb0cd] mt-1">From {s.pricePerHour || s.price}/wk</p>}
+            <div className="relative">
+              <div id="similar-scroll" className="flex gap-5 overflow-x-auto pb-4 scroll-smooth [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none' }}>
+                {similar.map((s) => {
+                  const simg = (s.images || []).filter(Boolean).map((i) => getAnkorImageUrl(i, '640w'))[0] || '/images/yachts/yatch2.jpeg';
+                  return (
+                    <div key={s.id} className="shrink-0 w-64 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] overflow-hidden">
+                      <div className="relative aspect-[4/3]"><Image src={simg} alt={s.name} fill className="object-cover" /></div>
+                      <div className="p-4">
+                        <h3 className="trajan-regular text-sm text-[#C0C0C0] uppercase tracking-[0.1em] truncate">{s.name}</h3>
+                        <p className="text-xs text-[#acb0cd]/70 mt-1">{[s.length, s.guests && `${s.guests} guests`, s.type].filter(Boolean).join(' · ')}</p>
+                        {(s.pricePerHour || s.price) && <p className="text-xs text-[#acb0cd] mt-1">From {s.pricePerHour || s.price}/wk</p>}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+              <button onClick={() => document.getElementById('similar-scroll')?.scrollBy({ left: -300, behavior: 'smooth' })} aria-label="Previous"
+                className="absolute top-1/2 -translate-y-1/2 -left-3 md:-left-5 w-11 h-11 rounded-full border-2 border-[#C0C0C0] bg-[#26272a] text-[#B03E00] flex items-center justify-center hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.3)]">
+                <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
+              </button>
+              <button onClick={() => document.getElementById('similar-scroll')?.scrollBy({ left: 300, behavior: 'smooth' })} aria-label="Next"
+                className="absolute top-1/2 -translate-y-1/2 -right-3 md:-right-5 w-11 h-11 rounded-full border-2 border-[#C0C0C0] bg-[#26272a] text-[#B03E00] flex items-center justify-center hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.3)]">
+                <ChevronRight className="w-5 h-5" strokeWidth={2.5} />
+              </button>
             </div>
           </div>
         </div>

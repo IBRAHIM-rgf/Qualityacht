@@ -7,6 +7,18 @@ import YachtFilters from '@/components/YachtFilters';
 
 const YACHTS_PER_PAGE = 40;
 
+// Filtre destination Caribbean : 7 sous-régions au lieu de la liste globale.
+const CARIBBEAN_DESTINATIONS = [
+  { value: '', label: 'All Caribbean sub-regions' },
+  { value: 'greater-antilles', label: 'Greater Antilles' },
+  { value: 'leeward-islands', label: 'Lesser Antilles (Leeward)' },
+  { value: 'windward-islands', label: 'Lesser Antilles (Windward)' },
+  { value: 'bahamas', label: 'Bahamas' },
+  { value: 'grand-cayman', label: 'Cayman Islands' },
+  { value: 'turks-caicos', label: 'Turks & Caicos' },
+  { value: 'belize', label: 'Belize' },
+];
+
 export default function ExploreYachtClient({ initialFilters, initialData, totalYachts }) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -116,7 +128,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
         </div>
 
         {/* Filters (mobile bouton orange) */}
-        <YachtFilters filters={filters} onChange={setFilters} mobileButtonClass="text-[#B03E00]" mobileLabelClass="border border-[#C0C0C0] rounded-full px-5 py-2" />
+        <YachtFilters filters={filters} onChange={setFilters} mobileButtonClass="text-[#B03E00]" mobileLabelClass="border border-[#C0C0C0] rounded-full px-5 py-2" customDestinations={CARIBBEAN_DESTINATIONS} />
 
         {/* Yacht Grid */}
         <main className="mt-6">

@@ -5,7 +5,7 @@ const destinations = [
     title: "Caribbean",
     description: "Explorez les eaux turquoise et les îles paradisiaques des Caraïbes.",
     image: "/images/destinations/destnation-feature-caribbean.webp",
-    href: "/charters/destinations/caribbean",
+    href: "/charters/destinations/caribbean-v15",
   },
   {
     title: "East Mediterranean",
