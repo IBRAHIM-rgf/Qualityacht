@@ -66,6 +66,56 @@ function seasonGroup(s) {
   return 'summer';
 }
 
+// Bug Ankor : sur certains yachts, TOUS les membres ont role="Captain".
+// On déduit le vrai rôle depuis la bio (priorité du plus spécifique au plus générique).
+// Si Ankor renvoie un rôle non-"Captain", on lui fait confiance.
+function inferCrewRole(c) {
+  const role = (c.role || '').trim();
+  if (role && role.toLowerCase() !== 'captain') return role;
+
+  // On regarde les ~30 premiers mots de la bio (le rôle y est souvent annoncé tôt)
+  const intro = (c.bio || '').split(/\s+/).slice(0, 60).join(' ').toLowerCase();
+  if (!intro) return role || 'Crew Member';
+
+  // Ordre = du plus spécifique au plus générique
+  const rules = [
+    [/\b(executive\s+chef|head\s+chef|master\s+chef)\b/, 'Executive Chef'],
+    [/\bsous[\s-]?chef\b/, 'Sous Chef'],
+    [/\b(pastry|patissier)\b/, 'Pastry Chef'],
+    [/\bchef\b/, 'Chef'],
+    [/\bchief\s+engineer\b/, 'Chief Engineer'],
+    [/\b(2nd|second)\s+engineer\b/, '2nd Engineer'],
+    [/\b(3rd|third)\s+engineer\b/, '3rd Engineer'],
+    [/\bsole\s+engineer\b/, 'Sole Engineer'],
+    [/\b(engineer|engineering)\b/, 'Engineer'],
+    [/\bchief\s+stew(ardess)?\b/, 'Chief Stewardess'],
+    [/\b(2nd|second)\s+stew(ardess)?\b/, '2nd Stewardess'],
+    [/\b(3rd|third)\s+stew(ardess)?\b/, '3rd Stewardess'],
+    [/\bjunior\s+stew(ardess)?\b/, 'Junior Stewardess'],
+    [/\bstew(ardess)?\b/, 'Stewardess'],
+    [/\bchief\s+officer\b/, 'Chief Officer'],
+    [/\bfirst\s+officer|first\s+mate|1st\s+officer\b/, 'First Officer'],
+    [/\b(2nd|second)\s+officer\b/, '2nd Officer'],
+    [/\b(3rd|third)\s+officer\b/, '3rd Officer'],
+    [/\bbosun|boatswain\b/, 'Bosun'],
+    [/\bpurser\b/, 'Purser'],
+    [/\bmasseuse|massage\s+therapist|spa\s+therapist|wellness\b/, 'Spa Therapist'],
+    [/\bdive\s+(master|instructor)\b/, 'Dive Master'],
+    [/\b(yoga|fitness)\s+instructor\b/, 'Wellness Instructor'],
+    [/\bdeckhand|deck\s+crew|deck\s+hand\b/, 'Deckhand'],
+    [/\bskipper\b/, 'Skipper'],
+    [/\bcaptain\b/, 'Captain'],
+    [/\bcook\b/, 'Cook'],
+    [/\bsteward(?!ess)\b/, 'Steward'],
+    [/\bcrew\s+member\b/, 'Crew Member'],
+  ];
+
+  for (const [re, label] of rules) {
+    if (re.test(intro)) return label;
+  }
+  return role || 'Crew Member';
+}
+
 function iconFor(label) {
   const t = String(label || '').toLowerCase();
   if (/jet[\s-]?ski|seadoo|wave[\s-]?runner/.test(t)) return '🌊';
@@ -197,7 +247,16 @@ function CrewCard({ c }) {
           </div>
           <div className={`p-3 ${open ? 'text-left' : 'text-center'}`}>
             <p className="text-sm font-bold text-[#C0C0C0]">{c.name || <FillerValue>JOHN DOE</FillerValue>}</p>
-            <p className="text-[10px] uppercase tracking-[0.15em] text-[#B03E00] mt-1">{c.role || <FillerValue>Captain</FillerValue>}</p>
+            {(() => {
+              const inferred = inferCrewRole(c);
+              const isInferred = c.role && c.role.toLowerCase() === 'captain' && inferred !== 'Captain';
+              return (
+                <p className="text-[10px] uppercase tracking-[0.15em] text-[#B03E00] mt-1" title={isInferred ? `Ankor renvoie "${c.role}" pour tout le monde — rôle déduit de la bio` : undefined}>
+                  {c.role ? inferred : <FillerValue>Captain</FillerValue>}
+                  {isInferred && <span className="ml-1 text-[8px] text-[#B03E00]/60">*</span>}
+                </p>
+              );
+            })()}
             {open && hasBio && (
               <p className="text-xs text-[#acb0cd] leading-relaxed whitespace-pre-line mt-3">{c.bio}</p>
             )}
@@ -728,7 +787,7 @@ export default function TestInfosClient({ yacht }) {
         <div className="text-center mb-8">
           <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">The Crew — {crew.length || 'filler'} members</h2>
           <div className="relative w-32 h-6 mx-auto mt-3"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
-          <p className="text-xs text-[#acb0cd]/60 mt-3 italic">crew[] — { '{ name, role, avatar, bio }'} · clic sur badge BIO pour voir la biographie</p>
+          <p className="text-xs text-[#acb0cd]/60 mt-3 italic">crew[] — {'{ name, role, avatar, bio }'} · clic sur badge BIO pour voir la biographie · rôle suivi d'un <span className="text-[#B03E00]">*</span> = déduit de la bio (Ankor renvoie "Captain" pour tous sur certains yachts)</p>
         </div>
         {crew.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
