@@ -80,13 +80,13 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
           alt="Greater Antilles"
           fill
           priority
-          className={`object-cover object-center transition-opacity duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-0' : 'opacity-100'}`}
+          className={`object-cover object-center transition-all duration-[2500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
         />
         <Image
           src="/images/destinations/gretar antilles-original.jpg"
           alt="Greater Antilles"
           fill
-          className={`object-cover object-center transition-opacity duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-100' : 'opacity-0'}`}
+          className={`object-cover object-center transition-all duration-[2500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
         />
         <div
           className="absolute inset-0"

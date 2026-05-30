@@ -68,8 +68,8 @@ export default function MonthPicker({ value = '', onChange, placeholder = 'Selec
             </button>
           </div>
 
-          {/* Grille mois 4x3 avec lignes de séparation cococo */}
-          <div className="grid grid-cols-4 gap-px bg-[#C0C0C0]/25 p-px">
+          {/* Grille mois 4x3 avec lignes de séparation orange */}
+          <div className="grid grid-cols-4 gap-px bg-[#B03E00]/40 p-px">
             {MONTHS_EN.map((m, i) => {
               const past = isPast(year, i);
               const selected = selectedYear === year && selectedMonth === i;
