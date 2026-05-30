@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown, X as XIcon, RotateCcw, PawPrint, Accessibility } from 'lucide-react';
+import MonthPicker from '@/components/MonthPicker';
 
 const STEPS = ['Charter Details', 'Contact Info', 'Thank You!'];
 
@@ -478,7 +479,12 @@ export default function RequestQuoteWizard() {
     price: params.get('price') || '',
   };
 
-  const [step, setStep] = useState(0);
+  // Support ?step=1 (Contact Info direct) ou ?step=2 — utilisé par "Contact broker".
+  const initialStep = (() => {
+    const s = Number(params.get('step'));
+    return Number.isFinite(s) && s >= 0 && s <= 2 ? s : 0;
+  })();
+  const [step, setStep] = useState(initialStep);
 
   const [charter, setCharter] = useState({
     startMonth: '', endMonth: '', guests: yacht.guests || '',
@@ -486,35 +492,26 @@ export default function RequestQuoteWizard() {
   });
 
   // Panier de yachts (rempli par yacht-detail-v11 via Add to cart Enquire).
-  // Si vide, on retombe sur le yacht passé en query params.
+  // Plus de fallback INITIAL : si le panier localStorage est vide, on n'affiche
+  // aucun bateau (etat vide) — l'utilisateur ajoute depuis yacht-detail-v11.
   const [boats, setBoats] = useState([]);
   const [initialBoats, setInitialBoats] = useState([]);
   useEffect(() => {
     try {
       const stored = JSON.parse(localStorage.getItem('quote_cart') || '[]');
-      const list = stored.length > 0
-        ? stored.map((b, idx) => ({
-            id: b.id || `yacht-${idx}`,
-            name: b.name || 'Yacht',
-            image: b.image || '/images/yachts/yatch2.jpeg',
-            length: b.length || null,
-            guests: b.guests || null,
-            type: b.type || null,
-            price: b.price || null,
-          }))
-        : [{
-            id: 'query',
-            name: yacht.name,
-            image: yacht.image,
-            length: null,
-            guests: yacht.guests || null,
-            type: yacht.type || null,
-            price: yacht.price || null,
-          }];
+      const list = stored.map((b, idx) => ({
+        id: b.id || `yacht-${idx}`,
+        name: b.name || 'Yacht',
+        image: b.image || '/images/yachts/yatch2.jpeg',
+        length: b.length || null,
+        guests: b.guests || null,
+        type: b.type || null,
+        price: b.price || null,
+      }));
       setInitialBoats(list);
       setBoats(list);
     } catch {}
-  }, [yacht.name, yacht.image, yacht.guests, yacht.type, yacht.price]);
+  }, []);
   const removeBoat = (id) => {
     setBoats((bs) => {
       const next = bs.filter((b) => b.id !== id);
@@ -628,24 +625,10 @@ export default function RequestQuoteWizard() {
               {/* Trip details : mois uniquement (24 mois glissants) */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Field label="Departure month" required>
-                  <div className="relative min-w-0">
-                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none z-10" />
-                    <select value={charter.startMonth} onChange={e => setCharter({ ...charter, startMonth: e.target.value })}
-                      className={`${inputClass} pl-10`}>
-                      <option value="" className="bg-[#2e2f32]">— select —</option>
-                      {months.map(m => <option key={m.value} value={m.value} className="bg-[#2e2f32]">{m.label}</option>)}
-                    </select>
-                  </div>
+                  <MonthPicker value={charter.startMonth} onChange={(v) => setCharter({ ...charter, startMonth: v })} placeholder="Select month" />
                 </Field>
                 <Field label="Return month" required>
-                  <div className="relative min-w-0">
-                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none z-10" />
-                    <select value={charter.endMonth} onChange={e => setCharter({ ...charter, endMonth: e.target.value })}
-                      className={`${inputClass} pl-10`}>
-                      <option value="" className="bg-[#2e2f32]">— select —</option>
-                      {months.map(m => <option key={m.value} value={m.value} className="bg-[#2e2f32]">{m.label}</option>)}
-                    </select>
-                  </div>
+                  <MonthPicker value={charter.endMonth} onChange={(v) => setCharter({ ...charter, endMonth: v })} placeholder="Select month" />
                 </Field>
                 <Field label="Number of Guests" required>
                   <div className="relative">

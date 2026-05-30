@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Filter, X, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
+import MonthPicker from './MonthPicker';
 
 const YACHT_TYPES = [
   { value: '', label: 'All Types' },
@@ -538,25 +539,19 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
               </div>
             )}
 
-            {/* Dates */}
+            {/* Dates : MonthPicker custom (popover avec grille mois + logo Qualityacht sur passés) */}
             <div>
               <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Charter Dates</label>
-              <div className="flex gap-2">
-                <input
-                  type="month"
+              <div className="grid grid-cols-2 gap-2">
+                <MonthPicker
                   value={(localFilters.startDate || '').slice(0, 7)}
-                  onChange={e => handleChange('startDate', e.target.value)}
-                  placeholder="yyyy-mm"
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] [color-scheme:light]"
-                  lang="en-US"
+                  onChange={(v) => handleChange('startDate', v)}
+                  placeholder="From"
                 />
-                <input
-                  type="month"
+                <MonthPicker
                   value={(localFilters.endDate || '').slice(0, 7)}
-                  onChange={e => handleChange('endDate', e.target.value)}
-                  placeholder="yyyy-mm"
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] [color-scheme:light]"
-                  lang="en-US"
+                  onChange={(v) => handleChange('endDate', v)}
+                  placeholder="To"
                 />
               </div>
             </div>

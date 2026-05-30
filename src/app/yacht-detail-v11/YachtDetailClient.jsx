@@ -252,7 +252,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         <div className="max-w-6xl mx-auto px-5 md:px-10 py-8 flex flex-col lg:flex-row lg:items-center gap-8">
           <div className="flex-1 w-full flex flex-col items-stretch lg:items-center gap-6">
             <EnquireButton yacht={yacht} bp={bp} full={full} imgs={imgs} />
-            <a href="/request-quote-test-v10" className="flex items-center justify-center w-full lg:w-auto rounded-lg border-2 border-[#C0C0C0] px-3 py-1.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+            <a href="/request-quote-test-v10?step=1" className="flex items-center justify-center w-full lg:w-auto rounded-lg border-2 border-[#C0C0C0] px-3 py-1.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
               Contact a broker
             </a>
           </div>
