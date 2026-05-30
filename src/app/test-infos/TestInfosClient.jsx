@@ -36,6 +36,50 @@ function FillerValue({ children }) {
   );
 }
 
+// ─── Glossaire des termes Ankor ──────────────────────────────────────────
+const GLOSSARY = {
+  'Charter Fee': "Frais de location du bateau seul, sans frais annexes ni taxes.",
+  'APA': "Advance Provisioning Allowance — provision pour les dépenses courantes durant la croisière (carburant, nourriture, boissons, taxes portuaires, blanchisserie…). Souvent 30 à 35 % du Charter Fee. Le solde non utilisé est remboursé en fin de charter.",
+  'Security deposit': "Caution remboursable en fin de croisière (couvre les dommages éventuels).",
+  'Security Deposit': "Caution remboursable en fin de croisière (couvre les dommages éventuels).",
+  'VAT': "TVA. Selon le pays, peut s'ajouter au charter fee (souvent 10-22 % en Méditerranée).",
+  'Skipper Fee': "Honoraires du skipper quand il n'est pas inclus dans le forfait.",
+  'EXCLUSIVE': "Prix affiché HORS taxes — il faut y ajouter la TVA et autres taxes.",
+  'INCLUSIVE': "Prix affiché TAXES COMPRISES.",
+  'NONE': "Aucune taxe applicable (typique des Caraïbes / eaux internationales).",
+  'WEEK': "Tarif hebdomadaire — pour 7 jours de location.",
+  'DAY': "Tarif journalier — location à la journée (rare).",
+  'HOUR': "Tarif horaire — location à l'heure (jet boats, très court).",
+  'inclusionZones': "Régions où ce tarif s'applique.",
+  'exclusionZones': "Régions interdites avec ce tarif.",
+  'effectiveDates': "Périodes de validité du tarif (peut couvrir plusieurs années glissantes).",
+  'bbox': "Bounding box géographique : 4 coordonnées qui forment un rectangle [west, south, east, north].",
+  'coordinates': "Position [longitude, latitude] du centre de la zone.",
+  'petsAllowed': "Animaux acceptés à bord pour cette saison.",
+};
+
+function explain(term) {
+  return GLOSSARY[term] || '';
+}
+
+function HelpTip({ term, children }) {
+  return (
+    <span className="inline-flex items-center gap-1 cursor-help" title={explain(term)}>
+      {children}
+      <span className="text-[#B03E00] text-[10px]">ⓘ</span>
+    </span>
+  );
+}
+
+function ExplainBox({ children, label = 'À savoir' }) {
+  return (
+    <div className="rounded-lg border-l-2 border-[#B03E00] bg-[#3a3b3f]/40 px-4 py-3 text-sm text-[#acb0cd] leading-relaxed">
+      <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mb-1">{label}</p>
+      {children}
+    </div>
+  );
+}
+
 function Val({ value, filler }) {
   if (value === null || value === undefined || value === '' || value === 0) {
     return <FillerValue>{filler}</FillerValue>;
@@ -199,47 +243,68 @@ function SeasonDetail({ season, idx }) {
 
   return (
     <div className="space-y-4 text-sm">
+      {/* Explication en français */}
+      <p className="text-sm text-[#acb0cd] leading-relaxed">
+        Voici le détail de cette saison. Le <span className="text-[#B03E00] font-medium">total</span> est ce que paye le client.
+        Il se décompose en plusieurs lignes : la location nue (Charter Fee), l'avance pour les dépenses courantes (APA),
+        la caution remboursable, et éventuellement la TVA.
+      </p>
+
       {/* Header chiffres clés */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <div className="rounded border border-[#C0C0C0]/20 bg-[#26272a] p-2">
-          <p className="text-[9px] uppercase tracking-wider text-[#acb0cd]/50">Total</p>
+          <p className="text-[9px] uppercase tracking-wider text-[#acb0cd]/50">Total à payer</p>
           <p className="text-[#B03E00] font-bold">{total || '—'}</p>
         </div>
         <div className="rounded border border-[#C0C0C0]/20 bg-[#26272a] p-2">
-          <p className="text-[9px] uppercase tracking-wider text-[#acb0cd]/50">Charter Fee</p>
+          <p className="text-[9px] uppercase tracking-wider text-[#acb0cd]/50" title={explain('Charter Fee')}>Location nue ⓘ</p>
           <p className="text-[#C0C0C0]">{charterFee || '—'}</p>
         </div>
         <div className="rounded border border-[#C0C0C0]/20 bg-[#26272a] p-2">
-          <p className="text-[9px] uppercase tracking-wider text-[#acb0cd]/50">Subtotal</p>
+          <p className="text-[9px] uppercase tracking-wider text-[#acb0cd]/50">Sous-total HT</p>
           <p className="text-[#C0C0C0]">{subTotal || '—'}</p>
         </div>
         <div className="rounded border border-[#C0C0C0]/20 bg-[#26272a] p-2">
-          <p className="text-[9px] uppercase tracking-wider text-[#acb0cd]/50">Tax</p>
+          <p className="text-[9px] uppercase tracking-wider text-[#acb0cd]/50">TVA / taxes</p>
           <p className="text-[#C0C0C0]">{totalTax || '—'}</p>
         </div>
       </div>
 
+      {/* Mode de taxation expliqué */}
+      <ExplainBox label="Régime fiscal">
+        <p>
+          Ce tarif est affiché en mode <span className="text-[#B03E00] font-bold">{p.inputAmountTaxed || '—'}</span> :{' '}
+          {p.inputAmountTaxed === 'EXCLUSIVE' && <span>les prix indiqués sont <strong>hors taxes</strong>. Il faut ajouter la TVA selon le pays.</span>}
+          {p.inputAmountTaxed === 'INCLUSIVE' && <span>les prix indiqués sont <strong>taxes comprises</strong>.</span>}
+          {p.inputAmountTaxed === 'NONE' && <span><strong>aucune taxe</strong> ne s'applique (typique des Caraïbes / eaux internationales).</span>}
+          {!p.inputAmountTaxed && <span>aucun mode renseigné par Ankor.</span>}
+        </p>
+      </ExplainBox>
+
       {/* Line items */}
       {lineItems.length > 0 && (
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mb-2">Line items ({lineItems.length})</p>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mb-2">Décomposition du total — {lineItems.length} ligne{lineItems.length > 1 ? 's' : ''}</p>
           <div className="rounded-lg border border-[#C0C0C0]/20 overflow-hidden">
             <table className="w-full text-xs">
               <thead className="bg-[#26272a]">
                 <tr>
-                  <th className="text-left px-3 py-2 text-[#acb0cd]/60 font-normal">Item</th>
-                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal">Qty</th>
-                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal">Unit price</th>
-                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal">Amount</th>
+                  <th className="text-left px-3 py-2 text-[#acb0cd]/60 font-normal">Poste</th>
+                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal" title="Quantité ou pourcentage (ex: APA = 0.3 = 30%)">Qté ⓘ</th>
+                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal">Prix unitaire</th>
+                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal">Montant</th>
                   <th className="text-left px-3 py-2 text-[#acb0cd]/60 font-normal">Conditions</th>
-                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal">Tax</th>
-                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal">Disc.</th>
+                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal">TVA</th>
+                  <th className="text-right px-3 py-2 text-[#acb0cd]/60 font-normal">Remise</th>
                 </tr>
               </thead>
               <tbody>
                 {lineItems.map((li, i) => (
                   <tr key={i} className="border-t border-[#C0C0C0]/10">
-                    <td className="px-3 py-2 text-[#C0C0C0] font-medium">{li.item || '—'}</td>
+                    <td className="px-3 py-2 text-[#C0C0C0] font-medium" title={explain(li.item)}>
+                      {li.item || '—'}
+                      {explain(li.item) && <span className="ml-1 text-[#B03E00] text-[10px]">ⓘ</span>}
+                    </td>
                     <td className="px-3 py-2 text-[#acb0cd] text-right font-mono">{li.quantity ?? '—'}</td>
                     <td className="px-3 py-2 text-[#acb0cd] text-right font-mono">{formatMoney(li.unitPrice, p.currency) || '—'}</td>
                     <td className="px-3 py-2 text-[#C0C0C0] text-right font-mono font-bold">{formatMoney(li.amount, p.currency) || '—'}</td>
@@ -252,10 +317,7 @@ function SeasonDetail({ season, idx }) {
             </table>
           </div>
           <p className="text-[10px] text-[#acb0cd]/50 mt-2 italic">
-            Taxation mode: <span className="text-[#C0C0C0]">{p.inputAmountTaxed || 'n/a'}</span>
-            {p.inputAmountTaxed === 'EXCLUSIVE' && ' — prix indiqué hors taxes'}
-            {p.inputAmountTaxed === 'INCLUSIVE' && ' — taxes incluses dans le prix'}
-            {p.inputAmountTaxed === 'NONE' && ' — aucune taxe applicable'}
+            Survoler le nom du poste pour voir l'explication. Les montants sont en {p.currency || '—'}.
           </p>
         </div>
       )}
@@ -263,7 +325,12 @@ function SeasonDetail({ season, idx }) {
       {/* Effective dates */}
       {dates.length > 0 && (
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mb-2">Effective periods ({dates.length})</p>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mb-2">
+            Quand ce tarif s'applique — {dates.length} période{dates.length > 1 ? 's' : ''}
+          </p>
+          <p className="text-xs text-[#acb0cd]/70 mb-2">
+            Le yacht est disponible à ce prix uniquement durant ces fenêtres de dates :
+          </p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5">
             {dates.map((d, i) => (
               <div key={i} className="rounded border border-[#C0C0C0]/15 bg-[#26272a] px-2 py-1 text-xs font-mono text-[#acb0cd]">
@@ -277,16 +344,21 @@ function SeasonDetail({ season, idx }) {
       {/* Inclusion zones (avec bbox info) */}
       {zones.length > 0 && (
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mb-2">Inclusion zones ({zones.length})</p>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mb-2">
+            Où ce tarif s'applique — {zones.length} zone{zones.length > 1 ? 's' : ''}
+          </p>
+          <p className="text-xs text-[#acb0cd]/70 mb-2">
+            Régions de navigation autorisées à ce tarif. Chaque zone a un type (pays, mer, zone custom) et des coordonnées géographiques.
+          </p>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead className="text-[#acb0cd]/60">
                 <tr>
-                  <th className="text-left px-2 py-1 font-normal">Label</th>
+                  <th className="text-left px-2 py-1 font-normal">Région</th>
                   <th className="text-left px-2 py-1 font-normal">Type</th>
-                  <th className="text-left px-2 py-1 font-normal">Category</th>
-                  <th className="text-right px-2 py-1 font-normal">Center (lat, lng)</th>
-                  <th className="text-right px-2 py-1 font-normal">BBox</th>
+                  <th className="text-left px-2 py-1 font-normal">Catégorie</th>
+                  <th className="text-right px-2 py-1 font-normal">Centre (lat, lng)</th>
+                  <th className="text-right px-2 py-1 font-normal" title="Bounding box : rectangle géographique qui englobe la zone">BBox ⓘ</th>
                 </tr>
               </thead>
               <tbody>
@@ -491,31 +563,31 @@ export default function TestInfosClient({ yacht }) {
 
   // Specs
   const specsTech = [
-    [Ruler, 'Length overall', bp.length ? `${bp.length} m` : null, '60 m'],
-    [Ruler, 'Beam', bp.beam ? `${bp.beam} m` : null, '10 m'],
-    [Ruler, 'Draft', bp.draft ? `${bp.draft} m` : null, '3.2 m'],
-    [Gauge, 'Top speed', bp.topSpeed ? `${bp.topSpeed} kn` : null, '18 kn'],
-    [Gauge, 'Cruise speed', bp.cruiseSpeed ? `${bp.cruiseSpeed} kn` : null, '14 kn'],
-    [Wrench, 'Engines', bp.engines, '2× MTU 4000 hp'],
-    [Building2, 'Hull construction', bp.hullConstruction, 'Steel'],
-    [Ship, 'Hull type', bp.hullType, 'Monohull'],
-    [Layers, 'Decks', bp.decks, '4'],
-    [Bath, 'Bathrooms', bp.bathrooms, '7'],
-    [Compass, 'Cruising capacity', bp.cruisingCapacity || null, '12'],
-    [Users, 'Static capacity', bp.staticCapacity || null, '20'],
-    [Fuel, 'Fuel capacity', bp.fuelCapacity || null, '120 000 L'],
+    [Ruler, 'Longueur hors-tout', bp.length ? `${bp.length} m` : null, '60 m'],
+    [Ruler, 'Largeur (beam)', bp.beam ? `${bp.beam} m` : null, '10 m'],
+    [Ruler, 'Tirant d\'eau (draft)', bp.draft ? `${bp.draft} m` : null, '3.2 m'],
+    [Gauge, 'Vitesse max', bp.topSpeed ? `${bp.topSpeed} kn` : null, '18 kn'],
+    [Gauge, 'Vitesse de croisière', bp.cruiseSpeed ? `${bp.cruiseSpeed} kn` : null, '14 kn'],
+    [Wrench, 'Motorisation', bp.engines, '2× MTU 4000 hp'],
+    [Building2, 'Matériau coque', bp.hullConstruction, 'Steel'],
+    [Ship, 'Type de coque', bp.hullType, 'Monohull'],
+    [Layers, 'Nombre de ponts', bp.decks, '4'],
+    [Bath, 'Salles de bain', bp.bathrooms, '7'],
+    [Compass, 'Capacité en croisière', bp.cruisingCapacity || null, '12'],
+    [Users, 'Capacité à quai', bp.staticCapacity || null, '20'],
+    [Fuel, 'Capacité carburant', bp.fuelCapacity || null, '120 000 L'],
     [Droplet, 'Tonnage', bp.tonnage || null, '1200 GT'],
-    [Ship, 'Model', bp.model, 'Custom'],
-    [Award, 'Architect', bp.architect, 'Espen Øino'],
-    [Award, 'Interior designer', bp.interiorDesigner, 'Terence Disdale'],
-    [Globe, 'Yacht type', yachtType, 'Motor'],
+    [Ship, 'Modèle', bp.model, 'Custom'],
+    [Award, 'Architecte naval', bp.architect, 'Espen Øino'],
+    [Award, 'Designer intérieur', bp.interiorDesigner, 'Terence Disdale'],
+    [Globe, 'Type de yacht', yachtType, 'Motor'],
     [Building2, 'Superstructure', Array.isArray(bp.superStructure) ? bp.superStructure.join(', ') : bp.superStructure, 'Aluminium'],
-    [Calendar, 'Built year', bp.builtYear, '2020'],
-    [Calendar, 'Refit year', bp.refitYear, '2024'],
-    [Users, 'Sleeps', bp.sleeps, '12'],
-    [BedDouble, 'Cabins', bp.cabins, '6'],
-    [Anchor, 'Max crew', bp.maxCrew, '16'],
-    [Anchor, 'Make', bp.make, 'Lürssen'],
+    [Calendar, 'Année de construction', bp.builtYear, '2020'],
+    [Calendar, 'Année du refit', bp.refitYear, '2024'],
+    [Users, 'Couchages', bp.sleeps, '12'],
+    [BedDouble, 'Cabines', bp.cabins, '6'],
+    [Anchor, 'Équipage max', bp.maxCrew, '16'],
+    [Anchor, 'Constructeur', bp.make, 'Lürssen'],
   ];
 
   return (
@@ -525,15 +597,25 @@ export default function TestInfosClient({ yacht }) {
       <div className="bg-red-900/30 border-b border-red-700/40 pt-20">
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-2.5 flex items-center justify-between flex-wrap gap-3 text-xs">
           <p className="text-red-300">
-            <span className="font-bold uppercase tracking-wider">Inventory dashboard</span> — tout ce qu'Ankor renvoie. Valeurs en <span className="italic text-red-400">rouge [ex.]</span> = absentes pour ce yacht.
+            <span className="font-bold uppercase tracking-wider">Page test infos</span> — tout ce qu'Ankor sait sur un yacht. Valeurs en <span className="italic text-red-400">rouge [ex.]</span> = absentes pour ce yacht.
           </p>
           {lastModified && (
-            <p className="text-red-300/70 flex items-center gap-1.5"><Clock className="w-3 h-3" /> Ankor updated: {lastModified}</p>
+            <p className="text-red-300/70 flex items-center gap-1.5"><Clock className="w-3 h-3" /> Dernière mise à jour Ankor : {lastModified}</p>
           )}
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-5 md:px-8 py-6 space-y-8">
+
+        {/* ══ Intro pédagogique ══ */}
+        <ExplainBox label="À quoi sert cette page ?">
+          <p>
+            Cette page <strong>liste toutes les informations</strong> qu'Ankor (notre fournisseur de données yachts) renvoie pour un bateau.
+            Elle sert à voir ce qu'on peut afficher sur les fiches client, et à comprendre les tarifs/régions disponibles.
+            Le yacht affiché est <strong className="text-[#C0C0C0]">{yacht.name}</strong>.
+            Pour voir un autre yacht, ajoute <code className="text-[#B03E00] bg-[#26272a] px-1 py-0.5 rounded text-xs">?name=NomDuYacht</code> dans l'URL.
+          </p>
+        </ExplainBox>
 
         {/* ══ HEADER ══ */}
         <div className="grid md:grid-cols-[280px_1fr] gap-5 items-start">
@@ -552,45 +634,63 @@ export default function TestInfosClient({ yacht }) {
 
             {/* Quick stat row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
-              <StatCard icon={Receipt} label="Seasons" value={seasons.length} sublabel={`${totalLineItems} line items`} />
-              <StatCard icon={Globe} label="Unique zones" value={allZones.size} sublabel={[...allUnits].join(', ') || '—'} />
-              <StatCard icon={Users} label="Crew" value={crew.length} sublabel={`${crew.filter(c => c.bio).length} with bio`} />
-              <StatCard icon={Database} label="Photos" value={imgs.length} sublabel={`${amenities.length}am · ${toys.length}toys`} />
+              <StatCard icon={Receipt} label="Saisons tarifaires" value={seasons.length} sublabel={`${totalLineItems} lignes de prix`} />
+              <StatCard icon={Globe} label="Zones de navigation" value={allZones.size} sublabel={[...allUnits].join(', ') || '—'} />
+              <StatCard icon={Users} label="Équipage" value={crew.length} sublabel={`${crew.filter(c => c.bio).length} avec bio`} />
+              <StatCard icon={Database} label="Photos" value={imgs.length} sublabel={`${amenities.length} équipements · ${toys.length} jouets`} />
             </div>
           </div>
         </div>
 
         {/* ══ PRICING — DEEP DIVE ══ */}
         <section>
-          <SectionTitle icon={Receipt} title="Pricing — full inventory" subtitle="pricing.* + pricingInfo[] avec line items, dates, zones et taxes" count={`${seasons.length} season${seasons.length > 1 ? 's' : ''}`} />
+          <SectionTitle icon={Receipt} title="Tarifs de location" subtitle="Combien coûte ce yacht, où et quand" count={`${seasons.length} saison${seasons.length > 1 ? 's' : ''} tarifaire${seasons.length > 1 ? 's' : ''}`} />
+
+          {/* Intro explicative */}
+          <ExplainBox label="Comment lire les tarifs">
+            <p className="mb-2">
+              Un yacht a plusieurs tarifs selon <strong>la saison</strong> (Méditerranée été vs Caraïbes hiver) et <strong>la zone de navigation</strong>.
+              Chaque tarif est composé de plusieurs <strong>postes</strong> :
+            </p>
+            <ul className="space-y-1 text-xs ml-4">
+              <li><span className="text-[#B03E00] font-bold">Charter Fee</span> — la location nue du bateau (équipage et bateau, sans frais annexes).</li>
+              <li><span className="text-[#B03E00] font-bold">APA</span> — provision pour les dépenses courantes (carburant, nourriture, taxes portuaires…). Généralement 30 à 35 % du Charter Fee. Le non-utilisé est remboursé.</li>
+              <li><span className="text-[#B03E00] font-bold">Security deposit</span> — caution remboursable (couvre les dommages).</li>
+              <li><span className="text-[#B03E00] font-bold">VAT / TVA</span> — selon le pays (10-22 % en Méditerranée, souvent 0 % aux Caraïbes).</li>
+            </ul>
+          </ExplainBox>
 
           {/* Range cards */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
-            <StatCard icon={TrendingUp} accent label="Weekly range" value={weekFrom && weekTo ? `${weekFrom} → ${weekTo}` : weekFrom || weekTo || '—'} sublabel="weekPricingFrom / weekPricingTo" />
-            <StatCard icon={TrendingUp} label="Daily range" value={dayFrom && dayTo ? `${dayFrom} → ${dayTo}` : dayFrom || dayTo || '—'} sublabel="dayPricingFrom / dayPricingTo" />
-            <StatCard icon={Percent} label="Tax modes" value={[...new Set(seasons.map(s => s.pricing?.inputAmountTaxed))].filter(Boolean).join(', ') || '—'} sublabel="EXCLUSIVE/INCLUSIVE/NONE" />
-            <StatCard icon={AlertCircle} label="Exclusion zones" value={totalExclusions} sublabel="across all seasons" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5 mt-5">
+            <StatCard icon={TrendingUp} accent label="Fourchette hebdomadaire" value={weekFrom && weekTo ? `${weekFrom} → ${weekTo}` : weekFrom || weekTo || '—'} sublabel="Du moins cher au plus cher des tarifs/semaine" />
+            <StatCard icon={TrendingUp} label="Fourchette journalière" value={dayFrom && dayTo ? `${dayFrom} → ${dayTo}` : dayFrom || dayTo || '—'} sublabel="Si location à la journée disponible" />
+            <StatCard icon={Percent} label="Régime fiscal" value={[...new Set(seasons.map(s => s.pricing?.inputAmountTaxed))].filter(Boolean).join(', ') || '—'} sublabel="HT, TTC ou sans taxe" />
+            <StatCard icon={AlertCircle} label="Zones exclues" value={totalExclusions} sublabel="Régions interdites au charter" />
           </div>
 
           {/* Master table */}
+          <p className="text-xs text-[#acb0cd]/70 mb-2">
+            <strong className="text-[#C0C0C0]">Tableau récapitulatif :</strong> une ligne par saison/tarif. Survole les en-têtes pour voir l'explication.
+            Clique sur une saison plus bas pour voir le détail (décomposition, dates exactes, zones).
+          </p>
           <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] overflow-hidden mb-5">
             <div className="overflow-x-auto">
               <table className="w-full text-xs">
                 <thead className="bg-[#26272a] text-[#acb0cd]/60">
                   <tr>
-                    <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Season</th>
-                    <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Unit</th>
-                    <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Curr.</th>
-                    <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Total</th>
-                    <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Charter fee</th>
-                    <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Subtotal</th>
-                    <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Tax</th>
-                    <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Tax mode</th>
-                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Pets</th>
-                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">LI</th>
-                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Dates</th>
-                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Zones</th>
-                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Excl</th>
+                    <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Saison</th>
+                    <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Sem/Jour/Heure">Unité ⓘ</th>
+                    <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Devise</th>
+                    <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Total à payer">Total ⓘ</th>
+                    <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title={explain('Charter Fee')}>Location ⓘ</th>
+                    <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Sous-total avant taxes">Sous-tot. ⓘ</th>
+                    <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">TVA</th>
+                    <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="EXCLUSIVE = HT, INCLUSIVE = TTC, NONE = sans taxe">Régime ⓘ</th>
+                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Animaux acceptés à bord">Pets ⓘ</th>
+                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Nombre de lignes dans la décomposition">Postes ⓘ</th>
+                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Nombre de plages de dates où le tarif s'applique">Dates ⓘ</th>
+                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Nombre de zones de navigation autorisées">Zones ⓘ</th>
+                    <th className="text-center px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Zones interdites pour cette saison">Excl. ⓘ</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -625,8 +725,12 @@ export default function TestInfosClient({ yacht }) {
           {seasons.length > 0 && (
             <div className="mb-5">
               <h3 className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-2 flex items-center gap-2">
-                <Calendar className="w-4 h-4" /> Season coverage calendar
+                <Calendar className="w-4 h-4" /> Calendrier des saisons
               </h3>
+              <p className="text-xs text-[#acb0cd]/70 mb-2">
+                Chaque ligne représente un tarif. Les cases <strong>colorées</strong> montrent les mois où ce tarif s'applique.
+                Permet de visualiser d'un coup d'œil <strong>quand chaque saison est active</strong>.
+              </p>
               <SeasonCalendar seasons={seasons} />
             </div>
           )}
@@ -635,10 +739,14 @@ export default function TestInfosClient({ yacht }) {
           {seasons.length > 0 && (
             <div className="space-y-2">
               <h3 className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-2 flex items-center gap-2">
-                <FileText className="w-4 h-4" /> Per-season breakdown
+                <FileText className="w-4 h-4" /> Détail de chaque saison
               </h3>
+              <p className="text-xs text-[#acb0cd]/70 mb-3">
+                Clique sur une saison pour voir : la <strong>décomposition complète du prix</strong> (Charter Fee + APA + caution + TVA),
+                les <strong>périodes exactes</strong> (du jour J au jour K), les <strong>zones de navigation</strong> autorisées et celles exclues.
+              </p>
               {seasons.map((s, i) => (
-                <Collapsible key={i} title={`${i + 1}. ${s.name || 'Unnamed season'}`} badge={formatMoney(s.pricing?.total, s.pricing?.currency) || '—'}>
+                <Collapsible key={i} title={`${i + 1}. ${s.name || 'Saison sans nom'}`} badge={formatMoney(s.pricing?.total, s.pricing?.currency) || '—'}>
                   <SeasonDetail season={s} idx={i} />
                 </Collapsible>
               ))}
@@ -648,7 +756,7 @@ export default function TestInfosClient({ yacht }) {
 
         {/* ══ BASE PORT + MAP ══ */}
         <section>
-          <SectionTitle icon={MapIcon} title="Base port" subtitle="blueprint.basePort — name, country, coordinates" />
+          <SectionTitle icon={MapIcon} title="Port d'attache" subtitle="Où le yacht est basé physiquement" />
           <div className="grid md:grid-cols-2 gap-4">
             <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] p-4 space-y-2">
               <p className="text-xl text-[#C0C0C0] font-bold"><Val value={bp.basePort?.name} filler="Monaco" /></p>
@@ -666,7 +774,7 @@ export default function TestInfosClient({ yacht }) {
 
         {/* ══ SPECIFICATIONS (table dense) ══ */}
         <section>
-          <SectionTitle icon={Ship} title="Specifications" subtitle="blueprint.* — 25 champs possibles" count={`${specsTech.filter(([, , v]) => v).length}/${specsTech.length} renseignés`} />
+          <SectionTitle icon={Ship} title="Caractéristiques techniques" subtitle="Toutes les specs renseignées par Ankor (dimensions, motorisation, designer…)" count={`${specsTech.filter(([, , v]) => v).length}/${specsTech.length} renseignés`} />
           <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] overflow-hidden">
             <table className="w-full text-sm">
               <tbody>
@@ -684,20 +792,24 @@ export default function TestInfosClient({ yacht }) {
 
         {/* ══ DESCRIPTION ══ */}
         <section>
-          <SectionTitle icon={FileText} title="Description" subtitle="full_data.description" count={`${description?.length || 0} chars`} />
+          <SectionTitle icon={FileText} title="Texte descriptif" subtitle="Le pitch marketing fourni par Ankor, en anglais — utilisable tel quel sur les fiches" count={`${description?.length || 0} caractères`} />
           <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] p-5">
             <p className="text-sm leading-relaxed text-[#acb0cd] whitespace-pre-line">
-              {description || <FillerValue>Lorem ipsum. Yacht overview text Ankor returns — multi-paragraph.</FillerValue>}
+              {description || <FillerValue>Yacht overview text. Multi-paragraphe descriptif fourni par Ankor.</FillerValue>}
             </p>
           </div>
         </section>
 
         {/* ══ AMENITIES + TOYS + ENTERTAINMENT + TENDERS (4 col grid dense) ══ */}
         <section>
-          <SectionTitle icon={Sparkles} title="On-board offering" subtitle="amenities + entertainment + toys + tenders" />
+          <SectionTitle icon={Sparkles} title="Équipements et activités à bord" subtitle="Confort (amenities), divertissement, jouets nautiques et annexes (tenders)" />
+          <p className="text-xs text-[#acb0cd]/70 mb-3">
+            Ce qu'on trouve sur le yacht. Le chiffre <span className="text-[#B03E00] font-bold">×N</span> est la quantité quand elle est précisée.
+            Ces listes alimentent les badges sur la fiche client.
+          </p>
           <div className="grid md:grid-cols-2 gap-3">
             <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-3">Amenities · {amenities.length || 'ex.'}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-3" title="Équipements et services à bord (gym, jacuzzi, etc.)">Confort & équipements · {amenities.length || 'ex.'} ⓘ</p>
               <ul className="text-xs space-y-1">
                 {amenities.length > 0 ? amenities.map((a, i) => (
                   <li key={i} className="flex items-center gap-2">
@@ -715,7 +827,7 @@ export default function TestInfosClient({ yacht }) {
             </div>
 
             <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-3">Entertainment · {entertainment.length || 'ex.'}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-3" title="Audio / vidéo / connectivité">Divertissement · {entertainment.length || 'ex.'} ⓘ</p>
               <ul className="text-xs space-y-1">
                 {entertainment.length > 0 ? entertainment.map((e, i) => (
                   <li key={i} className="flex items-center gap-2">
@@ -732,7 +844,7 @@ export default function TestInfosClient({ yacht }) {
             </div>
 
             <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-3">Water toys · {toys.length || 'ex.'}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-3" title="Jet-skis, paddle, plongée, etc.">Jouets nautiques · {toys.length || 'ex.'} ⓘ</p>
               <ul className="text-xs space-y-1">
                 {toys.length > 0 ? toys.map((t, i) => (
                   <li key={i} className="flex items-center gap-2">
@@ -750,7 +862,7 @@ export default function TestInfosClient({ yacht }) {
             </div>
 
             <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-3">Tenders · {tenders.length || 'ex.'}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[#B03E00] mb-3" title="Petits bateaux annexes (transport invités, secours)">Annexes (tenders) · {tenders.length || 'ex.'} ⓘ</p>
               <ul className="text-xs space-y-1.5">
                 {tenders.length > 0 ? tenders.map((t, i) => (
                   <li key={i} className="flex items-start gap-2">
@@ -770,7 +882,10 @@ export default function TestInfosClient({ yacht }) {
 
         {/* ══ CABIN LAYOUT ══ */}
         <section>
-          <SectionTitle icon={BedDouble} title="Cabin layout" subtitle="blueprint.cabinLayout[]" count={`${cabinLayout.length} types`} />
+          <SectionTitle icon={BedDouble} title="Cabines" subtitle="Le type et le nombre de cabines à bord" count={`${cabinLayout.length} type${cabinLayout.length > 1 ? 's' : ''}`} />
+          <p className="text-xs text-[#acb0cd]/70 mb-3">
+            Le yacht propose plusieurs catégories de cabines. Le chiffre représente le nombre de cabines de ce type.
+          </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {cabinLayout.length > 0 ? cabinLayout.map((c, i) => (
               <div key={i} className="rounded-lg border border-[#C0C0C0]/30 bg-[#3a3b3f] p-3 text-center">
@@ -788,7 +903,12 @@ export default function TestInfosClient({ yacht }) {
 
         {/* ══ CREW ══ */}
         <section>
-          <SectionTitle icon={Users} title="Crew" subtitle={`crew[] — {name, role*, avatar, bio} · * = déduit (Ankor renvoie souvent "Captain" pour tous)`} count={`${crew.length} members · ${crew.filter(c => c.bio).length} with bio`} />
+          <SectionTitle icon={Users} title="Équipage" subtitle="Tout l'équipage du yacht avec photo, rôle et biographie" count={`${crew.length} membre${crew.length > 1 ? 's' : ''} · ${crew.filter(c => c.bio).length} avec biographie`} />
+          <p className="text-xs text-[#acb0cd]/70 mb-3">
+            Clique sur une carte avec le badge <span className="px-1.5 py-0.5 rounded-full bg-[#B03E00]/80 text-white text-[8px] uppercase">bio</span> pour lire la biographie.
+            Le <span className="text-[#B03E00]">*</span> après le rôle signifie qu'il a été déduit de la bio
+            (Ankor a un bug : il renvoie souvent "Captain" pour tout l'équipage — on corrige automatiquement en analysant le texte de la bio).
+          </p>
           {crew.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
               {crew.map((c, i) => <CrewCard key={i} c={c} />)}
@@ -805,7 +925,7 @@ export default function TestInfosClient({ yacht }) {
         {/* ══ GALERIE compacte ══ */}
         {imgs.length > 0 && (
           <section>
-            <SectionTitle icon={Database} title="Gallery" subtitle="blueprint.images[]" count={`${imgs.length} URLs`} />
+            <SectionTitle icon={Database} title="Photos" subtitle="Toutes les photos disponibles. Clique pour agrandir en plein écran." count={`${imgs.length} photo${imgs.length > 1 ? 's' : ''}`} />
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1.5">
               {imgs.map((src, i) => (
                 <button key={i} onClick={() => setLightbox(i)} className="relative aspect-square rounded overflow-hidden border border-[#C0C0C0]/20 group">
@@ -816,25 +936,38 @@ export default function TestInfosClient({ yacht }) {
           </section>
         )}
 
-        {/* ══ RAW OVERVIEW ══ */}
+        {/* ══ GLOSSAIRE ══ */}
         <section>
-          <SectionTitle icon={Database} title="Raw entity overview" subtitle="Réponse brute /website/entity/{uri}" />
+          <SectionTitle icon={FileText} title="Glossaire" subtitle="Définitions des termes techniques utilisés sur cette page" />
+          <div className="grid md:grid-cols-2 gap-3">
+            {Object.entries(GLOSSARY).map(([term, def]) => (
+              <div key={term} className="rounded-lg border border-[#C0C0C0]/20 bg-[#3a3b3f] p-3">
+                <p className="text-[#B03E00] font-bold text-sm mb-1">{term}</p>
+                <p className="text-xs text-[#acb0cd] leading-relaxed">{def}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ══ RAW OVERVIEW (technique, en bas) ══ */}
+        <section>
+          <SectionTitle icon={Database} title="Récap technique" subtitle="Compteurs bruts par champ de l'API Ankor — pour debug" />
           <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#26272a] p-4 font-mono text-[11px] space-y-0.5">
             {[
               ['uri', full.uri],
               ['yachtType', JSON.stringify(full.yachtType)],
-              ['description', `${description?.length || 0} chars`],
-              ['blueprint.images', `${(bp.images || []).length} URLs`],
-              ['blueprint.amenities', `${amenities.length} items (${amenities.filter(a => a.quantity).length} avec qty)`],
-              ['blueprint.toys', `${toys.length} items (${toys.filter(t => t.quantity).length} avec qty)`],
-              ['blueprint.entertainment', `${entertainment.length} items`],
-              ['blueprint.tenders', `${tenders.length} items`],
-              ['blueprint.cabinLayout', `${cabinLayout.length} types`],
+              ['description', `${description?.length || 0} caractères`],
+              ['blueprint.images', `${(bp.images || []).length} photos`],
+              ['blueprint.amenities', `${amenities.length} équipements (${amenities.filter(a => a.quantity).length} avec quantité)`],
+              ['blueprint.toys', `${toys.length} jouets (${toys.filter(t => t.quantity).length} avec quantité)`],
+              ['blueprint.entertainment', `${entertainment.length} items divertissement`],
+              ['blueprint.tenders', `${tenders.length} annexes`],
+              ['blueprint.cabinLayout', `${cabinLayout.length} types de cabines`],
               ['blueprint.basePort.coordinates', lat ? `${lat.toFixed(4)}, ${lng.toFixed(4)}` : '—'],
-              ['crew', `${crew.length} members (${crew.filter(c => c.bio).length} bio, ${crew.filter(c => c.avatar).length} avatar)`],
+              ['crew', `${crew.length} membres (${crew.filter(c => c.bio).length} avec bio, ${crew.filter(c => c.avatar).length} avec photo)`],
               ['pricing.weekPricingFrom→To', `${weekFrom || '—'} → ${weekTo || '—'}`],
               ['pricing.dayPricingFrom→To', `${dayFrom || '—'} → ${dayTo || '—'}`],
-              ['pricing.pricingInfo', `${seasons.length} seasons, ${totalLineItems} total line items, ${allZones.size} unique zones`],
+              ['pricing.pricingInfo', `${seasons.length} saisons, ${totalLineItems} lignes au total, ${allZones.size} zones uniques`],
               ['lastModified', lastModified || '—'],
             ].map(([k, v]) => (
               <p key={k}><span className="text-[#B03E00]">{k}</span>: <span className="text-[#acb0cd]">{v || '—'}</span></p>
