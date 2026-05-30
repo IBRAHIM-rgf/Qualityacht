@@ -545,7 +545,7 @@ export default function RequestQuoteWizard() {
     waCountry: 'Switzerland', whatsapp: '',
     callbackCountry: 'Switzerland', callbackTime: '',
     contactMethod: 'Email',
-    message: '', acceptPolicy: false,
+    message: '', acceptPolicy: false, notRobot: false,
   });
 
   // Remonter en haut de page à chaque changement d'étape
@@ -680,6 +680,10 @@ export default function RequestQuoteWizard() {
           {/* ══ ÉTAPE 2 — CONTACT INFORMATION ══ */}
           <section className="w-full shrink-0 px-1">
             <div className="max-w-4xl mx-auto space-y-6">
+              {/* Note d'introduction (verte) */}
+              <p className="text-sm italic leading-relaxed text-[#7cb88a]">
+                A yacht is the ultimate personal preference. It is about what you want: where to go, which yacht to choose, what to do – there are so many possibilities. Whatever you have in mind, we will make it happen. Contact us to discuss your requirements.
+              </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Field label="Company"><input value={contact.company} onChange={e => setContact({ ...contact, company: e.target.value })} placeholder="Company" className={inputClass} /></Field>
                 <Field label="Title">
@@ -744,11 +748,30 @@ export default function RequestQuoteWizard() {
                 <textarea rows={5} value={contact.message} onChange={e => setContact({ ...contact, message: e.target.value })} className={`${inputClass} resize-none`} />
               </Field>
 
-              <label onClick={() => setContact({ ...contact, acceptPolicy: !contact.acceptPolicy })}
-                className="flex items-center gap-3 cursor-pointer select-none">
-                <CocoCheckbox checked={contact.acceptPolicy} />
-                <span className="text-sm text-[#acb0cd]">Accept <a href="#" onClick={e => e.stopPropagation()} className="text-[#c2622a] hover:underline">Privacy Policy</a></span>
-              </label>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <label onClick={() => setContact({ ...contact, acceptPolicy: !contact.acceptPolicy })}
+                  className="flex items-center gap-3 cursor-pointer select-none">
+                  <CocoCheckbox checked={contact.acceptPolicy} />
+                  <span className="text-sm text-[#acb0cd]">Accept <a href="#" onClick={e => e.stopPropagation()} className="text-[#c2622a] hover:underline">Privacy Policy</a></span>
+                </label>
+
+                {/* Faux captcha (juste a cliquer) */}
+                <div
+                  onClick={() => setContact({ ...contact, notRobot: !contact.notRobot })}
+                  className="flex items-center gap-3 bg-white rounded-md border border-[#d3d3d3] px-3 py-2.5 w-fit cursor-pointer hover:shadow-md transition-shadow"
+                >
+                  <span className={`w-6 h-6 rounded-sm border-2 flex items-center justify-center shrink-0 transition-colors ${contact.notRobot ? 'border-[#1c7430] bg-[#1c7430]' : 'border-[#c1c1c1] bg-white'}`}>
+                    {contact.notRobot && (
+                      <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                    )}
+                  </span>
+                  <span className="text-sm text-[#333] select-none">I&rsquo;m not a robot</span>
+                  <div className="flex flex-col items-center justify-center pl-3 ml-1 border-l border-[#e4e4e4] text-[8px] uppercase tracking-wider text-[#777] leading-tight">
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 text-[#4285f4]" fill="currentColor"><circle cx="12" cy="12" r="10" fillOpacity="0.15"/><path d="M12 6a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z"/></svg>
+                    <span>verify</span>
+                  </div>
+                </div>
+              </div>
 
               <div className="flex items-center justify-between gap-4 pt-4">
                 <GhostButton onClick={goBack} className="inline-flex items-center gap-3 px-6 py-3">
