@@ -200,8 +200,14 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                 const dMax = unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT;
                 const pL = ((lengthRange[0] - dMin) / (dMax - dMin)) * 100;
                 const pR = ((lengthRange[1] - dMin) / (dMax - dMin)) * 100;
+                const unit = unitPreference === 'meters' ? 'm' : 'ft';
                 return (
                   <div className="relative min-w-[180px]">
+                    {/* Bulles dynamiques au-dessus des thumbs */}
+                    <div className="relative h-4 mb-1">
+                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pL}%` }}>{lengthRange[0]}{unit}</span>
+                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pR}%` }}>{lengthRange[1]}{unit}</span>
+                    </div>
                     <div className="relative h-6 flex items-center">
                       <div className="absolute w-full h-1 rounded-full" style={{ background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pL}%, #B03E00 ${pL}%, #B03E00 ${pR}%, #4b5563 ${pR}%, #4b5563 100%)` }} />
                       {/* Tick marks */}
@@ -331,8 +337,14 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                 const lenMax = unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT;
                 const pL = ((lengthRange[0] - lenMin) / (lenMax - lenMin)) * 100;
                 const pR = ((lengthRange[1] - lenMin) / (lenMax - lenMin)) * 100;
+                const unit = unitPreference === 'meters' ? 'm' : 'ft';
                 return (
                   <div className="px-2">
+                    {/* Bulles dynamiques au-dessus des thumbs */}
+                    <div className="relative h-4 mb-1">
+                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pL}%` }}>{lengthRange[0]}{unit}</span>
+                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pR}%` }}>{lengthRange[1]}{unit}</span>
+                    </div>
                     <div className="relative h-6 flex items-center mb-1">
                       <div className="absolute w-full h-1 rounded-full" style={{ background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pL}%, #B03E00 ${pL}%, #B03E00 ${pR}%, #4b5563 ${pR}%, #4b5563 100%)` }} />
                       {/* Tick marks mobile */}

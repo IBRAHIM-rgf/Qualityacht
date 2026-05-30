@@ -329,8 +329,18 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                 const dlenMax = unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT;
                 const pctDLL = ((lengthRange[0] - dlenMin) / (dlenMax - dlenMin)) * 100;
                 const pctDLR = ((lengthRange[1] - dlenMin) / (dlenMax - dlenMin)) * 100;
+                const unit = unitPreference === 'meters' ? 'm' : 'ft';
                 return (
                   <div className="relative min-w-[180px]">
+                    {/* Bulles dynamiques au-dessus des thumbs (suivent la valeur) */}
+                    <div className="relative h-4 mb-1">
+                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pctDLL}%` }}>
+                        {lengthRange[0]}{unit}
+                      </span>
+                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pctDLR}%` }}>
+                        {lengthRange[1]}{unit}
+                      </span>
+                    </div>
                     {/* Track + tick marks container */}
                     <div className="relative h-6 flex items-center">
                       <div className="absolute w-full h-1 rounded-full" style={{
@@ -402,85 +412,55 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                   </div>
                 );
               })()}
-              <span className="text-xs text-gray-400 text-center">
-                {lengthRange[0]}{unitPreference === 'meters' ? 'm' : 'ft'} - {lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}
-              </span>
               <div className="flex gap-2 mt-1">
-                <button
-                  onClick={() => handleUnitChange('meters')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                    unitPreference === 'meters' ? 'text-[#B03E00]' : 'text-[#B03E00]'
-                  }`}
-                >
-                  Meters
-                </button>
-                <button
-                  onClick={() => handleUnitChange('feet')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                    unitPreference === 'feet' ? 'text-[#B03E00]' : 'text-[#B03E00]'
-                  }`}
-                >
-                  Feet
-                </button>
+                {['meters', 'feet'].map((u) => {
+                  const active = unitPreference === u;
+                  return (
+                    <button key={u} onClick={() => handleUnitChange(u)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
+                        active
+                          ? 'bg-[#B03E00] border-[#B03E00] text-white'
+                          : 'bg-[#3a3b3f] border-white/20 text-[#B03E00] hover:border-[#B03E00]'
+                      }`}>
+                      {u === 'meters' ? 'Meters' : 'Feet'}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Capacity */}
-            <div className="flex items-center gap-4">
-              <label className="text-sm text-[#C0C0C0] min-w-[60px]">Min guests:</label>
+            {/* Capacity + options toggles : sur une seule ligne, alignés */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <label className="text-sm text-[#C0C0C0]">Min guests:</label>
               <input
                 type="number"
                 min="1"
                 max="50"
                 value={localFilters.capacity || ''}
                 onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
-                placeholder=""
                 className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent"
               />
-            </div>
-
-            {/* Options as toggle buttons */}
-            <div className="flex items-center gap-4 flex-wrap">
-              <button
-                onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                  localFilters.petFriendly
-                    ? 'text-[#B03E00]'
-                    : 'text-[#B03E00]'
-                }`}
-              >
-                Pet Friendly
-              </button>
-              <button
-                onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                  localFilters.groupFriendly
-                    ? 'text-[#B03E00]'
-                    : 'text-[#B03E00]'
-                }`}
-              >
-                Group Friendly
-              </button>
-              <button
-                onClick={() => handleChange('waterToys', !localFilters.waterToys)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                  localFilters.waterToys
-                    ? 'text-[#B03E00]'
-                    : 'text-[#B03E00]'
-                }`}
-              >
-                Water Toys
-              </button>
-              <button
-                onClick={() => handleChange('couplesFriendly', !localFilters.couplesFriendly)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                  localFilters.couplesFriendly
-                    ? 'text-[#B03E00]'
-                    : 'text-[#B03E00]'
-                }`}
-              >
-                Couples Friendly
-              </button>
+              {[
+                { key: 'petFriendly',     label: 'Pet Friendly' },
+                { key: 'groupFriendly',   label: 'Group Friendly' },
+                { key: 'waterToys',       label: 'Water Toys' },
+                { key: 'couplesFriendly', label: 'Couples Friendly' },
+              ].map(({ key, label }) => {
+                const active = !!localFilters[key];
+                return (
+                  <button
+                    key={key}
+                    onClick={() => handleChange(key, !active)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
+                      active
+                        ? 'bg-[#B03E00] border-[#B03E00] text-white'
+                        : 'bg-[#3a3b3f] border-white/20 text-[#B03E00] hover:border-[#B03E00]'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -591,8 +571,18 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                     const lenMax = unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT;
                     const pctL = ((lengthRange[0] - lenMin) / (lenMax - lenMin)) * 100;
                     const pctR = ((lengthRange[1] - lenMin) / (lenMax - lenMin)) * 100;
+                    const unit = unitPreference === 'meters' ? 'm' : 'ft';
                     return (
                       <div className="relative">
+                        {/* Bulles dynamiques au-dessus des thumbs (suivent la valeur) */}
+                        <div className="relative h-4 mb-1">
+                          <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pctL}%` }}>
+                            {lengthRange[0]}{unit}
+                          </span>
+                          <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pctR}%` }}>
+                            {lengthRange[1]}{unit}
+                          </span>
+                        </div>
                         {/* Track + tick marks container */}
                         <div className="relative h-6 flex items-center">
                           <div className="absolute w-full h-1 rounded-full" style={{
@@ -664,32 +654,23 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
                       </div>
                     );
                   })()}
-                  <div className="flex justify-between text-sm text-gray-400 mt-1">
-                    <span>{lengthRange[0]}{unitPreference === 'meters' ? 'm' : 'ft'}</span>
-                    <span className="text-[#B03E00] font-medium">
-                      {lengthRange[1]}{unitPreference === 'meters' ? 'm' : 'ft'}
-                    </span>
-                  </div>
                 </div>
 
                 {/* Toggle Unité - après le slider */}
                 <div className="flex gap-3">
-                  <button
-                    onClick={() => handleUnitChange('meters')}
-                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                      unitPreference === 'meters' ? 'text-[#B03E00]' : 'text-[#B03E00]'
-                    }`}
-                  >
-                    Meters
-                  </button>
-                  <button
-                    onClick={() => handleUnitChange('feet')}
-                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                      unitPreference === 'feet' ? 'text-[#B03E00]' : 'text-[#B03E00]'
-                    }`}
-                  >
-                    Feet
-                  </button>
+                  {['meters', 'feet'].map((u) => {
+                    const active = unitPreference === u;
+                    return (
+                      <button key={u} onClick={() => handleUnitChange(u)}
+                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition border ${
+                          active
+                            ? 'bg-[#B03E00] border-[#B03E00] text-white'
+                            : 'bg-[#3a3b3f] border-white/20 text-[#B03E00] hover:border-[#B03E00]'
+                        }`}>
+                        {u === 'meters' ? 'Meters' : 'Feet'}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -735,46 +716,24 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
             {/* Options as toggle buttons */}
             <div className="space-y-3">
-              <button
-                onClick={() => handleChange('petFriendly', !localFilters.petFriendly)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                  localFilters.petFriendly
-                    ? 'text-[#B03E00]'
-                    : 'text-[#B03E00]'
-                }`}
-              >
-                Pet Friendly
-              </button>
-              <button
-                onClick={() => handleChange('groupFriendly', !localFilters.groupFriendly)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                  localFilters.groupFriendly
-                    ? 'text-[#B03E00]'
-                    : 'text-[#B03E00]'
-                }`}
-              >
-                Group Friendly
-              </button>
-              <button
-                onClick={() => handleChange('waterToys', !localFilters.waterToys)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                  localFilters.waterToys
-                    ? 'text-[#B03E00]'
-                    : 'text-[#B03E00]'
-                }`}
-              >
-                Water Toys
-              </button>
-              <button
-                onClick={() => handleChange('couplesFriendly', !localFilters.couplesFriendly)}
-                className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition bg-[#3a3b3f] border border-white/20 ${
-                  localFilters.couplesFriendly
-                    ? 'text-[#B03E00]'
-                    : 'text-[#B03E00]'
-                }`}
-              >
-                Couples Friendly
-              </button>
+              {[
+                { key: 'petFriendly',     label: 'Pet Friendly' },
+                { key: 'groupFriendly',   label: 'Group Friendly' },
+                { key: 'waterToys',       label: 'Water Toys' },
+                { key: 'couplesFriendly', label: 'Couples Friendly' },
+              ].map(({ key, label }) => {
+                const active = !!localFilters[key];
+                return (
+                  <button key={key} onClick={() => handleChange(key, !active)}
+                    className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition border ${
+                      active
+                        ? 'bg-[#B03E00] border-[#B03E00] text-white'
+                        : 'bg-[#3a3b3f] border-white/20 text-[#B03E00] hover:border-[#B03E00]'
+                    }`}>
+                    {label}
+                  </button>
+                );
+              })}
             </div>
 
             {activeCount > 0 && (
