@@ -151,13 +151,68 @@ function useScrollLit(delayMs = 0, replay = false) {
   return [ref, lit, setLit];
 }
 
+// Tracker global de la direction de scroll (singleton côté client).
+// Lu par useScrollOscillate au moment où chaque carte entre dans le viewport.
+let __scrollDir = 'down';
+let __lastScrollY = 0;
+if (typeof window !== 'undefined') {
+  __lastScrollY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y === __lastScrollY) return;
+    __scrollDir = y > __lastScrollY ? 'down' : 'up';
+    __lastScrollY = y;
+  }, { passive: true });
+}
+
+// Hook : oscille `lit` entre true/false tant que l'élément est en viewport.
+// - scroll vers le BAS : délai séquentiel = index * sequentialStepMs (ordre)
+// - scroll vers le HAUT : délai random (0-randomMaxMs) pour effet aléatoire
+// Puis toggle filtrée ↔ originale toutes les `intervalMs` ms.
+function useScrollOscillate({ index = 0, sequentialStepMs = 200, randomMaxMs = 1200, intervalMs = 6000 } = {}) {
+  const ref = useRef(null);
+  const [lit, setLit] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const el = ref.current;
+    let inView = false;
+    let startTimer = null;
+    let interval = null;
+    const stop = () => {
+      clearTimeout(startTimer);
+      clearInterval(interval);
+      startTimer = null;
+      interval = null;
+    };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !inView) {
+          inView = true;
+          const delay = __scrollDir === 'down'
+            ? index * sequentialStepMs
+            : Math.floor(Math.random() * randomMaxMs);
+          startTimer = setTimeout(() => {
+            setLit(true);
+            interval = setInterval(() => setLit((v) => !v), intervalMs);
+          }, delay);
+        } else if (!entry.isIntersecting && inView) {
+          inView = false;
+          stop();
+          setLit(false);
+        }
+      });
+    }, { threshold: 0.25 });
+    io.observe(el);
+    return () => { stop(); io.disconnect(); };
+  }, [index, sequentialStepMs, randomMaxMs, intervalMs]);
+  return [ref, lit, setLit];
+}
+
 // ── Carte rectangulaire ────────────────────────────────────────────────────────
-// Au scroll : cascade aléatoire harmonieuse (delay 0-1200ms) qui bascule sur
-// l'image originale colorée. Se rejoue à chaque passage (re-trigger).
-function DestCard({ name, image, imageOld, href }) {
-  // Délai aléatoire stable pour effet cascade (0 à 1200ms)
-  const delay = useRef(Math.floor(Math.random() * 1200)).current;
-  const [ref, lit, setLit] = useScrollLit(delay, true);
+// En vue : cascade en ordre au scroll bas, aléatoire au scroll haut, puis
+// oscillation perpétuelle filtrée ↔ originale toutes les 6s (transitions 3s).
+function DestCard({ name, image, imageOld, href, index = 0 }) {
+  const [ref, lit, setLit] = useScrollOscillate({ index, sequentialStepMs: 250, randomMaxMs: 1200, intervalMs: 6000 });
   function handleClick(e) {
     e.preventDefault(); setLit(true);
     setTimeout(() => { window.location.href = href; }, 800);
@@ -167,18 +222,18 @@ function DestCard({ name, image, imageOld, href }) {
       onMouseEnter={() => setLit(true)}
       onTouchStart={() => setLit(true)}
       className="relative overflow-hidden block cursor-pointer h-[220px] md:h-[280px]">
-      {/* Nouvelle image (repos) */}
+      {/* Nouvelle image (filtrée) */}
       <Image src={image} alt={name} fill
-        className={`object-cover transition-opacity duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-0' : 'opacity-100'}`} />
-      {/* Ancienne image colorée (originale, finale) */}
+        className={`object-cover transition-opacity duration-[3000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-0' : 'opacity-100'}`} />
+      {/* Ancienne image colorée (originale) */}
       {imageOld && (
         <Image src={imageOld} alt={name} fill
-          className={`object-cover transition-opacity duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100' : 'opacity-0'}`} />
+          className={`object-cover transition-opacity duration-[3000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100' : 'opacity-0'}`} />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-      <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-[2000ms] ${lit ? 'opacity-100' : 'opacity-0'}`} />
+      <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-[3000ms] ${lit ? 'opacity-100' : 'opacity-0'}`} />
       <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5">
-        <h3 className={`trajan-regular text-xs md:text-sm uppercase tracking-[0.15em] transition-colors duration-[2000ms] ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
+        <h3 className={`trajan-regular text-xs md:text-sm uppercase tracking-[0.15em] transition-colors duration-[3000ms] ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
           {name}
         </h3>
       </div>
@@ -426,14 +481,14 @@ export default function CaribbeanV15Page() {
             <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
             {/* Ligne 1 : 2 col mobile / 4 col desktop */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
-              {caribbeanIslands.slice(0, 4).map((island, i) => <DestCard key={i} {...island} />)}
+              {caribbeanIslands.slice(0, 4).map((island, i) => <DestCard key={i} index={i} {...island} />)}
             </div>
             {/* Ligne 2 : mobile 2+1 centré / desktop 3 centré */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
-              {caribbeanIslands.slice(4, 6).map((island, i) => <DestCard key={i} {...island} />)}
+              {caribbeanIslands.slice(4, 6).map((island, i) => <DestCard key={i} index={4 + i} {...island} />)}
               {/* Dernier centré sur mobile (span 2) et desktop (col-start-2) */}
               <div className="col-span-2 md:col-span-1 md:col-start-auto">
-                <DestCard {...caribbeanIslands[6]} />
+                <DestCard index={6} {...caribbeanIslands[6]} />
               </div>
             </div>
           </div>
