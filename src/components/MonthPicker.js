@@ -61,7 +61,7 @@ export default function MonthPicker({ value = '', onChange, placeholder = 'Selec
               className="w-7 h-7 rounded-full border border-[#C0C0C0] text-[#acb0cd] hover:text-[#B03E00] hover:border-[#B03E00] flex items-center justify-center transition-colors">
               <ChevronLeft className="w-3.5 h-3.5" />
             </button>
-            <span className="text-[#C0C0C0] font-bold text-base">{year}</span>
+            <span className="text-[#acb0cd] font-bold text-base">{year}</span>
             <button type="button" onClick={() => setYear((y) => y + 1)}
               className="w-7 h-7 rounded-full border border-[#C0C0C0] text-[#acb0cd] hover:text-[#B03E00] hover:border-[#B03E00] flex items-center justify-center transition-colors">
               <ChevronRight className="w-3.5 h-3.5" />
