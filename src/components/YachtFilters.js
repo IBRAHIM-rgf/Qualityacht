@@ -242,28 +242,11 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
             </div>
           )}
 
-          {/* Date Picker (mois uniquement) */}
+          {/* Date Picker (MonthPicker custom, mois uniquement) */}
           <div className="flex items-center gap-2">
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="month"
-                value={(localFilters.startDate || '').slice(0, 7)}
-                onChange={e => handleChange('startDate', e.target.value)}
-                placeholder="yyyy-mm"
-                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
-                lang="en-US"
-              />
-            </div>
+            <div className="w-40"><MonthPicker value={(localFilters.startDate || '').slice(0, 7)} onChange={(v) => handleChange('startDate', v)} placeholder="From" /></div>
             <span className="text-gray-400">-</span>
-            <input
-              type="month"
-              value={(localFilters.endDate || '').slice(0, 7)}
-              onChange={e => handleChange('endDate', e.target.value)}
-              placeholder="yyyy-mm"
-              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] focus:border-transparent [color-scheme:light]"
-              lang="en-US"
-            />
+            <div className="w-40"><MonthPicker value={(localFilters.endDate || '').slice(0, 7)} onChange={(v) => handleChange('endDate', v)} placeholder="To" /></div>
           </div>
 
           {/* Price Range - Select paliers + Currency */}

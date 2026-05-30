@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Filter, X, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
+import MonthPicker from '@/components/MonthPicker';
 
 const YACHT_TYPES = [
   { value: '', label: 'All Types' },
@@ -141,16 +142,11 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
             </select>
           </div>
 
-          {/* Dates */}
+          {/* Dates (MonthPicker custom) */}
           <div className="flex items-center gap-2">
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input type="date" value={localFilters.startDate || ''} onChange={e => handleChange('startDate', e.target.value)}
-                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] [color-scheme:light]" />
-            </div>
+            <div className="w-40"><MonthPicker value={(localFilters.startDate || '').slice(0, 7)} onChange={(v) => handleChange('startDate', v)} placeholder="From" /></div>
             <span className="text-gray-400">-</span>
-            <input type="date" value={localFilters.endDate || ''} onChange={e => handleChange('endDate', e.target.value)}
-              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478] [color-scheme:light]" />
+            <div className="w-40"><MonthPicker value={(localFilters.endDate || '').slice(0, 7)} onChange={(v) => handleChange('endDate', v)} placeholder="To" /></div>
           </div>
 
           {/* Prix */}

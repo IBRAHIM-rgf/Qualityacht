@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const MONTHS_FR = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /**
  * value : 'YYYY-MM' ou ''.
@@ -41,7 +41,7 @@ export default function MonthPicker({ value = '', onChange, placeholder = 'Selec
   }, [open]);
 
   const label = value
-    ? `${MONTHS_FR[selectedMonth].replace('.', '')} ${selectedYear}`
+    ? `${MONTHS_EN[selectedMonth]} ${selectedYear}`
     : placeholder;
 
   const isPast = (y, m) => y < currentY || (y === currentY && m < currentM);
@@ -68,9 +68,9 @@ export default function MonthPicker({ value = '', onChange, placeholder = 'Selec
             </button>
           </div>
 
-          {/* Grille mois 4x3 */}
-          <div className="grid grid-cols-4 gap-2 p-4">
-            {MONTHS_FR.map((m, i) => {
+          {/* Grille mois 4x3 avec lignes de séparation cococo */}
+          <div className="grid grid-cols-4 gap-px bg-[#C0C0C0]/25 p-px">
+            {MONTHS_EN.map((m, i) => {
               const past = isPast(year, i);
               const selected = selectedYear === year && selectedMonth === i;
               return (
@@ -80,12 +80,12 @@ export default function MonthPicker({ value = '', onChange, placeholder = 'Selec
                     onChange?.(`${year}-${mm}`);
                     setOpen(false);
                   }}
-                  className={`relative h-10 rounded-md text-sm font-medium transition-colors overflow-hidden ${
+                  className={`relative h-12 text-sm font-medium transition-colors overflow-hidden ${
                     selected
-                      ? 'bg-[#B03E00] text-white border border-[#B03E00]'
+                      ? 'bg-[#B03E00] text-white'
                       : past
-                        ? 'text-[#acb0cd]/40 hover:text-[#acb0cd]'
-                        : 'text-[#acb0cd] hover:text-[#B03E00] hover:bg-[#3a3b3f]'
+                        ? 'bg-[#2e2f32] text-[#acb0cd]/40 hover:text-[#acb0cd]'
+                        : 'bg-[#2e2f32] text-[#acb0cd] hover:text-[#B03E00] hover:bg-[#3a3b3f]'
                   }`}
                 >
                   {past && !selected && (

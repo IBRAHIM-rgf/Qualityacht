@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import YachtFiltersCaribbean from './YachtFiltersCaribbean';
 import YachtList from '@/components/YachtList';
 
@@ -19,6 +19,12 @@ function BurntLine() {
 // ── Page client ─────────────────────────────────────────────────────────────
 export default function GreaterAntillesClient({ initialData, totalYachts }) {
   const [showMore, setShowMore] = useState(false);
+  // Hero : transition de la version filtree (NB) vers l'originale colorée apres 2s.
+  const [heroLit, setHeroLit] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setHeroLit(true), 2000);
+    return () => clearTimeout(t);
+  }, []);
 
   const [filters, setFilters] = useState({
     type: '',
@@ -67,14 +73,20 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
-      {/* ══ HERO ══ */}
+      {/* ══ HERO (filtre NB au chargement, transition vers originale colorée à 2s) ══ */}
       <div className="relative h-[60vh] md:h-[75vh]">
         <Image
           src="/images/destinations/greater antillesNB.jpg"
           alt="Greater Antilles"
           fill
           priority
-          className="object-cover object-center"
+          className={`object-cover object-center transition-opacity duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-0' : 'opacity-100'}`}
+        />
+        <Image
+          src="/images/destinations/gretar antilles-original.jpg"
+          alt="Greater Antilles"
+          fill
+          className={`object-cover object-center transition-opacity duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-100' : 'opacity-0'}`}
         />
         <div
           className="absolute inset-0"
