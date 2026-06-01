@@ -409,18 +409,31 @@ export async function fetchVisibleYachts(filters = {}) {
         subRegion: subRegionMap.get(yacht.id) || null,
       }));
 
+    // 4b. OVERRIDES ADMIN : yachts visibles en BDD qu'Ankor n'a pas retourné
+    //     (souvent car leur ankor_region ≠ region admin). On les reconstruit depuis BDD
+    //     pour qu'ils apparaissent quand même sur /yachts.
+    const ankorIds = new Set(allYachts.map(y => y.id));
+    const overrides = selections
+      .filter(s => s.is_visible && !ankorIds.has(s.yacht_id))
+      .map(s => ({
+        ...yachtFromSelection(s),
+        isFeatured: featuredIds.has(s.yacht_id),
+        displayOrder: orderMap.get(s.yacht_id) ?? 999,
+        category: categoryMap.get(s.yacht_id) || null,
+      }));
+
+    const merged = [...filteredYachts, ...overrides];
+
     // 5. Trier : featured en premier, puis par ordre d'affichage
-    filteredYachts.sort((a, b) => {
-      // Featured en premier
+    merged.sort((a, b) => {
       if (a.isFeatured && !b.isFeatured) return -1;
       if (!a.isFeatured && b.isFeatured) return 1;
-      // Puis par ordre
       return (a.displayOrder || 999) - (b.displayOrder || 999);
     });
 
     return {
-      yachts: filteredYachts,
-      totalYachts: filteredYachts.length,
+      yachts: merged,
+      totalYachts: merged.length,
       originalTotal: totalYachts,
     };
   } catch (error) {
