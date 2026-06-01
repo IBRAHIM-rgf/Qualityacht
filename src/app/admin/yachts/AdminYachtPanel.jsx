@@ -359,7 +359,11 @@ function Step2Add({ searchResults, selectedIds, ankorPicks, setAnkorPicks, onBul
 // ============================================
 // Étape 3 — Vérifier/Assigner la région principale
 // ============================================
-function Step3AssignRegion({ selections, onUpdateRegion, onBulkImportRegion, importing }) {
+function Step3AssignRegion({ selections, onUpdateRegion, onBulkImportRegion, onApplyWhitelist, importing, applyingWhitelist }) {
+  const [whitelistText, setWhitelistText] = useState('');
+  const [whitelistRegion, setWhitelistRegion] = useState('caribbean');
+  const [whitelistResult, setWhitelistResult] = useState(null);
+
   const byRegion = useMemo(() => {
     const map = {};
     for (const s of selections) {
@@ -374,6 +378,26 @@ function Step3AssignRegion({ selections, onUpdateRegion, onBulkImportRegion, imp
     () => selections.filter(s => s.ankor_region && s.region && s.ankor_region !== s.region),
     [selections]
   );
+
+  const visibleByRegion = useMemo(() => {
+    const map = {};
+    for (const s of selections) {
+      const r = s.region;
+      if (!r) continue;
+      if (!map[r]) map[r] = { visible: 0, total: 0 };
+      map[r].total++;
+      if (s.is_visible !== false) map[r].visible++;
+    }
+    return map;
+  }, [selections]);
+
+  const handleApply = async () => {
+    const names = whitelistText.split('\n').map(s => s.trim()).filter(Boolean);
+    if (names.length === 0) return;
+    if (!confirm(`Appliquer la whitelist : ${names.length} yachts visibles, le reste de la région "${whitelistRegion}" sera MASQUÉ. Continuer ?`)) return;
+    const result = await onApplyWhitelist(whitelistRegion, names);
+    setWhitelistResult(result);
+  };
 
   return (
     <div className="space-y-4">
@@ -409,6 +433,89 @@ function Step3AssignRegion({ selections, onUpdateRegion, onBulkImportRegion, imp
                 Ces yachts ont une région assignée différente de ce qu'Ankor renvoie. Vérifiez à l'étape suivante.
               </p>
             </div>
+          </div>
+        )}
+      </div>
+
+      {/* ──── Whitelist : ne publier que la liste validée ──── */}
+      <div className="bg-[#2a2a30] rounded-xl p-4 border border-copper-700/40">
+        <h3 className="text-[#C0C0C0] font-medium mb-1 flex items-center gap-2">
+          <Check className="w-5 h-5 text-copper-400" />
+          Liste validée (whitelist) — seuls ces yachts seront publiés
+        </h3>
+        <p className="text-sm text-gray-400 mb-3">
+          Colle ici la liste des yachts (1 par ligne) à <strong className="text-copper-300">PUBLIER</strong> dans la région choisie.
+          Tous les autres yachts de cette région seront <strong className="text-amber-300">MASQUÉS</strong> (is_visible=false).
+          Ils restent en BDD mais n'apparaissent ni sur /yachts ni sur /charters/destinations/...
+        </p>
+
+        <div className="flex flex-wrap gap-2 mb-3">
+          {Object.entries(visibleByRegion).map(([r, stats]) => (
+            <span key={r} className="px-2 py-1 text-xs rounded-lg bg-[#303135] text-gray-400 border border-gray-700">
+              {r} : <span className="text-green-400 font-bold">{stats.visible}</span> visibles / {stats.total} total
+            </span>
+          ))}
+        </div>
+
+        <div className="flex gap-3 mb-3 flex-wrap">
+          <select
+            value={whitelistRegion}
+            onChange={(e) => setWhitelistRegion(e.target.value)}
+            className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-lg text-[#C0C0C0] text-sm"
+          >
+            <option value="caribbean">Caraïbes</option>
+            <option value="bahamas">Bahamas</option>
+            <option value="west-mediterranean">Méditerranée Ouest</option>
+            <option value="east-mediterranean">Méditerranée Est</option>
+            <option value="indian-ocean">Océan Indien</option>
+            <option value="pacific-ocean">Océan Pacifique</option>
+          </select>
+          <button
+            onClick={handleApply}
+            disabled={applyingWhitelist || !whitelistText.trim()}
+            className="px-4 py-2 text-sm rounded-lg border border-copper-500 bg-copper-500/20 text-copper-300 hover:bg-copper-500/30 disabled:opacity-50 flex items-center gap-2"
+          >
+            {applyingWhitelist ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+            Appliquer la whitelist
+          </button>
+        </div>
+
+        <textarea
+          value={whitelistText}
+          onChange={(e) => setWhitelistText(e.target.value)}
+          rows={10}
+          placeholder={"Un nom par ligne, ex :\nCORAL OCEAN\nOKINAWA\nAPOLLO 99\n..."}
+          className="w-full px-3 py-2 bg-[#303135] border border-gray-700 rounded-lg text-[#C0C0C0] text-sm font-mono resize-vertical"
+        />
+
+        {whitelistResult && (
+          <div className="mt-3 rounded-lg border border-gray-700 bg-[#303135] p-3 text-xs space-y-1">
+            <p className="text-[#C0C0C0]">
+              <Check className="inline w-3 h-3 text-green-400 mr-1" />
+              Whitelist appliquée à <strong>{whitelistResult.region}</strong> :
+              <span className="text-green-400 ml-2">{whitelistResult.shown} visibles</span> ·
+              <span className="text-amber-300 ml-2">{whitelistResult.hidden} masqués</span> sur {whitelistResult.total_in_region} en BDD
+            </p>
+            {whitelistResult.shown_changed > 0 && (
+              <p className="text-gray-400">→ {whitelistResult.shown_changed} yacht(s) rendus visibles à l'instant</p>
+            )}
+            {whitelistResult.hidden_changed > 0 && (
+              <p className="text-gray-400">→ {whitelistResult.hidden_changed} yacht(s) masqués à l'instant</p>
+            )}
+            {whitelistResult.not_found?.length > 0 && (
+              <div>
+                <p className="text-amber-300">⚠️ {whitelistResult.not_found.length} nom(s) introuvables en BDD :</p>
+                <p className="text-amber-200/70 ml-3">{whitelistResult.not_found.join(', ')}</p>
+              </div>
+            )}
+            {whitelistResult.ambiguous?.length > 0 && (
+              <div>
+                <p className="text-amber-300">⚠️ {whitelistResult.ambiguous.length} nom(s) ambigus (plusieurs matches, tous rendus visibles) :</p>
+                {whitelistResult.ambiguous.map((a, i) => (
+                  <p key={i} className="text-amber-200/70 ml-3">"{a.name}" → {a.candidates.join(', ')}</p>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -983,6 +1090,34 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
     setImporting(false);
   };
 
+  const [applyingWhitelist, setApplyingWhitelist] = useState(false);
+  const handleApplyWhitelist = async (region, names) => {
+    setApplyingWhitelist(true);
+    try {
+      const res = await fetch(`/api/admin/yachts/apply-whitelist?token=${token}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ region, names }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Recharger les sélections pour refléter is_visible
+        const sel = await fetch(`/api/admin/yachts?token=${token}`).then(r => r.json());
+        setSelections(sel.selections || []);
+        setStats(sel.stats || stats);
+        setApplyingWhitelist(false);
+        return data;
+      }
+      alert(`Erreur whitelist : ${data.error || 'inconnue'}`);
+      setApplyingWhitelist(false);
+      return data;
+    } catch (err) {
+      console.error('Erreur whitelist:', err);
+      setApplyingWhitelist(false);
+      return { error: err.message };
+    }
+  };
+
   const handleUpdateRegion = async (yacht_id, region) => {
     try {
       await fetch(`/api/admin/yachts?token=${token}`, {
@@ -1094,6 +1229,8 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
             selections={selections}
             onUpdateRegion={handleUpdateRegion}
             onBulkImportRegion={handleBulkImportRegion}
+            onApplyWhitelist={handleApplyWhitelist}
+            applyingWhitelist={applyingWhitelist}
             importing={importing}
           />
         )}
