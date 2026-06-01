@@ -333,9 +333,9 @@ function IslandGroup({ group, defaultOpen }) {
         <span className={`text-[#c2622a] transition-transform duration-300 text-2xl leading-none ${open ? 'rotate-180' : ''}`}>▾</span>
       </button>
       {open && (
-        <div className="pb-5 flex flex-wrap justify-center gap-x-5 gap-y-2 px-1">
+        <div className="pb-5 flex flex-wrap justify-center gap-2 px-1">
           {group.islands.map((island, i) => (
-            <span key={i} className="text-[#acb0cd]/70 text-sm flex items-center gap-2">
+            <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#C0C0C0]/40 bg-[#26272a] text-[#acb0cd] text-xs">
               <span className="text-[#c2622a] text-[8px]">›</span>
               {island}
             </span>
