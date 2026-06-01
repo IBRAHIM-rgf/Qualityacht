@@ -7,12 +7,12 @@ import { useEffect, useRef, useState } from 'react';
 // image = nouvelle (repos) ; imageOld = ancienne colorée (apparaît au survol)
 const caribbeanIslands = [
   { name: 'Greater Antilles',   image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/carabbean/greater-antilles-v11' },
-  { name: 'Leeward Islands',    image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/yachts?destination=leeward-islands' },
-  { name: 'Leeward Antilles',   image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/yachts?destination=leeward-antilles' },
-  { name: 'Windward Islands',   image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/yachts?destination=windward-islands' },
-  { name: 'Turks & Caicos',     image: '/images/pagesCaraibes/turks_caicos.png',      imageOld: '/images/destinations/Turks and Caicos-original.jpg',    href: '/yachts?destination=turks-caicos' },
-  { name: 'Trinidad & Tobago',  image: '/images/pagesCaraibes/unnamed.jpg',           imageOld: '/images/destinations/Trinidad and Tobago-original.jpg', href: '/yachts?destination=trinidad-tobago' },
-  { name: 'Grand Cayman',       image: '/images/pagesCaraibes/grand_cayman.png',      imageOld: '/images/destinations/Cayman Islands-original.jpg',      href: '/yachts?destination=grand-cayman' },
+  { name: 'Leeward Islands',    image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/charters/destinations/carabbean/leeward-islands-v11' },
+  { name: 'Leeward Antilles',   image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/charters/destinations/carabbean/leeward-antilles-v11' },
+  { name: 'Windward Islands',   image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/charters/destinations/carabbean/windward-islands-v11' },
+  { name: 'Turks & Caicos',     image: '/images/pagesCaraibes/turks_caicos.png',      imageOld: '/images/destinations/Turks and Caicos-original.jpg',    href: '/charters/destinations/carabbean/turks-caicos-v11' },
+  { name: 'Trinidad & Tobago',  image: '/images/pagesCaraibes/unnamed.jpg',           imageOld: '/images/destinations/Trinidad and Tobago-original.jpg', href: '/charters/destinations/carabbean/trinidad-tobago-v11' },
+  { name: 'Grand Cayman',       image: '/images/pagesCaraibes/grand_cayman.png',      imageOld: '/images/destinations/Cayman Islands-original.jpg',      href: '/charters/destinations/carabbean/grand-cayman-v11' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────
@@ -429,8 +429,8 @@ export default function CaribbeanV15Page() {
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
         {/* ══ HERO ══ */}
-        <div className="relative h-screen">
-          <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" style={{ transform: 'scaleY(1.25)', transformOrigin: 'center' }} />
+        <div className="relative h-screen bg-[#26272a]">
+          <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-contain object-center" />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
           <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
             <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
