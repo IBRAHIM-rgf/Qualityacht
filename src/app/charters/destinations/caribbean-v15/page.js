@@ -429,26 +429,25 @@ export default function CaribbeanV15Page() {
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
         {/* ══ HERO ══ */}
-        {/* Image yatch2.jpeg = 1200x900 (ratio 4:3 = 1.33 landscape).
-            Pour ne plus couper les côtés, il faut un container ratio >= 1.33 :
-            - Mobile (~375w) : hauteur max ~280px → h-[35vh] ≈ 230-260px (un peu plus serré pour garder du wow)
-            - Desktop (1920w) : déjà très landscape avec h-[75vh] (810px), ratio container 2.37 > 1.33 → coupe verticalement (haut/bas) pas les côtés.
-        */}
-        <div className="relative h-[40vh] md:h-[75vh]">
-          {/* Mobile : object-[center_25%] décale le cadrage vers le bas pour montrer + du haut de l'image.
-              Desktop md+ : object-center (centré classique). */}
-          <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-top md:object-center" />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
-          <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
-            <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
-              <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
-                The Caribbean
-              </h1>
-              <BurntLine />
-              <p className="text-[#acb0cd] text-sm md:text-xl uppercase tracking-[0.15em] md:tracking-[0.25em] font-light text-center">
-                The Ultimate Luxury Yachting Destination
-              </p>
-            </div>
+        {/* pt-[70px] (mobile) = hauteur exacte de la navbar fixe → l'image commence juste sous la navbar.
+            Mobile : aspect-[6/5] (ratio 1.20) → image visible haut-en-bas (perte ~10% latérale acceptée).
+            Desktop : pt-0 + h-[75vh] (la navbar gère son propre espace). */}
+        <div className="pt-[70px] md:pt-0">
+          <div className="relative aspect-[6/5] md:aspect-auto md:h-[75vh]">
+            <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
+          </div>
+        </div>
+
+        {/* ══ TITRE (sous le hero, avant la description) ══ */}
+        <div className="bg-[#26272a] px-4 py-10 md:py-16 flex flex-col items-center">
+          <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
+            <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
+              The Caribbean
+            </h1>
+            <BurntLine />
+            <p className="text-[#acb0cd] text-sm md:text-xl uppercase tracking-[0.15em] md:tracking-[0.25em] font-light text-center">
+              The Ultimate Luxury Yachting Destination
+            </p>
           </div>
         </div>
 
