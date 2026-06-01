@@ -212,7 +212,7 @@ function useScrollOscillate({ index = 0, sequentialStepMs = 200, randomMaxMs = 1
 // En vue : cascade en ordre au scroll bas, aléatoire au scroll haut, puis
 // oscillation perpétuelle filtrée ↔ originale toutes les 6s (transitions 3s).
 function DestCard({ name, image, imageOld, href, index = 0 }) {
-  const [ref, lit, setLit] = useScrollOscillate({ index, sequentialStepMs: 250, randomMaxMs: 1200, intervalMs: 6000 });
+  const [ref, lit, setLit] = useScrollOscillate({ index, sequentialStepMs: 400, randomMaxMs: 2000, intervalMs: 8000 });
   function handleClick(e) {
     e.preventDefault(); setLit(true);
     setTimeout(() => { window.location.href = href; }, 800);
@@ -222,13 +222,20 @@ function DestCard({ name, image, imageOld, href, index = 0 }) {
       onMouseEnter={() => setLit(true)}
       onTouchStart={() => setLit(true)}
       className="relative overflow-hidden block cursor-pointer h-[220px] md:h-[280px]">
+      {/* Fondu enchaîné via le flou : la nouvelle image commence à apparaître quand
+          l'ancienne est mi-floue (pas d'écran noir intermédiaire).
+          - Disparition : 2.5s, delay 0
+          - Apparition  : 2.5s, delay 1.2s (overlap dans la zone blur)
+          → ~3,7s total */}
       {/* Nouvelle image (filtrée) */}
       <Image src={image} alt={name} fill
-        className={`object-cover transition-all duration-[3000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`} />
+        className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
+        style={{ transitionProperty: 'opacity, filter', transitionDuration: '2500ms', transitionDelay: lit ? '0ms' : '1200ms' }} />
       {/* Ancienne image colorée (originale) */}
       {imageOld && (
         <Image src={imageOld} alt={name} fill
-          className={`object-cover transition-all duration-[3000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`} />
+          className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
+          style={{ transitionProperty: 'opacity, filter', transitionDuration: '2500ms', transitionDelay: lit ? '1200ms' : '0ms' }} />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
       <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-[3000ms] ${lit ? 'opacity-100' : 'opacity-0'}`} />
