@@ -680,9 +680,9 @@ export default function RequestQuoteWizard() {
           {/* ══ ÉTAPE 2 — CONTACT INFORMATION ══ */}
           <section className="w-full shrink-0 px-1">
             <div className="max-w-4xl mx-auto space-y-6">
-              {/* Note d'introduction (verte) */}
-              <p className="text-sm italic leading-relaxed text-[#7cb88a]">
-                A yacht is the ultimate personal preference. It is about what you want: where to go, which yacht to choose, what to do – there are so many possibilities. Whatever you have in mind, we will make it happen. Contact us to discuss your requirements.
+              {/* Note d'introduction (bleu lavande) */}
+              <p className="text-sm italic leading-relaxed text-[#acb0cd]">
+                A yacht is the pinnacle of personalization—your desires, your destinations, your legacy. Share your vision, and we will craft an experience beyond imagination.
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Field label="Company"><input value={contact.company} onChange={e => setContact({ ...contact, company: e.target.value })} placeholder="Company" className={inputClass} /></Field>
