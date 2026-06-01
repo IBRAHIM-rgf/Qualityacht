@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // ── Données jets privés Caribbean ─────────────────────────────────────────────
 const caribbeanJetGroups = [
@@ -39,9 +39,8 @@ const caribbeanJetGroups = [
   { island: 'Sombrero Island', airports: ['Pas d\'aéroport'] },
 ];
 
-// ── Destinations ───────────────────────────────────────────────────────────────
+// ── Destinations (ordre identique à /charters/destinations : Caraïbes en avant-dernier) ───
 const destinations = [
-  { name: 'Caribbean',           image: '/images/destinations/animals/caraibes.jpg',               groups: caribbeanJetGroups },
   { name: 'Arctic',              image: '/images/destinations/animals/Arctic.png',                  groups: [{ island: 'Coming Soon', airports: ['Information coming soon'] }] },
   { name: 'Bahamas',             image: '/images/destinations/animals/Bahamas.jpg',                 groups: [{ island: 'Coming Soon', airports: ['Information coming soon'] }] },
   { name: 'Central America',     image: '/images/destinations/animals/Central-America.jpg',         groups: [{ island: 'Coming Soon', airports: ['Information coming soon'] }] },
@@ -56,6 +55,7 @@ const destinations = [
   { name: 'Western Mediterranean', image: '/images/destinations/animals/Western-Mediterranean.webp', groups: [{ island: 'Coming Soon', airports: ['Information coming soon'] }] },
   { name: 'Africa',              image: '/images/destinations/animals/africa.jpeg',                 groups: [{ island: 'Coming Soon', airports: ['Information coming soon'] }] },
   { name: 'Northern Europe',     image: '/images/destinations/animals/articbynortherneurope.jpg',   groups: [{ island: 'Coming Soon', airports: ['Information coming soon'] }] },
+  { name: 'Caribbean',           image: '/images/destinations/animals/caraibes.jpg',               groups: caribbeanJetGroups },
   { name: 'Oceania',             image: '/images/destinations/animals/oceania.jpeg',                groups: [{ island: 'Coming Soon', airports: ['Information coming soon'] }] },
 ];
 
@@ -117,21 +117,41 @@ function JetModal({ dest, onClose }) {
 // ── Page ───────────────────────────────────────────────────────────────────────
 export default function PrivatJetPage() {
   const [selected, setSelected] = useState(null);
+  const heroRef = useRef(null);
+
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => { el.classList.add('revealed'); });
+  }, []);
 
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
+      <style>{`
+        .reveal-up { opacity: 0; transform: translateY(40px); transition: opacity 1.6s ease, transform 1.6s ease; }
+        .reveal-up.revealed { opacity: 1; transform: translateY(0); }
+      `}</style>
 
       {/* ══ HERO ══ */}
-      <div className="relative h-[60vh] md:h-[75vh]">
+      {/* Image jet_hero.jpeg = 927x1648 (portrait).
+          On utilise w-full h-auto (l'image suit son ratio naturel) pour qu'elle soit visible
+          en entier sur mobile ET desktop, comme demandé. La hauteur s'adapte automatiquement
+          à la largeur. Titre déplacé sous la photo (plus en overlay) avec animation reveal-up. */}
+      <div className="pt-[70px] md:pt-0">
         <Image
           src="/images/private_jet/jet_hero.jpeg"
           alt="Private Jet"
-          fill
+          width={927}
+          height={1648}
           priority
-          className="object-cover object-center"
+          sizes="100vw"
+          className="w-full h-auto block"
         />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.5) 20%, transparent 38%, transparent 52%, rgba(38,39,42,0.5) 78%, #26272a 100%)' }} />
-        <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
+      </div>
+
+      {/* ══ TITRE (sous le hero, anim reveal-up venant du bas) ══ */}
+      <div className="bg-[#26272a] px-4 py-10 md:py-16 flex flex-col items-center">
+        <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
           <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
             Private Jets
           </h1>
