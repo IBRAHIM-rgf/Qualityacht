@@ -301,6 +301,13 @@ export default function YachtFiltersRegion({
               </div>
             )}
             <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Charter Dates</label>
+              <div className="grid grid-cols-2 gap-2">
+                <MonthPicker value={(localFilters.startDate || '').slice(0, 7)} onChange={(v) => handleChange('startDate', v)} placeholder="From" />
+                <MonthPicker value={(localFilters.endDate || '').slice(0, 7)} onChange={(v) => handleChange('endDate', v)} placeholder="To" />
+              </div>
+            </div>
+            <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Price</label>
               <div className="flex gap-2">
                 <select value={selectedPriceTier} onChange={e => handlePriceTierChange(Number(e.target.value))}

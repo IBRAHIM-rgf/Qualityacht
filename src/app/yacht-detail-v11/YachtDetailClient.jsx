@@ -69,7 +69,7 @@ function SpecRow({ icon: Icon, label, value }) {
 
 function Badge({ children }) {
   return (
-    <span className="inline-block px-3 py-1.5 rounded-full border border-[#C0C0C0]/40 bg-[#3a3b3f] text-[#acb0cd] text-xs">
+    <span className="inline-block px-3 py-1.5 rounded-full border border-[#C0C0C0]/40 bg-[#26272a] text-[#acb0cd] text-xs">
       {children}
     </span>
   );

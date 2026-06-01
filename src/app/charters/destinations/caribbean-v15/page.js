@@ -224,11 +224,11 @@ function DestCard({ name, image, imageOld, href, index = 0 }) {
       className="relative overflow-hidden block cursor-pointer h-[220px] md:h-[280px]">
       {/* Nouvelle image (filtrée) */}
       <Image src={image} alt={name} fill
-        className={`object-cover transition-opacity duration-[3000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-0' : 'opacity-100'}`} />
+        className={`object-cover transition-all duration-[3000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`} />
       {/* Ancienne image colorée (originale) */}
       {imageOld && (
         <Image src={imageOld} alt={name} fill
-          className={`object-cover transition-opacity duration-[3000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100' : 'opacity-0'}`} />
+          className={`object-cover transition-all duration-[3000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`} />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
       <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-[3000ms] ${lit ? 'opacity-100' : 'opacity-0'}`} />
@@ -250,7 +250,7 @@ function StBarthBandeau({ children }) {
         src="/images/destinations/Caraibes_charters.png"
         alt=""
         fill
-        className={`object-cover transition-[filter] duration-[1500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'brightness-100' : 'brightness-50'}`}
+        className={`object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'brightness-100 blur-0' : 'brightness-50 blur-md'}`}
       />
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 30%, transparent 55%, #26272a 100%)' }} />
       {children}
@@ -266,12 +266,12 @@ function BandeauPhoto({ src, srcOld, position = 'center' }) {
     <div ref={ref} className="relative h-[45vh] md:h-[70vh] overflow-hidden">
       {/* Nouvelle image (filtrée, état initial) */}
       <Image src={src} alt="" fill
-        className={`object-cover transition-opacity duration-[1500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit && srcOld ? 'opacity-0' : 'opacity-100'}`}
+        className={`object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit && srcOld ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
         style={{ objectPosition: position }} />
       {/* Ancienne image (originale, finale) */}
       {srcOld && (
         <Image src={srcOld} alt="" fill
-          className={`object-cover transition-opacity duration-[1500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100' : 'opacity-0'}`}
+          className={`object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
           style={{ objectPosition: position }} />
       )}
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
