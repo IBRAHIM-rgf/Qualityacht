@@ -269,15 +269,17 @@ function BandeauPhoto({ src, srcOld, position = 'center' }) {
   const [ref, lit] = useScrollLit(200);
   return (
     <div ref={ref} className="relative h-[45vh] md:h-[70vh] overflow-hidden">
-      {/* Nouvelle image (filtrée, état initial) */}
+      {/* Fondu enchaîné asymétrique :
+          - Sortante (filtrée) : 3s, delay 0
+          - Entrante (originale) : 2.5s, delay 1.2s (apparait quand la 1ère est mi-floue) */}
       <Image src={src} alt="" fill
-        className={`object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit && srcOld ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
-        style={{ objectPosition: position }} />
+        className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${lit && srcOld ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
+        style={{ objectPosition: position, transitionProperty: 'opacity, filter', transitionDuration: lit && srcOld ? '3000ms' : '2500ms', transitionDelay: lit && srcOld ? '0ms' : '1200ms' }} />
       {/* Ancienne image (originale, finale) */}
       {srcOld && (
         <Image src={srcOld} alt="" fill
-          className={`object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
-          style={{ objectPosition: position }} />
+          className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
+          style={{ objectPosition: position, transitionProperty: 'opacity, filter', transitionDuration: lit ? '2500ms' : '3000ms', transitionDelay: lit ? '1200ms' : '0ms' }} />
       )}
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
     </div>

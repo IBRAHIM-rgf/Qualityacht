@@ -431,6 +431,55 @@ export async function fetchVisibleYachts(filters = {}) {
 }
 
 /**
+ * Helper : reconstruit un yacht-like (compatible YachtList/YachtCard) depuis une row selection BDD.
+ * Utilisé pour les overrides admin (yacht tagué region=caribbean alors qu'Ankor le classe ailleurs).
+ */
+function yachtFromSelection(s) {
+  const parse = (raw) => {
+    if (!raw) return {};
+    if (typeof raw === 'string') {
+      try { return JSON.parse(raw); } catch { return {}; }
+    }
+    return raw;
+  };
+  const light = parse(s.light_data);
+  const cached = parse(s.cached_data);
+  const full = parse(s.full_data);
+  const bp = full?.blueprint || {};
+
+  // Images : full_data > cached_data > light.hero_image
+  const images = (bp.images && bp.images.length > 0)
+    ? bp.images
+    : (cached.images && cached.images.length > 0)
+      ? cached.images
+      : (light.hero_image ? [light.hero_image] : []);
+
+  return {
+    id: s.yacht_id,
+    name: s.yacht_name || light.name || cached.name || bp.name,
+    description: light.description || cached.description || full.description,
+    length: light.length || cached.length || (bp.length ? `${bp.length}m` : null),
+    guests: light.guests || cached.guests || cached.capacity || bp.sleeps,
+    capacity: light.guests || cached.capacity || bp.sleeps,
+    cabins: light.cabins || cached.cabins || bp.cabins,
+    crew: light.crew || cached.crew || bp.maxCrew,
+    year: light.year || cached.year || bp.builtYear,
+    refit: cached.refit || bp.refitYear,
+    type: light.type || cached.type || (Array.isArray(full.yachtType) ? full.yachtType[0]?.toLowerCase() : full.yachtType?.toLowerCase()),
+    location: light.location || cached.location || bp.basePort?.name,
+    price: light.price || cached.price,
+    pricePerHour: cached.pricePerHour || light.price,
+    make: light.make || cached.make || bp.make,
+    images,
+    region: s.region || null,
+    subRegion: s.sub_region || null,
+    pets_allowed: s.pets_allowed,
+    groups_allowed: s.groups_allowed,
+    water_toys: s.water_toys,
+  };
+}
+
+/**
  * Récupère les yachts visibles d'une sous-région donnée
  * Fallback : si la BDD ne contient aucune sélection, retourne tous les yachts de la région
  * (cohérent avec le comportement de fetchVisibleYachts).
@@ -474,15 +523,29 @@ export async function fetchVisibleYachtsForSubRegion(region, subRegion) {
         subRegion,
       }));
 
-    filteredYachts.sort((a, b) => {
+    // Overrides admin : yachts BDD matchant la sous-région mais qu'Ankor ne renvoie pas pour cette région.
+    const ankorIds = new Set(allYachts.map(y => y.id));
+    const overrides = matchingSelections
+      .filter(s => !ankorIds.has(s.yacht_id))
+      .map(s => ({
+        ...yachtFromSelection(s),
+        isFeatured: featuredIds.has(s.yacht_id),
+        displayOrder: orderMap.get(s.yacht_id) ?? 999,
+        region,
+        subRegion,
+      }));
+
+    const merged = [...filteredYachts, ...overrides];
+
+    merged.sort((a, b) => {
       if (a.isFeatured && !b.isFeatured) return -1;
       if (!a.isFeatured && b.isFeatured) return 1;
       return (a.displayOrder || 999) - (b.displayOrder || 999);
     });
 
     return {
-      yachts: filteredYachts,
-      totalYachts: filteredYachts.length,
+      yachts: merged,
+      totalYachts: merged.length,
       filters,
     };
   } catch (error) {
@@ -518,7 +581,7 @@ export async function fetchVisibleYachtsForDestination(destination) {
       selections.map(s => [s.yacht_id, s.display_order])
     );
 
-    // 4. Filtrer et enrichir
+    // 4. Filtrer et enrichir les yachts Ankor de la destination
     const filteredYachts = allYachts
       .filter(yacht => visibleIds.has(yacht.id))
       .map(yacht => ({
@@ -527,16 +590,30 @@ export async function fetchVisibleYachtsForDestination(destination) {
         displayOrder: orderMap.get(yacht.id) ?? 999,
       }));
 
-    // 5. Trier
-    filteredYachts.sort((a, b) => {
+    // 5. OVERRIDES ADMIN : yachts taggés region=destination en BDD mais qu'Ankor ne renvoie pas
+    //    pour cette région (ankor_region différent). On les reconstruit depuis BDD pour qu'ils
+    //    apparaissent quand même côté public.
+    const ankorIds = new Set(allYachts.map(y => y.id));
+    const overrides = selections
+      .filter(s => s.is_visible && s.region === destination && !ankorIds.has(s.yacht_id))
+      .map(s => ({
+        ...yachtFromSelection(s),
+        isFeatured: featuredIds.has(s.yacht_id),
+        displayOrder: orderMap.get(s.yacht_id) ?? 999,
+      }));
+
+    const merged = [...filteredYachts, ...overrides];
+
+    // 6. Trier : featured d'abord, puis displayOrder
+    merged.sort((a, b) => {
       if (a.isFeatured && !b.isFeatured) return -1;
       if (!a.isFeatured && b.isFeatured) return 1;
       return (a.displayOrder || 999) - (b.displayOrder || 999);
     });
 
     return {
-      yachts: filteredYachts,
-      totalYachts: filteredYachts.length,
+      yachts: merged,
+      totalYachts: merged.length,
       filters,
     };
   } catch (error) {

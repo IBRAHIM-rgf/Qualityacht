@@ -75,18 +75,23 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
 
       {/* ══ HERO (filtre NB au chargement, transition vers originale colorée à 2s) ══ */}
       <div className="relative h-[60vh] md:h-[75vh]">
+        {/* Fondu enchaîné asymétrique :
+            - Sortante (NB) : 3s, delay 0
+            - Entrante (originale) : 2.5s, delay 1.2s (apparait quand la 1ère est mi-floue) */}
         <Image
           src="/images/destinations/greater antillesNB.jpg"
           alt="Greater Antilles"
           fill
           priority
-          className={`object-cover object-center transition-all duration-[2500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
+          className={`object-cover object-center ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
+          style={{ transitionProperty: 'opacity, filter', transitionDuration: heroLit ? '3000ms' : '2500ms', transitionDelay: heroLit ? '0ms' : '1200ms' }}
         />
         <Image
           src="/images/destinations/gretar antilles-original.jpg"
           alt="Greater Antilles"
           fill
-          className={`object-cover object-center transition-all duration-[2500ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
+          className={`object-cover object-center ease-[cubic-bezier(0.4,0,0.2,1)] ${heroLit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
+          style={{ transitionProperty: 'opacity, filter', transitionDuration: heroLit ? '2500ms' : '3000ms', transitionDelay: heroLit ? '1200ms' : '0ms' }}
         />
         <div
           className="absolute inset-0"
