@@ -62,6 +62,34 @@ function explain(term) {
   return GLOSSARY[term] || '';
 }
 
+// Extrait l'APA d'une saison : soit depuis lineItems (réel Ankor), soit estimée 30% du Charter Fee.
+function getAPAForSeason(season) {
+  const lineItems = season?.pricing?.lineItems || [];
+  const apa = lineItems.find(li => /^apa\b/i.test(String(li.item || '').trim()));
+  const charterFee = season?.pricing?.charterFee || 0;
+
+  if (apa && apa.amount > 0) {
+    const pct = apa.quantity != null && apa.quantity > 0
+      ? Math.round(apa.quantity * 100)
+      : (charterFee > 0 ? Math.round((apa.amount / charterFee) * 100) : null);
+    return {
+      amount: apa.amount,
+      currency: season.pricing?.currency,
+      percentage: pct,
+      isEstimated: false,
+    };
+  }
+  if (charterFee > 0) {
+    return {
+      amount: Math.round(charterFee * 0.3),
+      currency: season.pricing?.currency,
+      percentage: 30,
+      isEstimated: true,
+    };
+  }
+  return null;
+}
+
 function HelpTip({ term, children }) {
   return (
     <span className="inline-flex items-center gap-1 cursor-help" title={explain(term)}>
@@ -269,6 +297,37 @@ function SeasonDetail({ season, idx }) {
           <p className="text-[#C0C0C0]">{totalTax || '—'}</p>
         </div>
       </div>
+
+      {/* Bloc APA dédié — détermine ~30% du prix final, à voir en gros */}
+      {(() => {
+        const apa = getAPAForSeason(season);
+        if (!apa) return null;
+        const apaFormatted = formatMoney(apa.amount, apa.currency);
+        return (
+          <div className={`rounded-xl border-l-4 px-4 py-3 ${
+            apa.isEstimated
+              ? 'border-amber-500 bg-amber-900/10'
+              : 'border-[#B03E00] bg-[#B03E00]/10'
+          }`}>
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: apa.isEstimated ? '#fbbf24' : '#B03E00' }}>
+                  APA — Provision dépenses {apa.isEstimated && '(estimée)'}
+                </p>
+                <p className="trajan-regular text-2xl text-[#C0C0C0]">
+                  {apaFormatted}
+                  <span className="text-sm text-[#acb0cd]/60 ml-2">({apa.percentage}% du Charter Fee)</span>
+                </p>
+                <p className="text-[10px] text-[#acb0cd]/60 mt-1">
+                  {apa.isEstimated
+                    ? <>⚠️ Ankor ne fournit pas le détail APA pour ce yacht — <strong>estimation à 30 %</strong> selon la norme industrie. À confirmer avec le broker.</>
+                    : <>✓ Valeur fournie par Ankor — couvre carburant, taxes portuaires, nourriture, etc. Le solde non utilisé est remboursé.</>}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Mode de taxation expliqué */}
       <ExplainBox label="Régime fiscal">
@@ -672,6 +731,7 @@ export default function TestInfosClient({ yacht }) {
           <p className="text-xs text-[#acb0cd]/70 mb-2">
             <strong className="text-[#C0C0C0]">Tableau récapitulatif :</strong> une ligne par saison/tarif. Survole les en-têtes pour voir l'explication.
             Clique sur une saison plus bas pour voir le détail (décomposition, dates exactes, zones).
+            {' '}<span className="text-amber-400">APA en italique orange + astérisque (*)</span> = estimation 30% (Ankor ne fournit pas la valeur pour ce yacht).
           </p>
           <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] overflow-hidden mb-5">
             <div className="overflow-x-auto">
@@ -683,6 +743,7 @@ export default function TestInfosClient({ yacht }) {
                     <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">Devise</th>
                     <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Total à payer">Total ⓘ</th>
                     <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title={explain('Charter Fee')}>Location ⓘ</th>
+                    <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title={explain('APA')}>APA ⓘ</th>
                     <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="Sous-total avant taxes">Sous-tot. ⓘ</th>
                     <th className="text-right px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]">TVA</th>
                     <th className="text-left px-3 py-2.5 font-normal uppercase tracking-wider text-[10px]" title="EXCLUSIVE = HT, INCLUSIVE = TTC, NONE = sans taxe">Régime ⓘ</th>
@@ -696,6 +757,7 @@ export default function TestInfosClient({ yacht }) {
                 <tbody>
                   {seasons.length > 0 ? seasons.map((s, i) => {
                     const p = s.pricing || {};
+                    const apa = getAPAForSeason(s);
                     return (
                       <tr key={i} className="border-t border-[#C0C0C0]/10 hover:bg-[#26272a]/40">
                         <td className="px-3 py-2 text-[#C0C0C0] font-medium">{s.name || <FillerValue>—</FillerValue>}</td>
@@ -703,6 +765,14 @@ export default function TestInfosClient({ yacht }) {
                         <td className="px-3 py-2 text-[#acb0cd]">{p.currency || '—'}</td>
                         <td className="px-3 py-2 text-[#B03E00] text-right font-mono font-bold">{formatMoney(p.total, p.currency) || '—'}</td>
                         <td className="px-3 py-2 text-[#acb0cd] text-right font-mono">{formatMoney(p.charterFee, p.currency) || '—'}</td>
+                        <td className={`px-3 py-2 text-right font-mono ${apa?.isEstimated ? 'text-amber-400 italic' : 'text-[#acb0cd]'}`}>
+                          {apa ? (
+                            <span title={apa.isEstimated ? 'Estimation 30% — Ankor ne fournit pas l\'APA pour ce yacht' : 'Valeur fournie par Ankor'}>
+                              {formatMoney(apa.amount, apa.currency)}
+                              <span className="text-[9px] ml-1 opacity-70">{apa.percentage}%{apa.isEstimated ? '*' : ''}</span>
+                            </span>
+                          ) : '—'}
+                        </td>
                         <td className="px-3 py-2 text-[#acb0cd] text-right font-mono">{formatMoney(p.subTotal, p.currency) || '—'}</td>
                         <td className="px-3 py-2 text-[#acb0cd] text-right font-mono">{formatMoney(p.totalTax, p.currency) || '—'}</td>
                         <td className="px-3 py-2 text-[#acb0cd]/70 text-[10px] uppercase">{p.inputAmountTaxed || '—'}</td>
@@ -714,7 +784,7 @@ export default function TestInfosClient({ yacht }) {
                       </tr>
                     );
                   }) : (
-                    <tr><td colSpan={13} className="px-3 py-8 text-center text-red-400 italic">[ex.] no pricingInfo for this yacht</td></tr>
+                    <tr><td colSpan={14} className="px-3 py-8 text-center text-red-400 italic">[ex.] no pricingInfo for this yacht</td></tr>
                   )}
                 </tbody>
               </table>
