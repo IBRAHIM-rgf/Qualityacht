@@ -91,20 +91,20 @@ export default function PrivatJetDestinationPage({ params }) {
       `}</style>
 
       {/* ══ HERO image région + texte qui monte ══ */}
-      {/* Image au ratio naturel (w-full h-auto) → toujours visible en entier */}
-      <div className="relative z-20 w-full pt-[70px] md:pt-0">
-        <div className="relative w-full">
+      {/* Container limité au viewport ; object-contain → image visible en entier (letterbox sur fond sombre si portrait) */}
+      <div className="relative z-20 w-full pt-[70px] md:pt-0 bg-[#26272a]">
+        <div className="relative w-full h-[calc(100vh-70px)] md:h-screen flex items-center justify-center overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={dest.image}
             alt={dest.name}
-            className="w-full h-auto block"
+            className="max-w-full max-h-full w-auto h-auto object-contain block"
           />
           {/* Dégradé bas pour lisibilité du texte */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
 
           {/* Texte qui monte sur la photo */}
-          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-4 md:pb-10">
+          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-6 md:pb-12">
             <div ref={heroRef} className="reveal-up flex flex-col items-center text-center w-full">
               <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-2 md:mb-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
                 Private Jets
