@@ -29,7 +29,11 @@ export default function PrivatJetPage() {
   useEffect(() => {
     const el = heroRef.current;
     if (!el) return;
-    requestAnimationFrame(() => { el.classList.add('revealed'); });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) el.classList.add('revealed'); });
+    }, { threshold: 0.2 });
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   return (
@@ -39,28 +43,32 @@ export default function PrivatJetPage() {
         .reveal-up.revealed { opacity: 1; transform: translateY(0); }
       `}</style>
 
-      {/* ══ HERO ══ */}
-      <div className="pt-[70px] md:pt-0">
-        <Image
-          src="/images/private_jet/jet_hero.jpeg"
-          alt="Private Jet"
-          width={927}
-          height={1648}
-          priority
-          sizes="100vw"
-          className="w-full h-auto block"
-        />
-      </div>
+      {/* ══ HERO avec texte qui monte sur la photo ══ */}
+      <div className="relative pt-[70px] md:pt-0">
+        <div className="relative w-full">
+          <Image
+            src="/images/private_jet/jet_hero.jpeg"
+            alt="Private Jet"
+            width={927}
+            height={1648}
+            priority
+            sizes="100vw"
+            className="w-full h-auto block"
+          />
+          {/* Dégradé bas pour lisibilité */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
 
-      {/* ══ TITRE (anim reveal-up venant du bas) ══ */}
-      <div className="bg-[#26272a] px-4 py-10 md:py-16 flex flex-col items-center">
-        <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
-          <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
-            Private Jets
-          </h1>
-          <p className="text-[#acb0cd]/70 text-xs md:text-sm uppercase tracking-[0.25em] font-light text-center mt-3">
-            Your Gateway to Every Destination
-          </p>
+          {/* Texte qui monte sur la photo */}
+          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-8 md:pb-16">
+            <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
+              <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+                Private Jets
+              </h1>
+              <p className="text-[#acb0cd]/80 text-xs md:text-sm uppercase tracking-[0.25em] font-light text-center mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
+                Your Gateway to Every Destination
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 

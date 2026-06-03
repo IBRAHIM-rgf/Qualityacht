@@ -1,11 +1,11 @@
 'use client';
 
-// Page destination jet privé : fond identique à /not-found (bg-gray-900 + nuagesAncien grayscale).
-// Affiche tous les aéroports de la destination (groupés par île, triés par taille).
+// Page destination jet privé : hero image dédiée à la région + texte "Private Jets"
+// qui monte (reveal-up) sur la photo. Liste d'aéroports en dessous.
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { use } from 'react';
+import { use, useEffect, useRef } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { getDestinationBySlug } from '../data';
 
@@ -58,6 +58,14 @@ export default function PrivatJetDestinationPage({ params }) {
   const { slug } = use(params);
   const dest = getDestinationBySlug(slug);
 
+  const heroRef = useRef(null);
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    const t = setTimeout(() => el.classList.add('revealed'), 200);
+    return () => clearTimeout(t);
+  }, []);
+
   if (!dest) {
     return (
       <div className="min-h-screen relative flex items-center justify-center overflow-hidden">
@@ -76,96 +84,125 @@ export default function PrivatJetDestinationPage({ params }) {
   }
 
   return (
-    <div className="min-h-screen relative">
-      {/* Fond strict copie de /not-found : fixed pour rester sur le viewport
-          pendant le scroll (sinon l'image fill est étirée verticalement
-          sur toute la longueur de la page et devient invisible). */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gray-900" />
-        <Image src="/images/nuagesAncien.png" alt="Background clouds" fill className="object-cover opacity-30 grayscale" priority />
-      </div>
+    <div className="min-h-screen relative bg-[#26272a]">
+      <style>{`
+        .reveal-up { opacity: 0; transform: translateY(40px); transition: opacity 1.6s ease, transform 1.6s ease; }
+        .reveal-up.revealed { opacity: 1; transform: translateY(0); }
+      `}</style>
 
-      <div className="relative z-10 pt-24 md:pt-28 pb-16 px-5 md:px-10">
-        <div className="max-w-5xl mx-auto">
+      {/* ══ HERO image région + texte qui monte ══ */}
+      <div className="relative z-20 w-full pt-[70px] md:pt-0">
+        <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+          <Image
+            src={dest.image}
+            alt={dest.name}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          {/* Dégradé bas pour lisibilité du texte */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-          {/* ══ HEADER ══ */}
-          <div className="flex items-start justify-between gap-4 mb-10 flex-wrap">
-            <Link
-              href="/privat-jet"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#C0C0C0]/40 text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" /> Retour
-            </Link>
-            <Link
-              href="/contact-broker"
-              className="inline-flex items-center gap-2 rounded-xl border-2 border-[#C0C0C0] px-5 py-2 text-xs md:text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.2)]"
-            >
-              Contact a broker
-            </Link>
-          </div>
-
-          <div className="text-center mb-12">
-            <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-3">Private Jets</p>
-            <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.15em] text-[#acb0cd]">{dest.name}</h1>
-            <div className="relative w-32 h-6 mx-auto mt-4">
-              <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+          {/* Texte qui monte sur la photo */}
+          <div className="absolute inset-0 flex items-end justify-center pb-6 md:pb-14 px-4">
+            <div ref={heroRef} className="reveal-up flex flex-col items-center text-center w-full">
+              <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-2 md:mb-3">
+                Private Jets
+              </p>
+              <h1 className="trajan-regular text-2xl md:text-5xl lg:text-6xl uppercase tracking-[0.12em] md:tracking-[0.15em] text-[#acb0cd] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                {dest.name}
+              </h1>
+              <div className="relative w-24 md:w-32 h-5 md:h-6 mt-3 md:mt-4">
+                <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+              </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* ══ Groupes îles + aéroports ══ */}
-          <div className="space-y-12">
-            {dest.groups.map((group, i) => {
-              const grouped = groupAirports(group.airports);
-              return (
-                <div key={i}>
-                  {/* Titre île */}
-                  <div className="flex flex-col items-center mb-6">
-                    <h2 className="trajan-regular text-base md:text-xl text-[#acb0cd] uppercase tracking-[0.25em] text-center">
-                      {group.island}
-                    </h2>
-                    <div className="w-24 md:w-32 h-px bg-white/20 mt-3" />
-                    <span className="text-[#c2622a] text-xs mt-1">▴</span>
-                  </div>
+      {/* Fond nuages derrière le contenu (sous le hero) */}
+      <div className="relative">
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <div className="absolute inset-0 bg-gray-900" />
+          <Image src="/images/nuagesAncien.png" alt="Background clouds" fill className="object-cover opacity-30 grayscale" />
+        </div>
 
-                  {/* Sous-sections par catégorie + pills */}
-                  <div className="space-y-5">
-                    {grouped.map(([cat, airports], gi) => (
-                      <div key={gi} className="text-center">
-                        {airports.length > 0 && airports[0].code !== null && (
-                          <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#acb0cd]/60 italic mb-2">
-                            {cat}
-                          </p>
-                        )}
-                        <div className="flex flex-wrap gap-2 justify-center">
-                          {airports.map((a, ai) => (
-                            <span
-                              key={ai}
-                              className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#26272a]/80 backdrop-blur-sm"
-                            >
-                              <span className="w-1.5 h-1.5 rotate-45 bg-[#c2622a] shrink-0" />
-                              <span className="text-[#acb0cd] text-xs md:text-sm">{a.name}</span>
-                              {a.code && <span className="text-[#C0C0C0]/70 text-[10px] md:text-xs font-mono">({a.code})</span>}
-                            </span>
-                          ))}
-                        </div>
+        <div className="relative z-10 pt-10 md:pt-16 pb-16 px-5 md:px-10">
+          <div className="max-w-5xl mx-auto">
+
+            {/* ══ HEADER ══ */}
+            <div className="flex items-start justify-between gap-4 mb-10 flex-wrap">
+              <Link
+                href="/privat-jet"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#C0C0C0]/40 text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" /> Retour
+              </Link>
+              <Link
+                href="/contact-broker"
+                className="inline-flex items-center gap-2 rounded-xl border-2 border-[#C0C0C0] px-5 py-2 text-xs md:text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.2)]"
+              >
+                Contact a broker
+              </Link>
+            </div>
+
+            {/* ══ Groupes îles + aéroports ══ */}
+            <div className="space-y-12">
+              {dest.groups.map((group, i) => {
+                const grouped = groupAirports(group.airports);
+                return (
+                  <div key={i}>
+                    {/* Titre île + même trait décoratif que sous "Caribbean" (title-line.png) */}
+                    <div className="flex flex-col items-center mb-6">
+                      <h2 className="trajan-regular text-base md:text-xl text-[#acb0cd] uppercase tracking-[0.25em] text-center">
+                        {group.island}
+                      </h2>
+                      <div className="relative w-32 h-6 mt-3">
+                        <Image src="/images/title-line.png" alt="" fill className="object-contain" />
                       </div>
-                    ))}
+                    </div>
+
+                    {/* Sous-sections par catégorie + pills */}
+                    <div className="space-y-5">
+                      {grouped.map(([cat, airports], gi) => (
+                        <div key={gi} className="text-center">
+                          {airports.length > 0 && airports[0].code !== null && (
+                            <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#acb0cd]/60 italic mb-2">
+                              {cat}
+                            </p>
+                          )}
+                          <div className="flex flex-wrap gap-2 justify-center">
+                            {airports.map((a, ai) => (
+                              <span
+                                key={ai}
+                                className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#26272a]/80 backdrop-blur-sm"
+                              >
+                                <span className="w-1.5 h-1.5 rotate-45 bg-[#c2622a] shrink-0" />
+                                <span className="text-[#acb0cd] text-xs md:text-sm">{a.name}</span>
+                                {a.code && <span className="text-[#C0C0C0]/70 text-[10px] md:text-xs font-mono">({a.code})</span>}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
 
-          {/* ══ CTA bas ══ */}
-          <div className="text-center mt-16">
-            <Link
-              href="/contact-broker"
-              className="inline-flex items-center gap-2 rounded-xl border-2 border-[#C0C0C0] px-10 py-3 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]"
-            >
-              Contact a broker
-            </Link>
-          </div>
+            {/* ══ CTA bas ══ */}
+            <div className="text-center mt-16">
+              <Link
+                href="/contact-broker"
+                className="inline-flex items-center gap-2 rounded-xl border-2 border-[#C0C0C0] px-10 py-3 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]"
+              >
+                Contact a broker
+              </Link>
+            </div>
 
+          </div>
         </div>
       </div>
     </div>
