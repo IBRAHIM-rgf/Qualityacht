@@ -1,988 +1,531 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
-import {
-  Search, Plus, Eye, EyeOff, Star, Filter, ChevronDown, ChevronUp, Check, X,
-  Loader2, Edit3, Trash2, Ship, Anchor, PawPrint, Users, Waves,
-  ArrowLeft, ArrowRight, AlertTriangle, Download, MapPin, Tag,
-} from 'lucide-react';
+// Admin yachts v2 — branché sur la BDD réelle.
+// Structure : Dashboard (stats permanentes) + 3 onglets (Ankor / BDD / Publiés) + modal édition.
+// Remplace le wizard 5 étapes précédent. Pour la démo standalone : /admin/yachts-mock
+
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import { getAnkorImageUrl } from '@/lib/utils';
-import { formatLength } from '@/lib/unitConversion';
+import {
+  Plus, Check, X, Eye, EyeOff, Star, Edit3, Trash2,
+  Database, Globe, Loader2,
+} from 'lucide-react';
 
-// ============================================
-// Constantes
-// ============================================
-const YACHT_TYPES = [
-  { value: '', label: 'Tous les types' },
-  { value: 'motor', label: 'Moteur' },
-  { value: 'sailing', label: 'Voilier' },
-];
-
-const REGIONS = [
-  { value: '', label: 'Toutes régions' },
-  { value: 'arctic', label: 'Arctique' },
-  { value: 'bahamas', label: 'Bahamas' },
-  { value: 'central-america', label: 'Amérique Centrale' },
-  { value: 'east-asia', label: "Asie de l'Est" },
-  { value: 'east-mediterranean', label: 'Méditerranée Est' },
-  { value: 'indian-ocean', label: 'Océan Indien' },
-  { value: 'indonesia', label: 'Indonésie' },
-  { value: 'north-america', label: 'Amérique du Nord' },
-  { value: 'pacific-ocean', label: 'Océan Pacifique' },
-  { value: 'arabian-gulf', label: "Golfe d'Oman" },
-  { value: 'south-east-asia', label: 'Asie du Sud-Est' },
-  { value: 'west-mediterranean', label: 'Méditerranée Ouest' },
-  { value: 'africa', label: 'Afrique' },
-  { value: 'northern-europe', label: 'Europe du Nord' },
-  { value: 'caribbean', label: 'Caraïbes' },
-  { value: 'oceania', label: 'Océanie' },
-];
-
-const SUB_REGIONS_BY_REGION = {
-  caribbean: [
-    { value: 'greater-antilles', label: 'Greater Antilles' },
-    { value: 'leeward-islands', label: 'Leeward Islands' },
-    { value: 'windward-islands', label: 'Windward Islands' },
-    { value: 'leeward-antilles', label: 'Leeward Antilles (ABC)' },
-    { value: 'turks-caicos', label: 'Turks & Caicos' },
-    { value: 'trinidad-tobago', label: 'Trinidad & Tobago' },
-    { value: 'bvi', label: 'British Virgin Islands' },
-    { value: 'grand-cayman', label: 'Grand Cayman' },
-  ],
-  bahamas: [
-    { value: 'nassau', label: 'Nassau & New Providence' },
-    { value: 'exumas', label: 'Exumas' },
-    { value: 'abacos', label: 'Abacos' },
-    { value: 'eleuthera', label: 'Eleuthera & Harbour Island' },
-  ],
+// ════════════════════════════════════════════════════════════
+// CONSTANTES
+// ════════════════════════════════════════════════════════════
+const REGION_LABELS = {
+  'arctic': 'Arctique',
+  'bahamas': 'Bahamas',
+  'central-america': 'Amérique Centrale',
+  'east-asia': "Asie de l'Est",
+  'east-mediterranean': 'Méditerranée Est',
+  'indian-ocean': 'Océan Indien',
+  'indonesia': 'Indonésie',
+  'north-america': 'Amérique du Nord',
+  'pacific-ocean': 'Océan Pacifique',
+  'arabian-gulf': "Golfe d'Oman",
+  'south-east-asia': 'Asie du Sud-Est',
+  'west-mediterranean': 'Méditerranée Ouest',
+  'africa': 'Afrique',
+  'northern-europe': 'Europe du Nord',
+  'caribbean': 'Caraïbes',
+  'oceania': 'Océanie',
 };
 
-const getSubRegionsFor = (region) => SUB_REGIONS_BY_REGION[region] || [];
+const SUB_REGION_LABELS = {
+  'greater-antilles': 'Greater Antilles',
+  'leeward-islands': 'Leeward Islands',
+  'windward-islands': 'Windward Islands',
+  'leeward-antilles': 'Leeward Antilles',
+  'turks-caicos': 'Turks & Caicos',
+  'trinidad-tobago': 'Trinidad & Tobago',
+  'bvi': 'British Virgin Islands',
+  'grand-cayman': 'Grand Cayman',
+  'nassau': 'Nassau & New Providence',
+  'exumas': 'Exumas',
+  'abacos': 'Abacos',
+  'eleuthera': 'Eleuthera & Harbour Island',
+};
 
-const STEPS = [
-  { id: 1, label: 'Rechercher', icon: Search },
-  { id: 2, label: 'Ajouter', icon: Download },
-  { id: 3, label: 'Région', icon: MapPin },
-  { id: 4, label: 'Sous-région', icon: Tag },
-  { id: 5, label: 'Personnaliser', icon: Edit3 },
-];
+const SUB_REGIONS_BY_REGION = {
+  caribbean: ['greater-antilles', 'leeward-islands', 'windward-islands', 'leeward-antilles', 'turks-caicos', 'trinidad-tobago', 'bvi', 'grand-cayman'],
+  bahamas: ['nassau', 'exumas', 'abacos', 'eleuthera'],
+};
 
-// ============================================
-// Helper : lire light_data ou cached_data
-// ============================================
-function readYachtData(yacht) {
+// Adapte une row BDD au format yacht-like utilisé par l'UI
+function adaptYacht(s) {
   const parse = (raw) => {
-    if (!raw) return null;
+    if (!raw) return {};
     if (typeof raw === 'string') {
-      try { return JSON.parse(raw); } catch { return null; }
+      try { return JSON.parse(raw); } catch { return {}; }
     }
     return raw;
   };
-  const light = parse(yacht.light_data);
-  const cached = parse(yacht.cached_data);
+  const light = parse(s.light_data);
+  const cached = parse(s.cached_data);
+  const heroRaw = light.hero_image || cached.images?.[0] || null;
   return {
-    light: light || {},
-    cached: cached || {},
-    heroImage: light?.hero_image || cached?.images?.[0] || null,
-    description: light?.description || cached?.description || null,
-    length: light?.length || cached?.length || null,
-    guests: light?.guests || cached?.guests || cached?.capacity || null,
-    cabins: light?.cabins || cached?.cabins || null,
-    crew: light?.crew || cached?.crew || null,
-    type: light?.type || cached?.type || null,
-    location: light?.location || cached?.location || null,
-    year: light?.year || cached?.year || null,
-    price: light?.price || cached?.pricePerHour || cached?.price || null,
+    id: s.yacht_id,
+    name: s.yacht_name || light.name || cached.name,
+    image: heroRaw ? getAnkorImageUrl(heroRaw, '320w') : '/placeholder.jpg',
+    length: light.length || cached.length,
+    guests: light.guests || cached.guests || cached.capacity,
+    cabins: light.cabins || cached.cabins,
+    region: s.region,
+    sub_region: s.sub_region,
+    ankor_region: s.ankor_region,
+    is_visible: s.is_visible !== false,
+    is_featured: s.is_featured === true,
+    custom_title: s.custom_title || '',
+    custom_price: s.custom_price || '',
+    custom_description: s.custom_description || '',
+    pets_allowed: s.pets_allowed,
+    groups_allowed: s.groups_allowed,
+    water_toys: s.water_toys,
+    extra_info: s.extra_info,
   };
 }
 
-// ============================================
-// Wizard Stepper (barre de progression)
-// ============================================
-function WizardStepper({ currentStep, onStepClick }) {
+// ════════════════════════════════════════════════════════════
+// DASHBOARD
+// ════════════════════════════════════════════════════════════
+function Dashboard({ yachts }) {
+  const stats = useMemo(() => {
+    const total = yachts.length;
+    const visible = yachts.filter(y => y.is_visible).length;
+    const hidden = total - visible;
+    const featured = yachts.filter(y => y.is_featured && y.is_visible).length;
+    const byRegion = {};
+    const bySubRegion = {};
+    for (const y of yachts) {
+      const r = y.region || '_none';
+      byRegion[r] = (byRegion[r] || 0) + 1;
+      if (y.sub_region) bySubRegion[y.sub_region] = (bySubRegion[y.sub_region] || 0) + 1;
+    }
+    return { total, visible, hidden, featured, byRegion, bySubRegion };
+  }, [yachts]);
+
   return (
-    <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
-      <div className="flex items-center justify-between gap-2">
-        {STEPS.map((step, idx) => {
-          const Icon = step.icon;
-          const isActive = currentStep === step.id;
-          const isPast = currentStep > step.id;
-          return (
-            <div key={step.id} className="flex items-center flex-1 min-w-0">
-              <button
-                onClick={() => onStepClick(step.id)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all min-w-0 ${
-                  isActive
-                    ? 'bg-copper-500 border-copper-400 text-white'
-                    : isPast
-                    ? 'bg-[#303135] border-copper-700/40 text-copper-300 hover:border-copper-500'
-                    : 'bg-[#303135] border-gray-700 text-gray-500 hover:text-gray-300'
-                }`}
-              >
-                <span className={`flex items-center justify-center w-7 h-7 rounded-full text-sm font-bold ${
-                  isActive ? 'bg-white text-copper-600' : isPast ? 'bg-copper-700/40 text-copper-200' : 'bg-gray-700 text-gray-400'
-                }`}>
-                  {isPast ? <Check className="w-4 h-4" /> : step.id}
-                </span>
-                <span className="hidden md:flex items-center gap-1 text-sm font-medium">
-                  <Icon className="w-4 h-4" />
-                  {step.label}
-                </span>
-              </button>
-              {idx < STEPS.length - 1 && (
-                <ArrowRight className={`w-4 h-4 mx-1 flex-shrink-0 ${isPast ? 'text-copper-400' : 'text-gray-600'}`} />
-              )}
-            </div>
-          );
-        })}
+    <div className="bg-[#2a2a30] rounded-2xl border border-[#C0C0C0]/20 p-5 md:p-6 mb-6">
+      <div className="flex items-center gap-2 mb-4">
+        <Database className="w-5 h-5 text-[#B03E00]" />
+        <h2 className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] text-[#C0C0C0]">État de la base</h2>
       </div>
-    </div>
-  );
-}
 
-// ============================================
-// Wizard Navigation (boutons précédent/suivant)
-// ============================================
-function WizardNav({ currentStep, onPrev, onNext, nextLabel, nextDisabled }) {
-  return (
-    <div className="flex items-center justify-between gap-3 pt-4 border-t border-gray-700">
-      <button
-        onClick={onPrev}
-        disabled={currentStep === 1}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[#C0C0C0]/40 text-[#C0C0C0] hover:border-copper-500 hover:text-copper-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Précédent
-      </button>
-      <span className="text-gray-500 text-sm">Étape {currentStep}/5</span>
-      <button
-        onClick={onNext}
-        disabled={currentStep === 5 || nextDisabled}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[#C0C0C0]/40 text-[#C0C0C0] hover:border-copper-500 hover:text-copper-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-      >
-        {nextLabel || 'Suivant'}
-        <ArrowRight className="w-4 h-4" />
-      </button>
-    </div>
-  );
-}
-
-// ============================================
-// Étape 1 — Rechercher dans Ankor
-// ============================================
-function Step1Search({ filters, setFilters, onSearch, searching, searchResults }) {
-  const [showAdvanced, setShowAdvanced] = useState(false);
-
-  return (
-    <div className="space-y-4">
-      <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
-        <h3 className="text-[#C0C0C0] font-medium mb-4 flex items-center gap-2">
-          <Filter className="w-5 h-5 text-copper-400" />
-          Rechercher des yachts (API Ankor)
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
-          <input
-            type="text"
-            placeholder="Rechercher par nom..."
-            value={filters.search}
-            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-            className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] text-sm md:col-span-2"
-          />
-          <select
-            value={filters.type}
-            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-            className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] text-sm"
-          >
-            {YACHT_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-          </select>
-          <select
-            value={filters.destination}
-            onChange={(e) => setFilters({ ...filters, destination: e.target.value })}
-            className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] text-sm"
-          >
-            {REGIONS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
-          </select>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+        <div className="rounded-xl bg-[#3a3b3f] border border-[#C0C0C0]/20 p-3">
+          <p className="text-[10px] uppercase tracking-wider text-[#acb0cd]/60">En BDD</p>
+          <p className="trajan-regular text-3xl text-[#C0C0C0]">{stats.total}</p>
+          <p className="text-xs text-[#acb0cd]/50">bateaux au total</p>
         </div>
-
-        <button
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="text-sm text-gray-400 hover:text-[#C0C0C0] flex items-center gap-1 mb-2"
-        >
-          {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          Filtres avancés (longueur, prix)
-        </button>
-
-        {showAdvanced && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3 pt-3 border-t border-gray-700">
-            <input type="number" placeholder="Longueur min (m)" value={filters.minLength}
-              onChange={(e) => setFilters({ ...filters, minLength: e.target.value })}
-              className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] text-sm" />
-            <input type="number" placeholder="Longueur max (m)" value={filters.maxLength}
-              onChange={(e) => setFilters({ ...filters, maxLength: e.target.value })}
-              className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] text-sm" />
-            <input type="number" placeholder="Prix min (€/sem)" value={filters.priceMin}
-              onChange={(e) => setFilters({ ...filters, priceMin: e.target.value })}
-              className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] text-sm" />
-            <input type="number" placeholder="Prix max (€/sem)" value={filters.priceMax}
-              onChange={(e) => setFilters({ ...filters, priceMax: e.target.value })}
-              className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] text-sm" />
-          </div>
-        )}
-
-        <button
-          onClick={onSearch}
-          disabled={searching}
-          className="px-6 py-2 border border-[#C0C0C0] text-[#C0C0C0] hover:border-copper-500 hover:text-copper-300 rounded-xl font-medium flex items-center gap-2 disabled:opacity-50 transition-colors"
-        >
-          {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-          Lancer la recherche
-        </button>
-      </div>
-
-      {searchResults.length > 0 && (
-        <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
-          <p className="text-sm text-copper-300">
-            {searchResults.length} résultats trouvés. Passez à l'étape suivante pour les ajouter à la BDD.
-          </p>
+        <div className="rounded-xl bg-[#B03E00]/10 border border-[#B03E00]/40 p-3">
+          <p className="text-[10px] uppercase tracking-wider text-[#B03E00]">Publiés</p>
+          <p className="trajan-regular text-3xl text-[#C0C0C0]">{stats.visible}</p>
+          <p className="text-xs text-[#acb0cd]/70">visibles sur le site</p>
         </div>
-      )}
-    </div>
-  );
-}
-
-// ============================================
-// Étape 2 — Ajouter les yachts sélectionnés à la BDD
-// ============================================
-function Step2Add({ searchResults, selectedIds, ankorPicks, setAnkorPicks, onBulkAdd, adding }) {
-  const togglePick = (id) => {
-    setAnkorPicks(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
-  };
-
-  if (searchResults.length === 0) {
-    return (
-      <div className="bg-[#2a2a30] rounded-xl p-12 border border-gray-700 text-center text-gray-400">
-        <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
-        <p>Aucun résultat de recherche.</p>
-        <p className="text-sm mt-2">Revenez à l'étape 1 pour lancer une recherche.</p>
+        <div className="rounded-xl bg-[#3a3b3f] border border-[#C0C0C0]/20 p-3">
+          <p className="text-[10px] uppercase tracking-wider text-[#acb0cd]/60">En stock</p>
+          <p className="trajan-regular text-3xl text-[#acb0cd]/70">{stats.hidden}</p>
+          <p className="text-xs text-[#acb0cd]/50">cachés au public</p>
+        </div>
+        <div className="rounded-xl bg-[#3a3b3f] border border-[#C0C0C0]/20 p-3">
+          <p className="text-[10px] uppercase tracking-wider text-[#acb0cd]/60">Featured ★</p>
+          <p className="trajan-regular text-3xl text-[#C0C0C0]">{stats.featured}</p>
+          <p className="text-xs text-[#acb0cd]/50">mis en avant</p>
+        </div>
       </div>
-    );
-  }
 
-  const newYachts = searchResults.filter(y => !selectedIds.has(y.id));
-  const alreadyIn = searchResults.length - newYachts.length;
-
-  return (
-    <div className="space-y-3">
-      <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700 flex items-center justify-between flex-wrap gap-3">
+      <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <p className="text-[#C0C0C0]">
-            <span className="font-bold">{newYachts.length}</span> yachts nouveaux,
-            <span className="text-gray-500"> {alreadyIn} déjà en BDD</span>
-          </p>
-          <p className="text-sm text-gray-400 mt-1">
-            Cochez ceux à ajouter. Région principale sera pré-remplie depuis Ankor.
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setAnkorPicks(new Set(newYachts.map(y => y.id)))}
-            className="px-3 py-1.5 text-sm rounded-lg border border-[#C0C0C0]/40 text-[#C0C0C0] hover:border-copper-500 hover:text-copper-300 transition-colors"
-          >
-            Tout cocher
-          </button>
-          <button
-            onClick={() => setAnkorPicks(new Set())}
-            className="px-3 py-1.5 text-sm rounded-lg border border-[#C0C0C0]/40 text-[#C0C0C0] hover:border-copper-500 hover:text-copper-300 transition-colors"
-          >
-            Tout décocher
-          </button>
-          <button
-            onClick={onBulkAdd}
-            disabled={ankorPicks.size === 0 || adding}
-            className="px-4 py-1.5 text-sm rounded-lg border border-copper-500 bg-copper-500/20 text-copper-300 hover:bg-copper-500/30 disabled:opacity-50 transition-colors flex items-center gap-2"
-          >
-            {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-            Ajouter {ankorPicks.size} yacht(s)
-          </button>
-        </div>
-      </div>
-
-      <div className="space-y-2 max-h-[600px] overflow-y-auto">
-        {searchResults.map(yacht => {
-          const inBdd = selectedIds.has(yacht.id);
-          const picked = ankorPicks.has(yacht.id);
-          const images = Array.isArray(yacht.images) ? yacht.images : [];
-          const imageUrl = images.length > 0 ? getAnkorImageUrl(images[0], '320w') : '/placeholder.jpg';
-
-          return (
-            <div key={yacht.id}
-              className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
-                inBdd ? 'bg-[#252528] border-gray-800 opacity-50' :
-                picked ? 'bg-copper-900/20 border-copper-700' : 'bg-[#2a2a30] border-gray-700'
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={picked}
-                disabled={inBdd}
-                onChange={() => togglePick(yacht.id)}
-                className="w-5 h-5 rounded border-gray-600 text-copper-500 focus:ring-copper-500 cursor-pointer disabled:cursor-not-allowed"
-              />
-              <img src={imageUrl} alt={yacht.name} className="w-20 h-14 object-cover rounded-lg flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <h3 className="text-[#C0C0C0] font-medium truncate">{yacht.name}</h3>
-                <div className="flex gap-2 text-xs text-gray-400 mt-1 flex-wrap">
-                  {yacht.type && <span className="capitalize">{yacht.type}</span>}
-                  {yacht.length && <span>• {formatLength(yacht.length, 'both')}</span>}
-                  {yacht.guests && <span>• {yacht.guests} guests</span>}
-                  {yacht.pricePerHour && <span>• {yacht.pricePerHour}</span>}
-                </div>
-              </div>
-              {inBdd && (
-                <span className="px-3 py-1 bg-gray-800 text-gray-400 rounded-lg text-xs flex items-center gap-1">
-                  <Check className="w-3 h-3" /> Déjà en BDD
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-// ============================================
-// Étape 3 — Vérifier/Assigner la région principale
-// ============================================
-function Step3AssignRegion({ selections, onUpdateRegion, onBulkImportRegion, onApplyWhitelist, importing, applyingWhitelist }) {
-  const [whitelistText, setWhitelistText] = useState('');
-  const [whitelistRegion, setWhitelistRegion] = useState('caribbean');
-  const [whitelistResult, setWhitelistResult] = useState(null);
-
-  const byRegion = useMemo(() => {
-    const map = {};
-    for (const s of selections) {
-      const r = s.region || '_unassigned';
-      if (!map[r]) map[r] = [];
-      map[r].push(s);
-    }
-    return map;
-  }, [selections]);
-
-  const mismatches = useMemo(
-    () => selections.filter(s => s.ankor_region && s.region && s.ankor_region !== s.region),
-    [selections]
-  );
-
-  const visibleByRegion = useMemo(() => {
-    const map = {};
-    for (const s of selections) {
-      const r = s.region;
-      if (!r) continue;
-      if (!map[r]) map[r] = { visible: 0, total: 0 };
-      map[r].total++;
-      if (s.is_visible !== false) map[r].visible++;
-    }
-    return map;
-  }, [selections]);
-
-  const handleApply = async () => {
-    const names = whitelistText.split('\n').map(s => s.trim()).filter(Boolean);
-    if (names.length === 0) return;
-    if (!confirm(`Appliquer la whitelist : ${names.length} yachts visibles, le reste de la région "${whitelistRegion}" sera MASQUÉ. Continuer ?`)) return;
-    const result = await onApplyWhitelist(whitelistRegion, names);
-    setWhitelistResult(result);
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
-        <div className="flex items-center justify-between flex-wrap gap-3 mb-3">
-          <div>
-            <h3 className="text-[#C0C0C0] font-medium mb-1 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-copper-400" />
-              Répartition par région
-            </h3>
-            <p className="text-sm text-gray-400">
-              Chaque yacht est rangé dans une région. Ankor fournit une région source — on la respecte par défaut.
-            </p>
-          </div>
-          <button
-            onClick={() => onBulkImportRegion('caribbean')}
-            disabled={importing}
-            className="px-3 py-2 text-sm rounded-lg border border-copper-500 bg-copper-500/20 text-copper-300 hover:bg-copper-500/30 disabled:opacity-50 flex items-center gap-2"
-          >
-            {importing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-            Ré-importer Caraïbes
-          </button>
-        </div>
-
-        {mismatches.length > 0 && (
-          <div className="bg-amber-900/20 border border-amber-700/50 rounded-xl p-3 flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-amber-300 font-medium text-sm">
-                {mismatches.length} incohérence(s) entre région Ankor et région admin
-              </p>
-              <p className="text-amber-200/70 text-xs mt-1">
-                Ces yachts ont une région assignée différente de ce qu'Ankor renvoie. Vérifiez à l'étape suivante.
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* ──── Whitelist : ne publier que la liste validée ──── */}
-      <div className="bg-[#2a2a30] rounded-xl p-4 border border-copper-700/40">
-        <h3 className="text-[#C0C0C0] font-medium mb-1 flex items-center gap-2">
-          <Check className="w-5 h-5 text-copper-400" />
-          Liste validée (whitelist) — seuls ces yachts seront publiés
-        </h3>
-        <p className="text-sm text-gray-400 mb-3">
-          Colle ici la liste des yachts (1 par ligne) à <strong className="text-copper-300">PUBLIER</strong> dans la région choisie.
-          Tous les autres yachts de cette région seront <strong className="text-amber-300">MASQUÉS</strong> (is_visible=false).
-          Ils restent en BDD mais n'apparaissent ni sur /yachts ni sur /charters/destinations/...
-        </p>
-
-        <div className="flex flex-wrap gap-2 mb-3">
-          {Object.entries(visibleByRegion).map(([r, stats]) => (
-            <span key={r} className="px-2 py-1 text-xs rounded-lg bg-[#303135] text-gray-400 border border-gray-700">
-              {r} : <span className="text-green-400 font-bold">{stats.visible}</span> visibles / {stats.total} total
-            </span>
-          ))}
-        </div>
-
-        <div className="flex gap-3 mb-3 flex-wrap">
-          <select
-            value={whitelistRegion}
-            onChange={(e) => setWhitelistRegion(e.target.value)}
-            className="px-3 py-2 bg-[#303135] border border-gray-700 rounded-lg text-[#C0C0C0] text-sm"
-          >
-            <option value="caribbean">Caraïbes</option>
-            <option value="bahamas">Bahamas</option>
-            <option value="west-mediterranean">Méditerranée Ouest</option>
-            <option value="east-mediterranean">Méditerranée Est</option>
-            <option value="indian-ocean">Océan Indien</option>
-            <option value="pacific-ocean">Océan Pacifique</option>
-          </select>
-          <button
-            onClick={handleApply}
-            disabled={applyingWhitelist || !whitelistText.trim()}
-            className="px-4 py-2 text-sm rounded-lg border border-copper-500 bg-copper-500/20 text-copper-300 hover:bg-copper-500/30 disabled:opacity-50 flex items-center gap-2"
-          >
-            {applyingWhitelist ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-            Appliquer la whitelist
-          </button>
-        </div>
-
-        <textarea
-          value={whitelistText}
-          onChange={(e) => setWhitelistText(e.target.value)}
-          rows={10}
-          placeholder={"Un nom par ligne, ex :\nCORAL OCEAN\nOKINAWA\nAPOLLO 99\n..."}
-          className="w-full px-3 py-2 bg-[#303135] border border-gray-700 rounded-lg text-[#C0C0C0] text-sm font-mono resize-vertical"
-        />
-
-        {whitelistResult && (
-          <div className="mt-3 rounded-lg border border-gray-700 bg-[#303135] p-3 text-xs space-y-1">
-            <p className="text-[#C0C0C0]">
-              <Check className="inline w-3 h-3 text-green-400 mr-1" />
-              Whitelist appliquée à <strong>{whitelistResult.region}</strong> :
-              <span className="text-green-400 ml-2">{whitelistResult.shown} visibles</span> ·
-              <span className="text-amber-300 ml-2">{whitelistResult.hidden} masqués</span> sur {whitelistResult.total_in_region} en BDD
-            </p>
-            {whitelistResult.shown_changed > 0 && (
-              <p className="text-gray-400">→ {whitelistResult.shown_changed} yacht(s) rendus visibles à l'instant</p>
-            )}
-            {whitelistResult.hidden_changed > 0 && (
-              <p className="text-gray-400">→ {whitelistResult.hidden_changed} yacht(s) masqués à l'instant</p>
-            )}
-            {whitelistResult.not_found?.length > 0 && (
-              <div>
-                <p className="text-amber-300">⚠️ {whitelistResult.not_found.length} nom(s) introuvables en BDD :</p>
-                <p className="text-amber-200/70 ml-3">{whitelistResult.not_found.join(', ')}</p>
-              </div>
-            )}
-            {whitelistResult.ambiguous?.length > 0 && (
-              <div>
-                <p className="text-amber-300">⚠️ {whitelistResult.ambiguous.length} nom(s) ambigus (plusieurs matches, tous rendus visibles) :</p>
-                {whitelistResult.ambiguous.map((a, i) => (
-                  <p key={i} className="text-amber-200/70 ml-3">"{a.name}" → {a.candidates.join(', ')}</p>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {REGIONS.slice(1).map(region => {
-          const count = byRegion[region.value]?.length || 0;
-          if (count === 0) return null;
-          return (
-            <div key={region.value} className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
-              <div className="flex items-center justify-between">
-                <h4 className="text-[#C0C0C0] font-medium">{region.label}</h4>
-                <span className="text-copper-300 font-bold">{count}</span>
-              </div>
-              <div className="text-xs text-gray-500 mt-1">
-                {getSubRegionsFor(region.value).length > 0 && `${getSubRegionsFor(region.value).length} sous-régions disponibles`}
-              </div>
-            </div>
-          );
-        })}
-
-        {byRegion._unassigned?.length > 0 && (
-          <div className="bg-[#2a2a30] rounded-xl p-4 border border-amber-700/50 md:col-span-2">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="text-amber-300 font-medium flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" />
-                Sans région assignée
-              </h4>
-              <span className="text-amber-300 font-bold">{byRegion._unassigned.length}</span>
-            </div>
-            <div className="space-y-2 max-h-60 overflow-y-auto">
-              {byRegion._unassigned.map(y => (
-                <div key={y.yacht_id} className="flex items-center gap-3 p-2 bg-[#303135] rounded-lg">
-                  <span className="text-[#C0C0C0] text-sm flex-1 truncate">{y.yacht_name}</span>
-                  <select
-                    defaultValue={y.ankor_region || ''}
-                    onChange={(e) => onUpdateRegion(y.yacht_id, e.target.value)}
-                    className="px-2 py-1 bg-[#26272a] border border-gray-700 rounded text-[#C0C0C0] text-xs"
-                  >
-                    <option value="">— Choisir —</option>
-                    {REGIONS.slice(1).map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
-                  </select>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ============================================
-// Étape 4 — Répartir en sous-régions
-// ============================================
-function Step4SubRegion({ selections, onUpdate, activeRegion, setActiveRegion, onEdit }) {
-  const regionsWithYachts = useMemo(() => {
-    const set = new Set();
-    for (const s of selections) {
-      if (s.region && getSubRegionsFor(s.region).length > 0) set.add(s.region);
-    }
-    return [...set];
-  }, [selections]);
-
-  const yachtsInRegion = useMemo(
-    () => selections.filter(s => s.region === activeRegion),
-    [selections, activeRegion]
-  );
-
-  const subRegions = getSubRegionsFor(activeRegion);
-  const [selectedYachts, setSelectedYachts] = useState(new Set());
-
-  const toggle = (id) => {
-    setSelectedYachts(prev => {
-      const n = new Set(prev);
-      if (n.has(id)) n.delete(id); else n.add(id);
-      return n;
-    });
-  };
-
-  const assignBulk = async (subRegion) => {
-    for (const id of selectedYachts) {
-      await onUpdate(id, { sub_region: subRegion });
-    }
-    setSelectedYachts(new Set());
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
-        <h3 className="text-[#C0C0C0] font-medium mb-3 flex items-center gap-2">
-          <Tag className="w-5 h-5 text-copper-400" />
-          Répartition en sous-régions
-        </h3>
-        <p className="text-sm text-gray-400 mb-3">
-          Choisis une région principale, sélectionne les yachts à déplacer, puis clique sur une sous-région.
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {regionsWithYachts.length === 0 && (
-            <span className="text-sm text-gray-500">
-              Aucune région avec sous-régions disponibles pour le moment.
-            </span>
-          )}
-          {regionsWithYachts.map(r => {
-            const region = REGIONS.find(reg => reg.value === r);
-            const count = selections.filter(s => s.region === r).length;
-            return (
-              <button
-                key={r}
-                onClick={() => { setActiveRegion(r); setSelectedYachts(new Set()); }}
-                className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
-                  activeRegion === r
-                    ? 'bg-copper-500 border-copper-400 text-white'
-                    : 'bg-[#303135] border-[#C0C0C0]/40 text-[#C0C0C0] hover:border-copper-500'
-                }`}
-              >
-                {region?.label} ({count})
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {activeRegion && subRegions.length > 0 && (
-        <>
-          {/* Sticky bulk action bar */}
-          {selectedYachts.size > 0 && (
-            <div className="bg-copper-900/20 border border-copper-700 rounded-xl p-3 sticky top-0 z-10 flex items-center justify-between flex-wrap gap-2">
-              <span className="text-copper-300 font-medium">
-                {selectedYachts.size} yacht(s) sélectionné(s) → assigner :
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-2">Répartition par région</p>
+          <div className="flex flex-wrap gap-2">
+            {Object.keys(stats.byRegion).length === 0 && <span className="text-[#acb0cd]/50 text-xs italic">—</span>}
+            {Object.entries(stats.byRegion).map(([r, count]) => (
+              <span key={r} className="px-3 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#3a3b3f] text-xs">
+                <span className="text-[#acb0cd]">{r === '_none' ? 'Sans région' : (REGION_LABELS[r] || r)}</span>
+                <span className="text-[#B03E00] font-bold ml-2">{count}</span>
               </span>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => assignBulk(null)}
-                  className="px-3 py-1 text-xs rounded border border-[#C0C0C0]/40 text-[#C0C0C0] hover:border-copper-500 hover:text-copper-300"
-                >
-                  Aucune
-                </button>
-                {subRegions.map(sr => (
-                  <button
-                    key={sr.value}
-                    onClick={() => assignBulk(sr.value)}
-                    className="px-3 py-1 text-xs rounded border border-copper-500 text-copper-300 hover:bg-copper-500/30"
-                  >
-                    {sr.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Buckets par sous-région */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {[...subRegions, { value: null, label: 'Sans sous-région' }].map(sr => {
-              const yachts = yachtsInRegion.filter(y => (sr.value === null ? !y.sub_region : y.sub_region === sr.value));
-              return (
-                <div key={sr.value || 'none'} className="bg-[#2a2a30] rounded-xl p-3 border border-gray-700">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className={`font-medium ${sr.value === null ? 'text-amber-300' : 'text-[#C0C0C0]'}`}>
-                      {sr.label}
-                    </h4>
-                    <span className="text-copper-300 text-sm font-bold">{yachts.length}</span>
-                  </div>
-                  <div className="space-y-1 max-h-80 overflow-y-auto">
-                    {yachts.length === 0 ? (
-                      <p className="text-gray-500 text-xs italic">vide</p>
-                    ) : (
-                      yachts.map(y => {
-                        const data = readYachtData(y);
-                        const imageUrl = data.heroImage ? getAnkorImageUrl(data.heroImage, '320w') : '/placeholder.jpg';
-                        const picked = selectedYachts.has(y.yacht_id);
-                        return (
-                          <div key={y.yacht_id}
-                            onClick={() => toggle(y.yacht_id)}
-                            className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors ${
-                              picked ? 'bg-copper-900/30 border border-copper-700' : 'bg-[#303135] hover:bg-[#383a3e] border border-transparent'
-                            }`}
-                          >
-                            <input type="checkbox" readOnly checked={picked}
-                              className="w-4 h-4 rounded border-gray-600 text-copper-500" />
-                            <img src={imageUrl} alt="" className="w-10 h-10 rounded object-cover" />
-                            <span className="text-[#C0C0C0] text-xs flex-1 truncate">
-                              {y.custom_title || y.yacht_name}
-                            </span>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); onEdit(y); }}
-                              className="text-gray-400 hover:text-copper-400 p-1"
-                            >
-                              <Edit3 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        );
-                      })
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+            ))}
           </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-// ============================================
-// Étape 5 — Personnaliser (édition individuelle)
-// ============================================
-function Step5Customize({ selections, onUpdate, onEdit, onRemove, onToggleVisibility, onToggleFeatured, filterRegion, setFilterRegion }) {
-  const filtered = filterRegion
-    ? selections.filter(s => s.region === filterRegion)
-    : selections;
-
-  return (
-    <div className="space-y-3">
-      <div className="bg-[#2a2a30] rounded-xl p-4 border border-gray-700">
-        <h3 className="text-[#C0C0C0] font-medium mb-3 flex items-center gap-2">
-          <Edit3 className="w-5 h-5 text-copper-400" />
-          Personnalisation par yacht
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setFilterRegion('')}
-            className={`px-3 py-1 rounded-lg text-sm transition-colors ${
-              !filterRegion ? 'bg-copper-500 text-white' : 'bg-[#303135] text-[#C0C0C0] border border-gray-700 hover:border-copper-500'
-            }`}
-          >
-            Tous ({selections.length})
-          </button>
-          {REGIONS.slice(1).map(r => {
-            const count = selections.filter(s => s.region === r.value).length;
-            if (count === 0) return null;
-            return (
-              <button
-                key={r.value}
-                onClick={() => setFilterRegion(r.value)}
-                className={`px-3 py-1 rounded-lg text-sm transition-colors ${
-                  filterRegion === r.value
-                    ? 'bg-copper-500 text-white'
-                    : 'bg-[#303135] text-[#C0C0C0] border border-gray-700 hover:border-copper-500'
-                }`}
-              >
-                {r.label} ({count})
-              </button>
-            );
-          })}
         </div>
-      </div>
-
-      <div className="space-y-2 max-h-[700px] overflow-y-auto">
-        {filtered.length === 0 ? (
-          <div className="text-center py-12 text-gray-400">Aucun yacht.</div>
-        ) : (
-          filtered.map(y => <CustomizeRow key={y.yacht_id} yacht={y}
-            onEdit={onEdit} onRemove={onRemove}
-            onToggleVisibility={onToggleVisibility} onToggleFeatured={onToggleFeatured} />)
-        )}
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-2">Répartition par sous-région</p>
+          <div className="flex flex-wrap gap-2">
+            {Object.keys(stats.bySubRegion).length === 0 ? (
+              <span className="text-[#acb0cd]/50 text-xs italic">Aucune sous-région assignée</span>
+            ) : Object.entries(stats.bySubRegion).map(([s, count]) => (
+              <span key={s} className="px-3 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#3a3b3f] text-xs">
+                <span className="text-[#acb0cd]">{SUB_REGION_LABELS[s] || s}</span>
+                <span className="text-[#B03E00] font-bold ml-2">{count}</span>
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function CustomizeRow({ yacht, onEdit, onRemove, onToggleVisibility, onToggleFeatured }) {
-  const data = readYachtData(yacht);
-  const imageUrl = data.heroImage ? getAnkorImageUrl(data.heroImage, '320w') : '/placeholder.jpg';
-  const isVisible = yacht.is_visible !== false;
-  const isFeatured = yacht.is_featured === true;
-  const regionLabel = REGIONS.find(r => r.value === yacht.region)?.label;
-  const subRegionLabel = getSubRegionsFor(yacht.region).find(sr => sr.value === yacht.sub_region)?.label;
-  const mismatch = yacht.ankor_region && yacht.region && yacht.ankor_region !== yacht.region;
-
-  return (
-    <div className={`flex items-center gap-3 p-3 rounded-xl border ${
-      !isVisible ? 'bg-[#252528] border-gray-800 opacity-60' :
-      isFeatured ? 'bg-[#2a2a30] border-copper-700/50' : 'bg-[#2a2a30] border-gray-700'
-    }`}>
-      <img src={imageUrl} alt={yacht.yacht_name} className="w-20 h-14 object-cover rounded-lg flex-shrink-0" />
-      <div className="flex-1 min-w-0">
-        <h3 className="text-[#C0C0C0] font-medium truncate">{yacht.custom_title || yacht.yacht_name}</h3>
-        <div className="flex flex-wrap gap-2 text-xs text-gray-400 mt-1">
-          {data.length && <span>{data.length}</span>}
-          {data.guests && <span>• {data.guests} guests</span>}
-          {regionLabel && <span className="text-copper-400">• {regionLabel}</span>}
-          {subRegionLabel && <span className="text-copper-300/80">› {subRegionLabel}</span>}
-          {mismatch && (
-            <span className="text-amber-400 flex items-center gap-1">
-              <AlertTriangle className="w-3 h-3" /> Ankor: {yacht.ankor_region}
-            </span>
-          )}
-        </div>
-        <div className="flex gap-1 mt-1">
-          {yacht.pets_allowed && <PawPrint className="w-3 h-3 text-green-400" />}
-          {yacht.groups_allowed && <Users className="w-3 h-3 text-blue-400" />}
-          {yacht.water_toys && <Waves className="w-3 h-3 text-cyan-400" />}
-        </div>
-      </div>
-      <button onClick={() => onEdit(yacht)} className="p-2 text-gray-400 hover:text-copper-400"><Edit3 className="w-4 h-4" /></button>
-      <button onClick={() => onToggleFeatured(yacht)}
-        className={`p-2 ${isFeatured ? 'text-copper-400' : 'text-gray-500 hover:text-copper-400'}`}>
-        <Star className="w-4 h-4" fill={isFeatured ? 'currentColor' : 'none'} />
-      </button>
-      <button onClick={() => onToggleVisibility(yacht)}
-        className={`p-2 ${isVisible ? 'text-green-400' : 'text-red-400'}`}>
-        {isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-      </button>
-      <button onClick={() => onRemove(yacht.yacht_id)} className="p-2 text-gray-400 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
-    </div>
-  );
-}
-
-// ============================================
-// Modal d'édition enrichie (avec verrou souple)
-// ============================================
-function EditModal({ yacht, onClose, onSave, token }) {
+// ════════════════════════════════════════════════════════════
+// ONGLET 1 — Recherche Ankor (vrai endpoint)
+// ════════════════════════════════════════════════════════════
+function AnkorSearchTab({ existingIds, onAdd, token }) {
+  const [filters, setFilters] = useState({ search: '', type: '', destination: '' });
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const data = readYachtData(yacht);
-  const [form, setForm] = useState({
-    custom_title: yacht.custom_title || '',
-    custom_description: yacht.custom_description || '',
-    custom_price: yacht.custom_price || '',
-    internal_notes: yacht.internal_notes || '',
-    region: yacht.region || yacht.ankor_region || '',
-    sub_region: yacht.sub_region || '',
-    pets_allowed: yacht.pets_allowed || false,
-    groups_allowed: yacht.groups_allowed || false,
-    water_toys: yacht.water_toys || false,
-    extra_info: yacht.extra_info || '',
-  });
+  const [adding, setAdding] = useState(null);
 
-  const availableSubRegions = getSubRegionsFor(form.region);
-  const mismatch = yacht.ankor_region && form.region && yacht.ankor_region !== form.region;
-  const ankorRegionLabel = REGIONS.find(r => r.value === yacht.ankor_region)?.label;
-
-  const handleSave = async () => {
+  const doSearch = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/yachts?token=${token}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'enrich', yacht_id: yacht.yacht_id, ...form })
-      });
-      if (res.ok) {
-        onSave(yacht.yacht_id, form);
-        onClose();
+      const params = new URLSearchParams();
+      if (filters.type) params.set('type', filters.type);
+      if (filters.destination) params.set('destination', filters.destination);
+      const res = await fetch(`/api/admin/yachts/search?token=${token}&${params}`);
+      const data = await res.json();
+      let yachts = data.yachts || [];
+      if (filters.search) {
+        const q = filters.search.toLowerCase();
+        yachts = yachts.filter(y => y.name?.toLowerCase().includes(q));
       }
-    } catch (err) { console.error(err); }
+      setResults(yachts);
+    } catch (e) { console.error(e); }
     setLoading(false);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-      <div className="bg-[#2a2a30] rounded-2xl w-full max-w-3xl border border-gray-700 max-h-[95vh] overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-bold text-[#C0C0C0]">Modifier {yacht.yacht_name}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white"><X className="w-6 h-6" /></button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {data.heroImage && (
-            <img src={getAnkorImageUrl(data.heroImage, '640w')} alt={yacht.yacht_name}
-              className="w-full aspect-video object-cover rounded-xl" />
-          )}
-
-          <div className="bg-[#303135] rounded-xl p-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-            {data.type && <div><span className="text-gray-500">Type:</span> <span className="text-[#C0C0C0] capitalize">{data.type}</span></div>}
-            {data.length && <div><span className="text-gray-500">Long:</span> <span className="text-[#C0C0C0]">{data.length}</span></div>}
-            {data.guests && <div><span className="text-gray-500">Guests:</span> <span className="text-[#C0C0C0]">{data.guests}</span></div>}
-            {data.location && <div><span className="text-gray-500">Port:</span> <span className="text-[#C0C0C0]">{data.location}</span></div>}
+    <div>
+      <div className="bg-[#2a2a30] border border-[#C0C0C0]/20 rounded-2xl p-5 mb-4">
+        <div className="flex items-start gap-3 mb-4">
+          <Globe className="w-6 h-6 text-[#B03E00] shrink-0" />
+          <div>
+            <h3 className="trajan-regular text-base uppercase tracking-wider text-[#C0C0C0] mb-1">Recherche sur Ankor</h3>
+            <p className="text-sm text-[#acb0cd]/70">
+              Catalogue externe Ankor. Clique &laquo;&nbsp;Ajouter à ma BDD&nbsp;&raquo; pour importer un yacht en stock.
+              Les yachts déjà en BDD sont marqués.
+            </p>
           </div>
+        </div>
+        <div className="grid sm:grid-cols-4 gap-3">
+          <input
+            type="text" value={filters.search} onChange={e => setFilters({ ...filters, search: e.target.value })}
+            placeholder="Rechercher par nom…"
+            className="sm:col-span-2 px-4 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-xl text-[#acb0cd] text-sm focus:border-[#B03E00] outline-none"
+          />
+          <select
+            value={filters.destination} onChange={e => setFilters({ ...filters, destination: e.target.value })}
+            className="px-4 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-xl text-[#acb0cd] text-sm"
+          >
+            <option value="">Toutes régions</option>
+            {Object.entries(REGION_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+          </select>
+          <button
+            onClick={doSearch} disabled={loading}
+            className="px-4 py-2 rounded-xl border-2 border-[#B03E00] bg-[#B03E00]/20 text-[#B03E00] hover:bg-[#B03E00]/30 disabled:opacity-50 text-sm uppercase tracking-wider font-medium flex items-center justify-center gap-2"
+          >
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4" />}
+            Rechercher
+          </button>
+        </div>
+      </div>
 
-          {ankorRegionLabel && (
-            <div className={`rounded-xl p-3 border flex items-start gap-2 ${
-              mismatch ? 'bg-amber-900/20 border-amber-700/50' : 'bg-[#303135] border-gray-700'
-            }`}>
-              {mismatch ? <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" /> : <Anchor className="w-4 h-4 text-copper-400 flex-shrink-0 mt-0.5" />}
-              <p className={`text-sm ${mismatch ? 'text-amber-200' : 'text-gray-400'}`}>
-                Région Ankor : <span className="font-semibold">{ankorRegionLabel}</span>
-                {mismatch && ' — incohérent avec la région admin choisie.'}
-              </p>
+      <div className="space-y-2">
+        {results.length === 0 && !loading && (
+          <div className="text-center py-12 text-[#acb0cd]/50">Lance une recherche pour voir les yachts Ankor.</div>
+        )}
+        {results.map(yacht => {
+          const inBdd = existingIds.has(yacht.id);
+          const img = yacht.images?.[0] ? getAnkorImageUrl(yacht.images[0], '320w') : '/placeholder.jpg';
+          return (
+            <div key={yacht.id} className="flex items-center gap-3 p-3 rounded-xl border border-[#C0C0C0]/20 bg-[#2a2a30]">
+              <Image src={img} alt={yacht.name} width={80} height={56} className="rounded-lg object-cover h-14" />
+              <div className="flex-1 min-w-0">
+                <h4 className="text-[#C0C0C0] font-medium truncate">{yacht.name}</h4>
+                <div className="flex flex-wrap gap-3 text-xs text-[#acb0cd]/70 mt-1">
+                  {yacht.length && <span>{yacht.length}</span>}
+                  {yacht.guests && <span>{yacht.guests} guests</span>}
+                  {yacht.pricePerHour && <span className="text-[#B03E00] font-bold">{yacht.pricePerHour}</span>}
+                </div>
+              </div>
+              {inBdd ? (
+                <span className="px-3 py-1.5 rounded-full bg-[#acb0cd]/10 border border-[#acb0cd]/30 text-[#acb0cd]/70 text-xs flex items-center gap-1.5">
+                  <Check className="w-3 h-3" /> Déjà en BDD
+                </span>
+              ) : (
+                <button
+                  onClick={async () => { setAdding(yacht.id); await onAdd(yacht); setAdding(null); }}
+                  disabled={adding === yacht.id}
+                  className="px-4 py-2 rounded-xl border-2 border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/10 disabled:opacity-50 text-xs uppercase tracking-wider font-medium flex items-center gap-1.5"
+                >
+                  {adding === yacht.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                  Ajouter à ma BDD
+                </button>
+              )}
             </div>
-          )}
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
-          <div className="grid md:grid-cols-2 gap-3">
+// ════════════════════════════════════════════════════════════
+// ONGLET 2 — Catalogue BDD (toggle visible)
+// ════════════════════════════════════════════════════════════
+function BddCatalogueTab({ yachts, onToggleVisible, onToggleFeatured, onDelete, onEdit }) {
+  const [filterRegion, setFilterRegion] = useState('');
+  const [filterVisibility, setFilterVisibility] = useState('all');
+  const [search, setSearch] = useState('');
+
+  const filtered = useMemo(() => yachts.filter(y => {
+    if (filterRegion && y.region !== filterRegion) return false;
+    if (filterVisibility === 'visible' && !y.is_visible) return false;
+    if (filterVisibility === 'hidden' && y.is_visible) return false;
+    if (search && !(y.name || '').toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  }), [yachts, filterRegion, filterVisibility, search]);
+
+  const allRegions = useMemo(() => [...new Set(yachts.map(y => y.region).filter(Boolean))].sort(), [yachts]);
+
+  return (
+    <div>
+      <div className="bg-[#2a2a30] border border-[#C0C0C0]/20 rounded-2xl p-5 mb-4">
+        <div className="flex items-start gap-3 mb-4">
+          <Database className="w-6 h-6 text-[#B03E00] shrink-0" />
+          <div>
+            <h3 className="trajan-regular text-base uppercase tracking-wider text-[#C0C0C0] mb-1">Mes bateaux en BDD</h3>
+            <p className="text-sm text-[#acb0cd]/70">
+              Tous les yachts en base. Toggle <strong className="text-[#B03E00]">Publié</strong> pour les afficher/cacher sur le site.
+              L'édition (titre, prix, photos…) se fait sur l'onglet <strong>Mes bateaux publiés</strong>.
+            </p>
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-3 gap-3">
+          <input
+            type="text" value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Rechercher par nom…"
+            className="px-4 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-xl text-[#acb0cd] text-sm focus:border-[#B03E00] outline-none"
+          />
+          <select value={filterRegion} onChange={e => setFilterRegion(e.target.value)}
+            className="px-4 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-xl text-[#acb0cd] text-sm">
+            <option value="">Toutes régions ({allRegions.length})</option>
+            {allRegions.map(r => <option key={r} value={r}>{REGION_LABELS[r] || r}</option>)}
+          </select>
+          <select value={filterVisibility} onChange={e => setFilterVisibility(e.target.value)}
+            className="px-4 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-xl text-[#acb0cd] text-sm">
+            <option value="all">Visibles + En stock</option>
+            <option value="visible">Publiés uniquement</option>
+            <option value="hidden">En stock uniquement</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="text-xs text-[#acb0cd]/60 mb-2 px-1">{filtered.length} bateau{filtered.length > 1 ? 'x' : ''} sur {yachts.length}</div>
+
+      <div className="space-y-2 max-h-[800px] overflow-y-auto pr-1">
+        {filtered.length === 0 ? (
+          <div className="text-center py-12 text-[#acb0cd]/50">Aucun bateau ne correspond.</div>
+        ) : filtered.map(y => (
+          <div key={y.id} className={`flex items-center gap-3 p-3 rounded-xl border ${y.is_visible ? 'border-[#B03E00]/40 bg-[#B03E00]/5' : 'border-[#C0C0C0]/20 bg-[#2a2a30]'}`}>
+            <Image src={y.image} alt={y.name} width={80} height={56} className="rounded-lg object-cover h-14 shrink-0" unoptimized />
+            <div className="flex-1 min-w-0">
+              <h4 className="text-[#C0C0C0] font-medium flex items-center gap-2 truncate">
+                {y.name}
+                {y.is_featured && <Star className="w-3 h-3 text-[#B03E00] shrink-0" fill="currentColor" />}
+              </h4>
+              <div className="flex flex-wrap gap-3 text-xs text-[#acb0cd]/70 mt-1">
+                {y.length && <span>{y.length}</span>}
+                {y.guests && <span>{y.guests} guests</span>}
+                {y.cabins && <span>{y.cabins} cabines</span>}
+                {y.region && <span className="text-[#B03E00]">{REGION_LABELS[y.region] || y.region}</span>}
+                {y.sub_region && <span className="text-[#B03E00]/70">› {SUB_REGION_LABELS[y.sub_region] || y.sub_region}</span>}
+              </div>
+            </div>
+
+            <button
+              onClick={() => onToggleVisible(y)}
+              className={`px-3 py-2 rounded-xl text-xs uppercase tracking-wider font-medium flex items-center gap-2 shrink-0 ${
+                y.is_visible
+                  ? 'bg-[#B03E00]/20 border border-[#B03E00] text-[#B03E00]'
+                  : 'bg-[#3a3b3f] border border-[#C0C0C0]/30 text-[#acb0cd]/70 hover:border-[#B03E00] hover:text-[#B03E00]'
+              }`}
+              title={y.is_visible ? 'Cliquer pour cacher' : 'Cliquer pour publier'}
+            >
+              {y.is_visible ? <><Eye className="w-4 h-4" /> Publié</> : <><EyeOff className="w-4 h-4" /> En stock</>}
+            </button>
+
+            <button onClick={() => onToggleFeatured(y)} disabled={!y.is_visible}
+              className={`p-2 rounded-lg shrink-0 ${y.is_visible ? (y.is_featured ? 'text-[#B03E00]' : 'text-[#acb0cd]/50 hover:text-[#B03E00]') : 'text-[#acb0cd]/20 cursor-not-allowed'}`}
+              title={y.is_visible ? 'Mettre en avant' : 'Publie d\'abord'}>
+              <Star className="w-4 h-4" fill={y.is_featured ? 'currentColor' : 'none'} />
+            </button>
+
+            <button onClick={() => y.is_visible && onEdit(y)} disabled={!y.is_visible}
+              className={`p-2 rounded-lg shrink-0 ${y.is_visible ? 'text-[#acb0cd] hover:text-[#B03E00]' : 'text-[#acb0cd]/20 cursor-not-allowed'}`}
+              title={y.is_visible ? 'Éditer' : 'Publie d\'abord pour éditer'}>
+              <Edit3 className="w-4 h-4" />
+            </button>
+
+            <button onClick={() => onDelete(y)}
+              className="p-2 rounded-lg text-[#acb0cd]/50 hover:text-red-400 shrink-0"
+              title="Supprimer définitivement de la BDD">
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// ONGLET 3 — Publiés (édition)
+// ════════════════════════════════════════════════════════════
+function VisibleEditTab({ yachts, onEdit }) {
+  const visible = useMemo(() => yachts.filter(y => y.is_visible), [yachts]);
+
+  return (
+    <div>
+      <div className="bg-[#2a2a30] border border-[#C0C0C0]/20 rounded-2xl p-5 mb-4">
+        <div className="flex items-start gap-3">
+          <Eye className="w-6 h-6 text-[#B03E00] shrink-0" />
+          <div>
+            <h3 className="trajan-regular text-base uppercase tracking-wider text-[#C0C0C0] mb-1">Mes bateaux publiés</h3>
+            <p className="text-sm text-[#acb0cd]/70">
+              Édition complète : titre custom, description, prix affiché, options, région/sous-région.
+              Pour cacher un yacht, va dans <strong>Mes bateaux en BDD</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="text-xs text-[#acb0cd]/60 mb-2 px-1">{visible.length} bateau{visible.length > 1 ? 'x' : ''} publié{visible.length > 1 ? 's' : ''}</div>
+
+      <div className="grid md:grid-cols-2 gap-3 max-h-[800px] overflow-y-auto pr-1">
+        {visible.length === 0 ? (
+          <div className="col-span-2 text-center py-12 text-[#acb0cd]/50">
+            Aucun bateau publié. Va dans <strong>Mes bateaux en BDD</strong> pour en publier.
+          </div>
+        ) : visible.map(y => (
+          <button key={y.id} onClick={() => onEdit(y)}
+            className="flex items-center gap-3 p-4 rounded-xl border border-[#B03E00]/30 bg-[#B03E00]/5 text-left hover:bg-[#B03E00]/10 hover:border-[#B03E00] transition-colors">
+            <Image src={y.image} alt={y.name} width={100} height={70} className="rounded-lg object-cover h-16 shrink-0" unoptimized />
+            <div className="flex-1 min-w-0">
+              <h4 className="text-[#C0C0C0] font-medium flex items-center gap-2 truncate">
+                {y.name}
+                {y.is_featured && <Star className="w-3 h-3 text-[#B03E00] shrink-0" fill="currentColor" />}
+              </h4>
+              {y.custom_title && <p className="text-xs text-[#acb0cd] italic truncate">« {y.custom_title} »</p>}
+              <div className="flex flex-wrap gap-2 text-xs text-[#acb0cd]/70 mt-1">
+                {y.length && <span>{y.length}</span>}
+                {y.guests && <span>{y.guests} guests</span>}
+                {y.region && <span>{REGION_LABELS[y.region] || y.region}</span>}
+              </div>
+              {y.custom_price && <p className="text-[#B03E00] font-bold text-sm mt-1">{y.custom_price}</p>}
+            </div>
+            <Edit3 className="w-5 h-5 text-[#B03E00] shrink-0" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// MODAL Édition
+// ════════════════════════════════════════════════════════════
+function EditModal({ yacht, onClose, onSave }) {
+  const [form, setForm] = useState({
+    custom_title: yacht.custom_title || '',
+    custom_description: yacht.custom_description || '',
+    custom_price: yacht.custom_price || '',
+    region: yacht.region || '',
+    sub_region: yacht.sub_region || '',
+    pets_allowed: !!yacht.pets_allowed,
+    groups_allowed: !!yacht.groups_allowed,
+    water_toys: !!yacht.water_toys,
+    extra_info: yacht.extra_info || '',
+  });
+  const [saving, setSaving] = useState(false);
+  const availableSubRegions = SUB_REGIONS_BY_REGION[form.region] || [];
+
+  const save = async () => {
+    setSaving(true);
+    await onSave(yacht.id, form);
+    setSaving(false);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-[#2a2a30] rounded-2xl border border-[#C0C0C0]/30 max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="p-5 border-b border-[#C0C0C0]/20 flex items-center justify-between sticky top-0 bg-[#2a2a30]">
+          <h3 className="trajan-regular text-lg uppercase tracking-wider text-[#C0C0C0]">Éditer {yacht.name}</h3>
+          <button onClick={onClose} className="text-[#acb0cd]/60 hover:text-white"><X className="w-5 h-5" /></button>
+        </div>
+        <div className="p-5 space-y-4">
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Titre personnalisé</label>
+            <input type="text" value={form.custom_title} onChange={e => setForm({ ...form, custom_title: e.target.value })}
+              placeholder={yacht.name} className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Description FR</label>
+            <textarea rows={3} value={form.custom_description} onChange={e => setForm({ ...form, custom_description: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none resize-y" />
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Prix affiché</label>
+            <input type="text" value={form.custom_price} onChange={e => setForm({ ...form, custom_price: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+          <div className="grid sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Région d'affichage</label>
-              <select value={form.region}
-                onChange={(e) => setForm({ ...form, region: e.target.value, sub_region: '' })}
-                className="w-full px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0]">
-                {REGIONS.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Région</label>
+              <select value={form.region} onChange={e => setForm({ ...form, region: e.target.value, sub_region: '' })}
+                className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd]">
+                <option value="">— Aucune —</option>
+                {Object.entries(REGION_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
               </select>
             </div>
             {availableSubRegions.length > 0 && (
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Sous-région</label>
-                <select value={form.sub_region}
-                  onChange={(e) => setForm({ ...form, sub_region: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#303135] border border-copper-700/50 rounded-xl text-copper-400">
+                <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Sous-région</label>
+                <select value={form.sub_region} onChange={e => setForm({ ...form, sub_region: e.target.value })}
+                  className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd]">
                   <option value="">— Aucune —</option>
-                  {availableSubRegions.map(sr => <option key={sr.value} value={sr.value}>{sr.label}</option>)}
+                  {availableSubRegions.map(s => <option key={s} value={s}>{SUB_REGION_LABELS[s] || s}</option>)}
                 </select>
               </div>
             )}
           </div>
-
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Titre personnalisé</label>
-            <input type="text" value={form.custom_title}
-              onChange={(e) => setForm({ ...form, custom_title: e.target.value })}
-              placeholder={data.light?.name || yacht.yacht_name}
-              className="w-full px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0]" />
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Description FR</label>
-            <textarea value={form.custom_description} rows={3}
-              onChange={(e) => setForm({ ...form, custom_description: e.target.value })}
-              className="w-full px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] resize-none" />
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Prix affiché</label>
-            <input type="text" value={form.custom_price}
-              onChange={(e) => setForm({ ...form, custom_price: e.target.value })}
-              placeholder={data.price || ''}
-              className="w-full px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0]" />
-          </div>
-
-          <div className="bg-[#303135] rounded-xl p-3 grid grid-cols-3 gap-3">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={form.pets_allowed}
-                onChange={(e) => setForm({ ...form, pets_allowed: e.target.checked })}
-                className="w-4 h-4 rounded" />
-              <PawPrint className="w-4 h-4 text-gray-400" />
-              <span className="text-[#C0C0C0] text-sm">Animaux</span>
+          <div className="bg-[#3a3b3f] rounded-lg p-3 grid grid-cols-3 gap-2">
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={form.pets_allowed} onChange={e => setForm({ ...form, pets_allowed: e.target.checked })} className="w-4 h-4" />
+              <span className="text-[#acb0cd]">Animaux</span>
             </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={form.groups_allowed}
-                onChange={(e) => setForm({ ...form, groups_allowed: e.target.checked })}
-                className="w-4 h-4 rounded" />
-              <Users className="w-4 h-4 text-gray-400" />
-              <span className="text-[#C0C0C0] text-sm">Groupes</span>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={form.groups_allowed} onChange={e => setForm({ ...form, groups_allowed: e.target.checked })} className="w-4 h-4" />
+              <span className="text-[#acb0cd]">Groupes</span>
             </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={form.water_toys}
-                onChange={(e) => setForm({ ...form, water_toys: e.target.checked })}
-                className="w-4 h-4 rounded" />
-              <Waves className="w-4 h-4 text-gray-400" />
-              <span className="text-[#C0C0C0] text-sm">Water toys</span>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={form.water_toys} onChange={e => setForm({ ...form, water_toys: e.target.checked })} className="w-4 h-4" />
+              <span className="text-[#acb0cd]">Water toys</span>
             </label>
           </div>
-
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Notes internes (privées)</label>
-            <textarea value={form.internal_notes} rows={2}
-              onChange={(e) => setForm({ ...form, internal_notes: e.target.value })}
-              className="w-full px-3 py-2 bg-[#303135] border border-gray-700 rounded-xl text-[#C0C0C0] resize-none" />
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Infos additionnelles</label>
+            <textarea rows={2} value={form.extra_info} onChange={e => setForm({ ...form, extra_info: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none resize-y" />
           </div>
         </div>
-
-        <div className="flex gap-3 p-4 border-t border-gray-700">
-          <button onClick={onClose}
-            className="flex-1 px-4 py-2 border border-[#C0C0C0]/40 text-[#C0C0C0] hover:border-copper-500 rounded-xl">
-            Annuler
-          </button>
-          <button onClick={handleSave} disabled={loading}
-            className="flex-1 px-4 py-2 border border-copper-500 bg-copper-500/20 text-copper-300 hover:bg-copper-500/30 disabled:opacity-50 rounded-xl flex items-center justify-center gap-2">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+        <div className="p-5 border-t border-[#C0C0C0]/20 flex justify-end gap-2 sticky bottom-0 bg-[#2a2a30]">
+          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-[#C0C0C0]/30 text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] text-sm">Annuler</button>
+          <button onClick={save} disabled={saving}
+            className="px-6 py-2 rounded-xl border-2 border-[#B03E00] bg-[#B03E00]/20 text-[#B03E00] hover:bg-[#B03E00]/30 disabled:opacity-50 text-sm uppercase tracking-wider font-medium flex items-center gap-2">
+            {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             Sauvegarder
           </button>
         </div>
@@ -991,286 +534,124 @@ function EditModal({ yacht, onClose, onSave, token }) {
   );
 }
 
-// ============================================
-// Composant Principal
-// ============================================
+// ════════════════════════════════════════════════════════════
+// COMPOSANT PRINCIPAL
+// ════════════════════════════════════════════════════════════
 export default function AdminYachtPanel({ initialSelections, initialStats, token }) {
-  const [selections, setSelections] = useState(initialSelections || []);
-  const [stats, setStats] = useState(initialStats);
-  const [selectedIds, setSelectedIds] = useState(new Set((initialSelections || []).map(s => s.yacht_id)));
-
-  const [currentStep, setCurrentStep] = useState(1);
-  const [searchResults, setSearchResults] = useState([]);
-  const [searching, setSearching] = useState(false);
-  const [filters, setFilters] = useState({
-    search: '', type: '', destination: '', minLength: '', maxLength: '', priceMin: '', priceMax: '',
-  });
-  const [ankorPicks, setAnkorPicks] = useState(new Set());
-  const [adding, setAdding] = useState(false);
-  const [importing, setImporting] = useState(false);
+  const [rawYachts, setRawYachts] = useState(initialSelections || []);
+  const [activeTab, setActiveTab] = useState('bdd');
   const [editingYacht, setEditingYacht] = useState(null);
-  const [activeRegionStep4, setActiveRegionStep4] = useState('caribbean');
-  const [filterRegionStep5, setFilterRegionStep5] = useState('');
 
-  const handleSearch = async () => {
-    setSearching(true);
+  const yachts = useMemo(() => rawYachts.map(adaptYacht), [rawYachts]);
+  const existingIds = useMemo(() => new Set(yachts.map(y => y.id)), [yachts]);
+
+  // Recharge depuis BDD après chaque action mutante
+  const reload = useCallback(async () => {
     try {
-      const params = new URLSearchParams();
-      if (filters.type) params.set('type', filters.type);
-      if (filters.destination) params.set('destination', filters.destination);
-      if (filters.minLength) params.set('minLength', filters.minLength);
-      if (filters.maxLength) params.set('maxLength', filters.maxLength);
-      if (filters.priceMin) params.set('priceMin', filters.priceMin);
-      if (filters.priceMax) params.set('priceMax', filters.priceMax);
-
-      const res = await fetch(`/api/admin/yachts/search?token=${token}&${params.toString()}`);
+      const res = await fetch(`/api/admin/yachts?token=${token}`);
       const data = await res.json();
-      let results = data.yachts || [];
-      if (filters.search) {
-        const q = filters.search.toLowerCase();
-        results = results.filter(y => y.name?.toLowerCase().includes(q));
-      }
-      setSearchResults(results);
-    } catch (err) {
-      console.error('Erreur recherche:', err);
-    }
-    setSearching(false);
-  };
-
-  const handleBulkAdd = async () => {
-    setAdding(true);
-    const toAdd = searchResults.filter(y => ankorPicks.has(y.id));
-    const added = [];
-    for (const yacht of toAdd) {
-      try {
-        const res = await fetch(`/api/admin/yachts?token=${token}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            yacht_id: yacht.id,
-            yacht_name: yacht.name,
-            cached_data: yacht,
-          })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.selection) added.push(data.selection);
-        }
-      } catch (err) { console.error(err); }
-    }
-    if (added.length > 0) {
-      setSelections(prev => [...prev, ...added]);
-      setSelectedIds(prev => new Set([...prev, ...added.map(s => s.yacht_id)]));
-      setStats(prev => ({ ...prev, total: prev.total + added.length, visible: prev.visible + added.length }));
-    }
-    setAnkorPicks(new Set());
-    setAdding(false);
-  };
-
-  const handleBulkImportRegion = async (region) => {
-    setImporting(true);
-    try {
-      const res = await fetch(`/api/admin/yachts/import-region?token=${token}&region=${region}`, {
-        method: 'POST',
-      });
-      const data = await res.json();
-      if (data.success) {
-        // Recharger les sélections après l'import
-        const sel = await fetch(`/api/admin/yachts?token=${token}`).then(r => r.json());
-        setSelections(sel.selections || []);
-        setStats(sel.stats || stats);
-        setSelectedIds(new Set((sel.selections || []).map(s => s.yacht_id)));
-        alert(`Import OK : ${data.inserted} nouveaux, ${data.updated} mis à jour`);
-      } else {
-        alert(`Erreur: ${data.error || 'inconnue'}`);
-      }
-    } catch (err) {
-      console.error('Erreur import région:', err);
-    }
-    setImporting(false);
-  };
-
-  const [applyingWhitelist, setApplyingWhitelist] = useState(false);
-  const handleApplyWhitelist = async (region, names) => {
-    setApplyingWhitelist(true);
-    try {
-      const res = await fetch(`/api/admin/yachts/apply-whitelist?token=${token}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ region, names }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        // Recharger les sélections pour refléter is_visible
-        const sel = await fetch(`/api/admin/yachts?token=${token}`).then(r => r.json());
-        setSelections(sel.selections || []);
-        setStats(sel.stats || stats);
-        setApplyingWhitelist(false);
-        return data;
-      }
-      alert(`Erreur whitelist : ${data.error || 'inconnue'}`);
-      setApplyingWhitelist(false);
-      return data;
-    } catch (err) {
-      console.error('Erreur whitelist:', err);
-      setApplyingWhitelist(false);
-      return { error: err.message };
-    }
-  };
-
-  const handleUpdateRegion = async (yacht_id, region) => {
-    try {
-      await fetch(`/api/admin/yachts?token=${token}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'enrich', yacht_id, region })
-      });
-      setSelections(prev => prev.map(s => s.yacht_id === yacht_id ? { ...s, region } : s));
-    } catch (err) { console.error(err); }
-  };
-
-  const handleUpdate = useCallback(async (yacht_id, updates) => {
-    setSelections(prev => prev.map(s => s.yacht_id === yacht_id ? { ...s, ...updates } : s));
-    try {
-      await fetch(`/api/admin/yachts?token=${token}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'enrich', yacht_id, ...updates })
-      });
-    } catch (err) { console.error(err); }
+      setRawYachts(data.selections || []);
+    } catch (e) { console.error('reload:', e); }
   }, [token]);
 
-  const handleRemove = async (yacht_id) => {
-    if (!confirm('Supprimer ce yacht de la sélection ?')) return;
+  const onAddFromAnkor = async (yacht) => {
     try {
-      const res = await fetch(`/api/admin/yachts?token=${token}&yacht_id=${yacht_id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/yachts?token=${token}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          yacht_id: yacht.id, yacht_name: yacht.name, cached_data: yacht,
+        }),
+      });
       if (res.ok) {
-        setSelections(prev => prev.filter(s => s.yacht_id !== yacht_id));
-        setSelectedIds(prev => { const n = new Set(prev); n.delete(yacht_id); return n; });
-        setStats(prev => ({ ...prev, total: prev.total - 1 }));
+        await reload();
+        // L'API met is_visible=true par défaut. On le met en stock (false) pour cohérence UX.
+        await fetch(`/api/admin/yachts?token=${token}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'visibility', yacht_id: yacht.id, is_visible: false }),
+        });
+        await reload();
+        alert(`${yacht.name} ajouté en stock. Va dans "Mes bateaux en BDD" pour le publier.`);
       }
-    } catch (err) { console.error(err); }
+    } catch (e) { console.error(e); }
   };
 
-  const handleToggleVisibility = async (yacht) => {
-    const newVal = !(yacht.is_visible !== false);
+  const onToggleVisible = async (y) => {
     try {
       await fetch(`/api/admin/yachts?token=${token}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'visibility', yacht_id: yacht.yacht_id, is_visible: newVal })
+        body: JSON.stringify({ action: 'visibility', yacht_id: y.id, is_visible: !y.is_visible }),
       });
-      setSelections(prev => prev.map(s => s.yacht_id === yacht.yacht_id ? { ...s, is_visible: newVal } : s));
-    } catch (err) { console.error(err); }
+      setRawYachts(prev => prev.map(s => s.yacht_id === y.id ? { ...s, is_visible: !y.is_visible } : s));
+    } catch (e) { console.error(e); }
   };
 
-  const handleToggleFeatured = async (yacht) => {
-    const newVal = !yacht.is_featured;
+  const onToggleFeatured = async (y) => {
     try {
       await fetch(`/api/admin/yachts?token=${token}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'featured', yacht_id: yacht.yacht_id, is_featured: newVal })
+        body: JSON.stringify({ action: 'featured', yacht_id: y.id, is_featured: !y.is_featured }),
       });
-      setSelections(prev => prev.map(s => s.yacht_id === yacht.yacht_id ? { ...s, is_featured: newVal } : s));
-    } catch (err) { console.error(err); }
+      setRawYachts(prev => prev.map(s => s.yacht_id === y.id ? { ...s, is_featured: !y.is_featured } : s));
+    } catch (e) { console.error(e); }
   };
+
+  const onDelete = async (y) => {
+    if (!confirm(`Supprimer définitivement ${y.name} de la BDD ?`)) return;
+    try {
+      await fetch(`/api/admin/yachts?token=${token}&yacht_id=${encodeURIComponent(y.id)}`, { method: 'DELETE' });
+      setRawYachts(prev => prev.filter(s => s.yacht_id !== y.id));
+    } catch (e) { console.error(e); }
+  };
+
+  const onSaveEdit = async (id, updates) => {
+    try {
+      await fetch(`/api/admin/yachts?token=${token}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'enrich', yacht_id: id, ...updates }),
+      });
+      setRawYachts(prev => prev.map(s => s.yacht_id === id ? { ...s, ...updates } : s));
+    } catch (e) { console.error(e); }
+  };
+
+  const TABS = [
+    { id: 'ankor', label: 'Recherche Ankor', icon: Globe, desc: 'Catalogue externe à importer' },
+    { id: 'bdd', label: 'Mes bateaux en BDD', icon: Database, desc: 'Toute la base · publier/cacher' },
+    { id: 'visible', label: 'Mes bateaux publiés', icon: Eye, desc: 'Édition complète des publiés' },
+  ];
 
   return (
-    <div className="space-y-4">
-      {/* Stats globales */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="bg-[#2a2a30] rounded-xl p-3 border border-gray-700">
-          <div className="text-2xl font-bold text-[#C0C0C0]">{stats.total}</div>
-          <div className="text-gray-400 text-xs">En BDD</div>
-        </div>
-        <div className="bg-[#2a2a30] rounded-xl p-3 border border-gray-700">
-          <div className="text-2xl font-bold text-green-400">{stats.visible}</div>
-          <div className="text-gray-400 text-xs">Visibles</div>
-        </div>
-        <div className="bg-[#2a2a30] rounded-xl p-3 border border-gray-700">
-          <div className="text-2xl font-bold text-copper-400">{stats.featured}</div>
-          <div className="text-gray-400 text-xs">Featured</div>
-        </div>
-        <div className="bg-[#2a2a30] rounded-xl p-3 border border-gray-700">
-          <div className="text-2xl font-bold text-blue-400">
-            {selections.filter(s => s.region === 'caribbean').length}
-          </div>
-          <div className="text-gray-400 text-xs">Caraïbes</div>
-        </div>
+    <div>
+      <Dashboard yachts={yachts} />
+
+      <div className="grid grid-cols-3 gap-2 mb-6">
+        {TABS.map(tab => {
+          const Icon = tab.icon;
+          const active = activeTab === tab.id;
+          return (
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+              className={`p-4 rounded-xl border-2 text-left transition-all ${
+                active ? 'border-[#B03E00] bg-[#B03E00]/10' : 'border-[#C0C0C0]/20 bg-[#2a2a30] hover:border-[#B03E00]/40'
+              }`}>
+              <div className="flex items-center gap-2 mb-1">
+                <Icon className={`w-4 h-4 ${active ? 'text-[#B03E00]' : 'text-[#acb0cd]/60'}`} />
+                <h3 className={`text-xs md:text-sm uppercase tracking-wider font-medium ${active ? 'text-[#B03E00]' : 'text-[#acb0cd]'}`}>{tab.label}</h3>
+              </div>
+              <p className={`text-[10px] md:text-xs ${active ? 'text-[#acb0cd]' : 'text-[#acb0cd]/50'}`}>{tab.desc}</p>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Wizard stepper */}
-      <WizardStepper currentStep={currentStep} onStepClick={setCurrentStep} />
+      {activeTab === 'ankor' && <AnkorSearchTab existingIds={existingIds} onAdd={onAddFromAnkor} token={token} />}
+      {activeTab === 'bdd' && <BddCatalogueTab yachts={yachts} onToggleVisible={onToggleVisible} onToggleFeatured={onToggleFeatured} onDelete={onDelete} onEdit={(y) => setEditingYacht(y)} />}
+      {activeTab === 'visible' && <VisibleEditTab yachts={yachts} onEdit={(y) => setEditingYacht(y)} />}
 
-      {/* Contenu de l'étape */}
-      <div className="min-h-[400px]">
-        {currentStep === 1 && (
-          <Step1Search
-            filters={filters}
-            setFilters={setFilters}
-            onSearch={handleSearch}
-            searching={searching}
-            searchResults={searchResults}
-          />
-        )}
-        {currentStep === 2 && (
-          <Step2Add
-            searchResults={searchResults}
-            selectedIds={selectedIds}
-            ankorPicks={ankorPicks}
-            setAnkorPicks={setAnkorPicks}
-            onBulkAdd={handleBulkAdd}
-            adding={adding}
-          />
-        )}
-        {currentStep === 3 && (
-          <Step3AssignRegion
-            selections={selections}
-            onUpdateRegion={handleUpdateRegion}
-            onBulkImportRegion={handleBulkImportRegion}
-            onApplyWhitelist={handleApplyWhitelist}
-            applyingWhitelist={applyingWhitelist}
-            importing={importing}
-          />
-        )}
-        {currentStep === 4 && (
-          <Step4SubRegion
-            selections={selections}
-            onUpdate={handleUpdate}
-            activeRegion={activeRegionStep4}
-            setActiveRegion={setActiveRegionStep4}
-            onEdit={setEditingYacht}
-          />
-        )}
-        {currentStep === 5 && (
-          <Step5Customize
-            selections={selections}
-            onUpdate={handleUpdate}
-            onEdit={setEditingYacht}
-            onRemove={handleRemove}
-            onToggleVisibility={handleToggleVisibility}
-            onToggleFeatured={handleToggleFeatured}
-            filterRegion={filterRegionStep5}
-            setFilterRegion={setFilterRegionStep5}
-          />
-        )}
-      </div>
-
-      <WizardNav
-        currentStep={currentStep}
-        onPrev={() => setCurrentStep(Math.max(1, currentStep - 1))}
-        onNext={() => setCurrentStep(Math.min(5, currentStep + 1))}
-      />
-
-      {editingYacht && (
-        <EditModal
-          yacht={editingYacht}
-          token={token}
-          onClose={() => setEditingYacht(null)}
-          onSave={handleUpdate}
-        />
-      )}
+      {editingYacht && <EditModal yacht={editingYacht} onClose={() => setEditingYacht(null)} onSave={onSaveEdit} />}
     </div>
   );
 }
