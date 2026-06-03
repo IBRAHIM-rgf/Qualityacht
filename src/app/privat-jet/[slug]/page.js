@@ -123,9 +123,9 @@ export default function PrivatJetDestinationPage({ params }) {
         </div>
       </div>
 
-      {/* Fond nuages derrière le contenu (sous le hero) */}
-      <div className="relative">
-        <div className="fixed inset-0 z-0 pointer-events-none">
+      {/* Fond nuages derrière le contenu (sous le hero) — absolute pour ne pas masquer le Footer */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute inset-0 bg-gray-900" />
           <Image src="/images/nuagesAncien.png" alt="Background clouds" fill className="object-cover opacity-30 grayscale" />
         </div>

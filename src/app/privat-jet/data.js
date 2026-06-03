@@ -44,17 +44,17 @@ export const destinations = [
   { slug: 'central-america',        name: 'Central America',         image: '/images/private_jet/private_central-america.jpeg',        groups: comingSoon },
   { slug: 'east-asia',              name: 'East Asia',               image: '/images/private_jet/private_east-asia.jpeg',              groups: comingSoon },
   { slug: 'eastern-mediterranean',  name: 'Eastern Mediterranean',   image: '/images/private_jet/private_eastern-mediterranean.jpeg', groups: comingSoon },
-  { slug: 'indian-ocean',           name: 'Indian Ocean',            image: '/images/private_jet/private_indian-ocean.jpeg',           groups: comingSoon },
-  { slug: 'indonesia',              name: 'Indonesia',               image: '/images/private_jet/private_indonesia.jpeg',              groups: comingSoon },
-  { slug: 'north-america',          name: 'North America',           image: '/images/private_jet/private_nordamerica.jpeg',            groups: comingSoon },
+  { slug: 'indian-ocean',           name: 'Indian Ocean',            image: '/images/logoFondTrans.png',                                groups: comingSoon },
+  { slug: 'indonesia',              name: 'Indonesia',               image: '/images/logoFondTrans.png',                                groups: comingSoon },
+  { slug: 'north-america',          name: 'North America',           image: '/images/logoFondTrans.png',                                groups: comingSoon },
   { slug: 'pacific-ocean',          name: 'Pacific Ocean',           image: '/images/private_jet/private_pacific-ocean.jpeg',          groups: comingSoon },
   { slug: 'oman-gulf',              name: 'Oman Gulf',               image: '/images/private_jet/private_oman-gulf.jpeg',              groups: comingSoon },
   { slug: 'south-east-asia',        name: 'South East Asia',         image: '/images/private_jet/private_south-east-asia.jpeg',        groups: comingSoon },
-  { slug: 'western-mediterranean',  name: 'Western Mediterranean',   image: '/images/private_jet/private_western-mediterranean.jpeg', groups: comingSoon },
+  { slug: 'western-mediterranean',  name: 'Western Mediterranean',   image: '/images/logoFondTrans.png',                                groups: comingSoon },
   { slug: 'africa',                 name: 'Africa',                  image: '/images/private_jet/private_africa.jpeg',                 groups: comingSoon },
   { slug: 'northern-europe',        name: 'Northern Europe',         image: '/images/private_jet/private_northern-europe.jpeg',        groups: comingSoon },
   { slug: 'caribbean',              name: 'Caribbean',               image: '/images/private_jet/private_caribbean.jpg',                groups: caribbeanJetGroups },
-  { slug: 'oceania',                name: 'Oceania',                 image: '/images/private_jet/private_oceania.jpeg',                groups: comingSoon },
+  { slug: 'oceania',                name: 'Oceania',                 image: '/images/logoFondTrans.png',                                groups: comingSoon },
 ];
 
 export function getDestinationBySlug(slug) {
