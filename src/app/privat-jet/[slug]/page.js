@@ -76,11 +76,13 @@ export default function PrivatJetDestinationPage({ params }) {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Fond identique à /not-found */}
-      <div className="absolute inset-0 z-0">
+    <div className="min-h-screen relative">
+      {/* Fond strict copie de /not-found : fixed pour rester sur le viewport
+          pendant le scroll (sinon l'image fill est étirée verticalement
+          sur toute la longueur de la page et devient invisible). */}
+      <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gray-900" />
-        <Image src="/images/nuagesAncien.png" alt="" fill className="object-cover opacity-30 grayscale" priority />
+        <Image src="/images/nuagesAncien.png" alt="Background clouds" fill className="object-cover opacity-30 grayscale" priority />
       </div>
 
       <div className="relative z-10 pt-24 md:pt-28 pb-16 px-5 md:px-10">
