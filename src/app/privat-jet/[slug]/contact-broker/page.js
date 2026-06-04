@@ -52,7 +52,7 @@ export default function ContactBrokerPage() {
         <div className="fixed inset-0 -z-20 bg-[#26272a]" />
         <style>{`@keyframes thankPhotoIn{0%{opacity:0;filter:blur(10px);transform:scale(1.08)}100%{opacity:1;filter:blur(0);transform:scale(1)}}`}</style>
         <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 2s ease-out forwards' }}>
-          <Image src="/images/private_jet/private-jet_thankyou.jpg" alt="" fill className="object-cover object-top md:object-contain" />
+          <Image src="/images/privat_jet/privat-jet_thankyou.jpg" alt="" fill className="object-cover object-top md:object-contain" />
           <div className="absolute inset-0 bg-black/35" />
         </div>
 

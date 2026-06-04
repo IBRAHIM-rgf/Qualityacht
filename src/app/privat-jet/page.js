@@ -47,7 +47,7 @@ export default function PrivatJetPage() {
       <div className="relative pt-[70px] md:pt-0">
         <div className="relative w-full">
           <Image
-            src="/images/private_jet/jet_hero.jpeg"
+            src="/images/privat_jet/jet_hero.jpeg"
             alt="Private Jet"
             width={927}
             height={1648}
