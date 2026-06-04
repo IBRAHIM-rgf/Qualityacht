@@ -1,7 +1,7 @@
 'use client';
 
 // Helpers/constants UI dupliqués depuis request-quote-test-v10/RequestQuoteWizard.jsx
-// pour que la page /contact-broker propose les mêmes champs que l'étape "Contact Info"
+// pour que la page /contact-broker-jet propose les mêmes champs que l'étape "Contact Info"
 // du wizard sans dépendre directement de ce gros fichier (refactor potentiel plus tard).
 
 import { useState } from 'react';

@@ -1,6 +1,6 @@
 'use client';
 
-// Page contact-broker — désormais le broker "Private Jet".
+// Page contact-broker-jet — le broker "Private Jet".
 // Bloc 1 : header de réservation (One Way / Round Trip / Multi + FROM/TO/Date/Time/Pax/Aircraft + Request Quotes)
 // Bloc 2 : formulaire Contact Info (depuis le wizard) + Subject + Emergency button
 //
