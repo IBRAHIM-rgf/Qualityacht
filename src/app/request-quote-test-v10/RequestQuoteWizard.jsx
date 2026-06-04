@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown, X as XIcon, RotateCcw, PawPrint, Accessibility } from 'lucide-react';
 import MonthPicker from '@/components/MonthPicker';
+import JetBookingWidget from '@/components/JetBookingWidget';
 
 const STEPS = ['Charter Details', 'Contact Info', 'Thank You!'];
 
@@ -680,6 +681,16 @@ export default function RequestQuoteWizard() {
           {/* ══ ÉTAPE 2 — CONTACT INFORMATION ══ */}
           <section className="w-full shrink-0 px-1">
             <div className="max-w-4xl mx-auto space-y-6">
+              {/* Si l'utilisateur a coché "private jets" en step 0, on lui propose le widget de réservation jet juste avant la note */}
+              {charter.proposeJets && (
+                <div>
+                  <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-3">
+                    Book your private jet
+                  </p>
+                  <JetBookingWidget />
+                </div>
+              )}
+
               {/* Note d'introduction (bleu lavande) */}
               <p className="text-sm italic leading-relaxed text-[#acb0cd]">
                 A yacht is the pinnacle of personalization—your desires, your destinations, your legacy. Share your vision, and we will craft an experience beyond imagination.
