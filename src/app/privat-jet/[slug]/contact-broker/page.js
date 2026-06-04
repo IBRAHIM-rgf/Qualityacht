@@ -120,7 +120,7 @@ export default function ContactBrokerPage() {
           Get in touch
         </p>
         <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#C0C0C0]">
-          Contact a Broker
+          Contact Broker Jet
         </h1>
         <div className="relative w-32 h-6 mx-auto mt-4 mb-6">
           <Image src="/images/title-line.png" alt="" fill className="object-contain" />
