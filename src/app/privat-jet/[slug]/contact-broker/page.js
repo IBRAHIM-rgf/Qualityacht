@@ -44,6 +44,52 @@ export default function ContactBrokerPage() {
     });
   };
 
+  // ══ État SENT : reproduit le Thank You du wizard /request-quote-test-v10 ══
+  if (sent) {
+    return (
+      <div className="relative min-h-screen text-[#acb0cd] pt-24 pb-20 px-4 overflow-x-hidden">
+        {/* Fond de base + photo "Thank You" avec fade-in 2s */}
+        <div className="fixed inset-0 -z-20 bg-[#26272a]" />
+        <style>{`@keyframes thankPhotoIn{0%{opacity:0;filter:blur(10px);transform:scale(1.08)}100%{opacity:1;filter:blur(0);transform:scale(1)}}`}</style>
+        <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 2s ease-out forwards' }}>
+          <Image src="/images/private_jet/private-jet_thankyou.jpg" alt="" fill className="object-cover object-top md:object-contain" />
+          <div className="absolute inset-0 bg-black/35" />
+        </div>
+
+        <h1 className="trajan-regular font-bold text-2xl md:text-4xl text-center uppercase tracking-[0.15em] mb-10 md:mb-14 text-[#C0C0C0] [-webkit-text-stroke:0.6px_#C0C0C0] mt-[10vh]">
+          Contact Broker Jet
+        </h1>
+
+        <div className="max-w-2xl mx-auto text-center px-2 md:px-4 pt-6 pb-10 md:py-10 min-h-[60vh] md:min-h-0 flex flex-col items-center justify-between md:justify-center gap-20 md:gap-12">
+          <div className="flex flex-col items-center w-full">
+            {contact.emergency && (
+              <div className="inline-flex items-center gap-2 mb-6 text-[#B03E00]">
+                <AlertTriangle className="w-5 h-5" />
+                <span className="text-xs uppercase tracking-[0.3em] font-bold">Emergency request</span>
+              </div>
+            )}
+            <div className="trajan-bold font-bold text-2xl md:text-3xl uppercase tracking-[0.12em] mb-8 md:mb-4" style={{ color: '#B03E00', WebkitTextStroke: '0.8px #B03E00' }}>
+              Grateful
+            </div>
+            <div className="relative w-44 h-10 mx-auto mb-10 md:mb-6 overflow-hidden">
+              <Image src="/images/title-line.png" alt="" fill className="object-contain scale-x-150 scale-y-[3]" />
+            </div>
+            <div className="w-full rounded-xl border border-[#C0C0C0] bg-black/40 px-5 py-8 md:px-8 md:py-6 md:mb-16">
+              <p className="text-[#acb0cd] text-base md:text-lg leading-loose">
+                Your request has been received.
+                One of our brokers will contact you within 24 hours to craft your bespoke private jet experience.
+              </p>
+            </div>
+          </div>
+          <Link href="/"
+            className="block w-full text-center rounded-xl px-10 py-4 border-2 border-[#C0C0C0] bg-black/40 text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+            Back to Homepage
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen pt-[70px] md:pt-24">
       {/* ══ TITRE ══ */}
@@ -63,36 +109,14 @@ export default function ContactBrokerPage() {
         </p>
       </div>
 
-      {/* ══ BOOKING HEADER PRIVATE JET — composant partage, masque apres envoi ══ */}
-      {!sent && (
-        <div className="max-w-6xl mx-auto px-5 md:px-8 mb-10 md:mb-14">
-          <JetBookingWidget />
-        </div>
-      )}
+      {/* ══ BOOKING HEADER PRIVATE JET — composant partage ══ */}
+      <div className="max-w-6xl mx-auto px-5 md:px-8 mb-10 md:mb-14">
+        <JetBookingWidget />
+      </div>
 
       {/* ══ FORMULAIRE Contact Info ══ */}
       <div id="contact-form-anchor" className="max-w-4xl mx-auto px-5 md:px-8 pb-20">
-        {sent ? (
-          <div className={`rounded-xl border p-8 text-center ${contact.emergency ? 'border-[#B03E00] bg-[#B03E00]/15' : 'border-[#B03E00] bg-[#B03E00]/10'}`}>
-            {contact.emergency && (
-              <div className="inline-flex items-center gap-2 mb-3 text-[#B03E00]">
-                <AlertTriangle className="w-5 h-5" />
-                <span className="text-xs uppercase tracking-[0.3em] font-bold">Emergency request</span>
-              </div>
-            )}
-            <p className="trajan-regular text-xl md:text-2xl text-[#C0C0C0] mb-2">Message sent</p>
-            <p className="text-sm text-[#7cb88a]">
-              A broker will get back to you within 24 hours.
-            </p>
-
-            <div className="mt-6">
-              <Link href="/" className="inline-flex items-center gap-2 text-sm text-[#7cb88a] hover:underline">
-                <ArrowLeft className="w-4 h-4" /> Back to home
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
             {/* Note d'introduction */}
             <p className="text-sm italic leading-relaxed text-[#acb0cd]">
               A private jet is the pinnacle of personalization—your desires, your destinations, your legacy. Share your vision, and we will craft an experience beyond imagination.
@@ -233,8 +257,7 @@ export default function ContactBrokerPage() {
                 Confirm
               </button>
             </div>
-          </form>
-        )}
+        </form>
       </div>
     </div>
   );
