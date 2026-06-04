@@ -6,11 +6,11 @@
 //
 // TO ne propose QUE les aéroports listés dans la page Caraïbes (seule région avec un parc actif).
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, User, Plane, Plus, X as XIcon, AlertTriangle } from 'lucide-react';
-import { caribbeanJetGroups } from '../../data';
+import { ArrowLeft, AlertTriangle } from 'lucide-react';
+import JetBookingWidget from '@/components/JetBookingWidget';
 import {
   TITLES,
   CALLBACK_SLOTS,
@@ -21,53 +21,7 @@ import {
   CountryInput,
 } from './sharedUI';
 
-// ── Liste des aéroports caraïbes (à partir de data.js) — uniquement ceux ayant un code IATA ──
-function parseAirport(str) {
-  const m = str.match(/^(.+?)\s*\(([A-Z]{2,4})\)\s*[—-]\s*(.+)$/);
-  if (m) return { name: m[1].trim(), code: m[2], size: m[3].trim() };
-  return null;
-}
-const CARIBBEAN_AIRPORTS = caribbeanJetGroups.flatMap(({ island, airports }) =>
-  airports.map(parseAirport).filter(Boolean).map(a => ({ island, ...a }))
-);
-
-const AIRCRAFT_TYPES = [
-  'Any',
-  'Light jet',
-  'Medium jet',
-  'Medium/Large jet',
-  'Large jet',
-  'STOL aircraft',
-];
-
 export default function ContactBrokerPage() {
-  // ── Booking header state ──
-  const [tripType, setTripType] = useState('one-way'); // 'one-way' | 'round-trip' | 'multi'
-  const [legs, setLegs] = useState([{ from: '', to: '', date: '', time: '' }]);
-  const [passengers, setPassengers] = useState(1);
-  const [aircraft, setAircraft] = useState('');
-
-  const updateLeg = (i, key, val) => setLegs(prev => {
-    const next = [...prev];
-    while (next.length <= i) next.push({ from: '', to: '', date: '', time: '' });
-    next[i] = { ...next[i], [key]: val };
-    return next;
-  });
-  const addLeg = () => setLegs(prev => [...prev, { from: '', to: '', date: '', time: '' }]);
-  const removeLeg = (i) => setLegs(prev => prev.filter((_, idx) => idx !== i));
-
-  // Quand on bascule en round-trip, s'assurer qu'il y a bien 2 legs en state
-  // (sinon updateLeg(1, ...) marche mais le 2e leg restait absent jusqu'à modif)
-  const handleTripType = (type) => {
-    setTripType(type);
-    if (type === 'round-trip') {
-      setLegs(prev => {
-        if (prev.length >= 2) return prev;
-        return [...prev, { from: '', to: '', date: '', time: '' }];
-      });
-    }
-  };
-
   // ── Contact Info state ──
   const [contact, setContact] = useState({
     company: '', title: '', firstName: '', lastName: '',
@@ -85,17 +39,6 @@ export default function ContactBrokerPage() {
     e?.preventDefault?.();
     setSent(true);
   };
-
-  // Visible legs selon trip type. Round-trip force 2 lignes (retour auto si absent).
-  const visibleLegs = useMemo(() => {
-    if (tripType === 'one-way') return legs.slice(0, 1);
-    if (tripType === 'round-trip') {
-      const out = [...legs];
-      while (out.length < 2) out.push({ from: '', to: '', date: '', time: '' });
-      return out.slice(0, 2);
-    }
-    return legs;
-  }, [legs, tripType]);
 
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen pt-[70px] md:pt-24">
@@ -116,129 +59,11 @@ export default function ContactBrokerPage() {
         </p>
       </div>
 
-      {/* ══ BOOKING HEADER PRIVATE JET — masque apres envoi ══ */}
+      {/* ══ BOOKING HEADER PRIVATE JET — composant partage, masque apres envoi ══ */}
       {!sent && (
-      <div className="max-w-6xl mx-auto px-5 md:px-8 mb-10 md:mb-14">
-        {/* Tabs One Way / Round Trip / Multi */}
-        <div className="flex gap-px mb-3 max-w-2xl">
-          {[
-            { key: 'one-way', label: 'One Way' },
-            { key: 'round-trip', label: 'Round Trip' },
-            { key: 'multi', label: 'Multiple Destinations' },
-          ].map(({ key, label }) => (
-            <button key={key} type="button" onClick={() => handleTripType(key)}
-              className={`flex-1 px-4 md:px-6 py-3 text-xs md:text-sm uppercase tracking-[0.15em] font-medium border transition-colors ${
-                tripType === key
-                  ? 'bg-[#c2622a] text-[#26272a] border-[#c2622a]'
-                  : 'bg-[#3a3b3f]/40 text-[#acb0cd] border-[#C0C0C0]/30 hover:border-[#c2622a]'
-              }`}>
-              {label}
-            </button>
-          ))}
+        <div className="max-w-6xl mx-auto px-5 md:px-8 mb-10 md:mb-14">
+          <JetBookingWidget />
         </div>
-
-        {/* Rangée(s) de réservation — single row toujours, scroll horizontal si besoin */}
-        <div className="space-y-3">
-          {visibleLegs.map((leg, i) => (
-            <div key={i} className="flex flex-nowrap gap-px bg-[#3a3b3f]/40 border border-[#C0C0C0]/30 overflow-x-auto">
-              {/* FROM — restreint aux aéroports caraïbes sur les legs ≥ 2 (retour) */}
-              <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex-1 min-w-[160px]">
-                <p className="text-[9px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mb-1">From</p>
-                {i === 0 ? (
-                  <input value={leg.from} onChange={e => updateLeg(i, 'from', e.target.value)}
-                    placeholder="City or airport"
-                    className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none placeholder-[#6a6b6e]" />
-                ) : (
-                  <select value={leg.from} onChange={e => updateLeg(i, 'from', e.target.value)}
-                    className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none">
-                    <option value="" className="bg-[#2e2f32]">Select airport…</option>
-                    {CARIBBEAN_AIRPORTS.map((a, idx) => (
-                      <option key={`${a.island}-${a.code}-${idx}`} value={`${a.code}|${a.island}`} className="bg-[#2e2f32]">
-                        {a.island} — {a.name} ({a.code})
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-
-              {/* TO — restreint aux aéroports caraïbes sur le 1er leg (aller) ; libre sur les suivants (retour) */}
-              <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex-1 min-w-[160px]">
-                <p className="text-[9px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mb-1">To</p>
-                {i === 0 ? (
-                  <select value={leg.to} onChange={e => updateLeg(i, 'to', e.target.value)}
-                    className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none">
-                    <option value="" className="bg-[#2e2f32]">Select airport…</option>
-                    {CARIBBEAN_AIRPORTS.map((a, idx) => (
-                      <option key={`${a.island}-${a.code}-${idx}`} value={`${a.code}|${a.island}`} className="bg-[#2e2f32]">
-                        {a.island} — {a.name} ({a.code})
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <input value={leg.to} onChange={e => updateLeg(i, 'to', e.target.value)}
-                    placeholder="City or airport"
-                    className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none placeholder-[#6a6b6e]" />
-                )}
-              </div>
-
-              {/* Date */}
-              <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex items-center gap-2 min-w-[150px]">
-                <Calendar className="w-4 h-4 text-[#c2622a] shrink-0" />
-                <input type="date" value={leg.date} onChange={e => updateLeg(i, 'date', e.target.value)}
-                  className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none [color-scheme:dark]" />
-              </div>
-
-              {/* Time */}
-              <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex items-center gap-2 min-w-[120px]">
-                <Clock className="w-4 h-4 text-[#c2622a] shrink-0" />
-                <input type="time" value={leg.time} onChange={e => updateLeg(i, 'time', e.target.value)}
-                  className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none [color-scheme:dark]" />
-              </div>
-
-              {/* Pax + Aircraft (uniquement sur la 1ère ligne) */}
-              {i === 0 ? (
-                <>
-                  <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex items-center gap-2 min-w-[90px]">
-                    <User className="w-4 h-4 text-[#c2622a] shrink-0" />
-                    <input type="number" min="1" max="50" value={passengers}
-                      onChange={e => setPassengers(Math.max(1, Number(e.target.value) || 1))}
-                      className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none" />
-                  </div>
-                  <div className="px-4 py-3 bg-[#26272a] flex items-center gap-2 min-w-[170px]">
-                    <Plane className="w-4 h-4 text-[#c2622a] shrink-0" />
-                    <select value={aircraft} onChange={e => setAircraft(e.target.value)}
-                      className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none">
-                      <option value="" className="bg-[#2e2f32]">Type of aircraft</option>
-                      {AIRCRAFT_TYPES.map(a => <option key={a} value={a} className="bg-[#2e2f32]">{a}</option>)}
-                    </select>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="bg-[#26272a]" />
-                  <div className="px-4 py-3 bg-[#26272a] flex items-center justify-end">
-                    {tripType === 'multi' && (
-                      <button type="button" onClick={() => removeLeg(i)}
-                        aria-label="Remove leg"
-                        className="text-[#acb0cd]/70 hover:text-[#B03E00] transition-colors">
-                        <XIcon className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
-
-          {/* Add leg (multi-destination only) */}
-          {tripType === 'multi' && (
-            <button type="button" onClick={addLeg}
-              className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#c2622a] hover:text-[#B03E00] transition-colors">
-              <Plus className="w-4 h-4" /> Add destination
-            </button>
-          )}
-        </div>
-      </div>
       )}
 
       {/* ══ FORMULAIRE Contact Info ══ */}
