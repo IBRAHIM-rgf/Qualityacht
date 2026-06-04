@@ -40,14 +40,6 @@ const AIRCRAFT_TYPES = [
   'STOL aircraft',
 ];
 
-const SUBJECTS = [
-  'Private Jet',
-  'Pets / Animals',
-  'Emergency',
-  'PMR (Reduced Mobility)',
-  'Group',
-];
-
 export default function ContactBrokerPage() {
   // ── Booking header state ──
   const [tripType, setTripType] = useState('one-way'); // 'one-way' | 'round-trip' | 'multi'
@@ -84,20 +76,13 @@ export default function ContactBrokerPage() {
     waCountry: 'Switzerland', whatsapp: '',
     callbackCountry: 'Switzerland', callbackTime: '',
     contactMethod: 'Email',
-    subject: 'Private Jet',
     message: '', acceptPolicy: false, notRobot: false,
+    petsFriendly: false, group: false, prm: false, emergency: false,
   });
   const [sent, setSent] = useState(false);
-  const [emergency, setEmergency] = useState(false);
 
   const handleSubmit = (e) => {
     e?.preventDefault?.();
-    setSent(true);
-    setEmergency(false);
-  };
-  const handleEmergency = () => {
-    setContact(c => ({ ...c, subject: 'Emergency' }));
-    setEmergency(true);
     setSent(true);
   };
 
@@ -259,8 +244,8 @@ export default function ContactBrokerPage() {
       {/* ══ FORMULAIRE Contact Info ══ */}
       <div id="contact-form-anchor" className="max-w-4xl mx-auto px-5 md:px-8 pb-20">
         {sent ? (
-          <div className={`rounded-xl border p-8 text-center ${emergency ? 'border-[#B03E00] bg-[#B03E00]/15' : 'border-[#B03E00] bg-[#B03E00]/10'}`}>
-            {emergency && (
+          <div className={`rounded-xl border p-8 text-center ${contact.emergency ? 'border-[#B03E00] bg-[#B03E00]/15' : 'border-[#B03E00] bg-[#B03E00]/10'}`}>
+            {contact.emergency && (
               <div className="inline-flex items-center gap-2 mb-3 text-[#B03E00]">
                 <AlertTriangle className="w-5 h-5" />
                 <span className="text-xs uppercase tracking-[0.3em] font-bold">Emergency request</span>
@@ -268,21 +253,8 @@ export default function ContactBrokerPage() {
             )}
             <p className="trajan-regular text-xl md:text-2xl text-[#C0C0C0] mb-2">Message sent</p>
             <p className="text-sm text-[#7cb88a]">
-              {emergency
-                ? 'A broker is being notified right now. Expect a call within minutes.'
-                : 'A broker will get back to you within 24 hours.'}
+              A broker will get back to you within 24 hours.
             </p>
-
-            {/* Bouton Emergency avec logo Qualityacht — visible après validation */}
-            {!emergency && (
-              <button type="button" onClick={handleEmergency}
-                className="mt-6 inline-flex items-center gap-3 rounded-xl border-2 border-[#B03E00] bg-[#B03E00]/10 px-6 py-3 text-sm uppercase tracking-[0.2em] font-bold text-[#B03E00] hover:bg-[#B03E00]/25 transition-colors">
-                <span className="relative w-6 h-6 rounded-full overflow-hidden border border-[#C0C0C0]">
-                  <Image src="/images/logoFondTrans.png" alt="" fill className="object-cover scale-110" />
-                </span>
-                Emergency
-              </button>
-            )}
 
             <div className="mt-6">
               <Link href="/" className="inline-flex items-center gap-2 text-sm text-[#7cb88a] hover:underline">
@@ -372,12 +344,24 @@ export default function ContactBrokerPage() {
               </div>
             </Field>
 
-            {/* Subject (au-dessus de Message) */}
-            <Field label="Subject" required>
-              <select value={contact.subject} onChange={e => setContact({ ...contact, subject: e.target.value })} className={inputClass}>
-                {SUBJECTS.map(s => <option key={s} value={s} className="bg-[#2e2f32]">{s}</option>)}
-              </select>
-            </Field>
+            {/* Request type — cases a cocher au-dessus de Message */}
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] mb-3">Request type</p>
+              <div className="flex flex-wrap gap-x-6 gap-y-3">
+                {[
+                  { key: 'petsFriendly', label: 'Pets friendly' },
+                  { key: 'group', label: 'Group' },
+                  { key: 'prm', label: 'PRM' },
+                  { key: 'emergency', label: 'Emergency' },
+                ].map(({ key, label }) => (
+                  <label key={key} onClick={() => setContact({ ...contact, [key]: !contact[key] })}
+                    className="flex items-center gap-2 cursor-pointer select-none">
+                    <CocoCheckbox checked={contact[key]} />
+                    <span className="text-sm text-[#acb0cd]">{label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
 
             {/* Message */}
             <Field label="Message">
@@ -410,26 +394,15 @@ export default function ContactBrokerPage() {
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 md:gap-4 pt-4">
-              <Link href="/" className="rounded-xl border border-[#C0C0C0] text-[#acb0cd] text-sm uppercase tracking-[0.2em] hover:border-[#B03E00] hover:text-[#B03E00] transition-colors inline-flex items-center justify-center gap-2 px-3 py-2 md:gap-3 md:px-6 md:py-3 text-xs md:text-sm shrink-0">
+            <div className="flex items-center justify-between gap-2 md:gap-4 pt-4">
+              <Link href="/" className="rounded-xl border border-[#C0C0C0] text-[#acb0cd] text-sm uppercase tracking-[0.2em] hover:border-[#B03E00] hover:text-[#B03E00] transition-colors inline-flex items-center gap-2 px-3 py-2 md:gap-3 md:px-6 md:py-3 text-xs md:text-sm shrink-0">
                 <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" /> Go Back
               </Link>
 
-              <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4">
-                {/* Bouton Emergency — logo Qualityacht + bordure orange #B03E00 */}
-                <button type="button" onClick={handleEmergency}
-                  className="inline-flex items-center justify-center gap-3 rounded-xl border-2 border-[#B03E00] bg-[#B03E00]/10 px-6 py-2.5 md:px-8 md:py-3 text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-[#B03E00] hover:bg-[#B03E00]/25 transition-colors shadow-[0_4px_15px_rgba(176,62,0,0.25)]">
-                  <span className="relative w-6 h-6 rounded-full overflow-hidden border border-[#C0C0C0]">
-                    <Image src="/images/logoFondTrans.png" alt="" fill className="object-cover scale-110" />
-                  </span>
-                  Emergency
-                </button>
-
-                <button type="submit"
-                  className="border-2 border-[#C0C0C0] rounded-xl text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">
-                  Confirm
-                </button>
-              </div>
+              <button type="submit"
+                className="border-2 border-[#C0C0C0] rounded-xl text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">
+                Confirm
+              </button>
             </div>
           </form>
         )}

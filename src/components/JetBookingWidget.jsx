@@ -64,18 +64,18 @@ export default function JetBookingWidget() {
 
   return (
     <div className="w-full">
-      {/* Tabs */}
-      <div className="flex gap-px mb-3 max-w-2xl">
+      {/* Tabs — cards arrondies, fond commun ; actif = bordure + texte orange */}
+      <div className="flex gap-2 mb-3 max-w-2xl">
         {[
           { key: 'one-way', label: 'One Way' },
           { key: 'round-trip', label: 'Round Trip' },
           { key: 'multi', label: 'Multiple Destinations' },
         ].map(({ key, label }) => (
           <button key={key} type="button" onClick={() => handleTripType(key)}
-            className={`flex-1 px-4 md:px-6 py-3 text-xs md:text-sm uppercase tracking-[0.15em] font-medium border transition-colors ${
+            className={`flex-1 px-4 md:px-6 py-3 rounded-xl text-xs md:text-sm uppercase tracking-[0.15em] font-medium border-2 bg-[#3a3b3f]/40 transition-colors ${
               tripType === key
-                ? 'bg-[#c2622a] text-[#26272a] border-[#c2622a]'
-                : 'bg-[#3a3b3f]/40 text-[#acb0cd] border-[#C0C0C0]/30 hover:border-[#c2622a]'
+                ? 'border-[#c2622a] text-[#c2622a]'
+                : 'border-[#C0C0C0]/30 text-[#acb0cd] hover:border-[#c2622a] hover:text-[#c2622a]'
             }`}>
             {label}
           </button>
@@ -85,7 +85,7 @@ export default function JetBookingWidget() {
       {/* Legs (single row, scroll horizontal si besoin) */}
       <div className="space-y-3">
         {visibleLegs.map((leg, i) => (
-          <div key={i} className="grid grid-cols-3 md:flex md:flex-nowrap gap-px bg-[#3a3b3f]/40 border border-[#C0C0C0]/30 md:overflow-x-auto">
+          <div key={i} className="grid grid-cols-3 md:flex md:flex-nowrap gap-px bg-[#3a3b3f]/40 border border-[#C0C0C0]/30 rounded-2xl overflow-hidden md:overflow-x-auto">
             {/* FROM */}
             <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 md:flex-1 md:min-w-[160px]">
               <p className="text-[9px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mb-1">From</p>
