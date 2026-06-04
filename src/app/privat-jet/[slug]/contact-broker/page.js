@@ -38,6 +38,10 @@ export default function ContactBrokerPage() {
   const handleSubmit = (e) => {
     e?.preventDefault?.();
     setSent(true);
+    // Remonte tout en haut pour voir le titre + message de confirmation
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   };
 
   return (
@@ -176,7 +180,7 @@ export default function ContactBrokerPage() {
                 {[
                   { key: 'petsFriendly', label: 'Pets friendly' },
                   { key: 'group', label: 'Group' },
-                  { key: 'prm', label: 'PRM' },
+                  { key: 'prm', label: 'PRM (Person with Reduced Mobility)' },
                   { key: 'emergency', label: 'Emergency' },
                 ].map(({ key, label }) => (
                   <label key={key} onClick={() => setContact({ ...contact, [key]: !contact[key] })}
