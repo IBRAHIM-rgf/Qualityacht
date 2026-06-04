@@ -18,15 +18,15 @@ function parseAirport(str) {
 }
 
 const CATEGORY_LABEL = {
-  'grands jets privés': 'Grands jets privés',
-  'tous jets privés': 'Tous jets privés',
-  'jets privés moyens/grands': 'Jets privés moyens & grands',
-  'jets privés moyens': 'Jets privés moyens',
-  'petits jets privés': 'Petits jets privés',
-  'avions STOL uniquement': 'Avions STOL uniquement',
+  'large jets': 'Large jets',
+  'all jets': 'All jets',
+  'medium/large jets': 'Medium & large jets',
+  'medium jets': 'Medium jets',
+  'light jets': 'Light jets',
+  'stol aircraft only': 'STOL aircraft only',
 };
 function categoryLabel(size) {
-  if (!size) return 'Autre';
+  if (!size) return 'Other';
   const lower = size.toLowerCase();
   for (const key of Object.keys(CATEGORY_LABEL)) {
     if (lower.includes(key)) return CATEGORY_LABEL[key];
@@ -35,11 +35,11 @@ function categoryLabel(size) {
 }
 function categoryRank(label) {
   const l = label.toLowerCase();
-  if (l.includes('grands jets privés') && !l.includes('moyens')) return 0;
-  if (l.includes('tous jets')) return 1;
-  if (l.includes('moyens & grands') || l.includes('moyens/grands')) return 2;
-  if (l.includes('jets privés moyens')) return 3;
-  if (l.includes('petits jets')) return 4;
+  if (l.includes('large jets') && !l.includes('medium')) return 0;
+  if (l.includes('all jets')) return 1;
+  if (l.includes('medium & large') || l.includes('medium/large')) return 2;
+  if (l.includes('medium jets')) return 3;
+  if (l.includes('light jets')) return 4;
   if (l.includes('stol')) return 5;
   return 99;
 }
@@ -142,7 +142,7 @@ export default function PrivatJetDestinationPage({ params }) {
                 <ArrowLeft className="w-4 h-4" /> Retour
               </Link>
               <Link
-                href="/contact-broker-jet"
+                href={`/privat-jet/${slug}/contact-broker`}
                 className="inline-flex items-center gap-2 rounded-xl border-2 border-[#C0C0C0] px-5 py-2 text-xs md:text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.2)]"
               >
                 Contact a broker
@@ -197,7 +197,7 @@ export default function PrivatJetDestinationPage({ params }) {
             {/* ══ CTA bas ══ */}
             <div className="text-center mt-16">
               <Link
-                href="/contact-broker-jet"
+                href={`/privat-jet/${slug}/contact-broker`}
                 className="inline-flex items-center gap-2 rounded-xl border-2 border-[#C0C0C0] px-10 py-3 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]"
               >
                 Contact a broker

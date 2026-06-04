@@ -1,7 +1,7 @@
 'use client';
 
-// Page contact-broker-jet — le broker "Private Jet".
-// Bloc 1 : header de réservation (One Way / Round Trip / Multi + FROM/TO/Date/Time/Pax/Aircraft + Request Quotes)
+// Page contact-broker — broker "Private Jet" sous-route de /privat-jet/[slug].
+// Bloc 1 : header de réservation (One Way / Round Trip / Multi + FROM/TO/Date/Time/Pax/Aircraft)
 // Bloc 2 : formulaire Contact Info (depuis le wizard) + Subject + Emergency button
 //
 // TO ne propose QUE les aéroports listés dans la page Caraïbes (seule région avec un parc actif).
@@ -10,7 +10,7 @@ import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, User, Plane, Plus, X as XIcon, AlertTriangle } from 'lucide-react';
-import { caribbeanJetGroups } from '../privat-jet/data';
+import { caribbeanJetGroups } from '../../data';
 import {
   TITLES,
   CALLBACK_SLOTS,
@@ -120,7 +120,7 @@ export default function ContactBrokerPage() {
           Get in touch
         </p>
         <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#C0C0C0]">
-          Contact Broker Jet
+          Contact a Broker
         </h1>
         <div className="relative w-32 h-6 mx-auto mt-4 mb-6">
           <Image src="/images/title-line.png" alt="" fill className="object-contain" />
@@ -151,12 +151,12 @@ export default function ContactBrokerPage() {
           ))}
         </div>
 
-        {/* Rangée(s) de réservation */}
+        {/* Rangée(s) de réservation — single row toujours, scroll horizontal si besoin */}
         <div className="space-y-3">
           {visibleLegs.map((leg, i) => (
-            <div key={i} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto_auto_auto_auto] gap-px bg-[#3a3b3f]/40 border border-[#C0C0C0]/30">
+            <div key={i} className="flex flex-nowrap gap-px bg-[#3a3b3f]/40 border border-[#C0C0C0]/30 overflow-x-auto">
               {/* FROM — restreint aux aéroports caraïbes sur les legs ≥ 2 (retour) */}
-              <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20">
+              <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex-1 min-w-[160px]">
                 <p className="text-[9px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mb-1">From</p>
                 {i === 0 ? (
                   <input value={leg.from} onChange={e => updateLeg(i, 'from', e.target.value)}
@@ -176,7 +176,7 @@ export default function ContactBrokerPage() {
               </div>
 
               {/* TO — restreint aux aéroports caraïbes sur le 1er leg (aller) ; libre sur les suivants (retour) */}
-              <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20">
+              <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex-1 min-w-[160px]">
                 <p className="text-[9px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mb-1">To</p>
                 {i === 0 ? (
                   <select value={leg.to} onChange={e => updateLeg(i, 'to', e.target.value)}
@@ -251,17 +251,6 @@ export default function ContactBrokerPage() {
               <Plus className="w-4 h-4" /> Add destination
             </button>
           )}
-
-          {/* CTA Request Quotes */}
-          <div className="flex justify-end pt-2">
-            <button type="button" onClick={() => {
-              const el = document.getElementById('contact-form-anchor');
-              el?.scrollIntoView({ behavior: 'smooth' });
-            }}
-              className="bg-[#c2622a] text-[#26272a] px-8 md:px-12 py-3 md:py-4 text-xs md:text-sm uppercase tracking-[0.2em] font-bold hover:bg-[#B03E00] hover:text-[#C0C0C0] transition-colors">
-              Request Quotes
-            </button>
-          </div>
         </div>
       </div>
 
