@@ -85,9 +85,9 @@ export default function JetBookingWidget() {
       {/* Legs (single row, scroll horizontal si besoin) */}
       <div className="space-y-3">
         {visibleLegs.map((leg, i) => (
-          <div key={i} className="flex flex-nowrap gap-px bg-[#3a3b3f]/40 border border-[#C0C0C0]/30 overflow-x-auto">
+          <div key={i} className="grid grid-cols-3 md:flex md:flex-nowrap gap-px bg-[#3a3b3f]/40 border border-[#C0C0C0]/30 md:overflow-x-auto">
             {/* FROM */}
-            <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex-1 min-w-[160px]">
+            <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 md:flex-1 md:min-w-[160px]">
               <p className="text-[9px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mb-1">From</p>
               {i === 0 ? (
                 <input value={leg.from} onChange={e => updateLeg(i, 'from', e.target.value)}
@@ -107,7 +107,7 @@ export default function JetBookingWidget() {
             </div>
 
             {/* TO */}
-            <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex-1 min-w-[160px]">
+            <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 md:flex-1 md:min-w-[160px]">
               <p className="text-[9px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mb-1">To</p>
               {i === 0 ? (
                 <select value={leg.to} onChange={e => updateLeg(i, 'to', e.target.value)}
@@ -127,14 +127,14 @@ export default function JetBookingWidget() {
             </div>
 
             {/* Date */}
-            <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex items-center gap-2 min-w-[150px]">
+            <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex items-center gap-2 md:min-w-[150px]">
               <Calendar className="w-4 h-4 text-[#c2622a] shrink-0" />
               <input type="date" value={leg.date} onChange={e => updateLeg(i, 'date', e.target.value)}
                 className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none [color-scheme:dark]" />
             </div>
 
             {/* Time */}
-            <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex items-center gap-2 min-w-[120px]">
+            <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex items-center gap-2 md:min-w-[120px]">
               <Clock className="w-4 h-4 text-[#c2622a] shrink-0" />
               <input type="time" value={leg.time} onChange={e => updateLeg(i, 'time', e.target.value)}
                 className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none [color-scheme:dark]" />
@@ -143,13 +143,13 @@ export default function JetBookingWidget() {
             {/* Pax + Aircraft (1ère ligne uniquement) */}
             {i === 0 ? (
               <>
-                <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex items-center gap-2 min-w-[90px]">
+                <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 flex items-center gap-2 md:min-w-[90px]">
                   <User className="w-4 h-4 text-[#c2622a] shrink-0" />
                   <input type="number" min="1" max="50" value={passengers}
                     onChange={e => setPassengers(Math.max(1, Number(e.target.value) || 1))}
                     className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none" />
                 </div>
-                <div className="px-4 py-3 bg-[#26272a] flex items-center gap-2 min-w-[170px]">
+                <div className="px-4 py-3 bg-[#26272a] flex items-center gap-2 md:min-w-[170px]">
                   <Plane className="w-4 h-4 text-[#c2622a] shrink-0" />
                   <select value={aircraft} onChange={e => setAircraft(e.target.value)}
                     className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none">
