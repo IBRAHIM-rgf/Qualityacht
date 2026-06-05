@@ -6,15 +6,18 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, MapPin } from 'lucide-react';
-import { REGION_VIEWS, SUB_REGIONS, AIRPORTS, SIZE_COLORS, SIZE_LABELS } from './map-data';
+import { REGION_VIEWS, SUB_REGIONS, AIRPORTS, SIZE_COLORS, SIZE_LABELS, ISLANDS, ISLAND_GROUPS } from './map-data';
+
+const GROUP_COLOR = Object.fromEntries(ISLAND_GROUPS.map(g => [g.id, g.color]));
+const GROUP_LABEL = Object.fromEntries(ISLAND_GROUPS.map(g => [g.id, g.label]));
 
 export default function MapClient({ region }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
-  const layersRef = useRef({ circles: [], markers: [] });
+  const layersRef = useRef({ circles: [], markers: [], islands: [] });
   const [selectedSubRegion, setSelectedSubRegion] = useState(null);
   const [leafletReady, setLeafletReady] = useState(false);
-  const [displayMode, setDisplayMode] = useState('both'); // 'both' | 'regions' | 'airports'
+  const [displayMode, setDisplayMode] = useState('all'); // 'all' | 'regions' | 'airports' | 'islands'
 
   const view = REGION_VIEWS[region];
 
@@ -99,34 +102,66 @@ export default function MapClient({ region }) {
       layersRef.current.markers.push({ ...airport, layer: marker });
     });
 
+    // Markers ÎLES : icon = losange + nom intégré dans le même divIcon (HTML inline)
+    // → pas de bindTooltip permanent (qui faisait planter), label HTML direct sur le marker
+    ISLANDS.forEach((island) => {
+      const color = GROUP_COLOR[island.group] || '#fff';
+      const icon = L.divIcon({
+        className: 'island-marker',
+        html: `<div style="display: flex; align-items: center; gap: 5px; pointer-events: auto; cursor: pointer; transform: translate(-5px, -5px);">
+          <div style="
+            width: 10px; height: 10px;
+            background: transparent;
+            border: 2px solid ${color};
+            transform: rotate(45deg);
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+            flex-shrink: 0;
+          "></div>
+          <span style="
+            color: #fff;
+            font-family: system-ui, sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+            text-shadow: 0 0 3px rgba(0,0,0,0.95), 0 0 6px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9);
+            letter-spacing: 0.3px;
+          ">${island.name}</span>
+        </div>`,
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
+      });
+      const marker = L.marker(island.coords, { icon, zIndexOffset: -100 }).addTo(map);
+      marker.bindPopup(`
+        <div style="font-family: system-ui; min-width: 140px">
+          <div style="font-weight: bold; color: ${color}; font-size: 13px; margin-bottom: 2px">${island.name}</div>
+          <div style="color: #999; font-size: 11px; font-style: italic">${GROUP_LABEL[island.group]}</div>
+        </div>
+      `);
+      layersRef.current.islands.push({ ...island, layer: marker });
+    });
+
     return () => {
       map.remove();
       mapInstanceRef.current = null;
-      layersRef.current = { circles: [], markers: [] };
+      layersRef.current = { circles: [], markers: [], islands: [] };
     };
   }, [leafletReady, view]);
 
-  // 3a) Mode d'affichage : régions seules / aéroports seuls / les deux
+  // 3a) Mode d'affichage : régions / aéroports / îles / tout
   useEffect(() => {
     if (!mapInstanceRef.current) return;
     const map = mapInstanceRef.current;
-    const showRegions = displayMode === 'both' || displayMode === 'regions';
-    const showAirports = displayMode === 'both' || displayMode === 'airports';
+    const showRegions  = displayMode === 'all' || displayMode === 'regions';
+    const showAirports = displayMode === 'all' || displayMode === 'airports';
+    const showIslands  = displayMode === 'all' || displayMode === 'islands';
 
-    layersRef.current.circles.forEach(({ layer }) => {
-      if (showRegions) {
-        if (!map.hasLayer(layer)) map.addLayer(layer);
-      } else {
-        if (map.hasLayer(layer)) map.removeLayer(layer);
-      }
-    });
-    layersRef.current.markers.forEach(({ layer }) => {
-      if (showAirports) {
-        if (!map.hasLayer(layer)) map.addLayer(layer);
-      } else {
-        if (map.hasLayer(layer)) map.removeLayer(layer);
-      }
-    });
+    const toggle = (layer, show) => {
+      if (show) { if (!map.hasLayer(layer)) map.addLayer(layer); }
+      else { if (map.hasLayer(layer)) map.removeLayer(layer); }
+    };
+    layersRef.current.circles.forEach(({ layer }) => toggle(layer, showRegions));
+    layersRef.current.markers.forEach(({ layer }) => toggle(layer, showAirports));
+    layersRef.current.islands.forEach(({ layer }) => toggle(layer, showIslands));
   }, [displayMode, leafletReady]);
 
   // 3b) Filtre par sous-région : zoom + cache les autres markers
@@ -139,6 +174,7 @@ export default function MapClient({ region }) {
       // Réinitialise : vue région complète, tout visible
       map.setView(view.center, view.zoom);
       layersRef.current.markers.forEach(({ layer }) => layer.setOpacity(1));
+      layersRef.current.islands.forEach(({ layer }) => layer.setOpacity(1));
       layersRef.current.circles.forEach(({ layer }) => layer.setStyle({ weight: 2, opacity: 1 }));
       return;
     }
@@ -146,11 +182,13 @@ export default function MapClient({ region }) {
     // Zoom sur la sous-région
     const sub = SUB_REGIONS[selectedSubRegion];
     if (sub) {
-      // fitBounds sur le polygone pour cadrer pile la zone
       const bounds = L.latLngBounds(sub.polygon);
       map.flyToBounds(bounds, { duration: 1, padding: [40, 40], maxZoom: 9 });
       layersRef.current.markers.forEach(({ subRegion, layer }) => {
         layer.setOpacity(subRegion === selectedSubRegion ? 1 : 0.2);
+      });
+      layersRef.current.islands.forEach(({ group, layer }) => {
+        layer.setOpacity(group === selectedSubRegion ? 1 : 0.2);
       });
       layersRef.current.circles.forEach(({ key, layer }) => {
         layer.setStyle({
@@ -201,11 +239,12 @@ export default function MapClient({ region }) {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mr-1">Afficher :</span>
-              <div className="flex gap-1.5">
+              <div className="flex gap-1.5 flex-wrap">
                 {[
-                  { id: 'both', label: 'Tout' },
+                  { id: 'all', label: 'Tout' },
                   { id: 'regions', label: 'Régions' },
                   { id: 'airports', label: 'Aéroports' },
+                  { id: 'islands', label: 'Îles' },
                 ].map(opt => (
                   <button
                     key={opt.id}
