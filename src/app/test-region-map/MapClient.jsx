@@ -57,13 +57,12 @@ export default function MapClient({ region }) {
       maxZoom: 18,
     }).addTo(map);
 
-    // Polygones sous-régions (au lieu de cercles)
+    // Polygones sous-régions — uniquement les contours (pas de remplissage)
     Object.entries(SUB_REGIONS).forEach(([key, sub]) => {
       const poly = L.polygon(sub.polygon, {
         color: sub.color,
         weight: 2,
-        fillColor: sub.color,
-        fillOpacity: 0.18,
+        fill: false,
       }).addTo(map);
       poly.bindPopup(`<strong style="color:${sub.color}">${sub.label}</strong><br/><span style="font-size:11px;color:#666">${sub.description}</span>`);
       poly.on('click', () => setSelectedSubRegion(key));
@@ -140,7 +139,7 @@ export default function MapClient({ region }) {
       // Réinitialise : vue région complète, tout visible
       map.setView(view.center, view.zoom);
       layersRef.current.markers.forEach(({ layer }) => layer.setOpacity(1));
-      layersRef.current.circles.forEach(({ layer }) => layer.setStyle({ fillOpacity: 0.18, weight: 2 }));
+      layersRef.current.circles.forEach(({ layer }) => layer.setStyle({ weight: 2, opacity: 1 }));
       return;
     }
 
@@ -155,8 +154,8 @@ export default function MapClient({ region }) {
       });
       layersRef.current.circles.forEach(({ key, layer }) => {
         layer.setStyle({
-          fillOpacity: key === selectedSubRegion ? 0.35 : 0.05,
-          weight: key === selectedSubRegion ? 3 : 1,
+          weight: key === selectedSubRegion ? 3.5 : 1,
+          opacity: key === selectedSubRegion ? 1 : 0.4,
         });
       });
     }
