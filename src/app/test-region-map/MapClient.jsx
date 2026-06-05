@@ -102,33 +102,21 @@ export default function MapClient({ region }) {
       layersRef.current.markers.push({ ...airport, layer: marker });
     });
 
-    // Markers ÎLES : icon = losange + nom intégré dans le même divIcon (HTML inline)
-    // → pas de bindTooltip permanent (qui faisait planter), label HTML direct sur le marker
+    // Markers ÎLES : losange + label nom à côté.
+    // divIcon de taille fixe (10x10, ancré sur le losange) + bindTooltip permanent pour le label.
     ISLANDS.forEach((island) => {
       const color = GROUP_COLOR[island.group] || '#fff';
       const icon = L.divIcon({
         className: 'island-marker',
-        html: `<div style="display: flex; align-items: center; gap: 5px; pointer-events: auto; cursor: pointer; transform: translate(-5px, -5px);">
-          <div style="
-            width: 10px; height: 10px;
-            background: transparent;
-            border: 2px solid ${color};
-            transform: rotate(45deg);
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
-            flex-shrink: 0;
-          "></div>
-          <span style="
-            color: #fff;
-            font-family: system-ui, sans-serif;
-            font-size: 10px;
-            font-weight: 600;
-            white-space: nowrap;
-            text-shadow: 0 0 3px rgba(0,0,0,0.95), 0 0 6px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9);
-            letter-spacing: 0.3px;
-          ">${island.name}</span>
-        </div>`,
-        iconSize: [0, 0],
-        iconAnchor: [0, 0],
+        html: `<div style="
+          width: 10px; height: 10px;
+          background: transparent;
+          border: 2px solid ${color};
+          transform: rotate(45deg);
+          box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+        "></div>`,
+        iconSize: [10, 10],
+        iconAnchor: [5, 5],
       });
       const marker = L.marker(island.coords, { icon, zIndexOffset: -100 }).addTo(map);
       marker.bindPopup(`
@@ -137,6 +125,12 @@ export default function MapClient({ region }) {
           <div style="color: #999; font-size: 11px; font-style: italic">${GROUP_LABEL[island.group]}</div>
         </div>
       `);
+      marker.bindTooltip(island.name, {
+        permanent: true,
+        direction: 'right',
+        offset: [8, 0],
+        className: 'island-label',
+      });
       layersRef.current.islands.push({ ...island, layer: marker });
     });
 
@@ -217,6 +211,22 @@ export default function MapClient({ region }) {
 
   return (
     <div className="min-h-screen bg-[#26272a] text-[#acb0cd] pt-20 md:pt-24 pb-12 px-4 md:px-6">
+      <style>{`
+        .leaflet-tooltip.island-label {
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          color: #fff;
+          font-family: system-ui, sans-serif;
+          font-size: 10px;
+          font-weight: 600;
+          text-shadow: 0 0 3px rgba(0,0,0,0.95), 0 0 6px rgba(0,0,0,0.7);
+          padding: 1px 3px;
+          letter-spacing: 0.3px;
+          pointer-events: none;
+        }
+        .leaflet-tooltip.island-label::before { display: none !important; }
+      `}</style>
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
