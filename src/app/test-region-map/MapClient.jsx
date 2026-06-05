@@ -8,8 +8,17 @@ import Link from 'next/link';
 import { ArrowLeft, MapPin } from 'lucide-react';
 import { REGION_VIEWS, SUB_REGIONS, AIRPORTS, SIZE_COLORS, SIZE_LABELS, ISLANDS, ISLAND_GROUPS } from './map-data';
 
-const GROUP_COLOR = Object.fromEntries(ISLAND_GROUPS.map(g => [g.id, g.color]));
-const GROUP_LABEL = Object.fromEntries(ISLAND_GROUPS.map(g => [g.id, g.label]));
+// Helpers locaux pour récupérer couleur/label d'un groupe d'île.
+// (Évite Object.fromEntries au top-level qui crash en prod si ISLAND_GROUPS n'est pas résolu
+// au moment où le module est chargé — bug "Cannot read properties of undefined reading 'map'".)
+function getGroupColor(groupId) {
+  const g = (ISLAND_GROUPS || []).find(x => x.id === groupId);
+  return g ? g.color : '#ffffff';
+}
+function getGroupLabel(groupId) {
+  const g = (ISLAND_GROUPS || []).find(x => x.id === groupId);
+  return g ? g.label : groupId;
+}
 
 export default function MapClient({ region }) {
   const mapRef = useRef(null);
@@ -105,7 +114,7 @@ export default function MapClient({ region }) {
     // Markers ÎLES : losange + label nom à côté.
     // divIcon de taille fixe (10x10, ancré sur le losange) + bindTooltip permanent pour le label.
     ISLANDS.forEach((island) => {
-      const color = GROUP_COLOR[island.group] || '#fff';
+      const color = getGroupColor(island.group) || '#fff';
       const icon = L.divIcon({
         className: 'island-marker',
         html: `<div style="
@@ -122,7 +131,7 @@ export default function MapClient({ region }) {
       marker.bindPopup(`
         <div style="font-family: system-ui; min-width: 140px">
           <div style="font-weight: bold; color: ${color}; font-size: 13px; margin-bottom: 2px">${island.name}</div>
-          <div style="color: #999; font-size: 11px; font-style: italic">${GROUP_LABEL[island.group]}</div>
+          <div style="color: #999; font-size: 11px; font-style: italic">${getGroupLabel(island.group)}</div>
         </div>
       `);
       marker.bindTooltip(island.name, {
