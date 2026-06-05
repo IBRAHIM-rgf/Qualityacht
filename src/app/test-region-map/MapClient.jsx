@@ -70,7 +70,7 @@ export default function MapClient({ region }) {
     }).addTo(map);
 
     // Polygones sous-régions — uniquement les contours (pas de remplissage)
-    Object.entries(SUB_REGIONS).forEach(([key, sub]) => {
+    Object.entries(SUB_REGIONS || {}).forEach(([key, sub]) => {
       const poly = L.polygon(sub.polygon, {
         color: sub.color,
         weight: 2,
@@ -82,7 +82,7 @@ export default function MapClient({ region }) {
     });
 
     // Markers aéroports
-    AIRPORTS.forEach((airport) => {
+    (AIRPORTS || []).forEach((airport) => {
       const color = SIZE_COLORS[airport.size] || '#888';
       const icon = L.divIcon({
         className: 'airport-marker',
@@ -113,7 +113,7 @@ export default function MapClient({ region }) {
 
     // Markers ÎLES : losange + label nom à côté.
     // divIcon de taille fixe (10x10, ancré sur le losange) + bindTooltip permanent pour le label.
-    ISLANDS.forEach((island) => {
+    (ISLANDS || []).forEach((island) => {
       const color = getGroupColor(island.group) || '#fff';
       const icon = L.divIcon({
         className: 'island-marker',
@@ -282,7 +282,7 @@ export default function MapClient({ region }) {
 
             {/* Légende tailles (horizontale) */}
             <div className="flex flex-wrap items-center gap-3 text-[10px]">
-              {Object.entries(SIZE_LABELS).map(([size, label]) => (
+              {Object.entries(SIZE_LABELS || {}).map(([size, label]) => (
                 <div key={size} className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0 border border-white" style={{ background: SIZE_COLORS[size] }} />
                   <span className="text-[#acb0cd]/70">{label}</span>
@@ -303,7 +303,7 @@ export default function MapClient({ region }) {
               >
                 Tout
               </button>
-              {Object.entries(SUB_REGIONS).map(([key, sub]) => (
+              {Object.entries(SUB_REGIONS || {}).map(([key, sub]) => (
                 <button
                   key={key}
                   onClick={() => setSelectedSubRegion(selectedSubRegion === key ? null : key)}
