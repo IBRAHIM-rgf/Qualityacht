@@ -14,6 +14,7 @@ export default function MapClient({ region }) {
   const layersRef = useRef({ circles: [], markers: [] });
   const [selectedSubRegion, setSelectedSubRegion] = useState(null);
   const [leafletReady, setLeafletReady] = useState(false);
+  const [displayMode, setDisplayMode] = useState('both'); // 'both' | 'regions' | 'airports'
 
   const view = REGION_VIEWS[region];
 
@@ -106,7 +107,30 @@ export default function MapClient({ region }) {
     };
   }, [leafletReady, view]);
 
-  // 3) Filtre par sous-région : zoom + cache les autres markers
+  // 3a) Mode d'affichage : régions seules / aéroports seuls / les deux
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+    const map = mapInstanceRef.current;
+    const showRegions = displayMode === 'both' || displayMode === 'regions';
+    const showAirports = displayMode === 'both' || displayMode === 'airports';
+
+    layersRef.current.circles.forEach(({ layer }) => {
+      if (showRegions) {
+        if (!map.hasLayer(layer)) map.addLayer(layer);
+      } else {
+        if (map.hasLayer(layer)) map.removeLayer(layer);
+      }
+    });
+    layersRef.current.markers.forEach(({ layer }) => {
+      if (showAirports) {
+        if (!map.hasLayer(layer)) map.addLayer(layer);
+      } else {
+        if (map.hasLayer(layer)) map.removeLayer(layer);
+      }
+    });
+  }, [displayMode, leafletReady]);
+
+  // 3b) Filtre par sous-région : zoom + cache les autres markers
   useEffect(() => {
     if (!mapInstanceRef.current) return;
     const map = mapInstanceRef.current;
@@ -171,63 +195,82 @@ export default function MapClient({ region }) {
           <h1 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.12em] text-[#C0C0C0]">{view.label}</h1>
         </div>
 
-        {/* Layout carte + panneau latéral */}
-        <div className="grid lg:grid-cols-[1fr_280px] gap-4">
+        {/* Panneau de contrôle AU-DESSUS de la carte (compact, en ligne) */}
+        <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#2a2a30] p-3 md:p-4 mb-4 space-y-3">
 
-          {/* Carte */}
-          <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] overflow-hidden h-[500px] md:h-[600px] relative">
-            <div ref={mapRef} className="absolute inset-0" />
-            {!leafletReady && (
-              <div className="absolute inset-0 flex items-center justify-center bg-[#26272a]/80 text-[#acb0cd]/70 text-sm">
-                Chargement de la carte…
-              </div>
-            )}
-          </div>
-
-          {/* Panneau latéral : filtres */}
-          <div className="space-y-3">
-            <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#2a2a30] p-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-2">Sous-régions</p>
-              <div className="space-y-1.5">
-                <button
-                  onClick={() => setSelectedSubRegion(null)}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-xs transition-colors ${
-                    !selectedSubRegion ? 'bg-[#B03E00]/20 border border-[#B03E00] text-[#B03E00]' : 'bg-[#3a3b3f] border border-transparent text-[#acb0cd]/70 hover:border-[#C0C0C0]/40'
-                  }`}
-                >
-                  Tout afficher
-                </button>
-                {Object.entries(SUB_REGIONS).map(([key, sub]) => (
+          {/* Ligne 1 : Mode d'affichage + Légende tailles */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mr-1">Afficher :</span>
+              <div className="flex gap-1.5">
+                {[
+                  { id: 'both', label: 'Tout' },
+                  { id: 'regions', label: 'Régions' },
+                  { id: 'airports', label: 'Aéroports' },
+                ].map(opt => (
                   <button
-                    key={key}
-                    onClick={() => setSelectedSubRegion(selectedSubRegion === key ? null : key)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-xs flex items-center gap-2 transition-colors ${
-                      selectedSubRegion === key ? 'bg-[#B03E00]/20 border border-[#B03E00] text-[#C0C0C0]' : 'bg-[#3a3b3f] border border-transparent text-[#acb0cd]/80 hover:border-[#C0C0C0]/40'
+                    key={opt.id}
+                    onClick={() => setDisplayMode(opt.id)}
+                    className={`px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider transition-colors ${
+                      displayMode === opt.id
+                        ? 'bg-[#B03E00]/20 border border-[#B03E00] text-[#B03E00] font-bold'
+                        : 'bg-[#3a3b3f] border border-transparent text-[#acb0cd]/70 hover:border-[#C0C0C0]/40'
                     }`}
                   >
-                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: sub.color }} />
-                    {sub.label}
-                    <span className="ml-auto text-[10px] text-[#acb0cd]/40">
-                      {AIRPORTS.filter(a => a.subRegion === key).length}
-                    </span>
+                    {opt.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Légende tailles */}
-            <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#2a2a30] p-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-2">Types de jets</p>
-              <div className="space-y-1.5">
-                {Object.entries(SIZE_LABELS).map(([size, label]) => (
-                  <div key={size} className="flex items-center gap-2 text-xs">
-                    <span className="w-3 h-3 rounded-full shrink-0 border-2 border-white" style={{ background: SIZE_COLORS[size] }} />
-                    <span className="text-[#acb0cd]/80">{label}</span>
-                  </div>
-                ))}
-              </div>
+            {/* Légende tailles (horizontale) */}
+            <div className="flex flex-wrap items-center gap-3 text-[10px]">
+              {Object.entries(SIZE_LABELS).map(([size, label]) => (
+                <div key={size} className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full shrink-0 border border-white" style={{ background: SIZE_COLORS[size] }} />
+                  <span className="text-[#acb0cd]/70">{label}</span>
+                </div>
+              ))}
             </div>
           </div>
+
+          {/* Ligne 2 : Sous-régions en chips horizontales */}
+          <div>
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 block mb-2">Sous-régions :</span>
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                onClick={() => setSelectedSubRegion(null)}
+                className={`px-3 py-1.5 rounded-full text-[10px] uppercase tracking-wider transition-colors ${
+                  !selectedSubRegion ? 'bg-[#B03E00]/20 border border-[#B03E00] text-[#B03E00] font-bold' : 'bg-[#3a3b3f] border border-[#C0C0C0]/20 text-[#acb0cd]/70 hover:border-[#C0C0C0]/40'
+                }`}
+              >
+                Tout
+              </button>
+              {Object.entries(SUB_REGIONS).map(([key, sub]) => (
+                <button
+                  key={key}
+                  onClick={() => setSelectedSubRegion(selectedSubRegion === key ? null : key)}
+                  className={`px-3 py-1.5 rounded-full text-[10px] uppercase tracking-wider transition-colors inline-flex items-center gap-1.5 ${
+                    selectedSubRegion === key ? 'bg-[#B03E00]/20 border border-[#B03E00] text-[#C0C0C0]' : 'bg-[#3a3b3f] border border-[#C0C0C0]/20 text-[#acb0cd]/80 hover:border-[#C0C0C0]/40'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full shrink-0" style={{ background: sub.color }} />
+                  {sub.label}
+                  <span className="text-[9px] text-[#acb0cd]/40">({AIRPORTS.filter(a => a.subRegion === key).length})</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Carte plein largeur */}
+        <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] overflow-hidden h-[500px] md:h-[600px] relative">
+          <div ref={mapRef} className="absolute inset-0" />
+          {!leafletReady && (
+            <div className="absolute inset-0 flex items-center justify-center bg-[#26272a]/80 text-[#acb0cd]/70 text-sm">
+              Chargement de la carte…
+            </div>
+          )}
         </div>
 
         {/* Liste détaillée des aéroports filtrés (sous la carte) */}
