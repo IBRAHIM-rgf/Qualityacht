@@ -10,63 +10,129 @@ export const REGION_VIEWS = {
   },
 };
 
-// Centres approximatifs des 8 sous-régions Caraïbes (cercles/zones sur la carte).
+// Sous-régions Caraïbes en POLYGONES (approximatifs, englobent les îles principales).
+// `center` gardé pour le zoom auto. `polygon` = liste [lat, lng] qui dessine la zone.
 export const SUB_REGIONS = {
   'greater-antilles': {
     label: 'Greater Antilles',
     color: '#B03E00',
     center: [20, -76],
-    radius: 600000,  // mètres (rayon du cercle)
     description: 'Cuba, Hispaniola (Haïti & Rép. Dominicaine), Jamaïque, Porto Rico, Caïmans',
+    polygon: [
+      [23.3, -85.0],   // NW Cuba
+      [23.4, -77.0],   // NE Cuba
+      [20.7, -73.5],   // N Hispaniola
+      [19.7, -67.8],   // N Porto Rico
+      [18.6, -65.2],   // E Porto Rico
+      [17.5, -65.5],   // S Porto Rico
+      [17.6, -69.0],   // S Rép. Dom.
+      [17.6, -74.5],   // S Haïti
+      [17.4, -78.5],   // S Jamaïque
+      [19.2, -80.0],   // Caïmans
+      [19.6, -84.5],   // SW Cuba
+    ],
   },
   'leeward-islands': {
     label: 'Leeward Islands',
     color: '#d39478',
-    center: [17.5, -62.5],
-    radius: 200000,
+    center: [17.3, -62.4],
     description: 'Anguilla, St-Martin, St-Barth, Saba, St-Eustache, St-Kitts & Nevis, Antigua & Barbuda, Montserrat, Guadeloupe',
+    polygon: [
+      [18.6, -63.3],   // N Anguilla
+      [18.3, -62.3],   // E Anguilla / Barbuda
+      [17.7, -62.4],   // St-Barth
+      [17.3, -62.5],   // St-Kitts
+      [16.7, -61.6],   // S Antigua
+      [15.8, -61.4],   // S Guadeloupe
+      [15.9, -61.9],   // W Guadeloupe
+      [16.7, -62.3],   // Montserrat
+      [17.5, -63.3],   // Saba
+      [18.2, -63.4],   // St-Martin
+    ],
   },
   'windward-islands': {
     label: 'Windward Islands',
     color: '#c2622a',
     center: [13.5, -61.2],
-    radius: 200000,
     description: 'Dominique, Martinique, Sainte-Lucie, St-Vincent & Grenadines, Grenade, Barbade',
+    polygon: [
+      [15.7, -61.5],   // N Dominique
+      [15.5, -61.1],   // E Dominique
+      [14.8, -60.8],   // Martinique
+      [13.7, -60.8],   // Ste-Lucie
+      [13.2, -59.3],   // Barbade
+      [11.9, -61.4],   // S Grenade
+      [12.0, -61.9],   // SW Grenade
+      [12.8, -61.5],   // Carriacou
+      [13.3, -61.4],   // SVG
+      [14.6, -61.3],   // W Martinique
+      [15.3, -61.6],   // W Dominique
+    ],
   },
   'leeward-antilles': {
     label: 'Leeward Antilles (ABC)',
     color: '#B87333',
     center: [12.3, -68.9],
-    radius: 150000,
     description: 'Aruba, Bonaire, Curaçao',
+    polygon: [
+      [12.7, -70.2],   // NW Aruba
+      [12.6, -69.7],
+      [12.4, -68.5],
+      [12.3, -68.1],   // Bonaire
+      [11.9, -68.4],
+      [12.0, -69.5],   // S Curaçao
+      [12.3, -70.1],   // S Aruba
+    ],
   },
   'turks-caicos': {
     label: 'Turks & Caicos',
     color: '#5e7ec9',
     center: [21.7, -71.8],
-    radius: 90000,
     description: 'Providenciales, Grand Turk, South & West Caicos',
+    polygon: [
+      [22.1, -72.5],
+      [22.1, -71.0],
+      [21.3, -71.0],
+      [21.3, -72.5],
+    ],
   },
   'trinidad-tobago': {
     label: 'Trinidad & Tobago',
     color: '#8e44ad',
     center: [10.7, -61.3],
-    radius: 100000,
     description: 'Trinidad, Tobago',
+    polygon: [
+      [11.4, -60.9],   // N Tobago
+      [11.1, -60.4],   // E Tobago
+      [10.0, -60.7],   // SE Trinidad
+      [10.0, -61.9],   // SW Trinidad
+      [10.8, -62.0],   // NW Trinidad
+      [11.2, -60.9],   // back
+    ],
   },
   'bvi': {
     label: 'British Virgin Islands',
     color: '#27ae60',
     center: [18.5, -64.5],
-    radius: 60000,
     description: 'Tortola, Virgin Gorda, Anegada, Jost Van Dyke',
+    polygon: [
+      [18.85, -64.85],
+      [18.75, -64.0],
+      [18.30, -64.30],
+      [18.25, -64.85],
+    ],
   },
   'grand-cayman': {
     label: 'Grand Cayman',
     color: '#e67e22',
     center: [19.4, -81.3],
-    radius: 50000,
     description: 'Grand Cayman, Cayman Brac, Little Cayman',
+    polygon: [
+      [19.85, -81.6],
+      [19.85, -79.7],
+      [19.25, -79.7],
+      [19.25, -81.6],
+    ],
   },
 };
 

@@ -56,18 +56,17 @@ export default function MapClient({ region }) {
       maxZoom: 18,
     }).addTo(map);
 
-    // Cercles sous-régions
+    // Polygones sous-régions (au lieu de cercles)
     Object.entries(SUB_REGIONS).forEach(([key, sub]) => {
-      const circle = L.circle(sub.center, {
-        radius: sub.radius,
+      const poly = L.polygon(sub.polygon, {
         color: sub.color,
         weight: 2,
         fillColor: sub.color,
-        fillOpacity: 0.12,
+        fillOpacity: 0.18,
       }).addTo(map);
-      circle.bindPopup(`<strong style="color:${sub.color}">${sub.label}</strong><br/><span style="font-size:11px;color:#666">${sub.description}</span>`);
-      circle.on('click', () => setSelectedSubRegion(key));
-      layersRef.current.circles.push({ key, layer: circle });
+      poly.bindPopup(`<strong style="color:${sub.color}">${sub.label}</strong><br/><span style="font-size:11px;color:#666">${sub.description}</span>`);
+      poly.on('click', () => setSelectedSubRegion(key));
+      layersRef.current.circles.push({ key, layer: poly });
     });
 
     // Markers aéroports
@@ -117,20 +116,22 @@ export default function MapClient({ region }) {
       // Réinitialise : vue région complète, tout visible
       map.setView(view.center, view.zoom);
       layersRef.current.markers.forEach(({ layer }) => layer.setOpacity(1));
-      layersRef.current.circles.forEach(({ layer }) => layer.setStyle({ fillOpacity: 0.12, weight: 2 }));
+      layersRef.current.circles.forEach(({ layer }) => layer.setStyle({ fillOpacity: 0.18, weight: 2 }));
       return;
     }
 
     // Zoom sur la sous-région
     const sub = SUB_REGIONS[selectedSubRegion];
     if (sub) {
-      map.flyTo(sub.center, 7, { duration: 1 });
+      // fitBounds sur le polygone pour cadrer pile la zone
+      const bounds = L.latLngBounds(sub.polygon);
+      map.flyToBounds(bounds, { duration: 1, padding: [40, 40], maxZoom: 9 });
       layersRef.current.markers.forEach(({ subRegion, layer }) => {
         layer.setOpacity(subRegion === selectedSubRegion ? 1 : 0.2);
       });
       layersRef.current.circles.forEach(({ key, layer }) => {
         layer.setStyle({
-          fillOpacity: key === selectedSubRegion ? 0.3 : 0.05,
+          fillOpacity: key === selectedSubRegion ? 0.35 : 0.05,
           weight: key === selectedSubRegion ? 3 : 1,
         });
       });
