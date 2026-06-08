@@ -92,4 +92,19 @@ export const CARIBBEAN_SUBREGIONS = {
       { italic: true, text: "Whether you're drawn to the vibrant sophistication of Georgetown on Grand Cayman, the untouched beauty of Little Cayman, or the dramatic landscapes of Cayman Brac, this guide is your gateway to an unforgettable yacht charter experience, where every detail is tailored to your desires and comfort." },
     ],
   },
+  'emerging-destinations': {
+    name: 'Emerging Destinations',
+    heroImage: '/images/pagesCaraibes/emergencyfilter.jpg',
+    heroImageOriginal: '/images/pagesCaraibes/emergency.png',
+    topIslands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero'],
+    subTitle: "The Caribbean's Most Exclusive Hidden Gems",
+    intro: 'Beyond the well-known islands lies a constellation of secret destinations — untouched, exclusive, and accessible only to those who know where to look.',
+    extraParagraphs: [
+      { heading: 'Barbuda — Where Pink Sands Meet Pure Serenity', text: 'Step onto 17 miles of untouched pink sand beaches, where the only footprints are yours. Immerse yourself in the Codrington Lagoon, a sanctuary for frigate birds and sea turtles. Elevate your experience with a private helicopter tour or a gourmet beach dinner under the stars. Access: your private yacht or a charter flight from Antigua.' },
+      { heading: 'Petite Martinique — Your Own Private Island', text: 'Escape to an uninhabited paradise, where lush hills and hidden coves await only you. Swim in crystal-clear lagoons, hike through untouched landscapes, or simply unwind in complete seclusion. Accessible only by private yacht — because exclusivity is everything.' },
+      { heading: 'Redonda — Adventure Meets Exclusivity', text: 'Climb to the summit of this protected nature reserve and marvel at 360° views of the Caribbean — just for you. Home to unique wildlife, Redonda offers an adventure like no other. With exclusive access, this is a destination for those who seek the extraordinary. Special permits required — let us handle the details.' },
+      { heading: 'Aves Island — A Hidden Gem for the Curious Soul', text: "Discover a birdwatcher's paradise, where migratory birds soar and secluded beaches beckon. Once a pirate hideout, Aves Island is now your private retreat for snorkeling, shipwreck exploration, and stargazing. Your yacht, your schedule, your adventure." },
+      { heading: 'Sombrero — Dive into Luxury', text: 'Dive into the pristine coral reefs and underwater caves of this iconic hat-shaped island. Owned privately, Sombrero is accessible by special request — perfect for those who demand the best. Snorkel, explore, or simply relax on beaches that feel like your own.' },
+    ],
+  },
 };

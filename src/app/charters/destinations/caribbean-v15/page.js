@@ -2,17 +2,28 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import { MapPin, X } from 'lucide-react';
+import { ISLANDS } from '../../../test-region-map/map-data';
 
-// ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
+// Coordonnées d'une île par son nom (depuis map-data.js).
+// Fallback défensif (ISLANDS || []) — évite un crash si l'import n'est pas
+// résolu dans le bundle prod minifié.
+function getIslandCoords(name) {
+  const found = (ISLANDS || []).find((i) => i.name === name);
+  return found ? found.coords : null;
+}
+
+// ── Données rectangles (8 items : 4 + 4) ──────────────────────────────────────
 // image = nouvelle (repos) ; imageOld = ancienne colorée (apparaît au survol)
 const caribbeanIslands = [
-  { name: 'Greater Antilles',   image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/carabbean/greater-antilles-v11' },
-  { name: 'Leeward Islands',    image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/charters/destinations/carabbean/leeward-islands-v11' },
-  { name: 'Leeward Antilles',   image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/charters/destinations/carabbean/leeward-antilles-v11' },
-  { name: 'Windward Islands',   image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/charters/destinations/carabbean/windward-islands-v11' },
-  { name: 'Turks & Caicos',     image: '/images/pagesCaraibes/turks_caicos.png',      imageOld: '/images/destinations/Turks and Caicos-original.jpg',    href: '/charters/destinations/carabbean/turks-caicos-v11' },
-  { name: 'Trinidad & Tobago',  image: '/images/pagesCaraibes/unnamed.jpg',           imageOld: '/images/destinations/Trinidad and Tobago-original.jpg', href: '/charters/destinations/carabbean/trinidad-tobago-v11' },
-  { name: 'Grand Cayman',       image: '/images/pagesCaraibes/grand_cayman.png',      imageOld: '/images/destinations/Cayman Islands-original.jpg',      href: '/charters/destinations/carabbean/grand-cayman-v11' },
+  { name: 'Greater Antilles',      image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/carabbean/greater-antilles-v11' },
+  { name: 'Leeward Islands',       image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/charters/destinations/carabbean/leeward-islands-v11' },
+  { name: 'Leeward Antilles',      image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/charters/destinations/carabbean/leeward-antilles-v11' },
+  { name: 'Windward Islands',      image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/charters/destinations/carabbean/windward-islands-v11' },
+  { name: 'Turks & Caicos',        image: '/images/pagesCaraibes/turks_caicos.png',      imageOld: '/images/destinations/Turks and Caicos-original.jpg',    href: '/charters/destinations/carabbean/turks-caicos-v11' },
+  { name: 'Trinidad & Tobago',     image: '/images/pagesCaraibes/unnamed.jpg',           imageOld: '/images/destinations/Trinidad and Tobago-original.jpg', href: '/charters/destinations/carabbean/trinidad-tobago-v11' },
+  { name: 'Grand Cayman',          image: '/images/pagesCaraibes/grand_cayman.png',      imageOld: '/images/destinations/Cayman Islands-original.jpg',      href: '/charters/destinations/carabbean/grand-cayman-v11' },
+  { name: 'Emerging Destinations', image: '/images/pagesCaraibes/emergencyfilter.jpg',   imageOld: '/images/pagesCaraibes/emergency.png',                    href: '/charters/destinations/carabbean/emerging-destinations-v11' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────
@@ -324,8 +335,116 @@ function CircleCard({ name, image, nameBelow = false }) {
   );
 }
 
+// ── Modal carte : un point sur l'île cliquée ──────────────────────────────────
+// Leaflet chargé via CDN (comme test-region-map). island = { name, coords }.
+function IslandMapModal({ island, onClose }) {
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const [leafletReady, setLeafletReady] = useState(false);
+
+  // Charger Leaflet (CSS + JS) une seule fois pour toute la page
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.L) { setLeafletReady(true); return; }
+
+    if (!document.querySelector('link[data-leaflet-css]')) {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      css.setAttribute('data-leaflet-css', '');
+      document.head.appendChild(css);
+    }
+
+    const existing = document.querySelector('script[data-leaflet-js]');
+    if (existing) {
+      if (window.L) setLeafletReady(true);
+      else existing.addEventListener('load', () => setLeafletReady(true));
+      return;
+    }
+    const js = document.createElement('script');
+    js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    js.setAttribute('data-leaflet-js', '');
+    js.onload = () => setLeafletReady(true);
+    document.body.appendChild(js);
+  }, []);
+
+  // Init la carte + marker dès que Leaflet est prêt et qu'une île est sélectionnée
+  useEffect(() => {
+    if (!leafletReady || !island || !island.coords || !mapRef.current) return;
+    const L = window.L;
+    const map = L.map(mapRef.current, {
+      center: island.coords,
+      zoom: 5,
+      scrollWheelZoom: false,
+    });
+    mapInstanceRef.current = map;
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      maxZoom: 19,
+    }).addTo(map);
+
+    const icon = L.divIcon({
+      className: 'island-modal-marker',
+      html: `<div style="width:16px;height:16px;background:#c2622a;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 2px #c2622a,0 2px 8px rgba(0,0,0,0.6)"></div>`,
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+    });
+    L.marker(island.coords, { icon }).addTo(map)
+      .bindTooltip(island.name, { permanent: true, direction: 'right', offset: [10, 0], className: 'island-modal-label' });
+
+    // La modal s'ouvre après le rendu → recalcule la taille de la carte
+    const t = setTimeout(() => map.invalidateSize(), 150);
+    return () => { clearTimeout(t); map.remove(); mapInstanceRef.current = null; };
+  }, [leafletReady, island]);
+
+  // Fermeture clavier (Échap)
+  useEffect(() => {
+    if (!island) return;
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [island, onClose]);
+
+  if (!island) return null;
+
+  return (
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>
+      <style>{`
+        .leaflet-tooltip.island-modal-label {
+          background: rgba(255,255,255,0.9) !important; border: 1px solid #c2622a !important;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.3) !important;
+          color: #26272a; font-family: system-ui, sans-serif; font-size: 12px; font-weight: 700;
+          padding: 2px 7px; letter-spacing: 0.2px; border-radius: 6px;
+        }
+        .leaflet-tooltip.island-modal-label::before { display: none !important; }
+      `}</style>
+      <div className="relative w-full max-w-3xl bg-[#2e2f32] rounded-2xl border border-[#C0C0C0]/30 overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-[#c2622a]" />
+            <h3 className="trajan-regular text-[#acb0cd] text-sm md:text-base uppercase tracking-[0.15em]">{island.name}</h3>
+          </div>
+          <button onClick={onClose} aria-label="Fermer"
+            className="w-8 h-8 flex items-center justify-center rounded-full border border-[#C0C0C0]/30 text-[#acb0cd] hover:border-[#c2622a] hover:text-[#c2622a] transition-colors cursor-pointer">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="relative h-[55vh] md:h-[60vh] bg-[#3a3b3f]">
+          <div ref={mapRef} className="absolute inset-0" />
+          {!leafletReady && (
+            <div className="absolute inset-0 flex items-center justify-center text-[#acb0cd]/70 text-sm">
+              Chargement de la carte…
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Accordéon groupe (destinations by region) ─────────────────────────────────
-function IslandGroup({ group, defaultOpen }) {
+function IslandGroup({ group, defaultOpen, onIslandSelect }) {
   const [open, setOpen] = useState(defaultOpen || false);
   return (
     <div className="border-b border-white/10">
@@ -341,12 +460,19 @@ function IslandGroup({ group, defaultOpen }) {
       </button>
       {open && (
         <div className="pb-5 flex flex-wrap justify-center gap-2 px-1">
-          {group.islands.map((island, i) => (
-            <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#C0C0C0]/40 bg-[#26272a] text-[#acb0cd] text-xs">
-              <span className="text-[#c2622a] text-[8px]">›</span>
-              {island}
-            </span>
-          ))}
+          {group.islands.map((island, i) => {
+            const coords = getIslandCoords(island);
+            return (
+              <button key={i} type="button"
+                onClick={() => coords && onIslandSelect({ name: island, coords })}
+                disabled={!coords}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#C0C0C0]/40 bg-[#26272a] text-[#acb0cd] text-xs transition-colors hover:border-[#c2622a] hover:text-[#c2622a] cursor-pointer disabled:opacity-50 disabled:cursor-default">
+                <span className="text-[#c2622a] text-[8px]">›</span>
+                {island}
+                <MapPin className="w-3 h-3 text-[#c2622a]/70" />
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
@@ -411,6 +537,7 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
 // ── Page ───────────────────────────────────────────────────────────────────────
 export default function CaribbeanV15Page() {
   const heroRef = useRef(null);
+  const [activeIsland, setActiveIsland] = useState(null);
   useEffect(() => {
     const el = heroRef.current;
     if (!el) return;
@@ -495,7 +622,7 @@ export default function CaribbeanV15Page() {
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
         <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
 
-        {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 3 centré ══ */}
+        {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 4 (8 cards) ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
@@ -503,13 +630,9 @@ export default function CaribbeanV15Page() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
               {caribbeanIslands.slice(0, 4).map((island, i) => <DestCard key={i} index={i} {...island} />)}
             </div>
-            {/* Ligne 2 : mobile 2+1 centré / desktop 3 centré */}
+            {/* Ligne 2 : 2 col mobile / 4 col desktop */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
-              {caribbeanIslands.slice(4, 6).map((island, i) => <DestCard key={i} index={4 + i} {...island} />)}
-              {/* Dernier centré sur mobile (span 2) et desktop (col-start-2) */}
-              <div className="col-span-2 md:col-span-1 md:col-start-auto">
-                <DestCard index={6} {...caribbeanIslands[6]} />
-              </div>
+              {caribbeanIslands.slice(4, 8).map((island, i) => <DestCard key={i} index={4 + i} {...island} />)}
             </div>
           </div>
         </CloudSection>
@@ -522,7 +645,7 @@ export default function CaribbeanV15Page() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
               {islandGroups.map((group, i) => (
                 <div key={group.id} className={i === islandGroups.length - 1 ? 'md:col-start-2' : ''}>
-                  <IslandGroup group={group} defaultOpen={i < 3} />
+                  <IslandGroup group={group} defaultOpen={i < 3} onIslandSelect={setActiveIsland} />
                 </div>
               ))}
             </div>
@@ -588,6 +711,9 @@ export default function CaribbeanV15Page() {
         </CloudSection>
 
       </div>
+
+      {/* Modal carte d'une île (Destinations by Region) */}
+      <IslandMapModal island={activeIsland} onClose={() => setActiveIsland(null)} />
     </>
   );
 }
