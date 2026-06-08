@@ -429,12 +429,19 @@ export default function CaribbeanV15Page() {
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
         {/* ══ HERO ══ */}
-        {/* pt-[70px] (mobile) = hauteur exacte de la navbar fixe → l'image commence juste sous la navbar.
-            Mobile : aspect-[6/5] (ratio 1.20) → image visible haut-en-bas (perte ~10% latérale acceptée).
-            Desktop : pt-0 + h-[75vh] (la navbar gère son propre espace). */}
-        <div className="pt-[70px] md:pt-0">
-          <div className="relative aspect-[6/5] md:aspect-auto md:h-[75vh]">
+        {/* Mobile : aspect-[6/5] + object-cover (cadrage propre sous navbar fixe).
+            Desktop : image entière (natural ratio) centrée, max-h écran → on voit toute la photo. */}
+        <div className="pt-[70px] md:pt-0 bg-[#26272a]">
+          <div className="relative aspect-[6/5] md:hidden">
             <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
+          </div>
+          <div className="hidden md:block w-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/yachts/yatch2.jpeg"
+              alt=""
+              className="block w-full h-auto"
+            />
           </div>
         </div>
 
