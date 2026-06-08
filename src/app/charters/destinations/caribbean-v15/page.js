@@ -563,13 +563,13 @@ export default function CaribbeanV15Page() {
           <div className="relative aspect-[6/5] md:hidden">
             <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
           </div>
-          {/* Desktop : image + titre superposé */}
-          <div className="hidden md:block relative w-full">
+          {/* Desktop : image + titre superposé. Hauteur cappee a 90vh → pas de scroll excessif sur image portrait. */}
+          <div className="hidden md:flex relative w-full justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/yachts/yatch2.jpeg"
               alt=""
-              className="block w-full h-auto"
+              className="block w-auto h-auto max-h-[90vh] max-w-full"
             />
             {/* Dégradé bas pour lisibilité du texte */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
