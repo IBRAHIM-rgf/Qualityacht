@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { getAnkorImageUrl } from '@/lib/utils';
 import {
   Plus, Check, X, Eye, EyeOff, Star, Edit3, Trash2,
-  Database, Globe, Loader2,
+  Database, Globe, Loader2, Users,
 } from 'lucide-react';
 
 // ════════════════════════════════════════════════════════════
@@ -541,9 +541,36 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
   const [rawYachts, setRawYachts] = useState(initialSelections || []);
   const [activeTab, setActiveTab] = useState('bdd');
   const [editingYacht, setEditingYacht] = useState(null);
+  const [activeAdmins, setActiveAdmins] = useState(1);
 
   const yachts = useMemo(() => rawYachts.map(adaptYacht), [rawYachts]);
   const existingIds = useMemo(() => new Set(yachts.map(y => y.id)), [yachts]);
+
+  // ── Heartbeat : ping toutes les 30s pour signaler qu'on est en ligne ──
+  useEffect(() => {
+    // Session token unique par onglet/navigateur (sessionStorage = persiste tant que l'onglet est ouvert)
+    let sessionToken = sessionStorage.getItem('admin_session_token');
+    if (!sessionToken) {
+      sessionToken = (crypto.randomUUID && crypto.randomUUID()) || `s-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      sessionStorage.setItem('admin_session_token', sessionToken);
+    }
+
+    const ping = async () => {
+      try {
+        const res = await fetch(`/api/admin/heartbeat?token=${token}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionToken }),
+        });
+        const data = await res.json();
+        if (typeof data.activeCount === 'number') setActiveAdmins(data.activeCount);
+      } catch (e) { /* silent */ }
+    };
+
+    ping(); // immédiat
+    const interval = setInterval(ping, 30000);
+    return () => clearInterval(interval);
+  }, [token]);
 
   // Recharge depuis BDD après chaque action mutante
   const reload = useCallback(async () => {
@@ -626,6 +653,22 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
 
   return (
     <div>
+      {/* Indicateur multi-admin */}
+      {activeAdmins > 1 ? (
+        <div className="mb-4 rounded-xl border border-amber-700/50 bg-amber-900/20 px-4 py-3 flex items-center gap-3">
+          <Users className="w-5 h-5 text-amber-400 shrink-0" />
+          <div className="text-sm text-amber-200">
+            <strong className="text-amber-300">{activeAdmins} sessions admin actives</strong> en ce moment.
+            <span className="ml-1 text-amber-200/70">Attention à ne pas éditer le même yacht en simultané (le dernier qui sauvegarde écrase l'autre).</span>
+          </div>
+        </div>
+      ) : (
+        <div className="mb-4 inline-flex items-center gap-2 text-xs text-[#acb0cd]/50">
+          <Users className="w-3 h-3" />
+          <span>1 session admin active (toi)</span>
+        </div>
+      )}
+
       <Dashboard yachts={yachts} />
 
       <div className="grid grid-cols-3 gap-2 mb-6">

@@ -197,6 +197,71 @@ export const AIRPORTS = [
   { code: 'TAB', name: 'A.N.R. Robinson Intl', island: 'Tobago',              coords: [11.150, -60.832], size: 'medium', subRegion: 'trinidad-tobago' },
 ];
 
+// Îles des 7 groupes "Destinations by Region" de caribbean-v15.
+// Markers complémentaires aux aéroports (forme différente, plus discrète).
+export const ISLAND_GROUPS = [
+  { id: 'greater-antilles',  label: 'Greater Antilles',      color: '#B03E00' },
+  { id: 'leeward-islands',   label: 'Leeward Islands',       color: '#d39478' },
+  { id: 'leeward-antilles',  label: 'Leeward Antilles',      color: '#B87333' },
+  { id: 'windward-islands',  label: 'Windward Islands',      color: '#c2622a' },
+  { id: 'turks-caicos',      label: 'Turks & Caicos',        color: '#5e7ec9' },
+  { id: 'trinidad-tobago',   label: 'Trinidad & Tobago',     color: '#8e44ad' },
+  { id: 'emerging',          label: 'Emerging Destinations', color: '#27ae60' },
+];
+
+export const ISLANDS = [
+  // Greater Antilles
+  { name: 'Cuba',          group: 'greater-antilles', coords: [22.00, -79.50] },
+  { name: 'Hispaniola',    group: 'greater-antilles', coords: [18.85, -71.50] },
+  { name: 'Jamaica',       group: 'greater-antilles', coords: [18.10, -77.30] },
+  { name: 'Puerto Rico',   group: 'greater-antilles', coords: [18.20, -66.60] },
+
+  // Leeward Islands
+  { name: 'Anguilla',                       group: 'leeward-islands', coords: [18.22, -63.07] },
+  { name: 'Saint-Martin / Sint Maarten',    group: 'leeward-islands', coords: [18.07, -63.05] },
+  { name: 'Saint-Barthélemy',               group: 'leeward-islands', coords: [17.90, -62.83] },
+  { name: 'Saba & Saint-Eustache',          group: 'leeward-islands', coords: [17.55, -63.20] },
+  { name: 'Saint-Kitts & Nevis',            group: 'leeward-islands', coords: [17.25, -62.65] },
+  { name: 'Antigua & Barbuda',              group: 'leeward-islands', coords: [17.10, -61.80] },
+  { name: 'Montserrat',                     group: 'leeward-islands', coords: [16.74, -62.19] },
+  { name: 'Guadeloupe',                     group: 'leeward-islands', coords: [16.27, -61.55] },
+
+  // Leeward Antilles (ABC)
+  { name: 'Aruba',         group: 'leeward-antilles', coords: [12.52, -69.97] },
+  { name: 'Bonaire',       group: 'leeward-antilles', coords: [12.18, -68.27] },
+  { name: 'Curaçao',       group: 'leeward-antilles', coords: [12.17, -68.99] },
+
+  // Windward Islands
+  { name: 'Dominica',                      group: 'windward-islands', coords: [15.41, -61.37] },
+  { name: 'Martinique',                    group: 'windward-islands', coords: [14.65, -61.02] },
+  { name: 'Saint Lucia',                   group: 'windward-islands', coords: [13.91, -60.98] },
+  { name: 'Saint Vincent & the Grenadines', group: 'windward-islands', coords: [13.25, -61.20] },
+  { name: 'Mustique',                      group: 'windward-islands', coords: [12.88, -61.18] },
+  { name: 'Canouan',                       group: 'windward-islands', coords: [12.70, -61.34] },
+  { name: 'Bequia',                        group: 'windward-islands', coords: [12.99, -61.24] },
+  { name: 'Tobago Cays',                   group: 'windward-islands', coords: [12.63, -61.35] },
+  { name: 'Grenada',                       group: 'windward-islands', coords: [12.11, -61.68] },
+  { name: 'Carriacou',                     group: 'windward-islands', coords: [12.49, -61.45] },
+  { name: 'Barbados',                      group: 'windward-islands', coords: [13.19, -59.54] },
+
+  // Turks & Caicos
+  { name: 'Providenciales',  group: 'turks-caicos', coords: [21.78, -72.27] },
+  { name: 'Grand Turk',      group: 'turks-caicos', coords: [21.46, -71.13] },
+  { name: 'South Caicos',    group: 'turks-caicos', coords: [21.50, -71.52] },
+  { name: 'West Caicos',     group: 'turks-caicos', coords: [21.71, -72.46] },
+
+  // Trinidad & Tobago
+  { name: 'Trinidad',  group: 'trinidad-tobago', coords: [10.69, -61.22] },
+  { name: 'Tobago',    group: 'trinidad-tobago', coords: [11.18, -60.74] },
+
+  // Emerging Destinations
+  { name: 'Barbuda',           group: 'emerging', coords: [17.63, -61.81] },
+  { name: 'Petite Martinique', group: 'emerging', coords: [12.53, -61.39] },
+  { name: 'Redonda',           group: 'emerging', coords: [16.94, -62.34] },
+  { name: 'Aves Island',       group: 'emerging', coords: [15.67, -63.62] },
+  { name: 'Sombrero Island',   group: 'emerging', coords: [18.59, -63.43] },
+];
+
 export const SIZE_COLORS = {
   large:  '#B03E00',  // grand jet
   all:    '#c2622a',  // tous types

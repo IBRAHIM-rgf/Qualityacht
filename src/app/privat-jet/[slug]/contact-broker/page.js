@@ -54,6 +54,7 @@ export default function ContactBrokerPage() {
         <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 2s ease-out forwards' }}>
           <Image src="/images/private_jet/private-jet_thankyou.jpg" alt="" fill className="object-cover object-top md:object-contain" />
           <div className="absolute inset-0 bg-black/35" />
+          <div className="absolute inset-0 bg-[#e8b44a] mix-blend-multiply opacity-40" />
         </div>
 
         <h1 className="trajan-regular font-bold text-2xl md:text-4xl text-center uppercase tracking-[0.15em] mb-10 md:mb-14 text-[#C0C0C0] [-webkit-text-stroke:0.6px_#C0C0C0] mt-[10vh]">

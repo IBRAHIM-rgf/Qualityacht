@@ -468,4 +468,38 @@ export async function ensureV3Schema() {
   return { ok: true };
 }
 
+/**
+ * Table de présence admin : chaque admin ping toutes les 30s pour signaler qu'il est là.
+ * Permet d'afficher "X sessions actives" en haut du panel admin.
+ */
+export async function ensureAdminSessionsSchema() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS admin_sessions (
+      session_token TEXT PRIMARY KEY,
+      last_seen_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_admin_sessions_last_seen ON admin_sessions(last_seen_at)`;
+}
+
+/**
+ * Upsert présence + retourne le nombre de sessions admin actives (vues dans la dernière minute).
+ */
+export async function heartbeatAdmin(sessionToken) {
+  await ensureAdminSessionsSchema();
+  await sql`
+    INSERT INTO admin_sessions (session_token, last_seen_at)
+    VALUES (${sessionToken}, NOW())
+    ON CONFLICT (session_token) DO UPDATE SET last_seen_at = NOW()
+  `;
+  // Nettoyage : supprime les sessions inactives depuis +10 min
+  await sql`DELETE FROM admin_sessions WHERE last_seen_at < NOW() - INTERVAL '10 minutes'`;
+  // Compte les sessions actives (heartbeat < 1 min)
+  const rows = await sql`
+    SELECT COUNT(*)::int as nb FROM admin_sessions
+    WHERE last_seen_at > NOW() - INTERVAL '1 minute'
+  `;
+  return { activeCount: rows[0]?.nb || 0 };
+}
+
 export default sql;

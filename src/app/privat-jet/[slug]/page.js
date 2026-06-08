@@ -5,8 +5,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { use, useEffect, useRef } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { use, useEffect, useRef, useState } from 'react';
+import { ArrowLeft, ChevronDown } from 'lucide-react';
 import { getDestinationBySlug } from '../data';
 
 // ── Parsing identique au modal précédent ─────────────────────────────────────
@@ -65,6 +65,14 @@ export default function PrivatJetDestinationPage({ params }) {
     const t = setTimeout(() => el.classList.add('revealed'), 200);
     return () => clearTimeout(t);
   }, []);
+
+  // ── Accordéon par île ──
+  const [openIslands, setOpenIslands] = useState(new Set());
+  const toggleIsland = (i) => setOpenIslands(prev => {
+    const next = new Set(prev);
+    if (next.has(i)) next.delete(i); else next.add(i);
+    return next;
+  });
 
   if (!dest) {
     return (
@@ -149,46 +157,51 @@ export default function PrivatJetDestinationPage({ params }) {
               </Link>
             </div>
 
-            {/* ══ Groupes îles + aéroports ══ */}
-            <div className="space-y-12">
+            {/* ══ Groupes îles + aéroports (accordéon : triangle ouvre/ferme la section) ══ */}
+            <div className="space-y-6">
               {dest.groups.map((group, i) => {
                 const grouped = groupAirports(group.airports);
+                const isOpen = openIslands.has(i);
                 return (
                   <div key={i}>
-                    {/* Titre île + même trait décoratif que sous "Caribbean" (title-line.png) */}
-                    <div className="flex flex-col items-center mb-6">
-                      <h2 className="trajan-regular text-base md:text-xl text-[#acb0cd] uppercase tracking-[0.25em] text-center">
+                    {/* Titre île cliquable : titre + title-line + triangle dessous */}
+                    <button type="button" onClick={() => toggleIsland(i)}
+                      className="w-full flex flex-col items-center group">
+                      <h2 className="trajan-regular text-base md:text-xl text-[#acb0cd] uppercase tracking-[0.25em] text-center group-hover:text-[#c2622a] transition-colors">
                         {group.island}
                       </h2>
                       <div className="relative w-32 h-6 mt-3">
                         <Image src="/images/title-line.png" alt="" fill className="object-contain" />
                       </div>
-                    </div>
+                      <ChevronDown className={`w-5 h-5 text-[#c2622a] mt-2 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                    </button>
 
-                    {/* Sous-sections par catégorie + pills */}
-                    <div className="space-y-5">
-                      {grouped.map(([cat, airports], gi) => (
-                        <div key={gi} className="text-center">
-                          {airports.length > 0 && airports[0].code !== null && (
-                            <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#acb0cd]/60 italic mb-2">
-                              {cat}
-                            </p>
-                          )}
-                          <div className="flex flex-wrap gap-2 justify-center">
-                            {airports.map((a, ai) => (
-                              <span
-                                key={ai}
-                                className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#26272a]/80 backdrop-blur-sm"
-                              >
-                                <span className="w-1.5 h-1.5 rotate-45 bg-[#c2622a] shrink-0" />
-                                <span className="text-[#acb0cd] text-xs md:text-sm">{a.name}</span>
-                                {a.code && <span className="text-[#C0C0C0]/70 text-[10px] md:text-xs font-mono">({a.code})</span>}
-                              </span>
-                            ))}
+                    {/* Contenu de l'île (déplié si ouvert) */}
+                    {isOpen && (
+                      <div className="space-y-5 mt-6 animate-[fadeIn_0.3s_ease-out]">
+                        {grouped.map(([cat, airports], gi) => (
+                          <div key={gi} className="text-center">
+                            {airports.length > 0 && airports[0].code !== null && (
+                              <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#acb0cd]/60 italic mb-2">
+                                {cat}
+                              </p>
+                            )}
+                            <div className="flex flex-wrap gap-2 justify-center">
+                              {airports.map((a, ai) => (
+                                <span
+                                  key={ai}
+                                  className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#26272a]/80 backdrop-blur-sm"
+                                >
+                                  <span className="w-1.5 h-1.5 rotate-45 bg-[#c2622a] shrink-0" />
+                                  <span className="text-[#acb0cd] text-xs md:text-sm">{a.name}</span>
+                                  {a.code && <span className="text-[#C0C0C0]/70 text-[10px] md:text-xs font-mono">({a.code})</span>}
+                                </span>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
