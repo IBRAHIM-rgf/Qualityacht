@@ -556,30 +556,46 @@ export default function CaribbeanV15Page() {
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
         {/* ══ HERO ══ */}
-        {/* Mobile : aspect-[6/5] + object-cover (cadrage propre sous navbar fixe).
-            Desktop : image entière (natural ratio) centrée, max-h écran → on voit toute la photo. */}
+        {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
+            Desktop : image pleine largeur (natural ratio), titre OVERLAY en bas avec dégradé. */}
         <div className="pt-[70px] md:pt-0 bg-[#26272a]">
+          {/* Mobile : image seule */}
           <div className="relative aspect-[6/5] md:hidden">
             <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
           </div>
-          <div className="hidden md:block w-full">
+          {/* Desktop : image + titre superposé */}
+          <div className="hidden md:block relative w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/yachts/yatch2.jpeg"
               alt=""
               className="block w-full h-auto"
             />
+            {/* Dégradé bas pour lisibilité du texte */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+            {/* Texte overlay */}
+            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-10 md:pb-16">
+              <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
+                <h1 className="trajan-regular text-6xl lg:text-7xl uppercase tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+                  The Caribbean
+                </h1>
+                <BurntLine />
+                <p className="text-[#acb0cd] text-xl uppercase tracking-[0.25em] font-light text-center drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
+                  The Ultimate Luxury Yachting Destination
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* ══ TITRE (sous le hero, avant la description) ══ */}
-        <div className="bg-[#26272a] px-4 py-10 md:py-16 flex flex-col items-center">
-          <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
-            <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
+        {/* ══ TITRE mobile (sous l'image, desktop : caché) ══ */}
+        <div className="bg-[#26272a] px-4 py-10 flex flex-col items-center md:hidden">
+          <div className="flex flex-col items-center w-full">
+            <h1 className="trajan-regular text-3xl uppercase tracking-[0.1em] text-[#acb0cd] text-center">
               The Caribbean
             </h1>
             <BurntLine />
-            <p className="text-[#acb0cd] text-sm md:text-xl uppercase tracking-[0.15em] md:tracking-[0.25em] font-light text-center">
+            <p className="text-[#acb0cd] text-sm uppercase tracking-[0.15em] font-light text-center">
               The Ultimate Luxury Yachting Destination
             </p>
           </div>
