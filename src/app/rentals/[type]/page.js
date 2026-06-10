@@ -4,6 +4,7 @@
 // Hero (image + titre qui monte) + grille des 16 destinations.
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { use, useEffect, useRef } from 'react';
 import { getSailingTypeBySlug, destinationItems } from '../data';
 
@@ -72,16 +73,31 @@ export default function RentalTypePage({ params }) {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {destinationItems.map((item) => (
-              <div key={item.title} className="min-w-0 rounded-2xl p-6 flex flex-col items-center text-center">
-                <div className="w-full relative mb-6 overflow-hidden h-48 rounded-xl">
-                  <Image src={item.image} alt={item.title} fill className="object-cover rounded-xl" sizes="(max-width: 768px) 100vw, 33vw" />
+            {destinationItems.map((item) => {
+              // Card Caraïbes → copie de v15 propre à ce voilier (/rentals/<type>/carribbean).
+              const href = item.caribbean ? `/rentals/${type}/carribbean` : item.href;
+              const content = (
+                <>
+                  <div className="w-full relative mb-6 overflow-hidden h-48 rounded-xl">
+                    <Image src={item.image} alt={item.title} fill className="object-cover rounded-xl" sizes="(max-width: 768px) 100vw, 33vw" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-[#acb0cd] trajan-regular uppercase text-center break-words leading-tight w-full hyphens-auto group-hover:text-[#c2622a] transition-colors duration-300">
+                    {item.title}
+                  </h3>
+                </>
+              );
+              // Card cliquable seulement si href (ex. Caraïbes → copie carribbean).
+              return href ? (
+                <Link key={item.title} href={href}
+                  className="group min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform cursor-pointer">
+                  {content}
+                </Link>
+              ) : (
+                <div key={item.title} className="min-w-0 rounded-2xl p-6 flex flex-col items-center text-center">
+                  {content}
                 </div>
-                <h3 className="text-lg font-semibold text-[#acb0cd] trajan-regular uppercase text-center break-words leading-tight w-full hyphens-auto">
-                  {item.title}
-                </h3>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

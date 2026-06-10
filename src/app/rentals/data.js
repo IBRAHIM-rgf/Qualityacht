@@ -115,6 +115,6 @@ export const destinationItems = [
   { title: 'Western Mediterranean', image: '/images/destinations/animals/Western-Mediterranean.webp' },
   { title: 'Africa',                image: '/images/destinations/animals/africa.jpeg' },
   { title: 'Northern Europe',       image: '/images/destinations/animals/articbynortherneurope.jpg' },
-  { title: 'Caraïbes',              image: '/images/destinations/animals/caraibes.jpg' },
+  { title: 'Caraïbes',              image: '/images/destinations/animals/caraibes.jpg', caribbean: true },
   { title: 'Oceania',               image: '/images/destinations/animals/oceania.jpeg' },
 ];
