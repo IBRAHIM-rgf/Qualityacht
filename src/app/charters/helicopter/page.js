@@ -5,6 +5,7 @@ export default function HelicopterCharter() {
   return (
     <ItemsGrid
       title="Helicopter Yacht Charter"
+      heroImage="/images/charters/helicoptaire.png"
       bgImage="/images/services-bg.png"
       items={destinations}
     />

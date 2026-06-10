@@ -5,6 +5,7 @@ export default function SportsCharter() {
   return (
     <ItemsGrid
       title="Sports Yacht Charter"
+      heroImage="/images/charters/Sport yacht charter.png"
       bgImage="/images/services-bg.png"
       items={destinations}
     />

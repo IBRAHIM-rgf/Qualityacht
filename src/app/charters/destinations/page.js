@@ -104,6 +104,7 @@ export default function DestinationsPage() {
   return (
     <ItemsGrid
       title="Destinations"
+      heroImage="/images/charters/destination.png"
       bgImage="/images/services-bg.png"
       items={destinations}
     />

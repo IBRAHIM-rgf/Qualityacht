@@ -7,22 +7,45 @@ export default function ItemsGrid({
   items,
   imageClassName = "rounded-xl",
   imageWrapperClassName = "h-48",
+  heroImage = null,
 }) {
   return (
-    <section
-      className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat py-24 px-4"
-      style={{ backgroundImage: `url('${bgImage}')` }}
-    >
-      <h1 className="text-3xl md:text-5xl font-bold text-white trajan-regular mb-4 text-center uppercase tracking-wide">
-        {title}
-      </h1>
-      <Image
-        src="/images/title-line.png"
-        alt="Decorative line"
-        width={200}
-        height={10}
-        className="mx-auto mb-12"
-      />
+    <>
+      {/* Hero optionnel : image pleine largeur + titre en overlay */}
+      {heroImage && (
+        <div className="relative w-full pt-[70px] md:pt-0 bg-[#26272a]">
+          <div className="relative w-full h-[45vh] md:h-[60vh] overflow-hidden">
+            <Image src={heroImage} alt={title} fill priority className="object-cover" sizes="100vw" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-black/30 to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-6 md:pb-10">
+              <h1 className="text-3xl md:text-5xl font-bold text-white trajan-regular mb-3 text-center uppercase tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+                {title}
+              </h1>
+              <Image src="/images/title-line.png" alt="Decorative line" width={200} height={10} className="mx-auto" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <section
+        className={`relative ${heroImage ? "" : "min-h-screen justify-center"} flex flex-col items-center bg-cover bg-center bg-no-repeat py-24 px-4`}
+        style={{ backgroundImage: `url('${bgImage}')` }}
+      >
+        {/* Titre + ligne affichés seulement sans hero (sinon déjà dans le hero) */}
+        {!heroImage && (
+          <>
+            <h1 className="text-3xl md:text-5xl font-bold text-white trajan-regular mb-4 text-center uppercase tracking-wide">
+              {title}
+            </h1>
+            <Image
+              src="/images/title-line.png"
+              alt="Decorative line"
+              width={200}
+              height={10}
+              className="mx-auto mb-12"
+            />
+          </>
+        )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
         {items.map((item) => {
@@ -67,9 +90,10 @@ export default function ItemsGrid({
         })}
       </div>
 
-      <div className="mt-16 text-center text-gray-500 text-xs">
-        © {new Date().getFullYear()} Qualityacht. All rights reserved.
-      </div>
-    </section>
+        <div className="mt-16 text-center text-gray-500 text-xs">
+          © {new Date().getFullYear()} Qualityacht. All rights reserved.
+        </div>
+      </section>
+    </>
   );
 }
