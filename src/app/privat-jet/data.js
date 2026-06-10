@@ -38,23 +38,25 @@ export const caribbeanJetGroups = [
 const comingSoon = [{ island: 'Coming Soon', airports: ['Information coming soon'] }];
 
 // Ordre identique à /charters/destinations
-// `image` = photo de la card (grille /privat-jet). `heroImage` = photo du hero
-// sur la page de la région (/privat-jet/<slug>). Si absent → fallback sur image.
+// `image`     = photo de la card (grille /privat-jet) — PORTRAIT
+// `heroImage` = photo du hero plein page sur /privat-jet/<slug> — PAYSAGE de preference (16:9, ~2880x1620)
+//   → deposer la photo dans /public/images/private_jet/hero/ et mettre a jour le chemin ci-dessous.
+//   → si heroImage est absent, la photo de la card sert de fallback (rendu portrait haut).
 export const destinations = [
   { slug: 'arctic',                 name: 'Arctic',                  image: '/images/private_jet/private_arctic.jpeg',                 heroImage: '/images/private_jet/hero/hero_artic.jpg',         groups: comingSoon },
-  { slug: 'bahamas',                name: 'Bahamas',                 image: '/images/private_jet/private_bahamas.jpeg',                groups: comingSoon },
-  { slug: 'central-america',        name: 'Central America',         image: '/images/private_jet/private_central-america.jpeg',        groups: comingSoon },
-  { slug: 'east-asia',              name: 'East Asia',               image: '/images/private_jet/private_east-asia.jpeg',              groups: comingSoon },
-  { slug: 'eastern-mediterranean',  name: 'Eastern Mediterranean',   image: '/images/private_jet/private_eastern-mediterranean.jpeg', groups: comingSoon },
-  { slug: 'indian-ocean',           name: 'Indian Ocean',            image: '/images/private_jet/private_indian-ocean.jpeg',           groups: comingSoon },
-  { slug: 'indonesia',              name: 'Indonesia',               image: '/images/private_jet/private_indonesia.jpeg',              groups: comingSoon },
+  { slug: 'bahamas',                name: 'Bahamas',                 image: '/images/private_jet/private_bahamas.jpeg',                heroImage: null, /* TODO paysage */                            groups: comingSoon },
+  { slug: 'central-america',        name: 'Central America',         image: '/images/private_jet/private_central-america.jpeg',        heroImage: null, /* TODO paysage */                            groups: comingSoon },
+  { slug: 'east-asia',              name: 'East Asia',               image: '/images/private_jet/private_east-asia.jpeg',              heroImage: null, /* TODO paysage */                            groups: comingSoon },
+  { slug: 'eastern-mediterranean',  name: 'Eastern Mediterranean',   image: '/images/private_jet/private_eastern-mediterranean.jpeg', heroImage: null, /* TODO paysage */                            groups: comingSoon },
+  { slug: 'indian-ocean',           name: 'Indian Ocean',            image: '/images/private_jet/private_indian-ocean.jpeg',           heroImage: null, /* TODO paysage */                            groups: comingSoon },
+  { slug: 'indonesia',              name: 'Indonesia',               image: '/images/private_jet/private_indonesia.jpeg',              heroImage: null, /* TODO paysage */                            groups: comingSoon },
   { slug: 'north-america',          name: 'North America',           image: '/images/private_jet/private_nordamerica.jpeg',            heroImage: '/images/private_jet/hero/hero_Namerica.jpg',      groups: comingSoon },
-  { slug: 'pacific-ocean',          name: 'Pacific Ocean',           image: '/images/private_jet/private_pacific-ocean.jpeg',          groups: comingSoon },
+  { slug: 'pacific-ocean',          name: 'Pacific Ocean',           image: '/images/private_jet/private_pacific-ocean.jpeg',          heroImage: null, /* TODO paysage */                            groups: comingSoon },
   { slug: 'oman-gulf',              name: 'Oman Gulf',               image: '/images/private_jet/private_oman-gulf.jpeg',              heroImage: '/images/private_jet/hero/hero_oman.jpeg',         groups: comingSoon },
-  { slug: 'south-east-asia',        name: 'South East Asia',         image: '/images/private_jet/private_south-east-asia.jpeg',        groups: comingSoon },
+  { slug: 'south-east-asia',        name: 'South East Asia',         image: '/images/private_jet/private_south-east-asia.jpeg',        heroImage: null, /* TODO paysage */                            groups: comingSoon },
   { slug: 'western-mediterranean',  name: 'Western Mediterranean',   image: '/images/private_jet/private_western-mediterranean.jpeg', heroImage: '/images/private_jet/hero/hero-Wmediteranée.jpg', groups: comingSoon },
   { slug: 'africa',                 name: 'Africa',                  image: '/images/private_jet/private_africa.jpeg',                 heroImage: '/images/private_jet/hero/hero_africa.jpeg',       groups: comingSoon },
-  { slug: 'northern-europe',        name: 'Northern Europe',         image: '/images/private_jet/private_northern-europe.jpeg',        groups: comingSoon },
+  { slug: 'northern-europe',        name: 'Northern Europe',         image: '/images/private_jet/private_northern-europe.jpeg',        heroImage: null, /* TODO paysage */                            groups: comingSoon },
   { slug: 'caribbean',              name: 'Caribbean',               image: '/images/private_jet/private_caribbean.jpg',                heroImage: '/images/private_jet/hero/hero_caraibes.jpg',      groups: caribbeanJetGroups },
   { slug: 'oceania',                name: 'Oceania',                 image: '/images/private_jet/private_oceania.jpeg',                heroImage: '/images/private_jet/hero/hero_oceania.jpg',       groups: comingSoon },
 ];

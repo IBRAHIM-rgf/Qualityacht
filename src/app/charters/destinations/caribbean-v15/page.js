@@ -502,9 +502,14 @@ function FaqItem({ q, a }) {
   );
 }
 
-// ── Trait orange ───────────────────────────────────────────────────────────────
+// ── Trait blanc (title-line.png) ───────────────────────────────────────────────
+// Charte: pas de trait orange sous les titres → on utilise toujours le title-line blanc.
 function BurntLine() {
-  return <div className="w-12 md:w-16 h-px bg-[#c2622a] mx-auto my-4 md:my-6" />;
+  return (
+    <div className="relative w-32 h-6 mx-auto my-4 md:my-6">
+      <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+    </div>
+  );
 }
 
 // ── Section fond ───────────────────────────────────────────────────────────────

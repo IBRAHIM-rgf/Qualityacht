@@ -25,30 +25,46 @@ export default function ItemsGrid({
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
-        {items.map((item) => (
-          <Link
-            key={item.title}
-            href={item.href}
-            className="min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform"
-          >
-            <div
-              className={`w-full relative mb-6 overflow-hidden ${imageWrapperClassName}`}
-            >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className={`object-cover ${imageClassName}`}
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-            </div>
-            <h2 className="text-lg font-semibold text-copper-500 mb-2 trajan-regular uppercase text-center break-words leading-tight w-full hyphens-auto">
-              {item.title}
-            </h2>
+        {items.map((item) => {
+          const content = (
+            <>
+              <div
+                className={`w-full relative mb-6 overflow-hidden ${imageWrapperClassName}`}
+              >
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  className={`object-cover ${imageClassName}`}
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
+              <h2 className="text-lg font-semibold text-copper-500 mb-2 trajan-regular uppercase text-center break-words leading-tight w-full hyphens-auto">
+                {item.title}
+              </h2>
 
-            <p className="text-[#C0C0C0] text-sm">{item.description}</p>
-          </Link>
-        ))}
+              <p className="text-[#C0C0C0] text-sm">{item.description}</p>
+            </>
+          );
+
+          // Card cliquable seulement si un href est fourni.
+          return item.href ? (
+            <Link
+              key={item.title}
+              href={item.href}
+              className="min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform"
+            >
+              {content}
+            </Link>
+          ) : (
+            <div
+              key={item.title}
+              className="min-w-0 rounded-2xl p-6 flex flex-col items-center text-center"
+            >
+              {content}
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-16 text-center text-gray-500 text-xs">
