@@ -84,7 +84,7 @@ export default function PrivatJetDestinationPage({ params }) {
         <div className="relative z-10 text-center px-4">
           <p className="text-gray-400 text-lg mb-6">Destination inconnue.</p>
           <Link href="/privat-jet" className="inline-flex items-center gap-2 text-gray-300 hover:text-white">
-            <ArrowLeft className="w-4 h-4" /> Retour
+            <ArrowLeft className="w-4 h-4" /> Back
           </Link>
         </div>
       </div>
@@ -106,7 +106,7 @@ export default function PrivatJetDestinationPage({ params }) {
           <div className="relative inline-block">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={dest.image}
+              src={dest.heroImage || dest.image}
               alt={dest.name}
               className="block w-auto h-auto max-w-full max-h-[calc(100vh-70px)] md:max-h-screen"
             />
@@ -147,7 +147,7 @@ export default function PrivatJetDestinationPage({ params }) {
                 href="/privat-jet"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#C0C0C0]/40 text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] transition-colors"
               >
-                <ArrowLeft className="w-4 h-4" /> Retour
+                <ArrowLeft className="w-4 h-4" /> Back
               </Link>
               <Link
                 href={`/privat-jet/${slug}/contact-broker`}

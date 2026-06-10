@@ -46,6 +46,7 @@ export default function PrivatJetPage() {
       {/* ══ HERO avec texte qui monte sur la photo ══ */}
       <div className="relative pt-[70px] md:pt-0">
         <div className="relative w-full">
+          {/* Mobile : photo portrait existante */}
           <Image
             src="/images/private_jet/jet_hero.jpeg"
             alt="Private Jet"
@@ -53,7 +54,14 @@ export default function PrivatJetPage() {
             height={1648}
             priority
             sizes="100vw"
-            className="w-full h-auto block"
+            className="w-full h-auto block md:hidden"
+          />
+          {/* Desktop : photo dediee paysage */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/private_jet/Private_jet_desktop.png"
+            alt="Private Jet"
+            className="w-full h-auto hidden md:block"
           />
           {/* Dégradé bas pour lisibilité */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
