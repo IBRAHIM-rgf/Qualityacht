@@ -707,7 +707,7 @@ export default function CaribbeanV15Page() {
             <a href="/charters/destinations/caribbean-v15/exploreyacht"
               style={{ color: '#c2622a', backgroundColor: '#26272a', borderColor: '#C0C0C0' }}
               className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border rounded-full hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-all duration-300">
-              Explore Yachts
+              Explore Sailing
             </a>
           </div>
         </StBarthBandeau>
