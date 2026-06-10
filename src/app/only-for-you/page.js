@@ -11,27 +11,6 @@ const sailingRentalItems = [
   { title: "Sailboat Regatta",              image: "/images/sailing/regate.jpg",               href: "/rentals/regatta" },
 ];
 
-// Cards des destinations — même ordre que /charters/destinations.
-// Pas de href : non cliquables (affichage uniquement).
-const destinationItems = [
-  { title: "Arctic",                image: "/images/destinations/animals/Arctic.png" },
-  { title: "Bahamas",               image: "/images/destinations/animals/Bahamas.jpg" },
-  { title: "Central America",       image: "/images/destinations/animals/Central-America.jpg" },
-  { title: "East Asia",             image: "/images/destinations/animals/EAST-ASIA.jpg" },
-  { title: "Eastern Mediterranean", image: "/images/destinations/animals/Eastern-Mediterranean.jpg" },
-  { title: "Indian Ocean",          image: "/images/destinations/animals/Indian-Ocean.jpg" },
-  { title: "Indonesia",             image: "/images/destinations/animals/Indonesia.jpg" },
-  { title: "North America",         image: "/images/destinations/animals/Nord-America.jpg" },
-  { title: "Pacific Ocean",         image: "/images/destinations/animals/Ocean-Pacific.jpeg" },
-  { title: "Oman Gulf",             image: "/images/destinations/animals/Oman-Gulf.jpeg" },
-  { title: "South East Asia",       image: "/images/destinations/animals/SOUTH-EAST-ASIA.jpeg" },
-  { title: "Western Mediterranean", image: "/images/destinations/animals/Western-Mediterranean.webp" },
-  { title: "Africa",                image: "/images/destinations/animals/africa.jpeg" },
-  { title: "Northern Europe",       image: "/images/destinations/animals/articbynortherneurope.jpg" },
-  { title: "Caraïbes",              image: "/images/destinations/animals/caraibes.jpg" },
-  { title: "Oceania",               image: "/images/destinations/animals/oceania.jpeg" },
-];
-
 // Card style "private jet" : image h-48 + titre seul, titre orange au survol.
 function Card({ item }) {
   const content = (
@@ -67,7 +46,7 @@ function Card({ item }) {
 }
 
 export default function SailingRentalPage() {
-  const items = [...sailingRentalItems, ...destinationItems];
+  const items = sailingRentalItems;
   return (
     <section
       className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat py-24 px-4"
