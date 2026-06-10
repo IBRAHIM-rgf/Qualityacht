@@ -1,10 +1,10 @@
 import ItemsGrid from "../../components/ItemsGrid";
 import { destinations } from "../destinationsData";
 
-export default function OnDemandCharter() {
+export default function OnlyCoupleCharter() {
   return (
     <ItemsGrid
-      title="On-Demand Yacht Charter"
+      title="Only Couple Charter"
       bgImage="/images/services-bg.png"
       items={destinations}
     />

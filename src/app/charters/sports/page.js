@@ -1,5 +1,12 @@
-import { redirect } from 'next/navigation';
+import ItemsGrid from "../../components/ItemsGrid";
+import { destinations } from "../destinationsData";
+
 export default function SportsCharter() {
-  redirect('/yachts');
-  return null;
+  return (
+    <ItemsGrid
+      title="Sports Yacht Charter"
+      bgImage="/images/services-bg.png"
+      items={destinations}
+    />
+  );
 }
