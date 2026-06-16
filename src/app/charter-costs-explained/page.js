@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Info } from 'lucide-react';
 import BackButton from './BackButton';
+import CharterCalculator from './CharterCalculator';
 
 export const metadata = {
   title: 'Charter Costs Explained — Qualityacht',
@@ -76,6 +77,24 @@ export default function Page() {
               <p className="text-base text-[#acb0cd] leading-relaxed">{s.body}</p>
             </section>
           ))}
+        </div>
+
+        {/* ══ Calculateur interactif ══ */}
+        <div className="mt-14 mb-10">
+          <div className="flex items-center gap-3 mb-3">
+            <Info className="w-6 h-6 text-[#B03E00] shrink-0" />
+            <h2 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.1em] text-[#C0C0C0]">
+              Charter Cost Estimator
+            </h2>
+          </div>
+          <div className="relative w-32 h-6 mb-6">
+            <Image src="/images/title-line.png" alt="" fill className="object-contain object-left" />
+          </div>
+          <p className="text-sm md:text-base text-[#acb0cd]/80 leading-relaxed mb-6">
+            Estimate the full cost of a luxury yacht charter — adjust parameters below to see how charter fee,
+            APA, VAT, deposit and crew gratuity build up to your total commitment.
+          </p>
+          <CharterCalculator />
         </div>
 
         <div className="mt-12 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] p-6">
