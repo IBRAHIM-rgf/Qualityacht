@@ -16,7 +16,6 @@ const CARIBBEAN_DESTINATIONS = [
   { value: 'bahamas', label: 'Bahamas' },
   { value: 'grand-cayman', label: 'Cayman Islands' },
   { value: 'turks-caicos', label: 'Turks & Caicos' },
-  { value: 'belize', label: 'Belize' },
 ];
 
 export default function ExploreYachtClient({ initialFilters, initialData, totalYachts }) {

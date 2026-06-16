@@ -788,7 +788,7 @@ export default function RequestQuoteWizard() {
                 <GhostButton onClick={goBack} className="inline-flex items-center gap-2 px-3 py-2 md:gap-3 md:px-6 md:py-3 text-xs md:text-sm shrink-0">
                   <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" /> Go Back
                 </GhostButton>
-                <PrimaryButton onClick={goNext} className="px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">Confirm</PrimaryButton>
+                <PrimaryButton onClick={goNext} className="px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">Secure My Reservation</PrimaryButton>
               </div>
             </div>
           </section>

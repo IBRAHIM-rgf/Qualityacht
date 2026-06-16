@@ -141,7 +141,7 @@ function EnquireButton({ yacht, bp, full, imgs }) {
       className={`flex flex-col items-start w-full lg:w-auto lg:inline-flex lg:items-center rounded-lg border-2 border-[#C0C0C0] px-2 py-0.5 transition-all text-left lg:text-center ${state === 'added' ? 'shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]' : 'shadow-none'}`}
     >
       <span className="text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00]">
-        {state === 'added' ? '✓ Added to cart' : 'Add to cart'}
+        {state === 'added' ? '✓ Yacht reserved' : 'Reserve this yacht'}
       </span>
       <span className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] mt-1" style={{ color: '#C0C0C0' }}>{yacht.name}</span>
     </button>
