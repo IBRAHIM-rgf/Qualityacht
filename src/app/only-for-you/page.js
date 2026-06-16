@@ -11,11 +11,11 @@ const sailingRentalItems = [
   { title: "Sailboat Regatta",              image: "/images/sailing/regate.jpg",               href: "/rentals/regatta" },
 ];
 
-// Card style "private jet" : image h-48 + titre seul, titre orange au survol.
+// Card portrait (forme verticale) : image aspect 3:4 + titre dessous, titre orange au survol.
 function Card({ item }) {
   const content = (
     <>
-      <div className="w-full relative mb-6 overflow-hidden h-48 rounded-xl">
+      <div className="w-full relative mb-6 overflow-hidden aspect-[3/4] rounded-xl">
         <Image
           src={item.image}
           alt={item.title}
@@ -63,7 +63,7 @@ export default function SailingRentalPage() {
         className="mx-auto mb-12"
       />
 
-      <div className="grid grid-cols-1 gap-10 w-full max-w-md">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
         {items.map((item) => (
           <Card key={item.title} item={item} />
         ))}
