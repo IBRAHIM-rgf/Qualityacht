@@ -7,7 +7,7 @@
 // et les paragraphes de description.
 
 import Image from 'next/image';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import YachtFiltersCaribbean from './YachtFiltersCaribbean';
 import YachtList from '@/components/YachtList';
 
@@ -34,9 +34,15 @@ export default function SubregionClient({
 }) {
   const [showMore, setShowMore] = useState(false);
   const [heroLit, setHeroLit] = useState(false);
+  const heroRef = useRef(null);
   useEffect(() => {
     const t = setTimeout(() => setHeroLit(true), 2000);
     return () => clearTimeout(t);
+  }, []);
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => { el.classList.add('revealed'); });
   }, []);
 
   const [filters, setFilters] = useState({
@@ -100,26 +106,32 @@ export default function SubregionClient({
           style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.5) 20%, transparent 38%, transparent 52%, rgba(38,39,42,0.5) 78%, #26272a 100%)' }}
         />
         <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
-          <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
-            {name}
-          </h1>
-          {islandRows.length > 0 && (
-            <div className="text-[#acb0cd] text-xs md:text-base uppercase tracking-[0.2em] md:tracking-[0.3em] font-light text-center mt-3 flex flex-col items-center gap-1">
-              {islandRows.map((row, ri) => (
-                <div key={ri} className="flex items-center justify-center gap-2 flex-wrap">
-                  <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
-                  {row.map((isl, ii) => (
-                    <span key={ii} className="flex items-center gap-2">
-                      <span>{isl}</span>
-                      <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
-                    </span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
+          <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
+            <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
+              {name}
+            </h1>
+            {islandRows.length > 0 && (
+              <div className="text-[#acb0cd] text-xs md:text-base uppercase tracking-[0.2em] md:tracking-[0.3em] font-light text-center mt-3 flex flex-col items-center gap-1">
+                {islandRows.map((row, ri) => (
+                  <div key={ri} className="flex items-center justify-center gap-2 flex-wrap">
+                    <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
+                    {row.map((isl, ii) => (
+                      <span key={ii} className="flex items-center gap-2">
+                        <span>{isl}</span>
+                        <span className="w-1.5 h-1.5 rotate-45 inline-block shrink-0" style={{ backgroundColor: '#c2622a' }} />
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
+      <style jsx>{`
+        :global(.reveal-up) { opacity: 0; transform: translateY(40px); transition: opacity 1.6s ease, transform 1.6s ease; }
+        :global(.reveal-up.revealed) { opacity: 1; transform: translateY(0); }
+      `}</style>
 
       {/* ══ DESCRIPTION + FILTRES + YACHTS — même fond ══ */}
       <div
