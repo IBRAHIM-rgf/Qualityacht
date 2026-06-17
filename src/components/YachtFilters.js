@@ -197,8 +197,33 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
   return (
     <>
-      {/* Desktop - Horizontal sticky filters */}
+      {/* Desktop - Sticky filter panel, cache derriere le bouton Filter */}
       <div className="hidden md:block sticky top-20 z-40 bg-[#3a3b3f]/95 backdrop-blur-sm py-4 px-6 rounded-2xl border border-white/10">
+        {/* Barre superieure : bouton Filter (toujours visible) + compteur actif */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center gap-2 px-6 py-2.5 bg-transparent border border-[#B03E00] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
+          >
+            <Filter className="w-4 h-4" />
+            <span className="text-sm">{isExpanded ? 'Close Filters' : 'Filter'}</span>
+            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+
+          {activeCount > 0 && (
+            <button
+              onClick={handleReset}
+              className="flex items-center gap-2 px-4 py-2.5 bg-[#d39478]/20 border border-[#d39478]/50 rounded-xl text-[#d39478] hover:bg-[#d39478]/30 transition-colors"
+            >
+              <X className="w-4 h-4" />
+              <span className="text-sm">{activeCount} filter{activeCount > 1 ? 's' : ''}</span>
+            </button>
+          )}
+        </div>
+
+        {/* Panneau de filtres (uniquement quand ouvert) */}
+        {isExpanded && (
+        <div className="mt-4 pt-4 border-t border-white/10 space-y-4">
         {/* Main filter row */}
         <div className="flex items-center gap-4 flex-wrap">
           {/* Type */}
@@ -272,39 +297,10 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
             </select>
           </div>
 
-          {/* More options button */}
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-transparent border border-white/20 rounded-xl text-[#C0C0C0] hover:bg-white/5 transition-colors"
-          >
-            <span className="text-sm">More Options</span>
-            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
-
-          {/* Filter button */}
-          <button
-            onClick={applyFilters}
-            className="flex items-center gap-2 px-6 py-2.5 bg-transparent border border-[#B03E00] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
-          >
-            <Filter className="w-4 h-4" />
-            <span className="text-sm">Filter</span>
-          </button>
-
-          {/* Active count + Reset */}
-          {activeCount > 0 && (
-            <button
-              onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 bg-[#d39478]/20 border border-[#d39478]/50 rounded-xl text-[#d39478] hover:bg-[#d39478]/30 transition-colors"
-            >
-              <X className="w-4 h-4" />
-              <span className="text-sm">{activeCount} filter{activeCount > 1 ? 's' : ''}</span>
-            </button>
-          )}
         </div>
 
-        {/* Extended options */}
-        {isExpanded && (
-          <div className="mt-4 pt-4 border-t border-white/10 space-y-4 bg-transparent">
+        {/* Champs etendus (Length, Capacity, toggles) */}
+        <div className="pt-4 border-t border-white/10 space-y-4 bg-transparent">
             {/* Length with dual slider */}
             <div className="flex flex-col gap-1">
               <label className="text-sm text-[#C0C0C0]">Length:</label>
@@ -447,6 +443,18 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
               })}
             </div>
           </div>
+
+          {/* Bouton Apply Filters au bas du panneau */}
+          <div className="flex justify-end pt-2">
+            <button
+              onClick={() => { applyFilters(); setIsExpanded(false); }}
+              className="flex items-center gap-2 px-6 py-2.5 bg-transparent border-2 border-[#C0C0C0] rounded-xl text-[#B03E00] font-medium transition-all hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.2)]"
+            >
+              <Filter className="w-4 h-4" />
+              <span className="text-sm uppercase tracking-[0.15em]">Apply Filters</span>
+            </button>
+          </div>
+        </div>
         )}
       </div>
 

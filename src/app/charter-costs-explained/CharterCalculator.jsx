@@ -108,7 +108,7 @@ export default function CharterCalculator() {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [vatPctManual, setVatPctManual] = useState(10);
   const [depositPct, setDepositPct] = useState(10);
-  const [tipPct, setTipPct] = useState(15);
+  const [tipPct, setTipPct] = useState(10);
   const [repoOn, setRepoOn] = useState(false);
   const [repo, setRepo] = useState(10000);
   const [search, setSearch] = useState('');
@@ -243,8 +243,8 @@ export default function CharterCalculator() {
           <Slider min={5} max={25} step={1} value={depositPct} onChange={setDepositPct} />
         </Row>
 
-        <Row label="Crew Gratuity" hint="Industry standard: 5–15% of charter fee" value={`${tipPct}%`}>
-          <Slider min={5} max={15} step={1} value={tipPct} onChange={setTipPct} />
+        <Row label="Crew Gratuity" hint="Industry standard: 10–15% of charter fee" value={`${tipPct}%`}>
+          <Slider min={10} max={15} step={1} value={tipPct} onChange={setTipPct} />
         </Row>
 
         <Divider />
