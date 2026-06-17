@@ -11,6 +11,7 @@ export default function ItemsGrid({
   imageClassName = "rounded-xl",
   imageWrapperClassName = "h-48",
   heroImage = null,
+  intro = null,
 }) {
   // Reveal-up : meme effet de glissement vers le haut que sur caribbean-v15.
   const heroRef = useRef(null);
@@ -52,7 +53,7 @@ export default function ItemsGrid({
         {/* Titre + ligne affichés seulement sans hero (sinon déjà dans le hero) */}
         {!heroImage && (
           <>
-            <h1 className="text-3xl md:text-5xl font-bold text-white trajan-regular mb-4 text-center uppercase tracking-wide">
+            <h1 className="text-3xl md:text-5xl font-bold text-[#acb0cd] trajan-regular mb-4 text-center uppercase tracking-wide">
               {title}
             </h1>
             <Image
@@ -64,6 +65,13 @@ export default function ItemsGrid({
             />
           </>
         )}
+
+      {/* Intro optionnel (apres title-line, avant la grille) */}
+      {intro && (
+        <div className="max-w-3xl mx-auto text-center mb-12 px-2">
+          {intro}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
         {items.map((item) => {
