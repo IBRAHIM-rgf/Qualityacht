@@ -8,21 +8,13 @@ const onlyCoupleDestinations = destinations.map((d) =>
 );
 
 const INTRO = (
-  <>
-    <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.12em] text-[#acb0cd] mb-2">
-      Caribbean
-    </h2>
-    <p className="text-base md:text-xl text-[#d39478] italic mb-5">
-      Luxury, Serenity, and Bliss
-    </p>
-    <p className="text-base md:text-lg text-[#acb0cd] leading-relaxed">
-      Discretion is the ultimate luxury. Here, the Caribbean unfolds in private coves
-      and secluded anchorages, where the only witnesses to your escape are the endless
-      horizon and the gentle rhythm of the waves. Your yacht, a sanctuary of elegance,
-      blends seamlessly with the turquoise waters&mdash;because true exclusivity is
-      found in the art of going unnoticed.
-    </p>
-  </>
+  <p className="text-base md:text-xl text-[#acb0cd] leading-relaxed">
+    Turn your next unforgettable memory into a{' '}
+    <span className="text-[#d39478] font-semibold">luxury escape on the water</span>.
+    Experience{' '}
+    <span className="text-[#d39478] font-semibold">absolute intimacy</span>{' '}
+    aboard an exceptional yacht.
+  </p>
 );
 
 export default function OnlyCoupleCharter() {
