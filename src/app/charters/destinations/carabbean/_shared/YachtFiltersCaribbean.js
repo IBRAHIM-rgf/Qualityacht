@@ -124,10 +124,10 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
 
   return (
     <>
-      {/* Desktop - Bouton Filter flottant en bas a droite (translucide) */}
+      {/* Desktop - Bouton Filter flottant en bas au CENTRE (translucide) */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="hidden md:flex fixed bottom-6 right-6 z-40 items-center gap-2 px-6 py-3 bg-[#3a3b3f]/80 backdrop-blur-md border border-[#C0C0C0] rounded-xl text-[#B03E00] font-medium shadow-2xl transition-colors hover:bg-[#B03E00]/10"
+        className="hidden md:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-40 items-center gap-2 px-6 py-3 bg-[#3a3b3f]/80 backdrop-blur-md border border-[#C0C0C0] rounded-xl text-[#B03E00] font-medium shadow-2xl transition-colors hover:bg-[#B03E00]/10"
       >
         <Filter className="w-5 h-5" />
         <span className="text-sm uppercase tracking-[0.15em]">Filter</span>
