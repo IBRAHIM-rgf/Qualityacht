@@ -120,170 +120,17 @@ export default function YachtFiltersRegion({
 
   return (
     <>
-      <div className="hidden md:block sticky top-20 z-40">
-        {/* Barre superieure : bouton Filter centre (sans card) + compteur actif */}
-        <div className="relative flex items-center justify-center gap-3">
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-[#3a3b3f]/95 backdrop-blur-sm border border-[#C0C0C0] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
-          >
-            <Filter className="w-4 h-4" />
-            <span className="text-sm">{isExpanded ? 'Close Filters' : 'Filter'}</span>
-            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
-
-          {activeCount > 0 && (
-            <button onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 bg-[#d39478]/20 backdrop-blur-sm border border-[#d39478]/50 rounded-xl text-[#d39478] hover:bg-[#d39478]/30 transition-colors">
-              <X className="w-4 h-4" />
-              <span className="text-sm">{activeCount} filter{activeCount > 1 ? 's' : ''}</span>
-            </button>
-          )}
-        </div>
-
-        {/* Panneau en OVERLAY translucide (uniquement quand ouvert) */}
-        {isExpanded && (
-        <div className="absolute left-0 right-0 mt-3 bg-[#3a3b3f]/80 backdrop-blur-md py-4 px-6 rounded-2xl border border-[#C0C0C0]/40 space-y-4 shadow-2xl">
-        <div className="flex items-center gap-4 flex-wrap">
-          <div className="flex-1 min-w-[150px] max-w-[180px]">
-            <select value={localFilters.type} onChange={e => handleChange('type', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]">
-              {YACHT_TYPES.map(t => <option key={t.value} value={t.value} className="bg-[#3a3b3f]">{t.label}</option>)}
-            </select>
-          </div>
-
-          {showDestinationDropdown && (
-            <div className="flex-1 min-w-[180px] max-w-[220px]">
-              <select value={localFilters.destination} onChange={e => handleChange('destination', e.target.value)}
-                className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]">
-                {destinations.map(d => <option key={d.value} value={d.value} className="bg-[#3a3b3f]">{d.label}</option>)}
-              </select>
-            </div>
-          )}
-
-          <div className="flex items-center gap-2">
-            <div className="w-40"><MonthPicker value={(localFilters.startDate || '').slice(0, 7)} onChange={(v) => handleChange('startDate', v)} placeholder="From" /></div>
-            <span className="text-gray-400">-</span>
-            <div className="w-40"><MonthPicker value={(localFilters.endDate || '').slice(0, 7)} onChange={(v) => handleChange('endDate', v)} placeholder="To" /></div>
-          </div>
-
-          <div className="flex items-center gap-2 min-w-[260px]">
-            <label className="text-sm text-gray-300 whitespace-nowrap">Price:</label>
-            <select value={selectedPriceTier} onChange={e => handlePriceTierChange(Number(e.target.value))}
-              className="flex-1 px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs accent-[#B03E00]">
-              {PRICE_TIERS.map((tier, i) => <option key={i} value={i} className="bg-[#3a3b3f]">{getPriceTierLabel(tier, CURRENCY_SYMBOLS[selectedCurrency])}</option>)}
-            </select>
-            <select value={selectedCurrency} onChange={e => handleCurrencyChange(e.target.value)}
-              className="px-2 py-1.5 bg-[#3a3b3f] border border-white/20 rounded-lg text-[#C0C0C0] text-xs accent-[#B03E00]">
-              {CURRENCIES.map(c => <option key={c.value} value={c.value} className="bg-[#3a3b3f]">{c.label}</option>)}
-            </select>
-          </div>
-
-        </div>
-
-        {/* Champs etendus (Length, Capacity, toggles) */}
-        <div className="pt-4 border-t border-white/10 space-y-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-sm text-gray-300">Length:</label>
-              {(() => {
-                const dMin = unitPreference === 'meters' ? MIN_LENGTH_M : MIN_LENGTH_FT;
-                const dMax = unitPreference === 'meters' ? MAX_LENGTH_M : MAX_LENGTH_FT;
-                const pL = ((lengthRange[0] - dMin) / (dMax - dMin)) * 100;
-                const pR = ((lengthRange[1] - dMin) / (dMax - dMin)) * 100;
-                const unit = unitPreference === 'meters' ? 'm' : 'ft';
-                return (
-                  <div className="relative min-w-[180px]">
-                    {/* Bulles dynamiques au-dessus des thumbs */}
-                    <div className="relative h-4 mb-1">
-                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pL}%` }}>{lengthRange[0]}{unit}</span>
-                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pR}%` }}>{lengthRange[1]}{unit}</span>
-                    </div>
-                    <div className="relative h-6 flex items-center">
-                      <div className="absolute w-full h-1 rounded-full" style={{ background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pL}%, #B03E00 ${pL}%, #B03E00 ${pR}%, #4b5563 ${pR}%, #4b5563 100%)` }} />
-                      {unitPreference === 'meters'
-                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
-                            const val = MIN_LENGTH_M + i * 10;
-                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
-                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
-                          })
-                        : Array.from({ length: 14 }, (_, i) => {
-                            const val = MIN_LENGTH_FT + i * 30;
-                            if (val > MAX_LENGTH_FT) return null;
-                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
-                            return <div key={val} className="absolute w-px h-3 bg-[#C0C0C0]/80 pointer-events-none" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }} />;
-                          })
-                      }
-                      <input type="range" min={dMin} max={dMax} step={unitPreference === 'meters' ? 5 : 10} value={lengthRange[0]}
-                        onChange={e => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 10))}
-                        className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
-                        style={{ zIndex: 5 }} />
-                      <input type="range" min={dMin} max={dMax} step={unitPreference === 'meters' ? 5 : 10} value={lengthRange[1]}
-                        onChange={e => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 10))}
-                        className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
-                        style={{ zIndex: 5 }} />
-                    </div>
-                    <div className="relative h-4">
-                      {unitPreference === 'meters'
-                        ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
-                            const val = MIN_LENGTH_M + i * 10;
-                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
-                            return i % 3 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
-                          })
-                        : Array.from({ length: 14 }, (_, i) => {
-                            const val = MIN_LENGTH_FT + i * 30;
-                            if (val > MAX_LENGTH_FT) return null;
-                            const pct = ((val - dMin) / (dMax - dMin)) * 100;
-                            return i % 2 === 0 ? <span key={val} className="absolute text-[10px] text-[#acb0cd]" style={{ left: `${pct}%`, transform: 'translateX(-50%)' }}>{val}</span> : null;
-                          })
-                      }
-                    </div>
-                  </div>
-                );
-              })()}
-              <div className="flex gap-2 mt-1">
-                {['meters', 'feet'].map(u => (
-                  <button key={u} onClick={() => handleUnitChange(u)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium bg-[#3a3b3f] border border-white/20 ${unitPreference === u ? 'text-[#B03E00]' : 'text-gray-400'}`}>
-                    {u.charAt(0).toUpperCase() + u.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <label className="text-sm text-gray-300 min-w-[60px]">Min guests:</label>
-              <input type="number" min="1" max="50" value={localFilters.capacity || ''} onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
-                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478]" />
-            </div>
-            <div className="flex items-center gap-3 flex-wrap">
-              {[['petFriendly', 'Pet Friendly'], ['groupFriendly', 'Group Friendly']].map(([key, label]) => {
-                const active = !!localFilters[key];
-                return (
-                  <button key={key} onClick={() => handleChange(key, !active)}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium transition border ${
-                      active
-                        ? 'bg-[#B03E00] border-[#B03E00] text-white'
-                        : 'bg-[#3a3b3f] border-white/20 text-[#B03E00] hover:border-[#B03E00]'
-                    }`}>
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Bouton Apply Filters au bas du panneau */}
-          <div className="flex justify-end pt-2">
-            <button
-              onClick={() => { applyFilters(); setIsExpanded(false); }}
-              className="flex items-center gap-2 px-6 py-2.5 bg-transparent border-2 border-[#C0C0C0] rounded-xl text-[#B03E00] font-medium transition-all hover:bg-[#B03E00]/10 hover:border-[#B03E00] shadow-[0_4px_15px_rgba(192,192,192,0.2)]"
-            >
-              <Filter className="w-4 h-4" />
-              <span className="text-sm uppercase tracking-[0.15em]">Explore Yachts</span>
-            </button>
-          </div>
-        </div>
+      {/* Desktop - Bouton Filter flottant en bas a droite (translucide) */}
+      <button
+        onClick={() => setIsMobileOpen(!isMobileOpen)}
+        className="hidden md:flex fixed bottom-6 right-6 z-40 items-center gap-2 px-6 py-3 bg-[#3a3b3f]/80 backdrop-blur-md border border-[#C0C0C0] rounded-xl text-[#B03E00] font-medium shadow-2xl transition-colors hover:bg-[#B03E00]/10"
+      >
+        <Filter className="w-5 h-5" />
+        <span className="text-sm uppercase tracking-[0.15em]">Filter</span>
+        {activeCount > 0 && (
+          <span className="ml-1 px-2 py-0.5 border border-[#C0C0C0] text-[#C0C0C0] text-xs rounded-full font-semibold">{activeCount}</span>
         )}
-      </div>
+      </button>
 
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#2e2f32] border-t border-white/10 shadow-lg">
         <button onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -296,10 +143,15 @@ export default function YachtFiltersRegion({
         </button>
       </div>
 
-      <div className={`md:hidden fixed inset-0 z-50 transition-transform duration-300 ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}>
-        <div className="absolute inset-0 bg-black/50" onClick={() => setIsMobileOpen(false)} />
-        <div className="absolute bottom-0 left-0 right-0 bg-[#2e2f32] rounded-t-3xl shadow-2xl max-h-[85vh] overflow-y-auto">
-          <div className="sticky top-0 bg-[#2e2f32] border-b border-white/10 px-6 py-4 flex items-center justify-between rounded-t-3xl">
+      {/* Filter panel — Mobile: drawer bas / Desktop: volet lateral droite translucide */}
+      <div className={`fixed inset-0 z-50 transition-transform duration-300 ${
+        isMobileOpen
+          ? 'translate-y-0 md:translate-x-0'
+          : 'translate-y-full md:translate-y-0 md:translate-x-full'
+      }`}>
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileOpen(false)} />
+        <div className="absolute bottom-0 left-0 right-0 md:left-auto md:top-0 md:w-[440px] md:max-w-[90vw] bg-[#2e2f32] md:bg-[#2e2f32]/80 md:backdrop-blur-md rounded-t-3xl md:rounded-t-none md:rounded-l-3xl shadow-2xl max-h-[85vh] md:max-h-none md:h-full overflow-y-auto">
+          <div className="sticky top-0 bg-[#2e2f32]/95 backdrop-blur-sm border-b border-white/10 px-6 py-4 flex items-center justify-between rounded-t-3xl md:rounded-t-none">
             <h2 className="text-lg font-bold text-[#C0C0C0]">Filters</h2>
             <button onClick={() => setIsMobileOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition">
               <X className="w-5 h-5 text-[#C0C0C0]" />
@@ -419,7 +271,7 @@ export default function YachtFiltersRegion({
               </button>
             )}
           </div>
-          <div className="sticky bottom-0 bg-[#2e2f32] border-t border-white/10 p-6">
+          <div className="sticky bottom-0 bg-[#2e2f32]/95 backdrop-blur-sm border-t border-white/10 p-6">
             <button onClick={() => { applyFilters(); setIsMobileOpen(false); }}
               className="w-full bg-transparent border-2 border-[#C0C0C0] rounded-xl py-3 font-medium transition-all text-[#B03E00] hover:bg-[#B03E00]/10">
               Apply Filters
