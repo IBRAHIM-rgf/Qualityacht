@@ -124,15 +124,14 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
 
   return (
     <>
-      {/* Desktop — filtre cache derriere bouton Filter */}
-      {/* Quand ferme : juste le bouton Filter aligne a droite (pas de card autour).
-          Quand ouvert : card complete avec panneau. */}
+      {/* Desktop — bouton Filter centre seul (sans card).
+          Quand ouvert, le panneau apparait EN OVERLAY translucide par-dessus le contenu (absolute). */}
       <div className="hidden md:block sticky top-20 z-40">
-        {/* Barre superieure : bouton Filter (toujours visible) + compteur actif, centre */}
-        <div className="flex items-center justify-center gap-3">
+        {/* Barre superieure : bouton Filter centre + compteur actif */}
+        <div className="relative flex items-center justify-center gap-3">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-[#3a3b3f]/95 backdrop-blur-sm border border-[#B03E00] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
+            className="flex items-center gap-2 px-6 py-2.5 bg-[#3a3b3f]/95 backdrop-blur-sm border border-[#C0C0C0] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
           >
             <Filter className="w-4 h-4" />
             <span className="text-sm">{isExpanded ? 'Close Filters' : 'Filter'}</span>
@@ -148,9 +147,9 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
           )}
         </div>
 
-        {/* Panneau de filtres (uniquement quand ouvert) */}
+        {/* Panneau de filtres en OVERLAY translucide (uniquement quand ouvert) */}
         {isExpanded && (
-        <div className="mt-3 bg-[#3a3b3f]/95 backdrop-blur-sm py-4 px-6 rounded-2xl border border-white/10 space-y-4">
+        <div className="absolute left-0 right-0 mt-3 bg-[#3a3b3f]/80 backdrop-blur-md py-4 px-6 rounded-2xl border border-[#C0C0C0]/40 space-y-4 shadow-2xl">
         <div className="flex items-center gap-4 flex-wrap">
 
           {/* Type */}

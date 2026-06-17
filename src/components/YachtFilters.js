@@ -198,13 +198,14 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
   return (
     <>
-      {/* Desktop - Bouton Filter centre seul (sans card), panneau s'ouvre dessous quand cliquer */}
+      {/* Desktop - Bouton Filter centre seul (sans card).
+          Quand ouvert, panneau en OVERLAY translucide (absolute par-dessus le contenu). */}
       <div className="hidden md:block sticky top-20 z-40">
         {/* Barre superieure : bouton Filter centre + compteur actif */}
-        <div className="flex items-center justify-center gap-3">
+        <div className="relative flex items-center justify-center gap-3">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-[#3a3b3f]/95 backdrop-blur-sm border border-[#B03E00] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
+            className="flex items-center gap-2 px-6 py-2.5 bg-[#3a3b3f]/95 backdrop-blur-sm border border-[#C0C0C0] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
           >
             <Filter className="w-4 h-4" />
             <span className="text-sm">{isExpanded ? 'Close Filters' : 'Filter'}</span>
@@ -222,9 +223,9 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
           )}
         </div>
 
-        {/* Panneau de filtres (uniquement quand ouvert) */}
+        {/* Panneau de filtres en OVERLAY translucide (uniquement quand ouvert) */}
         {isExpanded && (
-        <div className="mt-3 bg-[#3a3b3f]/95 backdrop-blur-sm py-4 px-6 rounded-2xl border border-white/10 space-y-4">
+        <div className="absolute left-0 right-0 mt-3 bg-[#3a3b3f]/80 backdrop-blur-md py-4 px-6 rounded-2xl border border-[#C0C0C0]/40 space-y-4 shadow-2xl">
         {/* Main filter row */}
         <div className="flex items-center gap-4 flex-wrap">
           {/* Type */}
