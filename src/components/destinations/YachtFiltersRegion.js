@@ -120,12 +120,12 @@ export default function YachtFiltersRegion({
 
   return (
     <>
-      <div className="hidden md:block sticky top-20 z-40 bg-[#3a3b3f]/95 backdrop-blur-sm py-4 px-6 rounded-2xl border border-white/10">
-        {/* Barre superieure : bouton Filter (toujours visible) + compteur actif */}
-        <div className="flex items-center gap-3">
+      <div className="hidden md:block sticky top-20 z-40">
+        {/* Barre superieure : bouton Filter centre (sans card) + compteur actif */}
+        <div className="flex items-center justify-center gap-3">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-transparent border border-[#B03E00] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
+            className="flex items-center gap-2 px-6 py-2.5 bg-[#3a3b3f]/95 backdrop-blur-sm border border-[#B03E00] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
           >
             <Filter className="w-4 h-4" />
             <span className="text-sm">{isExpanded ? 'Close Filters' : 'Filter'}</span>
@@ -134,7 +134,7 @@ export default function YachtFiltersRegion({
 
           {activeCount > 0 && (
             <button onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 bg-[#d39478]/20 border border-[#d39478]/50 rounded-xl text-[#d39478] hover:bg-[#d39478]/30 transition-colors">
+              className="flex items-center gap-2 px-4 py-2.5 bg-[#d39478]/20 backdrop-blur-sm border border-[#d39478]/50 rounded-xl text-[#d39478] hover:bg-[#d39478]/30 transition-colors">
               <X className="w-4 h-4" />
               <span className="text-sm">{activeCount} filter{activeCount > 1 ? 's' : ''}</span>
             </button>
@@ -143,7 +143,7 @@ export default function YachtFiltersRegion({
 
         {/* Panneau de filtres (uniquement quand ouvert) */}
         {isExpanded && (
-        <div className="mt-4 pt-4 border-t border-white/10 space-y-4">
+        <div className="mt-3 bg-[#3a3b3f]/95 backdrop-blur-sm py-4 px-6 rounded-2xl border border-white/10 space-y-4">
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex-1 min-w-[150px] max-w-[180px]">
             <select value={localFilters.type} onChange={e => handleChange('type', e.target.value)}

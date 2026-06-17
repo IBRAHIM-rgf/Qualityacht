@@ -198,13 +198,13 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
   return (
     <>
-      {/* Desktop - Sticky filter panel, cache derriere le bouton Filter */}
-      <div className="hidden md:block sticky top-20 z-40 bg-[#3a3b3f]/95 backdrop-blur-sm py-4 px-6 rounded-2xl border border-white/10">
-        {/* Barre superieure : bouton Filter (toujours visible) + compteur actif */}
-        <div className="flex items-center gap-3">
+      {/* Desktop - Bouton Filter centre seul (sans card), panneau s'ouvre dessous quand cliquer */}
+      <div className="hidden md:block sticky top-20 z-40">
+        {/* Barre superieure : bouton Filter centre + compteur actif */}
+        <div className="flex items-center justify-center gap-3">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-transparent border border-[#B03E00] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
+            className="flex items-center gap-2 px-6 py-2.5 bg-[#3a3b3f]/95 backdrop-blur-sm border border-[#B03E00] rounded-xl text-[#B03E00] font-medium transition-colors hover:bg-[#B03E00]/10"
           >
             <Filter className="w-4 h-4" />
             <span className="text-sm">{isExpanded ? 'Close Filters' : 'Filter'}</span>
@@ -214,7 +214,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
           {activeCount > 0 && (
             <button
               onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 bg-[#d39478]/20 border border-[#d39478]/50 rounded-xl text-[#d39478] hover:bg-[#d39478]/30 transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-[#d39478]/20 backdrop-blur-sm border border-[#d39478]/50 rounded-xl text-[#d39478] hover:bg-[#d39478]/30 transition-colors"
             >
               <X className="w-4 h-4" />
               <span className="text-sm">{activeCount} filter{activeCount > 1 ? 's' : ''}</span>
@@ -224,7 +224,7 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
 
         {/* Panneau de filtres (uniquement quand ouvert) */}
         {isExpanded && (
-        <div className="mt-4 pt-4 border-t border-white/10 space-y-4">
+        <div className="mt-3 bg-[#3a3b3f]/95 backdrop-blur-sm py-4 px-6 rounded-2xl border border-white/10 space-y-4">
         {/* Main filter row */}
         <div className="flex items-center gap-4 flex-wrap">
           {/* Type */}
