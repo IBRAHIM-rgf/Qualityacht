@@ -108,6 +108,7 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
       type: '', destination: 'caribbean', capacity: '',
       priceMax: '', priceMin: '', minLength: '', maxLength: '',
       currency: '', petFriendly: false, groupFriendly: false,
+      waterToys: false, couplesFriendly: false,
     };
     setLocalFilters(empty);
     setSelectedPriceTier(0);
@@ -264,7 +265,7 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                 className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] focus:ring-2 focus:ring-[#d39478]" />
             </div>
             <div className="flex items-center gap-4 flex-wrap">
-              {[['petFriendly', 'Pet Friendly'], ['groupFriendly', 'Group Friendly']].map(([key, label]) => (
+              {[['petFriendly', 'Pet Friendly'], ['groupFriendly', 'Group Friendly'], ['waterToys', 'Water Toys'], ['couplesFriendly', 'Couples Friendly']].map(([key, label]) => (
                 <button key={key} onClick={() => handleChange(key, !localFilters[key])}
                   className={`px-4 py-2 rounded-lg text-sm font-medium bg-[#3a3b3f] border border-white/20 ${localFilters[key] ? 'text-[#B03E00]' : 'text-gray-400'}`}>
                   {label}
@@ -419,6 +420,29 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
               <input type="number" min="1" max="50" value={localFilters.capacity || ''} onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
                 className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd]" />
             </div>
+
+            {/* Options as toggle buttons */}
+            <div className="space-y-3">
+              {[
+                { key: 'petFriendly',     label: 'Pet Friendly' },
+                { key: 'groupFriendly',   label: 'Group Friendly' },
+                { key: 'waterToys',       label: 'Water Toys' },
+                { key: 'couplesFriendly', label: 'Couples Friendly' },
+              ].map(({ key, label }) => {
+                const active = !!localFilters[key];
+                return (
+                  <button key={key} onClick={() => handleChange(key, !active)}
+                    className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition border ${
+                      active
+                        ? 'bg-[#B03E00] border-[#B03E00] text-white'
+                        : 'bg-[#3a3b3f] border-white/20 text-[#B03E00] hover:border-[#B03E00]'
+                    }`}>
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+
             {activeCount > 0 && (
               <button onClick={handleReset} className="w-full px-4 py-3 bg-transparent border-2 border-[#C0C0C0] text-[#C0C0C0] rounded-xl font-medium hover:bg-white/5 transition">
                 Reset ({activeCount})
