@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../../../test-region-map/map-data';
 
@@ -116,6 +116,62 @@ const faqItems = [
   {
     q: 'Do I need travel insurance?',
     a: 'We strongly recommend insurance to protect against cancellations, medical emergencies, or weather delays. Your broker can advise on the best options.',
+  },
+];
+
+// ── FAQ specifique Regatta (Racing Yacht Charter) ─────────────────────────────
+const regattaFaqItems = [
+  {
+    q: "Do I need an owner's representative or boat captain? What is their role?",
+    a: "Most of our racing yachts come with a boat captain or owner's representative. This person is not the skipper but serves as a valuable team member, leveraging their in-depth knowledge of the yacht to help you maximize performance and minimize avoidable damage. They can integrate seamlessly into your team, wherever you need them.",
+  },
+  {
+    q: 'How much should I tip the boat captain/crew?',
+    a: 'Our crew works tirelessly to ensure your charter is safe, enjoyable, and successful. While tipping is at your discretion, a 10% gratuity is customary if you’ve had a great experience.',
+  },
+  {
+    q: 'Can we include the crew when eating out?',
+    a: 'If you’d like to invite the permanent crew to join you for a meal or night out as a gesture of appreciation, please remember that what is a holiday for you is their job. If you choose to include them, we kindly ask that you cover their expenses.',
+  },
+  {
+    q: 'What is racing yacht charter?',
+    a: 'Racing yacht charter offers a unique opportunity to charter a race-prepared yacht and compete in regattas worldwide. We cater to all levels, from groups of friends seeking a fun, sunny regatta experience to professional teams aiming for the podium.',
+  },
+  {
+    q: 'Do I need sailing experience to participate?',
+    a: 'Sailing experience requirements vary depending on the yacht and regatta. For example, a Volvo 65 may require more experience than a 40-foot racer-cruiser. During the booking process, we’ll discuss any prerequisites to ensure you’re matched with the right yacht.',
+  },
+  {
+    q: 'What is the duration of a racing yacht charter?',
+    a: 'Most racing charters include 2 training days prior to the regatta start date. For offshore races, a third day is typically added for boat preparation.',
+  },
+  {
+    q: 'How do I confirm a yacht charter?',
+    a: 'To confirm your charter: 1) we’ll send you a charter agreement for signature ; 2) you’ll receive an invoice for the deposit ; 3) once the owner counter-signs the agreement, your charter is officially confirmed.',
+  },
+  {
+    q: 'What additional costs should I expect?',
+    a: 'In addition to the charter fee, you may need to cover a security deposit and an Advanced Charter Allowance (ACA) to cover race entry fees, berthing, and other charter-related expenses.',
+  },
+  {
+    q: 'Can you arrange accommodation?',
+    a: 'Yes! Our regatta concierge service can handle race entry and berthing, accommodation ashore (hotels, villas), flights, transfers, and restaurant reservations. A 10% service charge applies for concierge services.',
+  },
+  {
+    q: 'What happens after I book?',
+    a: 'Once your charter is confirmed: 1) we’ll collect crew information to handle race entry on your behalf ; 2) as the regatta approaches, we’ll connect you with the Boat Captain via WhatsApp and provide useful details about the event and location ; 3) our team is available 24/7 by phone or email to assist with any questions.',
+  },
+  {
+    q: 'Can I charter a yacht for a corporate event?',
+    a: 'Absolutely! We offer corporate yacht charters perfect for team-building, client entertainment, or corporate functions.',
+  },
+  {
+    q: 'What insurance will I need?',
+    a: 'The yacht is fully insured, but you’ll need personal insurance that specifically covers yacht racing.',
+  },
+  {
+    q: 'What is the security deposit for?',
+    a: 'The security deposit covers damage to the yacht beyond normal wear and tear expected during racing. In the worst-case scenario, it covers the insurance excess if a claim is necessary. It also covers less serious damage (e.g., sail damage) that doesn’t warrant an insurance claim. Refund process: if there’s no damage, the deposit is refunded within one week after the charter ; if there is damage, its cost is assessed, and the remaining balance of the deposit is refunded after deductions.',
   },
 ];
 
@@ -540,7 +596,12 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
 }
 
 // ── Page ───────────────────────────────────────────────────────────────────────
-export default function CaribbeanV15Page() {
+export default function CaribbeanV15Page({ params }) {
+  const { type } = use(params);
+  // FAQ specifique pour regatta (racing), generique pour les autres voiliers.
+  const faqList = type === 'regatta' ? regattaFaqItems : faqItems;
+  const faqTitle = type === 'regatta' ? 'Racing Yacht Charter — Frequently Asked Questions' : 'Your Luxury Yacht Charter, Explained';
+
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
   useEffect(() => {
@@ -717,13 +778,13 @@ export default function CaribbeanV15Page() {
           <div className="max-w-7xl mx-auto">
             <RevealBlock
               label="Frequently Asked Questions"
-              title="Your Luxury Yacht Charter, Explained"
+              title={faqTitle}
               sub=""
               useTitleLine
             />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
-              {faqItems.map((item, i) => (
-                <div key={i} className={faqItems.length % 3 !== 0 && i === faqItems.length - 1 ? 'md:col-start-2' : ''}>
+              {faqList.map((item, i) => (
+                <div key={i} className={faqList.length % 3 !== 0 && i === faqList.length - 1 ? 'md:col-start-2' : ''}>
                   <FaqItem q={item.q} a={item.a} />
                 </div>
               ))}

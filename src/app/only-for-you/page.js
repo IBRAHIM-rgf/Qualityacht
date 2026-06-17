@@ -60,8 +60,16 @@ export default function SailingRentalPage() {
         alt="Decorative line"
         width={200}
         height={10}
-        className="mx-auto mb-12"
+        className="mx-auto mb-8"
       />
+
+      <p className="max-w-3xl mx-auto text-base md:text-lg text-[#acb0cd] leading-relaxed text-center font-normal normal-case mb-12 px-2">
+        Only For You is more than a sailboat charter service&mdash;it&rsquo;s your gateway
+        to unforgettable sailing experiences. Whether you&rsquo;re a seasoned sailor or
+        a first-time adventurer, we craft bespoke journeys that match your aspirations
+        and budget. From intimate family getaways to high-end voyages, every trip is
+        designed with the same commitment to excellence and authenticity.
+      </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
         {items.map((item) => (
