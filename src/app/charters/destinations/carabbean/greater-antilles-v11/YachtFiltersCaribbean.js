@@ -10,16 +10,17 @@ const YACHT_TYPES = [
   { value: 'sailing', label: 'Sailing' },
 ];
 
-// Seulement les 7 destinations Caribbean + All Caribbean
+// 8 sous-regions Caribbean = les 8 cards de caribbean-v15
 const DESTINATIONS = [
-  { value: 'caribbean',        label: 'All Caribbean' },
-  { value: 'greater-antilles', label: 'Greater Antilles' },
-  { value: 'leeward-islands',  label: 'Leeward Islands' },
-  { value: 'leeward-antilles', label: 'Leeward Antilles' },
-  { value: 'windward-islands', label: 'Windward Islands' },
-  { value: 'turks-caicos',     label: 'Turks & Caicos' },
-  { value: 'trinidad-tobago',  label: 'Trinidad & Tobago' },
-  { value: 'grand-cayman',     label: 'Grand Cayman' },
+  { value: 'caribbean',             label: 'All Caribbean' },
+  { value: 'greater-antilles',      label: 'Greater Antilles' },
+  { value: 'leeward-islands',       label: 'Leeward Islands' },
+  { value: 'leeward-antilles',      label: 'Leeward Antilles' },
+  { value: 'windward-islands',      label: 'Windward Islands' },
+  { value: 'turks-caicos',          label: 'Turks & Caicos' },
+  { value: 'trinidad-tobago',       label: 'Trinidad & Tobago' },
+  { value: 'grand-cayman',          label: 'Grand Cayman' },
+  { value: 'emerging-destinations', label: 'Emerging Destinations' },
 ];
 
 const CURRENCIES = [

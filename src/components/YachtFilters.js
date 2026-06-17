@@ -31,17 +31,18 @@ const DESTINATIONS = [
 ];
 
 // Sous-régions par région principale (cascade dans le dropdown subRegion)
+// Caribbean : 8 sous-regions = les 8 cards de caribbean-v15.
 const SUB_REGIONS_BY_REGION = {
   caribbean: [
     { value: '', label: 'All Caribbean sub-regions' },
-    { value: 'greater-antilles', label: 'Greater Antilles' },
-    { value: 'leeward-islands', label: 'Leeward Islands' },
-    { value: 'windward-islands', label: 'Windward Islands' },
-    { value: 'leeward-antilles', label: 'Leeward Antilles (ABC)' },
-    { value: 'turks-caicos', label: 'Turks & Caicos' },
-    { value: 'trinidad-tobago', label: 'Trinidad & Tobago' },
-    { value: 'bvi', label: 'British Virgin Islands' },
-    { value: 'grand-cayman', label: 'Grand Cayman' },
+    { value: 'greater-antilles',      label: 'Greater Antilles' },
+    { value: 'leeward-islands',       label: 'Leeward Islands' },
+    { value: 'leeward-antilles',      label: 'Leeward Antilles' },
+    { value: 'windward-islands',      label: 'Windward Islands' },
+    { value: 'turks-caicos',          label: 'Turks & Caicos' },
+    { value: 'trinidad-tobago',       label: 'Trinidad & Tobago' },
+    { value: 'grand-cayman',          label: 'Grand Cayman' },
+    { value: 'emerging-destinations', label: 'Emerging Destinations' },
   ],
   bahamas: [
     { value: '', label: 'All Bahamas sub-regions' },

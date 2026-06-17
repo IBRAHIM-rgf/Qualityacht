@@ -7,15 +7,17 @@ import YachtFilters from '@/components/YachtFilters';
 
 const YACHTS_PER_PAGE = 40;
 
-// Filtre destination Caribbean : 7 sous-régions au lieu de la liste globale.
+// Filtre destination Caribbean : 8 sous-regions = les 8 cards de caribbean-v15.
 const CARIBBEAN_DESTINATIONS = [
   { value: '', label: 'All Caribbean sub-regions' },
-  { value: 'greater-antilles', label: 'Greater Antilles' },
-  { value: 'leeward-islands', label: 'Lesser Antilles (Leeward)' },
-  { value: 'windward-islands', label: 'Lesser Antilles (Windward)' },
-  { value: 'bahamas', label: 'Bahamas' },
-  { value: 'grand-cayman', label: 'Cayman Islands' },
-  { value: 'turks-caicos', label: 'Turks & Caicos' },
+  { value: 'greater-antilles',      label: 'Greater Antilles' },
+  { value: 'leeward-islands',       label: 'Leeward Islands' },
+  { value: 'leeward-antilles',      label: 'Leeward Antilles' },
+  { value: 'windward-islands',      label: 'Windward Islands' },
+  { value: 'turks-caicos',          label: 'Turks & Caicos' },
+  { value: 'trinidad-tobago',       label: 'Trinidad & Tobago' },
+  { value: 'grand-cayman',          label: 'Grand Cayman' },
+  { value: 'emerging-destinations', label: 'Emerging Destinations' },
 ];
 
 export default function ExploreYachtClient({ initialFilters, initialData, totalYachts }) {
