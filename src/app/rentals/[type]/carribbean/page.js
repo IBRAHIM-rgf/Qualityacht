@@ -1,9 +1,16 @@
 'use client';
 
 import Image from 'next/image';
-import { use, useEffect, useRef, useState } from 'react';
+import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../../../test-region-map/map-data';
+import {
+  REGATTAS_2027,
+  REGATTA_CATEGORIES,
+  MONTHS_2027,
+  groupByMonth,
+  getCategoryInfo,
+} from '../../../regattas-caribbean-shared/regattas-data';
 
 // Coordonnées d'une île par son nom (depuis map-data.js).
 // Fallback défensif (ISLANDS || []) — évite un crash si l'import n'est pas
@@ -595,12 +602,85 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
   );
 }
 
+// ── Card d'une regatte (Proposition A — calendrier 2027) ──────────────────────
+function RegattaEventCard({ event }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60">
+      <div className="px-5 py-4 flex items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <h4 className="trajan-regular text-base md:text-lg uppercase tracking-[0.1em] text-[#acb0cd] leading-snug">
+            {event.name}
+          </h4>
+          <p className="text-[11px] md:text-xs text-[#acb0cd]/60 mt-1 flex items-center gap-1">
+            <MapPin className="w-3 h-3 inline" /> {event.island}
+          </p>
+        </div>
+        <span className="shrink-0 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-white whitespace-nowrap">
+          {event.dates}
+        </span>
+      </div>
+      <div className="px-5 pb-4 flex flex-wrap gap-1.5">
+        {event.categories.map((catKey) => {
+          const cat = getCategoryInfo(catKey);
+          if (!cat) return null;
+          return (
+            <span key={catKey} className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-wide bg-[#26272a] border border-[#C0C0C0]/20 text-[#acb0cd]">
+              <span>{cat.icon}</span>
+              {cat.label}
+            </span>
+          );
+        })}
+      </div>
+      <button onClick={() => setOpen((v) => !v)}
+        className="w-full px-5 py-2 text-[11px] uppercase tracking-[0.2em] text-[#c2622a] border-t border-[#C0C0C0]/15 hover:bg-[#B03E00]/5 transition-colors">
+        {open ? 'Show less' : 'Read more'}
+      </button>
+      {open && (
+        <div className="px-5 py-4 border-t border-[#C0C0C0]/15 space-y-3 text-xs md:text-sm text-[#acb0cd]/80">
+          {event.description.island && (
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#c2622a] mb-1">The Island</p>
+              <p className="leading-relaxed">{event.description.island}</p>
+            </div>
+          )}
+          {event.description.race && (
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#c2622a] mb-1">The Race</p>
+              <p className="leading-relaxed">{event.description.race}</p>
+            </div>
+          )}
+          {event.description.nightlife && (
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#c2622a] mb-1">Off the Water</p>
+              <p className="leading-relaxed">{event.description.nightlife}</p>
+            </div>
+          )}
+          {event.footer && (
+            <p className="text-[11px] italic text-[#d39478] pt-2 border-t border-[#C0C0C0]/10">{event.footer}</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Page ───────────────────────────────────────────────────────────────────────
 export default function CaribbeanV15Page({ params }) {
   const { type } = use(params);
   // FAQ specifique pour regatta (racing), generique pour les autres voiliers.
   const faqList = type === 'regatta' ? regattaFaqItems : faqItems;
   const faqTitle = type === 'regatta' ? 'Racing Yacht Charter — Frequently Asked Questions' : 'Your Luxury Yacht Charter, Explained';
+
+  // Calendrier regatta 2027 : filtre + groupement par mois (uniquement type === 'regatta')
+  const [regattaFilter, setRegattaFilter] = useState('all');
+  const regattaFiltered = useMemo(() =>
+    regattaFilter === 'all'
+      ? REGATTAS_2027
+      : REGATTAS_2027.filter((r) => r.categories.includes(regattaFilter)),
+    [regattaFilter]
+  );
+  const regattaByMonth = useMemo(() => groupByMonth(regattaFiltered), [regattaFiltered]);
 
   // Hero photo : regatta a sa propre photo racing dediee, les autres voiliers gardent le yacht v15.
   const heroMobileSrc = type === 'regatta' ? '/images/sailing/only for you caraibes.jpg' : '/images/yachts/yatch2.jpeg';
@@ -707,6 +787,67 @@ export default function CaribbeanV15Page({ params }) {
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
         <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
+
+        {/* ══ 2027 REGATTA CALENDAR (uniquement pour type === 'regatta') ══ */}
+        {type === 'regatta' && (
+          <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
+            <div className="max-w-7xl mx-auto">
+              <RevealBlock label="Sailing Calendar" title="2027 Regatta Calendar" sub="From January to November — racing, classics, traditions, juniors and luxury" />
+
+              {/* Filtres categories */}
+              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-10">
+                <button onClick={() => setRegattaFilter('all')}
+                  className={`px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-[0.15em] font-medium transition border ${
+                    regattaFilter === 'all'
+                      ? 'bg-[#B03E00] border-[#B03E00] text-white'
+                      : 'bg-[#3a3b3f] border-[#C0C0C0]/30 text-[#B03E00] hover:border-[#B03E00]'
+                  }`}>
+                  All
+                </button>
+                {REGATTA_CATEGORIES.map((cat) => {
+                  const active = regattaFilter === cat.key;
+                  return (
+                    <button key={cat.key} onClick={() => setRegattaFilter(cat.key)}
+                      className={`px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-[0.15em] font-medium transition border ${
+                        active
+                          ? 'bg-[#B03E00] border-[#B03E00] text-white'
+                          : 'bg-[#3a3b3f] border-[#C0C0C0]/30 text-[#B03E00] hover:border-[#B03E00]'
+                      }`}>
+                      <span className="mr-1">{cat.icon}</span>{cat.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Timeline mois par mois */}
+              <div className="space-y-12">
+                {MONTHS_2027.map((month) => {
+                  const events = regattaByMonth[month.key];
+                  if (!events || events.length === 0) return null;
+                  return (
+                    <div key={month.key}>
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="flex-1 h-px bg-[#C0C0C0]/20" />
+                        <h3 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#acb0cd] italic">
+                          {month.label}
+                        </h3>
+                        <div className="flex-1 h-px bg-[#C0C0C0]/20" />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+                        {events.map((event) => (
+                          <RegattaEventCard key={event.id} event={event} />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+                {Object.keys(regattaByMonth).length === 0 && (
+                  <p className="text-center text-[#acb0cd]/60 italic py-8">No events match this filter.</p>
+                )}
+              </div>
+            </div>
+          </CloudSection>
+        )}
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 4 (8 cards) ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
