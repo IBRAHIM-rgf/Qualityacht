@@ -1,8 +1,8 @@
 'use client';
 
 // Proposition C : meme structure que /rentals/regatta/carribbean avec en plus une
-// section "Regattas by Category" stylisee comme "Destinations by Region" (accordeons
-// par categorie, titre + title-line.png + chevron, contenu en pills d'evenements).
+// section "Regattas by Region" stylisee comme "Destinations by Region" (accordeons
+// par ile/region, titre + title-line.png + chevron, contenu en pills d'evenements).
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
@@ -604,15 +604,34 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
   );
 }
 
-// ── Accordeon par categorie (style IslandGroup) ───────────────────────────────
-function RegattaCategoryGroup({ category, events, defaultOpen }) {
+// ── Extraction de la region a partir du champ island (Proposition C) ──────────
+// Ex: "Barbados — Carlisle Bay" -> "Barbados", "St. Thomas, USVI" -> "USVI".
+function extractRegion(island) {
+  if (!island) return 'Other';
+  if (/\bUSVI\b/.test(island)) return 'USVI (St. Thomas)';
+  if (/\bBVI\b/.test(island)) return 'BVI (Tortola)';
+  if (/Sint Maarten|St\. Maarten/.test(island)) return 'Sint Maarten';
+  if (/Saint-Barth|St\. Barth/.test(island)) return 'Saint-Barthélemy';
+  if (/Martinique/.test(island)) return 'Martinique';
+  if (/Antigua/.test(island)) return 'Antigua';
+  if (/Grenad/.test(island)) return 'Grenada';
+  if (/Barbados/.test(island)) return 'Barbados';
+  if (/St\. Vincent/.test(island)) return 'St. Vincent & Grenadines';
+  if (/Aruba/.test(island)) return 'Aruba';
+  if (/St\. Lucia/.test(island)) return 'St. Lucia';
+  // fallback : premiere partie avant " — " ou ","
+  return island.split(/[—,]/)[0].trim();
+}
+
+// ── Accordeon par region (style IslandGroup de caribbean-v15) ─────────────────
+function RegattaRegionGroup({ region, events, defaultOpen }) {
   const [open, setOpen] = useState(defaultOpen || false);
   return (
     <div className="border-b border-white/10">
       <button onClick={() => setOpen((o) => !o)}
         className="w-full flex flex-col items-center py-4 text-left group cursor-pointer">
         <span className="trajan-regular text-[#acb0cd] text-xs md:text-sm uppercase tracking-[0.2em] group-hover:text-[#c2622a] transition-colors duration-300 text-center w-full">
-          <span className="mr-2">{category.icon}</span>{category.label}
+          {region}
           <span className="ml-2 text-[10px] text-[#acb0cd]/50">({events.length})</span>
         </span>
         <div className="relative w-24 h-6 my-1">
@@ -808,24 +827,30 @@ export default function RegattasCaribbeanA() {
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
         <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
 
-        {/* ══ REGATTAS BY CATEGORY (Proposition C : style 'Destinations by Region') ══ */}
+        {/* ══ REGATTAS BY REGION (Proposition C : style 'Destinations by Region') ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
-            <RevealBlock label="Sailing Universe" title="Regattas by Category" sub="Eight categories — pick yours and explore the 2027 lineup" />
-            {/* 3 colonnes desktop, accordeons par categorie style IslandGroup */}
+            <RevealBlock label="Where the Races Happen" title="Regattas by Region" sub="Eleven Caribbean islands — pick yours and explore the 2027 lineup" />
+            {/* 3 colonnes desktop, accordeons par region style IslandGroup */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
-              {REGATTA_CATEGORIES.map((cat, i) => {
-                const events = REGATTAS_2027.filter((r) => r.categories.includes(cat.key));
-                if (events.length === 0) return null;
-                return (
-                  <RegattaCategoryGroup
-                    key={cat.key}
-                    category={cat}
+              {(() => {
+                // Groupe events par region extraite, ordonne par nombre d'events desc.
+                const byRegion = {};
+                for (const r of REGATTAS_2027) {
+                  const reg = extractRegion(r.island);
+                  if (!byRegion[reg]) byRegion[reg] = [];
+                  byRegion[reg].push(r);
+                }
+                const ordered = Object.entries(byRegion).sort((a, b) => b[1].length - a[1].length);
+                return ordered.map(([region, events], i) => (
+                  <RegattaRegionGroup
+                    key={region}
+                    region={region}
                     events={events}
                     defaultOpen={i < 3}
                   />
-                );
-              })}
+                ));
+              })()}
             </div>
           </div>
         </CloudSection>
