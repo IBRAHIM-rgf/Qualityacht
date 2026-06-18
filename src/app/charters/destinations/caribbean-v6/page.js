@@ -98,7 +98,7 @@ export default function CaribbeanV6Page() {
   return (
     <>
       <style>{`
-        .reveal-up { opacity: 0; transform: translateY(40px); transition: opacity 1.6s ease, transform 1.6s ease; }
+        .reveal-up { opacity: 0; transform: translateY(40px); transition: opacity 2.8s ease, transform 2.8s ease; }
         .reveal-up.revealed { opacity: 1; transform: translateY(0); }
       `}</style>
 

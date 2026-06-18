@@ -134,7 +134,7 @@ export default function CaribbeanV5Page() {
         .reveal-up {
           opacity: 0;
           transform: translateY(40px);
-          transition: opacity 1.6s ease, transform 1.6s ease;
+          transition: opacity 2.8s ease, transform 2.8s ease;
         }
         .reveal-up.revealed {
           opacity: 1;
