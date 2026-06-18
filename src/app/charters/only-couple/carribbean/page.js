@@ -564,15 +564,15 @@ export default function CaribbeanV15Page() {
         {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
             Desktop : image pleine largeur (natural ratio), titre OVERLAY en bas avec dégradé. */}
         <div className="pt-[70px] md:pt-0 bg-[#26272a]">
-          {/* Mobile : image seule */}
+          {/* Mobile : image dediee Only Couple Caraibes. */}
           <div className="relative aspect-[6/5] md:hidden">
-            <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
+            <Image src="/images/sailing/only for you caraibes.jpg" alt="" fill priority className="object-cover object-center" />
           </div>
-          {/* Desktop : photo dediee Yatch_desktop.png (paysage) en pleine largeur, ratio naturel. */}
+          {/* Desktop : meme photo, ratio naturel pleine largeur. */}
           <div className="hidden md:block relative w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/yachts/Yatch_desktop.png"
+              src="/images/sailing/only for you caraibes.jpg"
               alt=""
               className="block w-full h-auto"
             />

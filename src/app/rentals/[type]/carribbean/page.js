@@ -602,6 +602,10 @@ export default function CaribbeanV15Page({ params }) {
   const faqList = type === 'regatta' ? regattaFaqItems : faqItems;
   const faqTitle = type === 'regatta' ? 'Racing Yacht Charter — Frequently Asked Questions' : 'Your Luxury Yacht Charter, Explained';
 
+  // Hero photo : regatta a sa propre photo racing dediee, les autres voiliers gardent le yacht v15.
+  const heroMobileSrc = type === 'regatta' ? '/images/sailing/only for you caraibes.jpg' : '/images/yachts/yatch2.jpeg';
+  const heroDesktopSrc = type === 'regatta' ? '/images/sailing/only for you caraibes.jpg' : '/images/yachts/Yatch_desktop.png';
+
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
   useEffect(() => {
@@ -627,13 +631,13 @@ export default function CaribbeanV15Page({ params }) {
         <div className="pt-[70px] md:pt-0 bg-[#26272a]">
           {/* Mobile : image seule */}
           <div className="relative aspect-[6/5] md:hidden">
-            <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
+            <Image src={heroMobileSrc} alt="" fill priority className="object-cover object-center" />
           </div>
-          {/* Desktop : photo dediee Yatch_desktop.png (paysage) en pleine largeur, ratio naturel. */}
+          {/* Desktop : photo dediee paysage en pleine largeur, ratio naturel. */}
           <div className="hidden md:block relative w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/yachts/Yatch_desktop.png"
+              src={heroDesktopSrc}
               alt=""
               className="block w-full h-auto"
             />
