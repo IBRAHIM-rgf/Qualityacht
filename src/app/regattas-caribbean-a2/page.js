@@ -1,10 +1,13 @@
 'use client';
 
-// Proposition A2 : variante de A — meme structure (calendrier mensuel, carousel de
-// photos derriere les mois, plus de filtres) MAIS chaque card d'event a maintenant
-// un visuel photo en haut (cycle des 8 photos Caraibes).
+// Proposition A2 : variante de A — meme structure (calendrier mensuel, plus de
+// filtres) avec une PHOTO en haut de chaque card. La photo + le lien correspondent
+// a la region de l'event (mapping Destinations by Region : Greater Antilles,
+// Leeward Islands, Leeward Antilles, Windward Islands, Turks & Caicos, Trinidad
+// & Tobago, Grand Cayman, Emerging). Click sur card -> page de la sous-region.
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../test-region-map/map-data';
@@ -15,6 +18,28 @@ import {
   groupByMonth,
   getCategoryInfo,
 } from '../regattas-caribbean-shared/regattas-data';
+
+// ── Mapping region : island -> photo originale + slug page sous-region ────────
+function getRegionInfo(island) {
+  if (!island) return { photo: '/images/destinations/gretar antilles-original.jpg', slug: 'greater-antilles', name: 'Greater Antilles' };
+  if (/Barbados/.test(island))                     return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Grenad/.test(island))                       return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Sint Maarten|St\.? ?Maarten/.test(island))  return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/Antigua/.test(island))                      return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/Saint-Barth|St\.? ?Barth/.test(island))     return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/\bUSVI\b|St\.? ?Thomas/.test(island))       return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/\bBVI\b|Tortola/.test(island))              return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/Martinique|Schoelcher/.test(island))        return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/St\.? ?Vincent|Grenadines/.test(island))    return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/St\.? ?Lucia/.test(island))                 return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Aruba|Bonaire|Cura/.test(island))           return { photo: '/images/destinations/The Leeward Antilles-original.jpg', slug: 'leeward-antilles', name: 'Leeward Antilles' };
+  if (/Turks|Caicos/.test(island))                 return { photo: '/images/destinations/Turks and Caicos-original.jpg',     slug: 'turks-caicos',     name: 'Turks & Caicos' };
+  if (/Trinidad|Tobago/.test(island))              return { photo: '/images/destinations/Trinidad and Tobago-original.jpg',  slug: 'trinidad-tobago',  name: 'Trinidad & Tobago' };
+  if (/Cayman/.test(island))                       return { photo: '/images/destinations/Cayman Islands-original.jpg',       slug: 'grand-cayman',     name: 'Grand Cayman' };
+  if (/Cuba|Puerto Rico|Jamaica|Hispaniola/.test(island)) return { photo: '/images/destinations/gretar antilles-original.jpg', slug: 'greater-antilles', name: 'Greater Antilles' };
+  // fallback
+  return { photo: '/images/pagesCaraibes/emergency.png', slug: 'emerging-destinations', name: 'Emerging Destinations' };
+}
 
 // Coordonnées d'une île par son nom (depuis map-data.js).
 // Fallback défensif (ISLANDS || []) — évite un crash si l'import n'est pas
@@ -27,14 +52,14 @@ function getIslandCoords(name) {
 // ── Données rectangles (8 items : 4 + 4) ──────────────────────────────────────
 // image = nouvelle (repos) ; imageOld = ancienne colorée (apparaît au survol)
 const caribbeanIslands = [
-  { name: 'Greater Antilles',      image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/carabbean/greater-antilles-v11' },
-  { name: 'Leeward Islands',       image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/charters/destinations/carabbean/leeward-islands-v11' },
-  { name: 'Leeward Antilles',      image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/charters/destinations/carabbean/leeward-antilles-v11' },
-  { name: 'Windward Islands',      image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/charters/destinations/carabbean/windward-islands-v11' },
-  { name: 'Turks & Caicos',        image: '/images/pagesCaraibes/turks_caicos.png',      imageOld: '/images/destinations/Turks and Caicos-original.jpg',    href: '/charters/destinations/carabbean/turks-caicos-v11' },
-  { name: 'Trinidad & Tobago',     image: '/images/pagesCaraibes/unnamed.jpg',           imageOld: '/images/destinations/Trinidad and Tobago-original.jpg', href: '/charters/destinations/carabbean/trinidad-tobago-v11' },
-  { name: 'Grand Cayman',          image: '/images/pagesCaraibes/grand_cayman.png',      imageOld: '/images/destinations/Cayman Islands-original.jpg',      href: '/charters/destinations/carabbean/grand-cayman-v11' },
-  { name: 'Emerging Destinations', image: '/images/pagesCaraibes/emergencyfilter.jpg',   imageOld: '/images/pagesCaraibes/emergency.png',                    href: '/charters/destinations/carabbean/emerging-destinations-v11' },
+  { name: 'Greater Antilles',      image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/carabbean/greater-antilles' },
+  { name: 'Leeward Islands',       image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/charters/destinations/carabbean/leeward-islands' },
+  { name: 'Leeward Antilles',      image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/charters/destinations/carabbean/leeward-antilles' },
+  { name: 'Windward Islands',      image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/charters/destinations/carabbean/windward-islands' },
+  { name: 'Turks & Caicos',        image: '/images/pagesCaraibes/turks_caicos.png',      imageOld: '/images/destinations/Turks and Caicos-original.jpg',    href: '/charters/destinations/carabbean/turks-caicos' },
+  { name: 'Trinidad & Tobago',     image: '/images/pagesCaraibes/unnamed.jpg',           imageOld: '/images/destinations/Trinidad and Tobago-original.jpg', href: '/charters/destinations/carabbean/trinidad-tobago' },
+  { name: 'Grand Cayman',          image: '/images/pagesCaraibes/grand_cayman.png',      imageOld: '/images/destinations/Cayman Islands-original.jpg',      href: '/charters/destinations/carabbean/grand-cayman' },
+  { name: 'Emerging Destinations', image: '/images/pagesCaraibes/emergencyfilter.jpg',   imageOld: '/images/pagesCaraibes/emergency.png',                    href: '/charters/destinations/carabbean/emerging-destinations' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────
@@ -656,17 +681,20 @@ function MonthHeaderCarousel({ label, startIndex = 0 }) {
 // ── Card d'une regatte (calendrier) avec PHOTO + texte fade in/out (A2) ────────
 function RegattaEventCard({ event, index = 0 }) {
   const [open, setOpen] = useState(false);
-  const photoSrc = CARIBBEAN_HEADER_PHOTOS[index % CARIBBEAN_HEADER_PHOTOS.length];
+  const info = getRegionInfo(event.island);
   // Decale la fade animation par event pour un effet desynchronise.
   const delay = (index * 1.5) % 7;
   return (
-    <div className="rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60">
-      {/* Photo header : photos originales couleur translucides + texte cococo en gras */}
+    <Link
+      href={`/charters/destinations/carabbean/${info.slug}`}
+      className="block rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60 cursor-pointer"
+    >
+      {/* Photo header : photo correspondant a la region (Destinations by Region) */}
       <div className="relative h-44 md:h-52 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url('${encodeURI(photoSrc)}')`,
+            backgroundImage: `url('${encodeURI(info.photo)}')`,
             opacity: 0.55,
           }}
         />
@@ -678,7 +706,7 @@ function RegattaEventCard({ event, index = 0 }) {
           {event.dates}
         </span>
 
-        {/* Texte centre qui apparait/disparait en boucle (cococo en gras) */}
+        {/* Texte centre qui apparait/disparait en boucle */}
         <div
           className="absolute inset-0 flex flex-col items-center justify-center text-center px-5"
           style={{
@@ -689,8 +717,8 @@ function RegattaEventCard({ event, index = 0 }) {
           <h4 className="trajan-regular font-bold text-sm md:text-base uppercase tracking-[0.12em] text-[#C0C0C0] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
             {event.name}
           </h4>
-          <p className="trajan-regular font-bold text-base md:text-xl uppercase tracking-[0.15em] text-[#C0C0C0] mt-3 flex items-center justify-center gap-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-            <MapPin className="w-4 h-4 md:w-5 md:h-5 inline" /> {event.island}
+          <p className="trajan-regular text-base md:text-xl uppercase tracking-[0.15em] text-[#acb0cd] mt-3 flex items-center justify-center gap-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            <MapPin className="w-4 h-4 md:w-5 md:h-5 inline text-[#c2622a]" /> {event.island}
           </p>
         </div>
       </div>
@@ -705,12 +733,13 @@ function RegattaEventCard({ event, index = 0 }) {
           );
         })}
       </div>
-      <button onClick={() => setOpen((v) => !v)}
+      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen((v) => !v); }}
         className="w-full px-5 py-2 text-[11px] uppercase tracking-[0.2em] text-[#c2622a] border-t border-[#C0C0C0]/15 hover:bg-[#B03E00]/5 transition-colors">
         {open ? 'Show less' : 'Read more'}
       </button>
       {open && (
-        <div className="px-5 py-4 border-t border-[#C0C0C0]/15 space-y-3 text-xs md:text-sm text-[#acb0cd]/80">
+        <div className="px-5 py-4 border-t border-[#C0C0C0]/15 space-y-3 text-xs md:text-sm text-[#acb0cd]/80"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
           {event.description.island && (
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#c2622a] mb-1">The Island</p>
@@ -734,7 +763,7 @@ function RegattaEventCard({ event, index = 0 }) {
           )}
         </div>
       )}
-    </div>
+    </Link>
   );
 }
 
