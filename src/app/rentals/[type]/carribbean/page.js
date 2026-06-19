@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../../../test-region-map/map-data';
@@ -11,6 +12,27 @@ import {
   groupByMonth,
   getCategoryInfo,
 } from '../../../regattas-caribbean-shared/regattas-data';
+
+// ── Mapping region : island -> photo originale + slug page sous-region ────────
+function getRegionInfo(island) {
+  if (!island) return { photo: '/images/destinations/gretar antilles-original.jpg', slug: 'greater-antilles', name: 'Greater Antilles' };
+  if (/Barbados/.test(island))                     return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Grenad/.test(island))                       return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Sint Maarten|St\.? ?Maarten/.test(island))  return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/Antigua/.test(island))                      return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/Saint-Barth|St\.? ?Barth/.test(island))     return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/\bUSVI\b|St\.? ?Thomas/.test(island))       return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/\bBVI\b|Tortola/.test(island))              return { photo: '/images/destinations/Leeward Islands-original.jpg',      slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/Martinique|Schoelcher/.test(island))        return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/St\.? ?Vincent|Grenadines/.test(island))    return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/St\.? ?Lucia/.test(island))                 return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Aruba|Bonaire|Cura/.test(island))           return { photo: '/images/destinations/The Leeward Antilles-original.jpg', slug: 'leeward-antilles', name: 'Leeward Antilles' };
+  if (/Turks|Caicos/.test(island))                 return { photo: '/images/destinations/Turks and Caicos-original.jpg',     slug: 'turks-caicos',     name: 'Turks & Caicos' };
+  if (/Trinidad|Tobago/.test(island))              return { photo: '/images/destinations/Trinidad and Tobago-original.jpg',  slug: 'trinidad-tobago',  name: 'Trinidad & Tobago' };
+  if (/Cayman/.test(island))                       return { photo: '/images/destinations/Cayman Islands-original.jpg',       slug: 'grand-cayman',     name: 'Grand Cayman' };
+  if (/Cuba|Puerto Rico|Jamaica|Hispaniola/.test(island)) return { photo: '/images/destinations/gretar antilles-original.jpg', slug: 'greater-antilles', name: 'Greater Antilles' };
+  return { photo: '/images/pagesCaraibes/emergency.png', slug: 'emerging-destinations', name: 'Emerging Destinations' };
+}
 
 // Coordonnées d'une île par son nom (depuis map-data.js).
 // Fallback défensif (ISLANDS || []) — évite un crash si l'import n'est pas
@@ -602,42 +624,52 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
   );
 }
 
-// ── Card d'une regatte (Proposition A — calendrier 2027) ──────────────────────
-function RegattaEventCard({ event }) {
+// ── Card d'une regatte (A2 : photo region + texte fade in/out + Link) ─────────
+function RegattaEventCard({ event, index = 0 }) {
   const [open, setOpen] = useState(false);
+  const info = getRegionInfo(event.island);
+  const delay = (index * 1.5) % 7;
   return (
-    <div className="rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60">
-      <div className="px-5 py-4 flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <h4 className="trajan-regular text-base md:text-lg uppercase tracking-[0.1em] text-[#acb0cd] leading-snug">
-            {event.name}
-          </h4>
-          <p className="text-[11px] md:text-xs text-[#acb0cd]/60 mt-1 flex items-center gap-1">
-            <MapPin className="w-3 h-3 inline" /> {event.island}
-          </p>
-        </div>
-        <span className="shrink-0 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-white whitespace-nowrap">
+    <Link
+      href={`/charters/destinations/carabbean/regatta/${event.id}`}
+      className="block rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60 cursor-pointer"
+    >
+      {/* Photo header : photo correspondant a la region */}
+      <div className="relative h-44 md:h-52 overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url('${encodeURI(info.photo)}')`, opacity: 0.55 }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/40 via-[#26272a]/25 to-[#26272a]/75" />
+        <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-white whitespace-nowrap shadow-lg z-10">
           {event.dates}
         </span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-5"
+          style={{ animation: 'cardTextFade 7s ease-in-out infinite', animationDelay: `${delay}s` }}>
+          <h4 className="trajan-regular font-bold text-sm md:text-base uppercase tracking-[0.12em] text-[#C0C0C0] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            {event.name}
+          </h4>
+          <p className="trajan-regular text-base md:text-xl uppercase tracking-[0.15em] text-[#acb0cd] mt-3 flex items-center justify-center gap-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            <MapPin className="w-4 h-4 md:w-5 md:h-5 inline text-[#c2622a]" /> {event.island}
+          </p>
+        </div>
       </div>
-      <div className="px-5 pb-4 flex flex-wrap gap-1.5">
+      <div className="px-5 pt-4 pb-4 flex flex-wrap gap-1.5">
         {event.categories.map((catKey) => {
           const cat = getCategoryInfo(catKey);
           if (!cat) return null;
           return (
-            <span key={catKey} className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-wide bg-[#26272a] border border-[#C0C0C0]/20 text-[#acb0cd]">
-              <span>{cat.icon}</span>
+            <span key={catKey} className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-wide bg-[#26272a] border border-[#C0C0C0]/20 text-[#acb0cd]">
               {cat.label}
             </span>
           );
         })}
       </div>
-      <button onClick={() => setOpen((v) => !v)}
+      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen((v) => !v); }}
         className="w-full px-5 py-2 text-[11px] uppercase tracking-[0.2em] text-[#c2622a] border-t border-[#C0C0C0]/15 hover:bg-[#B03E00]/5 transition-colors">
         {open ? 'Show less' : 'Read more'}
       </button>
       {open && (
-        <div className="px-5 py-4 border-t border-[#C0C0C0]/15 space-y-3 text-xs md:text-sm text-[#acb0cd]/80">
+        <div className="px-5 py-4 border-t border-[#C0C0C0]/15 space-y-3 text-xs md:text-sm text-[#acb0cd]/80"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
           {event.description.island && (
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#c2622a] mb-1">The Island</p>
@@ -661,7 +693,7 @@ function RegattaEventCard({ event }) {
           )}
         </div>
       )}
-    </div>
+    </Link>
   );
 }
 
@@ -672,15 +704,8 @@ export default function CaribbeanV15Page({ params }) {
   const faqList = type === 'regatta' ? regattaFaqItems : faqItems;
   const faqTitle = type === 'regatta' ? 'Racing Yacht Charter — Frequently Asked Questions' : 'Your Luxury Yacht Charter, Explained';
 
-  // Calendrier regatta 2027 : filtre + groupement par mois (uniquement type === 'regatta')
-  const [regattaFilter, setRegattaFilter] = useState('all');
-  const regattaFiltered = useMemo(() =>
-    regattaFilter === 'all'
-      ? REGATTAS_2027
-      : REGATTAS_2027.filter((r) => r.categories.includes(regattaFilter)),
-    [regattaFilter]
-  );
-  const regattaByMonth = useMemo(() => groupByMonth(regattaFiltered), [regattaFiltered]);
+  // Calendrier regatta 2027 : groupement par mois (sans filtre, tous events affiches)
+  const regattaByMonth = useMemo(() => groupByMonth(REGATTAS_2027), []);
 
   // Hero photo : regatta a sa propre photo racing dediee, les autres voiliers gardent le yacht v15.
   const heroMobileSrc = type === 'regatta' ? '/images/sailing/only for you caraibes.jpg' : '/images/yachts/yatch2.jpeg';
@@ -701,6 +726,10 @@ export default function CaribbeanV15Page({ params }) {
         .reveal-up.revealed { opacity: 1; transform: translateY(0); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes cardTextFade {
+          0%, 100% { opacity: 0; }
+          25%, 75% { opacity: 1; }
+        }
       `}</style>
 
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
@@ -794,34 +823,9 @@ export default function CaribbeanV15Page({ params }) {
             <div className="max-w-7xl mx-auto">
               <RevealBlock label="Sailing Calendar" title="2027 Regatta Calendar" sub="From January to November — racing, classics, traditions, juniors and luxury" />
 
-              {/* Filtres categories */}
-              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-10">
-                <button onClick={() => setRegattaFilter('all')}
-                  className={`px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-[0.15em] font-medium transition border ${
-                    regattaFilter === 'all'
-                      ? 'bg-[#B03E00] border-[#B03E00] text-white'
-                      : 'bg-[#3a3b3f] border-[#C0C0C0]/30 text-[#B03E00] hover:border-[#B03E00]'
-                  }`}>
-                  All
-                </button>
-                {REGATTA_CATEGORIES.map((cat) => {
-                  const active = regattaFilter === cat.key;
-                  return (
-                    <button key={cat.key} onClick={() => setRegattaFilter(cat.key)}
-                      className={`px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-[0.15em] font-medium transition border ${
-                        active
-                          ? 'bg-[#B03E00] border-[#B03E00] text-white'
-                          : 'bg-[#3a3b3f] border-[#C0C0C0]/30 text-[#B03E00] hover:border-[#B03E00]'
-                      }`}>
-                      <span className="mr-1">{cat.icon}</span>{cat.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Timeline mois par mois */}
+              {/* Timeline mois par mois (sans filtre — affiche TOUS les events) */}
               <div className="space-y-12">
-                {MONTHS_2027.map((month) => {
+                {MONTHS_2027.map((month, mi) => {
                   const events = regattaByMonth[month.key];
                   if (!events || events.length === 0) return null;
                   return (
@@ -833,9 +837,9 @@ export default function CaribbeanV15Page({ params }) {
                         </h3>
                         <div className="flex-1 h-px bg-[#C0C0C0]/20" />
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-                        {events.map((event) => (
-                          <RegattaEventCard key={event.id} event={event} />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 items-start">
+                        {events.map((event, ei) => (
+                          <RegattaEventCard key={event.id} event={event} index={mi * 2 + ei} />
                         ))}
                       </div>
                     </div>

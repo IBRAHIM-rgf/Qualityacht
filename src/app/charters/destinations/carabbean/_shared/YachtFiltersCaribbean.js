@@ -51,7 +51,16 @@ const MAX_LENGTH_M = 140;
 const MIN_LENGTH_FT = 33;
 const MAX_LENGTH_FT = 459;
 
-export default function YachtFiltersCaribbean({ filters, onChange }) {
+// Liste des toggles par defaut (Caraibes generique)
+const DEFAULT_TOGGLES = [
+  { key: 'petFriendly',     label: 'Pet Friendly' },
+  { key: 'groupFriendly',   label: 'Group Friendly' },
+  { key: 'waterToys',       label: 'Water Toys' },
+  { key: 'couplesFriendly', label: 'Couples Friendly' },
+];
+
+export default function YachtFiltersCaribbean({ filters, onChange, customToggles = null }) {
+  const toggles = customToggles || DEFAULT_TOGGLES;
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
@@ -273,14 +282,9 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
                 className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd]" />
             </div>
 
-            {/* Options as toggle buttons */}
+            {/* Options as toggle buttons (custom ou default) */}
             <div className="space-y-3">
-              {[
-                { key: 'petFriendly',     label: 'Pet Friendly' },
-                { key: 'groupFriendly',   label: 'Group Friendly' },
-                { key: 'waterToys',       label: 'Water Toys' },
-                { key: 'couplesFriendly', label: 'Couples Friendly' },
-              ].map(({ key, label }) => {
+              {toggles.map(({ key, label }) => {
                 const active = !!localFilters[key];
                 return (
                   <button key={key} onClick={() => handleChange(key, !active)}
