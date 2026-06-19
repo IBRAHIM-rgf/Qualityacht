@@ -605,6 +605,53 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
   );
 }
 
+// ── Header de mois avec carousel des 8 photos Caraibes en background ──────────
+const CARIBBEAN_HEADER_PHOTOS = [
+  '/images/pagesCaraibes/greater_antilles.png',
+  '/images/pagesCaraibes/leeward_island.png',
+  '/images/pagesCaraibes/leeward_antilles.png',
+  '/images/pagesCaraibes/windward_island.png',
+  '/images/pagesCaraibes/turks_caicos.png',
+  '/images/pagesCaraibes/unnamed.jpg',
+  '/images/pagesCaraibes/grand_cayman.png',
+  '/images/pagesCaraibes/emergency.png',
+];
+
+function MonthHeaderCarousel({ label, startIndex = 0 }) {
+  const [idx, setIdx] = useState(startIndex % CARIBBEAN_HEADER_PHOTOS.length);
+  useEffect(() => {
+    const t = setInterval(() => {
+      setIdx((i) => (i + 1) % CARIBBEAN_HEADER_PHOTOS.length);
+    }, 3500);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <div className="relative h-24 md:h-32 mb-8 rounded-xl overflow-hidden">
+      {/* Photos qui se succedent en fondu enchaine */}
+      {CARIBBEAN_HEADER_PHOTOS.map((src, i) => (
+        <div
+          key={i}
+          className="absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ease-in-out"
+          style={{
+            backgroundImage: `url('${src}')`,
+            opacity: i === idx ? 1 : 0,
+          }}
+        />
+      ))}
+      {/* Overlay sombre pour lisibilite */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/70 via-[#26272a]/55 to-[#26272a]/70" />
+      {/* Label au milieu */}
+      <div className="relative h-full flex items-center justify-center gap-4 px-4">
+        <div className="flex-1 h-px bg-[#C0C0C0]/60" />
+        <h3 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.3em] text-[#acb0cd] italic drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] whitespace-nowrap">
+          {label}
+        </h3>
+        <div className="flex-1 h-px bg-[#C0C0C0]/60" />
+      </div>
+    </div>
+  );
+}
+
 // ── Card d'une regatte (calendrier) ────────────────────────────────────────────
 function RegattaEventCard({ event }) {
   const [open, setOpen] = useState(false);
@@ -676,15 +723,8 @@ export default function RegattasCaribbeanA() {
   const heroMobileSrc = '/images/sailing/only for you caraibes.jpg';
   const heroDesktopSrc = '/images/sailing/only for you caraibes.jpg';
 
-  // Filtre categorie pour le calendrier 2027
-  const [activeFilter, setActiveFilter] = useState('all');
-  const filteredRegattas = useMemo(() =>
-    activeFilter === 'all'
-      ? REGATTAS_2027
-      : REGATTAS_2027.filter((r) => r.categories.includes(activeFilter)),
-    [activeFilter]
-  );
-  const regattasByMonth = useMemo(() => groupByMonth(filteredRegattas), [filteredRegattas]);
+  // Calendrier 2027 : sans filtre, tous les events groupes par mois.
+  const regattasByMonth = useMemo(() => groupByMonth(REGATTAS_2027), []);
 
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -793,45 +833,14 @@ export default function RegattasCaribbeanA() {
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Sailing Calendar" title="2027 Regatta Calendar" sub="From January to November — racing, classics, traditions, juniors and luxury" />
 
-            {/* Filtres categories */}
-            <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-10">
-              <button onClick={() => setActiveFilter('all')}
-                className={`px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-[0.15em] font-medium transition border ${
-                  activeFilter === 'all'
-                    ? 'bg-[#B03E00] border-[#B03E00] text-white'
-                    : 'bg-[#3a3b3f] border-[#C0C0C0]/30 text-[#B03E00] hover:border-[#B03E00]'
-                }`}>
-                All
-              </button>
-              {REGATTA_CATEGORIES.map((cat) => {
-                const active = activeFilter === cat.key;
-                return (
-                  <button key={cat.key} onClick={() => setActiveFilter(cat.key)}
-                    className={`px-4 py-2 rounded-xl text-xs md:text-sm uppercase tracking-[0.15em] font-medium transition border ${
-                      active
-                        ? 'bg-[#B03E00] border-[#B03E00] text-white'
-                        : 'bg-[#3a3b3f] border-[#C0C0C0]/30 text-[#B03E00] hover:border-[#B03E00]'
-                    }`}>
-                    <span className="mr-1">{cat.icon}</span>{cat.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Timeline mois par mois */}
+            {/* Timeline mois par mois (sans filtre — affiche TOUT) */}
             <div className="space-y-12">
-              {MONTHS_2027.map((month) => {
+              {MONTHS_2027.map((month, mi) => {
                 const events = regattasByMonth[month.key];
                 if (!events || events.length === 0) return null;
                 return (
                   <div key={month.key}>
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="flex-1 h-px bg-[#C0C0C0]/20" />
-                      <h3 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#acb0cd] italic">
-                        {month.label}
-                      </h3>
-                      <div className="flex-1 h-px bg-[#C0C0C0]/20" />
-                    </div>
+                    <MonthHeaderCarousel label={month.label} startIndex={mi % 8} />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
                       {events.map((event) => (
                         <RegattaEventCard key={event.id} event={event} />
@@ -841,7 +850,7 @@ export default function RegattasCaribbeanA() {
                 );
               })}
               {Object.keys(regattasByMonth).length === 0 && (
-                <p className="text-center text-[#acb0cd]/60 italic py-8">No events match this filter.</p>
+                <p className="text-center text-[#acb0cd]/60 italic py-8">No events found.</p>
               )}
             </div>
           </div>
