@@ -840,7 +840,13 @@ export default function RegattasCaribbeanA() {
                 if (!events || events.length === 0) return null;
                 return (
                   <div key={month.key}>
-                    <MonthHeaderCarousel label={month.label} startIndex={mi % 8} />
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="flex-1 h-px bg-[#C0C0C0]/20" />
+                      <h3 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#acb0cd] italic">
+                        {month.label}
+                      </h3>
+                      <div className="flex-1 h-px bg-[#C0C0C0]/20" />
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
                       {events.map((event) => (
                         <RegattaEventCard key={event.id} event={event} />
