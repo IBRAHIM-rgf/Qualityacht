@@ -52,14 +52,13 @@ export default function Page() {
           <BackButton />
         </div>
 
-        <div className="flex items-center gap-3 mb-3">
-          <Info className="w-7 h-7 text-[#B03E00] shrink-0" />
-          <h1 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.1em] text-[#C0C0C0]">
+        <div className="flex items-center justify-center mb-3">
+          <h1 className="trajan-regular text-xl md:text-4xl uppercase tracking-[0.1em] text-[#C0C0C0] whitespace-nowrap">
             Understanding Your Charter Investment
           </h1>
         </div>
-        <div className="relative w-40 h-7 mt-2 mb-8">
-          <Image src="/images/title-line.png" alt="" fill className="object-contain object-left" />
+        <div className="relative w-40 h-7 mt-2 mb-8 mx-auto">
+          <Image src="/images/title-line.png" alt="" fill className="object-contain" />
         </div>
 
         <p className="text-base md:text-lg leading-relaxed text-[#acb0cd] mb-12">
@@ -81,14 +80,13 @@ export default function Page() {
 
         {/* ══ Calculateur interactif ══ */}
         <div className="mt-14 mb-10">
-          <div className="flex items-center gap-3 mb-3">
-            <Info className="w-6 h-6 text-[#B03E00] shrink-0" />
+          <div className="flex items-center justify-center mb-3">
             <h2 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.1em] text-[#C0C0C0]">
               Charter Cost Estimator
             </h2>
           </div>
-          <div className="relative w-32 h-6 mb-6">
-            <Image src="/images/title-line.png" alt="" fill className="object-contain object-left" />
+          <div className="relative w-32 h-6 mb-6 mx-auto">
+            <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
           <p className="text-sm md:text-base text-[#acb0cd]/80 leading-relaxed mb-6">
             Estimate the full cost of a luxury yacht charter — adjust parameters below to see how charter fee,
@@ -105,7 +103,7 @@ export default function Page() {
           </p>
           <div className="mt-5">
             <Link href="/request-quote-test-v10"
-              className="inline-flex items-center gap-2 rounded-lg border-2 border-[#C0C0C0] px-6 py-2.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] hover:bg-[#B03E00]/10 transition-colors">
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-[#C0C0C0] px-6 py-2.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-colors">
               Request a Quote
             </Link>
           </div>

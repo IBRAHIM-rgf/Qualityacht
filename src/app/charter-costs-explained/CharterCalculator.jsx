@@ -92,9 +92,9 @@ function Toggle({ checked, onChange, id }) {
   return (
     <label htmlFor={id} className="relative inline-block w-9 h-5 cursor-pointer shrink-0">
       <input id={id} type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="opacity-0 w-0 h-0" />
-      <span className={`absolute inset-0 rounded-full transition-all border ${checked ? 'border-[#c2622a]' : 'border-[#C0C0C0]/30'}`}
-            style={{ background: checked ? 'rgba(194,98,42,0.15)' : '#26272a' }}>
-        <span className={`absolute top-[3px] w-3 h-3 rounded-full transition-all ${checked ? 'left-[19px] bg-[#c2622a]' : 'left-[3px] bg-[#C0C0C0]/70'}`} />
+      <span className={`absolute inset-0 rounded-full transition-all border ${checked ? 'border-[#C0C0C0]' : 'border-[#C0C0C0]/30'}`}
+            style={{ background: '#26272a' }}>
+        <span className={`absolute top-[3px] w-3 h-3 rounded-full transition-all ${checked ? 'left-[19px] bg-[#C0C0C0]' : 'left-[3px] bg-[#C0C0C0]/70'}`} />
       </span>
     </label>
   );
@@ -144,9 +144,8 @@ export default function CharterCalculator() {
     <div className="space-y-6">
       {/* ══ CHARTER PARAMETERS ══ */}
       <div className="rounded-xl border border-[#C0C0C0]/40 bg-[#3a3b3f] p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center justify-center mb-6">
           <span className="text-[10px] tracking-[0.15em] uppercase text-[#c2622a]">Charter Parameters</span>
-          <span className="flex-1 h-px bg-[#C0C0C0]/20" />
         </div>
 
         <Row label="Charter Fee (per week)" hint="Vessel, captain & crew, standard equipment" value={fmt(charter)}>
@@ -164,7 +163,7 @@ export default function CharterCalculator() {
           <Toggle id="vat-toggle" checked={vatOn} onChange={setVatOn} />
           <label htmlFor="vat-toggle" className="text-sm text-[#acb0cd] cursor-pointer">
             Sales Tax / VAT
-            <span className="ml-2 inline-block text-[10px] tracking-wide px-2 py-0.5 rounded border border-[#c2622a]/40 bg-[#c2622a]/10 text-[#c2622a] uppercase">
+            <span className="ml-2 inline-block text-[10px] tracking-wide px-2 py-0.5 rounded border border-[#c2622a]/40 text-[#c2622a] uppercase">
               {vatBadge}
             </span>
           </label>
@@ -188,7 +187,7 @@ export default function CharterCalculator() {
             {vatTab === 'country' && (
               <div>
                 {selectedCountry !== null && (
-                  <div className="flex items-center justify-between rounded border border-[#c2622a]/40 bg-[#c2622a]/10 px-4 py-2.5 mb-3">
+                  <div className="flex items-center justify-between rounded border border-[#c2622a]/40 px-4 py-2.5 mb-3">
                     <div>
                       <div className="text-sm text-[#c2622a]">{COUNTRIES[selectedCountry].name}</div>
                       <div className="text-[11px] text-[#acb0cd]/60 mt-0.5">{COUNTRIES[selectedCountry].region}</div>
@@ -216,7 +215,7 @@ export default function CharterCalculator() {
                       key={c.idx}
                       type="button"
                       onClick={() => setSelectedCountry(c.idx)}
-                      className={`flex items-center justify-between px-3 py-2 rounded border text-left transition-all ${selectedCountry === c.idx ? 'border-[#c2622a] bg-[#c2622a]/10' : 'border-[#C0C0C0]/15 bg-white/[0.02] hover:border-[#c2622a]/40 hover:bg-[#c2622a]/5'}`}
+                      className={`flex items-center justify-between px-3 py-2 rounded border text-left transition-all ${selectedCountry === c.idx ? 'border-[#C0C0C0] bg-white/[0.02]' : 'border-[#C0C0C0]/15 bg-white/[0.02] hover:border-[#c2622a]/40'}`}
                     >
                       <div>
                         <div className="text-xs text-[#acb0cd]">{c.name}</div>
@@ -263,9 +262,8 @@ export default function CharterCalculator() {
 
       {/* ══ COST SUMMARY ══ */}
       <div className="rounded-xl border border-[#C0C0C0]/40 bg-[#3a3b3f] p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center justify-center mb-6">
           <span className="text-[10px] tracking-[0.15em] uppercase text-[#c2622a]">Cost Summary</span>
-          <span className="flex-1 h-px bg-[#C0C0C0]/20" />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -301,9 +299,8 @@ export default function CharterCalculator() {
 
       {/* ══ SIMULATION TABLE ══ */}
       <div className="rounded-xl border border-[#C0C0C0]/40 bg-[#3a3b3f] p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center justify-center mb-3">
           <span className="text-[10px] tracking-[0.15em] uppercase text-[#c2622a]">Multi-Destination VAT Simulation</span>
-          <span className="flex-1 h-px bg-[#C0C0C0]/20" />
         </div>
         <p className="text-xs text-[#acb0cd]/60 mb-5">
           Total charter cost across key destinations — based on your current parameters. Highlighted row = active selection.
@@ -327,11 +324,11 @@ export default function CharterCalculator() {
                 const totalRow = baseNoVat + vatAmt;
                 const isCurrent = vatOn && Math.abs(d.rate - vatRate) < 0.01;
                 return (
-                  <tr key={d.name} className={`border-t border-[#C0C0C0]/10 ${isCurrent ? 'bg-[#c2622a]/10' : ''}`}>
+                  <tr key={d.name} className={`border-t border-[#C0C0C0]/10 ${isCurrent ? 'bg-white/5' : ''}`}>
                     <td className={`py-2.5 pr-3 ${isCurrent ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
                       {d.name}
                       {isCurrent && (
-                        <span className="ml-2 text-[9px] uppercase px-1.5 py-0.5 rounded bg-[#c2622a]/20 text-[#c2622a]">Selected</span>
+                        <span className="ml-2 text-[9px] uppercase px-1.5 py-0.5 rounded bg-[#C0C0C0]/15 text-[#c2622a]">Selected</span>
                       )}
                     </td>
                     <td className={`py-2.5 px-3 text-right ${isCurrent ? 'text-[#c2622a]' : 'text-[#acb0cd]/70'}`}>{d.rate > 0 ? d.rate + '%' : '—'}</td>
@@ -350,18 +347,20 @@ export default function CharterCalculator() {
       <style jsx global>{`
         input[type=range]::-webkit-slider-thumb {
           -webkit-appearance: none;
-          width: 16px;
-          height: 16px;
-          background: #c2622a;
-          border-radius: 50%;
+          width: 13px;
+          height: 13px;
+          background: #B03E00;
+          border-radius: 2px;
+          transform: rotate(45deg);
           cursor: pointer;
           border: 1px solid #C0C0C0;
         }
         input[type=range]::-moz-range-thumb {
-          width: 16px;
-          height: 16px;
-          background: #c2622a;
-          border-radius: 50%;
+          width: 13px;
+          height: 13px;
+          background: #B03E00;
+          border-radius: 2px;
+          transform: rotate(45deg);
           cursor: pointer;
           border: 1px solid #C0C0C0;
         }
@@ -389,7 +388,7 @@ function Divider() {
 
 function Metric({ label, value }) {
   return (
-    <div className="rounded border border-[#c2622a]/30 bg-[#c2622a]/5 px-4 py-3 text-center">
+    <div className="rounded border border-[#c2622a]/30 px-4 py-3 text-center">
       <div className="text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1.5">{label}</div>
       <div className="text-base md:text-lg text-[#c2622a]">{value}</div>
     </div>
