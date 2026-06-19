@@ -661,21 +661,24 @@ function RegattaEventCard({ event, index = 0 }) {
   const delay = (index * 1.5) % 7;
   return (
     <div className="rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60">
-      {/* Photo header : photos originales couleur (non filtrees) + texte qui apparait/disparait */}
+      {/* Photo header : photos originales couleur translucides + texte cococo en gras */}
       <div className="relative h-44 md:h-52 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${encodeURI(photoSrc)}')` }}
+          style={{
+            backgroundImage: `url('${encodeURI(photoSrc)}')`,
+            opacity: 0.55,
+          }}
         />
         {/* Voile sombre pour la lisibilite du texte overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/30 via-[#26272a]/15 to-[#26272a]/65" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/40 via-[#26272a]/25 to-[#26272a]/75" />
 
         {/* Date pill (toujours visible) */}
         <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-white whitespace-nowrap shadow-lg z-10">
           {event.dates}
         </span>
 
-        {/* Texte centre qui apparait/disparait en boucle */}
+        {/* Texte centre qui apparait/disparait en boucle (cococo en gras) */}
         <div
           className="absolute inset-0 flex flex-col items-center justify-center text-center px-5"
           style={{
@@ -683,10 +686,10 @@ function RegattaEventCard({ event, index = 0 }) {
             animationDelay: `${delay}s`,
           }}
         >
-          <h4 className="trajan-regular text-sm md:text-base uppercase tracking-[0.12em] text-[#acb0cd] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+          <h4 className="trajan-regular font-bold text-sm md:text-base uppercase tracking-[0.12em] text-[#C0C0C0] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
             {event.name}
           </h4>
-          <p className="trajan-regular text-base md:text-xl uppercase tracking-[0.15em] text-[#acb0cd] mt-3 flex items-center justify-center gap-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+          <p className="trajan-regular font-bold text-base md:text-xl uppercase tracking-[0.15em] text-[#C0C0C0] mt-3 flex items-center justify-center gap-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
             <MapPin className="w-4 h-4 md:w-5 md:h-5 inline" /> {event.island}
           </p>
         </div>
