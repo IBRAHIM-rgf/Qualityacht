@@ -606,15 +606,15 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
   );
 }
 
-// ── Header de mois avec carousel des 8 photos Caraibes en background ──────────
+// ── 8 photos originales couleur (versions -original, non filtrees) ─────────────
 const CARIBBEAN_HEADER_PHOTOS = [
-  '/images/pagesCaraibes/greater_antilles.png',
-  '/images/pagesCaraibes/leeward_island.png',
-  '/images/pagesCaraibes/leeward_antilles.png',
-  '/images/pagesCaraibes/windward_island.png',
-  '/images/pagesCaraibes/turks_caicos.png',
-  '/images/pagesCaraibes/unnamed.jpg',
-  '/images/pagesCaraibes/grand_cayman.png',
+  '/images/destinations/gretar antilles-original.jpg',
+  '/images/destinations/Leeward Islands-original.jpg',
+  '/images/destinations/The Leeward Antilles-original.jpg',
+  '/images/destinations/the Windward Islands-original.jpg',
+  '/images/destinations/Turks and Caicos-original.jpg',
+  '/images/destinations/Trinidad and Tobago-original.jpg',
+  '/images/destinations/Cayman Islands-original.jpg',
   '/images/pagesCaraibes/emergency.png',
 ];
 
@@ -661,18 +661,14 @@ function RegattaEventCard({ event, index = 0 }) {
   const delay = (index * 1.5) % 7;
   return (
     <div className="rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60">
-      {/* Photo header : photo translucide/effacée + texte qui apparait et disparait */}
+      {/* Photo header : photos originales couleur (non filtrees) + texte qui apparait/disparait */}
       <div className="relative h-44 md:h-52 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url('${photoSrc}')`,
-            opacity: 0.45,
-            filter: 'grayscale(35%) blur(1px) brightness(0.85)',
-          }}
+          style={{ backgroundImage: `url('${encodeURI(photoSrc)}')` }}
         />
-        {/* Voile sombre supplementaire pour adoucir */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/40 via-[#26272a]/20 to-[#26272a]/70" />
+        {/* Voile sombre pour la lisibilite du texte overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/30 via-[#26272a]/15 to-[#26272a]/65" />
 
         {/* Date pill (toujours visible) */}
         <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-white whitespace-nowrap shadow-lg z-10">
