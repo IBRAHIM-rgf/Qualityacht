@@ -129,6 +129,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
     contact_info = null,
     commission_rate = null,
     category = null,
+    categories = null,
     tags = null,
     region = null,
     sub_region = null,
@@ -150,6 +151,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
         contact_info = COALESCE(${contact_info}, contact_info),
         commission_rate = COALESCE(${commission_rate}, commission_rate),
         category = COALESCE(${category}, category),
+        categories = COALESCE(${categories === null || categories === undefined ? null : JSON.stringify(categories)}::jsonb, categories),
         tags = COALESCE(${tags}, tags),
         region = COALESCE(${region}, region),
         sub_region = COALESCE(${sub_region}, sub_region),
@@ -283,7 +285,7 @@ export async function getSelectedYachtsWithData() {
     const rows = await sql`
       SELECT
         yacht_id, yacht_name, is_visible, is_featured, display_order,
-        category, tags, custom_title, custom_description, custom_price,
+        category, categories, tags, custom_title, custom_description, custom_price,
         custom_highlights, internal_notes, cached_data, light_data, ankor_region,
         region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info,
         created_at, updated_at
@@ -462,6 +464,8 @@ export async function ensureV3Schema() {
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS ankor_region VARCHAR(50)`;
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS light_data JSONB`;
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS full_data JSONB`;
+  // Axe "catégories charter" (multi-sélection, indépendant des régions géo) : tableau JSONB de clés.
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS categories JSONB DEFAULT '[]'::jsonb`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_ankor_region ON yacht_selections(ankor_region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_region ON yacht_selections(region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_sub_region ON yacht_selections(sub_region)`;

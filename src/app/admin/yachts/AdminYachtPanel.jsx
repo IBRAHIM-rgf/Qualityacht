@@ -54,6 +54,42 @@ const SUB_REGIONS_BY_REGION = {
   bahamas: ['nassau', 'exumas', 'abacos', 'eleuthera'],
 };
 
+// Axe "Catégories charter" — indépendant des régions géo, multi-sélection.
+// Un yacht peut appartenir à plusieurs catégories. 'Only for You' a des sous-catégories
+// (clés préfixées 'only-for-you/...'). Les clés sont stockées à plat dans categories[].
+const CHARTER_CATEGORIES = [
+  { id: 'only-for-couple', label: 'Only for Couple' },
+  {
+    id: 'only-for-you', label: 'Only for You',
+    subs: [
+      { id: 'only-for-you/classic-sailing-yacht', label: 'Classic Sailing Yacht' },
+      { id: 'only-for-you/catamaran',             label: 'Catamaran' },
+      { id: 'only-for-you/trimaran',              label: 'Trimaran' },
+      { id: 'only-for-you/sport-classic',         label: 'Sport Classic Yacht' },
+      { id: 'only-for-you/traditional',           label: 'Traditional Sailboat' },
+      { id: 'only-for-you/regatta',               label: 'Sailboat Regatta' },
+    ],
+  },
+  { id: 'last-minute',  label: 'Last Minute Charter' },
+  { id: 'accessible',   label: 'Accessible Yacht Charter' },
+];
+
+// Map clé → libellé lisible (sections + sous-catégories).
+const CATEGORY_LABELS = CHARTER_CATEGORIES.reduce((acc, c) => {
+  acc[c.id] = c.label;
+  (c.subs || []).forEach((s) => { acc[s.id] = `${c.label} › ${s.label}`; });
+  return acc;
+}, {});
+
+// Parse robuste d'une valeur categories venant de la BDD (JSONB array, string, ou null).
+function parseCategories(raw) {
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw === 'string') {
+    try { const v = JSON.parse(raw); return Array.isArray(v) ? v : []; } catch { return []; }
+  }
+  return [];
+}
+
 // Adapte une row BDD au format yacht-like utilisé par l'UI
 function adaptYacht(s) {
   const parse = (raw) => {
@@ -81,6 +117,7 @@ function adaptYacht(s) {
     custom_title: s.custom_title || '',
     custom_price: s.custom_price || '',
     custom_description: s.custom_description || '',
+    categories: parseCategories(s.categories),
     pets_allowed: s.pets_allowed,
     groups_allowed: s.groups_allowed,
     water_toys: s.water_toys,
@@ -99,12 +136,14 @@ function Dashboard({ yachts }) {
     const featured = yachts.filter(y => y.is_featured && y.is_visible).length;
     const byRegion = {};
     const bySubRegion = {};
+    const byCategory = {};
     for (const y of yachts) {
       const r = y.region || '_none';
       byRegion[r] = (byRegion[r] || 0) + 1;
       if (y.sub_region) bySubRegion[y.sub_region] = (bySubRegion[y.sub_region] || 0) + 1;
+      for (const c of (y.categories || [])) byCategory[c] = (byCategory[c] || 0) + 1;
     }
-    return { total, visible, hidden, featured, byRegion, bySubRegion };
+    return { total, visible, hidden, featured, byRegion, bySubRegion, byCategory };
   }, [yachts]);
 
   return (
@@ -162,6 +201,20 @@ function Dashboard({ yachts }) {
               </span>
             ))}
           </div>
+        </div>
+      </div>
+
+      <div className="mt-4">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-2">Répartition par catégorie charter</p>
+        <div className="flex flex-wrap gap-2">
+          {Object.keys(stats.byCategory).length === 0 ? (
+            <span className="text-[#acb0cd]/50 text-xs italic">Aucune catégorie assignée</span>
+          ) : Object.entries(stats.byCategory).map(([c, count]) => (
+            <span key={c} className="px-3 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#3a3b3f] text-xs">
+              <span className="text-[#acb0cd]">{CATEGORY_LABELS[c] || c}</span>
+              <span className="text-[#B03E00] font-bold ml-2">{count}</span>
+            </span>
+          ))}
         </div>
       </div>
     </div>
@@ -443,6 +496,7 @@ function EditModal({ yacht, onClose, onSave }) {
     custom_price: yacht.custom_price || '',
     region: yacht.region || '',
     sub_region: yacht.sub_region || '',
+    categories: Array.isArray(yacht.categories) ? yacht.categories : [],
     pets_allowed: !!yacht.pets_allowed,
     groups_allowed: !!yacht.groups_allowed,
     water_toys: !!yacht.water_toys,
@@ -450,6 +504,14 @@ function EditModal({ yacht, onClose, onSave }) {
   });
   const [saving, setSaving] = useState(false);
   const availableSubRegions = SUB_REGIONS_BY_REGION[form.region] || [];
+
+  const hasCategory = (id) => form.categories.includes(id);
+  const toggleCategory = (id) => setForm((f) => ({
+    ...f,
+    categories: f.categories.includes(id)
+      ? f.categories.filter((c) => c !== id)
+      : [...f.categories, id],
+  }));
 
   const save = async () => {
     setSaving(true);
@@ -501,6 +563,31 @@ function EditModal({ yacht, onClose, onSave }) {
               </div>
             )}
           </div>
+          {/* Catégories charter (multi-sélection, indépendant des régions) */}
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Catégories charter</label>
+            <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-3">
+              {CHARTER_CATEGORIES.map((cat) => (
+                <div key={cat.id}>
+                  <label className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input type="checkbox" checked={hasCategory(cat.id)} onChange={() => toggleCategory(cat.id)} className="w-4 h-4 accent-[#B03E00]" />
+                    <span className={hasCategory(cat.id) ? 'text-[#B03E00] font-medium' : 'text-[#acb0cd]'}>{cat.label}</span>
+                  </label>
+                  {cat.subs && (
+                    <div className="mt-2 ml-6 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                      {cat.subs.map((sub) => (
+                        <label key={sub.id} className="flex items-center gap-2 text-xs cursor-pointer">
+                          <input type="checkbox" checked={hasCategory(sub.id)} onChange={() => toggleCategory(sub.id)} className="w-3.5 h-3.5 accent-[#B03E00]" />
+                          <span className={hasCategory(sub.id) ? 'text-[#B03E00]' : 'text-[#acb0cd]/80'}>{sub.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="bg-[#3a3b3f] rounded-lg p-3 grid grid-cols-3 gap-2">
             <label className="flex items-center gap-2 text-sm cursor-pointer">
               <input type="checkbox" checked={form.pets_allowed} onChange={e => setForm({ ...form, pets_allowed: e.target.checked })} className="w-4 h-4" />
