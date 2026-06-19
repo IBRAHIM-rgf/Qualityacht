@@ -47,11 +47,10 @@ const SECTIONS = [
 export default function Page() {
   return (
     <div className="min-h-screen bg-[#26272a] text-[#acb0cd] pt-24 pb-20 px-4">
+      <div className="mb-8">
+        <BackButton />
+      </div>
       <div className="max-w-3xl mx-auto">
-        <div className="mb-8">
-          <BackButton />
-        </div>
-
         <div className="flex items-center justify-center mb-3">
           <h1 className="trajan-regular text-xl md:text-4xl uppercase tracking-[0.1em] text-[#C0C0C0] whitespace-nowrap">
             Understanding Your Charter Investment

@@ -874,7 +874,7 @@ export default function RegattasCaribbeanA() {
                       </h3>
                       <div className="flex-1 h-px bg-[#C0C0C0]/20" />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 items-start">
                       {events.map((event, ei) => (
                         <RegattaEventCard key={event.id} event={event} index={mi * 2 + ei} />
                       ))}

@@ -338,8 +338,8 @@ export default function CharterCalculator() {
       <style jsx global>{`
         input[type=range]::-webkit-slider-thumb {
           -webkit-appearance: none;
-          width: 13px;
-          height: 13px;
+          width: 10px;
+          height: 10px;
           background: #B03E00;
           border-radius: 2px;
           transform: rotate(45deg);
@@ -347,8 +347,8 @@ export default function CharterCalculator() {
           border: 1px solid #C0C0C0;
         }
         input[type=range]::-moz-range-thumb {
-          width: 13px;
-          height: 13px;
+          width: 10px;
+          height: 10px;
           background: #B03E00;
           border-radius: 2px;
           transform: rotate(45deg);
