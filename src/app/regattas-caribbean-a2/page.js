@@ -686,18 +686,17 @@ function RegattaEventCard({ event, index = 0 }) {
           <h4 className="trajan-regular text-sm md:text-base uppercase tracking-[0.12em] text-[#acb0cd] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
             {event.name}
           </h4>
-          <p className="text-[10px] md:text-xs text-[#acb0cd]/85 mt-2 flex items-center justify-center gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-            <MapPin className="w-3 h-3 inline" /> {event.island}
+          <p className="trajan-regular text-base md:text-xl uppercase tracking-[0.15em] text-[#acb0cd] mt-3 flex items-center justify-center gap-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            <MapPin className="w-4 h-4 md:w-5 md:h-5 inline" /> {event.island}
           </p>
         </div>
       </div>
-      <div className="px-5 pb-4 flex flex-wrap gap-1.5">
+      <div className="px-5 pt-4 pb-4 flex flex-wrap gap-1.5">
         {event.categories.map((catKey) => {
           const cat = getCategoryInfo(catKey);
           if (!cat) return null;
           return (
-            <span key={catKey} className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-wide bg-[#26272a] border border-[#C0C0C0]/20 text-[#acb0cd]">
-              <span>{cat.icon}</span>
+            <span key={catKey} className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-wide bg-[#26272a] border border-[#C0C0C0]/20 text-[#acb0cd]">
               {cat.label}
             </span>
           );
