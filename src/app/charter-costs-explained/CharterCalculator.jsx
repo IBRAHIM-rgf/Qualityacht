@@ -134,12 +134,6 @@ export default function CharterCalculator() {
     );
   }, [search]);
 
-  const vatBadge = vatOn
-    ? (selectedCountry !== null
-        ? `${COUNTRIES[selectedCountry].rate}% — ${COUNTRIES[selectedCountry].name}`
-        : 'On')
-    : 'Off';
-
   return (
     <div className="space-y-6">
       {/* ══ CHARTER PARAMETERS ══ */}
@@ -163,9 +157,6 @@ export default function CharterCalculator() {
           <Toggle id="vat-toggle" checked={vatOn} onChange={setVatOn} />
           <label htmlFor="vat-toggle" className="text-sm text-[#acb0cd] cursor-pointer">
             Sales Tax / VAT
-            <span className="ml-2 inline-block text-[10px] tracking-wide px-2 py-0.5 rounded border border-[#c2622a]/40 text-[#c2622a] uppercase">
-              {vatBadge}
-            </span>
           </label>
         </div>
 
