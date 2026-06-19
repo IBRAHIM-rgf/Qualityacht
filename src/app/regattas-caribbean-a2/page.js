@@ -653,30 +653,47 @@ function MonthHeaderCarousel({ label, startIndex = 0 }) {
   );
 }
 
-// ── Card d'une regatte (calendrier) avec PHOTO header (A2) ─────────────────────
+// ── Card d'une regatte (calendrier) avec PHOTO + texte fade in/out (A2) ────────
 function RegattaEventCard({ event, index = 0 }) {
   const [open, setOpen] = useState(false);
   const photoSrc = CARIBBEAN_HEADER_PHOTOS[index % CARIBBEAN_HEADER_PHOTOS.length];
+  // Decale la fade animation par event pour un effet desynchronise.
+  const delay = (index * 1.5) % 7;
   return (
     <div className="rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60">
-      {/* Photo header avec date pill en overlay */}
-      <div className="relative h-32 md:h-40 overflow-hidden">
+      {/* Photo header : photo translucide/effacée + texte qui apparait et disparait */}
+      <div className="relative h-44 md:h-52 overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"
-          style={{ backgroundImage: `url('${photoSrc}')` }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('${photoSrc}')`,
+            opacity: 0.45,
+            filter: 'grayscale(35%) blur(1px) brightness(0.85)',
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#26272a]/90 via-[#26272a]/30 to-transparent" />
-        <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-white whitespace-nowrap shadow-lg">
+        {/* Voile sombre supplementaire pour adoucir */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/40 via-[#26272a]/20 to-[#26272a]/70" />
+
+        {/* Date pill (toujours visible) */}
+        <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-white whitespace-nowrap shadow-lg z-10">
           {event.dates}
         </span>
-      </div>
-      <div className="px-5 py-4">
-        <h4 className="trajan-regular text-base md:text-lg uppercase tracking-[0.1em] text-[#acb0cd] leading-snug">
-          {event.name}
-        </h4>
-        <p className="text-[11px] md:text-xs text-[#acb0cd]/60 mt-1 flex items-center gap-1">
-          <MapPin className="w-3 h-3 inline" /> {event.island}
-        </p>
+
+        {/* Texte centre qui apparait/disparait en boucle */}
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center text-center px-5"
+          style={{
+            animation: 'cardTextFade 7s ease-in-out infinite',
+            animationDelay: `${delay}s`,
+          }}
+        >
+          <h4 className="trajan-regular text-sm md:text-base uppercase tracking-[0.12em] text-[#acb0cd] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            {event.name}
+          </h4>
+          <p className="text-[10px] md:text-xs text-[#acb0cd]/85 mt-2 flex items-center justify-center gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+            <MapPin className="w-3 h-3 inline" /> {event.island}
+          </p>
+        </div>
       </div>
       <div className="px-5 pb-4 flex flex-wrap gap-1.5">
         {event.categories.map((catKey) => {
@@ -749,6 +766,10 @@ export default function RegattasCaribbeanA() {
         .reveal-up.revealed { opacity: 1; transform: translateY(0); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes cardTextFade {
+          0%, 100% { opacity: 0; }
+          25%, 75% { opacity: 1; }
+        }
       `}</style>
 
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
