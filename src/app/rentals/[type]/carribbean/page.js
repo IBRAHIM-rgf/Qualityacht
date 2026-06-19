@@ -13,37 +13,39 @@ import {
   getCategoryInfo,
 } from '../../../regattas-caribbean-shared/regattas-data';
 
-// ── Mapping region : island -> photo + slug page sous-region ──────────────────
-// Le slug reste fidele a la geographie (route SubregionClient).
-// La photo varie pour exploiter les 8 visuels Caraibes (greater-antilles,
-// leeward-islands, leeward-antilles, windward-islands, turks-caicos,
-// trinidad-tobago, cayman, emerging) au lieu de n'en utiliser que 2.
+// ── Mapping region : island -> photos (originelle + filtree) + slug ───────────
+// Pour chaque region : photoOriginal = version couleur,
+// photoFiltered = version graphique (pagesCaraibes/*). L'alternance entre les
+// deux est decidee par la card (index % 2) pour creer du contraste cote a cote.
+const REGION_VISUALS = {
+  greaterAntilles: { original: '/images/destinations/gretar antilles-original.jpg',     filtered: '/images/pagesCaraibes/greater_antilles.png' },
+  leeward:         { original: '/images/destinations/Leeward Islands-original.jpg',     filtered: '/images/pagesCaraibes/leeward_island.png'   },
+  leewardAntilles: { original: '/images/destinations/The Leeward Antilles-original.jpg', filtered: '/images/pagesCaraibes/leeward_antilles.png' },
+  windward:        { original: '/images/destinations/the Windward Islands-original.jpg', filtered: '/images/pagesCaraibes/windward_island.png'  },
+  turksCaicos:     { original: '/images/destinations/Turks and Caicos-original.jpg',    filtered: '/images/pagesCaraibes/turks_caicos.png'     },
+  trinidad:        { original: '/images/destinations/Trinidad and Tobago-original.jpg', filtered: '/images/pagesCaraibes/unnamed.jpg'          },
+  cayman:          { original: '/images/destinations/Cayman Islands-original.jpg',      filtered: '/images/pagesCaraibes/grand_cayman.png'     },
+  emerging:        { original: '/images/pagesCaraibes/emergency.png',                    filtered: '/images/pagesCaraibes/emergencyfilter.jpg'  },
+};
+
 function getRegionInfo(island) {
-  if (!island)                                     return { photo: '/images/destinations/gretar antilles-original.jpg', slug: 'greater-antilles', name: 'Greater Antilles' };
-  // Barbados : destination east-Caribbean unique -> visuel Emerging Destinations
-  if (/Barbados/.test(island))                     return { photo: '/images/pagesCaraibes/emergency.png',                slug: 'windward-islands', name: 'Windward Islands' };
-  // Grenade : south Caribbean, proche de Trinidad -> visuel Trinidad & Tobago
-  if (/Grenad/.test(island))                       return { photo: '/images/destinations/Trinidad and Tobago-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
-  // Leeward classiques (Sint Maarten, Antigua, St Barth) -> visuel Leeward Islands
-  if (/Sint Maarten|St\.? ?Maarten/.test(island))  return { photo: '/images/destinations/Leeward Islands-original.jpg',  slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/Antigua/.test(island))                      return { photo: '/images/destinations/Leeward Islands-original.jpg',  slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/Saint-Barth|St\.? ?Barth/.test(island))     return { photo: '/images/destinations/Leeward Islands-original.jpg',  slug: 'leeward-islands',  name: 'Leeward Islands' };
-  // USVI/BVI : entre Greater et Leeward Antilles -> visuel Greater Antilles
-  if (/\bUSVI\b|St\.? ?Thomas/.test(island))       return { photo: '/images/destinations/gretar antilles-original.jpg',  slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/\bBVI\b|Tortola/.test(island))              return { photo: '/images/destinations/gretar antilles-original.jpg',  slug: 'leeward-islands',  name: 'Leeward Islands' };
-  // Windward classiques (Martinique, St Vincent) -> visuel Windward Islands
-  if (/Martinique|Schoelcher/.test(island))        return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
-  if (/St\.? ?Vincent|Grenadines/.test(island))    return { photo: '/images/destinations/the Windward Islands-original.jpg', slug: 'windward-islands', name: 'Windward Islands' };
-  // St Lucia : sud-Windward avec Pitons UNESCO -> visuel Cayman Islands (cote rocheuse)
-  if (/St\.? ?Lucia/.test(island))                 return { photo: '/images/destinations/Cayman Islands-original.jpg',   slug: 'windward-islands', name: 'Windward Islands' };
-  // Aruba/Bonaire/Curacao (ABC) -> visuel Leeward Antilles
-  if (/Aruba|Bonaire|Cura/.test(island))           return { photo: '/images/destinations/The Leeward Antilles-original.jpg', slug: 'leeward-antilles', name: 'Leeward Antilles' };
-  // Bahamas-area -> visuel Turks & Caicos
-  if (/Bahamas|Turks|Caicos/.test(island))         return { photo: '/images/destinations/Turks and Caicos-original.jpg',  slug: 'turks-caicos',     name: 'Turks & Caicos' };
-  if (/Trinidad|Tobago/.test(island))              return { photo: '/images/destinations/Trinidad and Tobago-original.jpg', slug: 'trinidad-tobago',  name: 'Trinidad & Tobago' };
-  if (/Cayman/.test(island))                       return { photo: '/images/destinations/Cayman Islands-original.jpg',   slug: 'grand-cayman',     name: 'Grand Cayman' };
-  if (/Cuba|Puerto Rico|Jamaica|Hispaniola/.test(island)) return { photo: '/images/destinations/gretar antilles-original.jpg', slug: 'greater-antilles', name: 'Greater Antilles' };
-  return { photo: '/images/pagesCaraibes/emergency.png', slug: 'emerging-destinations', name: 'Emerging Destinations' };
+  if (!island)                                     return { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' };
+  if (/Barbados/.test(island))                     return { visuals: REGION_VISUALS.emerging,        slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Grenad/.test(island))                       return { visuals: REGION_VISUALS.trinidad,        slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Sint Maarten|St\.? ?Maarten/.test(island))  return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/Antigua/.test(island))                      return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/Saint-Barth|St\.? ?Barth/.test(island))     return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/\bUSVI\b|St\.? ?Thomas/.test(island))       return { visuals: REGION_VISUALS.greaterAntilles, slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/\bBVI\b|Tortola/.test(island))              return { visuals: REGION_VISUALS.greaterAntilles, slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/Martinique|Schoelcher/.test(island))        return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
+  if (/St\.? ?Vincent|Grenadines/.test(island))    return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
+  if (/St\.? ?Lucia/.test(island))                 return { visuals: REGION_VISUALS.cayman,          slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Aruba|Bonaire|Cura/.test(island))           return { visuals: REGION_VISUALS.leewardAntilles, slug: 'leeward-antilles', name: 'Leeward Antilles' };
+  if (/Bahamas|Turks|Caicos/.test(island))         return { visuals: REGION_VISUALS.turksCaicos,     slug: 'turks-caicos',     name: 'Turks & Caicos' };
+  if (/Trinidad|Tobago/.test(island))              return { visuals: REGION_VISUALS.trinidad,        slug: 'trinidad-tobago',  name: 'Trinidad & Tobago' };
+  if (/Cayman/.test(island))                       return { visuals: REGION_VISUALS.cayman,          slug: 'grand-cayman',     name: 'Grand Cayman' };
+  if (/Cuba|Puerto Rico|Jamaica|Hispaniola/.test(island)) return { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' };
+  return { visuals: REGION_VISUALS.emerging, slug: 'emerging-destinations', name: 'Emerging Destinations' };
 }
 
 // Coordonnées d'une île par son nom (depuis map-data.js).
@@ -641,15 +643,17 @@ function RegattaEventCard({ event, index = 0 }) {
   const [open, setOpen] = useState(false);
   const info = getRegionInfo(event.island);
   const delay = (index * 1.5) % 7;
+  // Alterne original / filtre selon la parite de l'index pour contraste cote a cote.
+  const photoSrc = index % 2 === 0 ? info.visuals.original : info.visuals.filtered;
   return (
     <Link
       href={`/charters/destinations/carabbean/regatta/${event.id}`}
       className="block rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60 cursor-pointer"
     >
-      {/* Photo header : photo correspondant a la region */}
+      {/* Photo header : alterne entre version originale et filtree (contraste cote a cote) */}
       <div className="relative h-44 md:h-52 overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${encodeURI(info.photo)}')`, opacity: 0.55 }} />
+          style={{ backgroundImage: `url('${encodeURI(photoSrc)}')`, opacity: 0.55 }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/40 via-[#26272a]/25 to-[#26272a]/75" />
         <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-white whitespace-nowrap shadow-lg z-10">
           {event.dates}
