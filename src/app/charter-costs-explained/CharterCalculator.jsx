@@ -83,7 +83,7 @@ function Slider({ min, max, step, value, onChange }) {
       value={value}
       onChange={(e) => onChange(+e.target.value)}
       className="flex-1 h-1 rounded appearance-none cursor-pointer focus:outline-none"
-      style={{ background: `linear-gradient(to right, #c2622a 0%, #c2622a ${pct}%, #26272a ${pct}%)` }}
+      style={{ background: `linear-gradient(to right, #B03E00 0%, #B03E00 ${pct}%, #26272a ${pct}%)` }}
     />
   );
 }
@@ -168,7 +168,7 @@ export default function CharterCalculator() {
                   key={key}
                   type="button"
                   onClick={() => setVatTab(key)}
-                  className={`text-[11px] tracking-wider uppercase px-4 py-2 -mb-px border-b-2 transition-colors ${vatTab === key ? 'text-[#c2622a] border-[#c2622a]' : 'text-[#acb0cd]/60 border-transparent hover:text-[#acb0cd]'}`}
+                  className={`text-[11px] tracking-wider uppercase px-4 py-2 -mb-px border-b-2 transition-colors ${vatTab === key ? 'text-[#c2622a] border-[#C0C0C0]' : 'text-[#acb0cd]/60 border-transparent hover:text-[#acb0cd]'}`}
                 >
                   {label}
                 </button>
@@ -178,7 +178,7 @@ export default function CharterCalculator() {
             {vatTab === 'country' && (
               <div>
                 {selectedCountry !== null && (
-                  <div className="flex items-center justify-between rounded border border-[#c2622a]/40 px-4 py-2.5 mb-3">
+                  <div className="flex items-center justify-between rounded border border-[#C0C0C0] px-4 py-2.5 mb-3">
                     <div>
                       <div className="text-sm text-[#c2622a]">{COUNTRIES[selectedCountry].name}</div>
                       <div className="text-[11px] text-[#acb0cd]/60 mt-0.5">{COUNTRIES[selectedCountry].region}</div>
@@ -197,7 +197,7 @@ export default function CharterCalculator() {
                   placeholder="Search country..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full text-sm bg-[#26272a] border border-[#C0C0C0]/30 rounded px-3 py-2 text-[#acb0cd] placeholder-[#acb0cd]/30 outline-none focus:border-[#c2622a]/60 mb-3"
+                  className="w-full text-sm bg-[#26272a] border border-[#C0C0C0]/30 rounded px-3 py-2 text-[#acb0cd] placeholder-[#acb0cd]/30 outline-none focus:border-[#C0C0C0] mb-3"
                 />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-72 overflow-y-auto pr-1">
@@ -206,7 +206,7 @@ export default function CharterCalculator() {
                       key={c.idx}
                       type="button"
                       onClick={() => setSelectedCountry(c.idx)}
-                      className={`flex items-center justify-between px-3 py-2 rounded border text-left transition-all ${selectedCountry === c.idx ? 'border-[#C0C0C0] bg-white/[0.02]' : 'border-[#C0C0C0]/15 bg-white/[0.02] hover:border-[#c2622a]/40'}`}
+                      className={`flex items-center justify-between px-3 py-2 rounded border text-left transition-all ${selectedCountry === c.idx ? 'border-[#C0C0C0] bg-white/[0.02]' : 'border-[#C0C0C0]/15 bg-white/[0.02] hover:border-[#C0C0C0]/40'}`}
                     >
                       <div>
                         <div className="text-xs text-[#acb0cd]">{c.name}</div>
@@ -276,7 +276,7 @@ export default function CharterCalculator() {
             )}
             {repoOn && <BreakdownRow label="Delivery & Repositioning" value={fmt(repo)} />}
             <BreakdownRow label="Security Deposit (fully refundable)" value={fmt(deposit)} italic />
-            <tr className="border-t border-[#c2622a]/40">
+            <tr className="border-t border-[#C0C0C0]">
               <td className="text-[11px] uppercase tracking-wider text-[#c2622a] pt-4 pb-2">Estimated Total Commitment</td>
               <td className="text-right text-sm text-[#c2622a] pt-4 pb-2">{fmt(total)}</td>
             </tr>
@@ -379,7 +379,7 @@ function Divider() {
 
 function Metric({ label, value }) {
   return (
-    <div className="rounded border border-[#c2622a]/30 px-4 py-3 text-center">
+    <div className="rounded border border-[#C0C0C0] px-4 py-3 text-center">
       <div className="text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1.5">{label}</div>
       <div className="text-base md:text-lg text-[#c2622a]">{value}</div>
     </div>
