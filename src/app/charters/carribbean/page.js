@@ -34,7 +34,8 @@ const islandGroups = [
   { id: 4, name: 'Windward Islands',      islands: ['Dominica', 'Martinique', 'Saint Lucia', 'Saint Vincent & the Grenadines', 'Mustique', 'Canouan', 'Bequia', 'Tobago Cays', 'Grenada', 'Carriacou', 'Barbados'] },
   { id: 5, name: 'Turks & Caicos',        islands: ['Providenciales', 'Grand Turk', 'South Caicos', 'West Caicos'] },
   { id: 6, name: 'Trinidad & Tobago',     islands: ['Trinidad', 'Tobago'] },
-  { id: 7, name: 'Emerging Destinations', islands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero Island'] },
+  { id: 7, name: 'Grand Cayman',          islands: ['Grand Cayman', 'Cayman Brac', 'Little Cayman'] },
+  { id: 8, name: 'Emerging Destinations', islands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero Island'] },
 ];
 
 // ── Données cercles ────────────────────────────────────────────────────────────
@@ -661,12 +662,19 @@ export default function CaribbeanV15Page() {
         {/* ══ ACCORDÉONS destinations by region ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
-            <RevealBlock label="Archipelagos" title="Destinations by Region" sub="Seven groups — over 700 islands" />
-            {/* 3+3+1 centré — noms îles centrés sur mobile */}
+            <RevealBlock label="Archipelagos" title="Destinations by Region" sub="Eight groups — over 700 islands" />
+            {/* Layout 3+3 puis les 2 derniers (Grand Cayman + Emerging) centres */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
-              {islandGroups.map((group, i) => (
-                <div key={group.id} className={i === islandGroups.length - 1 ? 'md:col-start-2' : ''}>
+              {islandGroups.slice(0, -2).map((group, i) => (
+                <div key={group.id}>
                   <IslandGroup group={group} defaultOpen={i < 3} onIslandSelect={setActiveIsland} />
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 flex flex-wrap justify-center gap-x-12 gap-y-6">
+              {islandGroups.slice(-2).map((group) => (
+                <div key={group.id} className="w-full md:w-[calc((100%-3rem)/3)]">
+                  <IslandGroup group={group} defaultOpen={false} onIslandSelect={setActiveIsland} />
                 </div>
               ))}
             </div>
