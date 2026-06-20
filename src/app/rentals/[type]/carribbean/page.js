@@ -28,18 +28,28 @@ const REGION_VISUALS = {
   emerging:        { original: '/images/pagesCaraibes/emergency.png',                    filtered: '/images/pagesCaraibes/emergencyfilter.jpg'  },
 };
 
-function getRegionInfo(island) {
+// Override par event-id (cas particuliers : meme ile mais regions differentes)
+const EVENT_REGION_OVERRIDE = {
+  'stir':            { visuals: REGION_VISUALS.leewardAntilles, slug: 'leeward-antilles', name: 'Leeward Antilles' },
+  'bvi-spring-regatta': { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' },
+  'ior-st-thomas':   { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' },
+  'mango-bowl':      { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' },
+};
+
+function getRegionInfo(event) {
+  if (event && EVENT_REGION_OVERRIDE[event.id]) return EVENT_REGION_OVERRIDE[event.id];
+  const island = event?.island || '';
   if (!island)                                     return { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' };
   if (/Barbados/.test(island))                     return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
-  if (/Grenad/.test(island))                       return { visuals: REGION_VISUALS.trinidad,        slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Grenad/.test(island))                       return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
   if (/Sint Maarten|St\.? ?Maarten/.test(island))  return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
   if (/Antigua/.test(island))                      return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
   if (/Saint-Barth|St\.? ?Barth/.test(island))     return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/\bUSVI\b|St\.? ?Thomas/.test(island))       return { visuals: REGION_VISUALS.greaterAntilles, slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/\bBVI\b|Tortola/.test(island))              return { visuals: REGION_VISUALS.greaterAntilles, slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/\bUSVI\b|St\.? ?Thomas/.test(island))       return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
+  if (/\bBVI\b|Tortola/.test(island))              return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
   if (/Martinique|Schoelcher/.test(island))        return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
   if (/St\.? ?Vincent|Grenadines/.test(island))    return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
-  if (/St\.? ?Lucia/.test(island))                 return { visuals: REGION_VISUALS.cayman,          slug: 'windward-islands', name: 'Windward Islands' };
+  if (/St\.? ?Lucia/.test(island))                 return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
   if (/Aruba|Bonaire|Cura/.test(island))           return { visuals: REGION_VISUALS.leewardAntilles, slug: 'leeward-antilles', name: 'Leeward Antilles' };
   if (/Bahamas|Turks|Caicos/.test(island))         return { visuals: REGION_VISUALS.turksCaicos,     slug: 'turks-caicos',     name: 'Turks & Caicos' };
   if (/Trinidad|Tobago/.test(island))              return { visuals: REGION_VISUALS.trinidad,        slug: 'trinidad-tobago',  name: 'Trinidad & Tobago' };
@@ -642,7 +652,7 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
 // ── Card d'une regatte (A2 : photo region + texte fade in/out + Link) ─────────
 function RegattaEventCard({ event, index = 0 }) {
   const [open, setOpen] = useState(false);
-  const info = getRegionInfo(event.island);
+  const info = getRegionInfo(event);
   const delay = (index * 1.5) % 7;
   // Toutes les cards utilisent la version originale couleur.
   const photoSrc = info.visuals.original;
