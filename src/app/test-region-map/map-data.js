@@ -254,6 +254,11 @@ export const ISLANDS = [
   { name: 'Trinidad',  group: 'trinidad-tobago', coords: [10.69, -61.22] },
   { name: 'Tobago',    group: 'trinidad-tobago', coords: [11.18, -60.74] },
 
+  // Grand Cayman
+  { name: 'Grand Cayman', group: 'grand-cayman', coords: [19.31, -81.25] },
+  { name: 'Cayman Brac',  group: 'grand-cayman', coords: [19.72, -79.83] },
+  { name: 'Little Cayman', group: 'grand-cayman', coords: [19.68, -80.04] },
+
   // Emerging Destinations
   { name: 'Barbuda',           group: 'emerging', coords: [17.63, -61.81] },
   { name: 'Petite Martinique', group: 'emerging', coords: [12.53, -61.39] },
