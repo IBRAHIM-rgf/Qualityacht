@@ -1,62 +1,18 @@
 'use client';
 
+// Proposition B : meme structure que /rentals/regatta/carribbean avec en plus une
+// section "4 Worlds of Caribbean Racing" (4 univers thematiques expand-on-click).
+
 import Image from 'next/image';
-import Link from 'next/link';
-import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
-import { ISLANDS } from '../../../test-region-map/map-data';
+import { ISLANDS } from '../test-region-map/map-data';
 import {
   REGATTAS_2027,
   REGATTA_CATEGORIES,
-  MONTHS_2027,
-  groupByMonth,
+  REGATTA_UNIVERSES,
   getCategoryInfo,
-} from '../../../regattas-caribbean-shared/regattas-data';
-
-// ── Mapping region : island -> photos (originelle + filtree) + slug ───────────
-// Pour chaque region : photoOriginal = version couleur,
-// photoFiltered = version graphique (pagesCaraibes/*). L'alternance entre les
-// deux est decidee par la card (index % 2) pour creer du contraste cote a cote.
-const REGION_VISUALS = {
-  greaterAntilles: { original: '/images/destinations/gretar antilles-original.jpg',     filtered: '/images/pagesCaraibes/greater_antilles.png' },
-  leeward:         { original: '/images/destinations/Leeward Islands-original.jpg',     filtered: '/images/pagesCaraibes/leeward_island.png'   },
-  leewardAntilles: { original: '/images/destinations/The Leeward Antilles-original.jpg', filtered: '/images/pagesCaraibes/leeward_antilles.png' },
-  windward:        { original: '/images/destinations/the Windward Islands-original.jpg', filtered: '/images/pagesCaraibes/windward_island.png'  },
-  turksCaicos:     { original: '/images/destinations/Turks and Caicos-original.jpg',    filtered: '/images/pagesCaraibes/turks_caicos.png'     },
-  trinidad:        { original: '/images/destinations/Trinidad and Tobago-original.jpg', filtered: '/images/pagesCaraibes/unnamed.jpg'          },
-  cayman:          { original: '/images/destinations/Cayman Islands-original.jpg',      filtered: '/images/pagesCaraibes/grand_cayman.png'     },
-  emerging:        { original: '/images/pagesCaraibes/emergency.png',                    filtered: '/images/pagesCaraibes/emergencyfilter.jpg'  },
-};
-
-// Override par event-id (cas particuliers : meme ile mais regions differentes)
-const EVENT_REGION_OVERRIDE = {
-  'stir':            { visuals: REGION_VISUALS.leewardAntilles, slug: 'leeward-antilles', name: 'Leeward Antilles' },
-  'bvi-spring-regatta': { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' },
-  'ior-st-thomas':   { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' },
-  'mango-bowl':      { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' },
-};
-
-function getRegionInfo(event) {
-  if (event && EVENT_REGION_OVERRIDE[event.id]) return EVENT_REGION_OVERRIDE[event.id];
-  const island = event?.island || '';
-  if (!island)                                     return { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' };
-  if (/Barbados/.test(island))                     return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
-  if (/Grenad/.test(island))                       return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
-  if (/Sint Maarten|St\.? ?Maarten/.test(island))  return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/Antigua/.test(island))                      return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/Saint-Barth|St\.? ?Barth/.test(island))     return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/\bUSVI\b|St\.? ?Thomas/.test(island))       return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/\bBVI\b|Tortola/.test(island))              return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
-  if (/Martinique|Schoelcher/.test(island))        return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
-  if (/St\.? ?Vincent|Grenadines/.test(island))    return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
-  if (/St\.? ?Lucia/.test(island))                 return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
-  if (/Aruba|Bonaire|Cura/.test(island))           return { visuals: REGION_VISUALS.leewardAntilles, slug: 'leeward-antilles', name: 'Leeward Antilles' };
-  if (/Bahamas|Turks|Caicos/.test(island))         return { visuals: REGION_VISUALS.turksCaicos,     slug: 'turks-caicos',     name: 'Turks & Caicos' };
-  if (/Trinidad|Tobago/.test(island))              return { visuals: REGION_VISUALS.trinidad,        slug: 'trinidad-tobago',  name: 'Trinidad & Tobago' };
-  if (/Cayman/.test(island))                       return { visuals: REGION_VISUALS.cayman,          slug: 'grand-cayman',     name: 'Grand Cayman' };
-  if (/Cuba|Puerto Rico|Jamaica|Hispaniola/.test(island)) return { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' };
-  return { visuals: REGION_VISUALS.emerging, slug: 'emerging-destinations', name: 'Emerging Destinations' };
-}
+} from '../regattas-caribbean-shared/regattas-data';
 
 // Coordonnées d'une île par son nom (depuis map-data.js).
 // Fallback défensif (ISLANDS || []) — évite un crash si l'import n'est pas
@@ -83,12 +39,11 @@ const caribbeanIslands = [
 const islandGroups = [
   { id: 1, name: 'Greater Antilles',      islands: ['Cuba', 'Hispaniola', 'Jamaica', 'Puerto Rico'] },
   { id: 2, name: 'Leeward Islands',       islands: ['Anguilla', 'Saint-Martin / Sint Maarten', 'Saint-Barthélemy', 'Saba & Saint-Eustache', 'Saint-Kitts & Nevis', 'Antigua & Barbuda', 'Montserrat', 'Guadeloupe'] },
-  { id: 3, name: 'Leeward Antilles',      islands: ['Aruba', 'Bonaire', 'Curaçao', 'Saint Thomas (USVI)', 'Saint Croix (USVI)', 'Saint John (USVI)', 'Saint James (USVI)', 'Buck Island (USVI)', 'Tortola (BVI)', 'Peter Island (BVI)', 'Jost Van Dyke (BVI)', 'Virgin Gorda (BVI)', 'Anegada (BVI)'] },
+  { id: 3, name: 'Leeward Antilles',      islands: ['Aruba', 'Bonaire', 'Curaçao'] },
   { id: 4, name: 'Windward Islands',      islands: ['Dominica', 'Martinique', 'Saint Lucia', 'Saint Vincent & the Grenadines', 'Mustique', 'Canouan', 'Bequia', 'Tobago Cays', 'Grenada', 'Carriacou', 'Barbados'] },
   { id: 5, name: 'Turks & Caicos',        islands: ['Providenciales', 'Grand Turk', 'South Caicos', 'West Caicos'] },
   { id: 6, name: 'Trinidad & Tobago',     islands: ['Trinidad', 'Tobago'] },
-  { id: 7, name: 'Grand Cayman',          islands: ['Grand Cayman', 'Cayman Brac', 'Little Cayman'] },
-  { id: 8, name: 'Emerging Destinations', islands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero Island'] },
+  { id: 7, name: 'Emerging Destinations', islands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero Island'] },
 ];
 
 // ── Données cercles ────────────────────────────────────────────────────────────
@@ -649,94 +604,51 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
   );
 }
 
-// ── Card d'une regatte (A2 : photo region + texte fade in/out + Link) ─────────
-function RegattaEventCard({ event, index = 0 }) {
-  const [open, setOpen] = useState(false);
-  const info = getRegionInfo(event);
-  const delay = (index * 1.5) % 7;
-  // Toutes les cards utilisent la version originale couleur.
-  const photoSrc = info.visuals.original;
+// ── Card compacte d'une regatte (Proposition B) ───────────────────────────────
+function RegattaEventCardCompact({ event }) {
   return (
-    <Link
-      href={`/charters/destinations/carabbean/regatta/${event.id}`}
-      className="block rounded-2xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm overflow-hidden transition-all hover:border-[#B03E00]/60 cursor-pointer"
-    >
-      {/* Photo header : alterne entre version originale et filtree (contraste cote a cote) */}
-      <div className="relative h-44 md:h-52 overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${encodeURI(photoSrc)}')`, opacity: 0.55 }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/40 via-[#26272a]/25 to-[#26272a]/75" />
-        <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-[#C0C0C0] whitespace-nowrap shadow-lg z-10">
-          {event.dates}
-        </span>
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-5"
-          style={{ animation: 'cardTextFade 7s ease-in-out infinite', animationDelay: `${delay}s` }}>
-          <h4 className="trajan-regular font-bold text-sm md:text-base uppercase tracking-[0.12em] text-[#C0C0C0] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-            {event.name}
-          </h4>
-          <p className="trajan-regular text-base md:text-xl uppercase tracking-[0.15em] text-[#acb0cd] mt-3 flex items-center justify-center gap-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-            <MapPin className="w-4 h-4 md:w-5 md:h-5 inline text-[#c2622a]" /> {event.island}
-          </p>
+    <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f]/80 backdrop-blur-sm px-4 py-3 flex items-start justify-between gap-3 hover:border-[#B03E00]/60 transition-colors">
+      <div className="flex-1 min-w-0">
+        <h4 className="trajan-regular text-sm md:text-base uppercase tracking-[0.1em] text-[#acb0cd] leading-snug">
+          {event.name}
+        </h4>
+        <p className="text-[11px] text-[#acb0cd]/60 mt-1 flex items-center gap-1">
+          <MapPin className="w-3 h-3 inline" /> {event.island}
+        </p>
+        <div className="flex flex-wrap gap-1 mt-2">
+          {event.categories.map((catKey) => {
+            const cat = getCategoryInfo(catKey);
+            if (!cat) return null;
+            return (
+              <span key={catKey} className="inline-block px-1.5 py-0.5 rounded-sm text-[9px] uppercase tracking-wide bg-[#26272a] border border-[#C0C0C0]/15 text-[#acb0cd]">
+                {cat.icon} {cat.label}
+              </span>
+            );
+          })}
         </div>
       </div>
-      <div className="px-5 pt-4 pb-4 flex flex-wrap gap-1.5">
-        {event.categories.map((catKey) => {
-          const cat = getCategoryInfo(catKey);
-          if (!cat) return null;
-          return (
-            <span key={catKey} className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-wide bg-[#26272a] border border-[#C0C0C0]/20 text-[#acb0cd]">
-              {cat.label}
-            </span>
-          );
-        })}
-      </div>
-      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen((v) => !v); }}
-        className="w-full px-5 py-2 text-[11px] uppercase tracking-[0.2em] text-[#c2622a] border-t border-[#C0C0C0]/15 hover:bg-[#B03E00]/5 transition-colors">
-        {open ? 'Show less' : 'Read more'}
-      </button>
-      {open && (
-        <div className="px-5 py-4 border-t border-[#C0C0C0]/15 space-y-3 text-xs md:text-sm text-[#acb0cd]/80"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-          {event.description.island && (
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#c2622a] mb-1">The Island</p>
-              <p className="leading-relaxed">{event.description.island}</p>
-            </div>
-          )}
-          {event.description.race && (
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#c2622a] mb-1">The Race</p>
-              <p className="leading-relaxed">{event.description.race}</p>
-            </div>
-          )}
-          {event.description.nightlife && (
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#c2622a] mb-1">Off the Water</p>
-              <p className="leading-relaxed">{event.description.nightlife}</p>
-            </div>
-          )}
-          {event.footer && (
-            <p className="text-[11px] italic text-[#d39478] pt-2 border-t border-[#C0C0C0]/10">{event.footer}</p>
-          )}
-        </div>
-      )}
-    </Link>
+      <span className="shrink-0 inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#B03E00] text-white whitespace-nowrap">
+        {event.dates}
+      </span>
+    </div>
   );
 }
 
 // ── Page ───────────────────────────────────────────────────────────────────────
-export default function CaribbeanV15Page({ params }) {
-  const { type } = use(params);
-  // FAQ specifique pour regatta (racing), generique pour les autres voiliers.
-  const faqList = type === 'regatta' ? regattaFaqItems : faqItems;
-  const faqTitle = type === 'regatta' ? 'Racing Yacht Charter — Frequently Asked Questions' : 'Your Luxury Yacht Charter, Explained';
+export default function RegattasCaribbeanB() {
+  const faqList = regattaFaqItems;
+  const faqTitle = 'Racing Yacht Charter — Frequently Asked Questions';
+  const heroMobileSrc = '/images/sailing/only for you caraibes.jpg';
+  const heroDesktopSrc = '/images/sailing/only for you caraibes.jpg';
 
-  // Calendrier regatta 2027 : groupement par mois (sans filtre, tous events affiches)
-  const regattaByMonth = useMemo(() => groupByMonth(REGATTAS_2027), []);
-
-  // Hero photo : regatta a sa propre photo racing dediee, les autres voiliers gardent le yacht v15.
-  const heroMobileSrc = type === 'regatta' ? '/images/sailing/only for you caraibes.jpg' : '/images/yachts/yatch2.jpeg';
-  const heroDesktopSrc = type === 'regatta' ? '/images/sailing/only for you caraibes.jpg' : '/images/yachts/Yatch_desktop.png';
+  // Univers actif (Proposition B)
+  const [activeUniverse, setActiveUniverse] = useState(null);
+  const eventsForUniverse = useMemo(() => {
+    if (!activeUniverse) return [];
+    const u = REGATTA_UNIVERSES.find((x) => x.key === activeUniverse);
+    if (!u) return [];
+    return REGATTAS_2027.filter((r) => r.categories.some((c) => u.categories.includes(c)));
+  }, [activeUniverse]);
 
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -753,10 +665,6 @@ export default function CaribbeanV15Page({ params }) {
         .reveal-up.revealed { opacity: 1; transform: translateY(0); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        @keyframes cardTextFade {
-          0%, 100% { opacity: 0; }
-          25%, 75% { opacity: 1; }
-        }
       `}</style>
 
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
@@ -809,9 +717,8 @@ export default function CaribbeanV15Page({ params }) {
 
         {/* ══ DESCRIPTION ══ */}
         <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">
-          {/* Texte en vert UNIQUEMENT sur regatta pour notifier le changement (4 paragraphes seulement) */}
-          <div className={`max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6 ${type === 'regatta' ? 'text-[#22c55e]' : 'text-[#acb0cd]'}`}>
-            <p className="text-lg md:text-2xl">
+          <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6">
+            <p className="text-lg md:text-2xl text-[#acb0cd]">
               A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>,{' '}
               <span className="text-[#d39478] font-semibold">powder-white beaches</span>,{' '}
               <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and{' '}
@@ -819,19 +726,19 @@ export default function CaribbeanV15Page({ params }) {
               the Caribbean stands as{' '}
               <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
             </p>
-            <p className="text-base md:text-xl max-w-3xl mx-auto">
+            <p className="text-base md:text-xl max-w-3xl mx-auto text-[#acb0cd]">
               From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
               of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and{' '}
               <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
               offers an unparalleled sailing experience.
             </p>
-            <p className="text-base md:text-xl max-w-2xl mx-auto">
+            <p className="text-base md:text-xl max-w-2xl mx-auto text-[#acb0cd]">
               Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over{' '}
               <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
               and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
               cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
             </p>
-            <p className="text-sm md:text-lg max-w-xl mx-auto">
+            <p className="text-sm md:text-lg max-w-xl mx-auto text-[#acb0cd]">
               For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
               of exclusivity and adventure. Whether it's the glamour of{' '}
               <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of{' '}
@@ -845,44 +752,58 @@ export default function CaribbeanV15Page({ params }) {
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
         <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
 
-        {/* ══ 2027 REGATTA CALENDAR (uniquement pour type === 'regatta') ══ */}
-        {type === 'regatta' && (
-          <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
-            <div className="max-w-7xl mx-auto">
-              <RevealBlock label="Sailing Calendar" title="2027 Regatta Calendar" sub="From January to November — racing, classics, traditions, juniors and luxury" />
+        {/* ══ 4 WORLDS OF CARIBBEAN RACING (Proposition B : univers thematiques) ══ */}
+        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
+          <div className="max-w-7xl mx-auto">
+            <RevealBlock label="Choose Your Story" title="4 Worlds of Caribbean Racing" sub="Pick your sailing style — click a universe to discover its events" />
 
-              {/* Timeline mois par mois (sans filtre — affiche TOUS les events) */}
-              <div className="space-y-12">
-                {MONTHS_2027.map((month, mi) => {
-                  const events = regattaByMonth[month.key];
-                  if (!events || events.length === 0) return null;
-                  return (
-                    <div key={month.key}>
-                      <div className="flex items-center gap-4 mb-6">
-                        <div className="flex-1 h-px bg-[#C0C0C0]/20" />
-                        <h3 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#acb0cd] italic">
-                          {month.label}
-                        </h3>
-                        <div className="flex-1 h-px bg-[#C0C0C0]/20" />
-                      </div>
-                      {/* flex-wrap + justify-center : card seule sur sa ligne reste centree */}
-                      <div className="flex flex-wrap justify-center gap-5 md:gap-6 items-start">
-                        {events.map((event, ei) => (
-                          <div key={event.id} className="w-full md:w-[calc(50%-12px)]">
-                            <RegattaEventCard event={event} index={mi * 2 + ei} />
-                          </div>
-                        ))}
-                      </div>
+            {/* Grille 2x2 des univers */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-7 mb-10">
+              {REGATTA_UNIVERSES.map((u) => {
+                const active = activeUniverse === u.key;
+                const count = REGATTAS_2027.filter((r) =>
+                  r.categories.some((c) => u.categories.includes(c))
+                ).length;
+                return (
+                  <button key={u.key} onClick={() => setActiveUniverse(active ? null : u.key)}
+                    className={`relative rounded-2xl border p-6 md:p-8 text-left transition-all overflow-hidden ${
+                      active
+                        ? 'bg-[#B03E00]/15 border-[#B03E00] shadow-[0_8px_30px_rgba(176,62,0,0.25)]'
+                        : 'bg-[#3a3b3f]/80 border-[#C0C0C0]/30 hover:border-[#B03E00]/60 hover:bg-[#3a3b3f]'
+                    }`}>
+                    <div className="text-4xl md:text-5xl mb-3">{u.icon}</div>
+                    <h3 className="trajan-regular text-lg md:text-2xl uppercase tracking-[0.12em] text-[#acb0cd] mb-2">
+                      {u.title}
+                    </h3>
+                    <p className="text-xs md:text-sm text-[#acb0cd]/70 italic mb-4">{u.tagline}</p>
+                    <div className="flex items-center justify-between pt-3 border-t border-[#C0C0C0]/15">
+                      <span className="text-[11px] uppercase tracking-[0.2em] text-[#c2622a]">
+                        {count} event{count > 1 ? 's' : ''}
+                      </span>
+                      <span className="text-[11px] uppercase tracking-[0.2em] text-[#c2622a]">
+                        {active ? 'Hide ▲' : 'Explore ▼'}
+                      </span>
                     </div>
-                  );
-                })}
-                {Object.keys(regattaByMonth).length === 0 && (
-                  <p className="text-center text-[#acb0cd]/60 italic py-8">No events match this filter.</p>
-                )}
-              </div>
+                  </button>
+                );
+              })}
             </div>
-          </CloudSection>
-        )}
+
+            {/* Liste des events de l'univers actif */}
+            {activeUniverse && eventsForUniverse.length > 0 && (
+              <div className="space-y-4 animate-[fadeIn_0.4s_ease-out]">
+                <p className="text-center text-[#acb0cd]/60 text-xs uppercase tracking-[0.3em] mb-6">
+                  {eventsForUniverse.length} event{eventsForUniverse.length > 1 ? 's' : ''} in this universe
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {eventsForUniverse.map((event) => (
+                    <RegattaEventCardCompact key={event.id} event={event} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </CloudSection>
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 4 (8 cards) ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
@@ -903,18 +824,11 @@ export default function CaribbeanV15Page({ params }) {
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Archipelagos" title="Destinations by Region" sub="Seven groups — over 700 islands" />
-            {/* Layout 3+3 puis les 2 derniers (Grand Cayman + Emerging) centres */}
+            {/* 3+3+1 centré — noms îles centrés sur mobile */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
-              {islandGroups.slice(0, -2).map((group, i) => (
-                <div key={group.id}>
+              {islandGroups.map((group, i) => (
+                <div key={group.id} className={i === islandGroups.length - 1 ? 'md:col-start-2' : ''}>
                   <IslandGroup group={group} defaultOpen={i < 3} onIslandSelect={setActiveIsland} />
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 flex flex-wrap justify-center gap-x-12 gap-y-6">
-              {islandGroups.slice(-2).map((group) => (
-                <div key={group.id} className="w-full md:w-[calc((100%-3rem)/3)]">
-                  <IslandGroup group={group} defaultOpen={false} onIslandSelect={setActiveIsland} />
                 </div>
               ))}
             </div>
