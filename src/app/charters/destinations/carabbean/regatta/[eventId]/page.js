@@ -4,7 +4,7 @@
 
 import SubregionClient from '../../_shared/SubregionClient';
 import { CARIBBEAN_SUBREGIONS } from '../../_shared/configs';
-import { REGATTAS_2027 } from '../../../../../regattas-caribbean-shared/regattas-data';
+import { REGATTAS_2027, REGATTA_BOAT_GROUPS } from '../../../../../regattas-caribbean-shared/regattas-data';
 import { fetchVisibleYachts } from '@/lib/yachts';
 import { notFound } from 'next/navigation';
 
@@ -17,8 +17,19 @@ const REGATTA_TOGGLES = [
   { key: 'juniorFriendly', label: 'Junior' },
 ];
 
+// Override par event-id (alignement avec la card du listing /rentals/regatta/carribbean).
+// Doit rester en sync avec EVENT_REGION_OVERRIDE du fichier rentals/[type]/carribbean/page.js
+// pour que la photo de la card == photo de la page event.
+const EVENT_REGION_OVERRIDE = {
+  'stir':               'leeward-antilles',
+  'bvi-spring-regatta': 'greater-antilles',
+  'ior-st-thomas':      'greater-antilles',
+  'mango-bowl':         'windward-islands',
+};
+
 // Mapping event island -> region SubregionClient
 function getRegionSlugForEvent(event) {
+  if (event && EVENT_REGION_OVERRIDE[event.id]) return EVENT_REGION_OVERRIDE[event.id];
   const island = event.island || '';
   if (/Barbados|Grenad|Martinique|Schoelcher|St\.? ?Vincent|Grenadines|St\.? ?Lucia/.test(island)) return 'windward-islands';
   if (/Sint Maarten|St\.? ?Maarten|Antigua|Saint-Barth|St\.? ?Barth|USVI|St\.? ?Thomas|BVI|Tortola/.test(island)) return 'leeward-islands';
@@ -53,9 +64,9 @@ export default async function Page({ params }) {
 
   try {
     const { yachts, totalYachts } = await fetchVisibleYachts({ destination: 'caribbean' });
-    return <SubregionClient {...config} initialData={yachts} totalYachts={totalYachts} customToggles={REGATTA_TOGGLES} />;
+    return <SubregionClient {...config} initialData={yachts} totalYachts={totalYachts} customToggles={REGATTA_TOGGLES} hideMotor boatGroups={REGATTA_BOAT_GROUPS} />;
   } catch (error) {
     console.error('Regatta event page error:', error);
-    return <SubregionClient {...config} initialData={[]} totalYachts={0} customToggles={REGATTA_TOGGLES} />;
+    return <SubregionClient {...config} initialData={[]} totalYachts={0} customToggles={REGATTA_TOGGLES} hideMotor boatGroups={REGATTA_BOAT_GROUPS} />;
   }
 }

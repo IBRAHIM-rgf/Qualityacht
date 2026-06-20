@@ -11,6 +11,30 @@ export const REGATTA_CATEGORIES = [
   { key: 'unesco',      icon: '🏛', label: 'UNESCO',       color: '#6b3fa0' },
 ];
 
+// Categories & types de bateaux du circuit regatta caribeen.
+// Sert d'options groupees (optgroup) dans le filtre des pages event regatta.
+// label = nom de la categorie (optgroup), options = modeles de bateaux.
+export const REGATTA_BOAT_GROUPS = [
+  {
+    label: 'Monotypes IRC / ORC — Course en flotte',
+    options: [
+      { value: 'j24',     label: 'J/24 — 7,3 m · one-design entrée de gamme' },
+      { value: 'j80',     label: 'J/80 — 7,9 m · sportif, populaire' },
+      { value: 'j120',    label: 'J/120 — 11,4 m · haute performance' },
+      { value: 'farr40',  label: 'Farr 40 — 12,2 m · pro / compétition' },
+      { value: 'tp52',    label: 'TP52 — 15,8 m · Rolex TP52 Series' },
+      { value: 'swan45',  label: 'Swan 45 — 13,7 m · prestige IRC A' },
+    ],
+  },
+  {
+    label: 'Multicoques — Vitesse & Spectacle',
+    options: [
+      { value: 'gunboat',  label: 'Catamaran de course (Gunboat 55/62) — 15-18 m' },
+      { value: 'trimaran', label: 'Trimaran sportif (Corsair / Dragonfly) — 8-9 m' },
+    ],
+  },
+];
+
 export const MONTHS_2027 = [
   { key: 'january',   label: 'January',   order: 1 },
   { key: 'february',  label: 'February',  order: 2 },

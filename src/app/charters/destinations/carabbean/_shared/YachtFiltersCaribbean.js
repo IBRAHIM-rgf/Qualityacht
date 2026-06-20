@@ -59,8 +59,9 @@ const DEFAULT_TOGGLES = [
   { key: 'couplesFriendly', label: 'Couples Friendly' },
 ];
 
-export default function YachtFiltersCaribbean({ filters, onChange, customToggles = null }) {
+export default function YachtFiltersCaribbean({ filters, onChange, customToggles = null, hideMotor = false, boatGroups = null }) {
   const toggles = customToggles || DEFAULT_TOGGLES;
+  const yachtTypes = hideMotor ? YACHT_TYPES.filter(t => t.value !== 'motor') : YACHT_TYPES;
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
@@ -117,7 +118,7 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
       type: '', destination: 'caribbean', capacity: '',
       priceMax: '', priceMin: '', minLength: '', maxLength: '',
       currency: '', petFriendly: false, groupFriendly: false,
-      waterToys: false, couplesFriendly: false,
+      waterToys: false, couplesFriendly: false, boatClass: '',
     };
     setLocalFilters(empty);
     setSelectedPriceTier(0);
@@ -178,9 +179,23 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
               <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Yacht Type</label>
               <select value={localFilters.type} onChange={e => handleChange('type', e.target.value)}
                 className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
-                {YACHT_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                {yachtTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
             </div>
+            {boatGroups && (
+              <div>
+                <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Boat Class</label>
+                <select value={localFilters.boatClass || ''} onChange={e => handleChange('boatClass', e.target.value)}
+                  className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
+                  <option value="">All Classes</option>
+                  {boatGroups.map(group => (
+                    <optgroup key={group.label} label={group.label}>
+                      {group.options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                    </optgroup>
+                  ))}
+                </select>
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Caribbean Destination</label>
               <select value={localFilters.destination} onChange={e => handleChange('destination', e.target.value)}
