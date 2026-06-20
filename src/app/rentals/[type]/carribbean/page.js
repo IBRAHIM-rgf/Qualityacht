@@ -643,8 +643,8 @@ function RegattaEventCard({ event, index = 0 }) {
   const [open, setOpen] = useState(false);
   const info = getRegionInfo(event.island);
   const delay = (index * 1.5) % 7;
-  // Alterne original / filtre selon la parite de l'index pour contraste cote a cote.
-  const photoSrc = index % 2 === 0 ? info.visuals.original : info.visuals.filtered;
+  // Toutes les cards utilisent la version originale couleur.
+  const photoSrc = info.visuals.original;
   return (
     <Link
       href={`/charters/destinations/carabbean/regatta/${event.id}`}
