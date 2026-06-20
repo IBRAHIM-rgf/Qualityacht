@@ -759,7 +759,7 @@ export default function CaribbeanV15Page({ params }) {
         }
       `}</style>
 
-      <div className={`bg-[#26272a] text-[#acb0cd] overflow-x-hidden ${type === 'regatta' ? '[&_p]:!text-[#22c55e] [&_h1]:!text-[#22c55e] [&_h2]:!text-[#22c55e] [&_h3]:!text-[#22c55e] [&_h4]:!text-[#22c55e] [&_p_span]:!text-[#22c55e] [&_h2_span]:!text-[#22c55e]' : ''}`}>
+      <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
         {/* ══ HERO ══ */}
         {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
@@ -809,7 +809,8 @@ export default function CaribbeanV15Page({ params }) {
 
         {/* ══ DESCRIPTION ══ */}
         <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">
-          <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6 text-[#acb0cd]">
+          {/* Texte en vert UNIQUEMENT sur regatta pour notifier le changement (4 paragraphes seulement) */}
+          <div className={`max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6 ${type === 'regatta' ? 'text-[#22c55e]' : 'text-[#acb0cd]'}`}>
             <p className="text-lg md:text-2xl">
               A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>,{' '}
               <span className="text-[#d39478] font-semibold">powder-white beaches</span>,{' '}
