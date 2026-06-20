@@ -34,7 +34,8 @@ const islandGroups = [
   { id: 4, name: 'Windward Islands',      islands: ['Dominica', 'Martinique', 'Saint Lucia', 'Saint Vincent & the Grenadines', 'Mustique', 'Canouan', 'Bequia', 'Tobago Cays', 'Grenada', 'Carriacou', 'Barbados'] },
   { id: 5, name: 'Turks & Caicos',        islands: ['Providenciales', 'Grand Turk', 'South Caicos', 'West Caicos'] },
   { id: 6, name: 'Trinidad & Tobago',     islands: ['Trinidad', 'Tobago'] },
-  { id: 7, name: 'Emerging Destinations', islands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero Island'] },
+  { id: 7, name: 'Grand Cayman',          islands: ['Grand Cayman', 'Cayman Brac', 'Little Cayman'] },
+  { id: 8, name: 'Emerging Destinations', islands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero Island'] },
 ];
 
 // ── Données cercles ────────────────────────────────────────────────────────────
