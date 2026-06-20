@@ -16,21 +16,21 @@ export const REGATTA_CATEGORIES = [
 // label = nom de la categorie (optgroup), options = modeles de bateaux.
 export const REGATTA_BOAT_GROUPS = [
   {
-    label: 'Monotypes IRC / ORC — Course en flotte',
+    label: 'Monotypes IRC / ORC — Fleet Racing',
     options: [
-      { value: 'j24',     label: 'J/24 — 7,3 m · one-design entrée de gamme' },
-      { value: 'j80',     label: 'J/80 — 7,9 m · sportif, populaire' },
-      { value: 'j120',    label: 'J/120 — 11,4 m · haute performance' },
-      { value: 'farr40',  label: 'Farr 40 — 12,2 m · pro / compétition' },
-      { value: 'tp52',    label: 'TP52 — 15,8 m · Rolex TP52 Series' },
-      { value: 'swan45',  label: 'Swan 45 — 13,7 m · prestige IRC A' },
+      { value: 'j24',     label: 'J/24 — 7.3 m · entry-level one-design' },
+      { value: 'j80',     label: 'J/80 — 7.9 m · sporty, popular' },
+      { value: 'j120',    label: 'J/120 — 11.4 m · high performance' },
+      { value: 'farr40',  label: 'Farr 40 — 12.2 m · pro / competition' },
+      { value: 'tp52',    label: 'TP52 — 15.8 m · Rolex TP52 Series' },
+      { value: 'swan45',  label: 'Swan 45 — 13.7 m · prestige IRC A' },
     ],
   },
   {
-    label: 'Multicoques — Vitesse & Spectacle',
+    label: 'Multihulls — Speed & Spectacle',
     options: [
-      { value: 'gunboat',  label: 'Catamaran de course (Gunboat 55/62) — 15-18 m' },
-      { value: 'trimaran', label: 'Trimaran sportif (Corsair / Dragonfly) — 8-9 m' },
+      { value: 'gunboat',  label: 'Racing catamaran (Gunboat 55/62) — 15-18 m' },
+      { value: 'trimaran', label: 'Sport trimaran (Corsair / Dragonfly) — 8-9 m' },
     ],
   },
 ];

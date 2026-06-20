@@ -59,7 +59,7 @@ const DEFAULT_TOGGLES = [
   { key: 'couplesFriendly', label: 'Couples Friendly' },
 ];
 
-export default function YachtFiltersCaribbean({ filters, onChange, customToggles = null, hideMotor = false, boatGroups = null }) {
+export default function YachtFiltersCaribbean({ filters, onChange, customToggles = null, hideMotor = false, boatGroups = null, hideYachtType = false }) {
   const toggles = customToggles || DEFAULT_TOGGLES;
   const yachtTypes = hideMotor ? YACHT_TYPES.filter(t => t.value !== 'motor') : YACHT_TYPES;
   const [isExpanded, setIsExpanded] = useState(false);
@@ -175,13 +175,15 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
             </button>
           </div>
           <div className="p-6 space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Yacht Type</label>
-              <select value={localFilters.type} onChange={e => handleChange('type', e.target.value)}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
-                {yachtTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-              </select>
-            </div>
+            {!hideYachtType && (
+              <div>
+                <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Yacht Type</label>
+                <select value={localFilters.type} onChange={e => handleChange('type', e.target.value)}
+                  className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
+                  {yachtTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                </select>
+              </div>
+            )}
             {boatGroups && (
               <div>
                 <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Boat Class</label>

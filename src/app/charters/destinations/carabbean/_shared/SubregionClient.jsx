@@ -34,6 +34,7 @@ export default function SubregionClient({
   customToggles = null,
   hideMotor = false,
   boatGroups = null,
+  hideYachtType = false,
 }) {
   const [showMore, setShowMore] = useState(false);
   const [heroLit, setHeroLit] = useState(false);
@@ -220,7 +221,7 @@ export default function SubregionClient({
             </p>
           </div>
 
-          <YachtFiltersCaribbean filters={filters} onChange={setFilters} customToggles={customToggles} hideMotor={hideMotor} boatGroups={boatGroups} />
+          <YachtFiltersCaribbean filters={filters} onChange={setFilters} customToggles={customToggles} hideMotor={hideMotor} boatGroups={boatGroups} hideYachtType={hideYachtType} />
 
           <main className="mt-6">
             {filteredYachts.length === 0 ? (
