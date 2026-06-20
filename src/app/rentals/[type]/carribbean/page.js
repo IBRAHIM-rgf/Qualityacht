@@ -666,7 +666,7 @@ function RegattaEventCard({ event, index = 0 }) {
         <div className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${encodeURI(photoSrc)}')`, opacity: 0.55 }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/40 via-[#26272a]/25 to-[#26272a]/75" />
-        <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#B03E00] text-white whitespace-nowrap shadow-lg z-10">
+        <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide bg-[#3a3b3f] border border-[#C0C0C0] text-[#C0C0C0] whitespace-nowrap shadow-lg z-10">
           {event.dates}
         </span>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-5"
