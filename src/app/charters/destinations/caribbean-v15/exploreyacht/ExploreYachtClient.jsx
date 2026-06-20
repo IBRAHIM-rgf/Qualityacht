@@ -94,6 +94,12 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
     if (filters.petFriendly) result = result.filter(y => y.pets_allowed === true || y.petFriendly === true);
     if (filters.groupFriendly) result = result.filter(y => y.groups_allowed === true || y.groupFriendly === true);
 
+    // Tri par taille (longueur) decroissante.
+    result.sort((a, b) => {
+      const la = parseFloat(String(a.length).replace(/[^0-9.]/g, '')) || 0;
+      const lb = parseFloat(String(b.length).replace(/[^0-9.]/g, '')) || 0;
+      return lb - la;
+    });
     return result;
   }, [initialData, filters]);
 

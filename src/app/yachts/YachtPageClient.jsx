@@ -112,6 +112,12 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
       result = result.filter(y => y.groups_allowed === true || y.groupFriendly === true);
     }
 
+    // Tri par taille (longueur) decroissante.
+    result.sort((a, b) => {
+      const la = parseFloat(String(a.length).replace(/[^0-9.]/g, '')) || 0;
+      const lb = parseFloat(String(b.length).replace(/[^0-9.]/g, '')) || 0;
+      return lb - la;
+    });
     return result;
   }, [initialData, filters]);
 
