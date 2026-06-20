@@ -230,6 +230,18 @@ export const ISLANDS = [
   { name: 'Aruba',         group: 'leeward-antilles', coords: [12.52, -69.97] },
   { name: 'Bonaire',       group: 'leeward-antilles', coords: [12.18, -68.27] },
   { name: 'Curaçao',       group: 'leeward-antilles', coords: [12.17, -68.99] },
+  // US Virgin Islands (USVI)
+  { name: 'Saint Thomas (USVI)', group: 'leeward-antilles', coords: [18.343, -64.930] },
+  { name: 'Saint Croix (USVI)',  group: 'leeward-antilles', coords: [17.728, -64.785] },
+  { name: 'Saint John (USVI)',   group: 'leeward-antilles', coords: [18.350, -64.736] },
+  { name: 'Saint James (USVI)',  group: 'leeward-antilles', coords: [18.318, -64.839] },
+  { name: 'Buck Island (USVI)',  group: 'leeward-antilles', coords: [17.789, -64.620] },
+  // British Virgin Islands (BVI)
+  { name: 'Tortola (BVI)',       group: 'leeward-antilles', coords: [18.428, -64.624] },
+  { name: 'Peter Island (BVI)',  group: 'leeward-antilles', coords: [18.362, -64.580] },
+  { name: 'Jost Van Dyke (BVI)', group: 'leeward-antilles', coords: [18.450, -64.750] },
+  { name: 'Virgin Gorda (BVI)',  group: 'leeward-antilles', coords: [18.479, -64.421] },
+  { name: 'Anegada (BVI)',       group: 'leeward-antilles', coords: [18.722, -64.328] },
 
   // Windward Islands
   { name: 'Dominica',                      group: 'windward-islands', coords: [15.41, -61.37] },
