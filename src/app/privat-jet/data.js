@@ -26,6 +26,8 @@ export const caribbeanJetGroups = [
   { island: 'Barbados', airports: ['Grantley Adams International Airport (BGI) — all jets'] },
   { island: 'Turks & Caicos', airports: ['Providenciales International Airport (PLS) — medium/large jets', 'Grand Turk International Airport (GDT) — light jets'] },
   { island: 'Trinidad & Tobago', airports: ['Piarco International Airport (POS) — all jets', 'A.N.R. Robinson International Airport (TAB) — medium jets'] },
+  { island: 'British Virgin Islands (BVI)', airports: ['Terrance B. Lettsome International Airport (EIS) — Tortola — light jets', 'Virgin Gorda Airport (VIJ) — Virgin Gorda — STOL aircraft only'] },
+  { island: 'US Virgin Islands (USVI)', airports: ['Cyril E. King Airport (STT) — St. Thomas — medium/large jets', 'Henry E. Rohlsen Airport (STX) — St. Croix — medium jets'] },
   { island: 'Barbuda', airports: ['Barbuda Codrington Airport (BBQ) — light jets'] },
   { island: 'Carriacou', airports: ['Lauriston Airport (CRU) — light jets'] },
   { island: 'Petite Martinique', airports: ['No airport — boat access only'] },
