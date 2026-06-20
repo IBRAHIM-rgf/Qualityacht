@@ -30,7 +30,7 @@ const REGION_VISUALS = {
 
 function getRegionInfo(island) {
   if (!island)                                     return { visuals: REGION_VISUALS.greaterAntilles, slug: 'greater-antilles', name: 'Greater Antilles' };
-  if (/Barbados/.test(island))                     return { visuals: REGION_VISUALS.emerging,        slug: 'windward-islands', name: 'Windward Islands' };
+  if (/Barbados/.test(island))                     return { visuals: REGION_VISUALS.windward,        slug: 'windward-islands', name: 'Windward Islands' };
   if (/Grenad/.test(island))                       return { visuals: REGION_VISUALS.trinidad,        slug: 'windward-islands', name: 'Windward Islands' };
   if (/Sint Maarten|St\.? ?Maarten/.test(island))  return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
   if (/Antigua/.test(island))                      return { visuals: REGION_VISUALS.leeward,         slug: 'leeward-islands',  name: 'Leeward Islands' };
