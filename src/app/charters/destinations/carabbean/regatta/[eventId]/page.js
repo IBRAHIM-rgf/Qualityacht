@@ -64,9 +64,9 @@ export default async function Page({ params }) {
 
   try {
     const { yachts, totalYachts } = await fetchVisibleYachts({ destination: 'caribbean' });
-    return <SubregionClient {...config} initialData={yachts} totalYachts={totalYachts} customToggles={REGATTA_TOGGLES} hideYachtType boatGroups={REGATTA_BOAT_GROUPS} />;
+    return <SubregionClient {...config} initialData={yachts} totalYachts={totalYachts} customToggles={REGATTA_TOGGLES} hideYachtType boatGroups={REGATTA_BOAT_GROUPS} lengthRangeM={[7, 40]} />;
   } catch (error) {
     console.error('Regatta event page error:', error);
-    return <SubregionClient {...config} initialData={[]} totalYachts={0} customToggles={REGATTA_TOGGLES} hideYachtType boatGroups={REGATTA_BOAT_GROUPS} />;
+    return <SubregionClient {...config} initialData={[]} totalYachts={0} customToggles={REGATTA_TOGGLES} hideYachtType boatGroups={REGATTA_BOAT_GROUPS} lengthRangeM={[7, 40]} />;
   }
 }

@@ -46,10 +46,9 @@ function getPriceTierLabel(tier, symbol) {
   return `${fmt(tier.min)} – ${fmt(tier.max)} ${symbol}`;
 }
 
-const MIN_LENGTH_M = 10;
-const MAX_LENGTH_M = 140;
-const MIN_LENGTH_FT = 33;
-const MAX_LENGTH_FT = 459;
+// Plage de longueur par defaut (m). Surchargeable via la prop lengthRangeM
+// (ex. voiliers de course / regatta : [7, 40]). Les bornes en pieds sont derivees.
+const DEFAULT_LENGTH_RANGE_M = [10, 140];
 
 // Liste des toggles par defaut (Caraibes generique)
 const DEFAULT_TOGGLES = [
@@ -59,7 +58,12 @@ const DEFAULT_TOGGLES = [
   { key: 'couplesFriendly', label: 'Couples Friendly' },
 ];
 
-export default function YachtFiltersCaribbean({ filters, onChange, customToggles = null, hideMotor = false, boatGroups = null, hideYachtType = false }) {
+export default function YachtFiltersCaribbean({ filters, onChange, customToggles = null, hideMotor = false, boatGroups = null, hideYachtType = false, lengthRangeM = DEFAULT_LENGTH_RANGE_M }) {
+  // Bornes du slider Length (m + pieds derives) — par defaut 10-140 m, surchargeable par page.
+  const MIN_LENGTH_M = lengthRangeM[0];
+  const MAX_LENGTH_M = lengthRangeM[1];
+  const MIN_LENGTH_FT = Math.round(MIN_LENGTH_M * 3.28084);
+  const MAX_LENGTH_FT = Math.round(MAX_LENGTH_M * 3.28084);
   const toggles = customToggles || DEFAULT_TOGGLES;
   const yachtTypes = hideMotor ? YACHT_TYPES.filter(t => t.value !== 'motor') : YACHT_TYPES;
   const [isExpanded, setIsExpanded] = useState(false);
