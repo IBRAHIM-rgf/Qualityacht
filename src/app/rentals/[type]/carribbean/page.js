@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
-import { MapPin, X } from 'lucide-react';
+import { MapPin, X, ChevronDown } from 'lucide-react';
 import { ISLANDS } from '../../../test-region-map/map-data';
 import {
   REGATTAS_2027,
@@ -724,6 +724,64 @@ function RegattaEventCard({ event, index = 0 }) {
   );
 }
 
+// ── Textes dedies par type voilier (pages Caraibes /rentals/<type>/carribbean) ──
+// title + lead (1ere phrase) visibles ; le reste du paragraphe replie via See more.
+const SAILING_INTRO = {
+  'classic-sailing-yacht': {
+    title: 'Classic Sailing Yacht: Ultimate Caribbean Luxury Yacht Experience',
+    lead: 'Indulge in a luxury yacht charter in the Caribbean where every detail is designed for excellence.',
+    rest: 'Enjoy a fully crewed private yacht with a dedicated captain, stewardess, and private chef delivering gourmet dining on board. Relax in spacious cabins featuring premium materials such as Italian leather and polished wood finishes. Discover hidden Caribbean islands, exclusive beach clubs, and pristine turquoise waters. With personalized service, tailor-made itineraries, and world-class amenities, your Caribbean yacht experience becomes a seamless journey of comfort, privacy, and sophistication.',
+  },
+  'catamaran': {
+    title: 'The Catamaran: Private Caribbean Yacht Charter for Ultimate Comfort',
+    lead: 'A catamaran offers the perfect balance of comfort, space, and performance for a private yacht charter in the Caribbean.',
+    rest: 'Its dual-hull structure ensures smooth sailing, even in open waters, while providing generous living areas, sun decks, and panoramic views. Ideal for families, couples, or groups, it grants access to secluded beaches and exclusive anchorages. Experience the Caribbean in total privacy, combining relaxation, luxury, and freedom.',
+  },
+  'trimaran': {
+    title: 'The Trimaran: Elite Caribbean Luxury Sailing Experience',
+    lead: 'The trimaran represents innovation in luxury yacht charter Caribbean experiences.',
+    rest: 'Its three-hull design ensures exceptional stability, speed, and comfort, making it ideal for both long-distance cruising and island hopping. With access to shallow lagoons and secluded beaches, it offers a unique way to discover hidden Caribbean gems. Onboard, modern design meets high-end finishes, delivering a bespoke luxury sailing experience tailored for elite travelers.',
+  },
+  'sport-classic': {
+    title: 'The Classic Sport Yacht: High-End Caribbean Yacht Rental Experience',
+    lead: 'Combining speed, performance, and refined luxury, the classic sport yacht defines the ultimate Caribbean yacht rental experience.',
+    rest: 'Sleek, powerful, and sophisticated, it allows you to explore multiple Caribbean destinations effortlessly. Enjoy premium onboard comfort, designer interiors, and expansive living spaces. Perfect for clients seeking a private luxury yacht charter in the Caribbean with both performance and prestige.',
+  },
+  'traditional': {
+    title: 'The Traditional Sailboat: Timeless Luxury Yacht Charter in the Caribbean',
+    lead: 'For the discerning traveler seeking an authentic luxury yacht charter in the Caribbean, a traditional sailboat embodies elegance and heritage.',
+    rest: 'Its classic design and graceful lines offer a refined sailing experience where wind and sea dictate the rhythm. With a shallow draft, it provides access to exclusive hidden coves and private anchorages across the Caribbean islands. Spacious decks and handcrafted interiors create an intimate yet luxurious atmosphere. Ideal for those who value craftsmanship, authenticity, and a bespoke sailing experience in the Caribbean.',
+  },
+};
+
+function SailingIntro({ title, lead, rest }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="max-w-4xl mx-auto text-center leading-relaxed text-[#acb0cd]">
+      <h2 className="trajan-regular text-lg md:text-2xl uppercase tracking-[0.08em] text-[#acb0cd] mb-2">
+        {title}
+      </h2>
+      <BurntLine />
+      <p className="text-base md:text-xl max-w-3xl mx-auto mt-2">{lead}</p>
+
+      {/* Suite du paragraphe repliable (animation hauteur via grid-rows) */}
+      <div className={`grid transition-all duration-300 ease-out ${open ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'}`}>
+        <div className="overflow-hidden">
+          <p className="text-base md:text-xl max-w-3xl mx-auto">{rest}</p>
+        </div>
+      </div>
+
+      <button
+        onClick={() => setOpen(!open)}
+        className="mt-4 mx-auto inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-[0.12em] text-[#c2622a] hover:text-[#B03E00] transition-colors"
+      >
+        {open ? 'See less' : 'See more'}
+        <ChevronDown size={14} className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+      </button>
+    </div>
+  );
+}
+
 // ── Page ───────────────────────────────────────────────────────────────────────
 export default function CaribbeanV15Page({ params }) {
   const { type } = use(params);
@@ -807,7 +865,7 @@ export default function CaribbeanV15Page({ params }) {
           </div>
         </div>
 
-        {/* ══ DESCRIPTION ══ */}
+        {/* ══ DESCRIPTION (texte dedie par type voilier ; regatta a sa propre section) ══ */}
         <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">
           {type === 'regatta' ? (
             /* Regatta : texte dedie (remplace l'ancien marqueur vert temporaire). */
@@ -829,6 +887,8 @@ export default function CaribbeanV15Page({ params }) {
                 <span className="text-[#d39478] font-semibold">crown jewels of the Caribbean racing circuit</span>.
               </p>
             </div>
+          ) : SAILING_INTRO[type] ? (
+            <SailingIntro {...SAILING_INTRO[type]} />
           ) : (
             <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6 text-[#acb0cd]">
               <p className="text-lg md:text-2xl">
@@ -862,34 +922,6 @@ export default function CaribbeanV15Page({ params }) {
             </div>
           )}
         </CloudSection>
-
-        {/* ══ ONLY FOR YOU — escapade voilier classique (uniquement classic-sailing-yacht) ══ */}
-        {type === 'classic-sailing-yacht' && (
-          <CloudSection className="bg-[#2e2f32] py-14 md:py-24 px-5 md:px-20">
-            <div className="max-w-4xl mx-auto">
-              <RevealBlock label="Only For You" title="Indulge In The Ultimate Escape" />
-              <div className="text-center leading-relaxed space-y-5 md:space-y-6 text-[#acb0cd]">
-                <p className="text-base md:text-xl">
-                  Indulge in the ultimate escape aboard a{' '}
-                  <span className="text-[#d39478] font-semibold">classic yacht</span> in the Caribbean,
-                  where luxury meets unparalleled comfort. Picture this: a dedicated crew anticipating
-                  your every need, spacious cabins adorned with{' '}
-                  <span className="text-[#d39478] font-semibold">Italian leather and polished mahogany</span>,
-                  gourmet meals prepared by a <span className="text-[#d39478] font-semibold">private chef</span>{' '}
-                  served on your own deck, and stops at{' '}
-                  <span className="text-[#d39478] font-semibold">secluded coves accessible only by sea</span>.
-                </p>
-                <p className="text-base md:text-xl max-w-3xl mx-auto">
-                  Climate-controlled interiors, custom bedding, an{' '}
-                  <span className="text-[#d39478] font-semibold">onboard spa</span>, and access to{' '}
-                  <span className="text-[#d39478] font-semibold">exclusive beach clubs</span> ashore ensure
-                  your journey is a seamless blend of relaxation and opulence. Here, time stands still,
-                  and luxury becomes second nature.
-                </p>
-              </div>
-            </div>
-          </CloudSection>
-        )}
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
         <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
