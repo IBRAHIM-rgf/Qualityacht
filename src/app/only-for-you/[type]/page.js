@@ -1,6 +1,6 @@
 'use client';
 
-// Page d'un type de voilier (/rentals/<slug>) — accessible depuis /only-for-you.
+// Page d'un type de voilier (/only-for-you/<slug>) — accessible depuis /only-for-you.
 // Hero (image + titre qui monte) + grille des 16 destinations.
 
 import Image from 'next/image';
@@ -74,8 +74,8 @@ export default function RentalTypePage({ params }) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {destinationItems.map((item) => {
-              // Card Caraïbes → copie de v15 propre à ce voilier (/rentals/<type>/carribbean).
-              const href = item.caribbean ? `/rentals/${type}/carribbean` : item.href;
+              // Card Caraïbes → copie de v15 propre à ce voilier (/only-for-you/<type>/carribbean).
+              const href = item.caribbean ? `/only-for-you/${type}/carribbean` : item.href;
               const content = (
                 <>
                   <div className="w-full relative mb-6 overflow-hidden h-48 rounded-xl">

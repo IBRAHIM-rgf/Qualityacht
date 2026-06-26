@@ -17,8 +17,8 @@ const REGATTA_TOGGLES = [
   { key: 'juniorFriendly', label: 'Junior' },
 ];
 
-// Override par event-id (alignement avec la card du listing /rentals/regatta/carribbean).
-// Doit rester en sync avec EVENT_REGION_OVERRIDE du fichier rentals/[type]/carribbean/page.js
+// Override par event-id (alignement avec la card du listing /only-for-you/regatta/carribbean).
+// Doit rester en sync avec EVENT_REGION_OVERRIDE du fichier only-for-you/[type]/carribbean/page.js
 // pour que la photo de la card == photo de la page event.
 const EVENT_REGION_OVERRIDE = {
   'stir':               'leeward-antilles',

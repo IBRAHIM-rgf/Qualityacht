@@ -724,7 +724,7 @@ function RegattaEventCard({ event, index = 0 }) {
   );
 }
 
-// ── Textes dedies par type voilier (pages Caraibes /rentals/<type>/carribbean) ──
+// ── Textes dedies par type voilier (pages Caraibes /only-for-you/<type>/carribbean) ──
 // title + lead (1ere phrase) visibles ; le reste du paragraphe replie via See more.
 const SAILING_INTRO = {
   'classic-sailing-yacht': {

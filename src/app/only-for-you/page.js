@@ -3,12 +3,12 @@ import Link from "next/link";
 
 // Cards voiliers (cliquables → pages rentals).
 const sailingRentalItems = [
-  { title: "Classic Sailing Yacht Charter", image: "/images/sailing/classique4.jpg",          href: "/rentals/classic-sailing-yacht" },
-  { title: "Catamaran Charter",             image: "/images/sailing/catamaran.jpg",            href: "/rentals/catamaran" },
-  { title: "Trimaran Charter",              image: "/images/sailing/trimaran.jpg",             href: "/rentals/trimaran" },
-  { title: "Sport Classic Yacht",           image: "/images/sailing/Sport-Classic-Yacht.jpg",  href: "/rentals/sport-classic" },
-  { title: "Traditional Sailboat",          image: "/images/sailing/traditional.jpg",          href: "/rentals/traditional" },
-  { title: "Sailboat Regatta",              image: "/images/sailing/regate.jpg",               href: "/rentals/regatta" },
+  { title: "Classic Sailing Yacht Charter", image: "/images/sailing/classique4.jpg",          href: "/only-for-you/classic-sailing-yacht" },
+  { title: "Catamaran Charter",             image: "/images/sailing/catamaran.jpg",            href: "/only-for-you/catamaran" },
+  { title: "Trimaran Charter",              image: "/images/sailing/trimaran.jpg",             href: "/only-for-you/trimaran" },
+  { title: "Sport Classic Yacht",           image: "/images/sailing/Sport-Classic-Yacht.jpg",  href: "/only-for-you/sport-classic" },
+  { title: "Traditional Sailboat",          image: "/images/sailing/traditional.jpg",          href: "/only-for-you/traditional" },
+  { title: "Sailboat Regatta",              image: "/images/sailing/regate.jpg",               href: "/only-for-you/regatta" },
 ];
 
 // Card portrait (forme verticale) : image aspect 3:4 + titre dessous, titre orange au survol.
