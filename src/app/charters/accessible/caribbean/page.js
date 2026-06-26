@@ -8,8 +8,9 @@
 // Palette adaptee au site (sombre #26272a, cococo #C0C0C0, lavande #acb0cd,
 // orange #B03E00, cuivre #B87333). Boutons "Companion" en couleur : autorise.
 
+import Image from 'next/image';
 import { useState, useMemo } from 'react';
-import { Search } from 'lucide-react';
+import { Search, ChevronDown } from 'lucide-react';
 
 const REGION = 'Caribbean';
 
@@ -88,6 +89,13 @@ export default function CaribbeanAccessibilityGuide() {
   const [activeCat, setActiveCat] = useState('all');
   const [activeComp, setActiveComp] = useState(null);
   const [search, setSearch] = useState('');
+  const [expanded, setExpanded] = useState(() => new Set());
+
+  const toggle = (key) => setExpanded((prev) => {
+    const next = new Set(prev);
+    if (next.has(key)) next.delete(key); else next.add(key);
+    return next;
+  });
 
   const isFiltered = activeCat !== 'all' || activeComp || search.trim();
 
@@ -116,6 +124,7 @@ export default function CaribbeanAccessibilityGuide() {
 
       {/* ══ MASTHEAD ══ */}
       <div className="bg-[#1b223d] border-b border-[#B87333]/30 px-6 md:px-14 pt-28 md:pt-32 pb-10">
+        <Image src="/images/logoFondTrans.png" alt="Qualityacht" width={60} height={60} priority className="rounded-full mb-6" />
         <div className="w-7 h-px bg-[#B87333] mb-5" />
         <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
           {REGION} · Private Charter Accessibility
@@ -206,45 +215,40 @@ export default function CaribbeanAccessibilityGuide() {
         )}
       </div>
 
-      {/* ══ TABLE ══ */}
-      <div className="overflow-x-auto">
+      {/* ══ CARDS (fond nuage du site) ══ */}
+      <div
+        className="px-6 md:px-14 py-10"
+        style={{
+          backgroundImage: 'url(/images/nuagesAncien.png)',
+          backgroundSize: 'contain',
+          backgroundPosition: 'center',
+          backgroundColor: '#2e2f32',
+        }}
+      >
         {total === 0 ? (
-          <div className="py-16 px-6 md:px-14 text-center bg-[#2e2f32]">
+          <div className="py-16 text-center">
             <p className="text-[#6f7585] text-sm">
               No conditions match your current filters.{' '}
               <button onClick={resetAll} className="text-[#c2622a] hover:text-[#B03E00] font-medium transition-colors">Reset all filters</button>
             </p>
           </div>
         ) : (
-          <table className="w-full border-collapse" style={{ minWidth: 1040 }}>
-            <colgroup>
-              <col style={{ width: 172 }} />
-              <col style={{ width: 210 }} />
-              <col style={{ width: 124 }} />
-              <col style={{ width: 210 }} />
-              <col style={{ width: 195 }} />
-              <col />
-            </colgroup>
-            <thead>
-              <tr>
-                {['Condition', 'Clinical overview', 'Companion', 'Vessel provisions', 'Specialist equipment', 'Coordination notes'].map((h, i) => (
-                  <th
-                    key={h}
-                    className={`text-left text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6f7585] bg-[#2e2f32] border-b-2 border-[#C0C0C0]/40 py-3 px-5 whitespace-nowrap ${
-                      i === 0 ? 'pl-6 md:pl-14' : ''
-                    } ${i === 5 ? 'pr-6 md:pr-14' : ''}`}
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {grouped.map(({ sec, rows }) => (
-                <FragmentSection key={sec.id} sec={sec} rows={rows} />
-              ))}
-            </tbody>
-          </table>
+          <div className="space-y-12">
+            {grouped.map(({ sec, rows }) => (
+              <section key={sec.id}>
+                <div className="flex items-center gap-3 mb-5">
+                  <h2 className="trajan-regular text-lg md:text-xl text-[#C0C0C0] whitespace-nowrap">{sec.label}</h2>
+                  <span className="text-[11px] text-[#6f7585] whitespace-nowrap">{rows.length} condition{rows.length > 1 ? 's' : ''}</span>
+                  <div className="flex-1 h-px bg-[#B87333]/25" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+                  {rows.map((r) => (
+                    <Card key={r.type} r={r} open={expanded.has(r.type)} onToggle={() => toggle(r.type)} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
         )}
       </div>
 
@@ -272,40 +276,50 @@ function Legend({ dot, label }) {
   );
 }
 
-function FragmentSection({ sec, rows }) {
+function Card({ r, open, onToggle }) {
+  const c = COMP[r.comp];
   return (
-    <>
-      <tr>
-        <td colSpan={6} className="trajan-regular text-[15px] text-[#C0C0C0] pt-6 pb-2 px-5 pl-6 md:pl-14 bg-[#26272a] border-t border-white/5 border-b border-[#B87333]/25">
-          {sec.label}
-          <span className="font-sans text-[11px] text-[#6f7585] ml-3 tracking-wide normal-case">
-            {rows.length} condition{rows.length > 1 ? 's' : ''}
-          </span>
-        </td>
-      </tr>
-      {rows.map((r) => {
-        const c = COMP[r.comp];
-        return (
-          <tr key={r.type} className="group">
-            <td className="align-top py-3.5 px-5 pl-6 md:pl-14 bg-[#2e2f32] group-hover:bg-[#34353a] border-b border-white/5 transition-colors">
-              <span className="text-[13px] font-medium text-[#C0C0C0] leading-snug">{r.type}</span>
-            </td>
-            <td className="align-top py-3.5 px-5 bg-[#2e2f32] group-hover:bg-[#34353a] border-b border-white/5 transition-colors text-[12px] text-[#acb0cd] leading-relaxed">{r.desc}</td>
-            <td className="align-top py-3.5 px-5 bg-[#2e2f32] group-hover:bg-[#34353a] border-b border-white/5 transition-colors">
-              <span
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[10.5px] font-semibold uppercase tracking-wide whitespace-nowrap border"
-                style={{ backgroundColor: c.bg, color: c.text, borderColor: c.border }}
-              >
-                <span className="w-[5px] h-[5px] rounded-full flex-none" style={{ backgroundColor: c.dot }} />
-                {c.short}
-              </span>
-            </td>
-            <td className="align-top py-3.5 px-5 bg-[#2e2f32] group-hover:bg-[#34353a] border-b border-white/5 transition-colors text-[12px] text-[#c4c8d8] leading-relaxed">{r.vessel}</td>
-            <td className="align-top py-3.5 px-5 bg-[#2e2f32] group-hover:bg-[#34353a] border-b border-white/5 transition-colors text-[12px] text-[#acb0cd] leading-relaxed">{r.equip}</td>
-            <td className="align-top py-3.5 px-5 pr-6 md:pr-14 bg-[#2e2f32] group-hover:bg-[#34353a] border-b border-white/5 transition-colors text-[11.5px] text-[#8b90a0] italic leading-relaxed">{r.coord}</td>
-          </tr>
-        );
-      })}
-    </>
+    <article className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl p-5 flex flex-col hover:border-[#C0C0C0]/35 transition-colors">
+      <div className="flex items-start justify-between gap-3 mb-2.5">
+        <h3 className="text-[#C0C0C0] font-semibold text-[15px] leading-snug">{r.type}</h3>
+        <span
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[10px] font-semibold uppercase tracking-wide whitespace-nowrap border flex-none"
+          style={{ backgroundColor: c.bg, color: c.text, borderColor: c.border }}
+        >
+          <span className="w-[5px] h-[5px] rounded-full flex-none" style={{ backgroundColor: c.dot }} />
+          {c.short}
+        </span>
+      </div>
+
+      <p className="text-[#acb0cd] text-[13px] leading-relaxed">{r.desc}</p>
+
+      {/* Bloc detail repliable (animation hauteur via grid-rows) */}
+      <div className={`grid transition-all duration-300 ease-out ${open ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'}`}>
+        <div className="overflow-hidden">
+          <div className="space-y-3 border-t border-white/10 pt-4">
+            <Field label="Vessel provisions" value={r.vessel} />
+            <Field label="Specialist equipment" value={r.equip} />
+            <Field label="Coordination notes" value={r.coord} italic />
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={onToggle}
+        className="mt-4 self-start inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-[0.08em] text-[#c2622a] hover:text-[#B03E00] transition-colors"
+      >
+        {open ? 'See less' : 'See more'}
+        <ChevronDown size={13} className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+      </button>
+    </article>
+  );
+}
+
+function Field({ label, value, italic }) {
+  return (
+    <div>
+      <p className="text-[10px] uppercase tracking-[0.14em] text-[#B87333] mb-1">{label}</p>
+      <p className={`text-[12.5px] leading-relaxed ${italic ? 'italic text-[#9498a6]' : 'text-[#acb0cd]'}`}>{value}</p>
+    </div>
   );
 }
