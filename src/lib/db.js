@@ -130,6 +130,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
     commission_rate = null,
     category = null,
     categories = null,
+    handicaps = null,
     tags = null,
     region = null,
     sub_region = null,
@@ -152,6 +153,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
         commission_rate = COALESCE(${commission_rate}, commission_rate),
         category = COALESCE(${category}, category),
         categories = COALESCE(${categories === null || categories === undefined ? null : JSON.stringify(categories)}::jsonb, categories),
+        handicaps = COALESCE(${handicaps === null || handicaps === undefined ? null : JSON.stringify(handicaps)}::jsonb, handicaps),
         tags = COALESCE(${tags}, tags),
         region = COALESCE(${region}, region),
         sub_region = COALESCE(${sub_region}, sub_region),
@@ -285,7 +287,7 @@ export async function getSelectedYachtsWithData() {
     const rows = await sql`
       SELECT
         yacht_id, yacht_name, is_visible, is_featured, display_order,
-        category, categories, tags, custom_title, custom_description, custom_price,
+        category, categories, handicaps, tags, custom_title, custom_description, custom_price,
         custom_highlights, internal_notes, cached_data, light_data, ankor_region,
         region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info,
         created_at, updated_at
@@ -466,6 +468,8 @@ export async function ensureV3Schema() {
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS full_data JSONB`;
   // Axe "catégories charter" (multi-sélection, indépendant des régions géo) : tableau JSONB de clés.
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS categories JSONB DEFAULT '[]'::jsonb`;
+  // Handicaps accommodés par le yacht (multi-sélection) : tableau JSONB d'ids (voir src/lib/handicaps.js).
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS handicaps JSONB DEFAULT '[]'::jsonb`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_ankor_region ON yacht_selections(ankor_region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_region ON yacht_selections(region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_sub_region ON yacht_selections(sub_region)`;

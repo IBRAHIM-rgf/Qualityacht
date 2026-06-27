@@ -11,6 +11,7 @@ import {
   updateYachtEnrichedData,
   removeYachtFromSelection,
   getSelectedYachtsWithData,
+  ensureV3Schema,
 } from '@/lib/db';
 import { extractLightData, inferAnkorRegion } from '@/lib/yachtCache';
 
@@ -41,6 +42,10 @@ export async function GET(request) {
   }
 
   try {
+    // Auto-migration idempotente : garantit que les colonnes (dont `handicaps`)
+    // existent dès l'ouverture du panel admin. ALTER ... IF NOT EXISTS = no-op si déjà là.
+    await ensureV3Schema();
+
     const [selections, stats] = await Promise.all([
       getSelectedYachtsWithData(),
       getSelectionStats()
@@ -164,6 +169,7 @@ export async function PATCH(request) {
           custom_price,
           category,
           categories,
+          handicaps,
           internal_notes,
           region,
           sub_region,
@@ -181,6 +187,7 @@ export async function PATCH(request) {
           custom_price,
           category,
           categories,
+          handicaps,
           internal_notes,
           region,
           sub_region,

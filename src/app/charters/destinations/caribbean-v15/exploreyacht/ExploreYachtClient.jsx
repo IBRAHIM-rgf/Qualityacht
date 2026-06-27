@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import YachtList from '@/components/YachtList';
 import YachtFilters from '@/components/YachtFilters';
@@ -20,7 +21,8 @@ const CARIBBEAN_DESTINATIONS = [
   { value: 'emerging-destinations', label: 'Emerging Destinations' },
 ];
 
-export default function ExploreYachtClient({ initialFilters, initialData, totalYachts }) {
+export default function ExploreYachtClient({ initialFilters, initialData, totalYachts, handicapFilter = null }) {
+  const pathname = usePathname();
   const [currentPage, setCurrentPage] = useState(1);
 
   const [filters, setFilters] = useState(() => ({
@@ -132,6 +134,16 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
             {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
             {totalYachts && totalYachts > filteredYachts.length ? ` (${totalYachts} total)` : ''}
           </p>
+          {handicapFilter && (
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm bg-[#B03E00]/15 border border-[#B03E00]/40 text-[#e3a892]">
+                Adapté pour : <strong className="font-semibold">{handicapFilter.label}</strong>
+              </span>
+              <a href={pathname} className="text-[#c2622a] hover:text-[#B03E00] text-sm underline-offset-2 hover:underline">
+                Voir tous les yachts
+              </a>
+            </div>
+          )}
         </div>
 
         {/* Filters (mobile bouton orange) */}

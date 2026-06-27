@@ -11,6 +11,7 @@ import {
   Plus, Check, X, Eye, EyeOff, Star, Edit3, Trash2,
   Database, Globe, Loader2, Users,
 } from 'lucide-react';
+import { HANDICAPS_BY_CAT, HANDICAP_LABELS, parseHandicaps } from '@/lib/handicaps';
 
 // ════════════════════════════════════════════════════════════
 // CONSTANTES
@@ -118,6 +119,7 @@ function adaptYacht(s) {
     custom_price: s.custom_price || '',
     custom_description: s.custom_description || '',
     categories: parseCategories(s.categories),
+    handicaps: parseHandicaps(s.handicaps),
     pets_allowed: s.pets_allowed,
     groups_allowed: s.groups_allowed,
     water_toys: s.water_toys,
@@ -497,6 +499,7 @@ function EditModal({ yacht, onClose, onSave }) {
     region: yacht.region || '',
     sub_region: yacht.sub_region || '',
     categories: Array.isArray(yacht.categories) ? yacht.categories : [],
+    handicaps: Array.isArray(yacht.handicaps) ? yacht.handicaps : [],
     pets_allowed: !!yacht.pets_allowed,
     groups_allowed: !!yacht.groups_allowed,
     water_toys: !!yacht.water_toys,
@@ -511,6 +514,20 @@ function EditModal({ yacht, onClose, onSave }) {
     categories: f.categories.includes(id)
       ? f.categories.filter((c) => c !== id)
       : [...f.categories, id],
+  }));
+
+  // ── Picker handicaps (style région → sous-région : catégorie puis handicap, + bouton Ajouter) ──
+  const [hCat, setHCat] = useState('');
+  const [hType, setHType] = useState('');
+  const hOptions = HANDICAPS_BY_CAT.find((c) => c.id === hCat)?.items || [];
+  const addHandicap = () => {
+    if (!hType || form.handicaps.includes(hType)) return;
+    setForm((f) => ({ ...f, handicaps: [...f.handicaps, hType] }));
+    setHType('');
+  };
+  const removeHandicap = (id) => setForm((f) => ({
+    ...f,
+    handicaps: f.handicaps.filter((h) => h !== id),
   }));
 
   const save = async () => {
@@ -585,6 +602,49 @@ function EditModal({ yacht, onClose, onSave }) {
                   )}
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Handicaps accommodés — style région → sous-région : catégorie puis handicap, + bouton Ajouter */}
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Handicaps accommodés</label>
+            <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-3">
+              <div className="grid sm:grid-cols-[1fr_1fr_auto] gap-2 items-end">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Catégorie</label>
+                  <select value={hCat} onChange={e => { setHCat(e.target.value); setHType(''); }}
+                    className="w-full px-3 py-2 bg-[#2a2a30] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] text-sm">
+                    <option value="">— Choisir —</option>
+                    {HANDICAPS_BY_CAT.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Handicap</label>
+                  <select value={hType} onChange={e => setHType(e.target.value)} disabled={!hCat}
+                    className="w-full px-3 py-2 bg-[#2a2a30] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] text-sm disabled:opacity-40">
+                    <option value="">— Choisir —</option>
+                    {hOptions.map(h => <option key={h.id} value={h.id}>{h.type}</option>)}
+                  </select>
+                </div>
+                <button type="button" onClick={addHandicap} disabled={!hType}
+                  className="px-4 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 disabled:opacity-40 text-sm font-medium flex items-center gap-1 whitespace-nowrap">
+                  <Plus className="w-4 h-4" /> Ajouter
+                </button>
+              </div>
+              {form.handicaps.length === 0 ? (
+                <p className="text-[#acb0cd]/40 text-xs italic">Aucun handicap assigné.</p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {form.handicaps.map(id => (
+                    <span key={id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-[#B03E00]/15 border border-[#B03E00]/40 text-[#e3a892]">
+                      {HANDICAP_LABELS[id] || id}
+                      <button type="button" onClick={() => removeHandicap(id)} className="text-[#e3a892]/70 hover:text-white">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

@@ -5,11 +5,12 @@
 // qui est la valeur stockée en BDD dans la colonne `handicaps` (JSONB array).
 // Format des ids calqué sur les categories charter ('only-for-you/...').
 
-// 3 statuts d'accompagnement — boutons & badges en couleur (autorisé sur la page accessible).
+// 3 statuts d'accompagnement (Required / Advised / Independent) — tous en bleu lavande
+// #acb0cd (demande client : on retire le code couleur, la distinction reste par le libellé).
 export const HANDICAP_COMP = {
-  req: { short: 'Required',    dot: '#D4846A', text: '#e3a892', bg: 'rgba(212,132,106,0.16)', border: 'rgba(212,132,106,0.55)', onBg: 'rgba(212,132,106,0.20)' },
-  rec: { short: 'Advised',     dot: '#C9AA5C', text: '#d8be7e', bg: 'rgba(201,170,92,0.16)',  border: 'rgba(201,170,92,0.55)',  onBg: 'rgba(201,170,92,0.20)' },
-  ok:  { short: 'Independent', dot: '#6DAF8A', text: '#8fcfa9', bg: 'rgba(109,175,138,0.16)', border: 'rgba(109,175,138,0.55)', onBg: 'rgba(109,175,138,0.20)' },
+  req: { short: 'Required',    dot: '#acb0cd', text: '#acb0cd', bg: 'rgba(172,176,205,0.12)', border: 'rgba(172,176,205,0.45)', onBg: 'rgba(172,176,205,0.20)' },
+  rec: { short: 'Advised',     dot: '#acb0cd', text: '#acb0cd', bg: 'rgba(172,176,205,0.12)', border: 'rgba(172,176,205,0.45)', onBg: 'rgba(172,176,205,0.20)' },
+  ok:  { short: 'Independent', dot: '#acb0cd', text: '#acb0cd', bg: 'rgba(172,176,205,0.12)', border: 'rgba(172,176,205,0.45)', onBg: 'rgba(172,176,205,0.20)' },
 };
 
 // Catégories pour les filtres "chips" de la page (inclut 'all').

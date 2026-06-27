@@ -10,24 +10,36 @@
 
 import Image from 'next/image';
 import { useState, useMemo } from 'react';
-import { Search, ChevronDown } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ChevronDown, ArrowRight, Check } from 'lucide-react';
 import {
   HANDICAP_COMP as COMP,
   HANDICAP_CATS as CATS,
   HANDICAP_SECTIONS as SECTIONS,
   HANDICAPS as DATA,
+  HANDICAP_LABELS,
 } from '@/lib/handicaps';
 
 const REGION = 'Caribbean';
+
+// Listing yachts Caraïbes dédié accessible (filtré par handicap via ?handicap=<id>).
+const YACHTS_LISTING_PATH = '/charters/accessible/caribbean/yacht';
 
 // Les 31 handicaps + COMP/CATS/SECTIONS sont importés depuis @/lib/handicaps
 // (source unique partagée avec l'admin et le filtre yachts). Voir le haut du fichier.
 
 export default function CaribbeanAccessibilityGuide() {
+  const router = useRouter();
+  const [picked, setPicked] = useState('');            // handicap principal choisi (id)
   const [activeCat, setActiveCat] = useState('all');
   const [activeComp, setActiveComp] = useState(null);
   const [search, setSearch] = useState('');
   const [expanded, setExpanded] = useState(() => new Set());
+
+  const seeMatchingYachts = () => {
+    if (!picked) return;
+    router.push(`${YACHTS_LISTING_PATH}?handicap=${encodeURIComponent(picked)}`);
+  };
 
   const toggle = (key) => setExpanded((prev) => {
     const next = new Set(prev);
@@ -80,21 +92,7 @@ export default function CaribbeanAccessibilityGuide() {
       </div>
 
       {/* ══ TOOLBAR ══ */}
-      <div className="flex items-center gap-3 flex-wrap px-6 md:px-14 py-4 bg-[#2e2f32] border-b border-white/10">
-        <div className="relative flex-none w-full sm:w-60">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6f7585] pointer-events-none" size={14} />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search condition or equipment…"
-            autoComplete="off"
-            className="w-full pl-9 pr-3 py-2 text-xs bg-[#3a3b3f] border border-[#C0C0C0]/20 rounded text-[#acb0cd] placeholder:text-[#6f7585] outline-none focus:border-[#B03E00] transition-colors"
-          />
-        </div>
-
-        <div className="hidden sm:block w-px h-5 bg-white/10" />
-
+      <div className="flex flex-col gap-3 px-6 md:px-14 py-4 bg-[#2e2f32] border-b border-white/10">
         {/* Filtres categorie */}
         <div className="flex gap-1.5 flex-wrap">
           {CATS.map((c) => {
@@ -115,9 +113,9 @@ export default function CaribbeanAccessibilityGuide() {
           })}
         </div>
 
-        {/* Filtre accompagnant (couleurs autorisees) */}
-        <div className="flex items-center gap-1.5 md:ml-auto">
-          <span className="text-[11px] text-[#6f7585] whitespace-nowrap">Companion:</span>
+        {/* Filtre accompagnant (sous la rangee des categories, en lavande) */}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="text-[11px] text-[#acb0cd] whitespace-nowrap">Companion:</span>
           {['req', 'rec', 'ok'].map((k) => {
             const on = activeComp === k;
             const c = COMP[k];
@@ -163,6 +161,13 @@ export default function CaribbeanAccessibilityGuide() {
           backgroundColor: '#2e2f32',
         }}
       >
+        {/* Phrase au-dessus des cards : on selectionne son handicap en cliquant sur une card */}
+        <div className="max-w-3xl mx-auto text-center mb-10">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-2">Find your yacht</p>
+          <h2 className="trajan-regular text-2xl md:text-3xl text-[#C0C0C0]">Choose Your Main Disability</h2>
+          <p className="text-[12px] text-[#8b90a0] mt-2">Select the card that matches, then tap “View Yacht”.</p>
+        </div>
+
         {total === 0 ? (
           <div className="py-16 text-center">
             <p className="text-[#6f7585] text-sm">
@@ -181,7 +186,8 @@ export default function CaribbeanAccessibilityGuide() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
                   {rows.map((r) => (
-                    <Card key={r.type} r={r} open={expanded.has(r.type)} onToggle={() => toggle(r.type)} />
+                    <Card key={r.id} r={r} open={expanded.has(r.type)} onToggle={() => toggle(r.type)}
+                      selected={picked === r.id} onSelect={() => setPicked(r.id)} />
                   ))}
                 </div>
               </section>
@@ -201,6 +207,22 @@ export default function CaribbeanAccessibilityGuide() {
           {REGION} Fleet
         </span>
       </div>
+
+      {/* ══ BARRE STICKY : choix + View Yacht ══ */}
+      {picked && <div className="h-20" />}
+      {picked && (
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-[#1b223d]/95 backdrop-blur border-t border-[#B87333]/40 px-6 md:px-14 py-3 flex items-center justify-between gap-4">
+          <p className="text-sm text-[#acb0cd] truncate">
+            Your choice: <span className="text-[#C0C0C0] font-semibold">{HANDICAP_LABELS[picked] || picked}</span>
+          </p>
+          <button
+            onClick={seeMatchingYachts}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-[#C0C0C0]/40 text-[#c2622a] text-sm font-medium uppercase tracking-[0.12em] whitespace-nowrap hover:bg-[#B03E00] hover:text-white hover:border-[#B03E00] transition-colors"
+          >
+            View Yacht <ArrowRight size={15} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -214,10 +236,18 @@ function Legend({ dot, label }) {
   );
 }
 
-function Card({ r, open, onToggle }) {
+function Card({ r, open, onToggle, selected, onSelect }) {
   const c = COMP[r.comp];
   return (
-    <article className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl p-5 flex flex-col hover:border-[#C0C0C0]/35 transition-colors">
+    <article
+      onClick={onSelect}
+      className={`relative bg-[#3a3b3f] border rounded-2xl p-5 flex flex-col cursor-pointer transition-colors ${selected ? 'border-[#B03E00] ring-1 ring-[#B03E00]' : 'border-[#C0C0C0]/15 hover:border-[#C0C0C0]/35'}`}
+    >
+      {selected && (
+        <span className="absolute -top-2 -right-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#B03E00] text-white shadow-lg">
+          <Check size={14} />
+        </span>
+      )}
       <div className="flex items-start justify-between gap-3 mb-2.5">
         <h3 className="text-[#C0C0C0] font-semibold text-[15px] leading-snug">{r.type}</h3>
         <span
@@ -243,7 +273,7 @@ function Card({ r, open, onToggle }) {
       </div>
 
       <button
-        onClick={onToggle}
+        onClick={(e) => { e.stopPropagation(); onToggle(); }}
         className="mt-4 self-start inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-[0.08em] text-[#c2622a] hover:text-[#B03E00] transition-colors"
       >
         {open ? 'See less' : 'See more'}
