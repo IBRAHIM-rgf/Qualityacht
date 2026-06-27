@@ -112,29 +112,6 @@ export default function CaribbeanAccessibilityGuide() {
             );
           })}
         </div>
-
-        {/* Filtre accompagnant (sous la rangee des categories, en lavande) */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-[11px] text-[#acb0cd] whitespace-nowrap">Companion:</span>
-          {['req', 'rec', 'ok'].map((k) => {
-            const on = activeComp === k;
-            const c = COMP[k];
-            return (
-              <button
-                key={k}
-                onClick={() => setActiveComp(on ? null : k)}
-                className="px-[11px] py-[5px] rounded-full text-[11px] font-medium border transition-colors"
-                style={
-                  on
-                    ? { backgroundColor: c.onBg, color: c.text, borderColor: c.border }
-                    : { backgroundColor: 'transparent', color: '#acb0cd', borderColor: 'rgba(192,192,192,0.2)' }
-                }
-              >
-                {c.short}
-              </button>
-            );
-          })}
-        </div>
       </div>
 
       {/* ══ RESULTS LINE ══ */}
@@ -164,8 +141,26 @@ export default function CaribbeanAccessibilityGuide() {
         {/* Phrase au-dessus des cards : on selectionne son handicap en cliquant sur une card */}
         <div className="max-w-3xl mx-auto text-center mb-10">
           <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-2">Find your yacht</p>
-          <h2 className="trajan-regular text-2xl md:text-3xl text-[#C0C0C0]">Choose Your Main Disability</h2>
-          <p className="text-[12px] text-[#8b90a0] mt-2">Select the card that matches, then tap “View Yacht”.</p>
+          <h2 className="trajan-regular text-2xl md:text-3xl text-[#C0C0C0] mb-4">Your Boarding Preference</h2>
+          <p className="text-[13px] md:text-sm text-[#acb0cd] leading-relaxed">
+            For the ultimate white-glove experience, <span className="text-[#C0C0C0] font-medium">Dedicated Companion</span> is required.
+          </p>
+          <p className="text-[13px] md:text-sm text-[#acb0cd] leading-relaxed">
+            For a more independent stay, <span className="text-[#C0C0C0] font-medium">Independent Boarding</span> is strongly advised.
+          </p>
+          <div className="mt-6 relative inline-block text-left">
+            <select
+              value={activeComp || ''}
+              onChange={(e) => setActiveComp(e.target.value || null)}
+              className="appearance-none cursor-pointer pl-6 pr-12 py-2.5 rounded-lg border border-[#C0C0C0]/40 bg-[#26272a] text-[#c2622a] text-sm font-medium uppercase tracking-[0.12em] outline-none hover:border-[#B03E00] focus:border-[#B03E00] transition-colors"
+            >
+              <option value="">Select Independent Boarding</option>
+              <option value="req">Dedicated Companion required</option>
+              <option value="rec">Companion strongly advised</option>
+              <option value="ok">Independent Boarding</option>
+            </select>
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-[#c2622a] pointer-events-none" size={16} />
+          </div>
         </div>
 
         {total === 0 ? (
