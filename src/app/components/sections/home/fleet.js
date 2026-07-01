@@ -5,7 +5,7 @@ export default function Fleet() {
     "Pet-Friendly",
     "Accessible",
     "Sport Yachts",
-    "Helicopter Yachts",
+    "Halal Charter",
   ];
 
   return (

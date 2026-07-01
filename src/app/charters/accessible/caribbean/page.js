@@ -25,6 +25,13 @@ const REGION = 'Caribbean';
 // Listing yachts Caraïbes dédié accessible (filtré par handicap via ?handicap=<id>).
 const YACHTS_LISTING_PATH = '/charters/accessible/caribbean/yacht';
 
+// Boarding : style neutre du site (cococo / cuivre), aucun code couleur par statut.
+const BOARDING = {
+  req: { dot: '#C0C0C0', text: '#c2622a', border: 'rgba(192,192,192,0.4)', bg: '#26272a' },
+  rec: { dot: '#C0C0C0', text: '#c2622a', border: 'rgba(192,192,192,0.4)', bg: '#26272a' },
+  ok:  { dot: '#C0C0C0', text: '#c2622a', border: 'rgba(192,192,192,0.4)', bg: '#26272a' },
+};
+
 // Les 31 handicaps + COMP/CATS/SECTIONS sont importés depuis @/lib/handicaps
 // (source unique partagée avec l'admin et le filtre yachts). Voir le haut du fichier.
 
@@ -84,9 +91,9 @@ export default function CaribbeanAccessibilityGuide() {
         </h1>
 
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3 mt-7 pt-6 border-t border-white/10">
-          <Legend dot={COMP.req.dot} label="Dedicated companion required" />
-          <Legend dot={COMP.rec.dot} label="Companion strongly advised" />
-          <Legend dot={COMP.ok.dot}  label="Independent boarding" />
+          <Legend dot={BOARDING.req.dot} label="Dedicated companion required" />
+          <Legend dot={BOARDING.rec.dot} label="Companion strongly advised" />
+          <Legend dot={BOARDING.ok.dot}  label="Independent boarding" />
           <span className="text-[11px] text-[#6f7585] md:ml-auto">Each charter assessed individually by our medical coordinator.</span>
         </div>
       </div>
@@ -148,19 +155,7 @@ export default function CaribbeanAccessibilityGuide() {
           <p className="text-[13px] md:text-sm text-[#acb0cd] leading-relaxed">
             For a more independent stay, <span className="text-[#C0C0C0] font-medium">Independent Boarding</span> is strongly advised.
           </p>
-          <div className="mt-6 relative inline-block text-left">
-            <select
-              value={activeComp || ''}
-              onChange={(e) => setActiveComp(e.target.value || null)}
-              className="appearance-none cursor-pointer pl-6 pr-12 py-2.5 rounded-lg border border-[#C0C0C0]/40 bg-[#26272a] text-[#c2622a] text-sm font-medium uppercase tracking-[0.12em] outline-none hover:border-[#B03E00] focus:border-[#B03E00] transition-colors"
-            >
-              <option value="">Select Independent Boarding</option>
-              <option value="req">Dedicated Companion required</option>
-              <option value="rec">Companion strongly advised</option>
-              <option value="ok">Independent Boarding</option>
-            </select>
-            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-[#c2622a] pointer-events-none" size={16} />
-          </div>
+          <p className="text-[12px] text-[#6f7585] mt-4">Set your boarding preference on each condition below.</p>
         </div>
 
         {total === 0 ? (
@@ -232,7 +227,8 @@ function Legend({ dot, label }) {
 }
 
 function Card({ r, open, onToggle, selected, onSelect }) {
-  const c = COMP[r.comp];
+  const [boarding, setBoarding] = useState(r.comp);
+  const cc = BOARDING[boarding];
   return (
     <article
       onClick={onSelect}
@@ -243,18 +239,26 @@ function Card({ r, open, onToggle, selected, onSelect }) {
           <Check size={14} />
         </span>
       )}
-      <div className="flex items-start justify-between gap-3 mb-2.5">
+      <div className="mb-2.5">
         <h3 className="text-[#C0C0C0] font-semibold text-[15px] leading-snug">{r.type}</h3>
-        <span
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[10px] font-semibold uppercase tracking-wide whitespace-nowrap border flex-none"
-          style={{ backgroundColor: c.bg, color: c.text, borderColor: c.border }}
-        >
-          <span className="w-[5px] h-[5px] rounded-full flex-none" style={{ backgroundColor: c.dot }} />
-          {c.short}
-        </span>
       </div>
 
       <p className="text-[#acb0cd] text-[13px] leading-relaxed">{r.desc}</p>
+
+      {/* Boarding preference — select colore rouge/jaune/vert selon le statut */}
+      <div className="mt-3.5 relative" onClick={(e) => e.stopPropagation()}>
+        <select
+          value={boarding}
+          onChange={(e) => setBoarding(e.target.value)}
+          style={{ color: cc.text, borderColor: cc.border, backgroundColor: cc.bg }}
+          className="appearance-none w-full cursor-pointer pl-3 pr-9 py-2 rounded-lg border text-[11px] font-semibold uppercase tracking-[0.06em] outline-none transition-colors"
+        >
+          <option value="req" style={{ backgroundColor: '#26272a', color: BOARDING.req.text }}>Dedicated companion required</option>
+          <option value="rec" style={{ backgroundColor: '#26272a', color: BOARDING.rec.text }}>Companion strongly advised</option>
+          <option value="ok" style={{ backgroundColor: '#26272a', color: BOARDING.ok.text }}>Independent boarding</option>
+        </select>
+        <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: cc.text }} />
+      </div>
 
       {/* Bloc detail repliable (animation hauteur via grid-rows) */}
       <div className={`grid transition-all duration-300 ease-out ${open ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'}`}>

@@ -107,7 +107,7 @@ export default function Header() {
               <ul className="space-y-2">
                 <li><a href="/charters" className="hover:text-white transition">Group Yacht Charter</a></li>
                 <li><a href="/charters" className="hover:text-white transition">Sports Yacht Charter</a></li>
-                <li><a href="/charters" className="hover:text-white transition">Helicopter Yacht Charter</a></li>
+                <li><a href="/charters/halal" className="hover:text-white transition">Tailored Halal Private Charter</a></li>
               </ul>
             </div>
 

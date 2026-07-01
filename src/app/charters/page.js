@@ -40,10 +40,10 @@ const charterItems = [
 		href: "/charters/sports",
 	},
 	{
-		title: "Helicopter Yacht Charter",
-		description: "Combine the luxury of yachting with the exclusivity of a helicopter.",
-		image: "/images/charters/helicoptaire.png",
-		href: "/charters/helicopter",
+		title: "Tailored Halal Private Charter",
+		description: "A fully halal charter shaped around your family, your faith, and the way you like to travel.",
+		image: "/images/halal/vecteezy_woman-in-hijab-gazes-thoughtfully-at-the-ocean-while_69947790.jpg",
+		href: "/charters/halal",
 	},
 	{
 		title: "Group Yacht Charter",

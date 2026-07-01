@@ -72,6 +72,18 @@ export default async function AdminYachtsPage({ searchParams }) {
             </p>
           </div>
           <div className="flex items-center gap-4">
+            <a
+              href={`/admin/regatta?token=${encodeURIComponent(token)}`}
+              className="flex-none px-4 py-2 rounded-lg border border-[#B87333]/60 text-[#B87333] hover:bg-[#B87333]/10 hover:text-[#d39478] text-sm font-medium transition-colors whitespace-nowrap"
+            >
+              🏁 Régates
+            </a>
+            <a
+              href={`/admin/voiliers?token=${encodeURIComponent(token)}`}
+              className="flex-none px-4 py-2 rounded-lg border border-[#B87333]/60 text-[#B87333] hover:bg-[#B87333]/10 hover:text-[#d39478] text-sm font-medium transition-colors whitespace-nowrap"
+            >
+              ⛵ Voiliers
+            </a>
             <div className="text-right text-sm">
               <div className="text-[#C0C0C0]">
                 <span className="text-green-400 font-semibold">{stats.visible}</span> visibles
