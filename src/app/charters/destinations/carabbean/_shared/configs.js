@@ -7,7 +7,7 @@ export const CARIBBEAN_SUBREGIONS = {
     name: 'Greater Antilles',
     heroImage: '/images/destinations/greater antillesNB.jpg',
     heroImageOriginal: '/images/destinations/gretar antilles-original.jpg',
-    topIslands: ['Cuba', 'Puerto Rico', 'Jamaica', 'Cayman Islands'],
+    topIslands: ['Cuba', 'Hispaniola', 'Jamaica', 'Puerto Rico', 'Cayman Islands'],
     subTitle: 'Where Culture Meets Adventure',
     intro: "The Greater Antilles—home to Cuba, Puerto Rico, Jamaica, and the Cayman Islands—stand as the Caribbean's premier yachting destination.",
     extraParagraphs: [
@@ -21,7 +21,7 @@ export const CARIBBEAN_SUBREGIONS = {
     name: 'Leeward Islands',
     heroImage: '/images/pagesCaraibes/leeward_island.png',
     heroImageOriginal: '/images/destinations/Leeward Islands-original.jpg',
-    topIslands: ['Anguilla', 'St Martin', 'St Barths', 'Antigua', 'St Kitts'],
+    topIslands: ['Anguilla', 'Saint-Martin', 'Sint Maarten', 'Saint-Barthélemy', 'Saba & Saint-Eustache', 'Saint-Kitts & Nevis', 'Antigua & Barbuda', 'Montserrat', 'Guadeloupe'],
     subTitle: 'A Premier Tropical Paradise',
     intro: 'Renowned as one of the most relaxed yet exclusive destinations in the Caribbean, the Leeward Islands in the Lesser Antilles offer a premier tropical paradise for luxury yacht charters.',
     extraParagraphs: [
@@ -34,7 +34,7 @@ export const CARIBBEAN_SUBREGIONS = {
     name: 'Leeward Antilles',
     heroImage: '/images/pagesCaraibes/leeward_antilles.png',
     heroImageOriginal: '/images/destinations/The Leeward Antilles-original.jpg',
-    topIslands: ['Aruba', 'Bonaire', 'Curaçao'],
+    topIslands: ['Aruba', 'Bonaire', 'Curaçao', 'Saint Thomas (USVI)', 'Saint Croix (USVI)', 'Saint John (USVI)', 'Saint James (USVI)', 'Buck Island (USVI)', 'Tortola (BVI)', 'Peter Island (BVI)', 'Jost Van Dyke (BVI)', 'Virgin Gorda (BVI)', 'Anegada (BVI)'],
     subTitle: 'A Stunning Trio of Tropical Islands',
     intro: 'Located in the southern Caribbean, just off the coast of South America, the Leeward Antilles form a stunning trio of tropical islands: Aruba, Bonaire, and Curaçao. Each island offers a unique experience, making them ideal destinations for a luxury yacht charter.',
     extraParagraphs: [
@@ -47,7 +47,7 @@ export const CARIBBEAN_SUBREGIONS = {
     name: 'Windward Islands',
     heroImage: '/images/pagesCaraibes/windward_island.png',
     heroImageOriginal: '/images/destinations/the Windward Islands-original.jpg',
-    topIslands: ['Dominica', 'Martinique', 'St Lucia', 'St Vincent', 'Grenadines'],
+    topIslands: ['Dominica', 'Martinique', 'Saint Lucia', 'Saint Vincent & the Grenadines', 'Mustique', 'Canouan', 'Bequia', 'Tobago Cays', 'Grenada', 'Carriacou', 'Barbados'],
     subTitle: "Caribbean's Premier Destination",
     intro: 'Nestled in the heart of the Lesser Antilles, the Windward Islands epitomize the ultimate Caribbean yachting experience. With their calm turquoise waters, palm-fringed white-sand beaches, and lush volcanic landscapes, these islands provide a breathtaking backdrop for luxury yacht charters.',
     extraParagraphs: [
@@ -96,7 +96,7 @@ export const CARIBBEAN_SUBREGIONS = {
     name: 'Emerging Destinations',
     heroImage: '/images/pagesCaraibes/emergencyfilter.jpg',
     heroImageOriginal: '/images/pagesCaraibes/emergency.png',
-    topIslands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero'],
+    topIslands: ['Barbuda', 'Petite Martinique', 'Redonda', 'Aves Island', 'Sombrero Island'],
     subTitle: "The Caribbean's Most Exclusive Hidden Gems",
     intro: 'Beyond the well-known islands lies a constellation of secret destinations — untouched, exclusive, and accessible only to those who know where to look.',
     extraParagraphs: [
