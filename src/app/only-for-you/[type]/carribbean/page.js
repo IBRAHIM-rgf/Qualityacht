@@ -679,7 +679,7 @@ function RegattaEventCard({ event, index = 0 }) {
           </p>
         </div>
       </div>
-      <div className="px-5 pt-4 pb-4 flex flex-wrap gap-1.5">
+      <div className="px-5 pt-4 pb-4 flex flex-wrap gap-1.5 items-center">
         {event.categories.map((catKey) => {
           const cat = getCategoryInfo(catKey);
           if (!cat) return null;
@@ -689,6 +689,12 @@ function RegattaEventCard({ event, index = 0 }) {
             </span>
           );
         })}
+        {/* Infos event (boat types / level / audience) a cote des categories, sans label */}
+        {[event.boatTypes, event.level, event.audience].filter(Boolean).map((info, i) => (
+          <span key={`info-${i}`} className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] tracking-wide bg-[#26272a] border border-[#C0C0C0]/20 text-[#acb0cd]/90">
+            {info}
+          </span>
+        ))}
       </div>
       <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen((v) => !v); }}
         className="w-full px-5 py-2 text-[11px] uppercase tracking-[0.2em] text-[#c2622a] border-t border-[#C0C0C0]/15 hover:bg-[#B03E00]/5 transition-colors">
