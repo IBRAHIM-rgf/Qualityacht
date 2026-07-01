@@ -25,11 +25,11 @@ const REGION = 'Caribbean';
 // Listing yachts Caraïbes dédié accessible (filtré par handicap via ?handicap=<id>).
 const YACHTS_LISTING_PATH = '/charters/accessible/caribbean/yacht';
 
-// Boarding : style neutre du site (cococo / cuivre), aucun code couleur par statut.
+// Boarding : bleu lavande du site (#acb0cd), aucun code couleur par statut.
 const BOARDING = {
-  req: { dot: '#C0C0C0', text: '#c2622a', border: 'rgba(192,192,192,0.4)', bg: '#26272a' },
-  rec: { dot: '#C0C0C0', text: '#c2622a', border: 'rgba(192,192,192,0.4)', bg: '#26272a' },
-  ok:  { dot: '#C0C0C0', text: '#c2622a', border: 'rgba(192,192,192,0.4)', bg: '#26272a' },
+  req: { dot: '#acb0cd', text: '#acb0cd', border: 'rgba(172,176,205,0.45)', bg: '#26272a' },
+  rec: { dot: '#acb0cd', text: '#acb0cd', border: 'rgba(172,176,205,0.45)', bg: '#26272a' },
+  ok:  { dot: '#acb0cd', text: '#acb0cd', border: 'rgba(172,176,205,0.45)', bg: '#26272a' },
 };
 
 // Les 31 handicaps + COMP/CATS/SECTIONS sont importés depuis @/lib/handicaps
