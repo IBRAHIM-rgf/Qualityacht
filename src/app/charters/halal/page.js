@@ -11,8 +11,6 @@ export const metadata = {
 
 const HERO_IMAGE = '/images/halal/7945425-portrait-3138562.jpg';
 
-const TAGLINE = 'A halal charter, quietly perfected for you.';
-
 const CTA = {
   title: 'Charter On Your Terms',
   body:
@@ -36,12 +34,11 @@ export default function HalalPrivateCharterPage() {
         <Image src={HERO_IMAGE} alt="Tailored Halal Private Charter" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: '50% 28%' }} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-12 md:pb-16">
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-4">Qualityacht · Private Charter</p>
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3">Qualityacht · Private Charter</p>
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
             Tailored Halal<br />Private Charter
           </h1>
-          <BurntLine className="my-6" />
-          <p className="text-[#acb0cd] text-base md:text-lg tracking-wide max-w-md drop-shadow-[0_1px_6px_rgba(0,0,0,0.75)]">{TAGLINE}</p>
+          <BurntLine className="mt-4" />
         </div>
       </section>
 
