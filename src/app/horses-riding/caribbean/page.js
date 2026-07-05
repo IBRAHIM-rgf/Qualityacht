@@ -133,7 +133,7 @@ const regions = [
     ],
   },
   {
-    name: 'Leeward Islands (Northern Lesser Antilles)',
+    name: 'Leeward Islands',
     photo: '/images/destinations/Leeward Islands-original.jpg',
     islands: [
       {
@@ -384,7 +384,9 @@ export default function CaribbeanHorsesRacingPage() {
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
       {/* HERO */}
       <section className="relative pt-[70px] md:pt-0 h-[56vh] md:h-[70vh]">
-        <Image src="/images/horse/hero_caraibes.png" alt="Horses &amp; Racing — Caribbean" fill priority sizes="100vw" className="object-cover" />
+        <Image src="/images/horse/hero_caraibes.png" alt="Horses &amp; Racing — Caribbean" fill priority sizes="100vw" className="object-cover saturate-[1.35] brightness-105" />
+        {/* Rehausse le bleu de la mer / vivifie la photo */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0b6fb3]/40 via-[#0b6fb3]/15 to-transparent mix-blend-soft-light" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-14">
           <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
@@ -428,11 +430,10 @@ export default function CaribbeanHorsesRacingPage() {
           backgroundColor: '#2e2f32',
         }}
       >
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center justify-center gap-3 mb-6">
           <h2 className="trajan-regular text-lg md:text-2xl text-[#C0C0C0] whitespace-nowrap">
             Seasonal Circuits
           </h2>
-          <div className="flex-1 h-px bg-[#B87333]/25" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start justify-items-center">
@@ -468,11 +469,10 @@ export default function CaribbeanHorsesRacingPage() {
       >
         {regions.map((region) => (
           <div key={region.name} className="mb-14 last:mb-0">
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-6">
               <h2 className="trajan-regular text-lg md:text-2xl text-[#C0C0C0] whitespace-nowrap">
                 {region.name}
               </h2>
-              <div className="flex-1 h-px bg-[#B87333]/25" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
