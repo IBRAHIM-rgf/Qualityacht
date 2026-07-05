@@ -6,7 +6,23 @@ import { destinations } from '../charters/destinationsData';
 // Hero + intro + grille des 16 destinations en cards VERTICALES (portrait 3/4 +
 // titre dessous, style /only-for-you). Une card est cliquable si Caraïbes
 // (caribbeanHref) ou si son titre est dans `links`. `cardImages` surcharge la photo.
-export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {} }) {
+export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false }) {
+  const heroGradient = (
+    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
+  );
+  const heroOverlay = (
+    <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-4 md:pb-6">
+      <div className="hero-rise flex flex-col items-center">
+        <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3">{eyebrow}</p>
+        <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
+          {title}
+        </h1>
+        <div className="relative w-28 md:w-40 h-5 mt-4">
+          <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+        </div>
+      </div>
+    </div>
+  );
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
       <style>{`
@@ -15,21 +31,23 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
       `}</style>
 
       {/* ══ HERO ══ */}
-      <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh]">
-        <Image src={heroImage} alt={title} fill priority sizes="100vw" className="object-cover" />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-4 md:pb-6">
-          <div className="hero-rise flex flex-col items-center">
-            <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3">{eyebrow}</p>
-            <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
-              {title}
-            </h1>
-            <div className="relative w-28 md:w-40 h-5 mt-4">
-              <Image src="/images/title-line.png" alt="" fill className="object-contain" />
-            </div>
+      {heroFullPhoto ? (
+        // Dezoom max : photo entiere (ratio naturel), aucun crop
+        <section className="relative pt-[70px]">
+          <div className="relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={encodeURI(heroImage)} alt={title} className="block w-full h-auto" />
+            {heroGradient}
+            {heroOverlay}
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh]">
+          <Image src={heroImage} alt={title} fill priority sizes="100vw" className="object-cover" />
+          {heroGradient}
+          {heroOverlay}
+        </section>
+      )}
 
       {/* ══ INTRO ══ */}
       {intro && (

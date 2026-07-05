@@ -31,6 +31,7 @@ export default function HorsesRidingPage() {
       eyebrow="Private Client Guide"
       title="Horses & Riding"
       heroImage="/images/horse/resized_1440x800.png"
+      heroFullPhoto
       intro="Beach rides, mountain trails, and the great racing traditions of each destination — equestrian experiences shaped around superyacht itineraries for a discerning private clientele."
       caribbeanHref="/horses-riding/caribbean"
       links={{
