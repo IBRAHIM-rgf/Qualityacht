@@ -5,8 +5,8 @@ export const metadata = {
   description: 'Equestrian experiences and racing traditions curated for a discerning private clientele, destination by destination.',
 };
 
-// Photos des cards destination (public/images/horse). Western Med & Northern
-// Europe n'ont pas de photo horse -> fallback sur l'image par defaut.
+// Photos des cards destination (public/images/horse). Les 16 destinations ont
+// leur photo horse dediee ; fallback sur l'image par defaut si une clef manque.
 const HORSE_IMAGES = {
   'Arctic': '/images/horse/horse artic.png',
   'Bahamas': '/images/horse/horse bahamas.png',
@@ -23,6 +23,7 @@ const HORSE_IMAGES = {
   'Caraïbes': '/images/horse/Horses caraibes.png',
   'Oceania': '/images/horse/horse Oceania.png',
   'Western Mediterranean': '/images/horse/leo_visions-0cVfIh1GVcs-unsplash.jpg',
+  'Northern Europe': '/images/horse/Horse northem europe.png',
 };
 
 export default function HorsesRidingPage() {
