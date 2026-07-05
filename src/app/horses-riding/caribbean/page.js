@@ -489,21 +489,22 @@ export default function CaribbeanHorsesRacingPage() {
                   key={island.name}
                   className="w-full lg:w-[calc(50%-10px)] max-w-xl bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl overflow-hidden flex flex-col"
                 >
-                  {/* Photo de region + nom de l'ile en overlay (style regatta) */}
-                  <div className="relative h-36 md:h-40 overflow-hidden">
-                    <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{ backgroundImage: `url('${encodeURI(region.photo)}')`, opacity: 0.55 }}
+                  {/* Photo region NETTE (object-cover, pleine opacite) + nom ile + pill date orange pleine — style regatta */}
+                  <div className="relative h-44 md:h-48 overflow-hidden">
+                    <Image
+                      src={encodeURI(region.photo)}
+                      alt={island.name}
+                      fill
+                      sizes="(max-width:1024px) 100vw, 50vw"
+                      className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/40 via-[#26272a]/25 to-[#26272a]/85" />
-                    <span className="absolute top-3 right-3 inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.14em] text-[#B03E00] border border-[#B03E00]/50 bg-[#26272a]/70">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#26272a]/95 via-[#26272a]/30 to-[#26272a]/5" />
+                    <span className="absolute top-3 right-3 inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold uppercase tracking-wide bg-[#B03E00] text-white whitespace-nowrap">
                       {island.season}
                     </span>
-                    <div className="absolute inset-0 flex items-center justify-center px-4">
-                      <h3 className="trajan-regular text-sm md:text-base font-bold uppercase tracking-[0.1em] text-center text-[#C0C0C0] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-                        {island.name}
-                      </h3>
-                    </div>
+                    <h3 className="absolute bottom-3 left-4 right-4 trajan-regular text-base md:text-lg font-bold uppercase tracking-[0.1em] text-[#C0C0C0] leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+                      {island.name}
+                    </h3>
                   </div>
 
                   <div className="p-5">
