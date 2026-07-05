@@ -382,38 +382,45 @@ const regions = [
 export default function CaribbeanHorsesRacingPage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
-      {/* HERO */}
-      <section className="relative pt-[70px] md:pt-0 h-[56vh] md:h-[70vh]">
-        <Image src="/images/horse/hero_caraibes.png" alt="Horses &amp; Racing — Caribbean" fill priority sizes="100vw" className="object-cover saturate-[1.35] brightness-105" />
-        {/* Rehausse le bleu de la mer / vivifie la photo */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0b6fb3]/40 via-[#0b6fb3]/15 to-transparent mix-blend-soft-light" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-5 md:pb-7">
-          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
-            Caribbean 2027 · Private Client Guide
-          </p>
-          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
-            Horses &amp; Racing
-          </h1>
-          <div className="relative w-28 md:w-36 h-5 mt-3">
-            <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+      <style>{`
+        .hero-rise { opacity: 0; animation: heroRise 2.2s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
+        @keyframes heroRise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: translateY(0); } }
+      `}</style>
+
+      {/* HERO — photo entiere (ratio naturel) + titre qui monte du bas */}
+      <section className="pt-[70px]">
+        <div className="relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/horse/hero_caraibes.png" alt="Horses & Racing — Caribbean" className="block w-full h-auto saturate-[1.35] brightness-105" />
+          {/* Rehausse le bleu de la mer / vivifie la photo */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0b6fb3]/40 via-[#0b6fb3]/15 to-transparent mix-blend-soft-light" />
+          <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-0">
+            <div className="hero-rise flex flex-col items-center">
+              <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
+                Caribbean 2027 · Private Client Guide
+              </p>
+              <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
+                Horses &amp; Racing
+              </h1>
+            </div>
           </div>
         </div>
       </section>
 
       {/* STATS ROW */}
-      <div className="bg-[#26272a] px-6 md:px-14 pt-12 md:pt-16 pb-8 border-b border-[#C0C0C0]/10">
-        <div className="grid grid-cols-3 gap-2.5 max-w-xs mx-auto">
+      <div className="bg-[#26272a] px-6 md:px-14 py-5 md:py-6 border-b border-[#C0C0C0]/10">
+        <div className="flex flex-wrap justify-center gap-2.5">
           {stats.map((s) => (
             <div
               key={s.label}
-              className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-xl px-3 py-3 text-center"
+              className="flex items-center gap-2 bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-lg px-3 py-2"
             >
-              <div className="trajan-regular text-base md:text-lg font-bold text-[#C0C0C0]">
+              <span className="trajan-regular text-lg md:text-xl font-bold text-[#C0C0C0] leading-none">
                 {s.value}
-              </div>
-              <div className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.1em] text-[#8b90a0]">
+              </span>
+              <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.06em] text-[#8b90a0] leading-tight">
                 {s.label}
-              </div>
+              </span>
             </div>
           ))}
         </div>
@@ -422,7 +429,7 @@ export default function CaribbeanHorsesRacingPage() {
       {/* SEASONAL CIRCUITS */}
       <section className="relative px-6 md:px-14 py-14 md:py-20 bg-[#26272a]">
         <div className="absolute inset-0 z-0">
-          <Image src="/images/services-bg.png" alt="" fill className="object-cover opacity-55" />
+          <Image src="/images/nuagesAncien.png" alt="" fill className="object-cover opacity-55" />
         </div>
         <div className="relative z-10">
         <div className="flex items-center justify-center gap-3 mb-6">
@@ -453,11 +460,18 @@ export default function CaribbeanHorsesRacingPage() {
         </div>
       </section>
 
-      {/* ISLANDS BY REGION */}
+      {/* ISLANDS BY REGION — section haute : fond nuages TUILE verticalement (meme echelle que Seasonal) */}
       <section className="relative px-6 md:px-14 py-14 md:py-20 bg-[#26272a]">
-        <div className="absolute inset-0 z-0">
-          <Image src="/images/services-bg.png" alt="" fill className="object-cover opacity-55" />
-        </div>
+        <div
+          className="absolute inset-0 z-0 opacity-55"
+          style={{
+            backgroundImage: "url('/images/nuagesAncien.png')",
+            backgroundSize: '100% auto',
+            backgroundRepeat: 'repeat-y',
+            backgroundPosition: 'top center',
+          }}
+        />
+        <div className="absolute inset-0 z-0 bg-[#26272a]/20" />
         <div className="relative z-10">
         {regions.map((region) => (
           <div key={region.name} className="mb-14 last:mb-0">
@@ -467,11 +481,11 @@ export default function CaribbeanHorsesRacingPage() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+            <div className="flex flex-wrap justify-center gap-5 items-start">
               {region.islands.map((island) => (
                 <article
                   key={island.name}
-                  className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl overflow-hidden flex flex-col"
+                  className="w-full lg:w-[calc(50%-10px)] max-w-xl bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl overflow-hidden flex flex-col"
                 >
                   {/* Photo de region + nom de l'ile en overlay (style regatta) */}
                   <div className="relative h-36 md:h-40 overflow-hidden">

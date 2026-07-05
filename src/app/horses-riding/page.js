@@ -30,7 +30,7 @@ export default function HorsesRidingPage() {
     <ThemeLandingPage
       eyebrow="Private Client Guide"
       title="Horses & Riding"
-      heroImage="/images/gridLosange/cheval2.png"
+      heroImage="/images/horse/resized_1440x800.png"
       intro="Beach rides, mountain trails, and the great racing traditions of each destination — equestrian experiences shaped around superyacht itineraries for a discerning private clientele."
       caribbeanHref="/horses-riding/caribbean"
       links={{

@@ -52,7 +52,13 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
               const card = (
                 <>
                   <div className="w-full relative overflow-hidden aspect-[3/4] rounded-xl mb-4">
-                    <Image src={encodeURI(img)} alt={label} fill sizes="(max-width:768px) 80vw, 25vw" className="object-cover rounded-xl transition-transform duration-500 group-hover:scale-105" />
+                    <Image
+                      src={encodeURI(img)}
+                      alt={label}
+                      fill
+                      sizes="(max-width:768px) 80vw, 25vw"
+                      className={`object-cover rounded-xl transition-transform duration-500 ${isCaribbean ? 'origin-right scale-[1.06] group-hover:scale-110' : 'group-hover:scale-105'}`}
+                    />
                   </div>
                   <h3 className="text-base md:text-lg font-semibold trajan-regular uppercase text-center leading-tight text-[#acb0cd] group-hover:text-[#c2622a] transition-colors duration-300">
                     {label}

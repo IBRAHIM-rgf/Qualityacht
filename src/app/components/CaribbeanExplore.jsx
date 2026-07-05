@@ -514,7 +514,7 @@ function BurntLine() {
 }
 
 // ── Section fond ───────────────────────────────────────────────────────────────
-function CloudSection({ children, className = '', bg = '/images/services-bg.png' }) {
+function CloudSection({ children, className = '', bg = '/images/nuagesAncien.png' }) {
   return (
     <div className={`relative ${className}`}>
       <div className="absolute inset-0 z-0">
