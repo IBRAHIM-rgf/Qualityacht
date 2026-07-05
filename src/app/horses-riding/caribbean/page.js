@@ -387,8 +387,7 @@ export default function CaribbeanHorsesRacingPage() {
         <Image src="/images/horse/hero_caraibes.png" alt="Horses &amp; Racing — Caribbean" fill priority sizes="100vw" className="object-cover saturate-[1.35] brightness-105" />
         {/* Rehausse le bleu de la mer / vivifie la photo */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0b6fb3]/40 via-[#0b6fb3]/15 to-transparent mix-blend-soft-light" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-14">
+        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-5 md:pb-7">
           <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
             Caribbean 2027 · Private Client Guide
           </p>
@@ -402,14 +401,14 @@ export default function CaribbeanHorsesRacingPage() {
       </section>
 
       {/* STATS ROW */}
-      <div className="bg-[#26272a] px-6 md:px-14 py-8 border-b border-[#C0C0C0]/10">
-        <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
+      <div className="bg-[#26272a] px-6 md:px-14 pt-12 md:pt-16 pb-8 border-b border-[#C0C0C0]/10">
+        <div className="grid grid-cols-3 gap-2.5 max-w-xs mx-auto">
           {stats.map((s) => (
             <div
               key={s.label}
               className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-xl px-3 py-3 text-center"
             >
-              <div className="trajan-regular text-xl md:text-2xl font-bold text-[#C0C0C0]">
+              <div className="trajan-regular text-base md:text-lg font-bold text-[#C0C0C0]">
                 {s.value}
               </div>
               <div className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.1em] text-[#8b90a0]">
@@ -421,26 +420,22 @@ export default function CaribbeanHorsesRacingPage() {
       </div>
 
       {/* SEASONAL CIRCUITS */}
-      <section
-        className="px-6 md:px-14 py-14 md:py-20"
-        style={{
-          backgroundImage: "url('/images/nuagesAncien.png')",
-          backgroundSize: 'contain',
-          backgroundPosition: 'center',
-          backgroundColor: '#2e2f32',
-        }}
-      >
+      <section className="relative px-6 md:px-14 py-14 md:py-20 bg-[#26272a]">
+        <div className="absolute inset-0 z-0">
+          <Image src="/images/services-bg.png" alt="" fill className="object-cover opacity-55" />
+        </div>
+        <div className="relative z-10">
         <div className="flex items-center justify-center gap-3 mb-6">
           <h2 className="trajan-regular text-lg md:text-2xl text-[#C0C0C0] whitespace-nowrap">
             Seasonal Circuits
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start justify-items-center">
+        <div className="flex flex-wrap justify-center gap-5">
           {circuits.map((c) => (
             <article
               key={c.dates}
-              className="w-full bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl p-5 flex flex-col text-center"
+              className="w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] max-w-md bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl p-5 flex flex-col text-center"
             >
               <div className="mb-3">
                 <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.14em] text-[#B03E00] border border-[#B03E00]/50">
@@ -455,18 +450,15 @@ export default function CaribbeanHorsesRacingPage() {
             </article>
           ))}
         </div>
+        </div>
       </section>
 
       {/* ISLANDS BY REGION */}
-      <section
-        className="px-6 md:px-14 py-14 md:py-20"
-        style={{
-          backgroundImage: "url('/images/nuagesAncien.png')",
-          backgroundSize: 'contain',
-          backgroundPosition: 'center',
-          backgroundColor: '#2e2f32',
-        }}
-      >
+      <section className="relative px-6 md:px-14 py-14 md:py-20 bg-[#26272a]">
+        <div className="absolute inset-0 z-0">
+          <Image src="/images/services-bg.png" alt="" fill className="object-cover opacity-55" />
+        </div>
+        <div className="relative z-10">
         {regions.map((region) => (
           <div key={region.name} className="mb-14 last:mb-0">
             <div className="flex items-center justify-center gap-3 mb-6">
@@ -520,6 +512,7 @@ export default function CaribbeanHorsesRacingPage() {
             </div>
           </div>
         ))}
+        </div>
       </section>
 
       {/* CLOSING NOTE BAND */}
