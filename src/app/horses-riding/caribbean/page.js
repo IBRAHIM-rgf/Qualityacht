@@ -394,7 +394,9 @@ export default function CaribbeanHorsesRacingPage() {
           <img src="/images/horse/hero_caraibes.png" alt="Horses & Racing — Caribbean" className="block w-full h-auto saturate-[1.35] brightness-105" />
           {/* Rehausse le bleu de la mer / vivifie la photo */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#0b6fb3]/40 via-[#0b6fb3]/15 to-transparent mix-blend-soft-light" />
-          <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-0">
+          {/* Degrade fond (comme le hero /horses-riding) : fond sombre en bas pour lisibilite + blend page — epaisseur reduite (moitie basse) */}
+          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
+          <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-4 md:pb-6">
             <div className="hero-rise flex flex-col items-center">
               <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
                 Caribbean 2027 · Private Client Guide

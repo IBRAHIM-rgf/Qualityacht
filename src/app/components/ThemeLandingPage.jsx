@@ -9,17 +9,24 @@ import { destinations } from '../charters/destinationsData';
 export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {} }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
+      <style>{`
+        .hero-rise { opacity: 0; animation: heroRise 2.2s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
+        @keyframes heroRise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: translateY(0); } }
+      `}</style>
+
       {/* ══ HERO ══ */}
       <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh]">
         <Image src={heroImage} alt={title} fill priority sizes="100vw" className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-12 md:pb-16">
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3">{eyebrow}</p>
-          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
-            {title}
-          </h1>
-          <div className="relative w-28 md:w-40 h-5 mt-4">
-            <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
+        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-4 md:pb-6">
+          <div className="hero-rise flex flex-col items-center">
+            <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3">{eyebrow}</p>
+            <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
+              {title}
+            </h1>
+            <div className="relative w-28 md:w-40 h-5 mt-4">
+              <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+            </div>
           </div>
         </div>
       </section>
