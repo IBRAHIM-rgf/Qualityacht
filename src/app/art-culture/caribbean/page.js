@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import CaribbeanExplore from '../../components/CaribbeanExplore';
 
 export const metadata = {
   title: 'Art & Culture — Caribbean 2026 | Qualityacht',
@@ -424,6 +425,9 @@ export default function CaribbeanArtCulturePage() {
           All private access arranged on request through your concierge.
         </p>
       </div>
+
+      {/* Sections reprises de caribbean-v15 (Explore / Caribbean Islands …) */}
+      <CaribbeanExplore />
     </div>
   );
 }

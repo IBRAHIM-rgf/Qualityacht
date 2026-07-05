@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import CaribbeanExplore from '../../components/CaribbeanExplore';
 
 export const metadata = {
   title: 'Superyacht Horses & Racing 2027 — Caribbean Private Guide | Qualityacht',
@@ -53,7 +54,8 @@ const circuits = [
 
 const regions = [
   {
-    name: 'Greater Antilles & Turks & Caicos',
+    name: 'Greater Antilles',
+    photo: '/images/destinations/gretar antilles-original.jpg',
     islands: [
       {
         name: 'Cuba (Havana · Viñales)',
@@ -73,6 +75,12 @@ const regions = [
         racing: 'Caymanas Park — Triple Crown; Diamond Mile (Nov); Boxing Day (Dec 26).',
         season: 'Nov–Jul',
       },
+    ],
+  },
+  {
+    name: 'Turks & Caicos',
+    photo: '/images/destinations/Turks and Caicos-original.jpg',
+    islands: [
       {
         name: 'Providenciales (Turks & Caicos)',
         riding: 'Provo Ponies (20 yrs), Long Bay Beach, swimming in the sea.',
@@ -101,6 +109,7 @@ const regions = [
   },
   {
     name: 'Cayman Islands',
+    photo: '/images/destinations/Cayman Islands-original.jpg',
     islands: [
       {
         name: 'Grand Cayman (West Bay · George Town)',
@@ -125,6 +134,7 @@ const regions = [
   },
   {
     name: 'Leeward Islands (Northern Lesser Antilles)',
+    photo: '/images/destinations/Leeward Islands-original.jpg',
     islands: [
       {
         name: 'Anguilla',
@@ -183,6 +193,7 @@ const regions = [
   },
   {
     name: 'British Virgin Islands (BVI)',
+    photo: '/images/destinations/The Leeward Antilles-original.jpg',
     islands: [
       {
         name: 'Tortola (Road Town)',
@@ -225,6 +236,7 @@ const regions = [
   },
   {
     name: 'US Virgin Islands (USVI)',
+    photo: '/images/destinations/The Leeward Antilles-original.jpg',
     islands: [
       {
         name: 'St Thomas',
@@ -248,6 +260,7 @@ const regions = [
   },
   {
     name: 'Windward Islands & Grenadines',
+    photo: '/images/destinations/the Windward Islands-original.jpg',
     islands: [
       {
         name: 'Martinique',
@@ -340,6 +353,7 @@ const regions = [
   },
   {
     name: 'ABC Islands (Aruba · Bonaire · Curaçao)',
+    photo: '/images/destinations/The Leeward Antilles-original.jpg',
     islands: [
       {
         name: 'Aruba (outside the cyclone zone)',
@@ -368,32 +382,35 @@ const regions = [
 export default function CaribbeanHorsesRacingPage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
-      {/* MASTHEAD */}
-      <div className="bg-[#1b223d] border-b border-[#B87333]/30 px-6 md:px-14 pt-28 md:pt-32 pb-10">
-        <div className="w-7 h-px bg-[#B87333] mb-5" />
-        <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
-          Caribbean 2027 · Private Client Guide
-        </p>
-        <h1 className="trajan-regular text-3xl md:text-5xl text-[#C0C0C0] leading-tight mb-2">
-          Horses &amp; Racing
-        </h1>
-        <p className="text-[13px] text-[#8b90a0]">
-          Riding · Racing · Seasonal Circuits — 48 islands across the Caribbean
-        </p>
-      </div>
+      {/* HERO */}
+      <section className="relative pt-[70px] md:pt-0 h-[56vh] md:h-[70vh]">
+        <Image src="/images/horse/hero_caraibes.png" alt="Horses &amp; Racing — Caribbean" fill priority sizes="100vw" className="object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
+        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-14">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
+            Caribbean 2027 · Private Client Guide
+          </p>
+          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
+            Horses &amp; Racing
+          </h1>
+          <div className="relative w-28 md:w-36 h-5 mt-3">
+            <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+          </div>
+        </div>
+      </section>
 
       {/* STATS ROW */}
       <div className="bg-[#26272a] px-6 md:px-14 py-8 border-b border-[#C0C0C0]/10">
-        <div className="grid grid-cols-3 gap-4 max-w-2xl">
+        <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
           {stats.map((s) => (
             <div
               key={s.label}
-              className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-xl px-4 py-5 text-center"
+              className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-xl px-3 py-3 text-center"
             >
-              <div className="trajan-regular text-2xl md:text-3xl text-[#C0C0C0] mb-1">
+              <div className="trajan-regular text-xl md:text-2xl font-bold text-[#C0C0C0]">
                 {s.value}
               </div>
-              <div className="text-[10px] md:text-[11px] uppercase tracking-[0.12em] text-[#8b90a0]">
+              <div className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.1em] text-[#8b90a0]">
                 {s.label}
               </div>
             </div>
@@ -418,21 +435,18 @@ export default function CaribbeanHorsesRacingPage() {
           <div className="flex-1 h-px bg-[#B87333]/25" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start justify-items-center">
           {circuits.map((c) => (
             <article
-              key={c.letter}
-              className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl p-5 flex flex-col"
+              key={c.dates}
+              className="w-full bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl p-5 flex flex-col text-center"
             >
-              <div className="flex items-center gap-3 mb-3">
-                <span className="trajan-regular text-2xl text-[#B87333] leading-none">
-                  {c.letter}
-                </span>
-                <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-[0.14em] text-[#B87333] border border-[#B87333]/40">
+              <div className="mb-3">
+                <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.14em] text-[#B03E00] border border-[#B03E00]/50">
                   {c.dates}
                 </span>
               </div>
-              <h3 className="text-[#C0C0C0] font-semibold text-[15px] leading-snug mb-1">
+              <h3 className="text-[#C0C0C0] font-bold text-[15px] leading-snug mb-1">
                 {c.name}
               </h3>
               <p className="text-[12px] text-[#8b90a0] mb-3">{c.distance}</p>
@@ -465,32 +479,42 @@ export default function CaribbeanHorsesRacingPage() {
               {region.islands.map((island) => (
                 <article
                   key={island.name}
-                  className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl p-5 flex flex-col"
+                  className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl overflow-hidden flex flex-col"
                 >
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <h3 className="text-[#C0C0C0] font-semibold text-[15px] leading-snug">
-                      {island.name}
-                    </h3>
-                    <span className="inline-block shrink-0 px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-[0.14em] text-[#B87333] border border-[#B87333]/40">
+                  {/* Photo de region + nom de l'ile en overlay (style regatta) */}
+                  <div className="relative h-36 md:h-40 overflow-hidden">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url('${encodeURI(region.photo)}')`, opacity: 0.55 }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#26272a]/40 via-[#26272a]/25 to-[#26272a]/85" />
+                    <span className="absolute top-3 right-3 inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.14em] text-[#B03E00] border border-[#B03E00]/50 bg-[#26272a]/70">
                       {island.season}
                     </span>
+                    <div className="absolute inset-0 flex items-center justify-center px-4">
+                      <h3 className="trajan-regular text-sm md:text-base font-bold uppercase tracking-[0.1em] text-center text-[#C0C0C0] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                        {island.name}
+                      </h3>
+                    </div>
                   </div>
 
-                  <p className="text-[13px] leading-relaxed mb-2">
-                    <span className="text-[#c2622a] font-semibold uppercase tracking-[0.08em] text-[11px] mr-2">
-                      Riding
-                    </span>
-                    <span className="text-[#acb0cd]">{island.riding}</span>
-                  </p>
-
-                  {island.racing !== '—' && (
-                    <p className="text-[13px] leading-relaxed">
+                  <div className="p-5">
+                    <p className="text-[13px] leading-relaxed mb-2">
                       <span className="text-[#c2622a] font-semibold uppercase tracking-[0.08em] text-[11px] mr-2">
-                        Racing
+                        Riding
                       </span>
-                      <span className="text-[#acb0cd]">{island.racing}</span>
+                      <span className="text-[#acb0cd]">{island.riding}</span>
                     </p>
-                  )}
+
+                    {island.racing !== '—' && (
+                      <p className="text-[13px] leading-relaxed">
+                        <span className="text-[#c2622a] font-semibold uppercase tracking-[0.08em] text-[11px] mr-2">
+                          Racing
+                        </span>
+                        <span className="text-[#acb0cd]">{island.racing}</span>
+                      </p>
+                    )}
+                  </div>
                 </article>
               ))}
             </div>
@@ -505,6 +529,10 @@ export default function CaribbeanHorsesRacingPage() {
           racing arrangements coordinated on request through your concierge.
         </p>
       </div>
+
+      {/* Sections reprises de caribbean-v15 (a partir de "Explore / Caribbean Islands") :
+          Caribbean Islands, Destinations by Region, Popular Destinations, CTA, FAQ + modal carte. */}
+      <CaribbeanExplore />
     </div>
   );
 }

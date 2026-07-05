@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { destinations } from '../charters/destinationsData';
 
 // Landing générique d'une thématique (Art & Culture, Horses & Riding, Historic Sites).
-// Hero + intro + grille des 16 destinations. Seule la card Caraïbes est cliquable
-// (vers caribbeanHref) tant que les autres régions n'ont pas de contenu dédié.
-export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref }) {
+// Hero + intro + grille des 16 destinations en cards VERTICALES (portrait 3/4 +
+// titre dessous, style /only-for-you). Une card est cliquable si Caraïbes
+// (caribbeanHref) ou si son titre est dans `links`. `cardImages` surcharge la photo.
+export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {} }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO ══ */}
@@ -32,7 +33,7 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
         </section>
       )}
 
-      {/* ══ DESTINATIONS ══ */}
+      {/* ══ DESTINATIONS (cards verticales — portrait 3/4 + titre dessous) ══ */}
       <section
         className="py-14 md:py-20 px-6 md:px-14"
         style={{ backgroundImage: "url('/images/nuagesAncien.png')", backgroundSize: 'contain', backgroundPosition: 'center', backgroundColor: '#2e2f32' }}
@@ -42,28 +43,30 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
             <p className="text-[11px] uppercase tracking-[0.3em] text-[#B87333] mb-3">By Destination</p>
             <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">Destinations</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="flex flex-wrap justify-center gap-8">
             {destinations.map((d) => {
               const isCaribbean = d.title === 'Caraïbes';
               const label = isCaribbean ? 'Caribbean' : d.title;
-              const href = isCaribbean ? caribbeanHref : null;
-              const inner = (
+              const href = isCaribbean ? caribbeanHref : (links[d.title] || null);
+              const img = cardImages[d.title] || d.image;
+              const card = (
                 <>
-                  <div className="w-full relative mb-6 overflow-hidden h-48 rounded-xl">
-                    <Image src={d.image} alt={label} fill className="object-cover rounded-xl" sizes="(max-width:768px) 100vw, 33vw" />
+                  <div className="w-full relative overflow-hidden aspect-[3/4] rounded-xl mb-4">
+                    <Image src={encodeURI(img)} alt={label} fill sizes="(max-width:768px) 80vw, 25vw" className="object-cover rounded-xl transition-transform duration-500 group-hover:scale-105" />
                   </div>
-                  <h3 className="text-lg font-semibold text-[#acb0cd] trajan-regular uppercase text-center leading-tight w-full group-hover:text-[#c2622a] transition-colors duration-300">
+                  <h3 className="text-base md:text-lg font-semibold trajan-regular uppercase text-center leading-tight text-[#acb0cd] group-hover:text-[#c2622a] transition-colors duration-300">
                     {label}
                   </h3>
                 </>
               );
+              const wrapClass = 'group flex flex-col items-center w-[70%] sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-22px)] max-w-[300px]';
               return href ? (
-                <Link key={d.title} href={href} className="group min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform cursor-pointer">
-                  {inner}
+                <Link key={d.title} href={href} className={`${wrapClass} cursor-pointer`}>
+                  {card}
                 </Link>
               ) : (
-                <div key={d.title} className="group min-w-0 rounded-2xl p-6 flex flex-col items-center text-center opacity-85">
-                  {inner}
+                <div key={d.title} className={`${wrapClass} opacity-90`}>
+                  {card}
                 </div>
               );
             })}

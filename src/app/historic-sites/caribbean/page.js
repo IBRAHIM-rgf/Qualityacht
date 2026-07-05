@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import CaribbeanExplore from '../../components/CaribbeanExplore';
 
 export const metadata = {
   title: 'Historic Sites — Jamaica | Qualityacht',
@@ -167,6 +168,9 @@ export default function HistoricSitesCaribbeanPage() {
           sites require private ground transfer from Kingston or Montego Bay.
         </p>
       </div>
+
+      {/* Sections reprises de caribbean-v15 (Explore / Caribbean Islands …) */}
+      <CaribbeanExplore />
     </div>
   );
 }
