@@ -89,8 +89,9 @@ export default function HalalPrivateCharterPage() {
         <HalalFaq />
       </section>
 
-      {/* ══ CTA ══ */}
-      <section className="bg-[#1b223d] py-16 md:py-20 px-6 md:px-14">
+      {/* ══ CTA ══ (fond gris sombre, PAS le navy du footer : la derniere section
+          doit se distinguer du footer #1b223d) */}
+      <section className="bg-[#2e2f32] py-16 md:py-20 px-6 md:px-14">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-[11px] uppercase tracking-[0.3em] text-[#B87333] mb-3">Bespoke Enquiry</p>
           <h2 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.08em] text-[#C0C0C0] mb-4">{CTA.title}</h2>
