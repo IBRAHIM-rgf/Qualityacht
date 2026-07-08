@@ -541,7 +541,14 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
 }
 
 // ── Page ───────────────────────────────────────────────────────────────────────
-export default function CaribbeanV15Page() {
+// Le hero est parametrable (mêmes valeurs qu'avant par defaut) pour permettre de
+// reutiliser tout le contenu v15 avec un hero different — cf. /charters/halal/caribbean.
+export default function CaribbeanV15Page({
+  heroImageMobile = '/images/yachts/yatch2.jpeg',
+  heroImageDesktop = '/images/yachts/Yatch_desktop.png',
+  heroTitle = 'The Caribbean',
+  heroSubtitle = 'The Ultimate Luxury Yachting Destination',
+} = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
   useEffect(() => {
@@ -567,13 +574,13 @@ export default function CaribbeanV15Page() {
         <div className="pt-[70px] md:pt-0 bg-[#26272a]">
           {/* Mobile : image seule */}
           <div className="relative aspect-[6/5] md:hidden">
-            <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
+            <Image src={heroImageMobile} alt="" fill priority className="object-cover object-center" />
           </div>
-          {/* Desktop : photo dediee Yatch_desktop.png (paysage) en pleine largeur, ratio naturel. */}
+          {/* Desktop : photo dediee (paysage) en pleine largeur, ratio naturel. */}
           <div className="hidden md:block relative w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/yachts/Yatch_desktop.png"
+              src={heroImageDesktop}
               alt=""
               className="block w-full h-auto"
             />
@@ -583,11 +590,11 @@ export default function CaribbeanV15Page() {
             <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-10 md:pb-16">
               <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
                 <h1 className="trajan-regular text-6xl lg:text-7xl uppercase tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
-                  The Caribbean
+                  {heroTitle}
                 </h1>
                 <BurntLine />
                 <p className="text-[#acb0cd] text-xl uppercase tracking-[0.25em] font-light text-center drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
-                  The Ultimate Luxury Yachting Destination
+                  {heroSubtitle}
                 </p>
               </div>
             </div>
