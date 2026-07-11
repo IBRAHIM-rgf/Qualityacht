@@ -62,7 +62,8 @@ export default function HalalPrivateCharterPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {destinations.map((d) => (
-              <Link key={d.title} href={d.href} className="group min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform">
+              // Sur la page halal, la carte Caraibes mene a la page halal caraibes dediee.
+              <Link key={d.title} href={d.title === 'Caraïbes' ? '/charters/halal/caribbean' : d.href} className="group min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform">
                 <div className="w-full relative mb-6 overflow-hidden h-48 rounded-xl">
                   <Image src={d.image} alt={d.title} fill className="object-cover rounded-xl" sizes="(max-width:768px) 100vw, 33vw" />
                 </div>
