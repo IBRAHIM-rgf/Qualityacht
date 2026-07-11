@@ -12,7 +12,7 @@ export default function HistoricSitesPage() {
       title="Historic Sites"
       heroImage="/images/new/pexels-gibran-riojas-2153089565-32551597.jpg"
       intro="Forts, plantation houses, sunken cities and Georgian towns — landmarks of historic consequence, with exclusive private access and after-hours experiences arranged at each."
-      caribbeanHref="/historic-sites/caribbean"
+      caribbeanHref="/historic-sites/caribbean-v2"
     />
   );
 }

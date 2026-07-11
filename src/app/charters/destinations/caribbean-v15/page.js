@@ -548,6 +548,7 @@ export default function CaribbeanV15Page({
   heroImageDesktop = '/images/yachts/Yatch_desktop.png',
   heroTitle = 'The Caribbean',
   heroSubtitle = 'The Ultimate Luxury Yachting Destination',
+  intro = null,
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -613,6 +614,15 @@ export default function CaribbeanV15Page({
             </p>
           </div>
         </div>
+
+        {/* ══ INTRO parametrable (ex. paragraphe halal) — sous le hero ══ */}
+        {intro && (
+          <CloudSection className="bg-[#26272a] pt-14 md:pt-24 px-5 md:px-20" bg="/images/nuagesAncien.png">
+            <div className="max-w-3xl mx-auto text-center">
+              <p className="text-[#acb0cd] text-base md:text-lg leading-relaxed">{intro}</p>
+            </div>
+          </CloudSection>
+        )}
 
         {/* ══ DESCRIPTION ══ */}
         <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">

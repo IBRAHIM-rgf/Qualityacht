@@ -52,6 +52,79 @@ function Tile({ item, index, fallbackImg }) {
   );
 }
 
+// ── Tuile RANDONNEE : photo + nom + lieu + pills stats + Read more (VIP / acces) ──
+const HTAG =
+  'inline-flex items-center px-2 py-0.5 rounded-md text-[9px] uppercase tracking-wide bg-[#26272a] border border-[#C0C0C0]/20 text-[#acb0cd]';
+const HREAD =
+  'w-full px-4 py-2.5 text-[10px] uppercase tracking-[0.2em] text-[#c2622a] border-t border-[#C0C0C0]/15 transition-colors hover:text-[#B03E00]';
+
+function HikeInfo({ label, children }) {
+  return (
+    <div className="space-y-1">
+      <span className={HTAG}>{label}</span>
+      <p className="text-[12px] leading-relaxed text-[#acb0cd]/85">{children}</p>
+    </div>
+  );
+}
+
+function HikeTile({ item, index, fallbackImg }) {
+  const [open, setOpen] = useState(false);
+  const src = item.img || fallbackImg;
+  return (
+    <figure
+      className="reveal group relative rounded-2xl overflow-hidden border border-[#C0C0C0]/15 bg-[#3a3b3f]/70 backdrop-blur-sm transition-all duration-700 hover:border-[#B03E00]/50 flex flex-col"
+      style={{ transitionDelay: `${(index % 4) * 90}ms` }}
+    >
+      <div className="relative aspect-[3/2] overflow-hidden">
+        <Image
+          src={encodeURI(src)}
+          alt={item.name}
+          fill
+          sizes="(max-width:768px) 100vw, 33vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#26272a]/92 via-[#26272a]/10 to-transparent" />
+        {item.isNew && (
+          <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-[#B03E00] text-white text-[9px] font-semibold uppercase tracking-[0.15em]">
+            New
+          </span>
+        )}
+        {item.yacht && (
+          <span className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full border border-[#C0C0C0]/40 bg-[#26272a]/70 text-[#acb0cd] text-[9px] uppercase tracking-[0.12em]">
+            Yacht access
+          </span>
+        )}
+        <figcaption className="absolute inset-x-0 bottom-0 p-4">
+          <h3 className="trajan-regular text-base md:text-lg uppercase tracking-[0.08em] text-[#C0C0C0] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            {item.name}
+          </h3>
+          <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-[#B87333]">{item.location}</p>
+        </figcaption>
+      </div>
+
+      <div className="px-4 pt-3 flex flex-wrap gap-1.5">
+        <span className={HTAG}>{item.level}</span>
+        <span className={HTAG}>{item.distance}</span>
+        <span className={HTAG}>{item.elevation}</span>
+        <span className={HTAG}>{item.duration}</span>
+      </div>
+
+      <button onClick={() => setOpen((v) => !v)} className={`${HREAD} mt-3`}>
+        {open ? 'Show less' : 'Read more'}
+      </button>
+
+      {open && (
+        <div className="px-4 py-3 border-t border-[#C0C0C0]/15 space-y-3 bg-[#26272a]/40">
+          <HikeInfo label="VIP experience">{item.vip}</HikeInfo>
+          <HikeInfo label="Access">
+            {item.access} · {item.yacht ? 'Yacht access' : 'Shore only'}
+          </HikeInfo>
+        </div>
+      )}
+    </figure>
+  );
+}
+
 export default function ExperienceColumns({ columns }) {
   const rootRef = useRef(null);
 
@@ -120,14 +193,14 @@ export default function ExperienceColumns({ columns }) {
               )}
             </header>
 
-            {col.items.map((item, i) => (
-              <Tile
-                key={item.name}
-                item={item}
-                index={i}
-                fallbackImg={SUBREGION_PHOTOS[(colOffset[ci] + i) % SUBREGION_PHOTOS.length]}
-              />
-            ))}
+            {col.items.map((item, i) => {
+              const fb = SUBREGION_PHOTOS[(colOffset[ci] + i) % SUBREGION_PHOTOS.length];
+              return col.variant === 'hike' ? (
+                <HikeTile key={item.name} item={item} index={i} fallbackImg={fb} />
+              ) : (
+                <Tile key={item.name} item={item} index={i} fallbackImg={fb} />
+              );
+            })}
           </section>
         ))}
       </div>
