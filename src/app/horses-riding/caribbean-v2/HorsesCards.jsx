@@ -101,6 +101,77 @@ export function CircuitCard({ circuit }) {
   );
 }
 
+// ── Sous-region GROUPEE ─────────────────────────────────────────────────────────
+// Une carte = une sous-region. Tuile-photo (style historic-sites/caribbean-v2) avec
+// le nom de la sous-region + nb d'iles, bouton Explore (marqueur vert temporaire),
+// puis accordeon qui REGROUPE toutes les iles de la sous-region (nom + saison + Riding/Racing).
+export function RegionGroupCard({ region }) {
+  const [open, setOpen] = useState(false);
+  const regionHref = REGION_LINKS[region.name];
+  const count = region.islands.length;
+  const label = `${count} ${count > 1 ? 'islands' : 'island'}`;
+
+  return (
+    <div className={`${SHELL} group flex flex-col`}>
+      {/* Tuile photo de la sous-region */}
+      <div className="relative h-52 md:h-56 overflow-hidden">
+        <Image
+          src={encodeURI(region.photo)}
+          alt={region.name}
+          fill
+          sizes="(max-width:1024px) 100vw, 33vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#26272a]/90 via-[#26272a]/20 to-transparent" />
+        <span className={`absolute top-3 right-3 ${DATE_PILL}`}>{label}</span>
+        <h3 className="absolute inset-x-0 bottom-0 p-4 trajan-regular text-lg md:text-xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+          {region.name}
+        </h3>
+      </div>
+
+      {regionHref && (
+        <div className="px-5 pt-4">
+          <Link href={regionHref} className={REGION_BTN}>
+            Explore {region.name}
+          </Link>
+        </div>
+      )}
+
+      <button onClick={() => setOpen((v) => !v)} className={`${READ_MORE} mt-auto`}>
+        {open ? 'Show less' : `Read more — ${label}`}
+      </button>
+
+      {open && (
+        <div className={PANEL}>
+          {region.islands.map((island) => {
+            const hasRacing = island.racing && island.racing !== '—';
+            return (
+              <div key={island.name} className={`${PANEL_BOX} p-3 space-y-2`}>
+                <div className="flex items-start justify-between gap-2">
+                  <h4 className="trajan-regular text-[13px] md:text-sm uppercase tracking-[0.08em] text-[#acb0cd] leading-snug">
+                    {island.name}
+                  </h4>
+                  <span className={DATE_PILL}>{island.season}</span>
+                </div>
+                <p className="text-[12px] md:text-[13px] leading-relaxed text-[#acb0cd]/85">
+                  <span className={`${TAG} mr-2 align-middle`}>Riding</span>
+                  {island.riding}
+                </p>
+                {hasRacing && (
+                  <p className="text-[12px] md:text-[13px] leading-relaxed text-[#acb0cd]/85">
+                    <span className={`${TAG} mr-2 align-middle`}>Racing</span>
+                    {island.racing}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Ile (structure regatta + photo de region en entete) ────────────────────────
 export function IslandCard({ island, regionName, regionPhoto }) {
   const [open, setOpen] = useState(false);

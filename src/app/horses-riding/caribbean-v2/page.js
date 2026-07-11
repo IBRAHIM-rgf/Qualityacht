@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import CaribbeanExplore from '../../components/CaribbeanExplore';
-import { CircuitCard, IslandCard } from './HorsesCards';
+import { CircuitCard, RegionGroupCard } from './HorsesCards';
 
 export const metadata = {
   title: 'Superyacht Horses & Racing 2027 — Caribbean Private Guide | Qualityacht',
@@ -466,23 +466,18 @@ export default function CaribbeanHorsesRacingPage() {
         />
         <div className="absolute inset-0 z-0 bg-[#26272a]/20" />
         <div className="relative z-10">
-        {regions.map((region) => (
-          <div key={region.name} className="mb-14 last:mb-0">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <h2 className="trajan-regular text-lg md:text-2xl text-[#C0C0C0] whitespace-nowrap">
-                {region.name}
-              </h2>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-5 items-start">
-              {region.islands.map((island) => (
-                <div key={island.name} className="w-full lg:w-[calc(50%-10px)] max-w-xl">
-                  <IslandCard island={island} regionName={region.name} regionPhoto={region.photo} />
-                </div>
-              ))}
-            </div>
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <h2 className="trajan-regular text-lg md:text-2xl text-[#C0C0C0] whitespace-nowrap">
+              Islands by Region
+            </h2>
           </div>
-        ))}
+
+          {/* Une carte par sous-region (regroupe ses iles) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-6xl mx-auto items-start">
+            {regions.map((region) => (
+              <RegionGroupCard key={region.name} region={region} />
+            ))}
+          </div>
         </div>
       </section>
 
