@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Galerie 3 colonnes facon Badrutt's Palace, adaptee a la palette SOMBRE Qualityacht
 // (jamais de blanc). Colonnes decalees verticalement + reveal au scroll.
