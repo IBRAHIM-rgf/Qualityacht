@@ -549,6 +549,13 @@ export default function CaribbeanV15Page({
   heroTitle = 'The Caribbean',
   heroSubtitle = 'The Ultimate Luxury Yachting Destination',
   intro = null,
+  // introNode : bloc JSX libre insere sous le hero (ex. la section a scroll lateral de
+  // /charters/halal/caribbean). Defaut null = aucune regression.
+  introNode = null,
+  // showDescription=false masque le bloc des 4 paragraphes "A paradise of turquoise
+  // waters..." (cf. /charters/halal/caribbean). Defaut true = aucune regression sur
+  // /charters/destinations/caribbean et caribbean-v15.
+  showDescription = true,
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -567,7 +574,11 @@ export default function CaribbeanV15Page({
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
+      {/* overflow-x-clip (et non -hidden) : -hidden fait de cette div un conteneur de
+          scroll, ce qui CASSE position:sticky pour ses descendants (le pin du scroll
+          lateral halal ne tenait pas). -clip masque le debordement horizontal a
+          l'identique sans creer de conteneur de scroll. */}
+      <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
 
         {/* ══ HERO ══ */}
         {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
@@ -615,7 +626,10 @@ export default function CaribbeanV15Page({
           </div>
         </div>
 
-        {/* ══ INTRO parametrable (ex. paragraphe halal) — sous le hero ══ */}
+        {/* ══ Bloc JSX libre sous le hero (ex. scroll lateral halal) ══ */}
+        {introNode}
+
+        {/* ══ INTRO parametrable (paragraphe simple) — sous le hero ══ */}
         {intro && (
           <CloudSection className="bg-[#26272a] pt-14 md:pt-24 px-5 md:px-20" bg="/images/nuagesAncien.png">
             <div className="max-w-3xl mx-auto text-center">
@@ -624,7 +638,8 @@ export default function CaribbeanV15Page({
           </CloudSection>
         )}
 
-        {/* ══ DESCRIPTION ══ */}
+        {/* ══ DESCRIPTION (masquable : showDescription) ══ */}
+        {showDescription && (
         <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">
           <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6">
             <p className="text-lg md:text-2xl text-[#acb0cd]">
@@ -657,6 +672,7 @@ export default function CaribbeanV15Page({
             </p>
           </div>
         </CloudSection>
+        )}
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
         <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
