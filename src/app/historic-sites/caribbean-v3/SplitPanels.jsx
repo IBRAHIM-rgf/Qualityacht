@@ -37,14 +37,20 @@ export default function SplitPanels({ panels }) {
                 } ${isActive ? 'h-[460px] md:h-auto' : 'h-[200px] md:h-auto'}`}
                 style={{ '--sp-grow': isActive ? 2.4 : 1 }}
               >
-                {/* Photo de fond : plus large + plus lumineuse quand le panneau est actif */}
+                {/* Photo de fond : plus large + plus lumineuse quand le panneau est actif.
+                    p.boost = photo terne a l'origine -> saturation/contraste remontes une
+                    fois le panneau ouvert (le gris du panneau ferme reste inchange). */}
                 <Image
                   src={encodeURI(p.img)}
                   alt={p.title}
                   fill
                   sizes="(max-width:768px) 100vw, 50vw"
                   className={`object-cover transition-all duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isActive ? 'scale-105 grayscale-0 opacity-100' : 'scale-100 grayscale opacity-60'
+                    isActive
+                      ? `scale-105 grayscale-0 opacity-100 ${
+                          p.boost ? 'saturate-[1.45] contrast-[1.12] brightness-[1.05]' : ''
+                        }`
+                      : 'scale-100 grayscale opacity-60'
                   }`}
                   priority={i === 0}
                 />
