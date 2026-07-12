@@ -16,13 +16,6 @@ const stats = [
 
 const circuits = [
   {
-    letter: 'A',
-    dates: 'Jan–Mar',
-    name: 'Grand Prix des Caraïbes',
-    distance: '~1,200 nm',
-    route: 'Turks & Caicos → Puerto Rico → USVI → Barbados Gold Cup → Antigua',
-  },
-  {
     letter: 'B',
     dates: 'Apr–May',
     name: 'Leewards Loop',
@@ -415,7 +408,7 @@ export default function CaribbeanHorsesRacingPage() {
           {stats.map((s) => (
             <div
               key={s.label}
-              className="flex items-center gap-2 bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-lg px-3 py-2"
+              className="flex items-center gap-1 bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-lg px-1.5 py-0.5"
             >
               <span className="trajan-regular text-lg md:text-xl font-bold text-[#C0C0C0] leading-none">
                 {s.value}
