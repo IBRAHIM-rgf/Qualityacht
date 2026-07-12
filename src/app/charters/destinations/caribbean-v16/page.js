@@ -568,7 +568,10 @@ export default function CaribbeanV16Page({
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
+      {/* overflow-x-CLIP (et non hidden) : `hidden` ferait calculer overflow-y:auto,
+          ce qui cree un conteneur de scroll et CASSE le position:sticky du scroll
+          lateral (HorizontalPanels). `clip` bloque le debordement sans scroll container. */}
+      <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
 
         {/* ══ HERO ══ */}
         {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.

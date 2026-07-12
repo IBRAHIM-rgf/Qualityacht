@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import CaribbeanExplore from '../../components/CaribbeanExplore';
 import SplitPanels from './SplitPanels';
 
 export const metadata = {
@@ -80,11 +79,9 @@ export default function HistoricSitesCaribbeanV3Page() {
         </div>
       </div>
 
-      {/* GRANDE CARD 3 PANNEAUX */}
+      {/* GRANDE CARD 3 PANNEAUX — seul contenu de la page (sections communes
+          Explore / Regions / FAQ retirees a la demande) */}
       <SplitPanels panels={panels} />
-
-      {/* Sections communes Caraibes (Explore / Regions / FAQ) */}
-      <CaribbeanExplore />
     </div>
   );
 }

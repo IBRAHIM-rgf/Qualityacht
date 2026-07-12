@@ -13,6 +13,16 @@ export default function SplitPanels({ panels }) {
 
   return (
     <div className="px-4 md:px-10 lg:px-14 py-14 md:py-20">
+      {/* flex-grow / flex-basis UNIQUEMENT en desktop : en mobile le conteneur est en
+          flex-col, flex-basis:0 piloterait la HAUTEUR et ecraserait les panneaux a 0px
+          (conteneur en h-auto = aucun espace libre a distribuer). En mobile on laisse
+          donc les hauteurs h-[180px] / h-[440px] faire le travail. */}
+      <style>{`
+        @media (min-width: 768px) {
+          .sp-panel { flex-grow: var(--sp-grow); flex-basis: 0; }
+        }
+      `}</style>
+
       <div className="max-w-7xl mx-auto rounded-3xl overflow-hidden border border-[#C0C0C0]/20 bg-[#2e2f32] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)]">
         <div className="flex flex-col md:flex-row h-auto md:h-[74vh] md:min-h-[560px]">
           {panels.map((p, i) => {
@@ -22,10 +32,10 @@ export default function SplitPanels({ panels }) {
                 key={p.key}
                 onMouseEnter={() => setActive(i)}
                 onClick={() => setActive(i)}
-                className={`group relative overflow-hidden cursor-pointer transition-[flex-grow,height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                className={`sp-panel group relative overflow-hidden cursor-pointer transition-[flex-grow,height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                   i > 0 ? 'border-t md:border-t-0 md:border-l border-[#C0C0C0]/15' : ''
-                } ${isActive ? 'h-[440px] md:h-auto' : 'h-[180px] md:h-auto'}`}
-                style={{ flexGrow: isActive ? 2.4 : 1, flexBasis: 0 }}
+                } ${isActive ? 'h-[460px] md:h-auto' : 'h-[200px] md:h-auto'}`}
+                style={{ '--sp-grow': isActive ? 2.4 : 1 }}
               >
                 {/* Photo de fond : plus large + plus lumineuse quand le panneau est actif */}
                 <Image
@@ -132,7 +142,8 @@ export default function SplitPanels({ panels }) {
       </div>
 
       <p className="mt-5 text-center text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/40">
-        Hover a panel to open it
+        <span className="md:hidden">Tap a panel to open it</span>
+        <span className="hidden md:inline">Hover a panel to open it</span>
       </p>
     </div>
   );
