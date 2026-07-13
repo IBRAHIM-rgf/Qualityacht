@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ScrollRise from "./components/ScrollRise";
 import { Michroma } from 'next/font/google';
 
 const michroma = Michroma({
@@ -115,6 +116,8 @@ export default function RootLayout({ children }) {
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        {/* Montee des textes au scroll sur TOUT le site (voir ScrollRise + globals.css) */}
+        <ScrollRise />
       </body>
     </html>
   );

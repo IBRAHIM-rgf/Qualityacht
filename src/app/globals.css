@@ -104,6 +104,11 @@ header, footer,h1, h2, h3, h4,.trajan-regular {
   }
 }
 
+/* NB : la montee des textes au scroll (tout le site) est portee par le composant
+   ScrollRise (layout racine) via la Web Animations API — volontairement PAS en CSS :
+   poser une classe sur un noeud rendu par le serveur casse l'hydratation React.
+   Voir les commentaires de src/app/components/ScrollRise.jsx. */
+
 .pulse-animation {
   animation: pulse 2s infinite;
 }
