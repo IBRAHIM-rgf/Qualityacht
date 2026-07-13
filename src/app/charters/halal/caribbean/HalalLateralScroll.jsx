@@ -8,8 +8,8 @@ import Image from 'next/image';
 // reprend son scroll normal. Aucune lib externe, transform posee directement sur le DOM
 // (pas de re-render React par frame).
 //
-// Slide 1 : texte halal a gauche + photo a droite.
-// Slide 2 : colonne texte laissee VIDE (demande client) + derniere photo a droite.
+// 1 slide par photo : le paragraphe de meme rang est affiche a gauche, sa photo a
+// droite. Ni chapo ni titre dans la section.
 // Chaque photo se revele par un rideau qui s'ouvre de GAUCHE a DROITE (clip-path),
 // declenche quand la photo entre dans le viewport (progression de scroll, pas d'IO :
 // l'IO est peu fiable sur un rail deplace par transform).
@@ -32,30 +32,18 @@ function Photo({ src, alt, priority = false }) {
   );
 }
 
-function TextBlock({ eyebrow, title, paragraphs }) {
+// Un TextBlock par slide : 1 paragraphe = 1 photo. Ni chapo ni titre (retires a la
+// demande) — seul le paragraphe est affiche, en face de sa photo.
+function TextBlock({ text }) {
+  if (!text) return <div aria-hidden />;
   return (
     <div className="flex h-full flex-col justify-center">
-      {eyebrow && (
-        <p className="mb-3 text-[10px] uppercase tracking-[0.22em] text-[#B87333] font-medium">{eyebrow}</p>
-      )}
-      <h2 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-tight">
-        {title}
-      </h2>
-      <div className="relative mt-4 h-5 w-28">
-        <Image src="/images/title-line.png" alt="" fill className="object-contain" />
-      </div>
-      <div className="mt-6 space-y-4 max-w-lg">
-        {paragraphs.map((t) => (
-          <p key={t.slice(0, 24)} className="text-sm md:text-base leading-relaxed text-[#acb0cd]">
-            {t}
-          </p>
-        ))}
-      </div>
+      <p className="max-w-lg text-sm md:text-base leading-relaxed text-[#acb0cd]">{text}</p>
     </div>
   );
 }
 
-export default function HalalLateralScroll({ eyebrow, title, paragraphs, photos = [] }) {
+export default function HalalLateralScroll({ paragraphs = [], photos = [], alt = 'Caribbean halal charter' }) {
   const wrapRef = useRef(null);
   const trackRef = useRef(null);
   const rootRef = useRef(null);
@@ -99,8 +87,6 @@ export default function HalalLateralScroll({ eyebrow, title, paragraphs, photos 
     };
   }, []);
 
-  const text = <TextBlock eyebrow={eyebrow} title={title} paragraphs={paragraphs} />;
-
   return (
     <div ref={rootRef} className="bg-[#26272a]">
       <style>{`
@@ -115,20 +101,22 @@ export default function HalalLateralScroll({ eyebrow, title, paragraphs, photos 
         }
       `}</style>
 
-      {/* ── MOBILE : pas de pin, empilement vertical (meme rideau) ── */}
+      {/* ── MOBILE : pas de pin, chaque paragraphe suivi de SA photo ── */}
       <div className="md:hidden px-5 py-14 space-y-8">
-        {text}
         {photos.map((src, i) => (
-          <div key={src} className="h-[58vh]">
-            <Photo src={src} alt={title} priority={i === 0} />
+          <div key={src} className="space-y-5">
+            <TextBlock text={paragraphs[i]} />
+            <div className="h-[58vh]">
+              <Photo src={src} alt={alt} priority={i === 0} />
+            </div>
           </div>
         ))}
       </div>
 
       {/* ── DESKTOP : pin + scroll lateral (technique v16) ──
-          1 slide par photo. Slide 1 = texte + photo ; slides suivants = colonne texte
-          laissee VIDE + photo. Hauteur de la section proportionnelle au nombre de
-          slides pour garder le meme rythme de scroll (150vh par slide). */}
+          1 slide par photo, et 1 PARAGRAPHE par photo en face d'elle. Hauteur de la
+          section proportionnelle au nombre de slides (150vh par slide) pour garder le
+          meme rythme de scroll quel que soit le nombre de photos. */}
       <section
         ref={wrapRef}
         className="hidden md:block relative"
@@ -138,8 +126,8 @@ export default function HalalLateralScroll({ eyebrow, title, paragraphs, photos 
           <div ref={trackRef} className="flex h-[74vh] w-full will-change-transform">
             {photos.map((src, i) => (
               <div key={src} className="shrink-0 w-screen h-full grid grid-cols-2 gap-10 px-[6vw]">
-                {i === 0 ? text : <div aria-hidden />}
-                <Photo src={src} alt={title} priority={i === 0} />
+                <TextBlock text={paragraphs[i]} />
+                <Photo src={src} alt={alt} priority={i === 0} />
               </div>
             ))}
           </div>

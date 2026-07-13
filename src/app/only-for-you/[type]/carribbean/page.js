@@ -788,6 +788,48 @@ function SailingIntro({ title, lead, rest }) {
   );
 }
 
+// ── Mois du calendrier regatta ─────────────────────────────────────────────────
+// MOBILE : section repliable, FERMEE par defaut, ouverte/fermee par la fleche (le
+// titre entier est cliquable). DESKTOP : rien ne change — les cards restent toujours
+// visibles (md:grid-rows-[1fr]) et la fleche est masquee, le titre n'est plus cliquable.
+function MonthSection({ month, count, children }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="w-full flex items-center gap-3 md:gap-4 mb-6 text-left md:pointer-events-none md:cursor-default"
+      >
+        <div className="flex-1 h-px bg-[#C0C0C0]/20" />
+        <h3 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#acb0cd] italic">
+          {month.label}
+        </h3>
+        <span className="md:hidden text-[10px] uppercase tracking-[0.14em] text-[#acb0cd]/45">
+          {count}
+        </span>
+        <ChevronDown
+          size={20}
+          className={`md:hidden shrink-0 text-[#c2622a] transition-transform duration-300 ${
+            open ? 'rotate-180' : ''
+          }`}
+        />
+        <div className="flex-1 h-px bg-[#C0C0C0]/20" />
+      </button>
+
+      {/* Animation de hauteur par grid-rows (meme technique que SailingIntro) */}
+      <div
+        className={`grid transition-all duration-300 ease-out md:grid-rows-[1fr] md:opacity-100 ${
+          open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        }`}
+      >
+        <div className="overflow-hidden md:overflow-visible">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 // ── Page ───────────────────────────────────────────────────────────────────────
 export default function CaribbeanV15Page({ params }) {
   const { type } = use(params);
@@ -938,20 +980,15 @@ export default function CaribbeanV15Page({ params }) {
             <div className="max-w-7xl mx-auto">
               <RevealBlock label="Sailing Calendar" title="2027 Regatta Calendar" sub="From January to November — racing, classics, traditions, juniors and luxury" />
 
-              {/* Timeline mois par mois (sans filtre — affiche TOUS les events) */}
-              <div className="space-y-12">
+              {/* Timeline mois par mois (sans filtre — affiche TOUS les events).
+                  MOBILE : chaque mois est repliable (fleche), ferme par defaut.
+                  DESKTOP : inchange — tout est deplie, pas de fleche. */}
+              <div className="space-y-12 md:space-y-12">
                 {MONTHS_2027.map((month, mi) => {
                   const events = regattaByMonth[month.key];
                   if (!events || events.length === 0) return null;
                   return (
-                    <div key={month.key}>
-                      <div className="flex items-center gap-4 mb-6">
-                        <div className="flex-1 h-px bg-[#C0C0C0]/20" />
-                        <h3 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#acb0cd] italic">
-                          {month.label}
-                        </h3>
-                        <div className="flex-1 h-px bg-[#C0C0C0]/20" />
-                      </div>
+                    <MonthSection key={month.key} month={month} count={events.length}>
                       {/* flex-wrap + justify-center : card seule sur sa ligne reste centree */}
                       <div className="flex flex-wrap justify-center gap-5 md:gap-6 items-start">
                         {events.map((event, ei) => (
@@ -960,7 +997,7 @@ export default function CaribbeanV15Page({ params }) {
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </MonthSection>
                   );
                 })}
                 {Object.keys(regattaByMonth).length === 0 && (

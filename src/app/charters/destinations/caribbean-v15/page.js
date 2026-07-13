@@ -629,10 +629,7 @@ export default function CaribbeanV15Page({
           </div>
         </div>
 
-        {/* ══ Bloc JSX libre sous le hero (ex. scroll lateral halal) ══ */}
-        {introNode}
-
-        {/* ══ INTRO parametrable (paragraphe simple) — sous le hero ══ */}
+        {/* ══ INTRO parametrable (paragraphe simple, centre) — juste sous le hero ══ */}
         {intro && (
           <CloudSection className="bg-[#26272a] pt-14 md:pt-24 px-5 md:px-20" bg="/images/nuagesAncien.png">
             <div className="max-w-3xl mx-auto text-center">
@@ -640,6 +637,9 @@ export default function CaribbeanV15Page({
             </div>
           </CloudSection>
         )}
+
+        {/* ══ Bloc JSX libre (ex. scroll lateral halal) — APRES l'intro centree ══ */}
+        {introNode}
 
         {/* ══ DESCRIPTION (masquable : showDescription) ══ */}
         {showDescription && (
