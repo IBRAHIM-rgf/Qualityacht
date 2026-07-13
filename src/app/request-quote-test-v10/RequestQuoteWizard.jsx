@@ -7,7 +7,7 @@ import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown, X as XIcon, Rotat
 import MonthPicker from '@/components/MonthPicker';
 import JetBookingWidget from '@/components/JetBookingWidget';
 
-const STEPS = ['Charter Details', 'Contact Info', 'Thank You!'];
+const STEPS = ['Charter Details', 'Enhancements & Details', 'Thank You!'];
 
 const TITLES = [
   '',

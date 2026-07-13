@@ -74,7 +74,7 @@ export default function SplitPanels({ panels }) {
                   }`}
                 />
 
-                {/* Contenu : UNIQUEMENT le titre centre + Discovery en bas.
+                {/* Contenu : UNIQUEMENT le titre centre + Discover en bas.
                     (chapo, texte, highlights et pill de comptage retires a la demande) */}
                 <div className="relative z-10 h-full flex flex-col items-center justify-center p-6 md:p-8">
                   <h2 className="trajan-regular text-center text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
@@ -86,7 +86,7 @@ export default function SplitPanels({ panels }) {
                       href={p.href}
                       className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.18em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
                     >
-                      Discovery
+                      Discover
                       <span aria-hidden className="text-[13px] leading-none">
                         &rarr;
                       </span>

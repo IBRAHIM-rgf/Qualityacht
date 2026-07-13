@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Calendar, Users, Ship, Plane, ArrowLeft, Check, ChevronDown } from 'lucide-react';
 
-const STEPS = ['Charter Details', 'Contact Info', 'Thank You!'];
+const STEPS = ['Charter Details', 'Enhancements & Details', 'Thank You!'];
 
 const TITLES = ['', 'Mr', 'Mrs', 'Ms', 'Miss', 'Dr', 'Prof', 'Sir', 'Lady'];
 
