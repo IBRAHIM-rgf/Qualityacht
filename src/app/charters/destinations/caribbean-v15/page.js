@@ -556,6 +556,9 @@ export default function CaribbeanV15Page({
   // waters..." (cf. /charters/halal/caribbean). Defaut true = aucune regression sur
   // /charters/destinations/caribbean et caribbean-v15.
   showDescription = true,
+  // showCocomer=false masque le bandeau photo cocomer (cf. /charters/halal/caribbean).
+  // Defaut true = aucune regression sur les autres pages basees sur la v15.
+  showCocomer = true,
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -674,8 +677,10 @@ export default function CaribbeanV15Page({
         </CloudSection>
         )}
 
-        {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
-        <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
+        {/* ══ BANDEAU cocomer — couleur au hover 4s (masquable : showCocomer) ══ */}
+        {showCocomer && (
+          <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
+        )}
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 4 (8 cards) ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">

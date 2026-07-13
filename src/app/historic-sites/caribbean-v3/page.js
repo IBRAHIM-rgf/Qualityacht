@@ -8,55 +8,29 @@ export const metadata = {
 };
 
 // v3 : une seule grande card decoupee en 3 panneaux verticaux. Le panneau survole
-// s'elargit et devoile son contenu (voir SplitPanels.jsx). Contenu synthetise
-// depuis la v2 (monuments Jamaique, 20 randonnees, cyclisme a completer).
+// s'elargit ; il ne porte QUE son titre (centre) et un bouton Discovery qui ouvre la
+// page des sous-regions empilees (/historic-sites/caribbean-v3/<key>).
+// boost : photo terne a l'origine -> saturation/contraste remontes une fois ouverte.
 const panels = [
   {
     key: 'monuments',
-    eyebrow: 'Jamaica & the Greater Antilles',
     title: 'Historic Monuments',
     img: '/images/stephan-hinni-ZHdkEO_oFRc-unsplash.jpg',
-    text: 'Ten sites of consequence, from the sunken city of Port Royal to the great houses of the north coast — most reachable by tender, all opened privately for our clients.',
-    count: '10 sites',
-    href: '/historic-sites/caribbean-v2',
-    highlights: [
-      { name: 'Port Royal', meta: '17th c. · UNESCO 2025' },
-      { name: 'Fort Charles', meta: '1655–1660 · Yacht access' },
-      { name: 'Rose Hall Great House', meta: '1770s · Yacht access' },
-      { name: 'Seville Heritage Park', meta: 'Since 650 AD' },
-    ],
+    href: '/historic-sites/caribbean-v3/monuments',
   },
   {
     key: 'hiking',
-    eyebrow: 'Windward & Leeward Islands',
     title: 'Hiking',
     img: '/images/isaw-company-hBtl2SojFic-unsplash.jpg',
-    boost: true, // photo un peu terne : saturation + contraste remontes (voir SplitPanels)
-    text: 'Twenty exceptional ascents across the arc of volcanoes — crater rims, cloud forests and boiling lakes — with private guides, helicopter transfers and a table set at altitude.',
-    count: '20 hikes · VIP access',
-    href: '/historic-sites/caribbean-v2',
-    highlights: [
-      { name: 'La Soufrière', meta: 'Guadeloupe · +1,467 m' },
-      { name: 'Boiling Lake', meta: 'Dominica · 6–8 h' },
-      { name: 'Petit Piton Summit', meta: 'St Lucia · +743 m' },
-      { name: 'Blue Mountains', meta: 'Jamaica · +2,256 m' },
-    ],
+    boost: true,
+    href: '/historic-sites/caribbean-v3/hiking',
   },
   {
     key: 'cycling',
-    eyebrow: 'Coastal roads & gravel',
     title: 'Cycling',
     img: '/images/carlos-mendoza-utvLhSfiqpo-unsplash(1).jpg',
     boost: true,
-    text: 'Descents from the Blue Mountains to the sea, coastal ribbons along the north shore and gravel lines through Cockpit Country — routes and support fleet in preparation.',
-    count: 'Routes in preparation',
-    href: null,
-    highlights: [
-      { name: 'Blue Mountain Descent', meta: 'Jamaica' },
-      { name: 'North Coast Coastal Ride', meta: 'Jamaica' },
-      { name: 'Cockpit Country Gravel', meta: 'Gravel' },
-      { name: 'Port Antonio Hills', meta: 'Climbing' },
-    ],
+    href: '/historic-sites/caribbean-v3/cycling',
   },
 ];
 
@@ -81,8 +55,7 @@ export default function HistoricSitesCaribbeanV3Page() {
         </div>
       </div>
 
-      {/* GRANDE CARD 3 PANNEAUX — seul contenu de la page (sections communes
-          Explore / Regions / FAQ retirees a la demande) */}
+      {/* GRANDE CARD 3 PANNEAUX — seul contenu de la page */}
       <SplitPanels panels={panels} />
     </div>
   );

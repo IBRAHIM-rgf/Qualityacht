@@ -33,6 +33,7 @@ export default function HalalCaribbeanPage() {
       heroImageMobile={HERO_IMAGE}
       heroImageDesktop={HERO_IMAGE}
       showDescription={false}
+      showCocomer={false}
       introNode={
         <HalalLateralScroll
           eyebrow="Caribbean · Halal Charter"

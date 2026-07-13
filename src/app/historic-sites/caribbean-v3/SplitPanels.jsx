@@ -74,72 +74,24 @@ export default function SplitPanels({ panels }) {
                   }`}
                 />
 
-                {/* Contenu */}
-                <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-8">
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-[#B87333] font-medium">
-                    {p.eyebrow}
-                  </span>
-
-                  <h2 className="trajan-regular mt-2 text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                {/* Contenu : UNIQUEMENT le titre centre + Discovery en bas.
+                    (chapo, texte, highlights et pill de comptage retires a la demande) */}
+                <div className="relative z-10 h-full flex flex-col items-center justify-center p-6 md:p-8">
+                  <h2 className="trajan-regular text-center text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                     {p.title}
                   </h2>
 
-                  <div className="relative w-24 h-5 mt-2">
-                    <Image src="/images/title-line.png" alt="" fill className="object-contain" />
-                  </div>
-
-                  {/* Bloc revele : hauteur + opacite animees */}
-                  <div
-                    className={`overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                      isActive ? 'max-h-[340px] opacity-100 mt-5' : 'max-h-0 opacity-0 mt-0'
-                    }`}
-                  >
-                    <p className="text-[13px] md:text-sm leading-relaxed text-[#acb0cd]/90 max-w-md">
-                      {p.text}
-                    </p>
-
-                    <ul className="mt-4 space-y-1.5 max-w-md">
-                      {p.highlights.map((h) => (
-                        <li key={h.name} className="flex items-baseline gap-3">
-                          <span className="h-px w-4 shrink-0 bg-[#B87333]/70 translate-y-[-3px]" />
-                          <span className="text-[13px] text-[#acb0cd]">{h.name}</span>
-                          <span className="text-[10px] uppercase tracking-[0.12em] text-[#acb0cd]/45">
-                            {h.meta}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-5 flex flex-wrap items-center gap-3">
-                      <span className="px-3 py-1 rounded-full border border-[#C0C0C0]/25 bg-[#26272a]/60 text-[10px] uppercase tracking-[0.14em] text-[#acb0cd]/80">
-                        {p.count}
+                  <div className="absolute inset-x-0 bottom-6 md:bottom-8 flex justify-center">
+                    <Link
+                      href={p.href}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.18em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
+                    >
+                      Discovery
+                      <span aria-hidden className="text-[13px] leading-none">
+                        &rarr;
                       </span>
-                      {p.href ? (
-                        <Link
-                          href={p.href}
-                          className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.18em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
-                        >
-                          Explore
-                          <span aria-hidden className="text-[13px] leading-none">
-                            &rarr;
-                          </span>
-                        </Link>
-                      ) : (
-                        <span className="px-5 py-2 rounded-full border border-[#C0C0C0]/25 text-[11px] uppercase tracking-[0.18em] text-[#acb0cd]/45">
-                          Coming soon
-                        </span>
-                      )}
-                    </div>
+                    </Link>
                   </div>
-
-                  {/* Indice quand le panneau est retracte */}
-                  <p
-                    className={`text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/50 transition-all duration-500 ${
-                      isActive ? 'opacity-0 max-h-0 mt-0' : 'opacity-100 max-h-6 mt-3'
-                    }`}
-                  >
-                    {p.count}
-                  </p>
                 </div>
               </article>
             );
