@@ -447,7 +447,7 @@ export const SECTIONS = {
   art: {
     title: 'Art',
     eyebrow: 'Caribbean · Museums, Galleries & Exhibitions',
-    img: '/images/pagesCaraibes/st-barth.jpg',
+    img: '/images/art-culture/kid-having-fun-jungle-party.jpg',
   },
   culture: {
     title: 'Culture',

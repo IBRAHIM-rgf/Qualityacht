@@ -32,9 +32,9 @@ const KEYFRAMES = [
   { opacity: 0, transform: 'translateY(26px)' },
   { opacity: 1, transform: 'none' },
 ];
-const TIMING = { duration: 900, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' };
+const TIMING = { duration: 1600, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' };
 
-const STAGGER_MS = 70; // decalage entre textes voisins
+const STAGGER_MS = 110; // decalage entre textes voisins
 const MAX_STAGGER = 4; // au-dela, plus de decalage (evite les longues listes en cascade)
 
 export default function ScrollRise() {

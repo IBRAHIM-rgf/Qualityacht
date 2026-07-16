@@ -10,7 +10,7 @@ export default function HistoricSitesPage() {
     <ThemeLandingPage
       eyebrow="Private Client Guide"
       title="Historic Sites"
-      heroImage="/images/new/pexels-gibran-riojas-2153089565-32551597.jpg"
+      heroImage="/images/monument historic/jivan-garcha-Lul2or0sxNk-unsplash (1) (1).jpg"
       intro="Forts, plantation houses, sunken cities and Georgian towns — landmarks of historic consequence, with exclusive private access and after-hours experiences arranged at each."
       caribbeanHref="/historic-sites/caribbean-v2"
     />

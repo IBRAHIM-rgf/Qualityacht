@@ -67,6 +67,18 @@ export default function SplitPanels({ panels }) {
                   }`}
                 />
 
+                {/* Voile sombre supplementaire quand le panneau ouvert porte du texte :
+                    sans lui, le paragraphe et les puces passent sur les zones claires de
+                    la photo et deviennent illisibles. Les cards sans texte
+                    (historic-sites/caribbean-v3) gardent leur photo pleinement lumineuse. */}
+                {(p.text || p.bullets) && (
+                  <div
+                    className={`absolute inset-0 bg-[#26272a] transition-opacity duration-700 ${
+                      isActive ? 'opacity-60' : 'opacity-0'
+                    }`}
+                  />
+                )}
+
                 {/* Filet cuivre en bas du panneau actif */}
                 <div
                   className={`absolute inset-x-0 bottom-0 h-[3px] bg-[#B03E00] origin-left transition-transform duration-700 ${
@@ -74,12 +86,42 @@ export default function SplitPanels({ panels }) {
                   }`}
                 />
 
-                {/* Contenu : UNIQUEMENT le titre centre + Discover en bas.
-                    (chapo, texte, highlights et pill de comptage retires a la demande) */}
+                {/* Contenu : titre centre + Discover en bas.
+                    p.text / p.bullets sont OPTIONNELS et ne s'affichent que dans le
+                    panneau ouvert (cf. /art-culture/caribbean). Sans eux, la card ne
+                    porte que son titre : c'est le cas de historic-sites/caribbean-v3,
+                    dont les cards doivent rester vides. */}
                 <div className="relative z-10 h-full flex flex-col items-center justify-center p-6 md:p-8">
                   <h2 className="trajan-regular text-center text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                     {p.title}
                   </h2>
+
+                  {(p.text || p.bullets) && (
+                    <div
+                      className={`overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                        isActive ? 'max-h-[420px] opacity-100 mt-5' : 'max-h-0 opacity-0 mt-0'
+                      }`}
+                    >
+                      {p.text && (
+                        <p className="max-w-xl mx-auto text-center text-[13px] md:text-sm leading-relaxed text-[#acb0cd] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                          {p.text}
+                        </p>
+                      )}
+
+                      {p.bullets && (
+                        <ul className="mt-4 space-y-2 max-w-xl mx-auto">
+                          {p.bullets.map((b) => (
+                            <li key={b} className="flex items-baseline gap-3">
+                              <span className="h-px w-4 shrink-0 bg-[#B87333]/80 translate-y-[-3px]" />
+                              <span className="text-[12px] md:text-[13px] leading-relaxed text-[#acb0cd] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                                {b}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  )}
 
                   <div className="absolute inset-x-0 bottom-6 md:bottom-8 flex justify-center">
                     <Link
