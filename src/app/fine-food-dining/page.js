@@ -1,51 +1,23 @@
-import Image from "next/image";
-import Text4Images2Section from "../components/sections/new/Text4Images2Section";
-import Text4ImagesSection from "../components/sections/new/Text4Images";
-import Text2imagesSection from "../components/sections/new/text2images";
-import ImageTextImage from "../components/sections/new/ImageTextImage";
-import FAQAccordion from "../components/sections/common/FAQAccordion";
-import FullWidthBanner from "../components/sections/common/FullWidthBanner";
-import HeroImageBackground from "../components/sections/common/HeroImageBackground";
-import TestimonialsSlider from "../components/sections/common/TestimonialsSlider";
-import ThreeColumnFeatures from "../components/sections/common/ThreeColumnFeatures";
-import TimelineSection from "../components/sections/common/TimelineSection";
+import ThemeLandingPage from '../components/ThemeLandingPage';
 
-const fineFoodDiningSections = [
-  {
-    chooseSection: 0,
-    title: "Fine Food & Dining",
-    content: "Discover our Fine Food & Dining selection. (Content coming soon)",
-    images: [
-      "/images/new/17500843321894246574840682884355.jpg"
-    ]
-  }
-];
+export const metadata = {
+  title: 'Fine Food & Dining | Qualityacht',
+  description:
+    'Provisioning, producers, fine grocery, tables and private chefs — a curated reference for discerning private clients, destination by destination.',
+};
 
-const sectionComponents = [
-  Text4Images2Section,
-  Text4ImagesSection,
-  Text2imagesSection,
-  ImageTextImage,
-  FAQAccordion,
-  FullWidthBanner,
-  HeroImageBackground,
-  TestimonialsSlider,
-  ThreeColumnFeatures,
-  TimelineSection,
-];
-
+// Meme landing generique que /art-culture et /historic-sites : hero + intro + les 16
+// destinations, seules les Caraibes ouvertes pour l'instant.
+// Le hero garde la photo deja associee a Fine Food & Dining sur la page d'accueil
+// (losange de luxuryandcontactsection) : la section se reconnait d'une page a l'autre.
 export default function FineFoodDiningPage() {
   return (
-    <main>
-      {fineFoodDiningSections.map((section, idx) => {
-        const SectionComponent = sectionComponents[section.chooseSection ?? (idx % sectionComponents.length)];
-        return (
-          <SectionComponent
-            key={idx}
-            {...section}
-          />
-        );
-      })}
-    </main>
+    <ThemeLandingPage
+      eyebrow="Ultra-Premium Reference"
+      title="Fine Food & Dining"
+      heroImage="/images/new/17500843321894246574840682884355.jpg"
+      intro="Provisioning, producers and fine grocery on one side; tables, chefs and beach clubs on the other — a curated reference through the flavours of the world's most inspiring destinations, chosen for excellence and for what they bring to a charter at anchor."
+      caribbeanHref="/fine-food-dining/caribbean"
+    />
   );
 }
