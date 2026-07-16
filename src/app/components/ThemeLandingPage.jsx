@@ -6,6 +6,10 @@ import { destinations } from '../charters/destinationsData';
 // Hero + intro + grille des 16 destinations en cards VERTICALES (portrait 3/4 +
 // titre dessous, style /only-for-you). Une card est cliquable si Caraïbes
 // (caribbeanHref) ou si son titre est dans `links`. `cardImages` surcharge la photo.
+// Couleurs du hero rendues plus vives. Constante partagee : /art-culture,
+// /historic-sites et /horses-riding ont ainsi exactement le meme traitement.
+const HERO_BOOST = 'saturate-[1.4] contrast-[1.1] brightness-[1.03]';
+
 export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false }) {
   const heroGradient = (
     <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
@@ -30,20 +34,23 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
         @keyframes heroRise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
 
-      {/* ══ HERO ══ */}
+      {/* ══ HERO ══
+          HERO_BOOST : couleurs plus vives (saturation + contraste legerement remontes).
+          Pose sur la PHOTO seule — le degrade et le titre sont des freres, ils ne sont
+          pas affectes. Meme parti pris que les panneaux de historic-sites/caribbean-v3. */}
       {heroFullPhoto ? (
         // Dezoom max : photo entiere (ratio naturel), aucun crop
         <section className="relative pt-[70px]">
           <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={encodeURI(heroImage)} alt={title} className="block w-full h-auto" />
+            <img src={encodeURI(heroImage)} alt={title} className={`block w-full h-auto ${HERO_BOOST}`} />
             {heroGradient}
             {heroOverlay}
           </div>
         </section>
       ) : (
         <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh]">
-          <Image src={heroImage} alt={title} fill priority sizes="100vw" className="object-cover" />
+          <Image src={heroImage} alt={title} fill priority sizes="100vw" className={`object-cover ${HERO_BOOST}`} />
           {heroGradient}
           {heroOverlay}
         </section>
