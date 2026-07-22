@@ -4,7 +4,7 @@ import WorldMapClient from './WorldMapClient';
 export const metadata = {
   title: 'Hotel & Palace | Qualityacht',
   description:
-    'Palaces, hotels and private residences across our charter destinations — explored on the map, region by region and sub-region by sub-region.',
+    'Palaces and hotels across our charter destinations — explored on the map, region by region and sub-region by sub-region.',
 };
 
 // Hero repris du traitement des pages theme (object-cover + degrade bas + titre en
@@ -38,7 +38,7 @@ export default function HotelPalacePage() {
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
           <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em] drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
-            Palaces · Hotels · Private Residences
+            Palaces · Hotels
           </p>
         </div>
       </section>
@@ -46,7 +46,7 @@ export default function HotelPalacePage() {
       {/* ══ INTRO ══ */}
       <section className="px-6 md:px-14 pt-12 md:pt-16">
         <p className="max-w-3xl mx-auto text-center text-base md:text-lg leading-relaxed text-[#acb0cd]">
-          A curated selection of palaces, hotels and private residences across every destination
+          A curated selection of palaces and hotels across every destination
           we charter. Open a destination on the map to descend into its sub-regions, and from
           each sub-region into the addresses that hold their rank.
         </p>

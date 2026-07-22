@@ -4,7 +4,7 @@ import CaribbeanMapClient from './CaribbeanMapClient';
 export const metadata = {
   title: 'Hotel & Palace — Caribbean | Qualityacht',
   description:
-    'Palaces, hotels and private residences across the Caribbean, explored sub-region by sub-region on the map.',
+    'Palaces and hotels across the Caribbean, explored sub-region by sub-region on the map.',
 };
 
 // Page dediee ouverte au clic sur les Caraibes depuis la carte monde de /hotel-palace.
@@ -26,7 +26,7 @@ export default function HotelPalaceCaribbeanPage() {
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
           <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em]">
-            Palaces · Hotels · Private Residences
+            Palaces · Hotels
           </p>
         </div>
       </div>
