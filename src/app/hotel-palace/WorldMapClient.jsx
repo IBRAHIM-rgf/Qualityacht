@@ -94,7 +94,7 @@ export default function WorldMapClient() {
     WORLD_DESTINATIONS.forEach((d) => {
       const icon = L.divIcon({
         className: 'hp-dest-marker',
-        html: `<div class="hp-logo-dest ${d.ready ? 'hp-logo-ready' : ''}"><img src="/images/logoFondTrans.png" alt="" /></div>`,
+        html: `<div class="hp-logo-dest ${d.ready ? 'hp-logo-ready' : ''}"><img src="/images/trans.png" alt="" /></div>`,
         iconSize: [30, 30],
         iconAnchor: [15, 15],
       });

@@ -35,7 +35,7 @@ const CARIB_BOUNDS = [[9.5, -85.0], [23.5, -58.0]];
 // Marqueur d'emplacement = le LOGO Qualityacht (medaillon, fond transparent), a la
 // place d'un point plein.
 const LOGO_MARK =
-  '<img src="/images/logoFondTrans.png" alt="" width="20" height="20" class="hp-logo-mark" />';
+  '<img src="/images/trans.png" alt="" width="20" height="20" class="hp-logo-mark" />';
 
 export default function CaribbeanMapClient() {
   const mapRef = useRef(null);
@@ -98,15 +98,15 @@ export default function CaribbeanMapClient() {
       interactive: false, // la terre ne capte pas les clics : ce sont les labels qui pilotent
     }).addTo(map);
 
-    // ── Niveau 1 : un LABEL par sous-region (nom), clic -> niveau 2 ──
+    // ── Niveau 1 : LOGO Qualityacht (fond transparent) + nom par sous-region, clic -> niveau 2 ──
     SUBREGIONS.forEach((s) => {
       const center = SUB_CENTERS[s.slug];
       if (!center) return;
       const icon = L.divIcon({
         className: 'hp-sub-label-wrap',
-        html: `<span class="hp-sub-label">${s.name}</span>`,
-        iconSize: [140, 20],
-        iconAnchor: [70, 10],
+        html: `<span class="hp-sub-logo"><img src="/images/trans.png" alt="" /></span><span class="hp-sub-label">${s.name}</span>`,
+        iconSize: [150, 52],
+        iconAnchor: [75, 40],
       });
       const marker = L.marker(center, { icon, title: s.name });
       marker.on('click', () => setActiveSub(s.slug));
@@ -196,14 +196,23 @@ export default function CaribbeanMapClient() {
     <section className="bg-[#26272a] px-4 md:px-10 lg:px-14 py-14 md:py-20">
       <style>{`
         .leaflet-container { background: ${SEA}; }
+        /* Marqueur de sous-region : logo (fond transparent) au-dessus du nom, centres */
+        .hp-sub-label-wrap {
+          display: flex; flex-direction: column; align-items: center; cursor: pointer;
+        }
+        .hp-sub-logo { line-height: 0; }
+        .hp-sub-logo img {
+          width: 30px; height: 30px; display: block;
+          filter: drop-shadow(0 1px 3px rgba(0,0,0,0.85));
+        }
         .hp-sub-label {
-          display: inline-block; white-space: nowrap; cursor: pointer;
+          display: inline-block; white-space: nowrap; cursor: pointer; margin-top: 2px;
           font-family: system-ui, sans-serif; font-size: 12px; font-weight: 700;
           text-transform: uppercase; letter-spacing: 0.1em; color: ${COCOCO};
           text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
           transition: color 0.2s;
         }
-        .hp-sub-label:hover { color: #c2622a; }
+        .hp-sub-label-wrap:hover .hp-sub-label { color: #c2622a; }
         .hp-island {
           display: inline-block; white-space: nowrap;
           font-family: system-ui, sans-serif; font-size: 10px; font-weight: 600; font-style: italic;
