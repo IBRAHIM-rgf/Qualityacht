@@ -514,11 +514,13 @@ function BurntLine() {
 }
 
 // ── Section fond ───────────────────────────────────────────────────────────────
-function CloudSection({ children, className = '', bg = '/images/services-bg.png' }) {
+function CloudSection({ children, className = '', bg = '/images/services-bg.png', gray = false }) {
   return (
     <div className={`relative ${className}`}>
       <div className="absolute inset-0 z-0">
-        <Image src={bg} alt="" fill className="object-cover opacity-55" />
+        {/* gray : nuages en gris (grayscale) — utilise sur la halal pour que le fond
+            nuageux continue en gris derriere le slide (cf. HalalLateralScroll). */}
+        <Image src={bg} alt="" fill className={`object-cover opacity-55 ${gray ? 'grayscale' : ''}`} />
       </div>
       <div className="relative z-10">{children}</div>
     </div>
@@ -563,6 +565,9 @@ export default function CaribbeanV15Page({
   // Destinations (cf. /charters/halal/caribbean : fleurs nationales des Caraibes).
   // Defaut [] = aucune regression ailleurs. Meme forme que popularDestinations.
   extraFlowers = [],
+  // grayIntroClouds : passe les nuages de l'intro en GRIS (cf. /charters/halal/caribbean,
+  // ou le fond nuageux doit continuer en gris derriere le slide). Defaut false.
+  grayIntroClouds = false,
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -635,7 +640,7 @@ export default function CaribbeanV15Page({
 
         {/* ══ INTRO parametrable (paragraphe simple, centre) — juste sous le hero ══ */}
         {intro && (
-          <CloudSection className="bg-[#26272a] pt-14 md:pt-24 px-5 md:px-20" bg="/images/nuagesAncien.png">
+          <CloudSection className="bg-[#26272a] pt-14 md:pt-24 pb-14 md:pb-20 px-5 md:px-20" bg="/images/nuagesAncien.png" gray={grayIntroClouds}>
             <div className="max-w-3xl mx-auto text-center">
               <p className="text-[#acb0cd] text-base md:text-lg leading-relaxed">{intro}</p>
             </div>

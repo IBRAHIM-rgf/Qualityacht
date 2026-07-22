@@ -37,10 +37,20 @@ const PHOTOS = [
 // NB : les marqueurs de source du texte fourni ([luxurylondon.co], [lansdowneclub])
 // ont ete retires ; la derniere phrase, coupee a "at the highest leve", a ete
 // completee en "level.".
+// 1 entree = 1 photo du slide. title = titre affiche au-dessus du paragraphe.
 const PARAGRAPHS = [
-  'We curate discreet yacht charter experiences with the understated elegance of a private members’ club in Mayfair. Every detail is handled with refinement, precision, and complete discretion, for guests who expect a level of service that feels effortlessly exclusive.',
-  'Halal-friendly arrangements are integrated with the same quiet sophistication, from refined catering and alcohol-free options to a service style shaped around your preferences. The result is a private experience at sea that feels polished, bespoke, and exceptionally well considered.',
-  'For clients who value privacy, taste, and absolute personal attention, each charter is designed as a singular experience rather than a standard itinerary. It is luxury without noise, service without excess, and hospitality at the highest level.',
+  {
+    title: 'Understated Elegance',
+    text: 'We curate discreet yacht charter experiences with the understated elegance of a private members’ club in Mayfair. Every detail is handled with refinement, precision, and complete discretion, for guests who expect a level of service that feels effortlessly exclusive.',
+  },
+  {
+    title: 'Halal, Seamlessly Integrated',
+    text: 'Halal-friendly arrangements are integrated with the same quiet sophistication, from refined catering and alcohol-free options to a service style shaped around your preferences. The result is a private experience at sea that feels polished, bespoke, and exceptionally well considered.',
+  },
+  {
+    title: 'A Singular Experience',
+    text: 'For clients who value privacy, taste, and absolute personal attention, each charter is designed as a singular experience rather than a standard itinerary. It is luxury without noise, service without excess, and hospitality at the highest level.',
+  },
 ];
 
 // Ancien texte du rail : remonte SOUS LE HERO, centre (prop intro de la v15).
@@ -56,6 +66,7 @@ export default function HalalCaribbeanPage() {
       showDescription={false}
       showCocomer={false}
       extraFlowers={NATIONAL_FLOWERS}
+      grayIntroClouds
       introNode={
         <HalalLateralScroll paragraphs={PARAGRAPHS} photos={PHOTOS} />
       }
