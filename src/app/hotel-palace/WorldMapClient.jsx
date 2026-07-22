@@ -89,14 +89,14 @@ export default function WorldMapClient() {
       maxZoom: 18,
     }).addTo(map);
 
-    // ── Les 16 destinations ──
+    // ── Les 16 destinations : marqueur = LOGO Qualityacht (fond transparent). La
+    //    destination "ready" (Caraibes) porte en plus l'anneau orange pulsant. ──
     WORLD_DESTINATIONS.forEach((d) => {
-      const color = d.ready ? '#B03E00' : '#C0C0C0';
       const icon = L.divIcon({
         className: 'hp-dest-marker',
-        html: `<div class="${d.ready ? 'hp-dot hp-dot-ready' : 'hp-dot'}" style="--dot:${color}"></div>`,
-        iconSize: [14, 14],
-        iconAnchor: [7, 7],
+        html: `<div class="hp-logo-dest ${d.ready ? 'hp-logo-ready' : ''}"><img src="/images/logoFondTrans.png" alt="" /></div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
       });
       const marker = L.marker(d.coords, { icon, title: d.label }).addTo(map);
       marker.bindTooltip(d.label, {
@@ -240,13 +240,18 @@ export default function WorldMapClient() {
   return (
     <section className="bg-[#26272a] px-4 md:px-10 lg:px-14 py-14 md:py-20">
       <style>{`
-        .hp-dot {
-          width: 12px; height: 12px; border-radius: 9999px;
-          background: var(--dot); border: 2px solid #26272a;
-          box-shadow: 0 0 0 1px var(--dot), 0 2px 6px rgba(0,0,0,0.6);
-          cursor: pointer;
+        .hp-logo-dest { position: relative; width: 30px; height: 30px; cursor: pointer; }
+        .hp-logo-dest img {
+          width: 30px; height: 30px; display: block;
+          filter: drop-shadow(0 1px 3px rgba(0,0,0,0.85));
         }
-        .hp-dot-ready { animation: hpPulse 2.4s ease-out infinite; }
+        /* destinations "coming soon" : logo plus transparent pour rester discret */
+        .hp-logo-dest:not(.hp-logo-ready) img { opacity: 0.5; }
+        /* Caraibes (ready) : anneau orange pulsant derriere le logo */
+        .hp-logo-ready::before {
+          content: ''; position: absolute; inset: 1px; border-radius: 9999px;
+          animation: hpPulse 2.4s ease-out infinite;
+        }
         @keyframes hpPulse {
           0%   { box-shadow: 0 0 0 1px #B03E00, 0 0 0 0 rgba(176,62,0,0.55); }
           70%  { box-shadow: 0 0 0 1px #B03E00, 0 0 0 14px rgba(176,62,0,0); }

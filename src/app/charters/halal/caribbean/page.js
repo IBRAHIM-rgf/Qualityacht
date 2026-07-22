@@ -66,6 +66,7 @@ export default function HalalCaribbeanPage() {
       showDescription={false}
       showCocomer={false}
       extraFlowers={NATIONAL_FLOWERS}
+      hideDefaultFlowers
       grayIntroClouds
       introNode={
         <HalalLateralScroll paragraphs={PARAGRAPHS} photos={PHOTOS} />

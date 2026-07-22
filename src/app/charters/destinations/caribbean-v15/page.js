@@ -565,6 +565,9 @@ export default function CaribbeanV15Page({
   // Destinations (cf. /charters/halal/caribbean : fleurs nationales des Caraibes).
   // Defaut [] = aucune regression ailleurs. Meme forme que popularDestinations.
   extraFlowers = [],
+  // hideDefaultFlowers=true : masque les 5 fleurs d'origine et n'affiche que
+  // extraFlowers (cf. /charters/halal/caribbean). Defaut false = aucune regression.
+  hideDefaultFlowers = false,
   // grayIntroClouds : passe les nuages de l'intro en GRIS (cf. /charters/halal/caribbean,
   // ou le fond nuageux doit continuer en gris derriere le slide). Defaut false.
   grayIntroClouds = false,
@@ -736,7 +739,7 @@ export default function CaribbeanV15Page({
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Anchorages & Marinas" title="Popular Destinations" sub="The most exclusive marinas and anchorages in the Caribbean" />
             <div className="flex overflow-x-auto snap-x snap-mandatory gap-0 md:gap-1 pt-2 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
-              {[...popularDestinations, ...extraFlowers].map((dest, i) => <CircleCard key={i} {...dest} />)}
+              {[...(hideDefaultFlowers ? [] : popularDestinations), ...extraFlowers].map((dest, i) => <CircleCard key={i} {...dest} />)}
             </div>
           </div>
         </CloudSection>
