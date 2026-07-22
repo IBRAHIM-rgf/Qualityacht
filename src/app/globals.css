@@ -6,6 +6,20 @@
   --font-eurostile: "Eurostile", sans-serif;
 }
 
+/* ── Plus de COULEUR sur toutes les images du site (saturation +30%) ─────────────
+   Selecteur d'element : une image qui porte deja SA PROPRE classe de filtre Tailwind
+   l'emporte (specificite de classe > element), donc les heros boostes (HERO_BOOST) et
+   les ronds de fleurs (grayscale) gardent EXACTEMENT leur rendu — pas de double dose.
+   Seules les photos "brutes" (object-cover sans filtre) sont saturees. On exclut les
+   tuiles de carte (gris, et un filtre les tinterait) et les logos-marqueurs. */
+img {
+  filter: saturate(1.3);
+}
+.leaflet-container img,
+.hp-logo-mark {
+  filter: none;
+}
+
 .trajan-regular {
   font-family: var(--font-trajan-regular);
 }

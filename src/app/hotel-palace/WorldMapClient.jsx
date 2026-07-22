@@ -14,6 +14,7 @@
 //
 // AUCUN emoji.
 
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import {
   WORLD_VIEW,
@@ -24,9 +25,14 @@ import {
   HOTELS_BY_SUB,
 } from './map-data';
 
+// Une zone "ready" ouvre sa page dediee (les Caraibes -> /hotel-palace/caribbean),
+// la ou le zoom se faisait avant sur place.
+const REGION_PATH = { caribbean: '/hotel-palace/caribbean' };
+
 const EMERGING_SLUG = 'emerging-destinations';
 
 export default function WorldMapClient() {
+  const router = useRouter();
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const layersRef = useRef({ world: [], subs: [], emerging: [] });
@@ -34,6 +40,9 @@ export default function WorldMapClient() {
   const [leafletReady, setLeafletReady] = useState(false);
   const [region, setRegion] = useState(null); // null = vue monde | 'caribbean'
   const [activeSub, setActiveSub] = useState(null); // slug de sous-region
+
+  // Ouvre la page dediee d'une zone prete (les Caraibes ont leur propre page).
+  const openRegion = (r) => router.push(REGION_PATH[r] || '/hotel-palace');
 
   // 1) Charger Leaflet (CSS + JS) depuis le CDN, une seule fois
   useEffect(() => {
@@ -97,7 +106,7 @@ export default function WorldMapClient() {
       });
 
       if (d.ready) {
-        marker.on('click', () => setRegion(d.region));
+        marker.on('click', () => openRegion(d.region));
       } else {
         marker.bindPopup(
           `<div class="hp-pop">
@@ -323,7 +332,7 @@ export default function WorldMapClient() {
                 <button
                   key={d.title}
                   type="button"
-                  onClick={() => d.ready && setRegion(d.region)}
+                  onClick={() => d.ready && openRegion(d.region)}
                   disabled={!d.ready}
                   className={`px-3 py-1.5 rounded-full text-[10px] uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors duration-300 ${
                     d.ready

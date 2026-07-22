@@ -559,6 +559,10 @@ export default function CaribbeanV15Page({
   // showCocomer=false masque le bandeau photo cocomer (cf. /charters/halal/caribbean).
   // Defaut true = aucune regression sur les autres pages basees sur la v15.
   showCocomer = true,
+  // extraFlowers : ronds de fleurs supplementaires ajoutes a la fin des Popular
+  // Destinations (cf. /charters/halal/caribbean : fleurs nationales des Caraibes).
+  // Defaut [] = aucune regression ailleurs. Meme forme que popularDestinations.
+  extraFlowers = [],
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -727,7 +731,7 @@ export default function CaribbeanV15Page({
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Anchorages & Marinas" title="Popular Destinations" sub="The most exclusive marinas and anchorages in the Caribbean" />
             <div className="flex overflow-x-auto snap-x snap-mandatory gap-0 md:gap-1 pt-2 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
-              {popularDestinations.map((dest, i) => <CircleCard key={i} {...dest} />)}
+              {[...popularDestinations, ...extraFlowers].map((dest, i) => <CircleCard key={i} {...dest} />)}
             </div>
           </div>
         </CloudSection>

@@ -14,6 +14,17 @@ export const metadata = {
 
 const HERO_IMAGE = '/images/halal/fruits_1440x800.jpg';
 
+// Fleurs nationales des Caraibes, ajoutees aux ronds "Popular Destinations" UNIQUEMENT
+// sur cette page (prop extraFlowers de caribbean-v15). Effet gris->couleur au survol
+// gere en CSS par CircleCard. Photos copiees du dossier fourni vers des chemins propres.
+const NATIONAL_FLOWERS = [
+  { name: 'Barbados',          image: '/images/destinations/flowers/barbados-pride.jpg',           href: '/yachts?destination=barbados',    nameBelow: true },
+  { name: 'Cuba',              image: '/images/destinations/flowers/cuba-mariposa.jpg',            href: '/yachts?destination=cuba',        nameBelow: true },
+  { name: 'Jamaica',           image: '/images/destinations/flowers/jamaica-lignum-vitae.jpg',     href: '/yachts?destination=jamaica',     nameBelow: true },
+  { name: 'Puerto Rico',       image: '/images/destinations/flowers/puerto-rico-maga.jpg',         href: '/yachts?destination=puerto-rico', nameBelow: true },
+  { name: 'Trinidad & Tobago', image: '/images/destinations/flowers/trinidad-tobago-chaconia.jpg', href: '/yachts?destination=trinidad',    nameBelow: true },
+];
+
 // 1 photo = 1 slide du rail. La 1re est a cote du texte, les suivantes defilent avec la
 // colonne texte laissee libre.
 const PHOTOS = [
@@ -44,6 +55,7 @@ export default function HalalCaribbeanPage() {
       intro={INTRO}
       showDescription={false}
       showCocomer={false}
+      extraFlowers={NATIONAL_FLOWERS}
       introNode={
         <HalalLateralScroll paragraphs={PARAGRAPHS} photos={PHOTOS} />
       }
