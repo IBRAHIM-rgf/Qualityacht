@@ -277,10 +277,18 @@ function StBarthBandeau({ children }) {
 
 // ── Bandeau photo : commence en version filtrée puis bascule en couleur
 // (originale) au scroll, et reste ainsi à la fin. Transition fluide 1.5s.
-function BandeauPhoto({ src, srcOld, position = 'center' }) {
+function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect }) {
   const [ref, lit] = useScrollLit(200);
-  return (
-    <div ref={ref} className="relative h-[45vh] md:h-[70vh] overflow-hidden">
+  // full : le bandeau est REDIMENSIONNE au ratio de la photo (prop aspect) et centre,
+  // au lieu d'une bande pleine largeur. Le conteneur ayant le meme ratio que l'image,
+  // object-cover la remplit EXACTEMENT — photo entiere, sans rognage et sans grand vide
+  // lateral. Degrade retire en mode full.
+  const inner = (
+    <div
+      ref={ref}
+      className={`relative overflow-hidden ${full ? 'h-[62vh] md:h-[86vh] max-w-full' : 'h-[45vh] md:h-[70vh]'}`}
+      style={full ? { aspectRatio: aspect } : undefined}
+    >
       {/* Fondu enchaîné asymétrique :
           - Sortante (filtrée) : 3s, delay 0
           - Entrante (originale) : 2.5s, delay 1.2s (apparait quand la 1ère est mi-floue) */}
@@ -293,9 +301,14 @@ function BandeauPhoto({ src, srcOld, position = 'center' }) {
           className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
           style={{ objectPosition: position, transitionProperty: 'opacity, filter', transitionDuration: lit ? '2500ms' : '3000ms', transitionDelay: lit ? '1200ms' : '0ms' }} />
       )}
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
+      {!full && (
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, rgba(38,39,42,0.3) 25%, transparent 40%, transparent 50%, rgba(38,39,42,0.3) 72%, #26272a 100%)' }} />
+      )}
     </div>
   );
+  // full : centre le bandeau redimensionne sur la largeur de la page.
+  if (full) return <div className="flex justify-center bg-[#26272a] px-4">{inner}</div>;
+  return inner;
 }
 
 // ── Cercle ─────────────────────────────────────────────────────────────────────
@@ -691,7 +704,7 @@ export default function CaribbeanV15Page({
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s (masquable : showCocomer) ══ */}
         {showCocomer && (
-          <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
+          <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" full aspect="864 / 1184" />
         )}
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 4 (8 cards) ══ */}
@@ -732,7 +745,7 @@ export default function CaribbeanV15Page({
         </CloudSection>
 
         {/* ══ BANDEAU palmiers — couleur au hover 4s ══ */}
-        <BandeauPhoto src="/images/pagesCaraibes/palmierscaraibes.jpeg" srcOld="/images/pagesCaraibes/palmierscaraibes-original.jpeg" />
+        <BandeauPhoto src="/images/pagesCaraibes/palmierscaraibes.jpeg" srcOld="/images/pagesCaraibes/palmierscaraibes-original.jpeg" full aspect="1248 / 832" />
 
         {/* ══ POPULAR DESTINATIONS — cercles slider ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
