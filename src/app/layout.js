@@ -3,12 +3,20 @@ import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollRise from "./components/ScrollRise";
-import { Michroma } from 'next/font/google';
+import { Michroma, Montserrat } from 'next/font/google';
 
 const michroma = Michroma({
   weight: '400',
   subsets: ['latin'],
   variable: '--font-michroma',
+});
+
+// Police de CORPS de texte par defaut (alternative gratuite proche de Proxima Nova)
+const montserrat = Montserrat({
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+  display: 'swap',
 });
 
 
@@ -111,7 +119,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${michroma.variable} ${geistMono.variable} ${eurostileFont.variable} ${trajanRegular.variable} ${trajanBold.variable} `}>
+    <html lang="en" className={`${geistSans.variable} ${michroma.variable} ${geistMono.variable} ${eurostileFont.variable} ${trajanRegular.variable} ${trajanBold.variable} ${montserrat.variable} `}>
       <body className="bg-[#303135] text-gray-900 antialiased flex flex-col min-h-screen">
         <Header />
         <main className="flex-1">{children}</main>

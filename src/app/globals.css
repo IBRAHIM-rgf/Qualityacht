@@ -6,6 +6,12 @@
   --font-eurostile: "Eurostile", sans-serif;
 }
 
+/* Police de CORPS de texte par defaut sur tout le site.
+   Les titres (header, footer, h1-h4) restent en Trajan via la regle plus bas. */
+body {
+  font-family: var(--font-montserrat), sans-serif;
+}
+
 /* ── Plus de COULEUR sur toutes les images du site (saturation +30%) ─────────────
    Selecteur d'element : une image qui porte deja SA PROPRE classe de filtre Tailwind
    l'emporte (specificite de classe > element), donc les heros boostes (HERO_BOOST) et
