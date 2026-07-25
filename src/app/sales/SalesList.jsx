@@ -10,54 +10,43 @@ import { useState } from 'react';
 // bouton a droite. Filtres par type au-dessus. LES 3 YACHTS SONT FICTIFS (demo design).
 // AUCUN emoji.
 
+// Yachts REELS (annonces Ventura Europe). Specs telles que publiees uniquement — aucune
+// donnee inventee (guests/vitesse non communiques => non affiches).
 const YACHTS = [
   {
-    id: 'azure-horizon',
-    name: 'Azure Horizon',
+    id: 'last-man-standing',
+    name: 'Last Man Standing',
     type: 'Motor Yacht',
-    builder: 'Benetti',
-    year: 2021,
-    length: '47 m',
-    cabins: 5,
-    guests: 12,
-    speed: '15 kn',
-    flag: 'Cayman Islands',
-    price: '€ 32,500,000',
-    badge: 'New Listing',
-    category: 'motor',
-    img: '/images/pagesCaraibes/beach-562145.jpg',
-  },
-  {
-    id: 'silver-mistral',
-    name: 'Silver Mistral',
-    type: 'Sailing Yacht',
-    builder: 'Perini Navi',
-    year: 2019,
-    length: '42 m',
+    builder: 'Astondoa 102 GLX',
+    year: 2003,
+    length: '34 m',
+    beam: '7 m',
     cabins: 4,
-    guests: 8,
-    speed: '12 kn',
-    flag: 'Malta',
-    price: '€ 18,900,000',
-    badge: 'Motivated Seller',
-    category: 'sailing',
-    img: '/images/yachts/yacht1.jpeg',
+    crew: 2,
+    flag: 'British',
+    price: '€ 2,200,000',
+    priceNote: 'VAT paid',
+    badge: 'For Sale',
+    category: 'motor',
+    img: '/images/Sales/last-man-standing.jpg',
   },
   {
-    id: 'coral-drifter',
-    name: 'Coral Drifter',
-    type: 'Explorer Yacht',
-    builder: 'Damen',
-    year: 2023,
-    length: '55 m',
-    cabins: 6,
-    guests: 12,
-    speed: '14 kn',
-    flag: 'Marshall Islands',
-    price: '€ 46,000,000',
-    badge: 'Best Buy',
-    category: 'explorer',
-    img: '/images/yachts/yatch2.jpeg',
+    id: 'pobedy-i',
+    name: 'Pobedy I',
+    type: 'Motor Yacht',
+    builder: 'Maiora 26',
+    year: 2004,
+    refit: 2025,
+    length: '26.5 m',
+    beam: '5.58 m',
+    cabins: 4,
+    crew: 2,
+    flag: 'Portuguese',
+    price: '€ 1,195,000',
+    priceNote: 'VAT paid',
+    badge: 'Price Reduced',
+    category: 'motor',
+    img: '/images/Sales/pobedy-i.jpg',
   },
 ];
 
@@ -144,15 +133,16 @@ export default function SalesList() {
                   <div className="text-right shrink-0">
                     <p className="text-[10px] uppercase tracking-[0.16em] text-[#8b90a0]">Asking</p>
                     <p className="text-lg md:text-2xl text-[#d39478] leading-tight">{y.price}</p>
+                    {y.priceNote && <p className="text-[10px] text-[#8b90a0] mt-0.5">{y.priceNote}</p>}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
                   <Spec label="Length" value={y.length} />
-                  <Spec label="Year" value={y.year} />
-                  <Spec label="Guests" value={y.guests} />
+                  <Spec label="Year" value={y.refit ? `${y.year} · Refit ${y.refit}` : y.year} />
+                  <Spec label="Beam" value={y.beam} />
                   <Spec label="Cabins" value={y.cabins} />
-                  <Spec label="Cruising" value={y.speed} />
+                  <Spec label="Crew" value={y.crew} />
                   <Spec label="Flag" value={y.flag} />
                 </div>
 
