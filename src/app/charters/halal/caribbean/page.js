@@ -64,6 +64,11 @@ export default function HalalCaribbeanPage() {
       heroImageDesktop={HERO_IMAGE}
       showDescription={false}
       showCocomer
+      palmiersSrc="/images/pagesCaraibes/beach-562145.jpg"
+      palmiersAspect="4000 / 3000"
+      palmiersSrcOld="/images/pagesCaraibes/beach-562145.jpg"
+      palmiersFilter="brightness-[0.72] saturate-[0.6]"
+      palmiersFilterOld="brightness-[0.78] saturate-[1.02]"
       extraFlowers={NATIONAL_FLOWERS}
       hideDefaultFlowers
       grayClouds

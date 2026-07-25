@@ -277,12 +277,14 @@ function StBarthBandeau({ children }) {
 
 // ── Bandeau photo : commence en version filtrée puis bascule en couleur
 // (originale) au scroll, et reste ainsi à la fin. Transition fluide 1.5s.
-function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect, heightClass = 'h-[45vh] md:h-[70vh]', boost = false }) {
-  // boost : couleurs accentuees sur ce bandeau (cf. halal : beach). NB les bandeaux ont
-  // deja `blur-0` (Tailwind) qui ECRASE le `img { filter: saturate(1.3) }` global -> sans
-  // ce boost ils n'ont AUCUNE saturation ajoutee. La classe saturate/contraste/luminosite
-  // se compose avec le blur dans le meme filter Tailwind.
-  const boostCls = boost ? 'saturate-[1.6] contrast-[1.12] brightness-[1.05] ' : '';
+function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect, heightClass = 'h-[45vh] md:h-[70vh]', filterCls = '', filterClsOld = '' }) {
+  // filterCls : filtre CSS de l'image affichee AU REPOS (src). filterClsOld : filtre de
+  // l'image REVELEE au scroll (srcOld). Deux filtres DIFFERENTS -> la transition est VISIBLE
+  // (repos assombri/desature -> revele plus lumineux/colore, facon cocomer ; cf. halal beach).
+  // NB les bandeaux ont deja `blur-0` (Tailwind) qui ECRASE le `saturate(1.3)` global : il
+  // faut donc passer le filtre ici ; il se compose avec le blur dans le meme filter Tailwind.
+  const fxCls = filterCls ? filterCls + ' ' : '';
+  const fxClsOld = (filterClsOld || filterCls) ? (filterClsOld || filterCls) + ' ' : '';
   const [ref, lit] = useScrollLit(200);
   // full : PLEINE LARGEUR au RATIO de la photo (prop aspect). Le conteneur fait 100% de
   // large, sa hauteur suit le ratio -> la photo entiere remplit le bandeau bord a bord,
@@ -300,12 +302,12 @@ function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect, 
           - Sortante (filtrée) : 3s, delay 0
           - Entrante (originale) : 2.5s, delay 1.2s (apparait quand la 1ère est mi-floue) */}
       <Image src={src} alt="" fill
-        className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${boostCls}${lit && srcOld ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
+        className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${fxCls}${lit && srcOld ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
         style={{ objectPosition: position, transitionProperty: 'opacity, filter', transitionDuration: lit && srcOld ? '3000ms' : '2500ms', transitionDelay: lit && srcOld ? '0ms' : '1200ms' }} />
       {/* Ancienne image (originale, finale) */}
       {srcOld && (
         <Image src={srcOld} alt="" fill
-          className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${boostCls}${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
+          className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${fxClsOld}${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
           style={{ objectPosition: position, transitionProperty: 'opacity, filter', transitionDuration: lit ? '2500ms' : '3000ms', transitionDelay: lit ? '1200ms' : '0ms' }} />
       )}
       {!full && (
@@ -584,8 +586,11 @@ export default function CaribbeanV15Page({
   // "beach". palmiersAspect = son ratio (mode full). Defaut null = bandeau palmiers d'origine.
   palmiersSrc = null,
   palmiersAspect = null,
-  // palmiersBoost : accentue les couleurs du bandeau palmiers/beach (cf. halal). Defaut false.
-  palmiersBoost = false,
+  palmiersSrcOld = null,
+  // palmiersFilter : filtre CSS du bandeau palmiers/beach au repos ; palmiersFilterOld : filtre
+  // de l'image revelee au scroll (cf. halal : beach assombri, transition visible). Defaut ''.
+  palmiersFilter = '',
+  palmiersFilterOld = '',
   // extraFlowers : ronds de fleurs supplementaires ajoutes a la fin des Popular
   // Destinations (cf. /charters/halal/caribbean : fleurs nationales des Caraibes).
   // Defaut [] = aucune regression ailleurs. Meme forme que popularDestinations.
@@ -766,10 +771,11 @@ export default function CaribbeanV15Page({
         {/* ══ BANDEAU palmiers (remplacable via palmiersSrc — cf. halal : beach) ══ */}
         <BandeauPhoto
           src={palmiersSrc || '/images/pagesCaraibes/palmierscaraibes.jpeg'}
-          srcOld={palmiersSrc ? undefined : '/images/pagesCaraibes/palmierscaraibes-original.jpeg'}
+          srcOld={palmiersSrc ? palmiersSrcOld : '/images/pagesCaraibes/palmierscaraibes-original.jpeg'}
           full
           aspect={palmiersAspect || '1248 / 832'}
-          boost={palmiersBoost}
+          filterCls={palmiersFilter}
+          filterClsOld={palmiersFilterOld}
         />
 
         {/* ══ POPULAR DESTINATIONS — cercles slider ══ */}
