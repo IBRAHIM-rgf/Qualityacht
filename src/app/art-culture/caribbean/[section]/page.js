@@ -52,9 +52,6 @@ export default async function ArtCultureSectionPage({ params }) {
           <div className="relative w-32 md:w-40 h-6 mt-4">
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
-          <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em]">
-            Sub-region by sub-region — tap to open
-          </p>
         </div>
       </div>
 

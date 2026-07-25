@@ -28,9 +28,9 @@ const NATIONAL_FLOWERS = [
 // 1 photo = 1 slide du rail. La 1re est a cote du texte, les suivantes defilent avec la
 // colonne texte laissee libre.
 const PHOTOS = [
-  '/images/Caraibes halal.jpg',
-  '/images/michael-worden-36s0MNiG-No-unsplash.jpg',
-  '/images/pexels-yassir-draka-2148838902-32967593.jpg',
+  '/images/pagesCaraibes/image-collee.png',                          // slide #1 (boostee, cf. Photo boost)
+  '/images/michael-worden-36s0MNiG-No-unsplash.jpg',                 // slide #2 (inchangee)
+  '/images/pagesCaraibes/oswald-elsaboath-lHOIwVCOMMM-unsplash.jpg', // slide #3 (Oswald)
 ];
 
 // Texte affiche A COTE de la 1re photo du rail horizontal.
@@ -62,14 +62,17 @@ export default function HalalCaribbeanPage() {
     <CaribbeanV15Page
       heroImageMobile={HERO_IMAGE}
       heroImageDesktop={HERO_IMAGE}
-      intro={INTRO}
       showDescription={false}
-      showCocomer={false}
+      showCocomer
       extraFlowers={NATIONAL_FLOWERS}
       hideDefaultFlowers
-      grayIntroClouds
+      grayClouds
+      heroTextLow
       introNode={
-        <HalalLateralScroll paragraphs={PARAGRAPHS} photos={PHOTOS} />
+        // intro passe DANS le composant (et non plus via le prop intro de la v15) : le
+        // paragraphe est ainsi rendu dans le MEME fond nuageux continu que le slide, sans
+        // section separee -> plus de "trait" entre le paragraphe et le slide.
+        <HalalLateralScroll intro={INTRO} paragraphs={PARAGRAPHS} photos={PHOTOS} />
       }
     />
   );

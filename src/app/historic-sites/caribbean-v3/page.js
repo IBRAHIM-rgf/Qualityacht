@@ -4,7 +4,7 @@ import SplitPanels from './SplitPanels';
 export const metadata = {
   title: 'Caribbean by Land — Monuments, Hiking & Cycling | Qualityacht',
   description:
-    'One card, three worlds: Caribbean historic monuments, hiking trails and cycling routes. Hover a panel to open it.',
+    'One card, three worlds: Caribbean historic monuments, hiking trails and cycling routes.',
 };
 
 // v3 : une seule grande card decoupee en 3 panneaux verticaux. Le panneau survole

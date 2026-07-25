@@ -17,34 +17,42 @@ import Image from 'next/image';
 
 const REVEAL_RATIO = 0.88; // la photo se revele quand son bord gauche passe sous 88% du viewport
 
-function Photo({ src, alt, priority = false }) {
+// boost : couleurs accentuees sur CETTE photo en particulier (cf. slide #1, la photo
+// "collee" trop pastel). La classe Tailwind l'emporte sur le filtre global
+// `img { filter: saturate(1.3) }` (globals.css) -> saturation portee a 1.6 + contraste
+// + luminosite, la photo devient plus vive malgre le filtre deja present.
+function Photo({ src, alt, priority = false, boost = false }) {
   return (
-    <div className="curtain group relative h-full w-full overflow-hidden rounded-2xl border border-[#C0C0C0]/15">
+    <div className="curtain group relative h-full w-full overflow-hidden">
       <Image
         src={encodeURI(src)}
         alt={alt}
         fill
         sizes="(max-width:768px) 100vw, 55vw"
-        className="object-cover group-hover:scale-110"
+        className={`object-cover group-hover:scale-110 ${
+          boost ? 'saturate-[1.6] contrast-[1.12] brightness-[1.05]' : ''
+        }`}
         priority={priority}
       />
     </div>
   );
 }
 
-// Un TextBlock par slide : 1 entree { title, text } = 1 photo. Titre + paragraphe poses
-// dans un CADRE gris clair (#3a3b3f) a contour cococo (#C0C0C0).
+// Un TextBlock par slide : 1 entree { title, text } = 1 photo. Le paragraphe est pose
+// DIRECTEMENT sur le fond de la page (nuages gris continus), SANS cadre ni fond propre :
+// son fond doit etre le meme que le reste de la page. Seule separation : le "trait" de
+// section (la ligne title-line sous le titre).
 function TextBlock({ item }) {
   if (!item) return <div aria-hidden />;
   return (
     <div className="flex h-full flex-col justify-center">
-      <div className="max-w-lg rounded-2xl border border-[#C0C0C0] bg-[#3a3b3f] p-6 md:p-8 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.9)]">
+      <div className="max-w-lg">
         {item.title && (
           <>
             <h3 className="trajan-regular text-lg md:text-2xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">
               {item.title}
             </h3>
-            <div className="relative my-4 h-4 w-24">
+            <div className="relative my-4 h-4 w-24 mx-auto">
               <Image src="/images/title-line.png" alt="" fill className="object-contain" />
             </div>
           </>
@@ -58,7 +66,7 @@ function TextBlock({ item }) {
 // Phrase d'accroche des 3 photos (au-dessus du slide).
 const TAGLINE = 'Halal without compromise. Luxury without noise.';
 
-export default function HalalLateralScroll({ paragraphs = [], photos = [], alt = 'Caribbean halal charter' }) {
+export default function HalalLateralScroll({ intro = null, paragraphs = [], photos = [], alt = 'Caribbean halal charter' }) {
   const wrapRef = useRef(null);
   const trackRef = useRef(null);
   const rootRef = useRef(null);
@@ -107,13 +115,20 @@ export default function HalalLateralScroll({ paragraphs = [], photos = [], alt =
       {/* Fond NUAGES GRIS continu : prolonge, en gris, les nuages de l'intro (qui
           s'arretaient net). grayscale sur l'image seule (pas le contenu, qui est en
           z-10). */}
+      {/* Fond nuages gris CONTINU avec le reste de la page : meme texture
+          (nuagesAncien), meme couleur (gris), meme opacite (55%) que les CloudSection
+          de caribbean-v15. Tuilage vertical (100% de large, hauteur naturelle, repete)
+          au lieu d'un cover unique : le cover s'etirait sur toute la hauteur du slide
+          (~450vh) et donnait un fond zoome qui "recommencait". Le tuilage garde une
+          echelle constante et l'alternance des bandes de nuages sur toute la page. */}
       <div
         aria-hidden
-        className="absolute inset-0 z-0 opacity-45 grayscale"
+        className="absolute inset-0 z-0 opacity-55 grayscale"
         style={{
           backgroundImage: "url('/images/nuagesAncien.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center top',
+          backgroundSize: '100% auto',
+          backgroundRepeat: 'repeat-y',
+          backgroundPosition: 'top center',
         }}
       />
 
@@ -133,6 +148,16 @@ export default function HalalLateralScroll({ paragraphs = [], photos = [], alt =
         }
       `}</style>
 
+      {/* INTRO (le paragraphe AVANT le slide) : rendu DANS ce meme fond nuageux continu,
+          pour que le fond du reste de la page ENGLOBE ce paragraphe. Il n'est donc plus une
+          section separee avec son propre fond -> plus de "trait" entre le paragraphe et le
+          slide. */}
+      {intro && (
+        <div className="relative z-10 max-w-3xl mx-auto px-5 md:px-20 pt-14 md:pt-24 pb-4 md:pb-8 text-center">
+          <p className="text-[#acb0cd] text-base md:text-lg leading-relaxed">{intro}</p>
+        </div>
+      )}
+
       {/* Phrase d'accroche des 3 photos */}
       <div className="relative z-10 px-6 md:px-14 pt-6 md:pt-12 text-center">
         <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">
@@ -146,7 +171,7 @@ export default function HalalLateralScroll({ paragraphs = [], photos = [], alt =
           <div key={src} className="space-y-5">
             <TextBlock item={paragraphs[i]} />
             <div className="h-[58vh]">
-              <Photo src={src} alt={alt} priority={i === 0} />
+              <Photo src={src} alt={alt} priority={i === 0} boost={i === 0} />
             </div>
           </div>
         ))}
@@ -161,12 +186,14 @@ export default function HalalLateralScroll({ paragraphs = [], photos = [], alt =
         className="hidden md:block relative z-10"
         style={{ height: `${Math.max(2, photos.length) * 150}vh` }}
       >
-        <div className="sticky top-0 h-screen overflow-hidden flex items-center">
-          <div ref={trackRef} className="flex h-[74vh] w-full will-change-transform">
+        {/* h-full (et non h-[74vh] centre) : les photos occupent toute la hauteur du
+            viewport et TOUCHENT le header pendant le pin — plus de marge haut/bas. */}
+        <div className="sticky top-0 h-screen overflow-hidden flex">
+          <div ref={trackRef} className="flex h-full w-full will-change-transform">
             {photos.map((src, i) => (
               <div key={src} className="shrink-0 w-screen h-full grid grid-cols-2 gap-10 px-[6vw]">
                 <TextBlock item={paragraphs[i]} />
-                <Photo src={src} alt={alt} priority={i === 0} />
+                <Photo src={src} alt={alt} priority={i === 0} boost={i === 0} />
               </div>
             ))}
           </div>

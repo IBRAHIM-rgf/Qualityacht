@@ -3,9 +3,11 @@
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-// Fait MONTER tous les textes du site quand ils entrent dans le champ (effet facon
-// kokomoislandfiji.com/discover). Monte une seule fois dans le layout racine : aucune
-// page a modifier, tout nouveau texte est pris en charge automatiquement.
+// Fait APPARAITRE LATERALEMENT tous les textes du site quand ils entrent dans le champ
+// (balayage gauche->droite, facon destinyhousebahamas.com). Monte une seule fois dans le
+// layout racine : aucune page a modifier, tout nouveau texte est pris en charge
+// automatiquement. Pour changer la DIRECTION de l'effet sur tout le site, il suffit de
+// modifier KEYFRAMES ci-dessous (un seul endroit).
 //
 // POURQUOI la Web Animations API et NON des classes CSS :
 // poser une classe (ou un style) sur un noeud rendu par le serveur declenche
@@ -28,9 +30,13 @@ const TEXT_SELECTOR = 'h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption';
 //  - .reveal, .reveal-up : blocs qui ont DEJA leur propre animation d'apparition
 const SKIP_CLOSEST = '[data-no-rise], .reveal, .reveal-up';
 
+// Apparition LATERALE (facon destinyhousebahamas.com) : le texte se devoile de GAUCHE a
+// DROITE par un balayage (clip-path), et non plus en montant d'en bas. clip-path ne
+// deborde JAMAIS la boite -> aucun risque de scrollbar horizontale, contrairement a un
+// translateX. Le petit fondu adoucit le bord du balayage.
 const KEYFRAMES = [
-  { opacity: 0, transform: 'translateY(26px)' },
-  { opacity: 1, transform: 'none' },
+  { opacity: 0, clipPath: 'inset(0 100% 0 0)' },
+  { opacity: 1, clipPath: 'inset(0 0 0 0)' },
 ];
 const TIMING = { duration: 1600, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' };
 

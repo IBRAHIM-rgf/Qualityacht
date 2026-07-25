@@ -102,7 +102,9 @@ function SubRegion({ region, section, artGroups, cultureRows }) {
         onClick={() => !empty && setOpen((v) => !v)}
         aria-expanded={open}
         disabled={empty}
-        className="relative block w-full h-[40vh] md:h-[46vh] overflow-hidden text-left disabled:cursor-default"
+        className={`relative block w-full overflow-hidden text-left disabled:cursor-default transition-[height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          open ? 'h-[35vh] md:h-[45vh]' : 'h-[15vh] md:h-[21vh]'
+        }`}
       >
         <Image
           src={encodeURI(region.img)}

@@ -277,28 +277,35 @@ function StBarthBandeau({ children }) {
 
 // ── Bandeau photo : commence en version filtrée puis bascule en couleur
 // (originale) au scroll, et reste ainsi à la fin. Transition fluide 1.5s.
-function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect }) {
+function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect, heightClass = 'h-[45vh] md:h-[70vh]', boost = false }) {
+  // boost : couleurs accentuees sur ce bandeau (cf. halal : beach). NB les bandeaux ont
+  // deja `blur-0` (Tailwind) qui ECRASE le `img { filter: saturate(1.3) }` global -> sans
+  // ce boost ils n'ont AUCUNE saturation ajoutee. La classe saturate/contraste/luminosite
+  // se compose avec le blur dans le meme filter Tailwind.
+  const boostCls = boost ? 'saturate-[1.6] contrast-[1.12] brightness-[1.05] ' : '';
   const [ref, lit] = useScrollLit(200);
-  // full : le bandeau est REDIMENSIONNE au ratio de la photo (prop aspect) et centre,
-  // au lieu d'une bande pleine largeur. Le conteneur ayant le meme ratio que l'image,
-  // object-cover la remplit EXACTEMENT — photo entiere, sans rognage et sans grand vide
-  // lateral. Degrade retire en mode full.
+  // full : PLEINE LARGEUR au RATIO de la photo (prop aspect). Le conteneur fait 100% de
+  // large, sa hauteur suit le ratio -> la photo entiere remplit le bandeau bord a bord,
+  // SANS rognage et SANS bordure (une photo portrait donne un bandeau haut). Degrade
+  // retire en mode full.
+  // Sinon : bande pleine largeur, object-cover ; heightClass regle la hauteur et
+  // position le cadrage.
   const inner = (
     <div
       ref={ref}
-      className={`relative overflow-hidden ${full ? 'h-[62vh] md:h-[86vh] max-w-full' : 'h-[45vh] md:h-[70vh]'}`}
+      className={`relative overflow-hidden w-full ${full ? '' : heightClass}`}
       style={full ? { aspectRatio: aspect } : undefined}
     >
       {/* Fondu enchaîné asymétrique :
           - Sortante (filtrée) : 3s, delay 0
           - Entrante (originale) : 2.5s, delay 1.2s (apparait quand la 1ère est mi-floue) */}
       <Image src={src} alt="" fill
-        className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${lit && srcOld ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
+        className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${boostCls}${lit && srcOld ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
         style={{ objectPosition: position, transitionProperty: 'opacity, filter', transitionDuration: lit && srcOld ? '3000ms' : '2500ms', transitionDelay: lit && srcOld ? '0ms' : '1200ms' }} />
       {/* Ancienne image (originale, finale) */}
       {srcOld && (
         <Image src={srcOld} alt="" fill
-          className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
+          className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${boostCls}${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
           style={{ objectPosition: position, transitionProperty: 'opacity, filter', transitionDuration: lit ? '2500ms' : '3000ms', transitionDelay: lit ? '1200ms' : '0ms' }} />
       )}
       {!full && (
@@ -306,8 +313,6 @@ function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect }
       )}
     </div>
   );
-  // full : centre le bandeau redimensionne sur la largeur de la page.
-  if (full) return <div className="flex justify-center bg-[#26272a] px-4">{inner}</div>;
   return inner;
 }
 
@@ -501,7 +506,7 @@ function FaqItem({ q, a }) {
       <button onClick={() => setOpen(o => !o)}
         className="w-full flex items-start justify-between py-5 text-left group cursor-pointer gap-3">
         <div className="flex-1">
-          <span className="trajan-regular text-[#acb0cd] text-xs md:text-sm uppercase tracking-[0.15em] group-hover:text-[#c2622a] transition-colors duration-300 leading-snug block text-center md:text-left">
+          <span className="trajan-regular text-[#acb0cd] text-sm md:text-base uppercase tracking-[0.15em] group-hover:text-[#c2622a] transition-colors duration-300 leading-snug block text-center md:text-left">
             {q}
           </span>
         </div>
@@ -574,6 +579,13 @@ export default function CaribbeanV15Page({
   // showCocomer=false masque le bandeau photo cocomer (cf. /charters/halal/caribbean).
   // Defaut true = aucune regression sur les autres pages basees sur la v15.
   showCocomer = true,
+  // palmiersSrc : remplace la photo du bandeau "palmiers" (le bandeau situe plus bas, apres
+  // la section Destinations by Region) — cf. /charters/halal/caribbean qui y met la photo
+  // "beach". palmiersAspect = son ratio (mode full). Defaut null = bandeau palmiers d'origine.
+  palmiersSrc = null,
+  palmiersAspect = null,
+  // palmiersBoost : accentue les couleurs du bandeau palmiers/beach (cf. halal). Defaut false.
+  palmiersBoost = false,
   // extraFlowers : ronds de fleurs supplementaires ajoutes a la fin des Popular
   // Destinations (cf. /charters/halal/caribbean : fleurs nationales des Caraibes).
   // Defaut [] = aucune regression ailleurs. Meme forme que popularDestinations.
@@ -581,9 +593,15 @@ export default function CaribbeanV15Page({
   // hideDefaultFlowers=true : masque les 5 fleurs d'origine et n'affiche que
   // extraFlowers (cf. /charters/halal/caribbean). Defaut false = aucune regression.
   hideDefaultFlowers = false,
-  // grayIntroClouds : passe les nuages de l'intro en GRIS (cf. /charters/halal/caribbean,
-  // ou le fond nuageux doit continuer en gris derriere le slide). Defaut false.
-  grayIntroClouds = false,
+  // heroTextLow : descend le bloc titre du hero (desktop) tout en bas de la photo
+  // (cf. /charters/halal/caribbean, dont le hero a une photo differente). Defaut false
+  // = hero inchange sur /charters/destinations/caribbean.
+  heroTextLow = false,
+  // grayClouds : passe TOUS les fonds nuageux de la page en GRIS et unifie leur texture
+  // (nuagesAncien partout) — fond nuageux continu et homogene sur toute la page, qui
+  // demarre au hero et garde l'alternance des bandes (cf. /charters/halal/caribbean).
+  // Defaut false = aucune regression (services-bg colore ailleurs).
+  grayClouds = false,
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -627,7 +645,7 @@ export default function CaribbeanV15Page({
             {/* Dégradé bas pour lisibilité du texte */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
             {/* Texte overlay */}
-            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-10 md:pb-16">
+            <div className={`absolute inset-x-0 bottom-0 flex flex-col items-center px-4 ${heroTextLow ? 'pb-3 md:pb-6' : 'pb-10 md:pb-16'}`}>
               <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
                 <h1 className="trajan-regular text-6xl lg:text-7xl uppercase tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
                   {heroTitle}
@@ -656,7 +674,7 @@ export default function CaribbeanV15Page({
 
         {/* ══ INTRO parametrable (paragraphe simple, centre) — juste sous le hero ══ */}
         {intro && (
-          <CloudSection className="bg-[#26272a] pt-14 md:pt-24 pb-14 md:pb-20 px-5 md:px-20" bg="/images/nuagesAncien.png" gray={grayIntroClouds}>
+          <CloudSection className="bg-[#26272a] pt-14 md:pt-24 pb-14 md:pb-20 px-5 md:px-20" bg="/images/nuagesAncien.png" gray={grayClouds}>
             <div className="max-w-3xl mx-auto text-center">
               <p className="text-[#acb0cd] text-base md:text-lg leading-relaxed">{intro}</p>
             </div>
@@ -668,7 +686,7 @@ export default function CaribbeanV15Page({
 
         {/* ══ DESCRIPTION (masquable : showDescription) ══ */}
         {showDescription && (
-        <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">
+        <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png" gray={grayClouds}>
           <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6">
             <p className="text-lg md:text-2xl text-[#acb0cd]">
               A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>,{' '}
@@ -702,13 +720,14 @@ export default function CaribbeanV15Page({
         </CloudSection>
         )}
 
-        {/* ══ BANDEAU cocomer — couleur au hover 4s (masquable : showCocomer) ══ */}
+        {/* ══ BANDEAU cocomer — couleur au hover 4s (masquable : showCocomer).
+            Photo portrait affichee ENTIERE, pleine largeur, sans bordure (full + aspect). ══ */}
         {showCocomer && (
-          <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" full aspect="864 / 1184" />
+          <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" full aspect="864 / 1184" />
         )}
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 4 (8 cards) ══ */}
-        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
+        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
             {/* Ligne 1 : 2 col mobile / 4 col desktop */}
@@ -723,7 +742,7 @@ export default function CaribbeanV15Page({
         </CloudSection>
 
         {/* ══ ACCORDÉONS destinations by region ══ */}
-        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
+        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Archipelagos" title="Destinations by Region" sub="Eight groups — over 700 islands" />
             {/* Layout 3+3 puis les 2 derniers (Grand Cayman + Emerging) centres comme une paire */}
@@ -744,11 +763,17 @@ export default function CaribbeanV15Page({
           </div>
         </CloudSection>
 
-        {/* ══ BANDEAU palmiers — couleur au hover 4s ══ */}
-        <BandeauPhoto src="/images/pagesCaraibes/palmierscaraibes.jpeg" srcOld="/images/pagesCaraibes/palmierscaraibes-original.jpeg" full aspect="1248 / 832" />
+        {/* ══ BANDEAU palmiers (remplacable via palmiersSrc — cf. halal : beach) ══ */}
+        <BandeauPhoto
+          src={palmiersSrc || '/images/pagesCaraibes/palmierscaraibes.jpeg'}
+          srcOld={palmiersSrc ? undefined : '/images/pagesCaraibes/palmierscaraibes-original.jpeg'}
+          full
+          aspect={palmiersAspect || '1248 / 832'}
+          boost={palmiersBoost}
+        />
 
         {/* ══ POPULAR DESTINATIONS — cercles slider ══ */}
-        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
+        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Anchorages & Marinas" title="Popular Destinations" sub="The most exclusive marinas and anchorages in the Caribbean" />
             <div className="flex overflow-x-auto snap-x snap-mandatory gap-0 md:gap-1 pt-2 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
@@ -784,7 +809,7 @@ export default function CaribbeanV15Page({
         </StBarthBandeau>
 
         {/* ══ FAQ ══ */}
-        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg="/images/nuagesAncien.png">
+        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg="/images/nuagesAncien.png" gray={grayClouds}>
           <div className="max-w-7xl mx-auto">
             <RevealBlock
               label="Frequently Asked Questions"

@@ -24,7 +24,7 @@ export default function SplitPanels({ panels }) {
       `}</style>
 
       <div className="max-w-7xl mx-auto rounded-3xl overflow-hidden border border-[#C0C0C0]/20 bg-[#2e2f32] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)]">
-        <div className="flex flex-col md:flex-row h-auto md:h-[74vh] md:min-h-[560px]">
+        <div className="flex flex-col md:flex-row h-auto md:h-[90vh] md:min-h-[720px]">
           {panels.map((p, i) => {
             const isActive = active === i;
             return (
@@ -34,7 +34,7 @@ export default function SplitPanels({ panels }) {
                 onClick={() => setActive(i)}
                 className={`sp-panel group relative overflow-hidden cursor-pointer transition-[flex-grow,height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                   i > 0 ? 'border-t md:border-t-0 md:border-l border-[#C0C0C0]/15' : ''
-                } ${isActive ? 'h-[460px] md:h-auto' : 'h-[200px] md:h-auto'}`}
+                } ${isActive ? 'h-[560px] md:h-auto' : 'h-[240px] md:h-auto'}`}
                 style={{ '--sp-grow': isActive ? 2.4 : 1 }}
               >
                 {/* Photo de fond : plus large + plus lumineuse quand le panneau est actif.
@@ -140,11 +140,6 @@ export default function SplitPanels({ panels }) {
           })}
         </div>
       </div>
-
-      <p className="mt-5 text-center text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/40">
-        <span className="md:hidden">Tap a panel to open it</span>
-        <span className="hidden md:inline">Hover a panel to open it</span>
-      </p>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import SplitPanels from '../../historic-sites/caribbean-v3/SplitPanels';
+import ArtCultureStack from './ArtCultureStack';
 import { SECTIONS } from './data';
 
 export const metadata = {
@@ -25,6 +25,7 @@ const panels = [
   {
     key: 'art',
     title: SECTIONS.art.title,
+    eyebrow: SECTIONS.art.eyebrow,
     img: SECTIONS.art.img,
     href: '/art-culture/caribbean/art',
     text: 'Caribbean art blends heritage and contemporary refinement, offering a subtle yet compelling cultural dimension to any yachting journey.',
@@ -39,6 +40,7 @@ const panels = [
   {
     key: 'culture',
     title: SECTIONS.culture.title,
+    eyebrow: SECTIONS.culture.eyebrow,
     img: SECTIONS.culture.img,
     href: '/art-culture/caribbean/culture',
     text: 'Caribbean culture unfolds in refined layers of heritage, tradition, and understated authenticity, enriching each journey with a sense of place that is both timeless and deeply immersive.',
@@ -56,65 +58,60 @@ const panels = [
 export default function CaribbeanArtCulturePage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
-      {/* HERO (meme traitement que les pages theme : object-cover + degrade bas +
-          titre en surimpression) */}
-      <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh]">
+      {/* HERO : la photo est montree EN ENTIER (pleine largeur, hauteur au ratio de
+          l'image, AUCUN rognage). Degrade reduit, titre descendu tout en bas. Le
+          title-line est SORTI de la photo (juste en dessous, voir plus bas). */}
+      <section className="relative pt-[70px] md:pt-0">
         <Image
           src={encodeURI(HERO_IMAGE)}
           alt="Art & Culture — Caribbean"
-          fill
+          width={5000}
+          height={3333}
           priority
           sizes="100vw"
-          // object-bottom : le hero est plus panoramique que la photo (2.05 vs 1.50), 27%
-          // de la hauteur est rogne. Par defaut c'est moitie haut / moitie bas, ce qui
-          // coupait l'enseigne TAXI. En calant sur le bas, tout le bas de la photo — donc
-          // le TAXI — reste visible, et le rognage se fait sur le ciel.
-          className="object-cover object-bottom saturate-[1.4] contrast-[1.1] brightness-[1.03]"
+          className="block w-full h-auto saturate-[1.4] contrast-[1.1] brightness-[1.03]"
         />
-        {/* Degrade allege (le renforcement etait destine a la photo des lanternes, qui
-            est partie sur /art-culture) : le bas de la photo du taxi cubain — dont
-            l'enseigne TAXI — doit rester visible. Lisibilite du titre assuree par les
-            drop-shadow, le fond derriere le texte etant deja sombre ici. */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#26272a]/85 via-[#26272a]/35 to-transparent" />
+        {/* Degrade plus PETIT (h-1/4) : juste de quoi asseoir le titre en bas */}
+        <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#26272a]/85 via-[#26272a]/25 to-transparent" />
 
-        {/* Le bloc titre est remonte (pb genereux) pour laisser l'enseigne TAXI visible
-            EN DESSOUS de lui. Il se pose alors sur le pare-brise, tres clair : sa
-            lisibilite est assuree par un voile sombre FLOUTE, cale sur le texte lui-meme
-            (et non sur la photo), qui n'atteint donc pas le TAXI. */}
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-28 md:pb-48">
+        {/* Titre descendu tout en bas de la photo (pb reduit) */}
+        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-5 md:pb-10">
           <div className="relative">
             <div
               aria-hidden
-              className="absolute -inset-x-12 -inset-y-6 md:-inset-x-24 md:-inset-y-10 rounded-[50%] bg-[#26272a]/70 blur-2xl"
+              className="absolute -inset-x-10 -inset-y-4 md:-inset-x-20 md:-inset-y-6 rounded-[50%] bg-[#26272a]/55 blur-2xl"
             />
-
             <div className="relative flex flex-col items-center">
-              <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+              <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
                 Caribbean · Private Client Edition
               </p>
               <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                 Art &amp; Culture
               </h1>
-              <div className="relative w-28 md:w-40 h-5 mt-4">
-                <Image src="/images/title-line.png" alt="" fill className="object-contain" />
-              </div>
-              <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-                Museums · Galleries · Exhibitions — Carnivals · Festivals · Seasons
+              <p className="mt-2 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                Museums · Galleries · Exhibitions
               </p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* title-line HORS de la photo, juste en dessous */}
+      <div className="flex justify-center pt-6 md:pt-8">
+        <div className="relative w-28 md:w-40 h-6">
+          <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+        </div>
+      </div>
+
       {/* TEXTE SOUS LE HERO */}
-      <div className="px-6 md:px-14 pt-12 md:pt-16">
+      <div className="px-6 md:px-14 pt-8 md:pt-10">
         <p className="max-w-3xl mx-auto text-center text-base md:text-lg leading-relaxed text-[#acb0cd]">
           {HERO_TEXT}
         </p>
       </div>
 
-      {/* 2 CARDS */}
-      <SplitPanels panels={panels} />
+      {/* 2 CARDS empilees (texte a cote de la photo, reveal par masque, fond nuages) */}
+      <ArtCultureStack cards={panels} />
     </div>
   );
 }
