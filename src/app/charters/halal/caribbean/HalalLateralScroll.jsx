@@ -29,7 +29,7 @@ function Photo({ src, alt, priority = false, boost = false }) {
         alt={alt}
         fill
         sizes="(max-width:768px) 100vw, 55vw"
-        className={`object-cover group-hover:scale-110 ${
+        className={`object-cover ${
           boost ? 'saturate-[1.6] contrast-[1.12] brightness-[1.05]' : ''
         }`}
         priority={priority}
@@ -136,15 +136,23 @@ export default function HalalLateralScroll({ intro = null, paragraphs = [], phot
         .curtain > img,
         .curtain > span > img {
           clip-path: inset(0 100% 0 0);
-          /* transitionne clip-path (rideau) ET transform (zoom au survol) : sans
-             transform ici, la regle .curtain > img (plus specifique) ecraserait la
-             transition du scale et le zoom serait instantane. */
-          transition: clip-path 1.15s cubic-bezier(0.22, 1, 0.36, 1),
-                      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+          transform: scale(1);
+          transition: clip-path 1.15s cubic-bezier(0.22, 1, 0.36, 1);
         }
+        /* Rideau ouvert : la photo se devoile (clip-path 1.15s), PUIS un zoom LENT et LONG
+           se declenche (delay 1.3s ~= fin du rideau) et reste en place (forwards). */
         .curtain.is-open > img,
         .curtain.is-open > span > img {
           clip-path: inset(0 0 0 0);
+          animation: halalSlowZoom 16s ease-out 1.3s forwards;
+        }
+        @keyframes halalSlowZoom {
+          from { transform: scale(1); }
+          to   { transform: scale(1.13); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .curtain.is-open > img,
+          .curtain.is-open > span > img { animation: none; }
         }
       `}</style>
 
