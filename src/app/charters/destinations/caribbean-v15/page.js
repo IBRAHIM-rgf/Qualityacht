@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../../../test-region-map/map-data';
+import CaribbeanShowcase from './CaribbeanShowcase';
 
 // Coordonnées d'une île par son nom (depuis map-data.js).
 // Fallback défensif (ISLANDS || []) — évite un crash si l'import n'est pas
@@ -581,6 +582,11 @@ export default function CaribbeanV15Page({
   // showCocomer=false masque le bandeau photo cocomer (cf. /charters/halal/caribbean).
   // Defaut true = aucune regression sur les autres pages basees sur la v15.
   showCocomer = true,
+  // showShowcase=true remplace le bandeau cocomer par la section "cartes flottantes"
+  // (reproduction de l'animation alethia.earth ; cf. CaribbeanShowcase). Defaut false
+  // = aucune regression (halal + route /caribbean-v15 gardent le cocomer). Active
+  // uniquement sur la page canonique /charters/destinations/caribbean.
+  showShowcase = false,
   // palmiersSrc : remplace la photo du bandeau "palmiers" (le bandeau situe plus bas, apres
   // la section Destinations by Region) — cf. /charters/halal/caribbean qui y met la photo
   // "beach". palmiersAspect = son ratio (mode full). Defaut null = bandeau palmiers d'origine.
@@ -610,6 +616,9 @@ export default function CaribbeanV15Page({
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
+  // Bloc description : seul le 1er paragraphe est visible ; les 3 suivants sont
+  // replies derriere un bouton "See more".
+  const [descOpen, setDescOpen] = useState(false);
   useEffect(() => {
     const el = heroRef.current;
     if (!el) return;
@@ -701,35 +710,59 @@ export default function CaribbeanV15Page({
               the Caribbean stands as{' '}
               <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
             </p>
-            <p className="text-base md:text-xl max-w-3xl mx-auto text-[#acb0cd]">
-              From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
-              of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and{' '}
-              <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
-              offers an unparalleled sailing experience.
-            </p>
-            <p className="text-base md:text-xl max-w-2xl mx-auto text-[#acb0cd]">
-              Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over{' '}
-              <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
-              and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
-              cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
-            </p>
-            <p className="text-sm md:text-lg max-w-xl mx-auto text-[#acb0cd]">
-              For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
-              of exclusivity and adventure. Whether it's the glamour of{' '}
-              <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of{' '}
-              <span className="text-[#d39478] font-semibold">St. Barts</span>, or{' '}
-              <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
-              where every moment is crafted for the extraordinary.
-            </p>
+
+            {/* Paragraphes 2 a 4 : replies, revele par "See more" (transition de hauteur). */}
+            <div
+              className={`space-y-5 md:space-y-6 overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] ${descOpen ? 'max-h-[1600px] opacity-100' : 'max-h-0 opacity-0'}`}
+            >
+              <p className="text-base md:text-xl max-w-3xl mx-auto text-[#acb0cd]">
+                From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
+                of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and{' '}
+                <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
+                offers an unparalleled sailing experience.
+              </p>
+              <p className="text-base md:text-xl max-w-2xl mx-auto text-[#acb0cd]">
+                Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over{' '}
+                <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
+                and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
+                cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
+              </p>
+              <p className="text-sm md:text-lg max-w-xl mx-auto text-[#acb0cd]">
+                For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
+                of exclusivity and adventure. Whether it's the glamour of{' '}
+                <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of{' '}
+                <span className="text-[#d39478] font-semibold">St. Barts</span>, or{' '}
+                <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
+                where every moment is crafted for the extraordinary.
+              </p>
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setDescOpen((o) => !o)}
+                aria-expanded={descOpen}
+                style={{ borderColor: '#C0C0C0', color: '#c2622a' }}
+                className="trajan-regular text-[11px] md:text-xs uppercase tracking-[0.25em] px-6 md:px-8 py-2.5 border rounded-full bg-[#26272a] hover:border-[#c2622a] transition-colors duration-300 cursor-pointer"
+              >
+                {descOpen ? 'See less' : 'See more'}
+              </button>
+            </div>
           </div>
         </CloudSection>
         )}
 
-        {/* ══ BANDEAU cocomer — couleur au hover 4s (masquable : showCocomer).
-            Photo portrait affichee ENTIERE, pleine largeur, sans bordure (full + aspect). ══ */}
-        {showCocomer && (
+        {/* ══ Emplacement cocomer ══
+            showShowcase : section "cartes flottantes" (animation alethia.earth) A LA PLACE
+            du cocomer. Sinon (defaut) : bandeau photo cocomer d'origine (masquable via
+            showCocomer). Photo portrait affichee ENTIERE, pleine largeur (full + aspect). */}
+        {showShowcase ? (
+          <CloudSection className="bg-[#26272a] py-16 md:py-24 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
+            <CaribbeanShowcase />
+          </CloudSection>
+        ) : showCocomer ? (
           <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" full aspect="864 / 1184" />
-        )}
+        ) : null}
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 4 (8 cards) ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
