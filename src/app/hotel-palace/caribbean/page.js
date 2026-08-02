@@ -1,37 +1,48 @@
 import Image from 'next/image';
 import CaribbeanMapClient from './CaribbeanMapClient';
+import HotelPoolCards from './HotelPoolCards';
+import { one } from '@/lib/quality-media';
 
 export const metadata = {
   title: 'Hotel & Palace — Caribbean | Qualityacht',
   description:
-    'Palaces and hotels across the Caribbean, explored sub-region by sub-region on the map.',
+    'A curated shortlist of Caribbean palaces with private pools for our charter guests, plus the map to explore the region sub-region by sub-region.',
 };
 
 // Page dediee ouverte au clic sur les Caraibes depuis la carte monde de /hotel-palace.
-// La carte y a la MER BLEUE et des CONTOURS ORANGE autour des zones (cf.
-// CaribbeanMapClient).
+// Hero DRONE (vue aerienne resort/cote), puis la selection "piscine privee"
+// (HotelPoolCards), puis la carte Caraibes (mer bleue, contours orange).
+const heroImg = one({ cat: 'aerial', tag: 'resort', kind: 'image' })?.src
+  || one({ cat: 'aerial', role: 'section-band', kind: 'image' })?.src
+  || one({ cat: 'aerial', role: 'hero-bg', kind: 'image' })?.src;
+
 export default function HotelPalaceCaribbeanPage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
-      {/* MASTHEAD */}
-      <div className="px-6 md:px-14 pt-28 md:pt-32 pb-8 border-b border-[#C0C0C0]/10">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
-          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
+      {/* ══ HERO DRONE ══ */}
+      <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[74vh]">
+        <Image src={heroImg} alt="Hotel & Palace — Caribbean" fill priority sizes="100vw" className="object-cover" />
+        <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
+        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
             Caribbean · Ultra-Premium Reference
           </p>
-          <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">
+          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
             Hotel &amp; Palace
           </h1>
-          <div className="relative w-32 md:w-40 h-6 mt-4">
+          <div className="relative w-28 md:w-40 h-5 mt-4">
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
-          <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em]">
+          <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em] drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
             Palaces · Hotels
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* CARTE CARAIBES (mer bleue, contours orange) */}
+      {/* ══ SELECTION "piscine privee" (cartes cliquables) ══ */}
+      <HotelPoolCards />
+
+      {/* ══ CARTE CARAIBES (mer bleue, contours orange) ══ */}
       <CaribbeanMapClient />
     </div>
   );

@@ -3,6 +3,7 @@
 // Blocs partages par les pages "vibe" (V2/V3, Caraibes & Halal) : en-tete de
 // section anime, bandeau video plein cadre, bouton CTA de marque, bande de stats.
 
+import { useEffect, useRef } from 'react';
 import Reveal from './Reveal';
 
 export function SectionHead({ kicker, title, sub, align = 'center' }) {
@@ -22,10 +23,12 @@ export function SectionHead({ kicker, title, sub, align = 'center' }) {
 }
 
 export function VideoBand({ media: m, title, sub, height = 'h-[60vh] md:h-[80vh]', tint = true }) {
+  const vref = useRef(null);
+  useEffect(() => { const v = vref.current; if (v) v.play?.().catch(() => {}); }, []);
   if (!m) return null;
   return (
     <section className={`relative w-full ${height} overflow-hidden`}>
-      <video className="absolute inset-0 w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" poster={m.poster}>
+      <video ref={vref} className="absolute inset-0 w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" poster={m.poster}>
         <source src={m.src} type="video/mp4" />
       </video>
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 24%, transparent 56%, rgba(38,39,42,0.65) 88%, #26272a 100%)' }} />

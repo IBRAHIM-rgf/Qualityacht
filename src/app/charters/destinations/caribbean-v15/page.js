@@ -613,6 +613,9 @@ export default function CaribbeanV15Page({
   // demarre au hero et garde l'alternance des bandes (cf. /charters/halal/caribbean).
   // Defaut false = aucune regression (services-bg colore ailleurs).
   grayClouds = false,
+  // heroNode : remplace ENTIEREMENT le hero (image + titre mobile) par un noeud libre
+  // (ex. un hero video). Defaut null = hero image d'origine (aucune regression).
+  heroNode = null,
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -640,7 +643,9 @@ export default function CaribbeanV15Page({
           l'identique sans creer de conteneur de scroll. */}
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
 
-        {/* ══ HERO ══ */}
+        {/* ══ HERO ══ (heroNode remplace tout le hero si fourni) */}
+        {heroNode ? heroNode : (
+        <>
         {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
             Desktop : image pleine largeur (natural ratio), titre OVERLAY en bas avec dégradé. */}
         <div className="pt-[70px] md:pt-0 bg-[#26272a]">
@@ -685,6 +690,8 @@ export default function CaribbeanV15Page({
             </p>
           </div>
         </div>
+        </>
+        )}
 
         {/* ══ INTRO parametrable (paragraphe simple, centre) — juste sous le hero ══ */}
         {intro && (

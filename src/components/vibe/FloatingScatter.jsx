@@ -57,7 +57,7 @@ export function Pill({ children, accent = '#c2622a' }) {
   );
 }
 
-export default function FloatingScatter({ cards = [], mobileNodes = [], minHeightClass = 'lg:min-h-[900px]', children }) {
+export default function FloatingScatter({ cards = [], mobileNodes = [], minHeightClass = 'lg:min-h-[900px]', children, fromCenter = true, revealDurationMs = 1500 }) {
   const rootRef = useRef(null);
   const scatterRef = useRef(null);
 
@@ -81,7 +81,7 @@ export default function FloatingScatter({ cards = [], mobileNodes = [], minHeigh
         card.style.setProperty('--oy', (cy - (r.top + r.height / 2)).toFixed(1) + 'px');
       });
     };
-    computeCenters();
+    if (fromCenter) computeCenters();
 
     const io = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) { root.classList.add('in'); io.disconnect(); }
@@ -101,7 +101,7 @@ export default function FloatingScatter({ cards = [], mobileNodes = [], minHeigh
       root.style.setProperty('--p', p.toFixed(3));
     };
     const onScroll = () => { if (raf == null) raf = requestAnimationFrame(update); };
-    const onResize = () => { computeCenters(); onScroll(); };
+    const onResize = () => { if (fromCenter) computeCenters(); onScroll(); };
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize);
@@ -114,18 +114,22 @@ export default function FloatingScatter({ cards = [], mobileNodes = [], minHeigh
   }, []);
 
   return (
-    <div ref={rootRef} className={`fs-root relative max-w-7xl mx-auto ${minHeightClass} lg:flex lg:items-center lg:justify-center`}>
+    <div ref={rootRef} className={`fs-root relative max-w-7xl mx-auto ${minHeightClass} lg:flex lg:items-center lg:justify-center ${fromCenter ? '' : 'no-center'}`}
+      style={{ '--fs-tr': `${revealDurationMs}ms`, '--fs-op': `${Math.round(revealDurationMs * 0.78)}ms` }}>
       <style>{`
         .fs-root { --p: 0; }
         .fs-pos { position: absolute; }
         .fs-card {
           opacity: 0;
           transform: translate(var(--ox, 0), var(--oy, 0)) scale(0.35);
-          transition: opacity 1.2s cubic-bezier(0.16,1,0.3,1), transform 1.5s cubic-bezier(0.16,1,0.3,1);
+          transition: opacity var(--fs-op, 1200ms) cubic-bezier(0.16,1,0.3,1), transform var(--fs-tr, 1500ms) cubic-bezier(0.16,1,0.3,1);
           transition-delay: var(--d, 0ms);
           will-change: transform, opacity;
         }
         .fs-root.in .fs-card { opacity: 1; transform: translate(0,0) scale(1); }
+        /* no-center : les cartes apparaissent EN PLACE (fondu + leger up), pas depuis le centre */
+        .fs-root.no-center .fs-card { transform: translateY(30px) scale(1); }
+        .fs-root.no-center.in .fs-card { transform: translateY(0) scale(1); }
         @keyframes fs-float { from { transform: translateY(-7px); } to { transform: translateY(7px); } }
         .fs-float { animation: fs-float var(--fd, 6s) ease-in-out infinite alternate; will-change: transform; }
         @media (prefers-reduced-motion: reduce) {
