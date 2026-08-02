@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import CaribbeanExplore from '../../components/CaribbeanExplore';
 import { CircuitCard, RegionGroupCard } from './HorsesCards';
+import HorsesEclat from './HorsesEclat';
+import { media } from '@/lib/quality-media';
 
 export const metadata = {
   title: 'Superyacht Horses & Racing 2027 — Caribbean Private Guide | Qualityacht',
@@ -372,6 +374,11 @@ const regions = [
   },
 ];
 
+// Photos des tuiles "Islands by Region" : remplacees par de vraies photos de chevaux
+// (galop plage, cheval dans la mer turquoise, cavaliers) de la mediatheque.
+const horsePhotos = media({ cat: 'horses', kind: 'image' }).map((m) => m.src);
+const regionsWithHorses = regions.map((r, i) => ({ ...r, photo: horsePhotos[i % horsePhotos.length] || r.photo }));
+
 export default function CaribbeanHorsesRacingPage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
@@ -467,12 +474,15 @@ export default function CaribbeanHorsesRacingPage() {
 
           {/* Une carte par sous-region (regroupe ses iles) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-6xl mx-auto items-start">
-            {regions.map((region) => (
+            {regionsWithHorses.map((region) => (
               <RegionGroupCard key={region.name} region={region} />
             ))}
           </div>
         </div>
       </section>
+
+      {/* ECLAT — cartes flottantes chevaux (apres Islands by Region) */}
+      <HorsesEclat />
 
       {/* Sections reprises de caribbean-v15 (a partir de "Explore / Caribbean Islands") :
           Caribbean Islands, Destinations by Region, Popular Destinations, CTA, FAQ + modal carte. */}
