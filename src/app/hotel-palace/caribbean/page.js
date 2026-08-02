@@ -1,6 +1,5 @@
 import Image from 'next/image';
-import CaribbeanMapClient from './CaribbeanMapClient';
-import HotelPoolCards from './HotelPoolCards';
+import HotelMap from './HotelMap';
 import { one } from '@/lib/quality-media';
 
 export const metadata = {
@@ -12,9 +11,9 @@ export const metadata = {
 // Page dediee ouverte au clic sur les Caraibes depuis la carte monde de /hotel-palace.
 // Hero DRONE (vue aerienne resort/cote), puis la selection "piscine privee"
 // (HotelPoolCards), puis la carte Caraibes (mer bleue, contours orange).
-const heroImg = one({ cat: 'aerial', tag: 'resort', kind: 'image' })?.src
-  || one({ cat: 'aerial', role: 'section-band', kind: 'image' })?.src
-  || one({ cat: 'aerial', role: 'hero-bg', kind: 'image' })?.src;
+const heroImg = one({ cat: 'aerial', role: 'hero-bg', kind: 'image', orientation: 'landscape' })?.src
+  || one({ cat: 'aerial', role: 'hero-bg', kind: 'image' })?.src
+  || one({ cat: 'beach', role: 'hero-bg', kind: 'image' })?.src;
 
 export default function HotelPalaceCaribbeanPage() {
   return (
@@ -39,11 +38,8 @@ export default function HotelPalaceCaribbeanPage() {
         </div>
       </section>
 
-      {/* ══ SELECTION "piscine privee" (cartes cliquables) ══ */}
-      <HotelPoolCards />
-
-      {/* ══ CARTE CARAIBES (mer bleue, contours orange) ══ */}
-      <CaribbeanMapClient />
+      {/* ══ CARTE SOMBRE — les hotels apparaissent SUR la carte (popup au clic) ══ */}
+      <HotelMap />
     </div>
   );
 }

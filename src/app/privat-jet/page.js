@@ -4,6 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { destinations } from './data';
+import VideoHero from '@/components/vibe/VideoHero';
+import { one } from '@/lib/quality-media';
+
+// Hero : vidéo "ciel nuageux" (au-dessus des nuages, coucher de soleil) — remplace
+// l'ancien hero photo sombre.
+const cloudsVideo = one({ cat: 'aerial', kind: 'video', role: 'hero-bg', orientation: 'landscape' });
 
 // ── Card ───────────────────────────────────────────────────────────────────────
 function DestCard({ dest }) {
@@ -43,42 +49,14 @@ export default function PrivatJetPage() {
         .reveal-up.revealed { opacity: 1; transform: translateY(0); }
       `}</style>
 
-      {/* ══ HERO avec texte qui monte sur la photo ══ */}
-      <div className="relative pt-[70px] md:pt-0">
-        <div className="relative w-full">
-          {/* Mobile : photo portrait existante */}
-          <Image
-            src="/images/private_jet/jet_hero.jpeg"
-            alt="Private Jet"
-            width={927}
-            height={1648}
-            priority
-            sizes="100vw"
-            className="w-full h-auto block md:hidden"
-          />
-          {/* Desktop : photo dediee paysage */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/private_jet/Private_jet_desktop.png"
-            alt="Private Jet"
-            className="w-full h-auto hidden md:block"
-          />
-          {/* Dégradé bas pour lisibilité */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
-
-          {/* Texte qui monte sur la photo */}
-          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-8 md:pb-16">
-            <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
-              <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
-                Private Jets
-              </h1>
-              <p className="text-[#acb0cd]/80 text-xs md:text-sm uppercase tracking-[0.25em] font-light text-center mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
-                Your Gateway to Every Destination
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* ══ HERO VIDEO — ciel nuageux (au-dessus des nuages), remplace l'ancien hero sombre ══ */}
+      <VideoHero
+        videoLandscape={cloudsVideo?.src}
+        posterLandscape={cloudsVideo?.poster}
+        kicker="Private Aviation"
+        title="Private Jets"
+        subtitle="Your Gateway to Every Destination"
+      />
 
       {/* ══ GRILLE ══ */}
       <section

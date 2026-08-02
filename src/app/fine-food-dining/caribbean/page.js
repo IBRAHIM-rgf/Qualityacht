@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import SplitPanels from '../../historic-sites/caribbean-v3/SplitPanels';
 import { SECTIONS } from './data';
+import MichelinDining from './MichelinDining';
 
 export const metadata = {
   title: 'Fine Food & Dining — Caribbean | Qualityacht',
@@ -95,6 +96,9 @@ export default function CaribbeanFineFoodDiningPage() {
 
       {/* 2 CARDS */}
       <SplitPanels panels={panels} />
+
+      {/* CARTE + TABLES D'EXCEPTION (chefs francais etoiles / equivalents) */}
+      <MichelinDining />
     </div>
   );
 }

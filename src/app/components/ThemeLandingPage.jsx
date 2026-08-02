@@ -10,7 +10,7 @@ import { destinations } from '../charters/destinationsData';
 // /historic-sites et /horses-riding ont ainsi exactement le meme traitement.
 const HERO_BOOST = 'saturate-[1.4] contrast-[1.1] brightness-[1.03]';
 
-export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false }) {
+export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false, animated = false }) {
   const heroGradient = (
     <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
   );
@@ -32,6 +32,11 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
       <style>{`
         .hero-rise { opacity: 0; animation: heroRise 2.2s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
         @keyframes heroRise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-zoom { animation: heroZoom 18s ease-in-out infinite alternate; will-change: transform; }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.12); } }
+        .theme-float { animation: themeFloat var(--tf, 6s) ease-in-out infinite alternate; will-change: transform; }
+        @keyframes themeFloat { from { transform: translateY(-9px); } to { transform: translateY(9px); } }
+        @media (prefers-reduced-motion: reduce) { .hero-zoom, .theme-float { animation: none !important; } }
       `}</style>
 
       {/* ══ HERO ══
@@ -49,8 +54,8 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
           </div>
         </section>
       ) : (
-        <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh]">
-          <Image src={heroImage} alt={title} fill priority sizes="100vw" className={`object-cover ${HERO_BOOST}`} />
+        <section className={`relative pt-[70px] md:pt-0 overflow-hidden ${animated ? 'h-[68vh] md:h-[90vh]' : 'h-[58vh] md:h-[78vh]'}`}>
+          <Image src={heroImage} alt={title} fill priority sizes="100vw" className={`object-cover ${HERO_BOOST} ${animated ? 'hero-zoom' : ''}`} />
           {heroGradient}
           {heroOverlay}
         </section>
@@ -76,14 +81,14 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
             <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">Destinations</h2>
           </div>
           <div className="flex flex-wrap justify-center gap-8">
-            {destinations.map((d) => {
+            {destinations.map((d, i) => {
               const isCaribbean = d.title === 'Caraïbes';
               const label = isCaribbean ? 'Caribbean' : d.title;
               const href = isCaribbean ? caribbeanHref : (links[d.title] || null);
               const img = cardImages[d.title] || d.image;
               const card = (
                 <>
-                  <div className="w-full relative overflow-hidden aspect-[3/4] rounded-xl mb-4">
+                  <div className={`w-full relative overflow-hidden aspect-[3/4] rounded-xl mb-4 ${animated ? 'shadow-[0_22px_50px_-16px_rgba(0,0,0,0.8)]' : ''}`}>
                     <Image
                       src={encodeURI(img)}
                       alt={label}
@@ -97,13 +102,14 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
                   </h3>
                 </>
               );
-              const wrapClass = 'group flex flex-col items-center w-[70%] sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-22px)] max-w-[300px]';
+              const wrapClass = `group flex flex-col items-center w-[70%] sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-22px)] max-w-[300px] ${animated ? 'theme-float' : ''}`;
+              const floatStyle = animated ? { '--tf': `${5 + (i % 4)}s`, animationDelay: `${(i % 5) * 0.35}s` } : undefined;
               return href ? (
-                <Link key={d.title} href={href} className={`${wrapClass} cursor-pointer`}>
+                <Link key={d.title} href={href} className={`${wrapClass} cursor-pointer`} style={floatStyle}>
                   {card}
                 </Link>
               ) : (
-                <div key={d.title} className={`${wrapClass} opacity-90`}>
+                <div key={d.title} className={`${wrapClass} opacity-90`} style={floatStyle}>
                   {card}
                 </div>
               );

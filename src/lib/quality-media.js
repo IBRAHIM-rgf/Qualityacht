@@ -1,8 +1,5 @@
-// AUTO-GENERE (scratchpad/build-media.js) — ne pas editer a la main.
-// Manifeste des medias haute qualite rapatries de D:\\quality vers public/media/quality/.
+// AUTO-GENERE puis RESYNC (scratchpad) sur l'etat reel du disque apres tri des medias.
 // Chaque entree : { cat, kind:'image'|'video', src, poster?, orientation, role, score, desc, tags[] }.
-// cat  : aerial | people | halal | beach | boats | interiors | horses | cycling | food | jets | divers
-// role : hero-bg | section-band | card | fun-gallery | avatar-circle | activity
 export const MEDIA = [
   {
     "cat": "aerial",
@@ -95,10 +92,10 @@ export const MEDIA = [
     "score": 9
   },
   {
-    "cat": "people",
+    "cat": "halal",
     "kind": "video",
-    "src": "/media/quality/people/fun-port-1.mp4",
-    "poster": "/media/quality/people/fun-port-1.jpg",
+    "src": "/media/quality/halal/fun-port-1.mp4",
+    "poster": "/media/quality/halal/fun-port-1.jpg",
     "orientation": "portrait",
     "role": "card",
     "tags": [
@@ -452,9 +449,9 @@ export const MEDIA = [
     ]
   },
   {
-    "cat": "people",
+    "cat": "boats",
     "kind": "image",
-    "src": "/media/quality/people/pexels-frans-van-heerden-201846-625418.jpg",
+    "src": "/media/quality/boats/pexels-frans-van-heerden-201846-625418.jpg",
     "orientation": "landscape",
     "role": "section-band",
     "score": 8,
@@ -467,9 +464,9 @@ export const MEDIA = [
     ]
   },
   {
-    "cat": "people",
+    "cat": "divers",
     "kind": "image",
-    "src": "/media/quality/people/holger-woizick-78z3qaiyn8i-unsplash.jpg",
+    "src": "/media/quality/divers/holger-woizick-78z3qaiyn8i-unsplash.jpg",
     "orientation": "landscape",
     "role": "fun-gallery",
     "score": 8,
@@ -574,9 +571,9 @@ export const MEDIA = [
     ]
   },
   {
-    "cat": "halal",
+    "cat": "people",
     "kind": "image",
-    "src": "/media/quality/halal/pexels-jmendezrf-4000822.jpg",
+    "src": "/media/quality/people/pexels-jmendezrf-4000822.jpg",
     "orientation": "portrait",
     "role": "fun-gallery",
     "score": 9,
@@ -622,9 +619,9 @@ export const MEDIA = [
     ]
   },
   {
-    "cat": "halal",
+    "cat": "people",
     "kind": "image",
-    "src": "/media/quality/halal/andrewm1r-couple-6708819-1920.jpg",
+    "src": "/media/quality/people/andrewm1r-couple-6708819-1920.jpg",
     "orientation": "portrait",
     "role": "card",
     "score": 7,
@@ -697,22 +694,6 @@ export const MEDIA = [
       "action",
       "ocean",
       "energetic"
-    ]
-  },
-  {
-    "cat": "beach",
-    "kind": "image",
-    "src": "/media/quality/beach/pexels-ocean-1867285-1920.jpg",
-    "orientation": "landscape",
-    "role": "hero-bg",
-    "score": 10,
-    "desc": "vivid turquoise open lagoon, empty horizon",
-    "tags": [
-      "turquoise",
-      "lagoon",
-      "vivid",
-      "empty",
-      "horizon"
     ]
   },
   {
@@ -1711,7 +1692,6 @@ export const MEDIA = [
   }
 ];
 
-// Filtre pratique : media({ cat, role, tag, orientation, kind }) -> tries par score desc.
 export function media({ cat, role, tag, orientation, kind } = {}) {
   return MEDIA.filter((m) =>
     (!cat || m.cat === cat) &&

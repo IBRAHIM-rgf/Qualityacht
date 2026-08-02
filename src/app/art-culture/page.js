@@ -13,6 +13,7 @@ export default function ArtCulturePage() {
       heroImage="/images/art-culture/Art et culture halo 2.jpg"
       intro="Museums, galleries, exhibitions and iconic sites — a curated reference through the cultural heritage of the world's most inspiring destinations, chosen for excellence and their resonance with the most sophisticated tastes."
       caribbeanHref="/art-culture/caribbean"
+      animated
     />
   );
 }
