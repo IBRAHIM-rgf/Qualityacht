@@ -1,5 +1,16 @@
 import CaribbeanV15Page from '../../destinations/caribbean-v15/page';
 import HalalLateralScroll from './HalalLateralScroll';
+import MouseExpandPanels from '@/components/vibe/MouseExpandPanels';
+import { one } from '@/lib/quality-media';
+
+// Panneaux "COMO" (s'etendent selon la souris) — experiences halal Caraibes.
+const PANELS = [
+  { number: '1', title: 'Halal Cuisine', desc: 'A private chef and a fully halal galley — refined menus and alcohol-free pairings, shaped around your table.', img: one({ cat: 'food', kind: 'image' })?.src, href: '/fine-food' },
+  { number: '2', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: one({ cat: 'boats', kind: 'image', role: 'card' })?.src || one({ cat: 'boats', kind: 'image' })?.src, href: '/charters' },
+  { number: '3', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: one({ cat: 'beach', kind: 'image', role: 'card' })?.src || one({ cat: 'beach', kind: 'image' })?.src },
+  { number: '4', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: one({ cat: 'halal', kind: 'image', role: 'card' })?.src || one({ cat: 'halal', kind: 'image' })?.src },
+  { number: '5', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: one({ cat: 'aerial', kind: 'image', role: 'card' })?.src || one({ cat: 'aerial', kind: 'image' })?.src },
+].filter((p) => p.img);
 
 // Halal — Caraibes : contenu de caribbean-v15, avec
 //  - un HERO different (fruits tropicaux au lieu du yacht),
@@ -74,10 +85,12 @@ export default function HalalCaribbeanPage() {
       grayClouds
       heroTextLow
       introNode={
-        // intro passe DANS le composant (et non plus via le prop intro de la v15) : le
-        // paragraphe est ainsi rendu dans le MEME fond nuageux continu que le slide, sans
-        // section separee -> plus de "trait" entre le paragraphe et le slide.
-        <HalalLateralScroll intro={INTRO} paragraphs={PARAGRAPHS} photos={PHOTOS} />
+        <>
+          {/* Section "COMO" : panneaux qui s'etendent selon la souris */}
+          <MouseExpandPanels panels={PANELS} />
+          {/* intro + slide lateral d'origine, en dessous */}
+          <HalalLateralScroll intro={INTRO} paragraphs={PARAGRAPHS} photos={PHOTOS} />
+        </>
       }
     />
   );
