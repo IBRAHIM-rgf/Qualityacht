@@ -1,14 +1,4 @@
 import Image from "next/image";
-import Text4Images2Section from "../components/sections/new/Text4Images2Section";
-import Text4ImagesSection from "../components/sections/new/Text4Images";
-import Text2imagesSection from "../components/sections/new/text2images";
-import ImageTextImage from "../components/sections/new/ImageTextImage";
-import FAQAccordion from "../components/sections/common/FAQAccordion";
-import FullWidthBanner from "../components/sections/common/FullWidthBanner";
-import HeroImageBackground from "../components/sections/common/HeroImageBackground";
-import TestimonialsSlider from "../components/sections/common/TestimonialsSlider";
-import ThreeColumnFeatures from "../components/sections/common/ThreeColumnFeatures";
-import TimelineSection from "../components/sections/common/TimelineSection";
 import WorldPinsMap from "@/components/vibe/WorldPinsMap";
 import FunMarquee from "@/components/vibe/FunMarquee";
 import { media } from "@/lib/quality-media";
@@ -33,37 +23,8 @@ const CARIB_EVENTS = CARIBBEAN_EVENTS.map((e, i) => ({ ...e, img: IMG_POOL[i % I
 
 const EVENT_MARQUEE = IMG_POOL.slice(0, 10).map((src, i) => ({ src, accent: i % 2 ? "#ff7a59" : "#2fd6c4" }));
 
-// Le hero est une VUE DRONE d'ile (voir le rendu). Ne restent en sections "classiques"
-// que les celebrations sur-mesure ; les blocs a fond blanc (Why Choose / Testimonials)
-// ont ete retires. La planisphere ne montre QUE des evenements Caraibes.
-const eventsSections = [
-  {
-    chooseSection: 1, // Text4ImagesSection
-    title: "Tailor-Made Celebrations",
-    content: "From intimate dinners to grand galas, our team curates unique experiences with attention to every detail. Imagine your wedding, corporate gathering, or private celebration in an exceptional setting.",
-    images: [
-      "/images/events/dinner.jpg",
-      "/images/events/gala.jpg",
-      "/images/events/wedding.jpg",
-      "/images/events/corporate.jpg"
-    ]
-  }
-];
-
-
-const sectionComponents = [
-  Text4Images2Section,
-  Text4ImagesSection,
-  Text2imagesSection,
-  ImageTextImage,
-  FAQAccordion,
-  FullWidthBanner,
-  HeroImageBackground,
-  TestimonialsSlider,
-  ThreeColumnFeatures,
-  TimelineSection,
-];
-
+// La section "Tailor-Made Celebrations" (images inexistantes -> icones cassees) a ete
+// retiree. La page = hero drone + marquee + planisphere des evenements Caraibes.
 export default function EventsPage() {
   return (
     <main>
@@ -79,18 +40,7 @@ export default function EventsPage() {
         </div>
       </section>
 
-      {eventsSections.map((section, idx) => {
-        const SectionComponent = sectionComponents[section.chooseSection ?? (idx % sectionComponents.length)];
-        // Correction : passer toutes les props, pas seulement title/content/images
-        return (
-          <SectionComponent
-            key={idx}
-            {...section}
-          />
-        );
-      })}
-
-      {/* Rouleau d'images + planisphere des evenements luxe dans le monde */}
+      {/* Rouleau d'images + planisphere des evenements Caraibes */}
       <section className="bg-[#26272a] py-10 md:py-14">
         <FunMarquee items={EVENT_MARQUEE} speed={52} direction="left" />
       </section>
