@@ -15,10 +15,11 @@ const heroImg = '/media/quality/aerial/resort-villas-drone.jpg';
 export default function HotelPalaceCaribbeanPage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
-      {/* ══ HERO DRONE ══ */}
-      <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[74vh]">
-        <Image src={heroImg} alt="Hotel & Palace — Caribbean" fill priority sizes="100vw" className="object-cover" />
-        <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
+      {/* ══ HERO DRONE — image ENTIERE (ratio naturel, aucun crop : plus zoomee) ══ */}
+      <section className="relative pt-[70px] md:pt-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={heroImg} alt="Hotel & Palace — Caribbean" className="block w-full h-auto max-h-[86vh] object-contain bg-[#26272a]" />
+        <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/60 to-transparent" />
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
             Caribbean · Ultra-Premium Reference
