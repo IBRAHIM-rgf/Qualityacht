@@ -33,7 +33,7 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
         .hero-rise { opacity: 0; animation: heroRise 2.2s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
         @keyframes heroRise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: translateY(0); } }
         .hero-zoom { animation: heroZoom 18s ease-in-out infinite alternate; will-change: transform; }
-        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.06); } }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
         .theme-float { animation: themeFloat var(--tf, 6s) ease-in-out infinite alternate; will-change: transform; }
         @keyframes themeFloat { from { transform: translateY(-9px); } to { transform: translateY(9px); } }
         @media (prefers-reduced-motion: reduce) { .hero-zoom, .theme-float { animation: none !important; } }
