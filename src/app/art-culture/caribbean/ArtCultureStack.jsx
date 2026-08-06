@@ -61,11 +61,6 @@ export default function ArtCultureStack({ cards }) {
                     className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#26272a]/80 via-[#26272a]/20 to-transparent" />
-                  <div className="absolute inset-0 flex items-center justify-center px-4">
-                    <h2 className="trajan-regular text-4xl md:text-6xl uppercase tracking-[0.14em] text-[#C0C0C0] drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
-                      {c.title}
-                    </h2>
-                  </div>
                 </div>
 
                 {/* CARD TEXTE (separee), centree et DECALEE vers le bas (pas pile en face) */}
@@ -74,6 +69,10 @@ export default function ArtCultureStack({ cards }) {
                     reversed ? 'md:order-1' : ''
                   }`}
                 >
+                  {/* Titre EN HAUT du paragraphe (plus rien d'ecrit sur la photo) */}
+                  <h2 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.14em] text-[#C0C0C0]">
+                    {c.title}
+                  </h2>
                   {c.eyebrow && (
                     <p className="text-[11px] md:text-xs uppercase tracking-[0.22em] text-[#B87333]">{c.eyebrow}</p>
                   )}

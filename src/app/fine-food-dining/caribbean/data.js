@@ -38,6 +38,13 @@ export const PROVISIONING = [
     url: 'https://www.froggygourmet.fr/shop',
     desc: 'Fine grocery for yacht provisioning, delivered wherever the yacht lies. Wines and champagnes, fish and seafood, meats and poultry, eggs and dairy, oils and vinegars, condiments and spreads, bakery, fruit and vegetables, dry, frozen, Asian and international ranges, and a dedicated luxury selection.',
     note: 'The online shop lists the Antibes stock only. The full range is ordered from the catalogue, the application, or by email.',
+    // TODO: remplacer par les vrais hero froggygourmet.fr une fois deposes dans /public.
+    // En attendant, illustration food maison (droits OK).
+    images: [
+      '/media/quality/food/klara-kulikova-h8hbl0hldp0-unsplash.jpg',
+      '/media/quality/food/raul-baz-pocjhyin6xs-unsplash.jpg',
+      '/media/quality/food/karthik-b-k-uvkjwz6-5-q-unsplash.jpg',
+    ],
   },
 ];
 

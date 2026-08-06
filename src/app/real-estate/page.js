@@ -1,13 +1,3 @@
-import Text4Images2Section from "../components/sections/new/Text4Images2Section";
-import Text4ImagesSection from "../components/sections/new/Text4Images";
-import Text2imagesSection from "../components/sections/new/text2images";
-import ImageTextImage from "../components/sections/new/ImageTextImage";
-import FAQAccordion from "../components/sections/common/FAQAccordion";
-import FullWidthBanner from "../components/sections/common/FullWidthBanner";
-import HeroImageBackground from "../components/sections/common/HeroImageBackground";
-import TestimonialsSlider from "../components/sections/common/TestimonialsSlider";
-import ThreeColumnFeatures from "../components/sections/common/ThreeColumnFeatures";
-import TimelineSection from "../components/sections/common/TimelineSection";
 import WorldPinsMap from "@/components/vibe/WorldPinsMap";
 import { media } from "@/lib/quality-media";
 
@@ -34,42 +24,18 @@ const PROPERTIES = [
   { name: "Ocean-view estates", place: "Turks & Caicos", badge: "Estate", coords: [21.77, -72.27], desc: "Private-beach estates on Providenciales." },
 ].map((p, i) => ({ ...p, img: RE_POOL[i % RE_POOL.length] }));
 
-const realEstateSections = [
-  {
-    chooseSection: 0,
-    title: "Real Estate",
-    content: "Discover our Real Estate opportunities. (Content coming soon)",
-    images: [
-      "/images/new/pexels-valentina-bondarenko-111153662-10076104.jpg"
-    ]
-  }
-];
-
-const sectionComponents = [
-  Text4Images2Section,
-  Text4ImagesSection,
-  Text2imagesSection,
-  ImageTextImage,
-  FAQAccordion,
-  FullWidthBanner,
-  HeroImageBackground,
-  TestimonialsSlider,
-  ThreeColumnFeatures,
-  TimelineSection,
-];
 
 export default function RealEstatePage() {
   return (
-    <main>
-      {realEstateSections.map((section, idx) => {
-        const SectionComponent = sectionComponents[section.chooseSection ?? (idx % sectionComponents.length)];
-        return (
-          <SectionComponent
-            key={idx}
-            {...section}
-          />
-        );
-      })}
+    <main className="bg-[#26272a] text-[#acb0cd]">
+      {/* Intro texte (plus aucune photo — la navigation se fait sur la planisphere) */}
+      <section className="px-6 md:px-14 pt-28 md:pt-32 pb-6 text-center">
+        <p className="text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-[#B87333] font-medium mb-3">A Global Portfolio</p>
+        <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">Real Estate</h1>
+        <p className="max-w-2xl mx-auto mt-5 text-[13px] md:text-base text-[#acb0cd] leading-relaxed">
+          A curated map of the addresses that hold their rank — introductions arranged by concierge.
+        </p>
+      </section>
 
       {/* Planisphere des localisations immobilieres de luxe */}
       <WorldPinsMap

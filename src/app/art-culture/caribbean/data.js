@@ -452,6 +452,6 @@ export const SECTIONS = {
   culture: {
     title: 'Culture',
     eyebrow: 'Caribbean · Carnivals, Festivals & Seasons',
-    img: '/images/destinations/the Windward Islands-original.jpg',
+    img: '/images/art-culture/x-f-8JPo6SBuZGw-unsplash.jpg',
   },
 };

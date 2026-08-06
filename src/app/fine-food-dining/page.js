@@ -18,6 +18,7 @@ export default function FineFoodDiningPage() {
       heroImage="/images/new/17500843321894246574840682884355.jpg"
       intro="Provisioning, producers and fine grocery on one side; tables, chefs and beach clubs on the other — a curated reference through the flavours of the world's most inspiring destinations, chosen for excellence and for what they bring to a charter at anchor."
       caribbeanHref="/fine-food-dining/caribbean"
+      animated
     />
   );
 }

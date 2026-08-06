@@ -5,7 +5,9 @@
 // sous-region rapproche encore et ouvre sa selection sous la carte.
 //
 // Leaflet est charge depuis le CDN (aucun npm install), meme technique que
-// /test-region-map. Fond de carte sombre CartoDB Dark Matter.
+// /test-region-map. Fond de carte Esri National Geographic (relief marron + relief de la
+// mer / bathymetrie + frontieres + villes) — choix client (le "#1" du comparateur
+// /test-world-relief). Gratuit, sans cle API.
 //
 // Le conteneur de la carte porte data-no-rise : ScrollRise (monte dans le layout racine)
 // balaye main a la recherche de h1-h6/p/li et met chaque texte en pause a opacite 0 en
@@ -84,9 +86,10 @@ export default function WorldMapClient() {
     });
     mapInstanceRef.current = map;
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap · © CARTO',
-      maxZoom: 18,
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; National Geographic',
+      maxZoom: 19,
+      maxNativeZoom: 16,
     }).addTo(map);
 
     // ── Les 16 destinations : marqueur = LOGO Qualityacht (fond transparent). La

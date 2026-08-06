@@ -71,34 +71,22 @@ export default function CaribbeanArtCulturePage() {
           sizes="100vw"
           className="block w-full h-auto saturate-[1.4] contrast-[1.1] brightness-[1.03]"
         />
-        {/* Degrade plus PETIT (h-1/4) : juste de quoi asseoir le titre en bas */}
+        {/* Degrade bas (h-1/4) : liaison avec le fond, aucun texte sur la photo */}
         <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#26272a]/85 via-[#26272a]/25 to-transparent" />
-
-        {/* Titre descendu tout en bas de la photo (pb reduit) */}
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-5 md:pb-10">
-          <div className="relative">
-            <div
-              aria-hidden
-              className="absolute -inset-x-10 -inset-y-4 md:-inset-x-20 md:-inset-y-6 rounded-[50%] bg-[#26272a]/55 blur-2xl"
-            />
-            <div className="relative flex flex-col items-center">
-              <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-                Caribbean · Private Client Edition
-              </p>
-              <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-                Art &amp; Culture
-              </h1>
-              <p className="mt-2 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-                Museums · Galleries · Exhibitions
-              </p>
-            </div>
-          </div>
-        </div>
       </section>
 
-      {/* title-line HORS de la photo, juste en dessous */}
-      <div className="flex justify-center pt-6 md:pt-8">
-        <div className="relative w-28 md:w-40 h-6">
+      {/* TITRE HORS de la photo (sous le hero, sur fond sombre — plus rien d'ecrit sur l'image) */}
+      <div className="flex flex-col items-center text-center px-6 pt-8 md:pt-10">
+        <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-2">
+          Caribbean · Private Client Edition
+        </p>
+        <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">
+          Art &amp; Culture
+        </h1>
+        <p className="mt-2 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em]">
+          Museums · Galleries · Exhibitions
+        </p>
+        <div className="relative w-28 md:w-40 h-6 mt-4">
           <Image src="/images/title-line.png" alt="" fill className="object-contain" />
         </div>
       </div>

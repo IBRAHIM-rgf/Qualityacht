@@ -1,7 +1,6 @@
 import Image from 'next/image';
-import SplitPanels from '../../historic-sites/caribbean-v3/SplitPanels';
+import ArtCultureStack from '../../art-culture/caribbean/ArtCultureStack';
 import { SECTIONS } from './data';
-import MichelinDining from './MichelinDining';
 
 export const metadata = {
   title: 'Fine Food & Dining — Caribbean | Qualityacht',
@@ -12,7 +11,8 @@ export const metadata = {
 // Photo d'etal de fruits tropicaux (bananes, ananas, noix de coco, mangues) : elle est
 // caraibe et alimentaire, elle porte donc le hero de la page Caraibes. La photo
 // atmospherique de la landing reste sur /fine-food-dining.
-const HERO_IMAGE = '/images/halal/fruits_1440x800.jpg';
+// Hero : diner dresse a bord au coucher du soleil (registre "tables d'exception").
+const HERO_IMAGE = '/media/quality/interiors/stockcake-diner-sur-yacht-au-coucher-du-soleil-3.jpg';
 
 const HERO_TEXT =
   'A rarefied expression of Caribbean produce and Caribbean tables, curated for the most discerning clientele.';
@@ -24,6 +24,7 @@ const panels = [
   {
     key: 'fine-food',
     title: SECTIONS['fine-food'].title,
+    eyebrow: 'Provisioning · Producers · Fine Grocery',
     img: SECTIONS['fine-food'].img,
     href: '/fine-food-dining/caribbean/fine-food',
     text: 'Caribbean produce is the quiet luxury of a charter: what comes aboard decides what is served, long before a chef touches it.',
@@ -39,8 +40,8 @@ const panels = [
   {
     key: 'dining',
     title: SECTIONS.dining.title,
+    eyebrow: 'Tables · Chefs · Beach Clubs',
     img: SECTIONS.dining.img,
-    boost: true,
     href: '/fine-food-dining/caribbean/dining',
     text: 'Caribbean dining runs from the barefoot table on the sand to the tasting menu ashore, and the best of it is rarely the most visible.',
     bullets: [
@@ -94,11 +95,9 @@ export default function CaribbeanFineFoodDiningPage() {
         </p>
       </div>
 
-      {/* 2 CARDS */}
-      <SplitPanels panels={panels} />
-
-      {/* CARTE + TABLES D'EXCEPTION (chefs francais etoiles / equivalents) */}
-      <MichelinDining />
+      {/* 2 CARDS empilees — MEME composant que /art-culture/caribbean (card photo + card
+          texte separees, zigzag, fond nuages, Discover). Fine Food et Dining separes. */}
+      <ArtCultureStack cards={panels} />
     </div>
   );
 }

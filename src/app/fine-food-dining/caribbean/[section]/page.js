@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import SubRegionStack from '../SubRegionStack';
-import { DINING, FINE_FOOD, PROVISIONING, SECTIONS, SUBREGIONS } from '../data';
+import DiningMap from '../DiningMap';
+import MichelinDining from '../MichelinDining';
+import { PROVISIONING, SECTIONS } from '../data';
 
 // Page ouverte au clic sur une card FINE FOOD ou DINING : les 8 sous-regions empilees
 // (bandes photo collees). Un clic sur une sous-region deplie ses adresses.
@@ -22,20 +23,10 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// Regroupement par sous-region, fait une fois au rendu (donnees statiques).
-function groupBySub(items) {
-  return items.reduce((acc, item) => {
-    (acc[item.sub] ||= []).push(item);
-    return acc;
-  }, {});
-}
-
 export default async function FineFoodDiningSectionPage({ params }) {
   const { section } = await params;
   const s = SECTIONS[section];
   if (!s) notFound();
-
-  const bySub = groupBySub(section === 'fine-food' ? FINE_FOOD : DINING);
 
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
@@ -51,11 +42,16 @@ export default async function FineFoodDiningSectionPage({ params }) {
           <div className="relative w-32 md:w-40 h-6 mt-4">
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
-          <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em]">
-            Sub-region by sub-region — tap to open
-          </p>
         </div>
       </div>
+
+      {/* DINING : d'abord la carte des tables etoilees (Leaflet), PUIS les cards photos. */}
+      {section === 'dining' && (
+        <>
+          <DiningMap />
+          <MichelinDining />
+        </>
+      )}
 
       {/* LIVRAISON PARTOUT — hors decoupage par sous-region, donc au-dessus de la pile et
           sur la seule section Fine Food. */}
@@ -75,6 +71,15 @@ export default async function FineFoodDiningSectionPage({ params }) {
                   key={p.name}
                   className="bg-[#3a3b3f] border border-[#C0C0C0]/15 rounded-2xl p-5 md:p-6 flex flex-col"
                 >
+                  {p.images && p.images.length > 0 && (
+                    <div className="grid grid-cols-3 gap-2 mb-5 -mt-1">
+                      {p.images.slice(0, 3).map((src, k) => (
+                        <div key={k} className="relative aspect-[4/3] rounded-lg overflow-hidden">
+                          <Image src={encodeURI(src)} alt={`${p.name} ${k + 1}`} fill sizes="(max-width:768px) 30vw, 220px" className="object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   <div className="flex items-center flex-wrap gap-2 mb-3">
                     <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-[0.14em] text-[#B87333] border border-[#B87333]/40">
                       {p.type}
@@ -103,11 +108,6 @@ export default async function FineFoodDiningSectionPage({ params }) {
           </div>
         </div>
       )}
-
-      {/* SOUS-REGIONS EMPILEES (clic = adresses) */}
-      <div className="py-10 md:py-14">
-        <SubRegionStack regions={SUBREGIONS} bySub={bySub} />
-      </div>
 
       <div className="bg-[#1b223d] border-t border-white/10 px-6 md:px-14 py-5">
         <p className="text-[11px] text-[#7a8094] max-w-4xl mx-auto text-center leading-relaxed">

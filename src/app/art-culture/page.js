@@ -15,6 +15,7 @@ export default function ArtCulturePage() {
       caribbeanHref="/art-culture/caribbean"
       animated
       heroFullPhoto
+      hideHeroText
     />
   );
 }

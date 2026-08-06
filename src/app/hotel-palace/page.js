@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import WorldMapClient from './WorldMapClient';
+import MapGate from './MapGate';
 import { media } from '@/lib/quality-media';
 
 export const metadata = {
@@ -56,8 +57,10 @@ export default function HotelPalacePage() {
         </p>
       </section>
 
-      {/* ══ CARTE MONDE ══ */}
-      <WorldMapClient />
+      {/* ══ CARTE MONDE (verrouillee : reconnaissance non-affiliation) ══ */}
+      <MapGate note="The palaces and hotels shown are an independent editorial selection for reference only. Qualityacht has no affiliation, partnership or commercial link with these establishments and receives no commission.">
+        <WorldMapClient />
+      </MapGate>
     </div>
   );
 }

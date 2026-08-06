@@ -12,14 +12,14 @@ import { media } from '@/lib/quality-media';
 const POOL = media({ cat: 'aerial', kind: 'image' }).map((m) => m.src);
 
 const HOTELS = [
-  { name: 'Eden Rock', place: 'St-Barthélemy', stars: 5, coords: [17.904, -62.835], desc: 'Suites perchées et piscines à débordement privées sur la baie de St-Jean.' },
-  { name: 'Cheval Blanc Isle de France', place: 'St-Barthélemy', stars: 5, coords: [17.923, -62.851], desc: 'Villas les pieds dans le sable et piscines privées, baie des Flamands.' },
-  { name: 'Rosewood Little Dix Bay', place: 'Virgin Gorda, BVI', stars: 5, coords: [18.502, -64.400], desc: 'Baie préservée, villas à piscine privée ouvertes sur le récif.' },
-  { name: 'Amanyara', place: 'Providenciales, Turks & Caicos', stars: 5, coords: [21.955, -72.318], desc: 'Pavillons épurés et piscines privées face à l’océan.' },
-  { name: 'Jade Mountain', place: 'Sainte-Lucie', stars: 5, coords: [13.916, -61.061], desc: 'Sanctuaires ouverts, piscines à débordement privées face aux Pitons.' },
-  { name: 'Sugar Beach, A Viceroy Resort', place: 'Sainte-Lucie', stars: 5, coords: [13.849, -61.061], desc: 'Villas dans la forêt tropicale, piscines privées entre les Pitons.' },
-  { name: 'Belmond Cap Juluca', place: 'Anguilla', stars: 5, coords: [18.163, -63.128], desc: 'Architecture mauresque, suites à piscine privée sur Maundays Bay.' },
-  { name: 'Sandy Lane', place: 'Barbade', stars: 5, coords: [13.181, -59.641], desc: 'Grande dame de la côte ouest, villas à piscine privée et majordome.' },
+  { name: 'Eden Rock', place: 'St-Barthélemy', stars: 5, coords: [17.904, -62.835], link: 'https://www.oetkercollection.com/hotels/eden-rock-st-barths/', desc: 'Suites perchées et piscines à débordement privées sur la baie de St-Jean.' },
+  { name: 'Cheval Blanc Isle de France', place: 'St-Barthélemy', stars: 5, coords: [17.923, -62.851], link: 'https://www.chevalblanc.com/en/maison/st-barth-isle-de-france/', desc: 'Villas les pieds dans le sable et piscines privées, baie des Flamands.' },
+  { name: 'Rosewood Little Dix Bay', place: 'Virgin Gorda, BVI', stars: 5, coords: [18.502, -64.400], link: 'https://www.rosewoodhotels.com/en/little-dix-bay-virgin-gorda', desc: 'Baie préservée, villas à piscine privée ouvertes sur le récif.' },
+  { name: 'Amanyara', place: 'Providenciales, Turks & Caicos', stars: 5, coords: [21.955, -72.318], link: 'https://www.aman.com/resorts/amanyara', desc: 'Pavillons épurés et piscines privées face à l’océan.' },
+  { name: 'Jade Mountain', place: 'Sainte-Lucie', stars: 5, coords: [13.916, -61.061], link: 'https://www.jademountain.com/', desc: 'Sanctuaires ouverts, piscines à débordement privées face aux Pitons.' },
+  { name: 'Sugar Beach, A Viceroy Resort', place: 'Sainte-Lucie', stars: 5, coords: [13.849, -61.061], link: 'https://www.viceroyhotelsandresorts.com/sugar-beach', desc: 'Villas dans la forêt tropicale, piscines privées entre les Pitons.' },
+  { name: 'Belmond Cap Juluca', place: 'Anguilla', stars: 5, coords: [18.163, -63.128], link: 'https://www.belmond.com/hotels/caribbean/anguilla/belmond-cap-juluca/', desc: 'Architecture mauresque, suites à piscine privée sur Maundays Bay.' },
+  { name: 'Sandy Lane', place: 'Barbade', stars: 5, coords: [13.181, -59.641], link: 'https://www.sandylane.com/', desc: 'Grande dame de la côte ouest, villas à piscine privée et majordome.' },
 ].map((h, i) => ({ ...h, img: POOL[i % POOL.length] }));
 
 function popupHtml(h) {
@@ -33,6 +33,7 @@ function popupHtml(h) {
       <div style="font-family:var(--font-trajan-regular),serif;text-transform:uppercase;letter-spacing:1px;font-size:13px;color:#C0C0C0;line-height:1.3">${h.name}</div>
       <div style="font-size:11px;color:#B87333;margin-top:3px">${h.place}</div>
       <div style="font-size:12px;color:#acb0cd;opacity:.85;margin-top:6px;line-height:1.45">${h.desc}</div>
+      <a href="${h.link}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#c2622a;text-decoration:none">Visit hotel ›</a>
     </div>`;
 }
 

@@ -11,7 +11,14 @@ import ThreeColumnFeatures from "../components/sections/common/ThreeColumnFeatur
 import TimelineSection from "../components/sections/common/TimelineSection";
 import WorldPinsMap from "@/components/vibe/WorldPinsMap";
 import FunMarquee from "@/components/vibe/FunMarquee";
+import VideoHero from "@/components/vibe/VideoHero";
 import { media } from "@/lib/quality-media";
+
+// Hero video "gens qui font la fete" (le plus proche d'un carnaval dans la mediatheque).
+const HERO_VIDEO = (media({ cat: "people", role: "hero-bg", kind: "video" })[0])?.src
+  || "/media/quality/people/hero-people.mp4";
+const HERO_POSTER = (media({ cat: "people", kind: "image" })[0])?.src
+  || "/media/quality/people/pexels-william-zali-7863870-33194523.jpg";
 
 // Pool d'images (aerien / plage / divers) pour illustrer les evenements + le marquee.
 const IMG_POOL = [
@@ -39,14 +46,10 @@ const WORLD_EVENTS = [
 
 const EVENT_MARQUEE = IMG_POOL.slice(0, 10).map((src, i) => ({ src, accent: i % 2 ? "#ff7a59" : "#2fd6c4" }));
 
+// Le hero est desormais une VIDEO (VideoHero, voir le rendu). Ne restent en sections
+// "classiques" que les celebrations sur-mesure ; les blocs a fond blanc
+// (Why Choose Our Event Services / What Our Clients Say) ont ete retires.
 const eventsSections = [
-  {
-    chooseSection: 6, // HeroImageBackground
-    title: "Exclusive Event Experiences",
-    subtitle: "Create unforgettable moments at sea and on land",
-    buttonText: "Plan Your Event",
-    backgroundImage: "/images/new/photo-1722009040906-0fc91b7e2942.jpeg",
-  },
   {
     chooseSection: 1, // Text4ImagesSection
     title: "Tailor-Made Celebrations",
@@ -57,25 +60,6 @@ const eventsSections = [
       "/images/events/wedding.jpg",
       "/images/events/corporate.jpg"
     ]
-  },
-  {
-    chooseSection: 8, // ThreeColumnFeatures
-    title: "Why Choose Our Event Services",
-    features: [
-      { icon: "Calendar", title: "Personalized Planning", content: "Every event is customized to your vision, from theme to logistics." },
-      { icon: "Star", title: "Luxury Venues", content: "Access to prestigious yachts, villas, and exclusive locations worldwide." },
-      { icon: "Users", title: "Professional Staff", content: "Our experienced crew and event specialists ensure flawless execution." }
-    ],
-    images: []
-  },
-  {
-    chooseSection: 7, // TestimonialsSlider
-    title: "What Our Clients Say",
-    testimonials: [
-      { avatar: "/images/avatars/emma.jpg", name: "Emma R.", content: "Our wedding onboard was magical, beyond our dreams.", role: "Bride" },
-      { avatar: "/images/avatars/marc.jpg", name: "Marc D.", content: "The corporate retreat was perfectly orchestrated, our team was impressed.", role: "CEO" }
-    ],
-    images: []
   }
 ];
 
@@ -96,6 +80,16 @@ const sectionComponents = [
 export default function EventsPage() {
   return (
     <main>
+      {/* ══ HERO VIDEO (ambiance fete / carnaval) ══ */}
+      <VideoHero
+        videoLandscape={HERO_VIDEO}
+        posterLandscape={HERO_POSTER}
+        kicker="Celebrations At Sea & On Land"
+        title="Exclusive Event Experiences"
+        subtitle="Weddings, galas and private celebrations — staged where the moment deserves it."
+        align="bottom"
+      />
+
       {eventsSections.map((section, idx) => {
         const SectionComponent = sectionComponents[section.chooseSection ?? (idx % sectionComponents.length)];
         // Correction : passer toutes les props, pas seulement title/content/images
