@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import CocomerBand from "@/components/vibe/CocomerBand";
 import Link from 'next/link';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, X, ChevronDown } from 'lucide-react';
@@ -972,7 +973,7 @@ export default function CaribbeanV15Page({ params }) {
         </CloudSection>
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
-        <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
+        <CocomerBand />
 
         {/* ══ 2027 REGATTA CALENDAR (uniquement pour type === 'regatta') ══ */}
         {type === 'regatta' && (

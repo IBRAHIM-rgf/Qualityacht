@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import CocomerBand from "@/components/vibe/CocomerBand";
 import { useEffect, useRef, useState } from 'react';
 
 // ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
@@ -363,7 +364,7 @@ export default function CaribbeanV10Page() {
         </CloudSection>
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
-        <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" position="center 40%" />
+        <CocomerBand />
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 3 centré ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">

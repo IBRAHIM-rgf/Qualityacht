@@ -5,6 +5,7 @@
 // par ile/region, titre + title-line.png + chevron, contenu en pills d'evenements).
 
 import Image from 'next/image';
+import CocomerBand from "@/components/vibe/CocomerBand";
 import { useEffect, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../test-region-map/map-data';
@@ -825,7 +826,7 @@ export default function RegattasCaribbeanA() {
         </CloudSection>
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
-        <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
+        <CocomerBand />
 
         {/* ══ REGATTAS BY REGION (Proposition C : style 'Destinations by Region') ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">

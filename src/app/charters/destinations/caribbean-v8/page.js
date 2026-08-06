@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import CocomerBand from "@/components/vibe/CocomerBand";
 import { useEffect, useRef, useState } from 'react';
 
 // ── Données rectangles (7 items : 4 + 3 centré) ───────────────────────────────
@@ -255,11 +256,8 @@ export default function CaribbeanV8Page() {
           </div>
         </CloudSection>
 
-        {/* ══ BANDEAU cocomer ══ */}
-        <div className="relative h-[45vh] md:h-[70vh] overflow-hidden">
-          <Image src="/images/pagesCaraibes/cocomer.jpeg" alt="" fill className="object-cover brightness-40 grayscale" style={{ objectPosition: 'center 40%' }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 18%, transparent 62%, #26272a 100%)' }} />
-        </div>
+        {/* ══ BANDEAU cocomer -> video beach-band ══ */}
+        <CocomerBand full={false} />
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 3 centré ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">

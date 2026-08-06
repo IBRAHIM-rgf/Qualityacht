@@ -117,11 +117,12 @@ export default function CaribbeanV3Page() {
       <div className="relative">
         {/* Image sticky */}
         <div className="sticky top-0 h-screen overflow-hidden -z-0">
-          <Image
-            src="/images/pagesCaraibes/cocomer.jpeg"
-            alt=""
-            fill
-            className="object-cover brightness-40 grayscale"
+          {/* cocomer -> video beach-band */}
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+          <video
+            src="/media/quality/beach/beach-band.mp4"
+            autoPlay muted loop playsInline
+            className="absolute inset-0 w-full h-full object-cover brightness-[0.55] saturate-[0.7]"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black/80" />
           <div className="absolute inset-0 bg-gray-700/30" />

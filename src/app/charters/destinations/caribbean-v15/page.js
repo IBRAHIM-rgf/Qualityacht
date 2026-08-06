@@ -278,7 +278,10 @@ function StBarthBandeau({ children }) {
 
 // ── Bandeau photo : commence en version filtrée puis bascule en couleur
 // (originale) au scroll, et reste ainsi à la fin. Transition fluide 1.5s.
-function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect, heightClass = 'h-[45vh] md:h-[70vh]', filterCls = '', filterClsOld = '' }) {
+function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect, heightClass = 'h-[45vh] md:h-[70vh]', filterCls = '', filterClsOld = '', contain = false, videoSrc = null }) {
+  // contain=true : image ENTIERE visible (object-contain, rien de rogne sur les cotes) sur
+  // fond sombre. Sinon object-cover (remplit, peut rogner).
+  const fitCls = contain ? 'object-contain' : 'object-cover';
   // filterCls : filtre CSS de l'image affichee AU REPOS (src). filterClsOld : filtre de
   // l'image REVELEE au scroll (srcOld). Deux filtres DIFFERENTS -> la transition est VISIBLE
   // (repos assombri/desature -> revele plus lumineux/colore, facon cocomer ; cf. halal beach).
@@ -293,22 +296,42 @@ function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect, 
   // retire en mode full.
   // Sinon : bande pleine largeur, object-cover ; heightClass regle la hauteur et
   // position le cadrage.
+  // Variante VIDEO : boucle muette, filtre gris au repos -> coloré revele au scroll (meme
+  // logique de filtres que les images). Aucune transition entre 2 sources : c'est le filtre
+  // qui change. Utilise sur halal (beach-band.mp4).
+  if (videoSrc) {
+    return (
+      <div
+        ref={ref}
+        className={`relative overflow-hidden w-full bg-[#26272a] ${full ? '' : heightClass}`}
+        style={full ? { aspectRatio: aspect } : undefined}
+      >
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+        <video
+          src={videoSrc}
+          autoPlay muted loop playsInline
+          className={`absolute inset-0 w-full h-full ${fitCls} ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? fxClsOld : fxCls}`}
+          style={{ objectPosition: position, transitionProperty: 'filter', transitionDuration: '2500ms', transitionDelay: lit ? '1200ms' : '0ms' }}
+        />
+      </div>
+    );
+  }
   const inner = (
     <div
       ref={ref}
-      className={`relative overflow-hidden w-full ${full ? '' : heightClass}`}
+      className={`relative overflow-hidden w-full ${contain ? 'bg-[#26272a]' : ''} ${full ? '' : heightClass}`}
       style={full ? { aspectRatio: aspect } : undefined}
     >
       {/* Fondu enchaîné asymétrique :
           - Sortante (filtrée) : 3s, delay 0
           - Entrante (originale) : 2.5s, delay 1.2s (apparait quand la 1ère est mi-floue) */}
       <Image src={src} alt="" fill
-        className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${fxCls}${lit && srcOld ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
+        className={`${fitCls} ease-[cubic-bezier(0.4,0,0.2,1)] ${fxCls}${lit && srcOld ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}
         style={{ objectPosition: position, transitionProperty: 'opacity, filter', transitionDuration: lit && srcOld ? '3000ms' : '2500ms', transitionDelay: lit && srcOld ? '0ms' : '1200ms' }} />
       {/* Ancienne image (originale, finale) */}
       {srcOld && (
         <Image src={srcOld} alt="" fill
-          className={`object-cover ease-[cubic-bezier(0.4,0,0.2,1)] ${fxClsOld}${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
+          className={`${fitCls} ease-[cubic-bezier(0.4,0,0.2,1)] ${fxClsOld}${lit ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
           style={{ objectPosition: position, transitionProperty: 'opacity, filter', transitionDuration: lit ? '2500ms' : '3000ms', transitionDelay: lit ? '1200ms' : '0ms' }} />
       )}
       {!full && (
@@ -582,6 +605,19 @@ export default function CaribbeanV15Page({
   // showCocomer=false masque le bandeau photo cocomer (cf. /charters/halal/caribbean).
   // Defaut true = aucune regression sur les autres pages basees sur la v15.
   showCocomer = true,
+  // cocomerAspect : ratio du bandeau cocomer (mode full). Defaut = ratio de l'ancienne
+  // photo. halal le surcharge au ratio de beach-band pour ne pas zoomer/rogner.
+  cocomerAspect = '864 / 1184',
+  // cocomerSrc/cocomerSrcOld : image du bandeau cocomer (repos / revelee). Defaut = les 2
+  // fichiers cocomer. cocomerFilter/cocomerFilterOld : filtres CSS repos/revele -> quand la
+  // meme image est passee aux deux, la transition gris->couleur vient des filtres (cf. halal).
+  cocomerSrc = null,
+  cocomerSrcOld = null,
+  cocomerFilter = '',
+  cocomerFilterOld = '',
+  cocomerContain = false,
+  // cocomerVideo : si fourni, le bandeau cocomer devient une VIDEO (cf. halal : beach-band.mp4).
+  cocomerVideo = null,
   // showShowcase=true remplace le bandeau cocomer par la section "cartes flottantes"
   // (reproduction de l'animation alethia.earth ; cf. CaribbeanShowcase). Defaut false
   // = aucune regression (halal + route /caribbean-v15 gardent le cocomer). Active
@@ -768,7 +804,16 @@ export default function CaribbeanV15Page({
             <CaribbeanShowcase />
           </CloudSection>
         ) : showCocomer ? (
-          <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" full aspect="864 / 1184" />
+          <BandeauPhoto
+            src={cocomerSrc || '/images/pagesCaraibes/cocomer.jpeg'}
+            srcOld={cocomerSrc ? cocomerSrcOld : '/images/pagesCaraibes/cocomer-original.jpeg'}
+            full
+            aspect={cocomerAspect}
+            filterCls={cocomerFilter}
+            filterClsOld={cocomerFilterOld}
+            contain={cocomerContain}
+            videoSrc={cocomerVideo}
+          />
         ) : null}
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 4 (8 cards) ══ */}

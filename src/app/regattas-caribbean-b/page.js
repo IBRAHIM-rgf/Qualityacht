@@ -4,6 +4,7 @@
 // section "4 Worlds of Caribbean Racing" (4 univers thematiques expand-on-click).
 
 import Image from 'next/image';
+import CocomerBand from "@/components/vibe/CocomerBand";
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../test-region-map/map-data';
@@ -750,7 +751,7 @@ export default function RegattasCaribbeanB() {
         </CloudSection>
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
-        <BandeauPhoto src="/images/pagesCaraibes/cocomer.jpeg" srcOld="/images/pagesCaraibes/cocomer-original.jpeg" position="center 40%" />
+        <CocomerBand />
 
         {/* ══ 4 WORLDS OF CARIBBEAN RACING (Proposition B : univers thematiques) ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">

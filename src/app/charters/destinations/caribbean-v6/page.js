@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import CocomerBand from "@/components/vibe/CocomerBand";
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
@@ -155,13 +156,8 @@ export default function CaribbeanV6Page() {
           </div>
         </section>
 
-        {/* BANDEAU — cocomer (sans texte) */}
-        <div className="relative h-[45vh] md:h-[70vh] overflow-hidden">
-          <Image src="/images/pagesCaraibes/cocomer.jpeg" alt="" fill className="object-cover brightness-40 grayscale" style={{ objectPosition: 'center 40%' }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #26272a 0%, transparent 20%, transparent 60%, #26272a 100%)' }} />
-          <div className="absolute bottom-0 left-0 right-0 h-20" style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', background: 'linear-gradient(to bottom, transparent, rgba(38,39,42,0.95))' }} />
-          <div className="absolute top-0 left-0 right-0 h-20" style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', background: 'linear-gradient(to top, transparent, rgba(38,39,42,0.95))' }} />
-        </div>
+        {/* BANDEAU — cocomer -> video beach-band */}
+        <CocomerBand full={false} />
 
         {/* CARIBBEAN ISLANDS */}
         <section className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">

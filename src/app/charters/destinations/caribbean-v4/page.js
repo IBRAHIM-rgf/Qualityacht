@@ -124,11 +124,12 @@ export default function CaribbeanV4Page() {
           BANDEAU PHOTO — cocomer
       ══════════════════════════════════════════════════════════ */}
       <div className="relative h-[55vh] overflow-hidden">
-        <Image
-          src="/images/pagesCaraibes/cocomer.jpeg"
-          alt=""
-          fill
-          className="object-cover brightness-40 grayscale"
+        {/* cocomer -> video beach-band */}
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+        <video
+          src="/media/quality/beach/beach-band.mp4"
+          autoPlay muted loop playsInline
+          className="absolute inset-0 w-full h-full object-cover brightness-[0.55] saturate-[0.7]"
           style={{ objectPosition: 'center 40%' }}
         />
         <div

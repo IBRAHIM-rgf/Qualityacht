@@ -72,6 +72,10 @@ export default function HalalCaribbeanPage() {
       heroImageDesktop={HERO_IMAGE}
       showDescription={false}
       showCocomer
+      cocomerVideo="/media/quality/beach/beach-band.mp4"
+      cocomerAspect="1920 / 1080"
+      cocomerFilter="brightness-[0.72] saturate-[0.6]"
+      cocomerFilterOld="brightness-[0.78] saturate-[1.02]"
       palmiersSrc="/images/pagesCaraibes/beach-562145.jpg"
       palmiersAspect="4000 / 3000"
       palmiersSrcOld="/images/pagesCaraibes/beach-562145.jpg"
