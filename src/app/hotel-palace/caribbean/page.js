@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import HotelMap from './HotelMap';
-import { one } from '@/lib/quality-media';
 
 export const metadata = {
   title: 'Hotel & Palace — Caribbean | Qualityacht',
@@ -9,10 +8,9 @@ export const metadata = {
 };
 
 // Page dediee ouverte au clic sur les Caraibes depuis la carte monde de /hotel-palace.
-// Hero DRONE (vue aerienne d'ile turquoise, caraibe). L'ancien hero (Zakynthos, Grece)
-// n'etait pas caraibe -> remplace par une lagune turquoise + catamarans.
-const heroImg = one({ cat: 'aerial', role: 'hero-bg', kind: 'image', tag: 'lagoon' })?.src
-  || '/media/quality/aerial/ishan-seefromthesky-rj8fmhnpxbg-unsplash.jpg';
+// Hero DRONE : vue aerienne d'un resort de villas a piscines, plage turquoise
+// (colle au sujet "Hotel & Palace, piscines privees").
+const heroImg = '/media/quality/aerial/resort-villas-drone.jpg';
 
 export default function HotelPalaceCaribbeanPage() {
   return (
