@@ -71,25 +71,25 @@ export default function CaribbeanArtCulturePage() {
           sizes="100vw"
           className="block w-full h-auto saturate-[1.4] contrast-[1.1] brightness-[1.03]"
         />
-        {/* Degrade bas (h-1/4) : liaison avec le fond, aucun texte sur la photo */}
-        <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#26272a]/85 via-[#26272a]/25 to-transparent" />
-      </section>
+        {/* Degrade bas renforce pour asseoir le titre ECRIT SUR la photo */}
+        <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#26272a]/90 via-[#26272a]/40 to-transparent" />
 
-      {/* TITRE HORS de la photo (sous le hero, sur fond sombre — plus rien d'ecrit sur l'image) */}
-      <div className="flex flex-col items-center text-center px-6 pt-8 md:pt-10">
-        <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-2">
-          Caribbean · Private Client Edition
-        </p>
-        <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">
-          Art &amp; Culture
-        </h1>
-        <p className="mt-2 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em]">
-          Museums · Galleries · Exhibitions
-        </p>
-        <div className="relative w-28 md:w-40 h-6 mt-4">
-          <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+        {/* TITRE ECRIT SUR LE HERO (en bas de la photo) */}
+        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-6 md:pb-10">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+            Caribbean · Private Client Edition
+          </p>
+          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+            Art &amp; Culture
+          </h1>
+          <p className="mt-2 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            Museums · Galleries · Exhibitions
+          </p>
+          <div className="relative w-28 md:w-40 h-6 mt-4">
+            <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* TEXTE SOUS LE HERO */}
       <div className="px-6 md:px-14 pt-8 md:pt-10">
