@@ -808,7 +808,7 @@ export default function CaribbeanV15Page({
             src={cocomerSrc || '/images/pagesCaraibes/cocomer.jpeg'}
             srcOld={cocomerSrc ? cocomerSrcOld : '/images/pagesCaraibes/cocomer-original.jpeg'}
             full
-            aspect={cocomerAspect}
+            aspect={!cocomerSrc && !cocomerVideo ? '1920 / 1080' : cocomerAspect}
             filterCls={cocomerFilter}
             filterClsOld={cocomerFilterOld}
             contain={cocomerContain}
