@@ -32,11 +32,14 @@ export default function CocomerBand({
     return () => io.disconnect();
   }, []);
 
+  // TOUJOURS au ratio de la video (16:9 par defaut) : la video remplit le cadre sans
+  // jamais etre zoomee/rognee. Les props full/heightClass sont ignorees (compat) — un
+  // cadre a hauteur fixe zoomait la video, ce qu'on ne veut plus nulle part.
   return (
     <div
       ref={ref}
-      className={`relative overflow-hidden w-full bg-[#26272a] ${full ? '' : heightClass}`}
-      style={full ? { aspectRatio: aspect } : undefined}
+      className="relative overflow-hidden w-full bg-[#26272a]"
+      style={{ aspectRatio: aspect }}
     >
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
