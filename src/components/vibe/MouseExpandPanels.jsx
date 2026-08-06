@@ -87,7 +87,7 @@ export default function MouseExpandPanels({ panels = [], height = 'h-[70vh] md:h
                 className="absolute inset-x-0 bottom-0 flex items-end justify-center pb-8 pointer-events-none"
                 style={{ opacity: isActive ? 0 : 1, transition: 'opacity 0.4s ease' }}
               >
-                <span className="[writing-mode:vertical-rl] rotate-180 trajan-regular text-[13px] uppercase tracking-[0.3em] text-[#C0C0C0] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                <span className="[writing-mode:vertical-rl] rotate-180 trajan-regular text-[18px] lg:text-[24px] uppercase tracking-[0.3em] text-[#C0C0C0] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                   {p.title}
                 </span>
               </div>
