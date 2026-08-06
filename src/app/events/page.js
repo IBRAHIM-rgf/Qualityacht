@@ -11,14 +11,14 @@ import ThreeColumnFeatures from "../components/sections/common/ThreeColumnFeatur
 import TimelineSection from "../components/sections/common/TimelineSection";
 import WorldPinsMap from "@/components/vibe/WorldPinsMap";
 import FunMarquee from "@/components/vibe/FunMarquee";
-import VideoHero from "@/components/vibe/VideoHero";
 import { media } from "@/lib/quality-media";
+import { CARIBBEAN_EVENTS } from "./caribbean-events";
 
-// Hero video "gens qui font la fete" (le plus proche d'un carnaval dans la mediatheque).
-const HERO_VIDEO = (media({ cat: "people", role: "hero-bg", kind: "video" })[0])?.src
-  || "/media/quality/people/hero-people.mp4";
-const HERO_POSTER = (media({ cat: "people", kind: "image" })[0])?.src
-  || "/media/quality/people/pexels-william-zali-7863870-33194523.jpg";
+// Hero : VUE DRONE d'ile (image aerienne turquoise) — plus de video fete, plus
+// d'evenements hors Caraibes.
+const HERO_IMAGE = (media({ cat: "aerial", role: "hero-bg", kind: "image" }).find((m) => (m.tags || []).includes("island"))
+  || media({ cat: "aerial", role: "hero-bg", kind: "image" })[0])?.src
+  || "/media/quality/aerial/golden-pearvilla-wzj0ewkvche-unsplash.jpg";
 
 // Pool d'images (aerien / plage / divers) pour illustrer les evenements + le marquee.
 const IMG_POOL = [
@@ -28,27 +28,14 @@ const IMG_POOL = [
   ...media({ cat: "boats", kind: "image" }),
 ].map((m) => m.src);
 
-// Evenements luxe dans le MONDE (selection editoriale, a titre indicatif).
-const WORLD_EVENTS = [
-  { name: "St Barth Bucket Regatta", place: "Gustavia — St-Barth", when: "March", badge: "Regatta", coords: [17.897, -62.851], desc: "The world’s finest superyachts race off St-Barth." },
-  { name: "Les Voiles de St-Barth", place: "St-Barthélemy", when: "April", badge: "Sailing", coords: [17.90, -62.83], desc: "A week of racing and beachfront soirées." },
-  { name: "Antigua Sailing Week", place: "Antigua", when: "Apr–May", badge: "Regatta", coords: [17.05, -61.75], desc: "The Caribbean’s legendary end-of-season regatta." },
-  { name: "Monaco Grand Prix", place: "Monaco", when: "May", badge: "Motorsport", coords: [43.735, 7.421], desc: "Formula 1 through the streets — the ultimate yachting weekend." },
-  { name: "Monaco Yacht Show", place: "Port Hercule — Monaco", when: "September", badge: "Yachting", coords: [43.735, 7.427], desc: "The superyacht world gathers in the principality." },
-  { name: "Cannes Film Festival", place: "Cannes", when: "May", badge: "Culture", coords: [43.551, 7.017], desc: "Red carpet by day, yacht parties by night." },
-  { name: "Les Voiles de St-Tropez", place: "St-Tropez", when: "October", badge: "Sailing", coords: [43.272, 6.640], desc: "Classic and modern yachts close the Med season." },
-  { name: "Art Basel", place: "Basel", when: "June", badge: "Art", coords: [47.564, 7.591], desc: "The world’s premier modern & contemporary art fair." },
-  { name: "Art Basel Miami Beach", place: "Miami", when: "December", badge: "Art", coords: [25.79, -80.13], desc: "Art, design and winter-sun glamour." },
-  { name: "Venice Biennale", place: "Venice", when: "Apr–Nov", badge: "Art", coords: [45.435, 12.335], desc: "The most prestigious art biennial in the world." },
-  { name: "Royal Ascot", place: "Ascot — UK", when: "June", badge: "Racing", coords: [51.411, -0.681], desc: "Racing, hats and Royal Enclosure tradition." },
-  { name: "F1 Abu Dhabi Grand Prix", place: "Yas Marina — Abu Dhabi", when: "December", badge: "Motorsport", coords: [24.467, 54.603], desc: "Season finale with marina berths at the circuit." },
-].map((e, i) => ({ ...e, img: IMG_POOL[i % IMG_POOL.length] }));
+// Evenements CARAIBES uniquement (54, geocodes par ile depuis le fichier client).
+const CARIB_EVENTS = CARIBBEAN_EVENTS.map((e, i) => ({ ...e, img: IMG_POOL[i % IMG_POOL.length] }));
 
 const EVENT_MARQUEE = IMG_POOL.slice(0, 10).map((src, i) => ({ src, accent: i % 2 ? "#ff7a59" : "#2fd6c4" }));
 
-// Le hero est desormais une VIDEO (VideoHero, voir le rendu). Ne restent en sections
-// "classiques" que les celebrations sur-mesure ; les blocs a fond blanc
-// (Why Choose Our Event Services / What Our Clients Say) ont ete retires.
+// Le hero est une VUE DRONE d'ile (voir le rendu). Ne restent en sections "classiques"
+// que les celebrations sur-mesure ; les blocs a fond blanc (Why Choose / Testimonials)
+// ont ete retires. La planisphere ne montre QUE des evenements Caraibes.
 const eventsSections = [
   {
     chooseSection: 1, // Text4ImagesSection
@@ -80,15 +67,17 @@ const sectionComponents = [
 export default function EventsPage() {
   return (
     <main>
-      {/* ══ HERO VIDEO (ambiance fete / carnaval) ══ */}
-      <VideoHero
-        videoLandscape={HERO_VIDEO}
-        posterLandscape={HERO_POSTER}
-        kicker="Celebrations At Sea & On Land"
-        title="Exclusive Event Experiences"
-        subtitle="Weddings, galas and private celebrations — staged where the moment deserves it."
-        align="bottom"
-      />
+      {/* ══ HERO : VUE DRONE D'ILE ══ */}
+      <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh]">
+        <Image src={encodeURI(HERO_IMAGE)} alt="Caribbean Events" fill priority sizes="100vw" className="object-cover" />
+        <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
+        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Caribbean · Cultural & Nautical Calendar</p>
+          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">Exclusive Event Experiences</h1>
+          <div className="relative w-28 md:w-40 h-5 mt-4"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
+          <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em] drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">Carnivals · Regattas · Heritage · Music</p>
+        </div>
+      </section>
 
       {eventsSections.map((section, idx) => {
         const SectionComponent = sectionComponents[section.chooseSection ?? (idx % sectionComponents.length)];
@@ -106,10 +95,12 @@ export default function EventsPage() {
         <FunMarquee items={EVENT_MARQUEE} speed={52} direction="left" />
       </section>
       <WorldPinsMap
-        items={WORLD_EVENTS}
-        kicker="Around The World"
-        title="The Luxury Events Calendar"
-        intro="From the St Barth Bucket to the Monaco Grand Prix and Art Basel — we place you where the world’s elite gathers, by land and by sea. Editorial selection; dates and access confirmed by concierge."
+        items={CARIB_EVENTS}
+        center={[15.5, -66]}
+        zoom={5}
+        kicker="Across The Islands"
+        title="The Caribbean Events Calendar"
+        intro="From island carnivals and heritage feasts to the great regattas — 54 cultural and nautical events across the Caribbean, 2026–2027. Editorial selection; some dates are estimated and confirmed by concierge before travel."
       />
     </main>
   );
