@@ -30,15 +30,19 @@ export default function HalalPrivateCharterPage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO — portrait plein cadre, titre en overlay ══ */}
-      <section className="relative pt-[70px] md:pt-0 h-[72vh] md:h-[88vh]">
-        <Image src={HERO_IMAGE} alt="Tailored Halal Private Charter" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: '50% 28%' }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-12 md:pb-16">
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3">Qualityacht · Private Charter</p>
-          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
-            Tailored Halal<br />Private Charter
-          </h1>
-          <BurntLine className="mt-4" />
+      {/* Photo affichee EN ENTIER (ratio naturel) — on voit toute la photo, pas de recadrage. */}
+      <section className="relative pt-[70px] md:pt-0">
+        <div className="relative w-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={HERO_IMAGE} alt="Tailored Halal Private Charter" className="block w-full h-auto" />
+          <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/40 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-6 pb-8 md:pb-12">
+            <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">Qualityacht · Private Charter</p>
+            <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
+              Tailored Halal<br />Private Charter
+            </h1>
+            <BurntLine className="mt-4" />
+          </div>
         </div>
       </section>
 

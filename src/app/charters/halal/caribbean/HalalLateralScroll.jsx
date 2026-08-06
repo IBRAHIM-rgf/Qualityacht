@@ -136,7 +136,7 @@ export default function HalalLateralScroll({ intro = null, paragraphs = [], phot
         .curtain > img,
         .curtain > span > img {
           clip-path: inset(0 100% 0 0);
-          transform: scale(1);
+          transform: scale(1.25);
           transition: clip-path 1.15s cubic-bezier(0.22, 1, 0.36, 1);
         }
         /* Rideau ouvert : la photo se devoile (clip-path 1.15s), PUIS un zoom LENT et LONG
@@ -144,11 +144,14 @@ export default function HalalLateralScroll({ intro = null, paragraphs = [], phot
         .curtain.is-open > img,
         .curtain.is-open > span > img {
           clip-path: inset(0 0 0 0);
-          animation: halalSlowZoom 16s ease-out 1.3s forwards;
+          transform-origin: center;
+          /* zoom LINEAIRE (mouvement regulier tout du long, pas d'ease-out qui stagne),
+             plus prononce et long ; demarre apres le rideau (delai 1.2s). */
+          animation: halalSlowZoom 8s linear 1.2s forwards;
         }
         @keyframes halalSlowZoom {
-          from { transform: scale(1); }
-          to   { transform: scale(1.13); }
+          from { transform: scale(1.25); }
+          to   { transform: scale(1); }
         }
         @media (prefers-reduced-motion: reduce) {
           .curtain.is-open > img,

@@ -33,7 +33,7 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
         .hero-rise { opacity: 0; animation: heroRise 2.2s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
         @keyframes heroRise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: translateY(0); } }
         .hero-zoom { animation: heroZoom 18s ease-in-out infinite alternate; will-change: transform; }
-        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.12); } }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.06); } }
         .theme-float { animation: themeFloat var(--tf, 6s) ease-in-out infinite alternate; will-change: transform; }
         @keyframes themeFloat { from { transform: translateY(-9px); } to { transform: translateY(9px); } }
         @media (prefers-reduced-motion: reduce) { .hero-zoom, .theme-float { animation: none !important; } }
@@ -54,8 +54,8 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
           </div>
         </section>
       ) : (
-        <section className={`relative pt-[70px] md:pt-0 overflow-hidden ${animated ? 'h-[68vh] md:h-[90vh]' : 'h-[58vh] md:h-[78vh]'}`}>
-          <Image src={heroImage} alt={title} fill priority sizes="100vw" className={`object-cover ${HERO_BOOST} ${animated ? 'hero-zoom' : ''}`} />
+        <section className={`relative pt-[70px] md:pt-0 overflow-hidden ${animated ? 'h-[60vh] md:h-[82vh]' : 'h-[58vh] md:h-[78vh]'}`}>
+          <Image src={heroImage} alt={title} fill priority sizes="100vw" className={`object-cover object-center ${HERO_BOOST} ${animated ? 'hero-zoom' : ''}`} />
           {heroGradient}
           {heroOverlay}
         </section>

@@ -1,7 +1,7 @@
 import CaribbeanV15Page from '../../destinations/caribbean-v15/page';
 import HalalLateralScroll from './HalalLateralScroll';
 import MouseExpandPanels from '@/components/vibe/MouseExpandPanels';
-import { one } from '@/lib/quality-media';
+import { media, one } from '@/lib/quality-media';
 
 // Panneaux "COMO" (s'etendent selon la souris) — experiences halal Caraibes.
 const PANELS = [
@@ -38,11 +38,8 @@ const NATIONAL_FLOWERS = [
 
 // 1 photo = 1 slide du rail. La 1re est a cote du texte, les suivantes defilent avec la
 // colonne texte laissee libre.
-const PHOTOS = [
-  '/images/pagesCaraibes/image-collee.png',                          // slide #1 (boostee, cf. Photo boost)
-  '/images/michael-worden-36s0MNiG-No-unsplash.jpg',                 // slide #2 (inchangee)
-  '/images/pagesCaraibes/oswald-elsaboath-lHOIwVCOMMM-unsplash.jpg', // slide #3 (Oswald)
-];
+// Nouvelles photos du slide lateral : halal-friendly (portrait), depuis le manifeste.
+const PHOTOS = media({ cat: 'halal', kind: 'image', orientation: 'portrait' }).slice(0, 3).map((m) => m.src);
 
 // Texte affiche A COTE de la 1re photo du rail horizontal.
 // NB : les marqueurs de source du texte fourni ([luxurylondon.co], [lansdowneclub])
