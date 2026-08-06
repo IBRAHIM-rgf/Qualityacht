@@ -812,7 +812,7 @@ export default function CaribbeanV15Page({
             filterCls={cocomerFilter}
             filterClsOld={cocomerFilterOld}
             contain={cocomerContain}
-            videoSrc={cocomerVideo}
+            videoSrc={cocomerSrc ? cocomerVideo : (cocomerVideo || '/media/quality/beach/beach-band.mp4')}
           />
         ) : null}
 
