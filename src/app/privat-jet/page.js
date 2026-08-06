@@ -53,7 +53,6 @@ export default function PrivatJetPage() {
       <VideoHero
         videoLandscape={cloudsVideo?.src}
         posterLandscape={cloudsVideo?.poster}
-        kicker="Private Aviation"
         title="Private Jets"
         subtitle="Your Gateway to Every Destination"
       />

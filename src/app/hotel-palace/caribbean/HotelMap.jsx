@@ -11,15 +11,16 @@ import { media } from '@/lib/quality-media';
 
 const POOL = media({ cat: 'aerial', kind: 'image' }).map((m) => m.src);
 
+// Liens vers les pages EN ANGLAIS des hotels (jamais les versions FR). desc en anglais.
 const HOTELS = [
-  { name: 'Eden Rock', place: 'St-Barthélemy', stars: 5, coords: [17.904, -62.835], link: 'https://www.oetkercollection.com/hotels/eden-rock-st-barths/', desc: 'Suites perchées et piscines à débordement privées sur la baie de St-Jean.' },
-  { name: 'Cheval Blanc Isle de France', place: 'St-Barthélemy', stars: 5, coords: [17.923, -62.851], link: 'https://www.chevalblanc.com/en/maison/st-barth-isle-de-france/', desc: 'Villas les pieds dans le sable et piscines privées, baie des Flamands.' },
-  { name: 'Rosewood Little Dix Bay', place: 'Virgin Gorda, BVI', stars: 5, coords: [18.502, -64.400], link: 'https://www.rosewoodhotels.com/en/little-dix-bay-virgin-gorda', desc: 'Baie préservée, villas à piscine privée ouvertes sur le récif.' },
-  { name: 'Amanyara', place: 'Providenciales, Turks & Caicos', stars: 5, coords: [21.955, -72.318], link: 'https://www.aman.com/resorts/amanyara', desc: 'Pavillons épurés et piscines privées face à l’océan.' },
-  { name: 'Jade Mountain', place: 'Sainte-Lucie', stars: 5, coords: [13.916, -61.061], link: 'https://www.jademountain.com/', desc: 'Sanctuaires ouverts, piscines à débordement privées face aux Pitons.' },
-  { name: 'Sugar Beach, A Viceroy Resort', place: 'Sainte-Lucie', stars: 5, coords: [13.849, -61.061], link: 'https://www.viceroyhotelsandresorts.com/sugar-beach', desc: 'Villas dans la forêt tropicale, piscines privées entre les Pitons.' },
-  { name: 'Belmond Cap Juluca', place: 'Anguilla', stars: 5, coords: [18.163, -63.128], link: 'https://www.belmond.com/hotels/caribbean/anguilla/belmond-cap-juluca/', desc: 'Architecture mauresque, suites à piscine privée sur Maundays Bay.' },
-  { name: 'Sandy Lane', place: 'Barbade', stars: 5, coords: [13.181, -59.641], link: 'https://www.sandylane.com/', desc: 'Grande dame de la côte ouest, villas à piscine privée et majordome.' },
+  { name: 'Eden Rock', place: 'St Barths', stars: 5, coords: [17.904, -62.835], link: 'https://www.oetkercollection.com/en/hotels/eden-rock-st-barths/', desc: 'Hillside suites and private infinity pools over St Jean Bay.' },
+  { name: 'Cheval Blanc Isle de France', place: 'St Barths', stars: 5, coords: [17.923, -62.851], link: 'https://www.chevalblanc.com/en/maison/st-barth-isle-de-france/', desc: 'Beachfront villas with private pools on Flamands Bay.' },
+  { name: 'Rosewood Little Dix Bay', place: 'Virgin Gorda, BVI', stars: 5, coords: [18.502, -64.400], link: 'https://www.rosewoodhotels.com/en/little-dix-bay-virgin-gorda', desc: 'A protected bay with private-pool villas opening onto the reef.' },
+  { name: 'Amanyara', place: 'Providenciales, Turks & Caicos', stars: 5, coords: [21.955, -72.318], link: 'https://www.aman.com/resorts/amanyara', desc: 'Pared-back pavilions and private pools facing the ocean.' },
+  { name: 'Jade Mountain', place: 'Saint Lucia', stars: 5, coords: [13.916, -61.061], link: 'https://www.jademountain.com/', desc: 'Open-wall sanctuaries with private infinity pools facing the Pitons.' },
+  { name: 'Sugar Beach, A Viceroy Resort', place: 'Saint Lucia', stars: 5, coords: [13.849, -61.061], link: 'https://www.viceroyhotelsandresorts.com/sugar-beach', desc: 'Rainforest villas with private pools set between the Pitons.' },
+  { name: 'Belmond Cap Juluca', place: 'Anguilla', stars: 5, coords: [18.163, -63.128], link: 'https://www.belmond.com/hotels/caribbean/anguilla/belmond-cap-juluca/', desc: 'Moorish architecture and private-pool suites on Maundays Bay.' },
+  { name: 'Sandy Lane', place: 'Barbados', stars: 5, coords: [13.181, -59.641], link: 'https://www.sandylane.com/', desc: 'The grande dame of the west coast — private-pool villas with butler service.' },
 ].map((h, i) => ({ ...h, img: POOL[i % POOL.length] }));
 
 function popupHtml(h) {

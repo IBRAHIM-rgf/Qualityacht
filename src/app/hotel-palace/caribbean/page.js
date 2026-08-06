@@ -9,11 +9,10 @@ export const metadata = {
 };
 
 // Page dediee ouverte au clic sur les Caraibes depuis la carte monde de /hotel-palace.
-// Hero DRONE (vue aerienne resort/cote), puis la selection "piscine privee"
-// (HotelPoolCards), puis la carte Caraibes (mer bleue, contours orange).
-const heroImg = one({ cat: 'aerial', role: 'hero-bg', kind: 'image', orientation: 'landscape' })?.src
-  || one({ cat: 'aerial', role: 'hero-bg', kind: 'image' })?.src
-  || one({ cat: 'beach', role: 'hero-bg', kind: 'image' })?.src;
+// Hero DRONE (vue aerienne d'ile turquoise, caraibe). L'ancien hero (Zakynthos, Grece)
+// n'etait pas caraibe -> remplace par une lagune turquoise + catamarans.
+const heroImg = one({ cat: 'aerial', role: 'hero-bg', kind: 'image', tag: 'lagoon' })?.src
+  || '/media/quality/aerial/ishan-seefromthesky-rj8fmhnpxbg-unsplash.jpg';
 
 export default function HotelPalaceCaribbeanPage() {
   return (
