@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { media } from '@/lib/quality-media';
+import { starMarkerHtml, starIconSize } from '@/lib/star-marker';
 
 const POOL = media({ cat: 'aerial', kind: 'image' }).map((m) => m.src);
 
@@ -63,7 +64,8 @@ export default function HotelMap() {
     const map = L.map(mapRef.current, { center: [17.6, -63.2], zoom: 6, scrollWheelZoom: false });
     mapInstance.current = map;
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap © CARTO', maxZoom: 19 }).addTo(map);
-    const icon = L.divIcon({ className: 'ho-marker', html: `<div style="width:14px;height:14px;background:#B87333;border:2px solid #efe7d6;border-radius:50%;box-shadow:0 0 0 2px rgba(184,115,51,.5),0 2px 8px rgba(0,0,0,.6)"></div>`, iconSize: [14, 14], iconAnchor: [7, 7] });
+    // Logo etoile (SVG, fond transparent) a la place du point plein.
+    const icon = L.divIcon({ className: 'ho-marker', html: starMarkerHtml(false), ...starIconSize(false) });
     HOTELS.forEach((h) => {
       L.marker(h.coords, { icon }).addTo(map)
         .bindTooltip(h.name, { direction: 'top', offset: [0, -8], className: 'ho-label' })

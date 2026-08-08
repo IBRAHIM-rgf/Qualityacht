@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import DiningMap from '../DiningMap';
-import MichelinDining from '../MichelinDining';
 import { PROVISIONING, SECTIONS } from '../data';
 
 // Page ouverte au clic sur une card FINE FOOD ou DINING : les 8 sous-regions empilees
@@ -45,13 +44,9 @@ export default async function FineFoodDiningSectionPage({ params }) {
         </div>
       </div>
 
-      {/* DINING : d'abord la carte des tables etoilees (Leaflet), PUIS les cards photos. */}
-      {section === 'dining' && (
-        <>
-          <DiningMap />
-          <MichelinDining />
-        </>
-      )}
+      {/* DINING : la carte des tables etoilees. Les fiches (photo/badge/chef/desc) sont
+          en popup au clic sur chaque logo (etoile) — plus de cards separees en dessous. */}
+      {section === 'dining' && <DiningMap />}
 
       {/* LIVRAISON PARTOUT — hors decoupage par sous-region, donc au-dessus de la pile et
           sur la seule section Fine Food. */}

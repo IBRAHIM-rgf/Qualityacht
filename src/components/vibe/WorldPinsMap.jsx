@@ -7,6 +7,7 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import { starMarkerHtml, starIconSize } from '@/lib/star-marker';
 
 export default function WorldPinsMap({
   items = [],
@@ -46,10 +47,11 @@ export default function WorldPinsMap({
     document.body.appendChild(js);
   }, []);
 
+  // Logo etoile (SVG, fond transparent) a la place du point plein.
   const makeIcon = (on) => window.L.divIcon({
     className: 'wp-marker',
-    html: `<div style="width:${on ? 18 : 12}px;height:${on ? 18 : 12}px;background:${on ? accent : dot};border:2px solid #efe7d6;border-radius:50%;box-shadow:0 0 0 2px rgba(184,115,51,0.5),0 2px 8px rgba(0,0,0,0.6)"></div>`,
-    iconSize: [12, 12], iconAnchor: [6, 6],
+    html: starMarkerHtml(on, accent, dot),
+    ...starIconSize(on),
   });
 
   useEffect(() => {
