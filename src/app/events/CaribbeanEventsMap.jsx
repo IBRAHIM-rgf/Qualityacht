@@ -1,11 +1,10 @@
 'use client';
 
-// ══ CaribbeanEventsMap — carte + filtres (secteur + categorie) ══
-// Les 54 evenements Caraibes se filtrent par SECTEUR (8 regroupements standard, cf.
-// island-sectors.js — plus les 30 villes/iles brutes du fichier client) et par
-// categorie. filtersBelow=true place les filtres SOUS la carte (entre la carte et le
-// marquee d'images, cf. /events/caribbean) au lieu d'au-dessus (defaut).
-// key={filterKey} force WorldPinsMap a se remonter (il n'observe pas les items sinon).
+// ══ CaribbeanEventsMap — carte, PUIS filtres, PUIS cards evenements ══
+// Ordre voulu par le client : carte -> filtres (secteur + categorie) -> cards. Les
+// filtres sont passes a WorldPinsMap via `between` (rendu entre la carte et sa grille
+// de cards), donc rien n'est melange ni renvoye tout en bas de la page.
+// Secteurs = 8 regroupements standard (island-sectors.js), pas les 30 villes brutes.
 
 import { useMemo, useState } from 'react';
 import WorldPinsMap from '@/components/vibe/WorldPinsMap';
@@ -17,7 +16,7 @@ const CAT_LABELS = {
   voile_traditionnelle: 'Traditional Sailing',
 };
 
-export default function CaribbeanEventsMap({ items, kicker, title, intro, filtersBelow = false }) {
+export default function CaribbeanEventsMap({ items, kicker, title, intro }) {
   const itemsWithSector = useMemo(
     () => items.map((e) => ({ ...e, sector: toSector(e.island) })),
     [items]
@@ -45,7 +44,7 @@ export default function CaribbeanEventsMap({ items, kicker, title, intro, filter
     }`;
 
   const filters = (
-    <div className="max-w-7xl mx-auto px-6 md:px-14 py-10 md:py-14 flex flex-col items-center gap-5">
+    <div className="flex flex-col items-center gap-5 mt-8">
       {/* Filtre categorie */}
       <div className="flex flex-wrap justify-center gap-2">
         <button type="button" onClick={() => setCategory('all')} className={pillCls(category === 'all')}>All Categories</button>
@@ -68,20 +67,15 @@ export default function CaribbeanEventsMap({ items, kicker, title, intro, filter
   );
 
   return (
-    <div className="bg-[#26272a]">
-      {!filtersBelow && filters}
-
-      <WorldPinsMap
-        key={`${sector}-${category}`}
-        items={filtered}
-        kicker={kicker}
-        title={title}
-        intro={filtered.length === 0 ? 'No event matches this filter — try another sector or category.' : intro}
-        center={[15.5, -66]}
-        zoom={5}
-      />
-
-      {filtersBelow && filters}
-    </div>
+    <WorldPinsMap
+      key={`${sector}-${category}`}
+      items={filtered}
+      kicker={kicker}
+      title={title}
+      intro={filtered.length === 0 ? 'No event matches this filter — try another sector or category.' : intro}
+      center={[15.5, -66]}
+      zoom={5}
+      between={filters}
+    />
   );
 }

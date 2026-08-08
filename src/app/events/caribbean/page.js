@@ -46,13 +46,12 @@ export default function EventsCaribbeanPage() {
         </div>
       </section>
 
-      {/* Carte, PUIS les filtres (secteur + categorie), PUIS le rouleau d'images */}
+      {/* Carte -> filtres (secteur + categorie) -> cards evenements, tout regroupe */}
       <CaribbeanEventsMap
         items={CARIB_EVENTS}
         kicker="Across The Islands"
         title="The Caribbean Events Calendar"
         intro="From island carnivals and heritage feasts to the great regattas — 54 cultural and nautical events across the Caribbean, 2026–2027. Editorial selection; some dates are estimated and confirmed by concierge before travel."
-        filtersBelow
       />
       <section className="bg-[#26272a] py-10 md:py-14">
         <FunMarquee items={EVENT_MARQUEE} speed={52} direction="left" />

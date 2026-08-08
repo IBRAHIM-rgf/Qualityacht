@@ -18,6 +18,9 @@ export default function WorldPinsMap({
   zoom = 2,
   accent = '#c2622a',
   dot = '#B87333',
+  // between : noeud React insere ENTRE la carte et les cards (ex. filtres, cf.
+  // /events/caribbean). Defaut null = aucune regression ailleurs.
+  between = null,
 }) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -96,6 +99,8 @@ export default function WorldPinsMap({
           <div ref={mapRef} className="absolute inset-0" />
           {!ready && <div className="absolute inset-0 flex items-center justify-center text-[#acb0cd]/60 text-sm">Loading map…</div>}
         </div>
+
+        {between}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 mt-8">
           {items.map((it, i) => (

@@ -2,12 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ExperienceColumns from '../../caribbean-v2/ExperienceColumns';
-import MonumentsDetail from '../MonumentsDetail';
 import { columns, SECTION_META } from '../data';
 
 // Page ouverte au clic sur un panneau de /historic-sites/caribbean (Monuments / Hiking /
-// Cycling). Reutilise ExperienceColumns (galerie 3 colonnes) avec UNE SEULE colonne, celle
-// de la section demandee — contenu reel repris de l'ancienne /historic-sites/caribbean-v2.
+// Cycling). Vraie fusion v2/v3 : le MEME composant ExperienceColumns rend les 3
+// sections (une seule colonne, celle de la section demandee), chacune avec son variant
+// de tuile (monument / hike / tuile simple) — contenu reel de l'ex-v2, style uniforme.
 
 export function generateStaticParams() {
   return Object.keys(SECTION_META).map((section) => ({ section }));
@@ -46,9 +46,7 @@ export default async function HistoricSitesCategoryPage({ params }) {
         </div>
       </div>
 
-      {/* Monuments : fiches detaillees (10 sites Jamaique). Hiking/Cycling : galerie
-          ExperienceColumns avec une seule colonne, celle de la section. */}
-      {section === 'monuments' ? <MonumentsDetail /> : <ExperienceColumns columns={[column]} />}
+      <ExperienceColumns columns={[column]} />
 
       <div className="pb-16 flex justify-center">
         <Link

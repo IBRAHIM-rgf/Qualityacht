@@ -125,6 +125,50 @@ function HikeTile({ item, index, fallbackImg }) {
   );
 }
 
+// ── Tuile MONUMENT : photo + nom + meta + Read more (description / private experience) ──
+function MonumentTile({ item, index, fallbackImg }) {
+  const [open, setOpen] = useState(false);
+  const src = item.img || fallbackImg;
+  return (
+    <figure
+      className="reveal group relative rounded-2xl overflow-hidden border border-[#C0C0C0]/15 bg-[#3a3b3f]/70 backdrop-blur-sm transition-all duration-700 hover:border-[#B03E00]/50 flex flex-col"
+      style={{ transitionDelay: `${(index % 4) * 90}ms` }}
+    >
+      <div className="relative aspect-[3/2] overflow-hidden">
+        <Image
+          src={encodeURI(src)}
+          alt={item.name}
+          fill
+          sizes="(max-width:768px) 100vw, 33vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#26272a]/92 via-[#26272a]/10 to-transparent" />
+        <figcaption className="absolute inset-x-0 bottom-0 p-4">
+          <h3 className="trajan-regular text-base md:text-lg uppercase tracking-[0.08em] text-[#C0C0C0] leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            {item.name}
+          </h3>
+          {item.meta && (
+            <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-[#B87333]">{item.meta}</p>
+          )}
+        </figcaption>
+      </div>
+
+      {item.desc && (
+        <button onClick={() => setOpen((v) => !v)} className={`${HREAD} mt-1`}>
+          {open ? 'Show less' : 'Read more'}
+        </button>
+      )}
+
+      {open && (
+        <div className="px-4 py-3 border-t border-[#C0C0C0]/15 space-y-3 bg-[#26272a]/40">
+          {item.desc && <p className="text-[12px] leading-relaxed text-[#acb0cd]/85">{item.desc}</p>}
+          {item.experience && <HikeInfo label="Private experience">{item.experience}</HikeInfo>}
+        </div>
+      )}
+    </figure>
+  );
+}
+
 export default function ExperienceColumns({ columns }) {
   const rootRef = useRef(null);
 
@@ -195,11 +239,9 @@ export default function ExperienceColumns({ columns }) {
 
             {col.items.map((item, i) => {
               const fb = SUBREGION_PHOTOS[(colOffset[ci] + i) % SUBREGION_PHOTOS.length];
-              return col.variant === 'hike' ? (
-                <HikeTile key={item.name} item={item} index={i} fallbackImg={fb} />
-              ) : (
-                <Tile key={item.name} item={item} index={i} fallbackImg={fb} />
-              );
+              if (col.variant === 'hike') return <HikeTile key={item.name} item={item} index={i} fallbackImg={fb} />;
+              if (col.variant === 'monument') return <MonumentTile key={item.name} item={item} index={i} fallbackImg={fb} />;
+              return <Tile key={item.name} item={item} index={i} fallbackImg={fb} />;
             })}
           </section>
         ))}
