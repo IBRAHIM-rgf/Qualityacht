@@ -1,7 +1,9 @@
 // ══ Evenements Caraïbes 2026-2027 (genere depuis caraibes-events-2026-2027.json) ══
 // 54 evenements culturels + nautiques, geocodes par ile (coords approximatives, centre
 // d'ile + jitter). Les dates 'estimated'/'tbd' portent confidence != 'confirmed' :
-// a afficher avec prudence. Selection editoriale.
+// a afficher avec prudence. Selection editoriale. Descriptions en anglais (ton luxe,
+// coherent avec le reste du site) — les noms d'evenements restent dans leur langue
+// d'origine (noms propres).
 
 export const CARIBBEAN_EVENTS = [
   {
@@ -12,11 +14,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "confirmed",
-    "coords": [
-      16.35,
-      -61.5
-    ],
-    "desc": "Hommage aux femmes qui transmettent la cuisine créole. Messe à l'église Saint-Pierre-et-Saint-Paul à 10h, procession en costumes madras d'apparat avec haltes musicales et quadrille, grand défilé, puis banquet."
+    "coords": [16.35, -61.5],
+    "desc": "A tribute to the women who carry on Creole cuisine — a mass at Saint-Pierre-et-Saint-Paul, a procession in ceremonial madras with musical interludes and quadrille, a grand parade, and a banquet to close the day."
   },
   {
     "name": "Spicemas",
@@ -26,11 +25,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      12.22,
-      -61.6
-    ],
-    "desc": "J'ouvert Jab Jab considéré comme le plus authentique des Caraïbes, Monday Night Mas, Parade of the Bands le mardi avec mas traditionnels : Moko Jumbies sur échasses, Vieux Corps aux masques peints."
+    "coords": [12.22, -61.6],
+    "desc": "Widely regarded as the most authentic J'ouvert Jab Jab in the Caribbean, followed by Monday Night Mas and the Parade of the Bands — stilt-walking Moko Jumbies and hand-painted Vieux Corps masks in full display."
   },
   {
     "name": "Fête de la Banane",
@@ -40,11 +36,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Gastronomy",
     "category": "gastronomie",
     "confidence": "tbd",
-    "coords": [
-      14.74,
-      -60.94
-    ],
-    "desc": "Festival dédié à la filière banane martiniquaise."
+    "coords": [14.74, -60.94],
+    "desc": "A festival celebrating Martinique's banana industry, its growers and its produce."
   },
   {
     "name": "Jounen Kwéyòl / Journée internationale du créole",
@@ -54,11 +47,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "confirmed",
-    "coords": [
-      15.5,
-      -61.32
-    ],
-    "desc": "Port du madras et des tenues créoles au travail et à l'école, cuisine traditionnelle, animations dans les communes. En Guadeloupe l'opération porte le nom 'Kréyòl en mouvman'."
+    "coords": [15.5, -61.32],
+    "desc": "Madras and Creole dress worn to work and to school, traditional cuisine and community celebrations across the islands. In Guadeloupe the day is known as 'Kréyòl en mouvman'."
   },
   {
     "name": "World Creole Music Festival",
@@ -68,11 +58,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Music",
     "category": "musique",
     "confidence": "estimated",
-    "coords": [
-      15.51,
-      -61.29
-    ],
-    "desc": "Trois nuits de bouyon, cadence-lypso, zouk et soukous. Adossé aux célébrations du Creole Day dominiquais."
+    "coords": [15.51, -61.29],
+    "desc": "Three nights of bouyon, cadence-lypso, zouk and soukous, staged alongside Dominica's Creole Day celebrations."
   },
   {
     "name": "Toussaint — illumination des cimetières",
@@ -82,11 +69,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "confirmed",
-    "coords": [
-      15.5,
-      -61.22
-    ],
-    "desc": "Les familles illuminent les tombes de centaines de bougies toute la nuit. Les cimetières de Morne-à-l'Eau (Guadeloupe) et du Carbet (Martinique) sont les plus spectaculaires."
+    "coords": [15.5, -61.22],
+    "desc": "Families light hundreds of candles at family graves through the night. The cemeteries of Morne-à-l'Eau (Guadeloupe) and Le Carbet (Martinique) offer the most striking displays."
   },
   {
     "name": "Journées de la Tenue Traditionnelle Martiniquaise",
@@ -96,11 +80,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "estimated",
-    "coords": [
-      14.7,
-      -60.98
-    ],
-    "desc": "Appel général à porter la tenue traditionnelle sur les lieux de travail, dans les écoles, les entreprises et les crèches. Gaules, grandes robes, madras, tenues blanches pour les hommes, chaudières sur la tête. Conférence-défilé, puis grande parade le samedi dans les rues de Fort-de-France au départ des jardins de l'ancien hôtel de ville."
+    "coords": [14.7, -60.98],
+    "desc": "An island-wide call to wear traditional dress at work, in schools and businesses — grand skirts, madras, starched white suits for the men, and headwraps shaped into elaborate turbans — culminating in a lecture-parade and a grand procession through Fort-de-France."
   },
   {
     "name": "Chanté Nwèl / Noël Kakado",
@@ -110,11 +91,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "confirmed",
-    "coords": [
-      15.46,
-      -61.26
-    ],
-    "desc": "Veillées de chants de Noël créoles chez l'habitant ou sur les places publiques. Cochon grillé, boudin, pâtés salés, schrubb et punch coco. Événement de proximité, non touristique."
+    "coords": [15.46, -61.26],
+    "desc": "Evenings of Creole Christmas carols shared in private homes and on public squares, with roast pork, boudin, savoury pastries, schrubb and coconut punch — an intimate, unstaged local tradition."
   },
   {
     "name": "Sugar Mas (National Carnival)",
@@ -124,11 +102,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      17.4,
-      -62.65
-    ],
-    "desc": "Carnaval de Noël. Masquerade troupes, Mocko Jumbies, Grand Parade le 1er janvier."
+    "coords": [17.4, -62.65],
+    "desc": "A Christmas carnival of masquerade troupes and stilt-walking Mocko Jumbies, culminating in the Grand Parade on New Year's Day."
   },
   {
     "name": "Junkanoo — Boxing Day Parade",
@@ -138,11 +113,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "confirmed",
-    "coords": [
-      25.13,
-      -77.32
-    ],
-    "desc": "Parade la plus compétitive et la plus élaborée de l'année. Tambours en peau de chèvre, cloches, cuivres, costumes en papier crépon. Démarre vers 2h du matin."
+    "coords": [25.13, -77.32],
+    "desc": "The year's most spirited and elaborate parade — goatskin drums, cowbells, brass and crepe-paper costumes, setting off in the small hours before dawn."
   },
   {
     "name": "Junkanoo — New Year's Day Parade",
@@ -152,11 +124,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "confirmed",
-    "coords": [
-      25.09,
-      -77.36
-    ],
-    "desc": "Seconde grande parade Junkanoo. Parades satellites dans les Family Islands début janvier (Georgetown, Exuma)."
+    "coords": [25.09, -77.36],
+    "desc": "Junkanoo's second grand parade, with satellite celebrations across the Family Islands in early January, from Georgetown to Exuma."
   },
   {
     "name": "Carnaval de Guadeloupe",
@@ -166,11 +135,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "confirmed",
-    "coords": [
-      16.31,
-      -61.54
-    ],
-    "desc": "Six semaines de parades dominicales par commune, puis jours gras. Groupes à peaux (chacha, trombophone, gwo siwo en Basse-Terre, Sen Jan en Grande-Terre) et groupes à caisse claire. Mas a Po, Mas a Konn, Mas a Goudron."
+    "coords": [16.31, -61.54],
+    "desc": "Six weeks of Sunday parades across every commune, building to the final days of revelry — skin-drum troupes and snare-drum bands alike, from Mas a Po to Mas a Konn and the tar-daubed Mas a Goudron."
   },
   {
     "name": "Carnaval de Martinique",
@@ -180,11 +146,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "confirmed",
-    "coords": [
-      14.66,
-      -61.02
-    ],
-    "desc": "Vaval, effigie géante en carton-pâte inspirée de l'actualité locale, est brûlé le mercredi des Cendres. Diables Rouges couverts d'huile et de charbon, mariés burlesques, femmes-à-moustaches."
+    "coords": [14.66, -61.02],
+    "desc": "Vaval, a giant papier-mâché effigy satirising the year's events, is burned on Ash Wednesday amid oil-and-charcoal-covered Red Devils, burlesque brides and bearded women."
   },
   {
     "name": "Fiestas de la Calle San Sebastián (SanSe)",
@@ -194,11 +157,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "confirmed",
-    "coords": [
-      18.32,
-      -66.51
-    ],
-    "desc": "Plus grand festival de Porto Rico, clôture officieuse de la saison des fêtes. Cabezudos (têtes géantes), bomba y plena, artisans, scènes multiples dont la principale Plaza del Quinto Centenario."
+    "coords": [18.32, -66.51],
+    "desc": "Puerto Rico's largest festival and the unofficial close of the holiday season — giant Cabezudos, bomba y plena, artisans' stalls and multiple stages centred on the Plaza del Quinto Centenario."
   },
   {
     "name": "Mustique Blues Festival",
@@ -208,11 +168,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Music",
     "category": "musique",
     "confidence": "estimated",
-    "coords": [
-      12.98,
-      -61.11
-    ],
-    "desc": "Deux semaines de blues à Basil's Bar. Confidentiel, public restreint."
+    "coords": [12.98, -61.11],
+    "desc": "Two weeks of blues at Basil's Bar — discreet, intimate, and famously exclusive."
   },
   {
     "name": "Trinidad and Tobago Carnival",
@@ -222,11 +179,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      10.79,
-      -61.14
-    ],
-    "desc": "Le carnaval de référence mondial. J'ouvert le lundi avant l'aube, Pretty Mas le mardi. Panorama (steelpan), Dimanche Gras, Soca Monarch en amont. Prévoir la semaine complète du 3 au 10 février."
+    "coords": [10.79, -61.14],
+    "desc": "The world's definitive carnival. J'ouvert breaks before dawn on the Monday, Pretty Mas takes the streets on Tuesday, with Panorama steelpan, Dimanche Gras and Soca Monarch building through the week — allow the full run, February 3rd to 10th."
   },
   {
     "name": "Mas Domnik",
@@ -236,11 +190,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      15.47,
-      -61.33
-    ],
-    "desc": "Carnaval traditionnel peu commercialisé. Sensay (costumes en fibres et rubans), Darkies, Bwa Bwa. Réputé le plus 'brut' des Caraïbes anglophones."
+    "coords": [15.47, -61.33],
+    "desc": "A largely uncommercialised traditional carnival — Sensay costumes in fibre and ribbon, Darkies and Bwa Bwa figures — widely considered the rawest in the English-speaking Caribbean."
   },
   {
     "name": "Kanaval",
@@ -250,11 +201,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      18.84,
-      -70.08
-    ],
-    "desc": "Chars, rara, masques en papier mâché de Jacmel (artisanat classé). Vérifier impérativement la situation sécuritaire avant toute recommandation."
+    "coords": [18.84, -70.08],
+    "desc": "Floats, rara processions and Jacmel's celebrated papier-mâché masks. Security conditions should always be verified before any recommendation."
   },
   {
     "name": "Carnaval Dominicano",
@@ -264,11 +212,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      18.8,
-      -70.12
-    ],
-    "desc": "Diablos Cojuelos aux masques à cornes et vessies de vache. La Vega est l'épicentre. Défilé national sur le Malecón de Santo Domingo."
+    "coords": [18.8, -70.12],
+    "desc": "Horned, cow-bladder-wielding Diablos Cojuelos take the streets, with La Vega as the epicentre and a national parade along Santo Domingo's Malecón."
   },
   {
     "name": "Carnaval de Ponce",
@@ -278,11 +223,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      18.28,
-      -66.55
-    ],
-    "desc": "Vejigantes aux masques en papier mâché à cornes multiples, tradition ininterrompue depuis le XVIIIe siècle. Entierro de la Sardina le mardi."
+    "coords": [18.28, -66.55],
+    "desc": "Multi-horned papier-mâché Vejigantes masks, a tradition unbroken since the 18th century, closing with the ceremonial 'Burial of the Sardine' on Tuesday."
   },
   {
     "name": "Aruba Carnival",
@@ -292,11 +234,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      12.62,
-      -69.89
-    ],
-    "desc": "Six semaines : Torch Parade, Lighting Parade, Jouvert Morning, Grand Parade Oranjestad, Burning of King Momo le mardi soir."
+    "coords": [12.62, -69.89],
+    "desc": "Six weeks of celebration — Torch Parade, Lighting Parade, Jouvert Morning and the Grand Parade through Oranjestad, closing with the burning of King Momo on Tuesday night."
   },
   {
     "name": "Karnaval Kòrsou",
@@ -306,11 +245,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      12.27,
-      -68.91
-    ],
-    "desc": "Tumba Festival (compétition musicale) ouvre la saison. Gran Marcha, puis Marcha di Despedida et incinération de Rei Momo."
+    "coords": [12.27, -68.91],
+    "desc": "The Tumba Festival music competition opens the season, building to the Gran Marcha, the Marcha di Despedida and the burning of Rei Momo."
   },
   {
     "name": "Carnaval de Saint-Barthélemy",
@@ -320,11 +256,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      18,
-      -62.75
-    ],
-    "desc": "Format réduit et local. Défilé à Gustavia, incinération de Vaval sur la plage de Shell Beach le mercredi des Cendres."
+    "coords": [18, -62.75],
+    "desc": "A small, local celebration — a parade through Gustavia, closing with the burning of Vaval on Shell Beach on Ash Wednesday."
   },
   {
     "name": "Jamaica Carnival",
@@ -334,11 +267,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      18.21,
-      -77.22
-    ],
-    "desc": "Saison de fêtes puis Road March à Kingston. Plus soca que reggae, contrairement à ce qu'on attend."
+    "coords": [18.21, -77.22],
+    "desc": "A season of fêtes building to Road March through Kingston — soca-driven, contrary to what visitors often expect of a reggae island."
   },
   {
     "name": "St. Thomas Carnival",
@@ -348,11 +278,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      18.44,
-      -64.85
-    ],
-    "desc": "J'ouvert, Children's Parade, Adults' Parade. Mocko Jumbies et quadrille."
+    "coords": [18.44, -64.85],
+    "desc": "J'ouvert, a Children's Parade and an Adults' Parade, with Mocko Jumbies and quadrille dancers throughout."
   },
   {
     "name": "St. Maarten Carnival",
@@ -362,11 +289,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      18.13,
-      -62.97
-    ],
-    "desc": "Carnival Village à Philipsburg, J'ouvert Jump-Up, Grand Carnival Parade, Burning of King Momo."
+    "coords": [18.13, -62.97],
+    "desc": "Carnival Village comes alive in Philipsburg with J'ouvert Jump-Up, the Grand Carnival Parade and the closing burning of King Momo."
   },
   {
     "name": "Commémoration de l'abolition de l'esclavage",
@@ -376,11 +300,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Public holiday",
     "category": "ferie",
     "confidence": "confirmed",
-    "coords": [
-      14.62,
-      -61.06
-    ],
-    "desc": "Jour férié local. Cérémonies, tambour bèlè, marches commémoratives."
+    "coords": [14.62, -61.06],
+    "desc": "A local public holiday marked by ceremonies, bèlè drumming and commemorative marches."
   },
   {
     "name": "Commémoration de l'abolition de l'esclavage",
@@ -390,11 +311,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Public holiday",
     "category": "ferie",
     "confidence": "confirmed",
-    "coords": [
-      16.27,
-      -61.58
-    ],
-    "desc": "Jour férié local. Gwo ka, cérémonies au Mémorial ACTe et sur les sites de mémoire."
+    "coords": [16.27, -61.58],
+    "desc": "A local public holiday with gwo ka drumming and ceremonies at the Mémorial ACTe and other sites of remembrance."
   },
   {
     "name": "Commémoration de l'abolition de l'esclavage",
@@ -404,11 +322,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Public holiday",
     "category": "ferie",
     "confidence": "confirmed",
-    "coords": [
-      18.18,
-      -62.97
-    ],
-    "desc": ""
+    "coords": [18.18, -62.97],
+    "desc": "A local public holiday commemorating the abolition of slavery."
   },
   {
     "name": "Terre de Blues",
@@ -418,11 +333,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Music",
     "category": "musique",
     "confidence": "estimated",
-    "coords": [
-      16.03,
-      -61.19
-    ],
-    "desc": "Festival de blues, zouk et musiques créoles sur trois jours. Logistique tendue : Marie-Galante n'est accessible que par ferry, réserver tôt."
+    "coords": [16.03, -61.19],
+    "desc": "Three days of blues, zouk and Creole music. Logistics require early planning — Marie-Galante is reachable only by ferry."
   },
   {
     "name": "Vincy Mas",
@@ -432,11 +344,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      13.35,
-      -61.12
-    ],
-    "desc": "J'ouvert, Mardi Gras, Soca Monarch. Format intimiste."
+    "coords": [13.35, -61.12],
+    "desc": "J'ouvert, Mardi Gras and Soca Monarch, in an intimate, unhurried format."
   },
   {
     "name": "St. John Festival (Emancipation Celebration)",
@@ -446,11 +355,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "estimated",
-    "coords": [
-      18.43,
-      -64.65
-    ],
-    "desc": ""
+    "coords": [18.43, -64.65],
+    "desc": "St. John's emancipation celebration, centred on Cruz Bay."
   },
   {
     "name": "Festival de Gwoka de Sainte-Anne",
@@ -460,11 +366,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Music",
     "category": "musique",
     "confidence": "estimated",
-    "coords": [
-      16.23,
-      -61.62
-    ],
-    "desc": "Le Gwo Ka est inscrit au patrimoine culturel immatériel de l'UNESCO. Six jours de concerts, léwòz, ateliers d'initiation, conférences et transmission intergénérationnelle. Le plus important rendez-vous culturel guadeloupéen après le carnaval."
+    "coords": [16.23, -61.62],
+    "desc": "Gwo Ka is inscribed on UNESCO's Intangible Cultural Heritage list; six days of concerts, léwòz dance circles, introductory workshops and cross-generational transmission — Guadeloupe's most important cultural gathering after carnival."
   },
   {
     "name": "Saint Lucia Carnival",
@@ -474,11 +377,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      14.01,
-      -60.9
-    ],
-    "desc": "J'ouvert, Monday Mas, Parade of the Bands. Plus accessible que Trinidad pour un premier carnaval."
+    "coords": [14.01, -60.9],
+    "desc": "J'ouvert, Monday Mas and the Parade of the Bands — a gentler introduction to Caribbean carnival than Trinidad."
   },
   {
     "name": "Tobago Heritage Festival",
@@ -488,11 +388,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "estimated",
-    "coords": [
-      11.28,
-      -60.66
-    ],
-    "desc": "Chaque village présente une tradition différente : Old Time Wedding à Moriah, Salaka Feast, danses ole time, contes. Le format le plus proche des 'journées patrimoniales' antillaises dans les Caraïbes anglophones."
+    "coords": [11.28, -60.66],
+    "desc": "Each village presents its own tradition — an Old Time Wedding in Moriah, the Salaka Feast, ole-time dance and storytelling — the closest the English-speaking Caribbean comes to the French Antilles' heritage days."
   },
   {
     "name": "Carnaval de Santiago de Cuba",
@@ -502,11 +399,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      21.62,
-      -77.7
-    ],
-    "desc": "Congas orientales, comparsas, tambours. Le plus ancien carnaval de Cuba, racines afro-haïtiennes (tumba francesa)."
+    "coords": [21.62, -77.7],
+    "desc": "Eastern congas, comparsas and drumming — Cuba's oldest carnival, with roots in Afro-Haitian tumba francesa."
   },
   {
     "name": "Antigua Carnival",
@@ -516,11 +410,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "estimated",
-    "coords": [
-      17.16,
-      -61.72
-    ],
-    "desc": "Carnival City à St. John's, Panorama, J'ouvert, Parade of Troupes, Last Lap."
+    "coords": [17.16, -61.72],
+    "desc": "Carnival City comes alive in St. John's — Panorama, J'ouvert, the Parade of Troupes and Last Lap."
   },
   {
     "name": "Crop Over — Grand Kadooment",
@@ -530,11 +421,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "confirmed",
-    "coords": [
-      13.29,
-      -59.46
-    ],
-    "desc": "Festival de fin de récolte de canne, tradition remontant à 1687. Foreday Morning, Pic-O-De-Crop finals, Cohobblopot, puis Grand Kadooment sur Spring Garden Highway. Point d'entrée le plus doux dans le carnaval caribéen : mieux organisé que Trinidad, et la plage est juste là."
+    "coords": [13.29, -59.46],
+    "desc": "A sugar-harvest festival dating to 1687 — Foreday Morning, the Pic-O-De-Crop finals, Cohobblopot and the Grand Kadooment parade down Spring Garden Highway. The most effortless first taste of Caribbean carnival: better organised than Trinidad, with the beach right there."
   },
   {
     "name": "Spicemas",
@@ -544,11 +432,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Carnival",
     "category": "carnaval",
     "confidence": "confirmed",
-    "coords": [
-      12.18,
-      -61.64
-    ],
-    "desc": "Compétitions préliminaires dès mai, festival ouvert début août. J'ouvert Jab Jab, Monday Night Mas, Parade of the Bands le mardi avec Moko Jumbies et Vieux Corps. Pas de jour de repos entre lundi et mardi."
+    "coords": [12.18, -61.64],
+    "desc": "Preliminary competitions begin in May, with the festival proper opening in early August — J'ouvert Jab Jab, Monday Night Mas and Tuesday's Parade of the Bands with Moko Jumbies and Vieux Corps, no rest day between."
   },
   {
     "name": "Fête des Cuisinières",
@@ -558,11 +443,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "estimated",
-    "coords": [
-      16.19,
-      -61.66
-    ],
-    "desc": ""
+    "coords": [16.19, -61.66],
+    "desc": "A tribute to the women who carry on Creole cuisine, with mass, procession and banquet in ceremonial madras."
   },
   {
     "name": "Fête de Saint-Barthélemy",
@@ -572,11 +454,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Heritage",
     "category": "patrimoine",
     "confidence": "confirmed",
-    "coords": [
-      17.96,
-      -62.79
-    ],
-    "desc": "Fête patronale : courses de bateaux locales, bénédiction de la mer, feu d'artifice à Gustavia."
+    "coords": [17.96, -62.79],
+    "desc": "The island's patron saint's day — local boat races, the blessing of the sea, and fireworks over Gustavia."
   },
   {
     "name": "Route du Rhum — Destination Guadeloupe",
@@ -586,11 +465,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      16.35,
-      -61.5
-    ],
-    "desc": "Départ Saint-Malo le 1er novembre 2026 à 13h02. Village de course à Saint-Malo du 20 octobre au 1er novembre, 118 bateaux. Transatlantique en solitaire, 3542 milles. Arrivées à Pointe-à-Pitre échelonnées : ~7-8 jours pour les Ultimes, jusqu'à 3 semaines pour la classe Rhum."
+    "coords": [16.35, -61.5],
+    "desc": "Departing Saint-Malo on November 1st, 2026, with 118 boats and a race village running from October 20th — a solo transatlantic crossing of 3,542 miles, finishing at Pointe-à-Pitre over a staggered window: roughly a week for the Ultimes, up to three weeks for the Rhum class."
   },
   {
     "name": "St Barth Cata Cup",
@@ -600,11 +476,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      17.92,
-      -62.83
-    ],
-    "desc": "Formule 18 (catamarans de sport). Courses du 18 au 22 novembre, événement complet du 16 au 23. Limité à 60 équipages."
+    "coords": [17.92, -62.83],
+    "desc": "Formula 18 sport catamarans racing November 18th–22nd, with the full event running the week of the 16th–23rd, capped at 60 crews."
   },
   {
     "name": "ARC — Atlantic Rally for Cruisers",
@@ -614,11 +487,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      14.01,
-      -60.9
-    ],
-    "desc": "Départ Las Palmas le 22 novembre, 2700 milles, remise des prix à Sainte-Lucie le 19 décembre. Plus de 200 bateaux. L'ARC+ (via le Cap-Vert) arrive à Port Louis Marina, Grenade."
+    "coords": [14.01, -60.9],
+    "desc": "Departing Las Palmas on November 22nd for a 2,700-mile crossing, with prize-giving in Saint Lucia on December 19th — over 200 boats, with the Cape Verde-routed ARC+ arriving at Port Louis Marina, Grenada."
   },
   {
     "name": "Grenada Sailing Week",
@@ -628,11 +498,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      12.14,
-      -61.68
-    ],
-    "desc": ""
+    "coords": [12.14, -61.68],
+    "desc": "A week of racing based at Port Louis Marina, Grenada."
   },
   {
     "name": "Caribbean Multihull Challenge",
@@ -642,11 +509,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      18.13,
-      -62.97
-    ],
-    "desc": "Seule régate des Caraïbes exclusivement dédiée aux multicoques. Rallye parallèle pour les catamarans de croisière."
+    "coords": [18.13, -62.97],
+    "desc": "The Caribbean's only regatta dedicated exclusively to multihulls, with a parallel rally for cruising catamarans."
   },
   {
     "name": "RORC Caribbean 600",
@@ -656,11 +520,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      17.12,
-      -61.76
-    ],
-    "desc": "600 milles autour de 11 îles : Barbuda, Nevis, St Kitts, Saba, St Barth, St Maarten, Guadeloupe. Départ le 22 février, remise des prix le 26."
+    "coords": [17.12, -61.76],
+    "desc": "A 600-mile course around 11 islands — Barbuda, Nevis, St Kitts, Saba, St Barth, St Maarten and Guadeloupe — starting February 22nd, with prize-giving on the 26th."
   },
   {
     "name": "St. Maarten Heineken Regatta",
@@ -670,11 +531,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      18.09,
-      -63.01
-    ],
-    "desc": "La plus grande régate des Caraïbes. Plus de 100 bateaux, 35 nationalités, 20 000 visiteurs. Toujours le premier week-end de mars."
+    "coords": [18.09, -63.01],
+    "desc": "The Caribbean's largest regatta — over 100 boats, 35 nationalities and 20,000 spectators — always the first weekend of March."
   },
   {
     "name": "St Barths Bucket Regatta",
@@ -684,11 +542,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      17.88,
-      -62.87
-    ],
-    "desc": "Superyachts de 30 m et plus, sur invitation uniquement. Nouveau format 2027 : quatre manches du jeudi au dimanche. Avant-dernier week-end complet de mars."
+    "coords": [17.88, -62.87],
+    "desc": "Invitation-only, for superyachts of 30 metres and above. A new 2027 format runs four races from Thursday to Sunday, the second-to-last full weekend of March."
   },
   {
     "name": "BVI Spring Regatta & Sailing Festival",
@@ -698,11 +553,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      18.52,
-      -64.54
-    ],
-    "desc": "Scrub Island Invitational le 30 mars, Nanny Cay Cup Round Tortola le 31, régate principale du 2 au 4 avril. Neuf classes, deux flottes."
+    "coords": [18.52, -64.54],
+    "desc": "The Scrub Island Invitational on March 30th, the Nanny Cay Cup Round Tortola on the 31st, and the main regatta April 2nd–4th, across nine classes and two fleets."
   },
   {
     "name": "St. Thomas International Regatta",
@@ -712,11 +564,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      18.4,
-      -64.89
-    ],
-    "desc": "Décalée hors du week-end de Pâques pour 2027. Nouveautés : classe wing foil et Three Sheets Distance Race & Rally (100 milles St John – St Croix – St Thomas)."
+    "coords": [18.4, -64.89],
+    "desc": "Moved off the Easter weekend for 2027, with a new wing foil class and the Three Sheets Distance Race & Rally — a 100-mile course from St John to St Croix to St Thomas."
   },
   {
     "name": "Antigua Sailing Week",
@@ -726,11 +575,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Regatta",
     "category": "regate",
     "confidence": "confirmed",
-    "coords": [
-      17.08,
-      -61.8
-    ],
-    "desc": "Format point-to-point : chaque journée se termine dans une destination différente. Classes croisière et rallye. Tarif early bird 12 USD/pied jusqu'au 31 octobre 2026."
+    "coords": [17.08, -61.8],
+    "desc": "A point-to-point format, with each day's racing finishing at a different destination — cruising and rally classes both welcome. Early-bird entry at $12/foot through October 31st, 2026."
   },
   {
     "name": "Traditour — Tour de Guadeloupe de Voile Traditionnelle",
@@ -740,11 +586,8 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Traditional sailing",
     "category": "voile_traditionnelle",
     "confidence": "estimated",
-    "coords": [
-      16.15,
-      -61.48
-    ],
-    "desc": "Tour de l'île en saintoises (voile traditionnelle guadeloupéenne). Prologue dans le port de pêche de Sainte-Rose. Sert de préparation à plusieurs équipages du Tour des Yoles."
+    "coords": [16.15, -61.48],
+    "desc": "A circumnavigation of the island by saintoise, Guadeloupe's traditional sailing craft, with the prologue staged from the fishing port of Sainte-Rose — a proving ground for several Tour des Yoles crews."
   },
   {
     "name": "Tour de Martinique des Yoles Rondes",
@@ -754,10 +597,7 @@ export const CARIBBEAN_EVENTS = [
     "badge": "Traditional sailing",
     "category": "voile_traditionnelle",
     "confidence": "estimated",
-    "coords": [
-      14.58,
-      -61.1
-    ],
-    "desc": "Yole ronde : embarcation traditionnelle à quille et gouvernail, équilibrée par des 'bois dressés' sur lesquels l'équipage de 14 à 18 personnes se suspend. Savoir-faire inscrit depuis décembre 2020 au Registre UNESCO des bonnes pratiques de sauvegarde du patrimoine culturel immatériel. Une commune d'arrivée par étape. Événement sportif ET culturel majeur de l'île."
+    "coords": [14.58, -61.1],
+    "desc": "The yole ronde — a keel-less traditional craft balanced by 'bois dressés', wooden poles the 14-to-18-strong crew hang from to windward — is inscribed on UNESCO's register of best safeguarding practices for intangible cultural heritage. One finishing commune per stage; a major sporting and cultural event on the island."
   }
 ];

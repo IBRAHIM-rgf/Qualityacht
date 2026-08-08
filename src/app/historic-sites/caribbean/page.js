@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import SplitPanels from '../caribbean-v3/SplitPanels';
+import HistoricHub from './HistoricHub';
+import { columns } from './data';
 
 export const metadata = {
   title: 'Caribbean by Land — Monuments, Hiking & Cycling | Qualityacht',
@@ -7,30 +8,13 @@ export const metadata = {
     'One card, three worlds: Caribbean historic monuments, hiking trails and cycling routes.',
 };
 
-// Page canonique /historic-sites/caribbean : la grande card 3 panneaux (ex-v3), qui mene
-// vers le contenu reel par categorie (ex-v2) sous des URLs naturelles, sans "v" :
-// /historic-sites/caribbean/monuments, /hiking, /cycling.
+// Page canonique /historic-sites/caribbean : 3 tuiles (Monuments/Hiking/Cycling) qui
+// revelent leur contenu reel EN DESSOUS au clic (HistoricHub), sur la MEME page — plus
+// de navigation vers /monuments /hiking /cycling, tout est fusionne ici.
 const panels = [
-  {
-    key: 'monuments',
-    title: 'Historic Monuments',
-    img: '/images/stephan-hinni-ZHdkEO_oFRc-unsplash.jpg',
-    href: '/historic-sites/caribbean/monuments',
-  },
-  {
-    key: 'hiking',
-    title: 'Hiking',
-    img: '/images/isaw-company-hBtl2SojFic-unsplash.jpg',
-    boost: true,
-    href: '/historic-sites/caribbean/hiking',
-  },
-  {
-    key: 'cycling',
-    title: 'Cycling',
-    img: '/images/carlos-mendoza-utvLhSfiqpo-unsplash(1).jpg',
-    boost: true,
-    href: '/historic-sites/caribbean/cycling',
-  },
+  { key: 'monuments', title: 'Historic Monuments', img: '/images/stephan-hinni-ZHdkEO_oFRc-unsplash.jpg' },
+  { key: 'hiking', title: 'Hiking', img: '/images/isaw-company-hBtl2SojFic-unsplash.jpg' },
+  { key: 'cycling', title: 'Cycling', img: '/images/carlos-mendoza-utvLhSfiqpo-unsplash(1).jpg' },
 ];
 
 export default function HistoricSitesCaribbeanPage() {
@@ -54,8 +38,7 @@ export default function HistoricSitesCaribbeanPage() {
         </div>
       </div>
 
-      {/* GRANDE CARD 3 PANNEAUX — seul contenu de la page */}
-      <SplitPanels panels={panels} />
+      <HistoricHub panels={panels} columns={columns} />
     </div>
   );
 }
