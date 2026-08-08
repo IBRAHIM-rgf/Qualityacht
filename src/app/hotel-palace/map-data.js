@@ -16,7 +16,7 @@
 //
 // AUCUN emoji.
 
-export const WORLD_VIEW = { center: [20, -25], zoom: 2 };
+export const WORLD_VIEW = { center: [20, -25], zoom: 4 };
 
 export const WORLD_DESTINATIONS = [
   { title: 'Arctic',                label: 'Arctic',                coords: [78.2, 15.6],    anchor: 'Svalbard',            ready: false },

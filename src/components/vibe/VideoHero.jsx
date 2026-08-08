@@ -18,6 +18,7 @@ export default function VideoHero({
   subtitle,
   height = 'screen',            // 'screen' | 'tall'
   align = 'center',             // 'center' | 'bottom'
+  objectPosition = 'center',    // cadrage video (ex. 'top' pour couper le bas plutot que le haut)
   tintA = 'rgba(47,214,196,0.20)',   // glow turquoise
   tintB = 'rgba(255,122,89,0.18)',   // glow corail
   children,                     // CTA(s)
@@ -41,6 +42,7 @@ export default function VideoHero({
       <video
         ref={vidL}
         className="hidden sm:block absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition }}
         autoPlay muted loop playsInline preload="metadata"
         poster={posterLandscape}
       >
@@ -50,6 +52,7 @@ export default function VideoHero({
       <video
         ref={vidP}
         className="sm:hidden absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition }}
         autoPlay muted loop playsInline preload="metadata"
         poster={posterPortrait || posterLandscape}
       >

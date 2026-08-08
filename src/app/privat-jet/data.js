@@ -59,7 +59,7 @@ export const destinations = [
   { slug: 'western-mediterranean',  name: 'Western Mediterranean',   image: '/images/private_jet/private_western-mediterranean.jpeg', heroImage: '/images/private_jet/hero/hero_western-mediterranean.jpg', groups: comingSoon },
   { slug: 'africa',                 name: 'Africa',                  image: '/images/private_jet/private_africa.jpeg',                 heroImage: '/images/private_jet/hero/hero_africa.jpeg',               groups: comingSoon },
   { slug: 'northern-europe',        name: 'Northern Europe',         image: '/images/private_jet/private_northern-europe.jpeg',        heroImage: '/images/private_jet/hero/hero_northern-europe.jpg',       groups: comingSoon },
-  { slug: 'caribbean',              name: 'Caribbean',               image: '/images/private_jet/private_caribbean.jpg',                heroImage: '/images/private_jet/hero/hero_caribbean.jpg',             groups: caribbeanJetGroups },
+  { slug: 'caribbean',              name: 'Caribbean',               image: '/images/private_jet/private_caribbean.jpg',                heroImage: '/images/private_jet/hero/hero_caribbean.jpg',             groups: caribbeanJetGroups, heroCropClass: 'h-[52vh] md:h-[68vh]', heroObjectPosition: '50% 38%' },
   { slug: 'oceania',                name: 'Oceania',                 image: '/images/private_jet/private_oceania.jpeg',                heroImage: '/images/private_jet/hero/hero_oceania.jpg',               groups: comingSoon },
 ];
 

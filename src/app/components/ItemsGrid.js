@@ -11,6 +11,7 @@ export default function ItemsGrid({
   imageClassName = "rounded-xl",
   imageWrapperClassName = "h-48",
   heroImage = null,
+  heroVideo = null,
   intro = null,
 }) {
   // Reveal-up : meme effet de glissement vers le haut que sur caribbean-v15.
@@ -28,11 +29,16 @@ export default function ItemsGrid({
         .reveal-up.revealed { opacity: 1; transform: translateY(0); }
       `}</style>
 
-      {/* Hero optionnel : image pleine largeur + titre en overlay qui glisse vers le haut */}
-      {heroImage && (
+      {/* Hero optionnel : image ou video pleine largeur + titre en overlay qui glisse vers le haut */}
+      {(heroImage || heroVideo) && (
         <div className="relative w-full pt-[70px] md:pt-0 bg-[#26272a]">
           <div className="relative w-full h-[45vh] md:h-[60vh] overflow-hidden">
-            <Image src={heroImage} alt={title} fill priority className="object-cover" sizes="100vw" />
+            {heroVideo ? (
+              // eslint-disable-next-line jsx-a11y/media-has-caption
+              <video src={heroVideo} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" />
+            ) : (
+              <Image src={heroImage} alt={title} fill priority className="object-cover" sizes="100vw" />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-black/30 to-transparent pointer-events-none" />
             <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-6 md:pb-10">
               <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
@@ -47,11 +53,11 @@ export default function ItemsGrid({
       )}
 
       <section
-        className={`relative ${heroImage ? "" : "min-h-screen justify-center"} flex flex-col items-center bg-cover bg-center bg-no-repeat py-24 px-4`}
+        className={`relative ${(heroImage || heroVideo) ? "" : "min-h-screen justify-center"} flex flex-col items-center bg-cover bg-center bg-no-repeat py-24 px-4`}
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
         {/* Titre + ligne affichés seulement sans hero (sinon déjà dans le hero) */}
-        {!heroImage && (
+        {!(heroImage || heroVideo) && (
           <>
             <h1 className="text-3xl md:text-5xl font-bold text-[#acb0cd] trajan-regular mb-4 text-center uppercase tracking-wide">
               {title}

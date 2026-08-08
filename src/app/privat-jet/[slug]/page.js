@@ -103,13 +103,25 @@ export default function PrivatJetDestinationPage({ params }) {
           Une fois la photo paysage dediee fournie via heroImage dans data.js,
           le rendu sera identique a /privat-jet (Private_jet_desktop.png). */}
       <div className="relative z-20 w-full pt-[70px] md:pt-0 bg-[#26272a]">
-        <div className="relative w-full">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={dest.heroImage || dest.image}
-            alt={dest.name}
-            className="block w-full h-auto"
-          />
+        <div className={`relative w-full ${dest.heroCropClass || ''}`}>
+          {dest.heroCropClass ? (
+            <Image
+              src={dest.heroImage || dest.image}
+              alt={dest.name}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+              style={dest.heroObjectPosition ? { objectPosition: dest.heroObjectPosition } : undefined}
+            />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={dest.heroImage || dest.image}
+              alt={dest.name}
+              className="block w-full h-auto"
+            />
+          )}
           {/* Dégradé bas pour lisibilité du texte */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
 

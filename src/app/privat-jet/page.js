@@ -55,6 +55,8 @@ export default function PrivatJetPage() {
         posterLandscape={cloudsVideo?.poster}
         title="Private Jets"
         subtitle="Your Gateway to Every Destination"
+        height="tall"
+        objectPosition="top"
       />
 
       {/* ══ GRILLE ══ */}

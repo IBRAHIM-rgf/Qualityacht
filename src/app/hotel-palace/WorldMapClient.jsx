@@ -86,10 +86,10 @@ export default function WorldMapClient() {
     });
     mapInstanceRef.current = map;
 
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; National Geographic',
+    // Fond NOIR (CARTO dark) remis a la place des tuiles Esri (marron/relief).
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO',
       maxZoom: 19,
-      maxNativeZoom: 16,
     }).addTo(map);
 
     // ── Les 16 destinations : marqueur = LOGO Qualityacht (fond transparent). La

@@ -4,12 +4,14 @@ import MouseExpandPanels from '@/components/vibe/MouseExpandPanels';
 import { media, one } from '@/lib/quality-media';
 
 // Panneaux "COMO" (s'etendent selon la souris) — experiences halal Caraibes.
+// Ordre voulu par le client : Set Sail, Turquoise Waters, Private Anchorages, Family
+// Moments, Halal Cuisine (renumerotes 1->5 dans ce nouvel ordre).
 const PANELS = [
-  { number: '1', title: 'Halal Cuisine', desc: 'A private chef and a fully halal galley — refined menus and alcohol-free pairings, shaped around your table.', img: one({ cat: 'food', kind: 'image' })?.src, href: '/fine-food' },
-  { number: '2', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: one({ cat: 'boats', kind: 'image', role: 'card' })?.src || one({ cat: 'boats', kind: 'image' })?.src, href: '/charters' },
-  { number: '3', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: one({ cat: 'beach', kind: 'image', role: 'card' })?.src || one({ cat: 'beach', kind: 'image' })?.src },
-  { number: '4', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: one({ cat: 'halal', kind: 'image', role: 'card' })?.src || one({ cat: 'halal', kind: 'image' })?.src },
-  { number: '5', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: one({ cat: 'aerial', kind: 'image', role: 'card' })?.src || one({ cat: 'aerial', kind: 'image' })?.src },
+  { number: '1', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: one({ cat: 'boats', kind: 'image', role: 'card' })?.src || one({ cat: 'boats', kind: 'image' })?.src, href: '/charters' },
+  { number: '2', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: one({ cat: 'beach', kind: 'image', role: 'card' })?.src || one({ cat: 'beach', kind: 'image' })?.src },
+  { number: '3', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: one({ cat: 'aerial', kind: 'image', role: 'card' })?.src || one({ cat: 'aerial', kind: 'image' })?.src },
+  { number: '4', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: '/media/quality/people/oswald-elsaboath-lhoiwvcommm-unsplash.jpg' },
+  { number: '5', title: 'Halal Cuisine', desc: 'A private chef and a fully halal galley — refined menus and alcohol-free pairings, shaped around your table.', img: one({ cat: 'food', kind: 'image' })?.src, href: '/fine-food' },
 ].filter((p) => p.img);
 
 // Halal — Caraibes : contenu de caribbean-v15, avec
@@ -68,6 +70,7 @@ const INTRO =
 export default function HalalCaribbeanPage() {
   return (
     <CaribbeanV15Page
+      heroVideo="/media/quality/halal/hero-halal.mp4"
       heroImageMobile={HERO_IMAGE}
       heroImageDesktop={HERO_IMAGE}
       showDescription={false}

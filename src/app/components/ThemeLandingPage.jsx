@@ -10,9 +10,11 @@ import { destinations } from '../charters/destinationsData';
 // /historic-sites et /horses-riding ont ainsi exactement le meme traitement.
 const HERO_BOOST = 'saturate-[1.4] contrast-[1.1] brightness-[1.03]';
 
-export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false, animated = false, hideHeroText = false }) {
+export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false, animated = false, hideHeroText = false, heroGradientSoft = false }) {
+  // heroGradientSoft : degrade plus leger (photo deja sombre au premier plan, cf.
+  // /historic-sites : arche du Taj Mahal). Defaut = degrade d'origine partout ailleurs.
   const heroGradient = (
-    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
+    <div className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${heroGradientSoft ? 'from-[#26272a]/70 via-[#26272a]/20 to-transparent' : 'from-[#26272a] via-[#26272a]/45 to-[#26272a]/10'}`} />
   );
   const heroOverlay = (
     <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-4 md:pb-6">

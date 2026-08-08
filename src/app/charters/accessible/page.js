@@ -17,7 +17,7 @@ export default function AccessibleCharter() {
   return (
     <ItemsGrid
       title="Accessible Charter Yacht"
-      heroImage="/images/charters/acces.png"
+      heroVideo="/images/yachts/7699189-hd_1920_1080_25fps.mp4"
       bgImage="/images/services-bg.png"
       items={accessibleItems}
     />

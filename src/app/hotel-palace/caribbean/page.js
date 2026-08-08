@@ -20,7 +20,7 @@ export default function HotelPalaceCaribbeanPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={heroImg} alt="Hotel & Palace — Caribbean" className="block w-full h-auto max-h-[86vh] object-contain bg-[#26272a]" />
         <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/60 to-transparent" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
+        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-2 md:pb-4">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
             Caribbean · Ultra-Premium Reference
           </p>

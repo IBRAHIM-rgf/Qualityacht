@@ -652,6 +652,13 @@ export default function CaribbeanV15Page({
   // heroNode : remplace ENTIEREMENT le hero (image + titre mobile) par un noeud libre
   // (ex. un hero video). Defaut null = hero image d'origine (aucune regression).
   heroNode = null,
+  // heroVideo : si fourni, le hero devient une VIDEO plein cadre (boucle muette) avec le
+  // titre en overlay. Defaut = la video aerienne (toutes les pages Caraibes v15 sauf halal,
+  // qui passe heroVideo={null} pour garder sa photo portrait).
+  heroVideo = '/media/quality/aerial/hero-aerial-portrait.mp4',
+  // heroVideoContain=true : video ENTIERE visible (object-contain, jamais rognee/zoomee).
+  // Defaut false = object-cover cadre en haut (object-top) : le sujet (nageur) reste visible.
+  heroVideoContain = false,
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -679,8 +686,26 @@ export default function CaribbeanV15Page({
           l'identique sans creer de conteneur de scroll. */}
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
 
-        {/* ══ HERO ══ (heroNode remplace tout le hero si fourni) */}
-        {heroNode ? heroNode : (
+        {/* ══ HERO ══ (heroNode remplace tout le hero si fourni ; sinon heroVideo -> video) */}
+        {heroNode ? heroNode : heroVideo ? (
+          <section className="relative pt-[70px] md:pt-0 h-[70vh] md:h-[86vh] overflow-hidden bg-[#26272a]">
+            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+            <video src={heroVideo} autoPlay muted loop playsInline className={`absolute inset-0 w-full h-full ${heroVideoContain ? 'object-contain object-center' : 'object-cover'}`} style={heroVideoContain ? undefined : { objectPosition: '50% 32%' }} />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
+            {/* Titre SOUS le nageur (visible vers 32% de hauteur dans la video) */}
+            <div className={`absolute inset-x-0 flex flex-col items-center px-4 ${heroTextLow ? 'bottom-[8%] md:bottom-[10%]' : 'top-[46%]'}`}>
+              <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
+                <h1 className="trajan-regular text-4xl md:text-6xl lg:text-7xl uppercase tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+                  {heroTitle}
+                </h1>
+                <BurntLine />
+                <p className="text-[#acb0cd] text-base md:text-xl uppercase tracking-[0.25em] font-light text-center drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
+                  {heroSubtitle}
+                </p>
+              </div>
+            </div>
+          </section>
+        ) : (
         <>
         {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
             Desktop : image pleine largeur (natural ratio), titre OVERLAY en bas avec dégradé. */}
