@@ -690,7 +690,7 @@ export default function CaribbeanV15Page({
         {heroNode ? heroNode : heroVideo ? (
           <section className="relative pt-[70px] md:pt-0 h-[70vh] md:h-[86vh] overflow-hidden bg-[#26272a]">
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <video src={heroVideo} autoPlay muted loop playsInline className={`absolute inset-0 w-full h-full ${heroVideoContain ? 'object-contain object-center' : 'object-cover'}`} style={heroVideoContain ? undefined : { objectPosition: '50% 32%' }} />
+            <video src={heroVideo} autoPlay muted loop playsInline className={`absolute inset-0 w-full h-full ${heroVideoContain ? 'object-contain object-center' : 'object-cover'}`} style={heroVideoContain ? undefined : { objectPosition: '50% 75%' }} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
             {/* Titre SOUS le nageur (visible vers 32% de hauteur dans la video) */}
             <div className={`absolute inset-x-0 flex flex-col items-center px-4 ${heroTextLow ? 'bottom-[8%] md:bottom-[10%]' : 'top-[46%]'}`}>

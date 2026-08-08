@@ -171,6 +171,10 @@ function MonumentTile({ item, index, fallbackImg }) {
 
 export default function ExperienceColumns({ columns }) {
   const rootRef = useRef(null);
+  // Une seule colonne (cf. HistoricHub : contenu d'une tuile revele sous elle) : plus de
+  // mise en page "3 colonnes cote a cote" (qui coincerait tout dans 1/3 de la largeur) —
+  // grille de cards pleine largeur, centree, plusieurs par ligne.
+  const single = columns.length === 1;
 
   useEffect(() => {
     const root = rootRef.current;
@@ -209,16 +213,16 @@ export default function ExperienceColumns({ columns }) {
         .reveal.is-visible { opacity: 1; transform: translateY(0); }
       `}</style>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7 max-w-7xl mx-auto">
+      <div className={single ? 'max-w-7xl mx-auto' : 'grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7 max-w-7xl mx-auto'}>
         {columns.map((col, ci) => (
           <section
             key={col.key}
-            className={`flex flex-col gap-6 md:gap-7 ${OFFSET[ci] || ''} ${
+            className={single ? 'flex flex-col items-center' : `flex flex-col gap-6 md:gap-7 ${OFFSET[ci] || ''} ${
               ci > 0 ? 'md:border-l md:border-[#C0C0C0]/10 md:pl-6 lg:pl-7' : ''
             }`}
           >
             {/* En-tete de colonne */}
-            <header className="reveal flex flex-col items-center text-center mb-1">
+            <header className="reveal flex flex-col items-center text-center mb-8 md:mb-10">
               <h2 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.14em] text-[#C0C0C0]">
                 {col.title}
               </h2>
@@ -237,12 +241,14 @@ export default function ExperienceColumns({ columns }) {
               )}
             </header>
 
-            {col.items.map((item, i) => {
-              const fb = SUBREGION_PHOTOS[(colOffset[ci] + i) % SUBREGION_PHOTOS.length];
-              if (col.variant === 'hike') return <HikeTile key={item.name} item={item} index={i} fallbackImg={fb} />;
-              if (col.variant === 'monument') return <MonumentTile key={item.name} item={item} index={i} fallbackImg={fb} />;
-              return <Tile key={item.name} item={item} index={i} fallbackImg={fb} />;
-            })}
+            <div className={single ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 w-full' : 'contents'}>
+              {col.items.map((item, i) => {
+                const fb = SUBREGION_PHOTOS[(colOffset[ci] + i) % SUBREGION_PHOTOS.length];
+                if (col.variant === 'hike') return <HikeTile key={item.name} item={item} index={i} fallbackImg={fb} />;
+                if (col.variant === 'monument') return <MonumentTile key={item.name} item={item} index={i} fallbackImg={fb} />;
+                return <Tile key={item.name} item={item} index={i} fallbackImg={fb} />;
+              })}
+            </div>
           </section>
         ))}
       </div>
