@@ -35,7 +35,7 @@ export default function ItemsGrid({
           <div className="relative w-full h-[45vh] md:h-[60vh] overflow-hidden">
             {heroVideo ? (
               // eslint-disable-next-line jsx-a11y/media-has-caption
-              <video src={heroVideo} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" />
+              <video src={heroVideo} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: '50% 30%' }} />
             ) : (
               <Image src={heroImage} alt={title} fill priority className="object-cover" sizes="100vw" />
             )}

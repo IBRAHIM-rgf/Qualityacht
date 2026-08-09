@@ -25,8 +25,14 @@ export default function CaribbeanEventsMap({ items, kicker, title, intro }) {
     () => SECTORS.filter((s) => itemsWithSector.some((e) => e.sector === s)),
     [itemsWithSector]
   );
+  // Categories connues (CAT_LABELS) affichees individuellement ; toute categorie
+  // presente dans les donnees mais absente de CAT_LABELS tombe sous "Other".
   const categories = useMemo(
-    () => Array.from(new Set(items.map((e) => e.category))).sort(),
+    () => Array.from(new Set(items.map((e) => e.category))).filter((c) => CAT_LABELS[c]).sort(),
+    [items]
+  );
+  const hasOther = useMemo(
+    () => items.some((e) => !CAT_LABELS[e.category]),
     [items]
   );
 
@@ -35,7 +41,7 @@ export default function CaribbeanEventsMap({ items, kicker, title, intro }) {
 
   const filtered = useMemo(() => itemsWithSector.filter((e) =>
     (sector === 'all' || e.sector === sector) &&
-    (category === 'all' || e.category === category)
+    (category === 'all' || (category === 'other' ? !CAT_LABELS[e.category] : e.category === category))
   ), [itemsWithSector, sector, category]);
 
   const pillCls = (active) =>
@@ -50,9 +56,14 @@ export default function CaribbeanEventsMap({ items, kicker, title, intro }) {
         <button type="button" onClick={() => setCategory('all')} className={pillCls(category === 'all')}>All Categories</button>
         {categories.map((c) => (
           <button key={c} type="button" onClick={() => setCategory(c)} className={pillCls(category === c)}>
-            {CAT_LABELS[c] || c}
+            {CAT_LABELS[c]}
           </button>
         ))}
+        {hasOther && (
+          <button type="button" onClick={() => setCategory('other')} className={pillCls(category === 'other')}>
+            Other
+          </button>
+        )}
       </div>
       {/* Filtre secteur (8 regroupements, pas les 30 villes brutes) */}
       <div className="flex flex-wrap justify-center gap-2">
