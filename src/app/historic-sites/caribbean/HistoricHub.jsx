@@ -37,10 +37,16 @@ export default function HistoricHub({ panels, columns }) {
                     fill
                     sizes="(max-width:768px) 100vw, 33vw"
                     className={`object-cover transition-all duration-700 ${
-                      isActive ? 'scale-105 grayscale-0 opacity-100' : 'scale-100 grayscale opacity-60 group-hover:opacity-80 group-hover:grayscale-0'
+                      isActive
+                        ? 'scale-105 grayscale-0 opacity-100 saturate-[1.6] contrast-[1.15] brightness-[1.08]'
+                        : 'scale-100 grayscale opacity-60 group-hover:opacity-80 group-hover:grayscale-0'
                     }`}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-[#26272a]/10" />
+                  <div className={`absolute inset-0 bg-gradient-to-t transition-opacity duration-700 ${
+                    isActive
+                      ? 'from-[#26272a]/70 via-[#26272a]/10 to-transparent'
+                      : 'from-[#26272a] via-[#26272a]/45 to-[#26272a]/10'
+                  }`} />
                   <div
                     className={`absolute inset-x-0 bottom-0 h-[3px] bg-[#B03E00] origin-left transition-transform duration-700 ${
                       isActive ? 'scale-x-100' : 'scale-x-0'

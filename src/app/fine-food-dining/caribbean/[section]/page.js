@@ -53,7 +53,8 @@ export default async function FineFoodDiningSectionPage({ params }) {
       {section === 'fine-food' && PROVISIONING.length > 0 && (
         <div className="px-6 md:px-14 pt-10 md:pt-14">
           <div className="max-w-3xl mx-auto">
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="flex-1 h-px bg-[#B87333]/25" />
               <h2 className="trajan-regular text-base md:text-lg text-[#C0C0C0] whitespace-nowrap">
                 Delivered Anywhere
               </h2>
@@ -104,12 +105,17 @@ export default async function FineFoodDiningSectionPage({ params }) {
         </div>
       )}
 
-      <div className="bg-[#1b223d] border-t border-white/10 px-6 md:px-14 py-5">
-        <p className="text-[11px] text-[#7a8094] max-w-4xl mx-auto text-center leading-relaxed">
-          ★ Signature Selection — addresses recommended as a priority for ultra-premium private
-          clients. All tables, provisioning and private chefs arranged on request through your
-          concierge.
-        </p>
+      <div className="bg-[#26272a] border-t border-[#C0C0C0]/10 px-6 md:px-14 py-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="flex items-center justify-center gap-2 text-sm md:text-base uppercase tracking-[0.18em] text-[#B87333] font-medium mb-2">
+            <span aria-hidden className="text-[#c2622a]">◆</span>
+            Signature Selection
+          </p>
+          <p className="text-[11px] text-[#7a8094] leading-relaxed">
+            Addresses recommended as a priority for ultra-premium private clients. All tables,
+            provisioning and private chefs arranged on request through your concierge.
+          </p>
+        </div>
       </div>
 
       <div className="py-14 flex justify-center">

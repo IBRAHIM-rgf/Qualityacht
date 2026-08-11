@@ -7,9 +7,10 @@ export const metadata = {
     'Carnivals, regattas, heritage feasts and the great social calendars of the world — a curated reference for private yacht clients, destination by destination.',
 };
 
-const HERO_IMAGE = (media({ cat: 'aerial', role: 'hero-bg', kind: 'image' }).find((m) => (m.tags || []).includes('island'))
-  || media({ cat: 'aerial', role: 'hero-bg', kind: 'image' })[0])?.src
-  || '/media/quality/aerial/golden-pearvilla-wzj0ewkvche-unsplash.jpg';
+// Baie + voiliers vue du ciel : pas de photo Grand Prix de Monaco disponible dans le
+// stock (aucune trouvee, ni telechargeable depuis ici) -> autre vue drone, cohérente
+// avec le contenu regates du calendrier events.
+const HERO_IMAGE = '/media/quality/aerial/hugh-whyte-k3abfa6ayzy-unsplash.jpg';
 
 // Meme landing generique que /art-culture, /fine-food-dining et /historic-sites : hero +
 // intro + les 16 destinations, seules les Caraibes ouvertes pour l'instant.
