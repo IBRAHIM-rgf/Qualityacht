@@ -148,17 +148,17 @@ export function RegionGroupCard({ region }) {
             return (
               <div key={island.name} className={`${PANEL_BOX} p-3 space-y-2`}>
                 <div className="flex items-start justify-between gap-2">
-                  <h4 className="trajan-regular text-[13px] md:text-sm uppercase tracking-[0.08em] text-[#acb0cd] leading-snug">
+                  <h4 className="trajan-regular text-base md:text-lg uppercase tracking-[0.08em] text-[#acb0cd] leading-snug">
                     {island.name}
                   </h4>
                   <span className={DATE_PILL}>{island.season}</span>
                 </div>
-                <p className="text-[12px] md:text-[13px] leading-relaxed text-[#acb0cd]/85">
+                <p className="text-sm md:text-base leading-relaxed text-[#acb0cd]/85">
                   <span className={`${TAG} mr-2 align-middle`}>Riding</span>
                   {island.riding}
                 </p>
                 {hasRacing && (
-                  <p className="text-[12px] md:text-[13px] leading-relaxed text-[#acb0cd]/85">
+                  <p className="text-sm md:text-base leading-relaxed text-[#acb0cd]/85">
                     <span className={`${TAG} mr-2 align-middle`}>Racing</span>
                     {island.racing}
                   </p>
