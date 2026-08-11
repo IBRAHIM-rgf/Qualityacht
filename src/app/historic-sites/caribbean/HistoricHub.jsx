@@ -70,14 +70,17 @@ export default function HistoricHub({ panels, columns }) {
         </div>
       </div>
 
-      {/* CONTENU REVELE — la section active, pleine largeur */}
-      <div
-        className={`overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          activeColumn ? 'max-h-[10000px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        {activeColumn && <ExperienceColumns columns={[activeColumn]} />}
-      </div>
+      {/* CONTENU REVELE — la section active, pleine largeur. Pas de transition sur
+          max-height (anime une hauteur enorme + montage simultane de 20 images =
+          lag) : simple fondu/translation courts sur le contenu deja monte. */}
+      {activeColumn && (
+        <div key={activeColumn.key} className="animate-[hubFadeIn_400ms_ease-out]">
+          <style>{`
+            @keyframes hubFadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+          `}</style>
+          <ExperienceColumns columns={[activeColumn]} />
+        </div>
+      )}
     </div>
   );
 }

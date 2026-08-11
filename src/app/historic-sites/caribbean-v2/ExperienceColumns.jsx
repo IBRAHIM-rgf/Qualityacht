@@ -34,7 +34,7 @@ function Tile({ item, index, fallbackImg }) {
         alt={item.name}
         fill
         sizes="(max-width:768px) 100vw, 33vw"
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
+        className="object-cover saturate-[1.55] contrast-[1.15] brightness-[1.04] transition-transform duration-700 group-hover:scale-105"
       />
 
       {/* voile bas pour lisibilite du nom */}
@@ -81,7 +81,7 @@ function HikeTile({ item, index, fallbackImg }) {
           alt={item.name}
           fill
           sizes="(max-width:768px) 100vw, 33vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          className="object-cover saturate-[1.55] contrast-[1.15] brightness-[1.04] transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#26272a]/92 via-[#26272a]/10 to-transparent" />
         {item.isNew && (
@@ -140,7 +140,7 @@ function MonumentTile({ item, index, fallbackImg }) {
           alt={item.name}
           fill
           sizes="(max-width:768px) 100vw, 33vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          className="object-cover saturate-[1.55] contrast-[1.15] brightness-[1.04] transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#26272a]/92 via-[#26272a]/10 to-transparent" />
         <figcaption className="absolute inset-x-0 bottom-0 p-4">
@@ -233,11 +233,6 @@ export default function ExperienceColumns({ columns }) {
                 <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-[#acb0cd]/45">
                   {col.subtitle}
                 </p>
-              )}
-              {col.placeholder && (
-                <span className="mt-3 inline-block px-3 py-1 rounded-full border border-[#C0C0C0]/30 text-[9px] uppercase tracking-[0.2em] text-[#acb0cd]/60">
-                  Placeholder — à compléter
-                </span>
               )}
             </header>
 
