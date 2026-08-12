@@ -61,6 +61,11 @@ coverage/
 texte.json
 texte.txt
 
+# Medias du trieur : outil LOCAL uniquement, jamais en ligne (trop lourd pour Vercel)
+public/media/quality/
+src/app/media-trieur/
+src/app/api/media-trieur/
+
 # Claude temporary files
 tmpclaude-*-cwd
 .claude/
