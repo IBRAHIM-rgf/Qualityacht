@@ -12,10 +12,8 @@ export const metadata = {
 // Hero repris du traitement des pages theme (object-cover + degrade bas + titre en
 // surimpression), puis la carte monde a la place de la grille de destinations : ici la
 // carte EST la navigation.
-// Hero drone (vue aerienne) — differente de la page Caraibes.
-const HERO_IMAGE = (media({ cat: 'aerial', role: 'hero-bg', kind: 'image' })[1]
-  || media({ cat: 'aerial', role: 'hero-bg', kind: 'image' })[0])?.src
-  || '/images/new/FB_IMG_1749967381497.jpg';
+// Hero drone (vue aerienne) — resort/villas + plage + lagon turquoise.
+const HERO_IMAGE = '/media/quality/aerial/antonio-araujo-FGICco5i988-unsplash.jpg';
 
 export default function HotelPalacePage() {
   return (

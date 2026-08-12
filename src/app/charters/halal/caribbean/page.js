@@ -1,7 +1,7 @@
 import CaribbeanV15Page from '../../destinations/caribbean-v15/page';
 import HalalLateralScroll from './HalalLateralScroll';
 import MouseExpandPanels from '@/components/vibe/MouseExpandPanels';
-import { media, one } from '@/lib/quality-media';
+import { one } from '@/lib/quality-media';
 
 // Panneaux "COMO" (s'etendent selon la souris) — experiences halal Caraibes.
 // Ordre voulu par le client : Set Sail, Turquoise Waters, Private Anchorages, Family
@@ -41,13 +41,12 @@ const NATIONAL_FLOWERS = [
 // 1 photo = 1 slide du rail. La 1re est a cote du texte, les suivantes defilent avec la
 // colonne texte laissee libre.
 // Nouvelles photos du slide lateral : halal-friendly (portrait), depuis le manifeste.
-// Les 2 premieres sont fixees (choix client) ; le reste complete depuis le manifeste.
-const HALAL_PORTRAIT = media({ cat: 'halal', kind: 'image', orientation: 'portrait' }).map((m) => m.src);
+// Les 3 sont fixees (choix client).
 const PHOTOS = [
-  '/media/quality/halal/pexels-harmoniapictura-9398148.jpg',
+  '/media/quality/halal/quan-nguyen-h8ad4l3ugdu-unsplash.jpg',
   '/media/quality/halal/pexels-iliusia-tagieva-43381791-32594560.jpg',
-  ...HALAL_PORTRAIT.filter((s) => !s.includes('harmoniapictura') && !s.includes('iliusia-tagieva')),
-].slice(0, 3);
+  '/media/quality/halal/jay-kudva-xt2rvbbo6ui-unsplash.jpg',
+];
 
 // Texte affiche A COTE de la 1re photo du rail horizontal.
 // NB : les marqueurs de source du texte fourni ([luxurylondon.co], [lansdowneclub])

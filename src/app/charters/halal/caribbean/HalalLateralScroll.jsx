@@ -45,7 +45,7 @@ function Photo({ src, alt, priority = false, boost = false }) {
 function TextBlock({ item }) {
   if (!item) return <div aria-hidden />;
   return (
-    <div className="flex h-full flex-col justify-center">
+    <div className="flex h-full flex-col items-center justify-center text-center">
       <div className="max-w-lg">
         {item.title && (
           <>
