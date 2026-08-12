@@ -8,7 +8,12 @@ import { media } from '@/lib/quality-media';
 import VibeCard from '@/components/vibe/VibeCard';
 import FloatingScatter, { StatChip, Pill } from '@/components/vibe/FloatingScatter';
 
-const H = media({ cat: 'horses', kind: 'image' });
+// La section "Islands by Region" (page.js) consomme deja les 8 photos horses en
+// commencant a l'index 0 (une par tuile de region). Ici on repart apres cette
+// plage pour ne pas reafficher les memes chevaux — avec 13 images au total,
+// les 6 cartes Eclat prennent les index 8..12 puis 6..7 (jamais 0..7).
+const ALL = media({ cat: 'horses', kind: 'image' });
+const H = ALL.length ? Array.from({ length: 6 }, (_, i) => ALL[8 + (i % Math.max(1, ALL.length - 8))]) : [];
 const P = (m, label, accent, aspect = 'aspect-[4/3]') => m && <VibeCard src={m.src} alt={m.desc} aspect={aspect} accent={accent} label={label} />;
 
 const cards = [

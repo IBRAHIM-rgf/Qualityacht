@@ -1282,6 +1282,70 @@ export const MEDIA = [
     ]
   },
   {
+    "cat": "horses",
+    "kind": "image",
+    "src": "/media/quality/horses/deepavali-gaind-C-K880krjWo-unsplash.jpg",
+    "orientation": "landscape",
+    "role": "hero-bg",
+    "score": 8.5,
+    "desc": "wild herd galloping along rocky turquoise shoreline",
+    "tags": [
+      "herd",
+      "action",
+      "turquoise",
+      "beach",
+      "wild"
+    ]
+  },
+  {
+    "cat": "horses",
+    "kind": "image",
+    "src": "/media/quality/horses/robglenister-horse-4475581_1920.jpg",
+    "orientation": "landscape",
+    "role": "card",
+    "score": 8,
+    "desc": "rider cantering bay horse through shallow beach water, dunes behind",
+    "tags": [
+      "action",
+      "splash",
+      "beach",
+      "rider",
+      "dynamic"
+    ]
+  },
+  {
+    "cat": "horses",
+    "kind": "image",
+    "src": "/media/quality/horses/jean-carlo-emer-NzR2dZAS7D0-unsplash.jpg",
+    "orientation": "landscape",
+    "role": "section-band",
+    "score": 7.5,
+    "desc": "lone horse splashing through calm sea at golden dusk",
+    "tags": [
+      "golden",
+      "calm",
+      "splash",
+      "silhouette",
+      "solitary"
+    ]
+  },
+  {
+    "cat": "horses",
+    "kind": "image",
+    "src": "/media/quality/horses/rebeccaspictures-horse-1722416_1920.jpg",
+    "orientation": "portrait",
+    "role": "activity",
+    "score": 7.5,
+    "desc": "silhouette of rider and horse cantering through water at sunset",
+    "tags": [
+      "silhouette",
+      "sunset",
+      "splash",
+      "dramatic",
+      "action"
+    ]
+  },
+  {
     "cat": "cycling",
     "kind": "image",
     "src": "/media/quality/cycling/alex-azabache-v83v-myb-z8-unsplash.jpg",
