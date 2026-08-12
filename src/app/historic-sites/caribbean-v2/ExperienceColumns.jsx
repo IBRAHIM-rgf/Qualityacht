@@ -169,11 +169,21 @@ function MonumentTile({ item, index, fallbackImg }) {
   );
 }
 
+// Repartit les items d'une seule categorie en 3 sous-colonnes (facon Badrutt),
+// pour que le contenu revele sous une tuile HistoricHub reprenne exactement la
+// disposition de v2 : 3 colonnes cote a cote, decalage vertical, trait de separation.
+function splitInThree(items) {
+  const cols = [[], [], []];
+  items.forEach((item, i) => cols[i % 3].push(item));
+  return cols;
+}
+
 export default function ExperienceColumns({ columns }) {
   const rootRef = useRef(null);
-  // Une seule colonne (cf. HistoricHub : contenu d'une tuile revele sous elle) : plus de
-  // mise en page "3 colonnes cote a cote" (qui coincerait tout dans 1/3 de la largeur) —
-  // grille de cards pleine largeur, centree, plusieurs par ligne.
+  // Une seule categorie (cf. HistoricHub : contenu d'une tuile revele sous elle) :
+  // on reprend la disposition v2 a l'identique en repartissant ses items sur 3
+  // sous-colonnes (decalage vertical + trait de separation), sans re-afficher
+  // l'en-tete de colonne (deja porte par la tuile cliquee au-dessus).
   const single = columns.length === 1;
 
   useEffect(() => {
@@ -213,40 +223,83 @@ export default function ExperienceColumns({ columns }) {
         .reveal.is-visible { opacity: 1; transform: translateY(0); }
       `}</style>
 
-      <div className={single ? 'max-w-7xl mx-auto' : 'grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7 max-w-7xl mx-auto'}>
-        {columns.map((col, ci) => (
-          <section
-            key={col.key}
-            className={single ? 'flex flex-col items-center' : `flex flex-col gap-6 md:gap-7 ${OFFSET[ci] || ''} ${
-              ci > 0 ? 'md:border-l md:border-[#C0C0C0]/10 md:pl-6 lg:pl-7' : ''
-            }`}
-          >
-            {/* En-tete de colonne */}
-            <header className="reveal flex flex-col items-center text-center mb-8 md:mb-10">
-              <h2 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.14em] text-[#C0C0C0]">
-                {col.title}
-              </h2>
-              <div className="relative w-24 md:w-28 h-5 mt-2">
-                <Image src="/images/title-line.png" alt="" fill className="object-contain" />
-              </div>
-              {col.subtitle && (
-                <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-[#acb0cd]/45">
-                  {col.subtitle}
-                </p>
-              )}
-            </header>
+      {single ? (
+        <div className="max-w-7xl mx-auto">
+          {columns.map((col) => {
+            const subCols = splitInThree(col.items);
+            return (
+              <div key={col.key}>
+                <header className="reveal flex flex-col items-center text-center mb-8 md:mb-10">
+                  <h2 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.14em] text-[#C0C0C0]">
+                    {col.title}
+                  </h2>
+                  <div className="relative w-24 md:w-28 h-5 mt-2">
+                    <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+                  </div>
+                  {col.subtitle && (
+                    <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-[#acb0cd]/45">
+                      {col.subtitle}
+                    </p>
+                  )}
+                </header>
 
-            <div className={single ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 w-full' : 'contents'}>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
+                  {subCols.map((items, sci) => {
+                    const subOffset = subCols.slice(0, sci).reduce((n, c) => n + c.length, 0);
+                    return (
+                      <section
+                        key={sci}
+                        className={`flex flex-col gap-6 md:gap-7 ${OFFSET[sci] || ''} ${
+                          sci > 0 ? 'md:border-l md:border-[#C0C0C0]/10 md:pl-6 lg:pl-7' : ''
+                        }`}
+                      >
+                        {items.map((item, i) => {
+                          const fb = SUBREGION_PHOTOS[(subOffset + i) % SUBREGION_PHOTOS.length];
+                          if (col.variant === 'hike') return <HikeTile key={item.name} item={item} index={i} fallbackImg={fb} />;
+                          if (col.variant === 'monument') return <MonumentTile key={item.name} item={item} index={i} fallbackImg={fb} />;
+                          return <Tile key={item.name} item={item} index={i} fallbackImg={fb} />;
+                        })}
+                      </section>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7 max-w-7xl mx-auto">
+          {columns.map((col, ci) => (
+            <section
+              key={col.key}
+              className={`flex flex-col gap-6 md:gap-7 ${OFFSET[ci] || ''} ${
+                ci > 0 ? 'md:border-l md:border-[#C0C0C0]/10 md:pl-6 lg:pl-7' : ''
+              }`}
+            >
+              <header className="reveal flex flex-col items-center text-center mb-8 md:mb-10">
+                <h2 className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.14em] text-[#C0C0C0]">
+                  {col.title}
+                </h2>
+                <div className="relative w-24 md:w-28 h-5 mt-2">
+                  <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+                </div>
+                {col.subtitle && (
+                  <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-[#acb0cd]/45">
+                    {col.subtitle}
+                  </p>
+                )}
+              </header>
+
               {col.items.map((item, i) => {
                 const fb = SUBREGION_PHOTOS[(colOffset[ci] + i) % SUBREGION_PHOTOS.length];
                 if (col.variant === 'hike') return <HikeTile key={item.name} item={item} index={i} fallbackImg={fb} />;
                 if (col.variant === 'monument') return <MonumentTile key={item.name} item={item} index={i} fallbackImg={fb} />;
                 return <Tile key={item.name} item={item} index={i} fallbackImg={fb} />;
               })}
-            </div>
-          </section>
-        ))}
-      </div>
+            </section>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
