@@ -25,14 +25,35 @@ const PROPERTIES = [
 ].map((p, i) => ({ ...p, img: RE_POOL[i % RE_POOL.length] }));
 
 
+const HERO_TRIPTYCH = [
+  '/media/quality/real-estate/real-estate-1.mp4',
+  '/media/quality/real-estate/real-estate-2.mp4',
+  '/media/quality/real-estate/real-estate-3.mp4',
+];
+
 export default function RealEstatePage() {
   return (
     <main className="bg-[#26272a] text-[#acb0cd]">
-      {/* Intro texte (plus aucune photo — la navigation se fait sur la planisphere) */}
-      <section className="px-6 md:px-14 pt-28 md:pt-32 pb-6 text-center">
-        <p className="text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-[#B87333] font-medium mb-3">A Global Portfolio</p>
-        <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">Real Estate</h1>
-        <p className="max-w-2xl mx-auto mt-5 text-[13px] md:text-base text-[#acb0cd] leading-relaxed">
+      {/* HERO — 3 videos cote a cote (remplit la largeur, pas de vide lateral) */}
+      <section className="relative pt-[70px] md:pt-0 h-[62vh] md:h-[85vh] bg-[#26272a] overflow-hidden grid grid-cols-3 gap-[2px]">
+        {HERO_TRIPTYCH.map((src) => (
+          // eslint-disable-next-line jsx-a11y/media-has-caption
+          <video key={src} src={src} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+        ))}
+        <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
+        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+            A Global Portfolio
+          </p>
+          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
+            Real Estate
+          </h1>
+        </div>
+      </section>
+
+      {/* Intro texte */}
+      <section className="px-6 md:px-14 pt-12 md:pt-16 pb-6 text-center">
+        <p className="max-w-2xl mx-auto text-[13px] md:text-base text-[#acb0cd] leading-relaxed">
           A curated map of the addresses that hold their rank — introductions arranged by concierge.
         </p>
       </section>
@@ -43,6 +64,8 @@ export default function RealEstatePage() {
         kicker="A Global Portfolio"
         title="Where The World Lives Best"
         intro="From St-Barth to Monaco, Mustique to Aspen — a curated map of the addresses that hold their rank. Editorial selection; introductions arranged by concierge."
+        hideCards
+        hidePins
       />
     </main>
   );

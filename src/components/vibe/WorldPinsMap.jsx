@@ -21,6 +21,12 @@ export default function WorldPinsMap({
   // between : noeud React insere ENTRE la carte et les cards (ex. filtres, cf.
   // /events/caribbean). Defaut null = aucune regression ailleurs.
   between = null,
+  // hideCards : masque la grille de cards sous la carte (ex. real-estate, ou seuls
+  // les pins + tooltip au clic suffisent). Defaut false = comportement inchange ailleurs.
+  hideCards = false,
+  // hidePins : n'ajoute aucun marqueur sur la carte (ex. real-estate sans navigation
+  // par pin). Defaut false = comportement inchange ailleurs.
+  hidePins = false,
 }) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -63,6 +69,7 @@ export default function WorldPinsMap({
     const map = L.map(mapRef.current, { center, zoom, scrollWheelZoom: false, worldCopyJump: true, minZoom: 2 });
     mapInstance.current = map;
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap © CARTO', maxZoom: 19 }).addTo(map);
+    if (hidePins) { const t = setTimeout(() => map.invalidateSize(), 150); return () => clearTimeout(t); }
     items.forEach((it, i) => {
       const m = L.marker(it.coords, { icon: makeIcon(false) }).addTo(map)
         .bindTooltip(it.name, { direction: 'top', offset: [0, -6], className: 'wp-label' });
@@ -102,6 +109,7 @@ export default function WorldPinsMap({
 
         {between}
 
+        {!hideCards && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 mt-8">
           {items.map((it, i) => (
             <button key={i} onClick={() => setActive(i)}
@@ -120,6 +128,7 @@ export default function WorldPinsMap({
             </button>
           ))}
         </div>
+        )}
       </div>
     </section>
   );

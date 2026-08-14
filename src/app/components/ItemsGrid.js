@@ -12,6 +12,7 @@ export default function ItemsGrid({
   imageWrapperClassName = "h-48",
   heroImage = null,
   heroVideo = null,
+  heroTriptych = null,
   intro = null,
 }) {
   // Reveal-up : meme effet de glissement vers le haut que sur caribbean-v15.
@@ -29,13 +30,24 @@ export default function ItemsGrid({
         .reveal-up.revealed { opacity: 1; transform: translateY(0); }
       `}</style>
 
-      {/* Hero optionnel : image ou video pleine largeur + titre en overlay qui glisse vers le haut */}
-      {(heroImage || heroVideo) && (
+      {/* Hero optionnel : image, video pleine largeur, ou triptyque de 3 videos cote a
+          cote (heroTriptych, pour les videos verticales/etroites qui laisseraient trop
+          de vide lateral en single video) + titre en overlay qui glisse vers le haut */}
+      {(heroImage || heroVideo || heroTriptych) && (
         <div className="relative w-full pt-[70px] md:pt-0 bg-[#26272a]">
-          <div className="relative w-full h-[45vh] md:h-[60vh] overflow-hidden">
-            {heroVideo ? (
+          <div className={`relative w-full overflow-hidden ${
+            heroTriptych ? 'h-[62vh] md:h-[85vh] grid grid-cols-3 gap-[2px]' :
+            heroVideo ? 'max-h-[86vh] bg-[#26272a] flex items-center justify-center' :
+            'h-[62vh] md:h-[85vh]'
+          }`}>
+            {heroTriptych ? (
+              heroTriptych.map((src) => (
+                // eslint-disable-next-line jsx-a11y/media-has-caption
+                <video key={src} src={src} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+              ))
+            ) : heroVideo ? (
               // eslint-disable-next-line jsx-a11y/media-has-caption
-              <video src={heroVideo} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: '50% 30%' }} />
+              <video src={heroVideo} autoPlay muted loop playsInline className="block w-full h-auto max-h-[86vh] object-contain" />
             ) : (
               <Image src={heroImage} alt={title} fill priority className="object-cover" sizes="100vw" />
             )}

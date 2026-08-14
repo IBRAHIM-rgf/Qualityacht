@@ -79,8 +79,21 @@ export default function CaribbeanAccessibilityGuide() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
 
+      {/* ══ HERO VIDEO — video entiere, aucun crop ══ */}
+      <div className="relative w-full pt-[70px] md:pt-0 bg-[#26272a] max-h-[86vh] overflow-hidden flex items-center justify-center">
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+        <video
+          src="/media/quality/video/hero-accessible-caribbean.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="block w-full h-auto max-h-[86vh] object-contain"
+        />
+      </div>
+
       {/* ══ MASTHEAD ══ */}
-      <div className="bg-[#1b223d] border-b border-[#B87333]/30 px-6 md:px-14 pt-28 md:pt-32 pb-10">
+      <div className="border-b border-[#B87333]/30 px-6 md:px-14 pt-14 md:pt-16 pb-10 flex flex-col items-center text-center">
         <Image src="/images/logoFondTrans.png" alt="Qualityacht" width={60} height={60} priority className="rounded-full mb-6" />
         <div className="w-7 h-px bg-[#B87333] mb-5" />
         <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
@@ -90,11 +103,11 @@ export default function CaribbeanAccessibilityGuide() {
           Onboard Accessibility<br />Coordination Guide
         </h1>
 
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-3 mt-7 pt-6 border-t border-white/10">
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-7 pt-6 border-t border-white/10 w-full">
           <Legend dot={BOARDING.req.dot} label="Dedicated companion required" />
           <Legend dot={BOARDING.rec.dot} label="Companion strongly advised" />
           <Legend dot={BOARDING.ok.dot}  label="Independent boarding" />
-          <span className="text-[11px] text-[#6f7585] md:ml-auto">Each charter assessed individually by our medical coordinator.</span>
+          <span className="text-[11px] text-[#6f7585]">Each charter assessed individually by our medical coordinator.</span>
         </div>
       </div>
 

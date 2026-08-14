@@ -10,7 +10,7 @@ import { destinations } from '../charters/destinationsData';
 // /historic-sites et /horses-riding ont ainsi exactement le meme traitement.
 const HERO_BOOST = 'saturate-[1.4] contrast-[1.1] brightness-[1.03]';
 
-export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false, animated = false, hideHeroText = false, heroGradientSoft = false }) {
+export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false, animated = false, hideHeroText = false, heroGradientSoft = false, heroZoomDuration = '9s' }) {
   // heroGradientSoft : degrade plus leger (photo deja sombre au premier plan, cf.
   // /historic-sites : arche du Taj Mahal). Defaut = degrade d'origine partout ailleurs.
   const heroGradient = (
@@ -34,7 +34,7 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
       <style>{`
         .hero-rise { opacity: 0; animation: heroRise 2.2s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
         @keyframes heroRise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: translateY(0); } }
-        .hero-zoom { animation: heroZoom 18s ease-in-out infinite alternate; will-change: transform; }
+        .hero-zoom { animation: heroZoom var(--hz, 18s) ease-in-out infinite alternate; will-change: transform; }
         @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
         .theme-float { animation: themeFloat var(--tf, 6s) ease-in-out infinite alternate; will-change: transform; }
         @keyframes themeFloat { from { transform: translateY(-9px); } to { transform: translateY(9px); } }
@@ -57,7 +57,7 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
         </section>
       ) : (
         <section className={`relative pt-[70px] md:pt-0 overflow-hidden ${animated ? 'h-[60vh] md:h-[82vh]' : 'h-[58vh] md:h-[78vh]'}`}>
-          <Image src={heroImage} alt={title} fill priority sizes="100vw" className={`object-cover object-center ${HERO_BOOST} ${animated ? 'hero-zoom' : ''}`} />
+          <Image src={heroImage} alt={title} fill priority sizes="100vw" style={animated ? { '--hz': heroZoomDuration } : undefined} className={`object-cover object-center ${HERO_BOOST} ${animated ? 'hero-zoom' : ''}`} />
           {heroGradient}
           {!hideHeroText && heroOverlay}
         </section>
