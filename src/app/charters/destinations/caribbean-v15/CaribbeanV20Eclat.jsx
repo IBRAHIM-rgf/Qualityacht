@@ -7,22 +7,18 @@
 // turquoise — PAS de cheval ni carnaval, on est un site de YACHT) + 2 VIDEOS
 // HORIZONTALES (dauphins + drone turquoise). Puis le 2e BANDEAU video beach-band.
 
-import { media, one } from '@/lib/quality-media';
 import VibeCard from '@/components/vibe/VibeCard';
 import FloatingScatter from '@/components/vibe/FloatingScatter';
 import { VideoBand } from '@/components/vibe/blocks';
 
-const I = (f) => media({ ...f, kind: 'image' });
-
-// medias — 100% yacht / mer / plage turquoise
-const photoAerial = I({ cat: 'aerial', role: 'hero-bg' })[0];        // crique turquoise vue du ciel
-const photoLagoon = I({ cat: 'beach', role: 'hero-bg' })[0];         // lagon turquoise
-const photoDock = I({ cat: 'beach', role: 'card' })[0];              // ponton / crique
-const photoYacht = I({ cat: 'boats', role: 'section-band' })[0];     // yachts en baie turquoise
-const vidDolphin = one({ cat: 'aerial', kind: 'video', role: 'card', orientation: 'landscape' }); // dauphins
-const vidTurq = media({ cat: 'aerial', kind: 'video', role: 'card', orientation: 'portrait' })[1]
-  || media({ cat: 'aerial', kind: 'video', role: 'card', orientation: 'portrait' })[0];            // drone turquoise + voiliers
-const treeBand = one({ cat: 'beach', kind: 'video', role: 'section-band' });                       // beach-band (arbre bord de mer)
+// medias — fichiers dedies, inedits ailleurs sur le site (100% yacht / mer / plage turquoise)
+const photoAerial = { src: '/media/quality/eclat-v15/aerial-coves.jpg', desc: 'Aerial beach club, palms and turquoise shallows' };
+const photoLagoon = { src: '/media/quality/eclat-v15/lagoon-sands.jpg', desc: 'Palm frond framing powder-white sands' };
+const photoDock = { src: '/media/quality/eclat-v15/hidden-anchorages.jpg', desc: 'Hidden lagoon anchorage with tender' };
+const photoYacht = { src: '/media/quality/eclat-v15/sail-away.jpg', desc: 'Tender adrift on crystal-clear water' };
+const vidDolphin = { src: '/media/quality/eclat-v15/dolphins.mp4', poster: '/media/quality/eclat-v15/dolphins.jpg' };
+const vidTurq = { src: '/media/quality/eclat-v15/at-anchor.mp4', poster: '/media/quality/eclat-v15/at-anchor.jpg' };
+const treeBand = { src: '/media/quality/eclat-v15/sunset-band.mp4', poster: '/media/quality/eclat-v15/sunset-band.jpg' };
 
 // carte texte (meme allure qu'une carte photo)
 function TextCard({ kicker, children }) {

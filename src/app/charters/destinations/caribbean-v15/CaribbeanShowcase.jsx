@@ -110,79 +110,102 @@ function Pill({ children }) {
 }
 
 // ── Definition des cartes ─────────────────────────────────────────────────────
-// pos : positionnement absolu (desktop lg+). depth : facteur parallax (px, signe
-// = sens). fd : duree du flottement. d : delai reveal (cascade). ox/oy : offset
-// d'arrivee du reveal. render : contenu.
+// pos : positionnement absolu (desktop lg+, = position FINALE exterieure). depth :
+// facteur parallax (px, signe = sens). fd : duree du flottement. d : delai reveal
+// (cascade). L'offset de depart du reveal est calcule en JS = vecteur vers le CENTRE,
+// pour que chaque carte JAILLISSE du milieu vers sa position exterieure.
 const CARDS = [
   {
     key: 'cocomer',
-    pos: { left: '1.5%', top: '5%', width: '210px' },
-    depth: 42, fd: '7s', d: 60, ox: '-46px', oy: '-26px',
-    render: <PhotoCard src="/images/pagesCaraibes/cocomer-original.jpeg" alt="Caraibes" badge="St Barths" />,
+    pos: { left: '1.5%', top: '4%', width: '206px' },
+    depth: 42, fd: '7s', d: 60,
+    render: <PhotoCard src="/images/pagesCaraibes/st-barth.jpg" alt="St Barths" aspect="aspect-[3/4]" badge="St Barths" />,
   },
   {
     key: 'fleet',
-    pos: { left: '25.5%', top: '7%', width: '236px' },
-    depth: -32, fd: '6s', d: 150, ox: '0px', oy: '-42px',
+    pos: { left: '27%', top: '5%', width: '230px' },
+    depth: -32, fd: '6s', d: 150,
     render: <StatCard kicker="Luxury Fleet · Caribbean" big="182" unit="Yachts" label="Available this season" heights={[45, 62, 40, 78, 55, 92]} />,
   },
   {
     key: 'aerial',
-    pos: { right: '4%', top: '1%', width: '312px' },
-    depth: 58, fd: '8.5s', d: 110, ox: '46px', oy: '-30px',
-    render: <AerialCard src="/images/pagesCaraibes/st-barth.jpg" alt="Vue aerienne Caraibes" kicker="Guest satisfaction" big="9.4" unit="/10" heights={[50, 70, 45, 85, 60, 95]} />,
+    pos: { right: '4%', top: '0%', width: '300px' },
+    depth: 58, fd: '8.5s', d: 110,
+    render: <AerialCard src="/media/quality/aerial/ishan-seefromthesky-rj8fmhnpxbg-unsplash.jpg" alt="Vue aerienne Caraibes" kicker="Guest satisfaction" big="9.4" unit="/10" heights={[50, 70, 45, 85, 60, 95]} />,
   },
   {
     key: 'map',
-    pos: { right: '0.5%', top: '41%', width: '188px' },
-    depth: -46, fd: '6.5s', d: 300, ox: '52px', oy: '0px',
-    render: <LightCard src="/images/pagesCaraibes/carteCarab.jpeg" alt="Carte des Caraibes" aspect="aspect-[4/3]" label="700+ islands" imgClass="object-cover" />,
+    pos: { left: '2.5%', top: '49%', width: '188px' },
+    depth: 36, fd: '6.5s', d: 340,
+    render: <LightCard src="/images/pagesCaraibes/carteCarab.jpeg" alt="Carte des Caraibes" aspect="aspect-[4/3]" imgClass="object-cover" />,
   },
   {
-    key: 'yacht',
-    pos: { left: '2.5%', top: '52%', width: '198px' },
-    depth: 36, fd: '7.5s', d: 350, ox: '-52px', oy: '0px',
-    render: <LightCard src="/images/yachts/yacht1.jpeg" alt="Yacht" aspect="aspect-[4/3]" label="Crewed" imgClass="object-cover grayscale" />,
+    key: 'water-beach',
+    pos: { left: '21%', bottom: '3%', width: '240px' },
+    depth: -34, fd: '6.2s', d: 230,
+    render: <PhotoCard src="/media/quality/beach/pedro-monteiro-hfiex7qwtli-unsplash.jpg" alt="Plage et eau turquoise des Caraibes" aspect="aspect-[4/3]" badge="Turquoise waters" />,
   },
   {
     key: 'palms',
-    pos: { left: '24%', bottom: '3%', width: '232px' },
-    depth: -34, fd: '6s', d: 230, ox: '0px', oy: '44px',
-    render: <PhotoCard src="/images/pagesCaraibes/palmierscaraibes-original.jpeg" alt="Palmiers Caraibes" aspect="aspect-[4/3]" />,
+    pos: { right: '27%', bottom: '4%', width: '206px' },
+    depth: 30, fd: '6.8s', d: 270,
+    render: <PhotoCard src="/media/quality/beach/csaba-veres-cucsubbscku-unsplash.jpg" alt="Palmiers Caraibes" aspect="aspect-[4/3]" />,
   },
   {
     key: 'islands',
-    pos: { right: '7%', bottom: '2%', width: '250px' },
-    depth: 50, fd: '8s', d: 200, ox: '44px', oy: '42px',
+    pos: { right: '4%', bottom: '2%', width: '244px' },
+    depth: 50, fd: '8s', d: 200,
     render: <StatCard kicker="Cruising grounds" big="700" unit="+ islands" label="Across 26 nations" heights={[40, 55, 72, 48, 88, 66]} />,
   },
   {
     key: 'pill-concierge',
-    pos: { left: '19%', top: '31%', width: 'auto' },
-    depth: -20, fd: '5.5s', d: 420, ox: '-30px', oy: '0px',
+    pos: { left: '18%', top: '30%', width: 'auto' },
+    depth: -20, fd: '5.5s', d: 420,
     render: <Pill>24/7 concierge</Pill>,
   },
   {
     key: 'pill-countries',
-    pos: { right: '23%', bottom: '27%', width: 'auto' },
-    depth: 26, fd: '6.2s', d: 480, ox: '30px', oy: '0px',
+    pos: { right: '20%', bottom: '26%', width: 'auto' },
+    depth: 26, fd: '6.2s', d: 480,
     render: <Pill>26 countries</Pill>,
   },
 ];
 
-// Sous-ensemble affiche en grille sur mobile/tablette (< lg).
-const MOBILE_ORDER = ['cocomer', 'aerial', 'fleet', 'palms', 'map', 'islands'];
+// Sous-ensemble affiche en grille sur mobile/tablette (< lg) — inclut les cartes eau.
+const MOBILE_ORDER = ['cocomer', 'aerial', 'water-beach', 'fleet', 'palms', 'map', 'islands'];
 
 export default function CaribbeanShowcase() {
   const rootRef = useRef(null);
+  const scatterRef = useRef(null);
 
-  // REVEAL (IntersectionObserver, une fois) + PARALLAX (--p pilote par le scroll).
+  // REVEAL (jaillissement depuis le centre) + PARALLAX (--p pilote par le scroll).
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
     const reduce = typeof window !== 'undefined'
       && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    // Positionne chaque carte AU CENTRE au repos : offset de reveal = vecteur
+    // (position finale -> centre du conteneur). Au reveal, la carte revient a 0,0
+    // donc elle "jaillit" du milieu vers sa position exterieure. Invariant au
+    // scroll (carte et conteneur bougent ensemble), donc calculable a tout moment.
+    const computeCenters = () => {
+      const scatter = scatterRef.current;
+      if (!scatter) return;
+      const c = scatter.getBoundingClientRect();
+      if (!c.width) return; // masque (< lg) : rien a calculer
+      const cx = c.left + c.width / 2;
+      const cy = c.top + c.height / 2;
+      scatter.querySelectorAll('.cs-pos').forEach((pos) => {
+        const r = pos.getBoundingClientRect();
+        const card = pos.querySelector('.cs-card');
+        if (!card) return;
+        card.style.setProperty('--ox', (cx - (r.left + r.width / 2)).toFixed(1) + 'px');
+        card.style.setProperty('--oy', (cy - (r.top + r.height / 2)).toFixed(1) + 'px');
+      });
+    };
+    computeCenters();
 
     const io = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { root.classList.add('in'); io.disconnect(); } },
@@ -205,13 +228,14 @@ export default function CaribbeanShowcase() {
       root.style.setProperty('--p', p.toFixed(3));
     };
     const onScroll = () => { if (raf == null) raf = requestAnimationFrame(update); };
+    const onResize = () => { computeCenters(); onScroll(); };
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener('resize', onResize);
     return () => {
       io.disconnect();
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('resize', onResize);
       if (raf != null) cancelAnimationFrame(raf);
     };
   }, []);
@@ -223,8 +247,8 @@ export default function CaribbeanShowcase() {
         .cs-pos { position: absolute; }
         .cs-card {
           opacity: 0;
-          transform: translate(var(--ox, 0), var(--oy, 0)) scale(0.82);
-          transition: opacity 1.1s cubic-bezier(.16,1,.3,1), transform 1.2s cubic-bezier(.16,1,.3,1);
+          transform: translate(var(--ox, 0), var(--oy, 0)) scale(0.35);
+          transition: opacity 1.2s cubic-bezier(.16,1,.3,1), transform 1.5s cubic-bezier(.16,1,.3,1);
           transition-delay: var(--d, 0ms);
           will-change: transform, opacity;
         }
@@ -251,7 +275,7 @@ export default function CaribbeanShowcase() {
       </div>
 
       {/* ── SCATTER (desktop lg+) : cartes en absolu autour du centre ── */}
-      <div className="hidden lg:block absolute inset-0 z-10">
+      <div ref={scatterRef} className="hidden lg:block absolute inset-0 z-10">
         <div className="relative w-full h-full">
           {CARDS.map((c) => (
             <div
@@ -259,7 +283,8 @@ export default function CaribbeanShowcase() {
               className="cs-pos"
               style={{ ...c.pos, transform: `translateY(calc(var(--p) * ${c.depth}px))` }}
             >
-              <div className="cs-card" style={{ '--ox': c.ox, '--oy': c.oy, '--d': `${c.d}ms` }}>
+              {/* --ox/--oy (offset de depart vers le centre) sont injectes en JS */}
+              <div className="cs-card" style={{ '--d': `${c.d}ms` }}>
                 <div className="cs-float" style={{ '--fd': c.fd }}>
                   {c.render}
                 </div>
