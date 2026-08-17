@@ -5,7 +5,7 @@ import { destinations } from "../destinationsData";
 // (cf. meme pattern que /charters/accessible) ; ajouter les autres ici au fur et a
 // mesure (cle = titre exact dans destinationsData).
 const LAST_MINUTE_GUIDES = {
-  "Caraïbes": "/charters/last-minute/caribbean",
+  Caraïbes: "/charters/last-minute/caribbean",
 };
 
 const lastMinuteItems = destinations.map((d) =>
