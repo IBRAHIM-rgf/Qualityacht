@@ -1,4 +1,4 @@
-import CaribbeanV15Page from '../../destinations/caribbean-v15/page';
+import CaribbeanV15Page from '../../destinations/caribbean-v15/CaribbeanV15Base';
 import HalalLateralScroll from './HalalLateralScroll';
 import MouseExpandPanels from '@/components/vibe/MouseExpandPanels';
 import { one } from '@/lib/quality-media';

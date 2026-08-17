@@ -5,7 +5,7 @@
 //  - a la place de description/cocomer/ancienne showcase : introNode = l'ECLAT
 //    (collage de cartes : 4 textes + 4 photos + 2 videos horizontales, sans effet
 //    "tout part du centre") + le 2e bandeau video beach-band (arbre bord de mer).
-import CaribbeanV15Page from '../caribbean-v15/page';
+import CaribbeanV15Page from '../caribbean-v15/CaribbeanV15Base';
 import CaribbeanV20Eclat from './CaribbeanV20Eclat';
 import VideoHero from '@/components/vibe/VideoHero';
 import { one } from '@/lib/quality-media';

@@ -2,7 +2,7 @@
 // que la page Caraibes canonique, cf. /charters/destinations/caribbean), avec le hero
 // remplace par un triptyque de 3 videos cote a cote (heroNode) au lieu du hero video/
 // image d'origine.
-import CaribbeanV15Page from '../../destinations/caribbean-v15/page';
+import CaribbeanV15Page from '../../destinations/caribbean-v15/CaribbeanV15Base';
 import LastMinuteHero from './LastMinuteHero';
 
 export const metadata = {
@@ -19,6 +19,7 @@ export default function LastMinuteCaribbeanPage() {
       showShowcase
       showcaseBandVideo="/media/quality/last-minute/band-1.mp4"
       showcaseBandFull={false}
+      showDescription={false}
     />
   );
 }

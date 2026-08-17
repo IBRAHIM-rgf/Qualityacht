@@ -1,7 +1,7 @@
 // ══ Halal Caraibes V20 — VERSION 1 : conforme a la structure halal, nouveaux medias ══
 // Reprend la page halal (contenu caribbean-v15 + scroll lateral Mamounia) mais avec
 // de nouveaux medias halal-friendly (familles, mode pudique coloree) et un hero vif.
-import CaribbeanV15Page from '../../destinations/caribbean-v15/page';
+import CaribbeanV15Page from '../../destinations/caribbean-v15/CaribbeanV15Base';
 import HalalLateralScroll from '../caribbean/HalalLateralScroll';
 import { media, one } from '@/lib/quality-media';
 
