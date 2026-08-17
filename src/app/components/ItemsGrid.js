@@ -65,11 +65,11 @@ export default function ItemsGrid({
       )}
 
       <section
-        className={`relative ${(heroImage || heroVideo) ? "" : "min-h-screen justify-center"} flex flex-col items-center bg-cover bg-center bg-no-repeat py-24 px-4`}
+        className={`relative ${(heroImage || heroVideo || heroTriptych) ? "" : "min-h-screen justify-center"} flex flex-col items-center bg-cover bg-center bg-no-repeat py-24 px-4`}
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
         {/* Titre + ligne affichés seulement sans hero (sinon déjà dans le hero) */}
-        {!(heroImage || heroVideo) && (
+        {!(heroImage || heroVideo || heroTriptych) && (
           <>
             <h1 className="text-3xl md:text-5xl font-bold text-[#acb0cd] trajan-regular mb-4 text-center uppercase tracking-wide">
               {title}

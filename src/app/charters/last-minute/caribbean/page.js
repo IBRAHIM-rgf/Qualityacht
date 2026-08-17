@@ -12,5 +12,13 @@ export const metadata = {
 };
 
 export default function LastMinuteCaribbeanPage() {
-  return <CaribbeanV15Page heroTitle="Last-Minute Charter" heroNode={<LastMinuteHero />} showShowcase />;
+  return (
+    <CaribbeanV15Page
+      heroTitle="Last-Minute Charter"
+      heroNode={<LastMinuteHero />}
+      showShowcase
+      showcaseBandVideo="/media/quality/last-minute/band-1.mp4"
+      showcaseBandFull={false}
+    />
+  );
 }

@@ -659,6 +659,14 @@ export default function CaribbeanV15Page({
   // heroVideoContain=true : video ENTIERE visible (object-contain, jamais rognee/zoomee).
   // Defaut false = object-cover cadre en haut (object-top) : le sujet (nageur) reste visible.
   heroVideoContain = false,
+  // showcaseBandVideo : si fourni (avec showShowcase=true), ajoute un bandeau video pleine
+  // largeur juste APRES la section "cartes flottantes" (cf. /charters/last-minute/caribbean).
+  // Defaut null = aucune regression sur /charters/destinations/caribbean.
+  showcaseBandVideo = null,
+  // showcaseBandFull=false : bande a hauteur fixe (heightClass, object-cover) au lieu du
+  // ratio natif de la video (full) — utile pour une source portrait qui donnerait une bande
+  // trop haute en mode full. Defaut true = comportement full d'origine.
+  showcaseBandFull = true,
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
@@ -825,9 +833,18 @@ export default function CaribbeanV15Page({
             du cocomer. Sinon (defaut) : bandeau photo cocomer d'origine (masquable via
             showCocomer). Photo portrait affichee ENTIERE, pleine largeur (full + aspect). */}
         {showShowcase ? (
-          <CloudSection className="bg-[#26272a] py-16 md:py-24 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
-            <CaribbeanShowcase />
-          </CloudSection>
+          <>
+            <CloudSection className="bg-[#26272a] py-16 md:py-24 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
+              <CaribbeanShowcase />
+            </CloudSection>
+            {showcaseBandVideo && (
+              showcaseBandFull ? (
+                <BandeauPhoto full aspect="1920 / 1080" videoSrc={showcaseBandVideo} />
+              ) : (
+                <BandeauPhoto heightClass="h-[45vh] md:h-[70vh]" videoSrc={showcaseBandVideo} />
+              )
+            )}
+          </>
         ) : showCocomer ? (
           <BandeauPhoto
             src={cocomerSrc || '/images/pagesCaraibes/cocomer.jpeg'}
