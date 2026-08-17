@@ -32,7 +32,7 @@ export default function LastMinuteHero() {
         <video key={src} src={src} autoPlay muted loop playsInline className="w-full h-full object-cover" />
       ))}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
-      <div className="absolute inset-x-0 flex flex-col items-center px-4 top-[46%]">
+      <div className="absolute inset-x-0 flex flex-col items-center px-4 bottom-[8%] md:bottom-[10%]">
         <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
           <h1 className="trajan-regular text-4xl md:text-6xl lg:text-7xl uppercase tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             Last-Minute Charter
