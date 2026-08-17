@@ -33,6 +33,7 @@ export default function CaribbeanV15RoutePage() {
           kicker="Qualityacht · Caribbean"
           title="The Caribbean"
           subtitle="The Ultimate Luxury Yachting Destination"
+          align="bottom"
         />
       }
       showShowcase={false}
