@@ -82,6 +82,18 @@ const CATEGORY_LABELS = CHARTER_CATEGORIES.reduce((acc, c) => {
   return acc;
 }, {});
 
+// Types de navire (mêmes clés que TYPE_MAP côté recherche Ankor, src/lib/yachts.js).
+const TYPE_LABELS = {
+  motor: 'Motor',
+  sailing: 'Sailing',
+  catamaran: 'Catamaran',
+  gulet: 'Gulet',
+  'power catamaran': 'Power Catamaran',
+  classic: 'Classic',
+  expedition: 'Expedition',
+  'sport fishing': 'Sport fishing',
+};
+
 // Parse robuste d'une valeur categories venant de la BDD (JSONB array, string, ou null).
 function parseCategories(raw) {
   if (Array.isArray(raw)) return raw;
@@ -339,23 +351,50 @@ function slugify(s) {
 
 function ManualAddTab({ onAdd }) {
   const emptyForm = {
-    name: '', length: '', guests: '', cabins: '', crew: '', price: '',
+    name: '', type: '', make: '', year: '', refit: '', location: '',
+    length: '', guests: '', cabins: '', crew: '', price: '',
     description: '', images: '', region: '', sub_region: '',
+    categories: [], handicaps: [],
+    pets_allowed: false, groups_allowed: false, water_toys: false,
+    extra_info: '', internal_notes: '',
   };
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const availableSubRegions = SUB_REGIONS_BY_REGION[form.region] || [];
-  const canSubmit = form.name.trim().length > 0 && !saving;
 
+  const hasCategory = (id) => form.categories.includes(id);
+  const toggleCategory = (id) => setForm((f) => ({
+    ...f,
+    categories: f.categories.includes(id) ? f.categories.filter((c) => c !== id) : [...f.categories, id],
+  }));
+
+  // ── Picker handicaps (catégorie → handicap, + bouton Ajouter) ──
+  const [hCat, setHCat] = useState('');
+  const [hType, setHType] = useState('');
+  const hOptions = HANDICAPS_BY_CAT.find((c) => c.id === hCat)?.items || [];
+  const addHandicap = () => {
+    if (!hType || form.handicaps.includes(hType)) return;
+    setForm((f) => ({ ...f, handicaps: [...f.handicaps, hType] }));
+    setHType('');
+  };
+  const removeHandicap = (id) => setForm((f) => ({ ...f, handicaps: f.handicaps.filter((h) => h !== id) }));
+
+  // Rien n'est obligatoire : un champ vide n'empêche jamais l'enregistrement.
   const submit = async () => {
-    if (!canSubmit) return;
+    if (saving) return;
     setSaving(true);
     try {
       const images = form.images.split('\n').map(s => s.trim()).filter(Boolean);
-      const yacht_id = `manual-${slugify(form.name) || 'yacht'}-${Date.now().toString(36)}`;
+      const name = form.name.trim() || 'Navire sans nom';
+      const yacht_id = `manual-${slugify(name) || 'yacht'}-${Date.now().toString(36)}`;
       await onAdd({
         yacht_id,
-        yacht_name: form.name.trim(),
+        yacht_name: name,
+        type: form.type || null,
+        make: form.make.trim() || null,
+        year: form.year ? Number(form.year) : null,
+        refit: form.refit ? Number(form.refit) : null,
+        location: form.location.trim() || null,
         images,
         length: form.length.trim() || null,
         guests: form.guests ? Number(form.guests) : null,
@@ -365,6 +404,13 @@ function ManualAddTab({ onAdd }) {
         description: form.description.trim() || null,
         region: form.region || null,
         sub_region: form.sub_region || null,
+        categories: form.categories,
+        handicaps: form.handicaps,
+        pets_allowed: form.pets_allowed,
+        groups_allowed: form.groups_allowed,
+        water_toys: form.water_toys,
+        extra_info: form.extra_info.trim() || null,
+        internal_notes: form.internal_notes.trim() || null,
       });
       setForm(emptyForm);
     } finally {
@@ -380,20 +426,58 @@ function ManualAddTab({ onAdd }) {
           <div>
             <h3 className="trajan-regular text-base uppercase tracking-wider text-[#C0C0C0] mb-1">Ajouter un navire manuellement</h3>
             <p className="text-sm text-[#acb0cd]/70">
-              Pour un bateau hors catalogue Ankor. Il est créé « en stock » (masqué) — publie-le ensuite depuis
-              l'onglet <strong>Mes bateaux en BDD</strong>, puis complète titre/description/catégories via l'édition.
+              Pour un bateau hors catalogue Ankor. Tous les champs sont facultatifs — laisse vide ce que tu ne connais pas
+              encore, tu pourras compléter plus tard. Il est créé « en stock » (masqué) — publie-le ensuite depuis
+              l'onglet <strong>Mes bateaux en BDD</strong>.
             </p>
           </div>
         </div>
 
+        {/* Identité */}
         <div className="grid sm:grid-cols-2 gap-3">
           <div className="sm:col-span-2">
-            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Nom du navire *</label>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Nom du navire</label>
             <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
               placeholder="Ex : Belle Étoile"
               className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
           </div>
 
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Type de navire</label>
+            <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd]">
+              <option value="">— Non renseigné —</option>
+              {Object.entries(TYPE_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Constructeur</label>
+            <input type="text" value={form.make} onChange={e => setForm({ ...form, make: e.target.value })}
+              placeholder="Ex : Sunseeker"
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Année de construction</label>
+            <input type="number" min="1900" max="2100" value={form.year} onChange={e => setForm({ ...form, year: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Année de refit</label>
+            <input type="number" min="1900" max="2100" value={form.refit} onChange={e => setForm({ ...form, refit: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+
+          <div className="sm:col-span-2">
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Port d'attache / Localisation</label>
+            <input type="text" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })}
+              placeholder="Ex : Gustavia, St-Barthélemy"
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+        </div>
+
+        {/* Caractéristiques */}
+        <div className="grid sm:grid-cols-2 gap-3 mt-3 pt-3 border-t border-[#C0C0C0]/10">
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Longueur</label>
             <input type="text" value={form.length} onChange={e => setForm({ ...form, length: e.target.value })}
@@ -406,7 +490,6 @@ function ManualAddTab({ onAdd }) {
               placeholder="Ex : 15 000 €/semaine"
               className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
           </div>
-
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Invités</label>
             <input type="number" min="0" value={form.guests} onChange={e => setForm({ ...form, guests: e.target.value })}
@@ -422,7 +505,10 @@ function ManualAddTab({ onAdd }) {
             <input type="number" min="0" value={form.crew} onChange={e => setForm({ ...form, crew: e.target.value })}
               className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
           </div>
+        </div>
 
+        {/* Région */}
+        <div className="grid sm:grid-cols-2 gap-3 mt-3 pt-3 border-t border-[#C0C0C0]/10">
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Région</label>
             <select value={form.region} onChange={e => setForm({ ...form, region: e.target.value, sub_region: '' })}
@@ -441,13 +527,15 @@ function ManualAddTab({ onAdd }) {
               </select>
             </div>
           )}
+        </div>
 
+        {/* Description + photos */}
+        <div className="grid sm:grid-cols-2 gap-3 mt-3 pt-3 border-t border-[#C0C0C0]/10">
           <div className="sm:col-span-2">
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Description</label>
             <textarea rows={3} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })}
               className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none resize-y" />
           </div>
-
           <div className="sm:col-span-2">
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Photos (une URL par ligne, la 1ère = photo principale)</label>
             <textarea rows={3} value={form.images} onChange={e => setForm({ ...form, images: e.target.value })}
@@ -456,8 +544,106 @@ function ManualAddTab({ onAdd }) {
           </div>
         </div>
 
+        {/* Catégories charter */}
+        <div className="mt-3 pt-3 border-t border-[#C0C0C0]/10">
+          <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Catégories charter</label>
+          <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-3">
+            {CHARTER_CATEGORIES.map((cat) => (
+              <div key={cat.id}>
+                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input type="checkbox" checked={hasCategory(cat.id)} onChange={() => toggleCategory(cat.id)} className="w-4 h-4 accent-[#B03E00]" />
+                  <span className={hasCategory(cat.id) ? 'text-[#B03E00] font-medium' : 'text-[#acb0cd]'}>{cat.label}</span>
+                </label>
+                {cat.subs && (
+                  <div className="mt-2 ml-6 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                    {cat.subs.map((sub) => (
+                      <label key={sub.id} className="flex items-center gap-2 text-xs cursor-pointer">
+                        <input type="checkbox" checked={hasCategory(sub.id)} onChange={() => toggleCategory(sub.id)} className="w-3.5 h-3.5 accent-[#B03E00]" />
+                        <span className={hasCategory(sub.id) ? 'text-[#B03E00]' : 'text-[#acb0cd]/80'}>{sub.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Handicaps accommodés */}
+        <div className="mt-3">
+          <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Handicaps accommodés</label>
+          <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-3">
+            <div className="grid sm:grid-cols-[1fr_1fr_auto] gap-2 items-end">
+              <div>
+                <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Catégorie</label>
+                <select value={hCat} onChange={e => { setHCat(e.target.value); setHType(''); }}
+                  className="w-full px-3 py-2 bg-[#2a2a30] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] text-sm">
+                  <option value="">— Choisir —</option>
+                  {HANDICAPS_BY_CAT.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Handicap</label>
+                <select value={hType} onChange={e => setHType(e.target.value)} disabled={!hCat}
+                  className="w-full px-3 py-2 bg-[#2a2a30] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] text-sm disabled:opacity-40">
+                  <option value="">— Choisir —</option>
+                  {hOptions.map(h => <option key={h.id} value={h.id}>{h.type}</option>)}
+                </select>
+              </div>
+              <button type="button" onClick={addHandicap} disabled={!hType}
+                className="px-4 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 disabled:opacity-40 text-sm font-medium flex items-center gap-1 whitespace-nowrap">
+                <Plus className="w-4 h-4" /> Ajouter
+              </button>
+            </div>
+            {form.handicaps.length === 0 ? (
+              <p className="text-[#acb0cd]/40 text-xs italic">Aucun handicap assigné.</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {form.handicaps.map(id => (
+                  <span key={id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-[#B03E00]/15 border border-[#B03E00]/40 text-[#e3a892]">
+                    {HANDICAP_LABELS[id] || id}
+                    <button type="button" onClick={() => removeHandicap(id)} className="text-[#e3a892]/70 hover:text-white">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Options + notes internes */}
+        <div className="mt-3 pt-3 border-t border-[#C0C0C0]/10">
+          <div className="bg-[#3a3b3f] rounded-lg p-3 grid grid-cols-3 gap-2 mb-3">
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={form.pets_allowed} onChange={e => setForm({ ...form, pets_allowed: e.target.checked })} className="w-4 h-4" />
+              <span className="text-[#acb0cd]">Animaux</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={form.groups_allowed} onChange={e => setForm({ ...form, groups_allowed: e.target.checked })} className="w-4 h-4" />
+              <span className="text-[#acb0cd]">Groupes</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={form.water_toys} onChange={e => setForm({ ...form, water_toys: e.target.checked })} className="w-4 h-4" />
+              <span className="text-[#acb0cd]">Water toys</span>
+            </label>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Infos additionnelles (public)</label>
+              <textarea rows={2} value={form.extra_info} onChange={e => setForm({ ...form, extra_info: e.target.value })}
+                className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none resize-y" />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Notes internes (usage admin uniquement)</label>
+              <textarea rows={2} value={form.internal_notes} onChange={e => setForm({ ...form, internal_notes: e.target.value })}
+                className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none resize-y" />
+            </div>
+          </div>
+        </div>
+
         <div className="flex justify-end mt-4">
-          <button onClick={submit} disabled={!canSubmit}
+          <button onClick={submit} disabled={saving}
             className="px-6 py-2 rounded-xl border-2 border-[#B03E00] bg-[#B03E00]/20 text-[#B03E00] hover:bg-[#B03E00]/30 disabled:opacity-50 text-sm uppercase tracking-wider font-medium flex items-center gap-2">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
             Ajouter en stock
@@ -895,15 +1081,31 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
 
   const onAddManual = async (data) => {
     try {
-      const { yacht_id, yacht_name, images, length, guests, cabins, crew, price, description, region, sub_region } = data;
-      const cached_data = { id: yacht_id, name: yacht_name, images, length, guests, cabins, crew, price, description };
+      const {
+        yacht_id, yacht_name, type, make, year, refit, location,
+        images, length, guests, cabins, crew, price, description,
+        region, sub_region, categories, handicaps,
+        pets_allowed, groups_allowed, water_toys, extra_info, internal_notes,
+      } = data;
+      const cached_data = {
+        id: yacht_id, name: yacht_name, type, make, year, refit, location,
+        images, length, guests, cabins, crew, price, description,
+      };
       const res = await fetch(`/api/admin/yachts?token=${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ yacht_id, yacht_name, cached_data, region, sub_region }),
+        body: JSON.stringify({
+          yacht_id, yacht_name, cached_data, region, sub_region,
+          pets_allowed, groups_allowed, water_toys, extra_info,
+        }),
       });
       if (res.ok) {
-        await reload();
+        // Champs non gérés par la création (uniquement via l'enrichissement) : catégories, handicaps, notes internes.
+        await fetch(`/api/admin/yachts?token=${token}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'enrich', yacht_id, categories, handicaps, internal_notes }),
+        });
         // Comme pour l'import Ankor : créé en stock, l'admin publie ensuite explicitement.
         await fetch(`/api/admin/yachts?token=${token}`, {
           method: 'PATCH',
