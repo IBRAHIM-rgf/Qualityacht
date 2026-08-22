@@ -327,6 +327,148 @@ function AnkorSearchTab({ existingIds, onAdd, token }) {
 }
 
 // ════════════════════════════════════════════════════════════
+// ONGLET — Ajout manuel (hors Ankor)
+// ════════════════════════════════════════════════════════════
+function slugify(s) {
+  return (s || '')
+    .toLowerCase()
+    .normalize('NFD').replace(new RegExp('[̀-ͯ]', 'g'), '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+function ManualAddTab({ onAdd }) {
+  const emptyForm = {
+    name: '', length: '', guests: '', cabins: '', crew: '', price: '',
+    description: '', images: '', region: '', sub_region: '',
+  };
+  const [form, setForm] = useState(emptyForm);
+  const [saving, setSaving] = useState(false);
+  const availableSubRegions = SUB_REGIONS_BY_REGION[form.region] || [];
+  const canSubmit = form.name.trim().length > 0 && !saving;
+
+  const submit = async () => {
+    if (!canSubmit) return;
+    setSaving(true);
+    try {
+      const images = form.images.split('\n').map(s => s.trim()).filter(Boolean);
+      const yacht_id = `manual-${slugify(form.name) || 'yacht'}-${Date.now().toString(36)}`;
+      await onAdd({
+        yacht_id,
+        yacht_name: form.name.trim(),
+        images,
+        length: form.length.trim() || null,
+        guests: form.guests ? Number(form.guests) : null,
+        cabins: form.cabins ? Number(form.cabins) : null,
+        crew: form.crew ? Number(form.crew) : null,
+        price: form.price.trim() || null,
+        description: form.description.trim() || null,
+        region: form.region || null,
+        sub_region: form.sub_region || null,
+      });
+      setForm(emptyForm);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div>
+      <div className="bg-[#2a2a30] border border-[#C0C0C0]/20 rounded-2xl p-5 mb-4">
+        <div className="flex items-start gap-3 mb-4">
+          <Plus className="w-6 h-6 text-[#B03E00] shrink-0" />
+          <div>
+            <h3 className="trajan-regular text-base uppercase tracking-wider text-[#C0C0C0] mb-1">Ajouter un navire manuellement</h3>
+            <p className="text-sm text-[#acb0cd]/70">
+              Pour un bateau hors catalogue Ankor. Il est créé « en stock » (masqué) — publie-le ensuite depuis
+              l'onglet <strong>Mes bateaux en BDD</strong>, puis complète titre/description/catégories via l'édition.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-3">
+          <div className="sm:col-span-2">
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Nom du navire *</label>
+            <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
+              placeholder="Ex : Belle Étoile"
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Longueur</label>
+            <input type="text" value={form.length} onChange={e => setForm({ ...form, length: e.target.value })}
+              placeholder="Ex : 24m"
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Prix affiché</label>
+            <input type="text" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })}
+              placeholder="Ex : 15 000 €/semaine"
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Invités</label>
+            <input type="number" min="0" value={form.guests} onChange={e => setForm({ ...form, guests: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Cabines</label>
+            <input type="number" min="0" value={form.cabins} onChange={e => setForm({ ...form, cabins: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Équipage</label>
+            <input type="number" min="0" value={form.crew} onChange={e => setForm({ ...form, crew: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Région</label>
+            <select value={form.region} onChange={e => setForm({ ...form, region: e.target.value, sub_region: '' })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd]">
+              <option value="">— Aucune —</option>
+              {Object.entries(REGION_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+            </select>
+          </div>
+          {availableSubRegions.length > 0 && (
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Sous-région</label>
+              <select value={form.sub_region} onChange={e => setForm({ ...form, sub_region: e.target.value })}
+                className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd]">
+                <option value="">— Aucune —</option>
+                {availableSubRegions.map(s => <option key={s} value={s}>{SUB_REGION_LABELS[s] || s}</option>)}
+              </select>
+            </div>
+          )}
+
+          <div className="sm:col-span-2">
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Description</label>
+            <textarea rows={3} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none resize-y" />
+          </div>
+
+          <div className="sm:col-span-2">
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Photos (une URL par ligne, la 1ère = photo principale)</label>
+            <textarea rows={3} value={form.images} onChange={e => setForm({ ...form, images: e.target.value })}
+              placeholder={'https://exemple.com/photo1.jpg\nhttps://exemple.com/photo2.jpg'}
+              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none resize-y" />
+          </div>
+        </div>
+
+        <div className="flex justify-end mt-4">
+          <button onClick={submit} disabled={!canSubmit}
+            className="px-6 py-2 rounded-xl border-2 border-[#B03E00] bg-[#B03E00]/20 text-[#B03E00] hover:bg-[#B03E00]/30 disabled:opacity-50 text-sm uppercase tracking-wider font-medium flex items-center gap-2">
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+            Ajouter en stock
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
 // ONGLET 2 — Catalogue BDD (toggle visible)
 // ════════════════════════════════════════════════════════════
 function BddCatalogueTab({ yachts, onToggleVisible, onToggleFeatured, onDelete, onEdit }) {
@@ -751,6 +893,35 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
     } catch (e) { console.error(e); }
   };
 
+  const onAddManual = async (data) => {
+    try {
+      const { yacht_id, yacht_name, images, length, guests, cabins, crew, price, description, region, sub_region } = data;
+      const cached_data = { id: yacht_id, name: yacht_name, images, length, guests, cabins, crew, price, description };
+      const res = await fetch(`/api/admin/yachts?token=${token}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ yacht_id, yacht_name, cached_data, region, sub_region }),
+      });
+      if (res.ok) {
+        await reload();
+        // Comme pour l'import Ankor : créé en stock, l'admin publie ensuite explicitement.
+        await fetch(`/api/admin/yachts?token=${token}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'visibility', yacht_id, is_visible: false }),
+        });
+        await reload();
+        alert(`${yacht_name} ajouté en stock. Va dans "Mes bateaux en BDD" pour le publier.`);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert(`Erreur lors de l'ajout : ${err.error || res.status}`);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Erreur réseau lors de l'ajout.");
+    }
+  };
+
   const onToggleVisible = async (y) => {
     try {
       await fetch(`/api/admin/yachts?token=${token}`, {
@@ -794,6 +965,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
 
   const TABS = [
     { id: 'ankor', label: 'Recherche Ankor', icon: Globe, desc: 'Catalogue externe à importer' },
+    { id: 'manual', label: 'Ajout manuel', icon: Plus, desc: 'Navire hors catalogue Ankor' },
     { id: 'bdd', label: 'Mes bateaux en BDD', icon: Database, desc: 'Toute la base · publier/cacher' },
     { id: 'visible', label: 'Mes bateaux publiés', icon: Eye, desc: 'Édition complète des publiés' },
   ];
@@ -818,7 +990,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
 
       <Dashboard yachts={yachts} />
 
-      <div className="grid grid-cols-3 gap-2 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
         {TABS.map(tab => {
           const Icon = tab.icon;
           const active = activeTab === tab.id;
@@ -838,6 +1010,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
       </div>
 
       {activeTab === 'ankor' && <AnkorSearchTab existingIds={existingIds} onAdd={onAddFromAnkor} token={token} />}
+      {activeTab === 'manual' && <ManualAddTab onAdd={onAddManual} />}
       {activeTab === 'bdd' && <BddCatalogueTab yachts={yachts} onToggleVisible={onToggleVisible} onToggleFeatured={onToggleFeatured} onDelete={onDelete} onEdit={(y) => setEditingYacht(y)} />}
       {activeTab === 'visible' && <VisibleEditTab yachts={yachts} onEdit={(y) => setEditingYacht(y)} />}
 
