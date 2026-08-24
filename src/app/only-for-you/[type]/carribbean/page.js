@@ -723,7 +723,7 @@ function RegattaEventCard({ event, index = 0 }) {
             </div>
           )}
           {event.footer && (
-            <p className="text-[11px] italic text-[#d39478] pt-2 border-t border-[#C0C0C0]/10">{event.footer}</p>
+            <p className="text-[11px] italic text-[#bd9973] pt-2 border-t border-[#C0C0C0]/10">{event.footer}</p>
           )}
         </div>
       )}
@@ -925,15 +925,15 @@ export default function CaribbeanV15Page({ params }) {
               <BurntLine />
               <p className="text-base md:text-xl max-w-3xl mx-auto mt-2">
                 Set against the backdrop of the Caribbean's most{' '}
-                <span className="text-[#d39478] font-semibold">pristine, secure, and hospitable islands</span>,
+                <span className="text-[#bd9973] font-semibold">pristine, secure, and hospitable islands</span>,
                 these regattas are the epitome of{' '}
-                <span className="text-[#d39478] font-semibold">elite sailing</span>—where{' '}
-                <span className="text-[#d39478] font-semibold">world-class competition</span> meets{' '}
-                <span className="text-[#d39478] font-semibold">unparalleled luxury</span>. With tailored courses,
+                <span className="text-[#bd9973] font-semibold">elite sailing</span>—where{' '}
+                <span className="text-[#bd9973] font-semibold">world-class competition</span> meets{' '}
+                <span className="text-[#bd9973] font-semibold">unparalleled luxury</span>. With tailored courses,
                 dedicated start/finish vessels, and an ever-expanding roster of racing classes, they attract the
                 most passionate and discerning yachtsmen. A must-do for those who demand both thrilling sport and
                 the finest in waterfront sophistication, these events are the{' '}
-                <span className="text-[#d39478] font-semibold">crown jewels of the Caribbean racing circuit</span>.
+                <span className="text-[#bd9973] font-semibold">crown jewels of the Caribbean racing circuit</span>.
               </p>
             </div>
           ) : SAILING_INTRO[type] ? (
@@ -941,31 +941,31 @@ export default function CaribbeanV15Page({ params }) {
           ) : (
             <div className="max-w-4xl mx-auto text-center leading-relaxed space-y-5 md:space-y-6 text-[#acb0cd]">
               <p className="text-lg md:text-2xl">
-                A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>,{' '}
-                <span className="text-[#d39478] font-semibold">powder-white beaches</span>,{' '}
-                <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and{' '}
-                <span className="text-[#d39478] font-semibold">lush tropical forests</span>,
+                A paradise of <span className="text-[#bd9973] font-semibold">turquoise waters</span>,{' '}
+                <span className="text-[#bd9973] font-semibold">powder-white beaches</span>,{' '}
+                <span className="text-[#bd9973] font-semibold">vibrant coral reefs</span>, and{' '}
+                <span className="text-[#bd9973] font-semibold">lush tropical forests</span>,
                 the Caribbean stands as{' '}
-                <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
+                <span className="text-[#bd9973] font-semibold">the world's premier destination</span> for luxury yacht charters.
               </p>
               <p className="text-base md:text-xl max-w-3xl mx-auto">
-                From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
-                of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and{' '}
-                <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
+                From <span className="text-[#bd9973] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
+                of <span className="text-[#bd9973] font-semibold">Michelin-starred restaurants</span> and{' '}
+                <span className="text-[#bd9973] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
                 offers an unparalleled sailing experience.
               </p>
               <p className="text-base md:text-xl max-w-2xl mx-auto">
-                Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over{' '}
-                <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
+                Comprising <span className="text-[#bd9973] font-semibold">twenty-six countries</span> and over{' '}
+                <span className="text-[#bd9973] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
                 and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
-                cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
+                cultural tapestry blending <span className="text-[#bd9973] font-semibold">Creole, French, Dutch, and British</span> influences.
               </p>
               <p className="text-sm md:text-lg max-w-xl mx-auto">
                 For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
                 of exclusivity and adventure. Whether it's the glamour of{' '}
-                <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of{' '}
-                <span className="text-[#d39478] font-semibold">St. Barts</span>, or{' '}
-                <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
+                <span className="text-[#bd9973] font-semibold">Turks and Caicos</span>, the sophistication of{' '}
+                <span className="text-[#bd9973] font-semibold">St. Barts</span>, or{' '}
+                <span className="text-[#bd9973] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
                 where every moment is crafted for the extraordinary.
               </p>
             </div>

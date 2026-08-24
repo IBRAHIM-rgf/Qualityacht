@@ -128,7 +128,7 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
           {/* Type */}
           <div className="flex-1 min-w-[150px] max-w-[180px]">
             <select value={localFilters.type} onChange={e => handleChange('type', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]">
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#bd9973] focus:border-transparent accent-[#B03E00]">
               {YACHT_TYPES.map(t => <option key={t.value} value={t.value} className="bg-[#3a3b3f]">{t.label}</option>)}
             </select>
           </div>
@@ -136,7 +136,7 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
           {/* Destination Caribbean seulement */}
           <div className="flex-1 min-w-[180px] max-w-[220px]">
             <select value={localFilters.destination} onChange={e => handleChange('destination', e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] focus:border-transparent accent-[#B03E00]">
+              className="w-full px-4 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#bd9973] focus:border-transparent accent-[#B03E00]">
               {DESTINATIONS.map(d => <option key={d.value} value={d.value} className="bg-[#3a3b3f]">{d.label}</option>)}
             </select>
           </div>
@@ -146,11 +146,11 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
             <div className="relative">
               <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input type="date" value={localFilters.startDate || ''} onChange={e => handleChange('startDate', e.target.value)}
-                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] [color-scheme:light]" />
+                className="w-36 pl-9 pr-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#bd9973] [color-scheme:light]" />
             </div>
             <span className="text-gray-400">-</span>
             <input type="date" value={localFilters.endDate || ''} onChange={e => handleChange('endDate', e.target.value)}
-              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478] [color-scheme:light]" />
+              className="w-36 px-3 py-2.5 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#bd9973] [color-scheme:light]" />
           </div>
 
           {/* Prix */}
@@ -182,7 +182,7 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
 
           {activeCount > 0 && (
             <button onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 bg-[#d39478]/20 border border-[#d39478]/50 rounded-xl text-[#d39478] hover:bg-[#d39478]/30 transition-colors">
+              className="flex items-center gap-2 px-4 py-2.5 bg-[#bd9973]/20 border border-[#bd9973]/50 rounded-xl text-[#bd9973] hover:bg-[#bd9973]/30 transition-colors">
               <X className="w-4 h-4" />
               <span className="text-sm">{activeCount} filter{activeCount > 1 ? 's' : ''}</span>
             </button>
@@ -228,7 +228,7 @@ export default function YachtFiltersCaribbean({ filters, onChange }) {
             <div className="flex items-center gap-4">
               <label className="text-sm text-gray-300 min-w-[60px]">Min guests:</label>
               <input type="number" min="1" max="50" value={localFilters.capacity || ''} onChange={e => handleChange('capacity', e.target.value ? Number(e.target.value) : '')}
-                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#d39478]" />
+                className="w-20 px-3 py-2 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#C0C0C0] focus:ring-2 focus:ring-[#bd9973]" />
             </div>
             <div className="flex items-center gap-4 flex-wrap">
               {[['petFriendly', 'Pet Friendly'], ['groupFriendly', 'Group Friendly']].map(([key, label]) => (

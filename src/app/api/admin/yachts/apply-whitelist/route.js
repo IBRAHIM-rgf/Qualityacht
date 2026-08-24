@@ -5,21 +5,17 @@
 // Permet à l'admin de ne publier qu'une sélection validée parmi les imports Ankor.
 
 import { NextResponse } from 'next/server';
-import sql from '@/lib/db';
-
-function checkAuth(request) {
-  const { searchParams } = new URL(request.url);
-  const token = searchParams.get('token');
-  if (!process.env.ADMIN_SECRET_TOKEN) return false;
-  return token === process.env.ADMIN_SECRET_TOKEN;
-}
+import { guardAdminRoute } from '@/lib/adminAuth';
 
 export async function POST(request) {
-  if (!checkAuth(request)) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
-  }
+  const denied = guardAdminRoute(request);
+  if (denied) return denied;
 
   try {
+
+    // Chargement APRES la garde : aucun module susceptible d'ouvrir une connexion
+    // n'est initialise avant que l'authentification soit etablie.
+    const { default: sql } = await import('@/lib/db');
     const body = await request.json();
     const { region, names } = body;
     if (!region) {

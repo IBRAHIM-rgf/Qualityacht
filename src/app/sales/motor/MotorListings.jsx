@@ -101,7 +101,7 @@ export default function MotorListings() {
                 {/* prix + view (passe sous le nom en mobile) */}
                 <div className="col-span-2 md:col-span-1 flex items-center justify-between md:flex-col md:items-end gap-2 md:text-right md:pl-4">
                   <div>
-                    <p className="text-sm md:text-base text-[#d39478] whitespace-nowrap">{y.price}</p>
+                    <p className="text-sm md:text-base text-[#bd9973] whitespace-nowrap">{y.price}</p>
                     {y.priceNote && <p className="text-[9px] text-[#8b90a0]">{y.priceNote}</p>}
                   </div>
                   <Link

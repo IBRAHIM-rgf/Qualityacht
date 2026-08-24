@@ -9,7 +9,10 @@ export default function WorldClassExperience() {
     <section
       className="py-16 px-6 md:px-20 md:min-h-screen text-center"
       style={{
-        backgroundImage: "url('/images/services-bg.png')",
+        // Voile sombre sur la photo : derriere les glyphes, le fond montait jusqu'a
+        // 1,82:1 dans les zones claires, sous le seuil de 3:1 du grand texte.
+        backgroundImage:
+          "linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/services-bg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -32,7 +35,7 @@ export default function WorldClassExperience() {
           isExpanded ? "" : "line-clamp-5"
         }`}
       >
-        <span className="text-[#d39478]">
+        <span className="text-[#bd9973]">
           Wishing to design a society where luxury, sea and adrenaline would be
           at the<br />
           center of activity.
@@ -41,7 +44,7 @@ export default function WorldClassExperience() {
         <br />
         whose DNA would be the image of the craze that drives us.
         <br />
-        <span className="text-[#d39478]">
+        <span className="text-[#bd9973]">
           Qualityacht has been in the luxury sector for more than 33 years,
         </span>{" "}
         including 13
@@ -54,7 +57,7 @@ export default function WorldClassExperience() {
         unmatched commitment.
         <br />
         Qualityacht is{" "}
-        <span className="text-[#d39478]">
+        <span className="text-[#bd9973]">
           {" "}
           committed to providing its customers with a customized solution.
           <br />
@@ -76,7 +79,7 @@ export default function WorldClassExperience() {
         create your
         <br />
         holidays fully ready to embar.
-        <span className="text-[#d39478]">
+        <span className="text-[#bd9973]">
           {" "}
           Our expertise includes: a collection of sailboats.
           <br />
@@ -96,7 +99,7 @@ export default function WorldClassExperience() {
         <br />
         <br />
         Our team is thus able to{" "}
-        <span className="text-[#d39478]"> guarantee a 5-star service</span>{" "}
+        <span className="text-[#bd9973]"> guarantee a 5-star service</span>{" "}
         regardless of the situation
         <br />
         they face because Qualityacht unites a whole team of professionals from
@@ -106,7 +109,7 @@ export default function WorldClassExperience() {
         service
         <br />
         <br />
-        <span className="text-[#d39478]">
+        <span className="text-[#bd9973]">
           {" "}
           Far beyond a service provider, we will be your partner.
           <br />

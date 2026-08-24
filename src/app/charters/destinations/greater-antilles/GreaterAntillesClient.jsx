@@ -109,19 +109,19 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
           {/* Titre principal */}
           <h2 className="trajan-regular text-lg md:text-2xl text-[#acb0cd] leading-snug">
             The Ultimate Yacht Charter Guide to the{' '}
-            <span style={{ color: '#d39478' }}>Greater Antilles</span>:{' '}
+            <span style={{ color: '#bd9973' }}>Greater Antilles</span>:{' '}
             Where Culture Meets Adventure
           </h2>
 
           {/* Paragraphe 1 — toujours visible */}
           <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
-            The <span style={{ color: '#d39478' }}>Greater Antilles</span>—home to{' '}
-            <span style={{ color: '#d39478' }}>Cuba, Puerto Rico, Jamaica</span>, and the{' '}
-            <span style={{ color: '#d39478' }}>Cayman Islands</span>—stand as the Caribbean&rsquo;s premier yachting destination.
+            The <span style={{ color: '#bd9973' }}>Greater Antilles</span>—home to{' '}
+            <span style={{ color: '#bd9973' }}>Cuba, Puerto Rico, Jamaica</span>, and the{' '}
+            <span style={{ color: '#bd9973' }}>Cayman Islands</span>—stand as the Caribbean&rsquo;s premier yachting destination.
             This archipelago offers an unmatched blend of{' '}
-            <span style={{ color: '#d39478' }}>rich cultural heritage</span> and{' '}
-            <span style={{ color: '#d39478' }}>breathtaking natural beauty</span>, making it the ideal setting for a{' '}
-            <span style={{ color: '#d39478' }}>luxury yacht charter</span> experience.
+            <span style={{ color: '#bd9973' }}>rich cultural heritage</span> and{' '}
+            <span style={{ color: '#bd9973' }}>breathtaking natural beauty</span>, making it the ideal setting for a{' '}
+            <span style={{ color: '#bd9973' }}>luxury yacht charter</span> experience.
           </p>
 
           {/* Partie cachée */}
@@ -132,9 +132,9 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
                   A Journey Through History and Tradition
                 </h3>
                 <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
-                  From <span style={{ color: '#d39478' }}>Cuba&rsquo;s iconic colonial ruins</span> and{' '}
-                  <span style={{ color: '#d39478' }}>legendary cigar lounges</span> to{' '}
-                  <span style={{ color: '#d39478' }}>Puerto Rico&rsquo;s vibrant fusion</span> of Spanish and Caribbean influences,
+                  From <span style={{ color: '#bd9973' }}>Cuba&rsquo;s iconic colonial ruins</span> and{' '}
+                  <span style={{ color: '#bd9973' }}>legendary cigar lounges</span> to{' '}
+                  <span style={{ color: '#bd9973' }}>Puerto Rico&rsquo;s vibrant fusion</span> of Spanish and Caribbean influences,
                   every port delivers a unique, immersive cultural experience.
                 </p>
               </div>
@@ -144,9 +144,9 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
                 </h3>
                 <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
                   The Greater Antilles also boast some of the world&rsquo;s most stunning natural attractions:
-                  the <span style={{ color: '#d39478' }}>second-largest coral reef system</span> off Cuba&rsquo;s coast,{' '}
-                  <span style={{ color: '#d39478' }}>Puerto Rico&rsquo;s pristine beaches</span> and hidden islands,
-                  and <span style={{ color: '#d39478' }}>Jamaica&rsquo;s mystical Blue Mountains</span> and bioluminescent bays.
+                  the <span style={{ color: '#bd9973' }}>second-largest coral reef system</span> off Cuba&rsquo;s coast,{' '}
+                  <span style={{ color: '#bd9973' }}>Puerto Rico&rsquo;s pristine beaches</span> and hidden islands,
+                  and <span style={{ color: '#bd9973' }}>Jamaica&rsquo;s mystical Blue Mountains</span> and bioluminescent bays.
                   These landscapes create the perfect backdrop for an unforgettable adventure.
                 </p>
               </div>

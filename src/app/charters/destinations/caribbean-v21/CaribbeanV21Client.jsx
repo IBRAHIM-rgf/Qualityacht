@@ -89,7 +89,7 @@ function SectionHead({ kicker, title, sub }) {
         <h2 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.1em] text-[#acb0cd]">{title}</h2>
       </Reveal>
       <Reveal variant="scale" delay={200}>
-        <span className="block h-[2px] w-24 mx-auto my-5 rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #c2622a 30%, #d39478 70%, transparent)' }} />
+        <span className="block h-[2px] w-24 mx-auto my-5 rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #c2622a 30%, #bd9973 70%, transparent)' }} />
       </Reveal>
       {sub && <Reveal variant="up" delay={260}><p className="text-[#acb0cd]/55 text-sm md:text-base uppercase tracking-[0.1em] px-4">{sub}</p></Reveal>}
     </div>
@@ -145,9 +145,9 @@ export default function CaribbeanV21Client() {
         <div className="max-w-3xl mx-auto text-center">
           <Reveal variant="up">
             <p className="text-lg md:text-2xl leading-relaxed text-[#acb0cd]">
-              A mosaic of <span className="text-[#d39478] font-semibold">turquoise lagoons</span>,{' '}
-              <span className="text-[#d39478] font-semibold">powder-white sands</span> and{' '}
-              <span className="text-[#d39478] font-semibold">vivid coral reefs</span> — seven hundred islands
+              A mosaic of <span className="text-[#bd9973] font-semibold">turquoise lagoons</span>,{' '}
+              <span className="text-[#bd9973] font-semibold">powder-white sands</span> and{' '}
+              <span className="text-[#bd9973] font-semibold">vivid coral reefs</span> — seven hundred islands
               where every day at sea is designed around your idea of joy.
             </p>
           </Reveal>

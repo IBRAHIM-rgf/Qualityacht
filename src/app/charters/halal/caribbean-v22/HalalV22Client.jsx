@@ -92,8 +92,8 @@ export default function HalalV22Client() {
         <div className="max-w-3xl mx-auto">
           <Reveal variant="up">
             <p className="text-xl md:text-3xl leading-relaxed text-[#acb0cd]">
-              Warm days on the water, <span className="text-[#d39478] font-semibold">laughter shared with the ones you love</span>,
-              and every detail — from <span className="text-[#d39478] font-semibold">halal cuisine</span> to complete privacy —
+              Warm days on the water, <span className="text-[#bd9973] font-semibold">laughter shared with the ones you love</span>,
+              and every detail — from <span className="text-[#bd9973] font-semibold">halal cuisine</span> to complete privacy —
               quietly taken care of.
             </p>
           </Reveal>

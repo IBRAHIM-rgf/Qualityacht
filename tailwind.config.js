@@ -10,6 +10,9 @@ module.exports = {
   theme: {
   	extend: {
   		colors: {
+			qy: {
+				antilles: 'rgb(var(--qy-antilles-rgb) / <alpha-value>)',
+			},
   			copper: {
   				400: '#D4915A',
   				500: '#B87333',

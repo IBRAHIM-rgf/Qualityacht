@@ -23,16 +23,16 @@ function ShortDescription() {
     <>
       <h2 className="trajan-regular text-lg md:text-2xl text-[#acb0cd] leading-snug">
         The Ultimate Yacht Charter Guide to the{' '}
-        <span style={{ color: '#d39478' }}>Bahamas</span>:{' '}
+        <span style={{ color: '#bd9973' }}>Bahamas</span>:{' '}
         700 Islands of Pure Caribbean Paradise
       </h2>
 
       <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
-        The <span style={{ color: '#d39478' }}>Bahamas</span>—an archipelago of{' '}
-        <span style={{ color: '#d39478' }}>700 islands</span> and over{' '}
-        <span style={{ color: '#d39478' }}>2,400 cays</span> stretching from
+        The <span style={{ color: '#bd9973' }}>Bahamas</span>—an archipelago of{' '}
+        <span style={{ color: '#bd9973' }}>700 islands</span> and over{' '}
+        <span style={{ color: '#bd9973' }}>2,400 cays</span> stretching from
         the coast of Florida — define the very idea of a{' '}
-        <span style={{ color: '#d39478' }}>tropical yacht charter</span>: crystal-clear waters, powder-white sand and
+        <span style={{ color: '#bd9973' }}>tropical yacht charter</span>: crystal-clear waters, powder-white sand and
         the closest superyacht playground to the United States.
       </p>
     </>
@@ -44,9 +44,9 @@ function LongDescription() {
     <>
       <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
         Whether you crave the cosmopolitan energy of{' '}
-        <span style={{ color: '#d39478' }}>Nassau</span>, the secluded sandbars of the{' '}
-        <span style={{ color: '#d39478' }}>Exumas</span>, or the historic loyalist villages of the{' '}
-        <span style={{ color: '#d39478' }}>Abacos</span>, the Bahamas deliver the perfect blend of accessibility,
+        <span style={{ color: '#bd9973' }}>Nassau</span>, the secluded sandbars of the{' '}
+        <span style={{ color: '#bd9973' }}>Exumas</span>, or the historic loyalist villages of the{' '}
+        <span style={{ color: '#bd9973' }}>Abacos</span>, the Bahamas deliver the perfect blend of accessibility,
         privacy and natural beauty.
       </p>
 
@@ -56,10 +56,10 @@ function LongDescription() {
         </h3>
         <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
           Drop anchor in the legendary{' '}
-          <span style={{ color: '#d39478' }}>Exuma Cays Land &amp; Sea Park</span>, swim with the famous{' '}
-          <span style={{ color: '#d39478' }}>pigs of Big Major Cay</span>, snorkel the{' '}
-          <span style={{ color: '#d39478' }}>Thunderball Grotto</span>, or stroll the iconic{' '}
-          <span style={{ color: '#d39478' }}>pink sand beaches</span> of Harbour Island —
+          <span style={{ color: '#bd9973' }}>Exuma Cays Land &amp; Sea Park</span>, swim with the famous{' '}
+          <span style={{ color: '#bd9973' }}>pigs of Big Major Cay</span>, snorkel the{' '}
+          <span style={{ color: '#bd9973' }}>Thunderball Grotto</span>, or stroll the iconic{' '}
+          <span style={{ color: '#bd9973' }}>pink sand beaches</span> of Harbour Island —
           experiences that exist nowhere else.
         </p>
       </div>
@@ -70,7 +70,7 @@ function LongDescription() {
         </h3>
         <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
           Sheltered from the Atlantic by Florida and protected by reefs, the Bahamas offer{' '}
-          <span style={{ color: '#d39478' }}>over 320 days of sunshine per year</span> and a calm sailing season that
+          <span style={{ color: '#bd9973' }}>over 320 days of sunshine per year</span> and a calm sailing season that
           extends well beyond the traditional Caribbean window. Ideal for a winter escape or a spring family adventure.
         </p>
       </div>

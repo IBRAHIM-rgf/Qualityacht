@@ -4,6 +4,14 @@
 
 :root {
   --font-eurostile: "Eurostile", sans-serif;
+
+  /* ── Accent Caraibes ──────────────────────────────────────────────────────
+     Zone flotte des sous-regions Caraibes. Remplace l'orange agressif #B03E00.
+     La forme hexadecimale sert aux styles inline ; la variante -rgb sert a
+     Tailwind, qui y injecte <alpha-value> pour generer les classes d'opacite
+     (ex: hover:bg-qy-antilles/10). */
+  --qy-antilles: #C2622A;
+  --qy-antilles-rgb: 194 98 42;
 }
 
 /* Police de CORPS de texte par defaut sur tout le site.

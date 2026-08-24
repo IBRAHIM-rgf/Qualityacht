@@ -2,12 +2,56 @@
 
 "use client";
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map } from 'lucide-react';
 import Image from 'next/image';
+import { ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map } from 'lucide-react';
 import { getAnkorImageUrl } from '@/lib/utils';
 import { formatLength } from '@/lib/unitConversion';
 
-export default function YachtCardV2({ yacht }) {
+/**
+ * Icone equipage : reprend le trace de public/casquette-capitaine.svg mais en
+ * `currentColor`, pour qu'elle suive l'accent du contexte. Le fichier public
+ * reste inchange (il sert ailleurs sur le site).
+ */
+function CrewIcon({ size = 22, color, className = '' }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+      className={className}
+      style={{ color }}
+    >
+      <path d="M10 62 Q50 72 90 62" />
+      <path d="M15 62 L20 38 Q50 28 80 38 L85 62 Z" />
+      <line x1="15" y1="55" x2="85" y2="55" />
+      <circle cx="50" cy="38" r="3" />
+      <line x1="50" y1="41" x2="50" y2="50" />
+      <path d="M44 46 Q50 52 56 46" />
+      <line x1="44" y1="50" x2="47" y2="50" />
+      <line x1="53" y1="50" x2="56" y2="50" />
+    </svg>
+  );
+}
+
+/**
+ * @param accentColor Couleur des petites icones de caracteristiques. Optionnel.
+ *   Omis, la carte reste strictement identique a son rendu historique (#B03E00,
+ *   equipage en <img>) : c'est le cas de /yachts et des autres consommateurs.
+ *   Fourni, les cinq icones suivent l'accent et l'equipage passe en SVG inline.
+ */
+export default function YachtCardV2({ yacht, accentColor }) {
+  // Sans accent transmis, la carte garde strictement son rendu historique :
+  // meme couleur ET meme balise <img> pour l'equipage, donc meme filtre global
+  // de saturation. Voir la regle `img { filter: saturate(1.3) }` de globals.css.
+  const resolvedAccentColor = accentColor || '#B03E00';
   // Utilise getAnkorImageUrl pour chaque image
   const images = Array.isArray(yacht.images)
     ? yacht.images.filter(Boolean).map(img => getAnkorImageUrl(img, '1280w'))
@@ -94,22 +138,24 @@ export default function YachtCardV2({ yacht }) {
         {/* Details */}
         <div className="flex flex-wrap gap-4 text-sm  mb-2 items-center">
           {yacht.length && (
-            <span className="flex items-center gap-1"><Ruler className="w-4 h-4 text-[#B03E00]" />{formatLength(yacht.length, 'both')}</span>
+            <span className="flex items-center gap-1"><Ruler className="w-4 h-4" style={{ color: resolvedAccentColor }} />{formatLength(yacht.length, 'both')}</span>
           )}
           {yacht.guests && (
-            <span className="flex items-center gap-1"><Users className="w-4 h-4 text-[#B03E00]" />{yacht.guests} guests</span>
+            <span className="flex items-center gap-1"><Users className="w-4 h-4" style={{ color: resolvedAccentColor }} />{yacht.guests} guests</span>
           )}
           {yacht.capacity && !yacht.guests && (
-            <span className="flex items-center gap-1"><Users className="w-4 h-4 text-[#B03E00]" />{yacht.capacity} guests</span>
+            <span className="flex items-center gap-1"><Users className="w-4 h-4" style={{ color: resolvedAccentColor }} />{yacht.capacity} guests</span>
           )}
           {yacht.cabins && (
-            <span className="flex items-center gap-1"><BedDouble className="w-4 h-4 text-[#B03E00]" />{yacht.cabins} cabins</span>
+            <span className="flex items-center gap-1"><BedDouble className="w-4 h-4" style={{ color: resolvedAccentColor }} />{yacht.cabins} cabins</span>
           )}
           {yacht.crew && (
-            <span className="flex items-center gap-1"><Image src="/casquette-capitaine.svg" alt="crew" width={22} height={22} />{yacht.crew} crew</span>
+            <span className="flex items-center gap-1">{accentColor
+              ? <CrewIcon size={22} color={resolvedAccentColor} />
+              : <Image src="/casquette-capitaine.svg" alt="crew" width={22} height={22} />}{yacht.crew} crew</span>
           )}
           {yacht.location && (
-            <span className="flex items-center gap-1"><Map className="w-4 h-4 text-[#B03E00]" />{yacht.location}</span>
+            <span className="flex items-center gap-1"><Map className="w-4 h-4" style={{ color: resolvedAccentColor }} />{yacht.location}</span>
           )}
         </div>
         {/* Destinations */}

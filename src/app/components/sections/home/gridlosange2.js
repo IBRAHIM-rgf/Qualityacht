@@ -29,24 +29,43 @@ export default function LosangesuitePcontact() {
         {/* <LosangeComposen/> */}
         <div className=" py-16 px-4 md:px-24">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
-            {/* WhatsApp box */}
-            <div className="rounded-2xl border border-white/20 p-6 shadow-md backdrop-blur-md bg-black/30 flex flex-col justify-between">
+            {/* WhatsApp box : toute la carte est cliquable. Numero officiel confirme,
+                identique au telephone. Aucune mention d'horaires. */}
+            <a
+              href="https://wa.me/41767365781"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Contact Qualityacht on WhatsApp"
+              className="rounded-2xl border border-white/20 p-6 shadow-md backdrop-blur-md bg-black/30 flex flex-col justify-between focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+            >
               <div>
                 <h2 className="text-2xl font-medium mb-2 flex items-center gap-2">
-                  <span className="text-3xl">🟢</span> WhatsApp
+                  <span className="text-3xl" aria-hidden>🟢</span> WhatsApp
                 </h2>
                 <p className="text-sm text-white/80">
                   Manage your enquiries and bookings on the go via private chat with our team
                 </p>
               </div>
-              <span className="mt-4 text-sm">↗</span>
-            </div>
+              <span className="mt-4 text-sm" aria-hidden>↗</span>
+            </a>
 
-            {/* Email + phone */}
+            {/* Coordonnees Qualityacht confirmees officielles. Les liens heritent de la
+                typographie : aucun changement visuel. Aucun horaire affiche. */}
             <div className="rounded-2xl bg-[#e5e5e5] text-black p-6 flex flex-col justify-center">
-              <p className="text-lg font-medium">info@airx.aero</p>
-              <p className="text-3xl font-light my-2">+44 203 958 3939</p>
-              <p className="text-sm text-gray-600">Telephone line open 24 hours a day</p>
+              <a
+                href="mailto:info@qualityacht.ch"
+                aria-label="Email Qualityacht at info@qualityacht.ch"
+                className="text-lg font-medium focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+              >
+                info@qualityacht.ch
+              </a>
+              <a
+                href="tel:+41767365781"
+                aria-label="Call Qualityacht on +41 76 736 57 81"
+                className="text-3xl font-light my-2 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+              >
+                +41 76 736 57 81
+              </a>
             </div>
 
             

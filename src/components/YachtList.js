@@ -5,7 +5,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import YachtCardV2 from "./YachtCardV2";
 
-export default function YachtList({ yachts }) {
+/**
+ * @param accentColor Transmis a YachtCardV2. Omis, la carte garde son accent
+ *   historique #B03E00 : /yachts et les autres consommateurs sont inchanges.
+ */
+export default function YachtList({ yachts, accentColor }) {
   const router = useRouter();
 
   if (!yachts.length) {
@@ -32,7 +36,7 @@ export default function YachtList({ yachts }) {
           onClick={() => router.push(`/yacht-detail-v11?name=${encodeURIComponent(yacht.name || '')}`)}
           className="cursor-pointer transition-transform hover:scale-[1.02]"
         >
-          <YachtCardV2 yacht={yacht} />
+          <YachtCardV2 yacht={yacht} accentColor={accentColor} />
         </div>
       ))}
     </div>

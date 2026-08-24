@@ -98,8 +98,8 @@ export default function CaribbeanV22Client() {
         <div className="max-w-3xl mx-auto">
           <Reveal variant="up">
             <p className="text-xl md:text-3xl leading-relaxed text-[#acb0cd]">
-              Sun on your skin, <span className="text-[#d39478] font-semibold">laughter over the water</span>, and a wake
-              full of <span className="text-[#d39478] font-semibold">stories worth telling</span>. This is the Caribbean
+              Sun on your skin, <span className="text-[#bd9973] font-semibold">laughter over the water</span>, and a wake
+              full of <span className="text-[#bd9973] font-semibold">stories worth telling</span>. This is the Caribbean
               the way it was meant to be lived.
             </p>
           </Reveal>

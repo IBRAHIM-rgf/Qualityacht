@@ -22,7 +22,7 @@ const cards = [
   H[1] && { key: 'h1', pos: { right: '2%', top: '2%', width: '250px' }, depth: 54, fd: '8.5s', d: 300, node: P(H[1], 'Beach riders', '#ff7a59') },
   H[2] && { key: 'h2', pos: { right: '1%', top: '43%', width: '210px' }, depth: -42, fd: '6.8s', d: 450, node: P(H[2], 'Along the coast', '#4ea8ff', 'aspect-[3/4]') },
   H[3] && { key: 'h3', pos: { left: '0.5%', top: '45%', width: '210px' }, depth: 36, fd: '7.5s', d: 600, node: P(H[3], 'Into the sea', '#2fd6c4', 'aspect-[3/4]') },
-  { key: 's2', pos: { right: '4%', bottom: '3%', width: '236px' }, depth: 50, fd: '8s', d: 750, node: <StatChip kicker="On the calendar" big="8" unit="races" label="Across the season" heights={[40, 55, 72, 48, 88, 66]} accent="#d39478" /> },
+  { key: 's2', pos: { right: '4%', bottom: '3%', width: '236px' }, depth: 50, fd: '8s', d: 750, node: <StatChip kicker="On the calendar" big="8" unit="races" label="Across the season" heights={[40, 55, 72, 48, 88, 66]} accent="#bd9973" /> },
   H[4] && { key: 'h4', pos: { left: '19%', bottom: '3%', width: '240px' }, depth: -34, fd: '6.2s', d: 900, node: P(H[4], 'Clifftop trails', '#ffb03a') },
   H[5] && { key: 'h5', pos: { right: '25%', bottom: '4%', width: '212px' }, depth: 28, fd: '6.6s', d: 1050, node: P(H[5], 'Sea swims', '#4ea8ff') },
   { key: 'p1', pos: { left: '18%', top: '31%' }, depth: -20, fd: '5.5s', d: 1200, node: <Pill accent="#c2622a">5 seasonal circuits</Pill> },

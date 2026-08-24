@@ -3,27 +3,23 @@
 // Stocke uniquement light_data (description + 1ère photo + meta), pas cached_data complet.
 
 import { NextResponse } from 'next/server';
-import { ensureV3Schema, bulkUpsertYachts } from '@/lib/db';
-import { fetchYachtsForDestination } from '@/lib/yachts';
-import { extractLightData, inferAnkorRegion } from '@/lib/yachtCache';
-
-function checkAuth(request) {
-  const { searchParams } = new URL(request.url);
-  const token = searchParams.get('token');
-  if (!process.env.ADMIN_SECRET_TOKEN) return false;
-  return token === process.env.ADMIN_SECRET_TOKEN;
-}
+import { guardAdminRoute } from '@/lib/adminAuth';
 
 /**
- * POST /api/admin/yachts/import-region?token=xxx&region=caribbean
+ * POST /api/admin/yachts/import-region?region=caribbean
  * Idempotent : ré-exécutable, met à jour light_data sans toucher aux choix admin existants.
  */
 export async function POST(request) {
-  if (!checkAuth(request)) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
-  }
+  const denied = guardAdminRoute(request);
+  if (denied) return denied;
 
   try {
+
+    // Chargement APRES la garde : aucun module susceptible d'ouvrir une connexion
+    // n'est initialise avant que l'authentification soit etablie.
+    const { ensureV3Schema, bulkUpsertYachts } = await import('@/lib/db');
+    const { fetchYachtsForDestination } = await import('@/lib/yachts');
+    const { extractLightData, inferAnkorRegion } = await import('@/lib/yachtCache');
     const { searchParams } = new URL(request.url);
     const region = searchParams.get('region');
 

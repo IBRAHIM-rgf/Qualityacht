@@ -10,7 +10,7 @@ import { useState } from 'react';
 // AUCUN emoji.
 
 const VIP_TONE = {
-  'Very High': 'text-[#d39478] border-[#d39478]/40',
+  'Very High': 'text-[#bd9973] border-[#bd9973]/40',
   High: 'text-[#B87333] border-[#B87333]/40',
   Medium: 'text-[#acb0cd] border-[#C0C0C0]/25',
   Low: 'text-[#acb0cd]/60 border-[#C0C0C0]/15',

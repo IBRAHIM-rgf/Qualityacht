@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { YACHTS, getYacht } from '../data';
+import { YACHTS, getYacht, getYachtRef } from '../data';
 
 // Page DETAIL d'un yacht — calquee sur la page detail globaljet.aero (aircraft) : TOUT est
 // CENTRE. Hero sobre sur fond photo estompe (nom + "Make an offer" + tagline + barre de
@@ -29,7 +29,11 @@ export default async function YachtDetailPage({ params }) {
   if (!y) notFound();
 
   const gallery = y.gallery && y.gallery.length ? y.gallery : [y.img];
-  const ref = `QA-${y.id.slice(0, 3).toUpperCase()}-${y.year}`;
+  const ref = getYachtRef(y);
+  // Le formulaire Sales resout le yacht depuis son identifiant : on ne met jamais
+  // le nom complet dans l'URL.
+  const offerHref = `/sales/enquiry?intent=offer&yachtId=${encodeURIComponent(y.id)}`;
+  const detailsHref = `/sales/enquiry?intent=details&yachtId=${encodeURIComponent(y.id)}`;
 
   const summary = [
     ['Year', y.refit ? `${y.year} · R${y.refit}` : y.year],
@@ -71,7 +75,7 @@ export default async function YachtDetailPage({ params }) {
           <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-[#8b90a0]">Ref. {ref}</p>
 
           <Link
-            href="/request-quote"
+            href={offerHref}
             className="mt-7 inline-flex items-center justify-center px-9 py-3 rounded-full bg-[#c2622a] text-[11px] uppercase tracking-[0.2em] text-gray-900 font-semibold transition-opacity duration-300 hover:opacity-90"
           >
             Make an offer
@@ -91,7 +95,7 @@ export default async function YachtDetailPage({ params }) {
             ))}
           </div>
 
-          <p className="mt-8 text-2xl md:text-3xl text-[#d39478]">
+          <p className="mt-8 text-2xl md:text-3xl text-[#bd9973]">
             {y.price}
             {y.priceNote && <span className="ml-2 text-xs uppercase tracking-[0.14em] text-[#8b90a0]">{y.priceNote}</span>}
           </p>
@@ -187,13 +191,13 @@ export default async function YachtDetailPage({ params }) {
         </h2>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="/request-quote"
+            href={offerHref}
             className="inline-flex items-center justify-center px-9 py-3 rounded-full bg-[#c2622a] text-[11px] uppercase tracking-[0.2em] text-gray-900 font-semibold transition-opacity duration-300 hover:opacity-90"
           >
             Make an offer
           </Link>
           <Link
-            href="/request-quote"
+            href={detailsHref}
             className="inline-flex items-center justify-center px-9 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
           >
             Request full details

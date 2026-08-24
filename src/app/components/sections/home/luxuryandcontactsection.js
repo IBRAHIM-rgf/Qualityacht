@@ -1,5 +1,6 @@
 import Image from "next/image";
 import LosangeComposen from "../../losangecomposen";
+import HomeContactForm from "./HomeContactForm";
 
 const activeItems = [
     { index: 0, title: ['Private Jet'], image: "/images/gridLosange/jet2.png", link: "/privat-jet" },
@@ -74,86 +75,68 @@ export default function Luxuryandcontactsection() {
 
 
         {/* <LosangeComposen/> */}
-        <div className=" py-16 px-4 md:px-24">
+        {/* Cible de l'ancre #contact du header. `id="discovery"` reste sur la section
+            englobante : /request-quote-test-v10 pointe vers /#discovery. */}
+        <div id="contact" className=" py-16 px-4 md:px-24 scroll-mt-24">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
-            {/* WhatsApp box */}
-            <div className="rounded-2xl border border-white/20 p-6 shadow-md backdrop-blur-md bg-black/30 flex flex-col justify-between">
+            {/* WhatsApp box : toute la carte est cliquable. Numero officiel confirme,
+                identique au telephone. Aucune mention d'horaires. */}
+            <a
+              href="https://wa.me/41767365781"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Contact Qualityacht on WhatsApp"
+              className="rounded-2xl border border-[#C0C0C0]/70 bg-[#3a3b3f]/35 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-between transition-colors hover:bg-[#3a3b3f]/45 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+            >
               <div>
-                <h2 className="text-2xl font-medium mb-2 flex items-center gap-2">
-                  <span className="text-3xl">🟢</span> WhatsApp
+                <h2 className="text-2xl font-medium mb-2 flex items-center gap-2 text-[#C0C0C0]">
+                  <span className="text-3xl" aria-hidden>🟢</span> WhatsApp
                 </h2>
-                <p className="text-sm text-white/80">
+                <p className="text-sm text-[#ACB0CD]">
                   Manage your enquiries and bookings on the go via private chat with our team
                 </p>
               </div>
-              <span className="mt-4 text-sm">↗</span>
+              <span className="mt-4 text-sm text-[#C2622A]" aria-hidden>↗</span>
+            </a>
+
+            {/* Coordonnees confirmees officielles. Meme traitement transparent que la
+                capsule du configurateur du hero. */}
+            <div className="rounded-2xl border border-[#C0C0C0]/70 bg-[#3a3b3f]/35 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-center">
+              <span className="block text-[10px] uppercase tracking-[0.22em] text-[#C0C0C0] mb-2">General</span>
+              <a
+                href="mailto:info@qualityacht.ch"
+                aria-label="Email Qualityacht at info@qualityacht.ch"
+                className="text-lg font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C0C0C0] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+              >
+                info@qualityacht.ch
+              </a>
+              <a
+                href="tel:+41767365781"
+                aria-label="Call Qualityacht on +41 76 736 57 81"
+                className="text-3xl font-light my-2 text-[#ACB0CD] transition-colors hover:text-[#C0C0C0] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+              >
+                +41 76 736 57 81
+              </a>
             </div>
 
-            {/* Email + phone */}
-            <div className="rounded-2xl bg-[#C0C0C0] text-black p-6 flex flex-col justify-center">
-              <p className="text-lg font-medium">info@airx.aero</p>
-              <p className="text-3xl font-light my-2">+44 203 958 3939</p>
-              <p className="text-sm text-gray-600">Telephone line open 24 hours a day</p>
-            </div>
-
-            {/* Email + phone */}
-            <div className="rounded-2xl bg-[#C0C0C0] text-black p-6 flex flex-col justify-center">
-              <p className="text-lg font-medium">info@qualityacht.ch</p>
-              <p className="text-3xl font-light my-2">+44 203 958 3939</p>
-              <p className="text-sm text-gray-600">Telephone line open 24 hours a day</p>
+            {/* Troisieme bloc, comme avant, dedie a la seconde adresse. */}
+            <div className="rounded-2xl border border-[#C0C0C0]/70 bg-[#3a3b3f]/35 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-center">
+              <span className="block text-[10px] uppercase tracking-[0.22em] text-[#C0C0C0] mb-2">Office</span>
+              <a
+                href="mailto:office@qualityacht.ch"
+                aria-label="Email Qualityacht at office@qualityacht.ch"
+                className="text-lg font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C0C0C0] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+              >
+                office@qualityacht.ch
+              </a>
             </div>
             
             
           </div>
 
           {/* Contact form */}
-          <div className="bg-[#C0C0C0] text-black mt-12 rounded-2xl p-10 grid grid-cols-1 shadow-sm lg:grid-cols-2 gap-8"
-          style={{ boxShadow: "#c0c0c045 -20px 18px 20px" }}
-          >
-            <div>
-              <p className="mb-4 font-semibold">
-                Please select the reason for your enquiry <span className="text-red-500">*</span>
-              </p>
-              <div className="flex gap-4 mb-6">
-                {['General Enquiry', 'Press', 'Other'].map((label) => (
-                  <button
-                    key={label}
-                    className="px-6 py-2 border border-gray-400 rounded-full text-sm hover:bg-black hover:text-white transition"
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  placeholder="Full Name *"
-                  className="border-b border-gray-400 bg-transparent py-2 outline-none"
-                />
-                <input
-                  type="email"
-                  placeholder="Email Address *"
-                  className="border-b border-gray-400 bg-transparent py-2 outline-none"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number *"
-                  className="border-b border-gray-400 bg-transparent py-2 outline-none"
-                />
-                <input
-                  type="text"
-                  placeholder="Company"
-                  className="border-b border-gray-400 bg-transparent py-2 outline-none"
-                />
-              </div>
-              <textarea
-                placeholder="Your Message"
-                className="w-full mt-4 border-b border-gray-400 bg-transparent py-2 outline-none"
-                rows={3}
-              />
-            </div>
-            {/* Empty side or optionally add something like a map or info */}
-            <div />
+          <div className="mt-12 rounded-2xl border border-[#C0C0C0]/70 bg-[#3a3b3f]/35 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <HomeContactForm />
           </div>
         </div>
       </div>

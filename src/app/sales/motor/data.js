@@ -128,6 +128,13 @@ export function getYacht(id) {
   return YACHTS.find((y) => y.id === id) || null;
 }
 
+// Reference commerciale affichee sur la fiche et reprise dans le formulaire Sales.
+// Source unique pour eviter que les deux endroits divergent.
+export function getYachtRef(y) {
+  if (!y) return null;
+  return `QA-${y.id.slice(0, 3).toUpperCase()}-${y.year}`;
+}
+
 // Filtres par type (globaljet : onglets constructeurs -> ici types de yacht).
 export const TYPE_FILTERS = [
   { key: 'all', label: 'All' },

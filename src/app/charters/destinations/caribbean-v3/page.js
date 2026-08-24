@@ -132,23 +132,23 @@ export default function CaribbeanV3Page() {
         {/* Texte description qui défile par-dessus */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-24 text-center leading-relaxed space-y-6" style={{ marginTop: '-100vh' }}>
           <p className="text-xl text-[#acb0cd]">
-            A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>, <span className="text-[#d39478] font-semibold">powder-white beaches</span>, <span className="text-[#d39478] font-semibold">vibrant coral reefs</span>, and <span className="text-[#d39478] font-semibold">lush tropical forests</span>,
-            the Caribbean stands as <span className="text-[#d39478] font-semibold">the world's premier destination</span> for luxury yacht charters.
+            A paradise of <span className="text-[#bd9973] font-semibold">turquoise waters</span>, <span className="text-[#bd9973] font-semibold">powder-white beaches</span>, <span className="text-[#bd9973] font-semibold">vibrant coral reefs</span>, and <span className="text-[#bd9973] font-semibold">lush tropical forests</span>,
+            the Caribbean stands as <span className="text-[#bd9973] font-semibold">the world's premier destination</span> for luxury yacht charters.
           </p>
           <p className="text-lg max-w-3xl mx-auto text-[#acb0cd]">
-            From <span className="text-[#d39478] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
-            of <span className="text-[#d39478] font-semibold">Michelin-starred restaurants</span> and <span className="text-[#d39478] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
+            From <span className="text-[#bd9973] font-semibold">untamed natural beauty</span> and pirate legends of the Leeward and Windward Islands to the opulence
+            of <span className="text-[#bd9973] font-semibold">Michelin-starred restaurants</span> and <span className="text-[#bd9973] font-semibold">ultra-luxury resorts</span> in St. Martin and St. Barts, the Caribbean
             offers an unparalleled sailing experience.
           </p>
           <p className="text-lg max-w-2xl mx-auto text-[#acb0cd]">
-            Comprising <span className="text-[#d39478] font-semibold">twenty-six countries</span> and over <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
+            Comprising <span className="text-[#bd9973] font-semibold">twenty-six countries</span> and over <span className="text-[#bd9973] font-semibold">seven hundred islands</span>, cays, and islets—including the Greater
             and Lesser Antilles—the Caribbean is a mosaic of crystal-clear seas, palm-fringed shores, and a rich
-            cultural tapestry blending <span className="text-[#d39478] font-semibold">Creole, French, Dutch, and British</span> influences.
+            cultural tapestry blending <span className="text-[#bd9973] font-semibold">Creole, French, Dutch, and British</span> influences.
           </p>
           <p className="text-base max-w-xl mx-auto text-[#acb0cd]">
             For discerning clients seeking the finest in yacht charters, the Caribbean delivers a seamless blend
-            of exclusivity and adventure. Whether it's the glamour of <span className="text-[#d39478] font-semibold">Turks and Caicos</span>, the sophistication of
-            <span className="text-[#d39478] font-semibold"> St. Barts</span>, or <span className="text-[#d39478] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
+            of exclusivity and adventure. Whether it's the glamour of <span className="text-[#bd9973] font-semibold">Turks and Caicos</span>, the sophistication of
+            <span className="text-[#bd9973] font-semibold"> St. Barts</span>, or <span className="text-[#bd9973] font-semibold">private island resorts accessible only by sea</span>, this region promises an elite escape
             where every moment is crafted for the extraordinary.
           </p>
         </div>

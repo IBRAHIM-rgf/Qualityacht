@@ -615,17 +615,17 @@ export default function CaribbeanV15Page() {
               <h2 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.12em] text-[#acb0cd] mb-2">
                 Caribbean
               </h2>
-              <p className="text-lg md:text-2xl text-[#d39478] italic">
+              <p className="text-lg md:text-2xl text-[#bd9973] italic">
                 Luxury, Serenity, and Bliss
               </p>
             </div>
             <p className="text-base md:text-xl text-[#acb0cd] leading-relaxed">
               Discretion is the ultimate luxury. Here, the Caribbean unfolds in{' '}
-              <span className="text-[#d39478] font-semibold">private coves and secluded anchorages</span>,
+              <span className="text-[#bd9973] font-semibold">private coves and secluded anchorages</span>,
               where the only witnesses to your escape are the endless horizon and the gentle rhythm of the waves.
               Your yacht, a sanctuary of elegance, blends seamlessly with the turquoise waters&mdash;because
               true exclusivity is found in the{' '}
-              <span className="text-[#d39478] font-semibold">art of going unnoticed</span>.
+              <span className="text-[#bd9973] font-semibold">art of going unnoticed</span>.
             </p>
           </div>
         </CloudSection>

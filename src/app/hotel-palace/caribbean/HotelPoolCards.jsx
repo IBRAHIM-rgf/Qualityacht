@@ -31,7 +31,7 @@ const HOTELS = [
 
 function Stars({ n, className = '' }) {
   return (
-    <span className={`tracking-[0.2em] text-[#d39478] ${className}`} aria-label={`${n} étoiles`}>
+    <span className={`tracking-[0.2em] text-[#bd9973] ${className}`} aria-label={`${n} étoiles`}>
       {'★'.repeat(n)}
     </span>
   );

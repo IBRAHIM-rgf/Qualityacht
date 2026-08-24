@@ -1,36 +1,21 @@
 // src/app/api/admin/yachts/search/route.js - Recherche Ankor pour admin
 
 import { NextResponse } from 'next/server';
-import { fetchYachtsWithFilters } from '@/lib/yachts';
-
-/**
- * Vérifie le token d'authentification admin
- */
-function checkAuth(request) {
-  const { searchParams } = new URL(request.url);
-  const token = searchParams.get('token');
-
-  if (!process.env.ADMIN_SECRET_TOKEN) {
-    console.error('ADMIN_SECRET_TOKEN non configuré');
-    return false;
-  }
-
-  return token === process.env.ADMIN_SECRET_TOKEN;
-}
+import { guardAdminRoute } from '@/lib/adminAuth';
 
 /**
  * GET /api/admin/yachts/search - Recherche dans l'API Ankor
  * Query params: type, destination, capacity, minLength, maxLength, priceMin, priceMax
  */
 export async function GET(request) {
-  if (!checkAuth(request)) {
-    return NextResponse.json(
-      { error: 'Non autorisé' },
-      { status: 401 }
-    );
-  }
+  const denied = guardAdminRoute(request);
+  if (denied) return denied;
 
   try {
+
+    // Chargement APRES la garde : aucun module susceptible d'ouvrir une connexion
+    // n'est initialise avant que l'authentification soit etablie.
+    const { fetchYachtsWithFilters } = await import('@/lib/yachts');
     const { searchParams } = new URL(request.url);
 
     const filters = {

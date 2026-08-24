@@ -273,11 +273,11 @@ export default function YachtFilters({ filters, onChange, mobileButtonClass = 't
             {/* Sub-region (cascade quand destination a des sous-régions) */}
             {availableSubRegions.length > 0 && (
               <div>
-                <label className="block text-sm font-medium text-[#d39478] mb-2">Sub-region</label>
+                <label className="block text-sm font-medium text-[#bd9973] mb-2">Sub-region</label>
                 <select
                   value={localFilters.subRegion || ''}
                   onChange={e => handleChange('subRegion', e.target.value)}
-                  className="w-full px-4 py-3 bg-[#3a3b3f] border border-[#B87333]/40 rounded-xl text-[#d39478] accent-[#B03E00]"
+                  className="w-full px-4 py-3 bg-[#3a3b3f] border border-[#B87333]/40 rounded-xl text-[#bd9973] accent-[#B03E00]"
                 >
                   {availableSubRegions.map(sr => (
                     <option key={sr.value} value={sr.value}>{sr.label}</option>

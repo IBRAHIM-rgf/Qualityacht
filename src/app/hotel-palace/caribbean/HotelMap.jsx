@@ -30,7 +30,7 @@ function popupHtml(h) {
     <div style="width:216px;font-family:system-ui,sans-serif">
       <div style="position:relative;border-radius:8px;overflow:hidden;height:118px;margin-bottom:8px">
         <img src="${h.img}" alt="" style="width:100%;height:100%;object-fit:cover"/>
-        <span style="position:absolute;top:6px;left:8px;color:#d39478;font-size:12px;letter-spacing:2px;text-shadow:0 1px 3px rgba(0,0,0,.9)">${stars}</span>
+        <span style="position:absolute;top:6px;left:8px;color:#bd9973;font-size:12px;letter-spacing:2px;text-shadow:0 1px 3px rgba(0,0,0,.9)">${stars}</span>
       </div>
       <div style="font-family:var(--font-trajan-regular),serif;text-transform:uppercase;letter-spacing:1px;font-size:13px;color:#C0C0C0;line-height:1.3">${h.name}</div>
       <div style="font-size:11px;color:#B87333;margin-top:3px">${h.place}</div>

@@ -604,7 +604,7 @@ export default function RequestQuoteWizard() {
               <h2 className="trajan-regular font-bold text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0] mb-4">Thank You!</h2>
               <div className="w-12 h-px bg-[#c2622a] mx-auto mb-6" />
               <p className="text-[#acb0cd] leading-relaxed mb-8">
-                Your request for <span className="text-[#d39478]">{yacht.name}</span> has been received.
+                Your request for <span className="text-[#bd9973]">{yacht.name}</span> has been received.
                 One of our charter experts will contact you shortly to craft your bespoke itinerary.
               </p>
               <a href="/charters/destinations/caribbean-v15"

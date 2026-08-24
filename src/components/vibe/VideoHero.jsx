@@ -86,7 +86,7 @@ export default function VideoHero({
         </Reveal>
         {/* Trait accent anime */}
         <Reveal variant="scale" delay={550}>
-          <span className="block h-[2px] w-24 md:w-32 my-5 rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #c2622a 30%, #d39478 70%, transparent)' }} />
+          <span className="block h-[2px] w-24 md:w-32 my-5 rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #c2622a 30%, #bd9973 70%, transparent)' }} />
         </Reveal>
         {subtitle && (
           <Reveal variant="up" delay={650}>

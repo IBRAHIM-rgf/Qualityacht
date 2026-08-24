@@ -9,7 +9,8 @@
 // orange #B03E00, cuivre #B87333). Boutons "Companion" en couleur : autorise.
 
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import Link from 'next/link';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronDown, ArrowRight, Check } from 'lucide-react';
 import {
@@ -37,6 +38,22 @@ const BOARDING = {
 
 export default function CaribbeanAccessibilityGuide() {
   const router = useRouter();
+  const heroVideoRef = useRef(null);
+
+  // prefers-reduced-motion : on met la video en pause sur une image stable et
+  // comprehensible plutot que de la laisser boucler.
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const apply = () => {
+      const v = heroVideoRef.current;
+      if (!v) return;
+      if (mq.matches) { v.pause(); v.removeAttribute('loop'); }
+      else { v.play?.().catch(() => {}); }
+    };
+    apply();
+    mq.addEventListener?.('change', apply);
+    return () => mq.removeEventListener?.('change', apply);
+  }, []);
   const [picked, setPicked] = useState('');            // handicap principal choisi (id)
   const [activeCat, setActiveCat] = useState('all');
   const [activeComp, setActiveComp] = useState(null);
@@ -79,18 +96,57 @@ export default function CaribbeanAccessibilityGuide() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
 
-      {/* ══ HERO VIDEO — video entiere, aucun crop ══ */}
-      <div className="relative w-full pt-[70px] md:pt-0 bg-[#26272a] max-h-[86vh] overflow-hidden flex items-center justify-center">
+      {/* ══ HERO VIDEO plein cadre ══
+          `object-cover` au lieu de `object-contain` : plus de bandes vides. Le
+          cadrage privilegie le centre en desktop et le haut du sujet en mobile.
+          Aucun voile colore, seulement un degrade sombre neutre pour la lisibilite. */}
+      <section className="relative w-full h-[82vh] min-h-[520px] md:h-[84vh] max-md:h-[74vh] overflow-hidden bg-[#26272a]">
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video
+          ref={heroVideoRef}
           src="/media/quality/video/hero-accessible-caribbean.mp4"
           autoPlay
           muted
           loop
           playsInline
-          className="block w-full h-auto max-h-[86vh] object-contain"
+          preload="metadata"
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center max-md:object-[50%_35%]"
         />
-      </div>
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.55) 0%, rgba(38,39,42,0.25) 30%, rgba(38,39,42,0.55) 68%, #26272a 100%)' }}
+        />
+
+        <div className="relative z-10 h-full flex flex-col items-center justify-end text-center px-5 pb-14 md:pb-20">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.28em] text-[#C0C0C0] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+            The Caribbean &middot; Tailored Support at Sea
+          </p>
+          <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight max-w-4xl drop-shadow-[0_3px_14px_rgba(0,0,0,0.85)]">
+            Accessible Caribbean Yacht Charters
+          </h1>
+          <p className="mt-5 max-w-2xl text-sm md:text-base leading-relaxed text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+            Whatever your mobility, sensory or onboard support needs, our team will identify
+            the right yacht and coordinate every detail with you.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/charters/accessible/caribbean/yacht"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-colors duration-300 hover:bg-[#2e2f32] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+            >
+              View Accessible Yachts
+            </Link>
+            <Link
+              href="/#contact"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a]/50 backdrop-blur-sm px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#C0C0C0] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+            >
+              Speak to a Charter Specialist
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* ══ MASTHEAD ══ */}
       <div className="border-b border-[#B87333]/30 px-6 md:px-14 pt-14 md:pt-16 pb-10 flex flex-col items-center text-center">
@@ -99,9 +155,9 @@ export default function CaribbeanAccessibilityGuide() {
         <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
           {REGION} · Private Charter Accessibility
         </p>
-        <h1 className="trajan-regular text-3xl md:text-5xl text-[#C0C0C0] leading-tight mb-2">
+        <h2 className="trajan-regular text-3xl md:text-5xl text-[#C0C0C0] leading-tight mb-2">
           Onboard Accessibility<br />Coordination Guide
-        </h1>
+        </h2>
 
         <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-7 pt-6 border-t border-white/10 w-full">
           <Legend dot={BOARDING.req.dot} label="Dedicated companion required" />
@@ -110,6 +166,32 @@ export default function CaribbeanAccessibilityGuide() {
           <span className="text-[11px] text-[#6f7585]">Each charter assessed individually by our medical coordinator.</span>
         </div>
       </div>
+
+      {/* ══ BLOC DE CONTACT RASSURANT ══
+          Place au debut du guide, assez loin du hero pour ne pas dupliquer ses CTA
+          tout en restant comprehensible si l'on arrive directement ici. */}
+      <section className="px-6 md:px-14 py-10 md:py-14">
+        <div className="max-w-3xl mx-auto rounded-2xl border border-[#C0C0C0]/40 bg-[#2e2f32] p-8 md:p-10 text-center">
+          <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#c2622a] mb-4">
+            <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#c2622a]" />
+            Personal coordination
+          </span>
+          <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-tight">
+            Tell Us What You Need
+          </h2>
+          <p className="mt-5 text-sm md:text-base leading-relaxed text-[#acb0cd]">
+            Every request is handled individually and in complete confidence. Tell us about your
+            mobility, sensory or onboard support needs, and our team will coordinate the yacht,
+            equipment and assistance best suited to your journey.
+          </p>
+          <Link
+            href="/#contact"
+            className="mt-8 inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-colors duration-300 hover:bg-[#2e2f32] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+          >
+            Speak to Our Team
+          </Link>
+        </div>
+      </section>
 
       {/* ══ TOOLBAR ══ */}
       <div className="flex flex-col gap-3 px-6 md:px-14 py-4 bg-[#2e2f32] border-b border-white/10">

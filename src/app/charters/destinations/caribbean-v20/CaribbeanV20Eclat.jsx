@@ -40,27 +40,27 @@ function TextCard({ kicker, children }) {
 
 const T1 = (
   <TextCard kicker="Paradise">
-    A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>,{' '}
-    <span className="text-[#d39478] font-semibold">powder-white beaches</span> and{' '}
-    <span className="text-[#d39478] font-semibold">vibrant coral reefs</span> — the world's premier destination for luxury yacht charters.
+    A paradise of <span className="text-[#bd9973] font-semibold">turquoise waters</span>,{' '}
+    <span className="text-[#bd9973] font-semibold">powder-white beaches</span> and{' '}
+    <span className="text-[#bd9973] font-semibold">vibrant coral reefs</span> — the world's premier destination for luxury yacht charters.
   </TextCard>
 );
 const T2 = (
   <TextCard kicker="Glamour & legend">
     From the pirate legends of the Leeward and Windward Islands to the{' '}
-    <span className="text-[#d39478] font-semibold">Michelin-starred tables</span> of St. Martin and St. Barts — an unparalleled sailing experience.
+    <span className="text-[#bd9973] font-semibold">Michelin-starred tables</span> of St. Martin and St. Barts — an unparalleled sailing experience.
   </TextCard>
 );
 const T3 = (
   <TextCard kicker="700+ islands">
-    <span className="text-[#d39478] font-semibold">Twenty-six nations</span> and over{' '}
-    <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays and islets — crystal-clear seas and palm-fringed shores.
+    <span className="text-[#bd9973] font-semibold">Twenty-six nations</span> and over{' '}
+    <span className="text-[#bd9973] font-semibold">seven hundred islands</span>, cays and islets — crystal-clear seas and palm-fringed shores.
   </TextCard>
 );
 const T4 = (
   <TextCard kicker="Curated around you">
-    The glamour of <span className="text-[#d39478] font-semibold">Turks &amp; Caicos</span>, the sophistication of{' '}
-    <span className="text-[#d39478] font-semibold">St. Barts</span>, private islands reachable only by sea — crafted for the extraordinary.
+    The glamour of <span className="text-[#bd9973] font-semibold">Turks &amp; Caicos</span>, the sophistication of{' '}
+    <span className="text-[#bd9973] font-semibold">St. Barts</span>, private islands reachable only by sea — crafted for the extraordinary.
   </TextCard>
 );
 

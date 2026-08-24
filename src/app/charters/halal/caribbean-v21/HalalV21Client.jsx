@@ -97,9 +97,9 @@ export default function HalalV21Client() {
         <div className="max-w-3xl mx-auto text-center">
           <Reveal variant="up">
             <p className="text-lg md:text-2xl leading-relaxed text-[#acb0cd]">
-              A world of <span className="text-[#d39478] font-semibold">turquoise privacy</span> for the whole family —
-              refined <span className="text-[#d39478] font-semibold">halal cuisine</span>,{' '}
-              <span className="text-[#d39478] font-semibold">alcohol-free</span> sundowners and a crew who anticipates
+              A world of <span className="text-[#bd9973] font-semibold">turquoise privacy</span> for the whole family —
+              refined <span className="text-[#bd9973] font-semibold">halal cuisine</span>,{' '}
+              <span className="text-[#bd9973] font-semibold">alcohol-free</span> sundowners and a crew who anticipates
               every wish, discreetly.
             </p>
           </Reveal>

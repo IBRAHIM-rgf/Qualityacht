@@ -34,7 +34,7 @@ export const SUB_REGIONS = {
   },
   'leeward-islands': {
     label: 'Leeward Islands',
-    color: '#d39478',
+    color: '#bd9973',
     center: [17.3, -62.4],
     description: 'Anguilla, St-Martin, St-Barth, Saba, St-Eustache, St-Kitts & Nevis, Antigua & Barbuda, Montserrat, Guadeloupe',
     polygon: [
@@ -201,7 +201,7 @@ export const AIRPORTS = [
 // Markers complémentaires aux aéroports (forme différente, plus discrète).
 export const ISLAND_GROUPS = [
   { id: 'greater-antilles',  label: 'Greater Antilles',      color: '#B03E00' },
-  { id: 'leeward-islands',   label: 'Leeward Islands',       color: '#d39478' },
+  { id: 'leeward-islands',   label: 'Leeward Islands',       color: '#bd9973' },
   { id: 'leeward-antilles',  label: 'Leeward Antilles',      color: '#B87333' },
   { id: 'windward-islands',  label: 'Windward Islands',      color: '#c2622a' },
   { id: 'turks-caicos',      label: 'Turks & Caicos',        color: '#5e7ec9' },
@@ -282,7 +282,7 @@ export const ISLANDS = [
 export const SIZE_COLORS = {
   large:  '#B03E00',  // grand jet
   all:    '#c2622a',  // tous types
-  medium: '#d39478',  // moyen
+  medium: '#bd9973',  // moyen
   light:  '#acb0cd',  // léger
   stol:   '#5e7ec9',  // STOL
 };

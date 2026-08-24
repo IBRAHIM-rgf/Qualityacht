@@ -7,6 +7,7 @@
 // turquoise — PAS de cheval ni carnaval, on est un site de YACHT) + 2 VIDEOS
 // HORIZONTALES (dauphins + drone turquoise). Puis le 2e BANDEAU video beach-band.
 
+import Link from 'next/link';
 import VibeCard from '@/components/vibe/VibeCard';
 import FloatingScatter from '@/components/vibe/FloatingScatter';
 import { VideoBand } from '@/components/vibe/blocks';
@@ -36,27 +37,27 @@ function TextCard({ kicker, children }) {
 
 const T1 = (
   <TextCard kicker="Paradise">
-    A paradise of <span className="text-[#d39478] font-semibold">turquoise waters</span>,{' '}
-    <span className="text-[#d39478] font-semibold">powder-white beaches</span> and{' '}
-    <span className="text-[#d39478] font-semibold">vibrant coral reefs</span> — the world's premier destination for luxury yacht charters.
+    A paradise of <span className="text-[#bd9973] font-semibold">turquoise waters</span>,{' '}
+    <span className="text-[#bd9973] font-semibold">powder-white beaches</span> and{' '}
+    <span className="text-[#bd9973] font-semibold">vibrant coral reefs</span> — the world's premier destination for luxury yacht charters.
   </TextCard>
 );
 const T2 = (
   <TextCard kicker="Glamour & legend">
     From the pirate legends of the Leeward and Windward Islands to the{' '}
-    <span className="text-[#d39478] font-semibold">Michelin-starred tables</span> of St. Martin and St. Barts — an unparalleled sailing experience.
+    <span className="text-[#bd9973] font-semibold">Michelin-starred tables</span> of St. Martin and St. Barts — an unparalleled sailing experience.
   </TextCard>
 );
 const T3 = (
   <TextCard kicker="700+ islands">
-    <span className="text-[#d39478] font-semibold">Twenty-six nations</span> and over{' '}
-    <span className="text-[#d39478] font-semibold">seven hundred islands</span>, cays and islets — crystal-clear seas and palm-fringed shores.
+    <span className="text-[#bd9973] font-semibold">Twenty-six nations</span> and over{' '}
+    <span className="text-[#bd9973] font-semibold">seven hundred islands</span>, cays and islets — crystal-clear seas and palm-fringed shores.
   </TextCard>
 );
 const T4 = (
   <TextCard kicker="Curated around you">
-    The glamour of <span className="text-[#d39478] font-semibold">Turks &amp; Caicos</span>, the sophistication of{' '}
-    <span className="text-[#d39478] font-semibold">St. Barts</span>, private islands reachable only by sea — crafted for the extraordinary.
+    The glamour of <span className="text-[#bd9973] font-semibold">Turks &amp; Caicos</span>, the sophistication of{' '}
+    <span className="text-[#bd9973] font-semibold">St. Barts</span>, private islands reachable only by sea — crafted for the extraordinary.
   </TextCard>
 );
 
@@ -96,6 +97,15 @@ export default function CaribbeanV20Eclat() {
           <h2 className="trajan-regular text-2xl md:text-4xl lg:text-5xl uppercase tracking-[0.08em] text-[#acb0cd] leading-tight max-w-2xl mx-auto">
             The Caribbean,<br className="hidden md:block" /> Curated Around You
           </h2>
+          {/* Acces flotte place juste apres le texte d'introduction, sans attendre
+              le lien deja present tout en bas de page. */}
+          <Link
+            href="/yachts?destination=caribbean"
+            className="group mt-8 inline-flex min-h-[48px] items-center justify-center gap-3 rounded-full border border-[#C0C0C0] bg-[#2e2f32]/60 px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+          >
+            Explore the Caribbean Fleet
+            <span aria-hidden className="text-[#c2622a] transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+          </Link>
         </FloatingScatter>
       </section>
 

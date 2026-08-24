@@ -2,7 +2,9 @@
 
 import AdminYachtPanel from './AdminYachtPanel';
 import AdminLogin from './AdminLogin';
-import { getSelectedYachtsWithData, getSelectionStats } from '@/lib/db';
+import AdminLogoutButton from './AdminLogoutButton';
+import { redirect } from 'next/navigation';
+import { hasValidAdminSession } from '@/lib/adminAuth';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -14,29 +16,16 @@ export const metadata = {
 
 export default async function AdminYachtsPage({ searchParams }) {
   const params = await searchParams;
-  const token = params?.token;
 
-  // Si pas de token -> afficher le formulaire de login
-  if (!token) {
-    return <AdminLogin />;
+  // Ancienne URL portant encore un ancien parametre secret dans l'URL : on nettoie immediatement sans lire ni
+  // valider le parametre, pour qu'il cesse de circuler dans l'historique et les logs.
+  if (params && 'token' in params) {
+    redirect('/admin/yachts');
   }
 
-  // Si token invalide -> afficher erreur avec lien retour
-  if (token !== process.env.ADMIN_SECRET_TOKEN) {
-    return (
-      <div className="min-h-screen bg-[#303135] flex items-center justify-center">
-        <div className="bg-[#1b223d] border border-red-700 rounded-xl p-8 max-w-md text-center">
-          <h1 className="text-2xl font-bold text-red-400 mb-4">Token Invalide</h1>
-          <p className="text-gray-400 mb-4">Le token fourni n'est pas correct.</p>
-          <a
-            href="/admin/yachts"
-            className="inline-block mt-4 px-6 py-2 bg-copper-500 hover:bg-copper-600 text-white rounded-xl transition-colors"
-          >
-            Reessayer
-          </a>
-        </div>
-      </div>
-    );
+  // Seule la session signee du cookie fait foi.
+  if (!(await hasValidAdminSession())) {
+    return <AdminLogin />;
   }
 
   let selections = [];
@@ -44,6 +33,9 @@ export default async function AdminYachtsPage({ searchParams }) {
   let error = null;
 
   try {
+    // Chargement APRES verification de la session : sans authentification, aucun
+    // module susceptible d'ouvrir une connexion n'est initialise.
+    const { getSelectedYachtsWithData, getSelectionStats } = await import('@/lib/db');
     // Fetch les sélections et stats depuis la base de données
     const [dbSelections, dbStats] = await Promise.all([
       getSelectedYachtsWithData(),
@@ -60,8 +52,9 @@ export default async function AdminYachtsPage({ searchParams }) {
 
   return (
     <div className="min-h-screen bg-[#303135]">
-      {/* Header Admin */}
-      <div className="bg-[#1b223d] border-b border-gray-700 px-6 py-4">
+      {/* Header Admin. `pt-24` degage la barre du header fixe du site, qui la
+          recouvrait et rendait ses boutons inclicables. */}
+      <div className="bg-[#1b223d] border-b border-gray-700 px-6 py-4 pt-24">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-[#C0C0C0] trajan-regular">
@@ -73,17 +66,18 @@ export default async function AdminYachtsPage({ searchParams }) {
           </div>
           <div className="flex items-center gap-4">
             <a
-              href={`/admin/regatta?token=${encodeURIComponent(token)}`}
-              className="flex-none px-4 py-2 rounded-lg border border-[#B87333]/60 text-[#B87333] hover:bg-[#B87333]/10 hover:text-[#d39478] text-sm font-medium transition-colors whitespace-nowrap"
+              href="/admin/regatta"
+              className="flex-none px-4 py-2 rounded-lg border border-[#B87333]/60 text-[#B87333] hover:bg-[#B87333]/10 hover:text-[#bd9973] text-sm font-medium transition-colors whitespace-nowrap"
             >
               🏁 Régates
             </a>
             <a
-              href={`/admin/voiliers?token=${encodeURIComponent(token)}`}
-              className="flex-none px-4 py-2 rounded-lg border border-[#B87333]/60 text-[#B87333] hover:bg-[#B87333]/10 hover:text-[#d39478] text-sm font-medium transition-colors whitespace-nowrap"
+              href="/admin/voiliers"
+              className="flex-none px-4 py-2 rounded-lg border border-[#B87333]/60 text-[#B87333] hover:bg-[#B87333]/10 hover:text-[#bd9973] text-sm font-medium transition-colors whitespace-nowrap"
             >
               ⛵ Voiliers
             </a>
+            <AdminLogoutButton />
             <div className="text-right text-sm">
               <div className="text-[#C0C0C0]">
                 <span className="text-green-400 font-semibold">{stats.visible}</span> visibles
@@ -109,7 +103,6 @@ export default async function AdminYachtsPage({ searchParams }) {
           <AdminYachtPanel
             initialSelections={selections}
             initialStats={stats}
-            token={token}
           />
         )}
       </div>

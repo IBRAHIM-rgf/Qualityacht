@@ -10,9 +10,9 @@ const onlyCoupleDestinations = destinations.map((d) =>
 const INTRO = (
   <p className="text-base md:text-xl text-[#acb0cd] leading-relaxed">
     Turn your next unforgettable memory into a{' '}
-    <span className="text-[#d39478] font-semibold">luxury escape on the water</span>.
+    <span className="text-[#bd9973] font-semibold">luxury escape on the water</span>.
     Experience{' '}
-    <span className="text-[#d39478] font-semibold">absolute intimacy</span>{' '}
+    <span className="text-[#bd9973] font-semibold">absolute intimacy</span>{' '}
     aboard an exceptional yacht.
   </p>
 );

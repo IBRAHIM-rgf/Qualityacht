@@ -77,7 +77,7 @@ export const SUBREGIONS = [
   {
     slug: 'leeward-islands',
     name: 'Leeward Islands',
-    color: '#d39478',
+    color: '#bd9973',
     description: 'Anguilla, St-Martin, St-Barth, Saba, St Eustatius, St Kitts & Nevis, Antigua & Barbuda, Montserrat, Guadeloupe',
     polygons: [
       [

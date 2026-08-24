@@ -489,7 +489,7 @@ function seasonMonthsCoverage(season) {
 
 function SeasonCalendar({ seasons }) {
   if (seasons.length === 0) return null;
-  const palette = ['#B03E00', '#d39478', '#c2622a', '#acb0cd', '#B87333', '#5e7ec9', '#8e44ad', '#27ae60', '#e67e22', '#16a085'];
+  const palette = ['#B03E00', '#bd9973', '#c2622a', '#acb0cd', '#B87333', '#5e7ec9', '#8e44ad', '#27ae60', '#e67e22', '#16a085'];
   return (
     <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] p-4 overflow-x-auto">
       <div className="min-w-[700px]">

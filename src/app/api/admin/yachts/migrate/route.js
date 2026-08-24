@@ -3,22 +3,18 @@
 // et backfill depuis cached_data pour les yachts existants.
 
 import { NextResponse } from 'next/server';
-import sql, { ensureV3Schema } from '@/lib/db';
-import { extractLightData, inferAnkorRegion } from '@/lib/yachtCache';
-
-function checkAuth(request) {
-  const { searchParams } = new URL(request.url);
-  const token = searchParams.get('token');
-  if (!process.env.ADMIN_SECRET_TOKEN) return false;
-  return token === process.env.ADMIN_SECRET_TOKEN;
-}
+import { guardAdminRoute } from '@/lib/adminAuth';
 
 export async function POST(request) {
-  if (!checkAuth(request)) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
-  }
+  const denied = guardAdminRoute(request);
+  if (denied) return denied;
 
   try {
+
+    // Chargement APRES la garde : aucun module susceptible d'ouvrir une connexion
+    // n'est initialise avant que l'authentification soit etablie.
+    const { default: sql, ensureV3Schema  } = await import('@/lib/db');
+    const { extractLightData, inferAnkorRegion } = await import('@/lib/yachtCache');
     await ensureV3Schema();
 
     // Backfill : pour chaque yacht avec cached_data mais sans light_data, on extrait

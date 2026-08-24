@@ -4,19 +4,50 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Lock, LogIn } from 'lucide-react';
 
+// Le secret est envoye dans le CORPS d'une requete POST. Il ne transite jamais par
+// l'URL et n'est jamais conserve cote navigateur : le serveur repond en posant un
+// cookie de session HttpOnly, inaccessible au JavaScript.
+
 export default function AdminLogin() {
-  const [token, setToken] = useState('');
+  const [secret, setSecret] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!token.trim()) {
+    if (loading) return;
+    if (!secret.trim()) {
       setError('Veuillez entrer le token');
       return;
     }
-    // Rediriger vers la page avec le token
-    router.push(`/admin/yachts?token=${encodeURIComponent(token.trim())}`);
+
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/admin/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ secret: secret.trim() }),
+      });
+
+      if (res.ok) {
+        setSecret('');
+        router.replace('/admin/yachts');
+        router.refresh();
+        return;
+      }
+      if (res.status === 503) {
+        setError("L'administration n'est pas configuree sur ce serveur.");
+      } else {
+        // Message volontairement generique : ne rien apprendre a un attaquant.
+        setError('Identifiants invalides.');
+      }
+    } catch {
+      setError('Connexion impossible. Reessayez.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,24 +63,30 @@ export default function AdminLogin() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-300 mb-2">Token d'acces</label>
+            <label htmlFor="admin-secret" className="block text-sm text-gray-300 mb-2">
+              Token d&apos;acces
+            </label>
             <input
+              id="admin-secret"
+              name="secret"
               type="password"
-              value={token}
-              onChange={(e) => { setToken(e.target.value); setError(''); }}
+              autoComplete="current-password"
+              value={secret}
+              onChange={(e) => { setSecret(e.target.value); setError(''); }}
               placeholder="Votre token secret..."
               className="w-full px-4 py-3 bg-[#252540] border border-gray-600 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-copper-500 focus:border-transparent transition"
               autoFocus
             />
-            {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
+            {error && <p role="alert" className="text-red-400 text-sm mt-2">{error}</p>}
           </div>
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 bg-copper-500 hover:bg-copper-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-2 bg-copper-500 hover:bg-copper-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-xl transition-colors"
           >
             <LogIn className="w-5 h-5" />
-            Connexion
+            {loading ? 'Connexion…' : 'Connexion'}
           </button>
         </form>
 

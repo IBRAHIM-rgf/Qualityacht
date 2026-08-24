@@ -2,6 +2,12 @@
 // Statique : simple aide-mémoire, pas de BDD. Source : CSV client (redécodé UTF-8).
 // Accès via le bouton "Régates" de la home admin (/admin/yachts). robots: noindex.
 
+import { redirect } from 'next/navigation';
+import { hasValidAdminSession } from '@/lib/adminAuth';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata = {
   title: 'Mémo Régates | Admin Qualityacht',
   robots: 'noindex, nofollow',
@@ -35,8 +41,19 @@ function domainOf(url) {
 
 export default async function AdminRegattaMemoPage({ searchParams }) {
   const params = (await searchParams) || {};
-  const token = typeof params.token === 'string' ? params.token : '';
-  const backHref = token ? `/admin/yachts?token=${encodeURIComponent(token)}` : '/admin/yachts';
+
+  // Ancienne URL portant encore un ancien parametre secret dans l'URL : on nettoie sans lire sa valeur.
+  if ('token' in params) {
+    redirect('/admin/regatta');
+  }
+
+  // Page interne : aucune session valide, aucun contenu rendu.
+  if (!(await hasValidAdminSession())) {
+    redirect('/admin/yachts');
+  }
+
+  // Retour vers l'administration sans aucun parametre : la session est dans le cookie.
+  const backHref = '/admin/yachts';
 
   return (
     <div className="min-h-screen bg-[#303135] text-[#C0C0C0]">

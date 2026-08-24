@@ -15,7 +15,7 @@ export function SectionHead({ kicker, title, sub, align = 'center' }) {
         <h2 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.1em] text-[#acb0cd]">{title}</h2>
       </Reveal>
       <Reveal variant="scale" delay={200}>
-        <span className={`block h-[2px] w-24 my-5 rounded-full ${align === 'left' ? '' : 'mx-auto'}`} style={{ background: 'linear-gradient(90deg, transparent, #c2622a 30%, #d39478 70%, transparent)' }} />
+        <span className={`block h-[2px] w-24 my-5 rounded-full ${align === 'left' ? '' : 'mx-auto'}`} style={{ background: 'linear-gradient(90deg, transparent, #c2622a 30%, #bd9973 70%, transparent)' }} />
       </Reveal>
       {sub && <Reveal variant="up" delay={260}><p className="text-[#acb0cd]/55 text-sm md:text-base uppercase tracking-[0.1em] px-1 max-w-2xl">{sub}</p></Reveal>}
     </div>

@@ -141,7 +141,7 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
       {/* Desktop - Bouton Filter flottant en bas au CENTRE (translucide) */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="hidden md:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-40 items-center gap-2 px-6 py-3 bg-[#3a3b3f]/80 backdrop-blur-md border border-[#C0C0C0] rounded-xl text-[#B03E00] font-medium shadow-2xl transition-colors hover:bg-[#B03E00]/10"
+        className="hidden md:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-40 items-center gap-2 px-6 py-3 bg-[#3a3b3f]/80 backdrop-blur-md border border-[#C0C0C0] rounded-xl text-qy-antilles font-medium shadow-2xl transition-colors hover:bg-qy-antilles/10"
       >
         <Filter className="w-5 h-5" />
         <span className="text-sm uppercase tracking-[0.15em]">Filter</span>
@@ -153,7 +153,7 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
       {/* Mobile — bouton fixe en bas */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#2e2f32] border-t border-white/10 shadow-lg">
         <button onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="w-full flex items-center justify-center gap-2 py-4 px-6 text-[#B03E00] font-medium">
+          className="w-full flex items-center justify-center gap-2 py-4 px-6 text-qy-antilles font-medium">
           <span className="inline-flex items-center gap-2 border border-[#C0C0C0] rounded-full px-5 py-2">
             <Filter className="w-5 h-5" />
             <span>Filters</span>
@@ -183,7 +183,7 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
               <div>
                 <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Yacht Type</label>
                 <select value={localFilters.type} onChange={e => handleChange('type', e.target.value)}
-                  className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
+                  className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-qy-antilles">
                   {yachtTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
               </div>
@@ -192,7 +192,7 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
               <div>
                 <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Boat Class</label>
                 <select value={localFilters.boatClass || ''} onChange={e => handleChange('boatClass', e.target.value)}
-                  className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
+                  className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-qy-antilles">
                   <option value="">All Classes</option>
                   {boatGroups.map(group => (
                     <optgroup key={group.label} label={group.label}>
@@ -205,7 +205,7 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
             <div>
               <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Caribbean Destination</label>
               <select value={localFilters.destination} onChange={e => handleChange('destination', e.target.value)}
-                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
+                className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-qy-antilles">
                 {DESTINATIONS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
               </select>
             </div>
@@ -220,11 +220,11 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
               <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Price</label>
               <div className="flex gap-2">
                 <select value={selectedPriceTier} onChange={e => handlePriceTierChange(Number(e.target.value))}
-                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
+                  className="flex-1 px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-qy-antilles">
                   {PRICE_TIERS.map((tier, i) => <option key={i} value={i}>{getPriceTierLabel(tier, CURRENCY_SYMBOLS[selectedCurrency])}</option>)}
                 </select>
                 <select value={selectedCurrency} onChange={e => handleCurrencyChange(e.target.value)}
-                  className="px-3 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-[#B03E00]">
+                  className="px-3 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-qy-antilles">
                   {CURRENCIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                 </select>
               </div>
@@ -241,11 +241,11 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
                   <div className="px-2">
                     {/* Bulles dynamiques au-dessus des thumbs */}
                     <div className="relative h-4 mb-1">
-                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pL}%` }}>{lengthRange[0]}{unit}</span>
-                      <span className="absolute text-[10px] font-bold text-[#B03E00] -translate-x-1/2" style={{ left: `${pR}%` }}>{lengthRange[1]}{unit}</span>
+                      <span className="absolute text-[10px] font-bold text-qy-antilles -translate-x-1/2" style={{ left: `${pL}%` }}>{lengthRange[0]}{unit}</span>
+                      <span className="absolute text-[10px] font-bold text-qy-antilles -translate-x-1/2" style={{ left: `${pR}%` }}>{lengthRange[1]}{unit}</span>
                     </div>
                     <div className="relative h-6 flex items-center mb-1">
-                      <div className="absolute w-full h-1 rounded-full" style={{ background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pL}%, #B03E00 ${pL}%, #B03E00 ${pR}%, #4b5563 ${pR}%, #4b5563 100%)` }} />
+                      <div className="absolute w-full h-1 rounded-full" style={{ background: `linear-gradient(to right, #4b5563 0%, #4b5563 ${pL}%, var(--qy-antilles) ${pL}%, var(--qy-antilles) ${pR}%, #4b5563 ${pR}%, #4b5563 100%)` }} />
                       {/* Tick marks mobile */}
                       {unitPreference === 'meters'
                         ? Array.from({ length: Math.floor((MAX_LENGTH_M - MIN_LENGTH_M) / 10) + 1 }, (_, i) => {
@@ -262,11 +262,11 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
                       }
                       <input type="range" min={lenMin} max={lenMax} step={unitPreference === 'meters' ? 5 : 10} value={lengthRange[0]}
                         onChange={e => handleLengthChange(0, Math.min(Number(e.target.value), lengthRange[1] - 10))}
-                        className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [[&::-moz-range-thumb]:bg-[#B03E00]::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
+                        className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-qy-antilles [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [[&::-moz-range-thumb]:bg-qy-antilles::-moz-range-thumb]:bg-qy-antilles [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
                         style={{ zIndex: 5 }} />
                       <input type="range" min={lenMin} max={lenMax} step={unitPreference === 'meters' ? 5 : 10} value={lengthRange[1]}
                         onChange={e => handleLengthChange(1, Math.max(Number(e.target.value), lengthRange[0] + 10))}
-                        className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-[#B03E00] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [[&::-moz-range-thumb]:bg-[#B03E00]::-moz-range-thumb]:bg-[#B03E00] [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
+                        className="absolute w-full pointer-events-none appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-sm [&::-webkit-slider-thumb]:bg-qy-antilles [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-sm [[&::-moz-range-thumb]:bg-qy-antilles::-moz-range-thumb]:bg-qy-antilles [&::-moz-range-thumb]:border-none [&::-moz-range-track]:bg-transparent"
                         style={{ zIndex: 5 }} />
                     </div>
                     {/* Labels under tick marks mobile */}
@@ -288,7 +288,7 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
                     <div className="flex gap-3 mt-2">
                       {['meters', 'feet'].map(u => (
                         <button key={u} onClick={() => handleUnitChange(u)}
-                          className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-[#3a3b3f] border border-white/20 ${unitPreference === u ? 'text-[#B03E00]' : 'text-gray-400'}`}>
+                          className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-[#3a3b3f] border border-white/20 ${unitPreference === u ? 'text-qy-antilles' : 'text-gray-400'}`}>
                           {u.charAt(0).toUpperCase() + u.slice(1)}
                         </button>
                       ))}
@@ -311,8 +311,8 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
                   <button key={key} onClick={() => handleChange(key, !active)}
                     className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition border ${
                       active
-                        ? 'bg-[#B03E00] border-[#B03E00] text-white'
-                        : 'bg-[#3a3b3f] border-white/20 text-[#B03E00] hover:border-[#B03E00]'
+                        ? 'bg-qy-antilles border-qy-antilles text-white'
+                        : 'bg-[#3a3b3f] border-white/20 text-qy-antilles hover:border-qy-antilles'
                     }`}>
                     {label}
                   </button>
@@ -328,7 +328,7 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
           </div>
           <div className="sticky bottom-0 bg-[#2e2f32]/95 backdrop-blur-sm border-t border-white/10 p-6">
             <button onClick={() => { applyFilters(); setIsMobileOpen(false); }}
-              className="w-full bg-transparent border-2 border-[#C0C0C0] rounded-xl py-3 font-medium transition-all text-[#B03E00] hover:bg-[#B03E00]/10">
+              className="w-full bg-transparent border-2 border-[#C0C0C0] rounded-xl py-3 font-medium transition-all text-qy-antilles hover:bg-qy-antilles/10">
               Apply Filters
             </button>
           </div>

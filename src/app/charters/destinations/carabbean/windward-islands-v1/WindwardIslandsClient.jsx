@@ -28,16 +28,16 @@ function ShortDescription() {
     <>
       <h2 className="trajan-regular text-lg md:text-2xl text-[#acb0cd] leading-snug">
         The Ultimate Yacht Charter Guide to the{' '}
-        <span style={{ color: '#d39478' }}>Windward Islands</span>:{' '}
+        <span style={{ color: '#bd9973' }}>Windward Islands</span>:{' '}
         Where Volcanoes Meet the Sea
       </h2>
 
       <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
-        The <span style={{ color: '#d39478' }}>Windward Islands</span>—stretching from{' '}
-        <span style={{ color: '#d39478' }}>Martinique</span> down to{' '}
-        <span style={{ color: '#d39478' }}>Grenada</span> and including the legendary{' '}
-        <span style={{ color: '#d39478' }}>Grenadines</span>—are the Caribbean&rsquo;s wildest and most authentic sailing
-        ground, blending dramatic <span style={{ color: '#d39478' }}>volcanic landscapes</span> with vibrant Creole culture.
+        The <span style={{ color: '#bd9973' }}>Windward Islands</span>—stretching from{' '}
+        <span style={{ color: '#bd9973' }}>Martinique</span> down to{' '}
+        <span style={{ color: '#bd9973' }}>Grenada</span> and including the legendary{' '}
+        <span style={{ color: '#bd9973' }}>Grenadines</span>—are the Caribbean&rsquo;s wildest and most authentic sailing
+        ground, blending dramatic <span style={{ color: '#bd9973' }}>volcanic landscapes</span> with vibrant Creole culture.
       </p>
     </>
   );
@@ -47,9 +47,9 @@ function LongDescription() {
   return (
     <>
       <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
-        With <span style={{ color: '#d39478' }}>steady trade winds</span>, short island hops and an array of unspoiled
+        With <span style={{ color: '#bd9973' }}>steady trade winds</span>, short island hops and an array of unspoiled
         anchorages, the Windwards are widely considered the{' '}
-        <span style={{ color: '#d39478' }}>best sailing region in the Caribbean</span>.
+        <span style={{ color: '#bd9973' }}>best sailing region in the Caribbean</span>.
       </p>
 
       <div>
@@ -57,10 +57,10 @@ function LongDescription() {
           Iconic Anchorages and Hidden Gems
         </h3>
         <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
-          From the iconic <span style={{ color: '#d39478' }}>Pitons of St Lucia</span> rising vertically from the sea,
-          to the crystalline waters of <span style={{ color: '#d39478' }}>Tobago Cays</span> and the exclusive private
-          island vibe of <span style={{ color: '#d39478' }}>Mustique</span> and{' '}
-          <span style={{ color: '#d39478' }}>Bequia</span>, every anchorage tells a different story.
+          From the iconic <span style={{ color: '#bd9973' }}>Pitons of St Lucia</span> rising vertically from the sea,
+          to the crystalline waters of <span style={{ color: '#bd9973' }}>Tobago Cays</span> and the exclusive private
+          island vibe of <span style={{ color: '#bd9973' }}>Mustique</span> and{' '}
+          <span style={{ color: '#bd9973' }}>Bequia</span>, every anchorage tells a different story.
         </p>
       </div>
 
@@ -70,8 +70,8 @@ function LongDescription() {
         </h3>
         <p className="text-sm md:text-base text-[#acb0cd]/90 leading-relaxed">
           The Windwards remain the Caribbean&rsquo;s last frontier: explore the{' '}
-          <span style={{ color: '#d39478' }}>rainforests of Dominica</span>, the{' '}
-          <span style={{ color: '#d39478' }}>spice plantations of Grenada</span>, the Creole soul of Martinique and the
+          <span style={{ color: '#bd9973' }}>rainforests of Dominica</span>, the{' '}
+          <span style={{ color: '#bd9973' }}>spice plantations of Grenada</span>, the Creole soul of Martinique and the
           coral-rich waters of Barbados — all within a single bareboat or crewed charter week.
         </p>
       </div>

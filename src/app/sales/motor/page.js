@@ -7,14 +7,12 @@ import { YACHTS, SELLING_STEPS, BUYING_STEPS, PUBLICATIONS, BUILDERS, RECENT_SAL
 // photo estompe, "Highlights" (3 cards compactes + cercle decoratif), "Our Exclusive List"
 // (sidebar filtres + lignes compactes), puis sections IMAGE+TEXTE cote a cote (valeur
 // ajoutee, vendre, acheter), publications, processus vente/achat, ventes recentes, builders,
-// gestion, contact. Tout transpose au monde MARITIME. Fond bleu marine #0a1432. AUCUN emoji.
+// gestion, contact. Tout transpose au monde MARITIME. AUCUN emoji.
 export const metadata = {
   title: 'Motor Yacht Sales & Acquisitions | Qualityacht',
   description:
     'A curated selection of motor yachts for sale, and a proven brokerage process for buying and selling — handled with discretion by Qualityacht.',
 };
-
-const NAVY = '#0a1432';
 
 function TitleLine({ className = 'w-24' }) {
   return (
@@ -39,14 +37,13 @@ function ProcessSteps({ steps }) {
   );
 }
 
-// Section image + texte cote a cote (photo desaturee facon globaljet). reverse = image a droite.
-function SplitSection({ img, eyebrow, title, children, cta, reverse = false }) {
+// Section image + texte cote a cote. reverse = image a droite.
+function SplitSection({ img, eyebrow, title, children, cta, ctaHref, reverse = false }) {
   return (
     <section className="px-6 md:px-14 py-16 md:py-24 border-t border-[#C0C0C0]/10">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
         <div className={`relative h-[240px] md:h-[360px] rounded-lg overflow-hidden border border-[#C0C0C0]/15 ${reverse ? 'md:order-2' : ''}`}>
-          <Image src={encodeURI(img)} alt="" fill sizes="(max-width:768px) 100vw, 50vw" className="object-cover grayscale" />
-          <div className="absolute inset-0 bg-gray-900/20" />
+          <Image src={encodeURI(img)} alt="" fill sizes="(max-width:768px) 100vw, 50vw" className="object-cover" />
         </div>
         <div className={reverse ? 'md:order-1' : ''}>
           {eyebrow && <p className="text-[10px] uppercase tracking-[0.3em] text-[#B87333] mb-3">{eyebrow}</p>}
@@ -58,7 +55,7 @@ function SplitSection({ img, eyebrow, title, children, cta, reverse = false }) {
           {cta && (
             <div className="mt-7">
               <Link
-                href="/request-quote"
+                href={ctaHref}
                 className="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
               >
                 {cta}
@@ -83,27 +80,38 @@ export default function MotorSalesPage() {
       </div>
       {/* ── HERO (titre sobre sur fond photo estompe) ── */}
       <header className="relative overflow-hidden pt-32 md:pt-44 pb-16 md:pb-24 px-6 md:px-14">
-        <div aria-hidden className="absolute inset-0 z-0">
-          <Image src="/images/Sales/last-man-standing.jpg" alt="" fill priority className="object-cover grayscale opacity-20" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a1432]/70 via-[#0a1432]/85 to-[#0a1432]" />
+        {/* Le masque fait DISPARAITRE la photo vers le bas au lieu de la recouvrir d'une
+            couleur : le fond reel de la page (gray-900 + nuages) reapparait progressivement,
+            donc aucune ligne de demarcation avec la section suivante. Le voile sombre sert
+            uniquement a garder le titre lisible et s'efface avec la photo. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 z-0"
+          style={{
+            maskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
+          }}
+        >
+          <Image src="/images/Sales/last-man-standing.jpg" alt="" fill priority className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-transparent" />
         </div>
         <div className="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center">
-          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-[#B87333] mb-4">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-[#B87333] mb-4 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
             Qualityacht &middot; Brokerage &amp; Acquisitions
           </p>
-          <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.14em] text-[#C0C0C0] leading-tight">
+          <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.14em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
             Motor Yacht Sales &amp; Acquisitions
           </h1>
           <div className="relative w-40 h-6 mt-5 mx-auto">
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
-          <p className="mt-5 text-sm md:text-base leading-relaxed text-[#acb0cd]/90">
+          <p className="mt-5 text-sm md:text-base leading-relaxed text-[#acb0cd]/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
             Built on decades of experience, Qualityacht is recognised in the world of luxury yachting for its
             exacting standards and discretion. As a trusted broker, we have guided owners through countless
             transactions and acquisitions for a demanding international clientele.
           </p>
           <Link
-            href="/request-quote"
+            href="/sales/enquiry?intent=listings"
             className="mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
           >
             Subscribe to our exclusive listings
@@ -154,7 +162,7 @@ export default function MotorSalesPage() {
 
       {/* ── VALEUR AJOUTEE (image + texte) ── */}
       <SplitSection img="/images/Sales/last-man-standing-3.jpg" title="The Qualityacht Difference">
-        More than a broker, Qualityacht is a trusted <span className="text-[#d39478]">partner</span>. Among the
+        More than a broker, Qualityacht is a trusted <span className="text-[#bd9973]">partner</span>. Among the
         leading yacht brokers, we have built a solid reputation for performance and reliability with our partners,
         suppliers and international clients. Our in-house experts are supported on every transaction by a dedicated
         legal team and by our technical department. Through our worldwide network of industry specialists,
@@ -167,6 +175,7 @@ export default function MotorSalesPage() {
         eyebrow="Sellers"
         title="Looking to sell your yacht?"
         cta="List your yacht"
+        ctaHref="/sales/enquiry?intent=sell"
         reverse
       >
         Make Qualityacht your exclusive partner. We will position your asset on the international market to make it
@@ -212,6 +221,7 @@ export default function MotorSalesPage() {
         eyebrow="Buyers"
         title="Looking to buy a yacht?"
         cta="Start your search"
+        ctaHref="/sales/enquiry?intent=buy"
       >
         Qualityacht will find the yacht that suits you best. Our acquisition experts and worldwide network let you set
         sail with complete peace of mind. We take into account your budget, range, cabin capacity, performance and the
@@ -272,7 +282,7 @@ export default function MotorSalesPage() {
       </section>
 
       {/* ── PROGRAMME DE GESTION ── */}
-      <SplitSection img="/images/Sales/pobedy-i-3.jpg" title="Yacht Management Programme" cta="Yacht Management" reverse>
+      <SplitSection img="/images/Sales/pobedy-i-3.jpg" title="Yacht Management Programme" cta="Yacht Management" ctaHref="/management" reverse>
         Beyond the sale, Qualityacht looks after your yacht at every stage of ownership — crew, maintenance,
         compliance and operations — so you enjoy the sea while we handle the rest.
       </SplitSection>
@@ -285,7 +295,7 @@ export default function MotorSalesPage() {
           </h2>
           <div className="mt-8 flex justify-center">
             <Link
-              href="/request-quote"
+              href="/sales/enquiry?intent=general"
               className="inline-flex items-center gap-2 px-8 py-3 rounded-full border border-[#C0C0C0] text-xs uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
             >
               Contact us

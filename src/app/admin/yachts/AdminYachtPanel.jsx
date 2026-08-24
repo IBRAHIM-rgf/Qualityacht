@@ -226,7 +226,7 @@ function Dashboard({ yachts }) {
 // ════════════════════════════════════════════════════════════
 // ONGLET 1 — Recherche Ankor (vrai endpoint)
 // ════════════════════════════════════════════════════════════
-function AnkorSearchTab({ existingIds, onAdd, token }) {
+function AnkorSearchTab({ existingIds, onAdd }) {
   const [filters, setFilters] = useState({ search: '', type: '', destination: '' });
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -238,7 +238,7 @@ function AnkorSearchTab({ existingIds, onAdd, token }) {
       const params = new URLSearchParams();
       if (filters.type) params.set('type', filters.type);
       if (filters.destination) params.set('destination', filters.destination);
-      const res = await fetch(`/api/admin/yachts/search?token=${token}&${params}`);
+      const res = await fetch(`/api/admin/yachts/search?${params}`);
       const data = await res.json();
       let yachts = data.yachts || [];
       if (filters.search) {
@@ -826,7 +826,7 @@ function EditModal({ yacht, onClose, onSave }) {
 // ════════════════════════════════════════════════════════════
 // COMPOSANT PRINCIPAL
 // ════════════════════════════════════════════════════════════
-export default function AdminYachtPanel({ initialSelections, initialStats, token }) {
+export default function AdminYachtPanel({ initialSelections, initialStats }) {
   const [rawYachts, setRawYachts] = useState(initialSelections || []);
   const [activeTab, setActiveTab] = useState('bdd');
   const [editingYacht, setEditingYacht] = useState(null);
@@ -837,19 +837,21 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
 
   // ── Heartbeat : ping toutes les 30s pour signaler qu'on est en ligne ──
   useEffect(() => {
-    // Session token unique par onglet/navigateur (sessionStorage = persiste tant que l'onglet est ouvert)
-    let sessionToken = sessionStorage.getItem('admin_session_token');
-    if (!sessionToken) {
-      sessionToken = (crypto.randomUUID && crypto.randomUUID()) || `s-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      sessionStorage.setItem('admin_session_token', sessionToken);
+    // Identifiant de PRESENCE, propre a l'onglet. Ce n'est PAS un secret et ce n'est
+    // pas la session d'authentification : il sert uniquement a compter les admins en
+    // ligne. La vraie session est le cookie HttpOnly, invisible d'ici.
+    let presenceSessionId = sessionStorage.getItem('admin_presence_session_id');
+    if (!presenceSessionId) {
+      presenceSessionId = (crypto.randomUUID && crypto.randomUUID()) || `s-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      sessionStorage.setItem('admin_presence_session_id', presenceSessionId);
     }
 
     const ping = async () => {
       try {
-        const res = await fetch(`/api/admin/heartbeat?token=${token}`, {
+        const res = await fetch('/api/admin/heartbeat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sessionToken }),
+          body: JSON.stringify({ sessionToken: presenceSessionId }),
         });
         const data = await res.json();
         if (typeof data.activeCount === 'number') setActiveAdmins(data.activeCount);
@@ -859,20 +861,20 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
     ping(); // immédiat
     const interval = setInterval(ping, 30000);
     return () => clearInterval(interval);
-  }, [token]);
+  }, []);
 
   // Recharge depuis BDD après chaque action mutante
   const reload = useCallback(async () => {
     try {
-      const res = await fetch(`/api/admin/yachts?token=${token}`);
+      const res = await fetch('/api/admin/yachts');
       const data = await res.json();
       setRawYachts(data.selections || []);
     } catch (e) { console.error('reload:', e); }
-  }, [token]);
+  }, []);
 
   const onAddFromAnkor = async (yacht) => {
     try {
-      const res = await fetch(`/api/admin/yachts?token=${token}`, {
+      const res = await fetch('/api/admin/yachts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -882,7 +884,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
       if (res.ok) {
         await reload();
         // L'API met is_visible=true par défaut. On le met en stock (false) pour cohérence UX.
-        await fetch(`/api/admin/yachts?token=${token}`, {
+        await fetch('/api/admin/yachts', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'visibility', yacht_id: yacht.id, is_visible: false }),
@@ -897,7 +899,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
     try {
       const { yacht_id, yacht_name, images, length, guests, cabins, crew, price, description, region, sub_region } = data;
       const cached_data = { id: yacht_id, name: yacht_name, images, length, guests, cabins, crew, price, description };
-      const res = await fetch(`/api/admin/yachts?token=${token}`, {
+      const res = await fetch('/api/admin/yachts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ yacht_id, yacht_name, cached_data, region, sub_region }),
@@ -905,7 +907,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
       if (res.ok) {
         await reload();
         // Comme pour l'import Ankor : créé en stock, l'admin publie ensuite explicitement.
-        await fetch(`/api/admin/yachts?token=${token}`, {
+        await fetch('/api/admin/yachts', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'visibility', yacht_id, is_visible: false }),
@@ -924,7 +926,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
 
   const onToggleVisible = async (y) => {
     try {
-      await fetch(`/api/admin/yachts?token=${token}`, {
+      await fetch('/api/admin/yachts', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'visibility', yacht_id: y.id, is_visible: !y.is_visible }),
@@ -935,7 +937,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
 
   const onToggleFeatured = async (y) => {
     try {
-      await fetch(`/api/admin/yachts?token=${token}`, {
+      await fetch('/api/admin/yachts', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'featured', yacht_id: y.id, is_featured: !y.is_featured }),
@@ -947,14 +949,14 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
   const onDelete = async (y) => {
     if (!confirm(`Supprimer définitivement ${y.name} de la BDD ?`)) return;
     try {
-      await fetch(`/api/admin/yachts?token=${token}&yacht_id=${encodeURIComponent(y.id)}`, { method: 'DELETE' });
+      await fetch(`/api/admin/yachts?yacht_id=${encodeURIComponent(y.id)}`, { method: 'DELETE' });
       setRawYachts(prev => prev.filter(s => s.yacht_id !== y.id));
     } catch (e) { console.error(e); }
   };
 
   const onSaveEdit = async (id, updates) => {
     try {
-      await fetch(`/api/admin/yachts?token=${token}`, {
+      await fetch('/api/admin/yachts', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'enrich', yacht_id: id, ...updates }),
@@ -1009,7 +1011,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats, token
         })}
       </div>
 
-      {activeTab === 'ankor' && <AnkorSearchTab existingIds={existingIds} onAdd={onAddFromAnkor} token={token} />}
+      {activeTab === 'ankor' && <AnkorSearchTab existingIds={existingIds} onAdd={onAddFromAnkor} />}
       {activeTab === 'manual' && <ManualAddTab onAdd={onAddManual} />}
       {activeTab === 'bdd' && <BddCatalogueTab yachts={yachts} onToggleVisible={onToggleVisible} onToggleFeatured={onToggleFeatured} onDelete={onDelete} onEdit={(y) => setEditingYacht(y)} />}
       {activeTab === 'visible' && <VisibleEditTab yachts={yachts} onEdit={(y) => setEditingYacht(y)} />}

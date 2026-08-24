@@ -11,6 +11,10 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import YachtFiltersCaribbean from './YachtFiltersCaribbean';
 import YachtList from '@/components/YachtList';
 
+// Accent Qualityacht de la zone flotte (#C2622A). Limite a cette section :
+// le hero et le texte editorial gardent leurs couleurs d'origine.
+const FLEET_ACCENT = 'var(--qy-antilles)';
+
 function BurntLine() {
   return (
     <div className="flex items-center justify-center gap-3 my-3 md:my-4 w-full max-w-xs mx-auto">
@@ -159,7 +163,7 @@ export default function SubregionClient({
 
           <h2 className="trajan-regular text-lg md:text-2xl text-[#acb0cd] leading-snug">
             The Ultimate Yacht Charter Guide to the{' '}
-            <span style={{ color: '#d39478' }}>{name}</span>
+            <span style={{ color: '#bd9973' }}>{name}</span>
             {subTitle && <>:{' '}{subTitle}</>}
           </h2>
 
@@ -217,7 +221,7 @@ export default function SubregionClient({
             <h2 className="trajan-regular text-xl md:text-3xl text-[#acb0cd] uppercase tracking-[0.1em]">
               Yachts in the Caribbean
             </h2>
-            <p className="text-xl md:text-3xl mt-3" style={{ color: '#B03E00' }}>
+            <p className="text-xl md:text-3xl mt-3" style={{ color: 'var(--qy-antilles)' }}>
               {filteredYachts.length} yacht{filteredYachts.length !== 1 ? 's' : ''} available
             </p>
           </div>
@@ -234,7 +238,7 @@ export default function SubregionClient({
                 <p className="text-gray-400">Try adjusting your filters</p>
               </div>
             ) : (
-              <YachtList yachts={filteredYachts} />
+              <YachtList yachts={filteredYachts} accentColor={FLEET_ACCENT} />
             )}
           </main>
         </div>
