@@ -47,8 +47,16 @@ export default function CaribbeanAccessibilityGuide() {
     const apply = () => {
       const v = heroVideoRef.current;
       if (!v) return;
-      if (mq.matches) { v.pause(); v.removeAttribute('loop'); }
-      else { v.play?.().catch(() => {}); }
+      if (mq.matches) {
+        v.loop = false;
+        v.pause();
+      } else {
+        // Retour a la normale dans la meme session : on rend la boucle et on
+        // relance, en absorbant le rejet possible de play().
+        v.loop = true;
+        const p = v.play?.();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      }
     };
     apply();
     mq.addEventListener?.('change', apply);
@@ -134,7 +142,7 @@ export default function CaribbeanAccessibilityGuide() {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/charters/accessible/caribbean/yacht"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-colors duration-300 hover:bg-[#2e2f32] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+              className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
             >
               View Accessible Yachts
             </Link>
@@ -186,7 +194,7 @@ export default function CaribbeanAccessibilityGuide() {
           </p>
           <Link
             href="/#contact"
-            className="mt-8 inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-colors duration-300 hover:bg-[#2e2f32] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+            className="mt-8 inline-flex min-h-[48px] max-w-full items-center justify-center text-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
           >
             Speak to Our Team
           </Link>
@@ -264,10 +272,10 @@ export default function CaribbeanAccessibilityGuide() {
           <div className="space-y-12">
             {grouped.map(({ sec, rows }) => (
               <section key={sec.id}>
-                <div className="flex items-center gap-3 mb-5">
-                  <h2 className="trajan-regular text-lg md:text-xl text-[#C0C0C0] whitespace-nowrap">{sec.label}</h2>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-5">
+                  <h2 className="trajan-regular text-lg md:text-xl text-[#C0C0C0] min-w-0">{sec.label}</h2>
                   <span className="text-[11px] text-[#6f7585] whitespace-nowrap">{rows.length} condition{rows.length > 1 ? 's' : ''}</span>
-                  <div className="flex-1 h-px bg-[#B87333]/25" />
+                  <div className="flex-1 min-w-[2rem] h-px bg-[#B87333]/25" />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
                   {rows.map((r) => (

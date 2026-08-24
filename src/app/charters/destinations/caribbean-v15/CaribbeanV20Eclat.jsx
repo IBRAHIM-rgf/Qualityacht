@@ -18,7 +18,7 @@ const photoLagoon = { src: '/media/quality/eclat-v15/lagoon-sands.jpg', desc: 'P
 const photoDock = { src: '/media/quality/eclat-v15/hidden-anchorages.jpg', desc: 'Hidden lagoon anchorage with tender' };
 const photoYacht = { src: '/media/quality/eclat-v15/sail-away.jpg', desc: 'Tender adrift on crystal-clear water' };
 const vidDolphin = { src: '/media/quality/eclat-v15/dolphins.mp4', poster: '/media/quality/eclat-v15/dolphins.jpg' };
-const vidTurq = { src: '/media/quality/eclat-v15/at-anchor.mp4', poster: '/media/quality/eclat-v15/at-anchor.jpg' };
+const vidTurq = { src: '/media/quality/eclat-v15/reef-freedive.mp4', poster: '/media/quality/eclat-v15/reef-freedive.jpg' };
 const treeBand = { src: '/media/quality/eclat-v15/sunset-band.mp4', poster: '/media/quality/eclat-v15/sunset-band.jpg' };
 
 // carte texte (meme allure qu'une carte photo)
@@ -71,7 +71,7 @@ const scatterCards = [
   vidDolphin && { key: 'v1', pos: { right: '1%', top: '2%', width: '292px' }, depth: 52, fd: '8.5s', d: 300, node: Vd(vidDolphin, 'Dolphins', '#4ea8ff') },
   photoLagoon && { key: 'p2', pos: { left: '0.5%', top: '27%', width: '206px' }, depth: -44, fd: '6.8s', d: 450, node: P(photoLagoon, 'Powder-white sands', '#4ea8ff') },
   { key: 't2', pos: { right: '0.5%', top: '26%', width: '236px' }, depth: 34, fd: '7.5s', d: 600, node: T2 },
-  vidTurq && { key: 'v2', pos: { left: '1%', bottom: '25%', width: '292px' }, depth: -50, fd: '8s', d: 750, node: Vd(vidTurq, 'At anchor', '#2fd6c4') },
+  vidTurq && { key: 'v2', pos: { left: '1%', bottom: '25%', width: '292px' }, depth: -50, fd: '8s', d: 750, node: Vd(vidTurq, 'Reef freediving', '#2fd6c4') },
   photoDock && { key: 'p3', pos: { right: '1%', bottom: '25%', width: '206px' }, depth: 46, fd: '6.2s', d: 900, node: P(photoDock, 'Hidden anchorages', '#ffb03a') },
   { key: 't3', pos: { left: '0.5%', bottom: '2%', width: '236px' }, depth: 28, fd: '5.8s', d: 1050, node: T3 },
   photoYacht && { key: 'p4', pos: { left: '28%', bottom: '3%', width: '208px' }, depth: -26, fd: '7.2s', d: 1200, node: P(photoYacht, 'Sail away', '#4ea8ff') },
@@ -82,7 +82,7 @@ const mobileNodes = [
   P(photoAerial, 'Turquoise coves', '#2fd6c4'), T1,
   Vd(vidDolphin, 'Dolphins', '#4ea8ff'), T2,
   P(photoLagoon, 'Powder-white sands', '#4ea8ff'), T3,
-  Vd(vidTurq, 'At anchor', '#2fd6c4'), T4,
+  Vd(vidTurq, 'Reef freediving', '#2fd6c4'), T4,
   P(photoDock, 'Hidden anchorages', '#ffb03a'),
   P(photoYacht, 'Sail away', '#4ea8ff'),
 ].filter(Boolean);
