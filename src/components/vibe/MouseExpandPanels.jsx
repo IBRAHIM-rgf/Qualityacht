@@ -10,6 +10,19 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
+// Style CTA valide par la cliente. Applique uniquement quand le panneau fournit
+// un ctaLabel ; sans lui, le lien discret d'origine ("Explore") est conserve,
+// donc aucun autre consommateur ne change d'aspect.
+const PANEL_CTA =
+  'mt-6 inline-flex min-h-[48px] max-w-full items-center justify-center text-center ' +
+  'px-6 py-3 rounded-full border border-[#C0C0C0] bg-[#26272a] ' +
+  'text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] ' +
+  'shadow-[0_0_18px_rgba(192,192,192,0.35)] w-fit ' +
+  'transition-[border-color,box-shadow] duration-300 ' +
+  'hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] ' +
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 ' +
+  'focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
+
 export default function MouseExpandPanels({ panels = [], height = 'h-[70vh] md:h-[80vh]' }) {
   const [active, setActive] = useState(0);
   if (!panels.length) return null;
@@ -76,9 +89,13 @@ export default function MouseExpandPanels({ panels = [], height = 'h-[70vh] md:h
                   {p.desc}
                 </p>
                 {p.href && (
-                  <a href={p.href} className="mt-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-[#acb0cd] hover:text-[#c2622a] transition-colors w-fit">
-                    <span className="w-10 h-px bg-current" /> Explore
-                  </a>
+                  p.ctaLabel ? (
+                    <a href={p.href} className={PANEL_CTA}>{p.ctaLabel}</a>
+                  ) : (
+                    <a href={p.href} className="mt-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-[#acb0cd] hover:text-[#c2622a] transition-colors w-fit">
+                      <span className="w-10 h-px bg-current" /> Explore
+                    </a>
+                  )
                 )}
               </div>
 
@@ -106,7 +123,13 @@ export default function MouseExpandPanels({ panels = [], height = 'h-[70vh] md:h
               <span className="text-[#C0C0C0]/50 text-3xl font-light leading-none">{p.number}</span>
               <h3 className="trajan-regular text-2xl uppercase tracking-[0.08em] text-[#C0C0C0] mt-1">{p.title}</h3>
               <p className="mt-2 text-[#acb0cd] text-sm leading-relaxed">{p.desc}</p>
-              {p.href && <a href={p.href} className="mt-3 text-[11px] uppercase tracking-[0.25em] text-[#c2622a]">Explore →</a>}
+              {p.href && (
+                p.ctaLabel ? (
+                  <a href={p.href} className={`${PANEL_CTA} mt-4`}>{p.ctaLabel}</a>
+                ) : (
+                  <a href={p.href} className="mt-3 text-[11px] uppercase tracking-[0.25em] text-[#c2622a]">Explore &rarr;</a>
+                )
+              )}
             </div>
           </div>
         ))}

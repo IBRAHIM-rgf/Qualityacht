@@ -15,10 +15,14 @@ const heroImg = '/media/quality/aerial/resort-villas-drone.jpg';
 export default function HotelPalaceCaribbeanPage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
-      {/* ══ HERO DRONE — image ENTIERE (ratio naturel, aucun crop : plus zoomee) ══ */}
-      <section className="relative pt-[70px] md:pt-0">
+      {/* ══ HERO DRONE ══
+          La photo est un PORTRAIT (2255x3308). Affichee en object-contain dans une
+          hauteur bornee, elle laissait 456 px de bande sombre de chaque cote en
+          desktop et le titre debordait dans le vide. Meme parti que les autres
+          heros du site : hauteur fixe et media plein cadre. */}
+      <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh] overflow-hidden bg-[#26272a]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={heroImg} alt="Hotel & Palace — Caribbean" className="block w-full h-auto max-h-[86vh] object-contain bg-[#26272a]" />
+        <img src={heroImg} alt="Hotel & Palace — Caribbean" className="absolute inset-0 w-full h-full object-cover object-center" />
         <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/60 to-transparent" />
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-2 md:pb-4">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">

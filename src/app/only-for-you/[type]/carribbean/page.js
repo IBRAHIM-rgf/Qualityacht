@@ -214,7 +214,7 @@ const regattaFaqItems = [
   },
   {
     q: 'What happens after I book?',
-    a: 'Once your charter is confirmed: 1) we’ll collect crew information to handle race entry on your behalf ; 2) as the regatta approaches, we’ll connect you with the Boat Captain via WhatsApp and provide useful details about the event and location ; 3) our team is available 24/7 by phone or email to assist with any questions.',
+    a: 'Once your charter is confirmed: 1) we’ll collect crew information to handle race entry on your behalf ; 2) as the regatta approaches, we’ll connect you with the Boat Captain via WhatsApp and provide useful details about the event and location ; 3) our team stays reachable by phone or email to assist with any questions.',
   },
   {
     q: 'Can I charter a yacht for a corporate event?',
@@ -896,6 +896,14 @@ export default function CaribbeanV15Page({ params }) {
                 <p className="text-[#acb0cd] text-xl uppercase tracking-[0.25em] font-light text-center drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
                   The Ultimate Luxury Yachting Destination
                 </p>
+                <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Link href="/request-quote" className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 rounded-full border border-[#C0C0C0] bg-[#26272a] text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">
+                    Request a Quote
+                  </Link>
+                  <Link href="/charters/destinations/caribbean-v15/exploreyacht" className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 rounded-full border border-[#C0C0C0] bg-[#26272a]/50 backdrop-blur-sm text-[13px] font-semibold uppercase tracking-[0.18em] text-[#C0C0C0] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">
+                    Explore the Caribbean Fleet
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -911,6 +919,14 @@ export default function CaribbeanV15Page({ params }) {
             <p className="text-[#acb0cd] text-sm uppercase tracking-[0.15em] font-light text-center">
               The Ultimate Luxury Yachting Destination
             </p>
+              <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link href="/request-quote" className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 rounded-full border border-[#C0C0C0] bg-[#26272a] text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">
+                  Request a Quote
+                </Link>
+                <Link href="/charters/destinations/caribbean-v15/exploreyacht" className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 rounded-full border border-[#C0C0C0] bg-[#26272a]/50 backdrop-blur-sm text-[13px] font-semibold uppercase tracking-[0.18em] text-[#C0C0C0] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">
+                  Explore the Caribbean Fleet
+                </Link>
+              </div>
           </div>
         </div>
 
@@ -1073,14 +1089,14 @@ export default function CaribbeanV15Page({ params }) {
             {/* Card 2 : phrase support (transparent 20%, texte lavande) */}
             <div className="rounded-2xl border border-[#C0C0C0] bg-[#3a3b3f]/20 backdrop-blur-sm px-3 md:px-4 py-1.5 md:py-2 max-w-xs md:max-w-md">
               <p className="text-sm md:text-base leading-relaxed text-[#acb0cd]">
-                Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.
+                Our team will help shape a bespoke yachting itinerary across the Caribbean.
               </p>
             </div>
 
             <a href="/charters/destinations/caribbean-v15/exploreyacht"
               style={{ color: '#c2622a', backgroundColor: '#26272a', borderColor: '#C0C0C0' }}
               className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border rounded-full hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-all duration-300">
-              Explore Sailing
+              Explore the Caribbean Fleet
             </a>
           </div>
         </StBarthBandeau>

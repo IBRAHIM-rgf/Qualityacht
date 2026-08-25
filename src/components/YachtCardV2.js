@@ -1,9 +1,10 @@
 // src/components/YachtCardV2.js
 
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map } from 'lucide-react';
+import { isInCart, toggleCart, subscribeCart, toCartEntry } from '@/lib/quoteCart';
 import { getAnkorImageUrl } from '@/lib/utils';
 import { formatLength } from '@/lib/unitConversion';
 
@@ -48,6 +49,13 @@ function CrewIcon({ size = 22, color, className = '' }) {
  *   Fourni, les cinq icones suivent l'accent et l'equipage passe en SVG inline.
  */
 export default function YachtCardV2({ yacht, accentColor }) {
+  // Selection de devis : meme stockage que la fiche yacht et Request Quote.
+  const [saved, setSaved] = useState(false);
+  useEffect(() => {
+    setSaved(isInCart(yacht));
+    return subscribeCart(() => setSaved(isInCart(yacht)));
+  }, [yacht?.id, yacht?.name]);
+
   // Sans accent transmis, la carte garde strictement son rendu historique :
   // meme couleur ET meme balise <img> pour l'equipage, donc meme filtre global
   // de saturation. Voir la regle `img { filter: saturate(1.3) }` de globals.css.
@@ -56,6 +64,9 @@ export default function YachtCardV2({ yacht, accentColor }) {
   const images = Array.isArray(yacht.images)
     ? yacht.images.filter(Boolean).map(img => getAnkorImageUrl(img, '1280w'))
     : [];
+  // Entree de selection : l'image doit etre une URL exploitable telle quelle par
+  // la page de devis, pas la cle brute renvoyee par Ankor.
+  const entry = toCartEntry(yacht, { image: images[0] || null });
   const [currentImage, setCurrentImage] = useState(0);
 
   const nextImage = (e) => {
@@ -109,10 +120,24 @@ export default function YachtCardV2({ yacht, accentColor }) {
               </div>
             </>
           )}
-          {/* Action Buttons */}
+          {/* Coeur : ajoute ou retire le yacht de la selection de devis.
+              Meme stockage que la fiche yacht et que Request Quote. */}
           <div className="absolute top-4 right-4 flex gap-2">
-            <button className="bg-white/80 hover:bg-white p-2 rounded-full transition-colors">
-              <Heart className="w-5 h-5 " />
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); setSaved(toggleCart(entry)); }}
+              aria-pressed={saved}
+              aria-label={saved
+                ? `Remove ${yacht.name || 'this yacht'} from your quote selection`
+                : `Add ${yacht.name || 'this yacht'} to your quote selection`}
+              title={saved ? 'Remove from selection' : 'Add to selection'}
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-white/80 hover:bg-white rounded-full transition-colors focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+            >
+              <Heart
+                aria-hidden
+                className={`w-5 h-5 transition-colors ${saved ? 'text-[#c2622a]' : 'text-[#26272a]'}`}
+                fill={saved ? '#c2622a' : 'none'}
+              />
             </button>
           </div>
         </div>

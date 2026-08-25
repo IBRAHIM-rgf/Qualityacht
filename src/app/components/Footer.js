@@ -96,6 +96,10 @@ export default function Footer() {
         © {new Date().getFullYear()} All rights reserved —{' '}
         <a href="https://qualityacht.ch" className="hover:text-gray-400 transition">qualityacht.ch</a>
         <span className="mx-2">|</span>
+        <Link href="/privacy-policy" className="hover:text-gray-400 transition">
+          Privacy Policy
+        </Link>
+        <span className="mx-2">|</span>
         <Link href="/admin/yachts" className="hover:text-gray-400 transition">
           Admin
         </Link>

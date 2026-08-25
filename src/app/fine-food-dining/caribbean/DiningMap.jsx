@@ -25,7 +25,33 @@ const RESTAURANTS = [
 ].map((r, i) => ({ ...r, img: FOOD[i % FOOD.length] }));
 
 
+// Parcours vers la flotte, par etablissement, selon sa sous-region reelle.
+// Table close et locale : aucune URL ne provient d'une saisie utilisateur.
+const FLEET_BY_RESTAURANT = {
+  'Le Gaïac': '/charters/destinations/carabbean/leeward-islands-v11',
+  'La Case de l’Isle': '/charters/destinations/carabbean/leeward-islands-v11',
+  'Bonito': '/charters/destinations/carabbean/leeward-islands-v11',
+  'Jacala': '/charters/destinations/carabbean/leeward-islands-v11',
+  'Blanchards': '/charters/destinations/carabbean/leeward-islands-v11',
+  'Malliouhana / Fifty-Eight°': '/charters/destinations/carabbean/leeward-islands-v11',
+  'The Cliff': '/charters/destinations/carabbean/windward-islands-v11',
+  'Le Soleil d’Or': '/charters/destinations/carabbean/grand-cayman-v11',
+};
+
+// Style CTA valide par la cliente, en styles en ligne : le HTML de la popup est
+// injecte par Leaflet et ne passe pas par le scan des classes utilitaires.
+const FLEET_CTA_STYLE = [
+  'display:flex', 'align-items:center', 'justify-content:center',
+  'min-height:48px', 'margin-top:10px', 'padding:0 12px',
+  'border:1px solid #C0C0C0', 'border-radius:999px', 'background:#26272a',
+  'box-shadow:0 0 18px rgba(192,192,192,0.35)',
+  'font-size:13px', 'font-weight:600', 'letter-spacing:0.18em',
+  'text-transform:uppercase', 'color:#c2622a', 'text-decoration:none',
+  'text-align:center', 'line-height:1.2',
+].join(';');
+
 function popupHtml(r) {
+  const fleet = FLEET_BY_RESTAURANT[r.name];
   return `
     <div style="width:216px;font-family:system-ui,sans-serif">
       <div style="position:relative;border-radius:8px;overflow:hidden;height:110px;margin-bottom:8px">
@@ -36,6 +62,7 @@ function popupHtml(r) {
       <div style="font-size:11px;color:#B87333;margin-top:3px">${r.place}</div>
       <div style="font-size:11px;color:#acb0cd;opacity:.7;font-style:italic;margin-top:1px">${r.chef}</div>
       <div style="font-size:12px;color:#acb0cd;opacity:.85;margin-top:6px;line-height:1.45">${r.desc}</div>
+      ${fleet ? `<a href="${fleet}" style="${FLEET_CTA_STYLE}">Explore the Fleet</a>` : ''}
     </div>`;
 }
 

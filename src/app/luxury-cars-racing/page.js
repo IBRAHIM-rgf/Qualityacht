@@ -16,7 +16,11 @@ const luxuryCarsRacingSections = [
     content: "Discover our Luxury Cars & Racing experiences. (Content coming soon)",
     images: [
       "/images/new/17500856938825139008889514837436.jpg"
-    ]
+    ],
+    // "Explore the Collection" n'est PAS pose : aucune collection de vehicules
+    // n'existe dans le projet et il n'y a donc aucune route reelle vers laquelle
+    // pointer. Seule la prise de contact mene quelque part de reel.
+    cta: { label: "Speak to Our Concierge", href: "/conciergery" }
   }
 ];
 

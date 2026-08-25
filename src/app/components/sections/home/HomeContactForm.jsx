@@ -221,7 +221,17 @@ export default function HomeContactForm() {
               aria-describedby={errors.consent ? `${uid}-consent-error` : undefined}
               className="mt-0.5 h-4 w-4 shrink-0 accent-[#C2622A]" />
             <span className="text-sm leading-relaxed text-[#ACB0CD]">
-              I agree that Qualityacht may use the details above to respond to this enquiry.
+              I agree that Qualityacht may use the details above to respond to this enquiry, as described
+              in the{' '}
+              <a
+                href="/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className={`text-[#C2622A] underline ${FOCUS}`}
+              >
+                Privacy Policy
+              </a>.
               <span aria-hidden className="text-[#C2622A]"> *</span>
             </span>
           </label>

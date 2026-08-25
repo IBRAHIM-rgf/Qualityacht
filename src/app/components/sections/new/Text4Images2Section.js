@@ -1,7 +1,10 @@
 // components/BestSection.tsx
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Text4Images2Section({ title, content, images = [] }) {
+// `cta` est OPTIONNEL : { label, href }. Sans lui le rendu est strictement
+// identique a l'existant, donc les autres consommateurs ne bougent pas.
+export default function Text4Images2Section({ title, content, images = [], cta = null }) {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -15,6 +18,14 @@ export default function Text4Images2Section({ title, content, images = [] }) {
               <p className="text-gray-400">
                 {content}
               </p>
+              {cta && (
+                <Link
+                  href={cta.href}
+                  className="mt-6 inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 rounded-full border border-[#C0C0C0] bg-[#26272a] text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+                >
+                  {cta.label}
+                </Link>
+              )}
             </div>
             {images[0] && (
               <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden">

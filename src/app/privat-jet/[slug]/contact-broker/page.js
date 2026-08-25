@@ -227,7 +227,7 @@ export default function ContactBrokerPage() {
               <label onClick={() => setContact({ ...contact, acceptPolicy: !contact.acceptPolicy })}
                 className="flex items-center gap-3 cursor-pointer select-none">
                 <CocoCheckbox checked={contact.acceptPolicy} />
-                <span className="text-sm text-[#acb0cd]">Accept <a href="#" onClick={e => e.stopPropagation()} className="text-[#c2622a] hover:underline">Privacy Policy</a></span>
+                <span className="text-sm text-[#acb0cd]">Accept <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="text-[#c2622a] hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">Privacy Policy</a></span>
               </label>
 
               <div

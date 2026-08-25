@@ -34,12 +34,19 @@ const TAG =
 const READ_MORE =
   'w-full px-5 py-3.5 text-xs md:text-sm uppercase tracking-[0.2em] text-[#c2622a] border-t border-[#C0C0C0]/15 transition-colors hover:text-[#B03E00]';
 const PANEL = 'px-5 py-3 border-t border-[#C0C0C0]/15 space-y-2.5';
-// TODO — Bouton sous-region : le VERT est TEMPORAIRE, c'est un marqueur pour se
-// souvenir que le TEXTE du bouton reste a modifier ("Explore {region}" n'est pas
-// le libelle final). Une fois le texte decide, repasser au style des regles design :
-// contour cococo #C0C0C0 -> orange #c2622a au survol, jamais de blanc.
+// Bouton sous-region — style CTA valide par la cliente : contour argent #C0C0C0,
+// fond #26272a, texte cuivre #C2622A, legere lueur argentee. Au survol seules la
+// bordure et la lueur passent au cuivre. Le vert n'etait qu'un marqueur temporaire
+// signalant que le libelle restait a arreter ; il l'est desormais ("Discover").
 const REGION_BTN =
-  'inline-flex items-center justify-center px-4 py-2 rounded-full border border-green-500 text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-green-400 hover:border-green-300 hover:text-green-300 transition-colors';
+  'inline-flex min-h-[48px] max-w-full items-center justify-center text-center ' +
+  'px-5 py-3 rounded-full border border-[#C0C0C0] bg-[#26272a] ' +
+  'text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] ' +
+  'shadow-[0_0_18px_rgba(192,192,192,0.35)] ' +
+  'transition-[border-color,box-shadow] duration-300 ' +
+  'hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] ' +
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 ' +
+  'focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
 
 function CardHeader({ title, subtitle, pill }) {
   return (
@@ -103,7 +110,7 @@ export function CircuitCard({ circuit }) {
 
 // ── Sous-region GROUPEE ─────────────────────────────────────────────────────────
 // Une carte = une sous-region. Tuile-photo (style historic-sites/caribbean-v2) avec
-// le nom de la sous-region + nb d'iles, bouton Explore (marqueur vert temporaire),
+// le nom de la sous-region + nb d'iles, bouton Discover au style CTA valide,
 // puis accordeon qui REGROUPE toutes les iles de la sous-region (nom + saison + Riding/Racing).
 export function RegionGroupCard({ region }) {
   const [open, setOpen] = useState(false);
@@ -132,7 +139,7 @@ export function RegionGroupCard({ region }) {
       {regionHref && (
         <div className="px-5 pt-4">
           <Link href={regionHref} className={REGION_BTN}>
-            Explore {region.name}
+            Discover {region.name}
           </Link>
         </div>
       )}
@@ -203,7 +210,7 @@ export function IslandCard({ island, regionName, regionPhoto }) {
       {regionHref && (
         <div className="px-5 pb-4">
           <Link href={regionHref} className={REGION_BTN}>
-            Explore {regionName}
+            Discover {regionName}
           </Link>
         </div>
       )}

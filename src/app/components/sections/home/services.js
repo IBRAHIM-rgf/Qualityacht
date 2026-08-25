@@ -43,7 +43,7 @@ export default function ServicesGrid() {
   />
   <ServiceItem
     title={["ONLY","FOR YOU"]}
-    image="/images/services/regatta2.jpg"
+    image="/media/client/lydie/2026-08-25/only-for-you/losange-option-2.jpg"
     className="top-[70%] left-[20%] md:top-[47%] md:left-[75%]"
     href={"/only-for-you"}
   />

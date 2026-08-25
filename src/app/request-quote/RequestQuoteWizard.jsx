@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import { readCart, removeFromCart, subscribeCart } from '@/lib/quoteCart';
 import { Calendar, Users, Ship, Plane, ArrowLeft, Check, ChevronDown } from 'lucide-react';
 
 const STEPS = ['Charter Details', 'Enhancements & Details', 'Thank You!'];
@@ -394,13 +395,41 @@ function CountryInput({ country, onCountry, value, onValue, placeholder, type = 
 
 export default function RequestQuoteWizard() {
   const params = useSearchParams();
-  const yacht = {
-    name: params.get('name') || 'Selected Yacht',
-    image: params.get('image') || '/images/yachts/yatch2.jpeg',
-    guests: params.get('guests') || '',
-    type: params.get('type') || '',
-    region: params.get('region') || '',
-    price: params.get('price') || '',
+  // Yacht transmis par l'URL : conserve comme repli pour les liens directs.
+  const fromUrl = params.get('name')
+    ? {
+        id: params.get('id') || null,
+        name: params.get('name'),
+        image: params.get('image') || '/images/yachts/yatch2.jpeg',
+        guests: params.get('guests') || '',
+        type: params.get('type') || '',
+        region: params.get('region') || '',
+        price: params.get('price') || '',
+      }
+    : null;
+
+  // La selection stockee fait foi : elle peut contenir PLUSIEURS yachts, ajoutes
+  // depuis les coeurs des cartes ou depuis le CTA d'une fiche.
+  const [boats, setBoats] = useState([]);
+  useEffect(() => {
+    const lire = () => {
+      const c = readCart();
+      setBoats(c.length ? c : fromUrl ? [fromUrl] : []);
+    };
+    lire();
+    return subscribeCart(lire);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const retirer = (b) => {
+    removeFromCart(b);
+    setBoats((prev) => prev.filter((x) => x !== b));
+  };
+
+  // Le premier yacht alimente les champs pre-remplis, comme auparavant.
+  const yacht = boats[0] || fromUrl || {
+    name: 'Selected Yacht', image: '/images/yachts/yatch2.jpeg',
+    guests: '', type: '', region: '', price: '',
   };
 
   const [step, setStep] = useState(0);
@@ -447,28 +476,72 @@ export default function RequestQuoteWizard() {
           {/* ══ ÉTAPE 1 — CHARTER DETAILS ══ */}
           <section className="w-full shrink-0 px-1">
             <div className="grid md:grid-cols-2 gap-8 items-start">
-              {/* Photo yacht choisi */}
-              <div>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-[#C0C0C0]">
-                  <Image src={yacht.image} alt={yacht.name} fill className="object-cover" />
-                </div>
-                <h2 className="trajan-regular text-xl md:text-2xl text-[#acb0cd] uppercase tracking-[0.1em] mt-4">{yacht.name}</h2>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {yacht.type && (
-                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd] capitalize">
-                      <Ship className="w-3 h-3 text-[#c2622a]" /> {yacht.type}
-                    </span>
-                  )}
-                  {yacht.region && (
-                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
-                      {yacht.region}
-                    </span>
-                  )}
-                  {yacht.price && (
-                    <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
-                      {yacht.price}/week
-                    </span>
-                  )}
+              {/* Selection de yachts : autant de fiches que de bateaux retenus,
+                  chacune retirable individuellement. */}
+              <div data-testid="quote-selection">
+                {boats.length === 0 && (
+                  <div className="rounded-2xl border border-[#C0C0C0]/50 bg-[#3a3b3f] p-6 text-center">
+                    <p className="text-sm text-[#acb0cd]">No yacht selected yet.</p>
+                    <a
+                      href="/yachts"
+                      className="mt-4 inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+                    >
+                      Browse the Fleet
+                    </a>
+                  </div>
+                )}
+
+                <div className="space-y-5">
+                  {boats.map((b, i) => (
+                    <div key={`${b.id || b.name}-${i}`} data-testid="quote-boat">
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-[#C0C0C0]">
+                        {b.image && <Image src={b.image} alt={b.name || ''} fill className="object-cover" />}
+                      </div>
+                      <div className="mt-4 flex items-start justify-between gap-3">
+                        <h2 className="trajan-regular text-xl md:text-2xl text-[#acb0cd] uppercase tracking-[0.1em]">{b.name}</h2>
+                        <button
+                          type="button"
+                          onClick={() => retirer(b)}
+                          aria-label={`Remove ${b.name || 'this yacht'} from your selection`}
+                          className="shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full border border-[#C0C0C0] text-[#acb0cd] transition-colors hover:border-[#c2622a] hover:text-[#c2622a] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+                        >
+                          <span aria-hidden className="text-lg leading-none">&times;</span>
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {b.type && (
+                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd] capitalize">
+                            <Ship className="w-3 h-3 text-[#c2622a]" /> {b.type}
+                          </span>
+                        )}
+                        {b.length && (
+                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
+                            {b.length}
+                          </span>
+                        )}
+                        {b.guests && (
+                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
+                            {b.guests} guests
+                          </span>
+                        )}
+                        {b.cabins && (
+                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
+                            {b.cabins} cabins
+                          </span>
+                        )}
+                        {b.region && (
+                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
+                            {b.region}
+                          </span>
+                        )}
+                        {b.price && (
+                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
+                            {b.price}/week
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -504,7 +577,7 @@ export default function RequestQuoteWizard() {
                 <div className="border border-[#C0C0C0] rounded-xl p-4 bg-[#3a3b3f]">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd] mb-2">Your selection</p>
                   <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-[#acb0cd]">
-                    <span>Yacht: {yacht.name}</span>
+                    <span>{boats.length > 1 ? `Yachts: ${boats.map((b) => b.name).join(', ')}` : `Yacht: ${yacht.name}`}</span>
                     {yacht.type && <span className="capitalize">Type: {yacht.type}</span>}
                     {yacht.region && <span>Region: {yacht.region}</span>}
                   </div>
@@ -586,7 +659,7 @@ export default function RequestQuoteWizard() {
               <label onClick={() => setContact({ ...contact, acceptPolicy: !contact.acceptPolicy })}
                 className="flex items-center gap-3 cursor-pointer select-none">
                 <CocoCheckbox checked={contact.acceptPolicy} />
-                <span className="text-sm text-[#acb0cd]">Accept <a href="#" onClick={e => e.stopPropagation()} className="text-[#c2622a] hover:underline">Privacy Policy</a></span>
+                <span className="text-sm text-[#acb0cd]">Accept <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="text-[#c2622a] hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">Privacy Policy</a></span>
               </label>
 
               <div className="flex items-center justify-between gap-4 pt-4">

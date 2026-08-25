@@ -36,7 +36,7 @@ const TYPES = [
 ];
 
 const focusRing =
-  'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c2622a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f1730]';
+  'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c2622a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#3a3b3f]';
 
 // Le select est transparent et sans chrome : c'est la capsule qui porte le style.
 const selectClass =
@@ -96,7 +96,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
             <label
               key={id}
               htmlFor={id}
-              className="flex min-h-[56px] cursor-pointer items-center gap-3.5 rounded-2xl border border-[#C0C0C0]/45 bg-[#3a3b3f]/35 px-4 py-2.5"
+              className="flex min-h-[56px] cursor-pointer items-center gap-3.5 rounded-2xl border border-[#C0C0C0] bg-[#26272a] px-4 py-2.5"
             >
               <Icon aria-hidden className="w-5 h-5 shrink-0 text-[#C2622A] pointer-events-none" />
               <div className="min-w-0 flex-1">
@@ -112,7 +112,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
                   className={`${selectClass} text-[15px] leading-snug`}
                 >
                   {options.map((o) => (
-                    <option key={o.value} value={o.value} className="bg-[#0f1730]">
+                    <option key={o.value} value={o.value} className="bg-[#26272a]">
                       {o.label}
                     </option>
                   ))}
@@ -168,7 +168,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
                   className={selectClass}
                 >
                   {options.map((o) => (
-                    <option key={o.value} value={o.value} className="bg-[#0f1730]">
+                    <option key={o.value} value={o.value} className="bg-[#26272a]">
                       {o.label}
                     </option>
                   ))}

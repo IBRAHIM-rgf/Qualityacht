@@ -7,11 +7,11 @@ import { one } from '@/lib/quality-media';
 // Ordre voulu par le client : Set Sail, Turquoise Waters, Private Anchorages, Family
 // Moments, Halal Cuisine (renumerotes 1->5 dans ce nouvel ordre).
 const PANELS = [
-  { number: '1', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: one({ cat: 'boats', kind: 'image', role: 'card' })?.src || one({ cat: 'boats', kind: 'image' })?.src, href: '/yachts?destination=caribbean' },
-  { number: '2', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: one({ cat: 'aerial', kind: 'image', role: 'card' })?.src || one({ cat: 'aerial', kind: 'image' })?.src },
-  { number: '3', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: one({ cat: 'beach', kind: 'image', role: 'card' })?.src || one({ cat: 'beach', kind: 'image' })?.src },
-  { number: '4', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: '/media/quality/people/oswald-elsaboath-lhoiwvcommm-unsplash.jpg' },
-  { number: '5', title: 'Halal Cuisine', desc: 'A private chef and a fully halal galley — refined menus and alcohol-free pairings, shaped around your table.', img: '/media/quality/food/alexey-demidov-y2rd93n7u7o-unsplash.jpg', href: '/fine-food-dining/caribbean/fine-food' },
+  { number: '1', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: one({ cat: 'boats', kind: 'image', role: 'card' })?.src || one({ cat: 'boats', kind: 'image' })?.src , href: '/yachts?destination=caribbean', ctaLabel: 'Explore the Fleet' },
+  { number: '2', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: one({ cat: 'aerial', kind: 'image', role: 'card' })?.src || one({ cat: 'aerial', kind: 'image' })?.src , href: '/yachts?destination=caribbean', ctaLabel: 'Explore the Fleet' },
+  { number: '3', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: one({ cat: 'beach', kind: 'image', role: 'card' })?.src || one({ cat: 'beach', kind: 'image' })?.src , href: '/yachts?destination=caribbean', ctaLabel: 'Explore the Fleet' },
+  { number: '4', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: '/media/quality/people/oswald-elsaboath-lhoiwvcommm-unsplash.jpg' , href: '/yachts?destination=caribbean', ctaLabel: 'Explore the Fleet' },
+  { number: '5', title: 'Halal Cuisine', desc: 'A private chef and a fully halal galley — refined menus and alcohol-free pairings, shaped around your table.', img: '/media/quality/food/alexey-demidov-y2rd93n7u7o-unsplash.jpg' , href: '/yachts?destination=caribbean', ctaLabel: 'Explore the Fleet' },
 ].filter((p) => p.img);
 
 // Halal — Caraibes : contenu de caribbean-v15, avec

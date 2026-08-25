@@ -2,6 +2,8 @@
 
 import { useState, useEffect, Fragment } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { addToCart, toCartEntry } from '@/lib/quoteCart';
 import { getAnkorImageUrl } from '@/lib/utils';
 import {
   Ruler, Users, BedDouble, Anchor, Calendar, ChevronLeft, ChevronRight, X, Map as MapIcon,
@@ -100,48 +102,53 @@ function Collapsible({ title, defaultOpen = false, children }) {
   );
 }
 
-// Bouton Enquire — ajoute le yacht au panier (localStorage) sans quitter la page.
-// Affiche un feedback "Added to cart" pendant 2s puis bascule sur "View cart".
-function EnquireButton({ yacht, bp, full, imgs }) {
-  const [state, setState] = useState('idle'); // 'idle' | 'added'
-  useEffect(() => {
-    try {
-      const cart = JSON.parse(localStorage.getItem('quote_cart') || '[]');
-      if (cart.find((y) => y.id === yacht.id || y.name === yacht.name)) setState('added');
-    } catch {}
-  }, [yacht.id, yacht.name]);
-  const toggle = () => {
-    try {
-      const cart = JSON.parse(localStorage.getItem('quote_cart') || '[]');
-      const idx = cart.findIndex((y) => y.id === yacht.id || y.name === yacht.name);
-      if (idx >= 0) {
-        cart.splice(idx, 1);
-        localStorage.setItem('quote_cart', JSON.stringify(cart));
-        setState('idle');
-      } else {
-        cart.push({
-          id: yacht.id,
-          name: yacht.name,
-          image: imgs[0] || null,
-          length: yacht.length || (bp.length ? `${bp.length} m` : null),
-          guests: yacht.guests || yacht.capacity || (yacht.cabins ? yacht.cabins * 2 : null),
-          type: yacht.type || (Array.isArray(full.yachtType) ? full.yachtType[0] : null),
-          cabins: yacht.cabins || bp.cabins || null,
-          price: yacht.pricePerHour || yacht.price || null,
-        });
-        localStorage.setItem('quote_cart', JSON.stringify(cart));
-        setState('added');
-      }
-    } catch {}
+// ══ CTA principal de la fiche ══
+// Un seul comportement, pose deux fois : en haut et en bas de page.
+// Au clic : ajout a la selection de devis SANS doublon, les autres yachts deja
+// selectionnes sont conserves, puis navigation vers /request-quote.
+// La selection utilise la cle `quote_cart` deja en place, partagee avec les
+// petits coeurs des cartes.
+function ReserveButton({ yacht, bp, full, imgs, variant = 'top' }) {
+  const router = useRouter();
+  const go = () => {
+    addToCart(
+      toCartEntry(yacht, {
+        image: imgs?.[0] || null,
+        length: yacht.length || (bp.length ? `${bp.length} m` : null),
+        guests: yacht.guests || yacht.capacity || (yacht.cabins ? yacht.cabins * 2 : null),
+        cabins: yacht.cabins || bp.cabins || null,
+        type: yacht.type || (Array.isArray(full.yachtType) ? full.yachtType[0] : null),
+        price: yacht.pricePerHour || yacht.price || null,
+      }),
+    );
+    router.push('/request-quote');
   };
+
+  const focus =
+    'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
+
+  if (variant === 'bottom') {
+    return (
+      <button
+        type="button"
+        onClick={go}
+        aria-label={`Reserve ${yacht.name || 'this yacht'} and open the quote request`}
+        className={`inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-[#C0C0C0] px-12 py-4 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] ${focus}`}
+      >
+        Reserve This Yacht
+      </button>
+    );
+  }
+
   return (
     <button
       type="button"
-      onClick={toggle}
-      className={`flex flex-col items-start w-full lg:w-auto lg:inline-flex lg:items-center rounded-lg border-2 border-[#C0C0C0] px-2 py-0.5 transition-all text-left lg:text-center ${state === 'added' ? 'shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]' : 'shadow-none'}`}
+      onClick={go}
+      aria-label={`Reserve ${yacht.name || 'this yacht'} and open the quote request`}
+      className={`flex flex-col items-start w-full lg:w-auto lg:inline-flex lg:items-center min-h-[48px] justify-center rounded-lg border-2 border-[#C0C0C0] px-2 py-0.5 transition-all text-left lg:text-center shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] ${focus}`}
     >
       <span className="text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00]">
-        {state === 'added' ? '✓ Yacht reserved' : 'Reserve this yacht'}
+        Reserve This Yacht
       </span>
       <span className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] mt-1" style={{ color: '#C0C0C0' }}>{yacht.name}</span>
     </button>
@@ -251,8 +258,8 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       <div className="border-b border-[#C0C0C0]/20">
         <div className="max-w-6xl mx-auto px-5 md:px-10 py-8 flex flex-col lg:flex-row lg:items-center gap-8">
           <div className="flex-1 w-full flex flex-col items-stretch lg:items-center gap-6">
-            <EnquireButton yacht={yacht} bp={bp} full={full} imgs={imgs} />
-            <a href="/request-quote-test-v10?step=1" className="flex items-center justify-center w-full lg:w-auto rounded-lg border-2 border-[#C0C0C0] px-3 py-1.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+            <ReserveButton yacht={yacht} bp={bp} full={full} imgs={imgs} variant="top" />
+            <a href="/request-quote" className="flex items-center justify-center min-h-[48px] w-full lg:w-auto rounded-lg border-2 border-[#C0C0C0] px-3 py-1.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
               Contact a broker
             </a>
           </div>
@@ -677,43 +684,16 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         );
       })()}
 
-      {/* ══ CREW (collapsible fermé, après la galerie) ══ */}
-      {crew.length > 0 && (
-        <div className="max-w-5xl mx-auto px-5 md:px-10 pb-12 md:pb-16">
-          <Collapsible title={`The Crew — ${crew.length} members`}>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {crew.map((c, i) => {
-                const avatar = c.avatar ? getAnkorImageUrl(c.avatar, '320w') : null;
-                return (
-                  <div key={i} className="rounded-xl border border-[#C0C0C0]/40 bg-[#26272a] overflow-hidden">
-                    <div className="relative aspect-square bg-[#26272a]">
-                      {avatar ? (
-                        <Image src={avatar} alt={c.name} fill className="object-cover" />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <UserCircle2 className="w-12 h-12 text-[#C0C0C0]/30" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-3 text-center">
-                      <p className="text-xs font-bold text-[#C0C0C0] truncate">{c.name}</p>
-                      {c.role && (
-                        <p className="text-[10px] uppercase tracking-[0.15em] text-[#B03E00] mt-1 truncate">{c.role}</p>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </Collapsible>
-        </div>
-      )}
+      {/* ══ CREW ══
+          Affichage retire a la demande de la cliente. Les donnees d'equipage
+          restent en base et `crew` reste disponible plus haut : la caracteristique
+          technique "Crew" du bloc de specifications n'est pas touchee. Le bloc
+          entier disparaissait deja quand crew etait vide, il ne laisse donc aucun
+          espace vide en moins. */}
 
       {/* ══ CTA ══ */}
       <div className="max-w-4xl mx-auto px-5 md:px-10 pb-16 text-center">
-        <a href="/request-quote-test-v10" className="inline-block rounded-xl border-2 border-[#C0C0C0] px-12 py-4 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
-          Request a Quote
-        </a>
+<ReserveButton yacht={yacht} bp={bp} full={full} imgs={imgs} variant="bottom" />
       </div>
 
       {/* ══ SIMILAR YACHTS (avec flèches orange pour scroll lateral) ══ */}

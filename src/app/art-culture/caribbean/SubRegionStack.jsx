@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 // Sous-regions empilees les unes SOUS les autres (bandes photo collees, colonne
@@ -8,6 +9,30 @@ import { useState } from 'react';
 // Ici la bande est CLIQUABLE : au clic, elle se deplie et affiche les infos de la
 // sous-region (musees/galeries pour Art, calendrier culturel pour Culture).
 // AUCUN emoji.
+
+// Parcours vers la flotte, une seule source pour Art ET Culture. Les slugs sont
+// ceux de data.js ; toute sous-region absente d'ici n'affiche simplement pas de CTA.
+const FLEET_BY_SUBREGION = {
+  'greater-antilles': '/charters/destinations/carabbean/greater-antilles-v11',
+  'leeward-islands': '/charters/destinations/carabbean/leeward-islands-v11',
+  'leeward-antilles': '/charters/destinations/carabbean/leeward-antilles-v11',
+  'windward-islands': '/charters/destinations/carabbean/windward-islands-v11',
+  'turks-caicos': '/charters/destinations/carabbean/turks-caicos-v11',
+  'trinidad-tobago': '/charters/destinations/carabbean/trinidad-tobago-v11',
+  'grand-cayman': '/charters/destinations/carabbean/grand-cayman-v11',
+  'emerging-destinations': '/charters/destinations/carabbean/emerging-destinations-v11',
+};
+
+// Style CTA valide par la cliente.
+const FLEET_CTA =
+  'inline-flex min-h-[48px] max-w-full items-center justify-center text-center ' +
+  'px-6 py-3 rounded-full border border-[#C0C0C0] bg-[#26272a] ' +
+  'text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] ' +
+  'shadow-[0_0_18px_rgba(192,192,192,0.35)] ' +
+  'transition-[border-color,box-shadow] duration-300 ' +
+  'hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] ' +
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 ' +
+  'focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
 
 const VIP_TONE = {
   'Very High': 'text-[#bd9973] border-[#bd9973]/40',
@@ -94,6 +119,8 @@ function SubRegion({ region, section, artGroups, cultureRows }) {
   const count = section === 'art' ? artGroups.length : cultureRows.length;
   const label = section === 'art' ? 'islands with venues' : 'destinations';
   const empty = count === 0;
+  // Pas de CTA sur une sous-region vide, ni sur un slug hors mapping.
+  const fleetHref = empty ? null : FLEET_BY_SUBREGION[region.slug];
 
   return (
     <section id={region.slug}>
@@ -148,6 +175,14 @@ function SubRegion({ region, section, artGroups, cultureRows }) {
         <div className="overflow-hidden">
           <div className="p-6 md:p-8 border-t border-[#C0C0C0]/10">
             {section === 'art' ? <ArtVenues groups={artGroups} /> : <CultureRows rows={cultureRows} />}
+
+            {open && fleetHref && (
+              <div className="mt-8 flex justify-center">
+                <Link href={fleetHref} className={FLEET_CTA}>
+                  Explore the Fleet
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

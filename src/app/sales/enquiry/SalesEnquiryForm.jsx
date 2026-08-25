@@ -342,7 +342,17 @@ export default function SalesEnquiryForm({ intent, yacht }) {
             aria-describedby={errors.consent ? `${uid}-consent-error` : undefined}
             className="mt-0.5 h-4 w-4 shrink-0 accent-[#c2622a] focus:ring-2 focus:ring-[#c2622a]/50" />
           <span className="text-sm leading-relaxed text-[#acb0cd]">
-            I agree that Qualityacht may use the details above to respond to this enquiry.
+            I agree that Qualityacht may use the details above to respond to this enquiry, as described
+            in the{' '}
+            <a
+              href="/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-[#c2622a] underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+            >
+              Privacy Policy
+            </a>.
             <span aria-hidden className="text-[#c2622a]"> *</span>
           </span>
         </label>

@@ -97,7 +97,7 @@ export default function HeroBaner() {
 
       {/* Configurateur mobile, place JUSTE APRES le hero : le logo anime occupe tout le
           bas du hero mobile, un panneau superpose le masquerait. */}
-      <div className="block md:hidden w-full bg-[#0f1730] border-y border-[#C0C0C0]/15 px-5 py-6">
+      <div className="block md:hidden w-full bg-[#3a3b3f] border-y border-[#C0C0C0]/15 px-5 py-6">
         <HeroQuickSearch variant="mobile" />
       </div>
     </>
