@@ -85,7 +85,6 @@ export default function Footer() {
             <li>Phone: <a href="tel:+41767365781" aria-label="Call Qualityacht on +41 76 736 57 81" className="underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">+41 76 736 57 81</a></li>
             <li><a href="https://wa.me/41767365781" target="_blank" rel="noopener noreferrer" aria-label="Contact Qualityacht on WhatsApp" className="underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">WhatsApp</a></li>
             <li>Office: Zurich</li>
-            <li><Link href="/about">About</Link></li>
             <li><Link href="/charters/destinations">Destinations</Link></li>
             <li><Link href="/events">Events</Link></li>
           </ul>

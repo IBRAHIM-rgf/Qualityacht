@@ -56,7 +56,7 @@ function SplitSection({ img, eyebrow, title, children, cta, ctaHref, reverse = f
             <div className="mt-7">
               <Link
                 href={ctaHref}
-                className="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a]"
               >
                 {cta}
                 <span aria-hidden className="text-[13px] leading-none">&rarr;</span>
@@ -112,7 +112,7 @@ export default function MotorSalesPage() {
           </p>
           <Link
             href="/sales/enquiry?intent=listings"
-            className="mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
+            className="mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a]"
           >
             Subscribe to our exclusive listings
             <span aria-hidden className="text-[13px] leading-none">&rarr;</span>
@@ -125,7 +125,7 @@ export default function MotorSalesPage() {
         <div className="max-w-5xl mx-auto relative">
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] md:w-[560px] md:h-[560px] rounded-full border border-[#C0C0C0]/10"
+            className="pointer-events-none absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-[380px] aspect-square md:w-[560px] md:h-[560px] md:max-w-none md:aspect-auto rounded-full border border-[#C0C0C0]/10"
           />
           <h2 className="relative trajan-regular text-2xl md:text-4xl uppercase tracking-[0.16em] text-[#C0C0C0] text-center mb-12">
             Highlights
@@ -296,7 +296,7 @@ export default function MotorSalesPage() {
           <div className="mt-8 flex justify-center">
             <Link
               href="/sales/enquiry?intent=general"
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-full border border-[#C0C0C0] text-xs uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
+              className="inline-flex items-center gap-2 px-8 py-3 rounded-full border border-[#C0C0C0] text-xs uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a]"
             >
               Contact us
               <span aria-hidden className="text-[13px] leading-none">&rarr;</span>

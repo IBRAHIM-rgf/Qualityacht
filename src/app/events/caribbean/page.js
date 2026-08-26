@@ -11,24 +11,69 @@ export const metadata = {
     "54 cultural and nautical events across the Caribbean, 2026-2027 — carnivals, heritage feasts and the great regattas, filterable by island and category.",
 };
 
-// Hero : VUE DRONE d'ile (image aerienne turquoise) — plus de video fete, plus
-// d'evenements hors Caraibes.
-const HERO_IMAGE = (media({ cat: "aerial", role: "hero-bg", kind: "image" }).find((m) => (m.tags || []).includes("island"))
-  || media({ cat: "aerial", role: "hero-bg", kind: "image" })[0])?.src
-  || "/media/quality/aerial/golden-pearvilla-wzj0ewkvche-unsplash.jpg";
+// ══ Visuels de la page ══
+//
+// Tous les fichiers ci-dessous existent deja dans le depot et ont ete ouverts et
+// controles un par un — jamais choisis d'apres leur nom. Aucune image externe,
+// aucun hotlink.
+//
+// Hero : course au large avec equipage, le visuel evenementiel le plus fort
+// disponible localement. Il remplace une vue de drone generique.
+const HERO_IMAGE = '/media/quality/boats/gregor-volvo-ocean-race-816438-1920.jpg';
 
-// Pool d'images (aerien / plage / divers) pour illustrer les evenements + le marquee.
-const IMG_POOL = [
-  ...media({ cat: "aerial", kind: "image" }),
-  ...media({ cat: "divers", kind: "image" }),
-  ...media({ cat: "beach", kind: "image" }),
-  ...media({ cat: "boats", kind: "image" }),
-].map((m) => m.src);
+// ══ Illustration editoriale PAR CATEGORIE ══
+//
+// Remplace l'ancienne attribution par simple modulo d'index, qui posait une
+// plage ou un plongeur sur un carnaval au hasard.
+//
+// ATTENTION : ces images N'ILLUSTRENT PAS l'evenement exact. Ce sont des visuels
+// editoriaux choisis pour rester coherents avec la CATEGORIE. Une meme image se
+// repete donc sur plusieurs evenements d'une meme categorie — c'est assume, et
+// preferable a une correspondance inventee.
+const CATEGORY_IMAGES = {
+  // Flotte de spinnakers en regate.
+  regate: '/media/quality/boats/davor25-regatta-1049741-1920.jpg',
+  // Voiliers classiques sous voile.
+  voile_traditionnelle: '/media/quality/boats/mackinacdesign-sailing-4945855-1920.jpg',
+  // Costume colore et masque peint : registre de fete.
+  carnaval: '/images/art-culture/kid-having-fun-jungle-party.jpg',
+  // Lieu caribeen anime en soiree.
+  musique: '/images/art-culture/x-f-8JPo6SBuZGw-unsplash.jpg',
+  // Etal de fruits des Antilles.
+  gastronomie: '/media/quality/food/fruits-1440x800.jpg',
+  // La Havane : voiture classique, drapeau cubain, arche du quartier chinois.
+  patrimoine: '/images/art-culture/louis-renaudineau-79dDz5e_vdE-unsplash.jpg',
+  // Jour ferie : pas de photo d'evenement, on reste sur une vue d'ile neutre.
+  ferie: '/media/quality/aerial/golden-pearvilla-wzj0ewkvche-unsplash.jpg',
+};
 
-// Evenements CARAIBES uniquement (54, geocodes par ile depuis le fichier client).
-const CARIB_EVENTS = CARIBBEAN_EVENTS.map((e, i) => ({ ...e, img: IMG_POOL[i % IMG_POOL.length] }));
+const IMAGE_NEUTRE = CATEGORY_IMAGES.ferie;
 
-const EVENT_MARQUEE = IMG_POOL.slice(0, 10).map((src, i) => ({ src, accent: i % 2 ? "#ff7a59" : "#2fd6c4" }));
+// Evenements CARAIBES uniquement (54). Les donnees — nom, date, lieu, coords,
+// description, confiance — ne sont PAS touchees : on ajoute seulement `img`.
+const CARIB_EVENTS = CARIBBEAN_EVENTS.map((e) => ({
+  ...e,
+  img: CATEGORY_IMAGES[e.category] || IMAGE_NEUTRE,
+}));
+
+// ══ Marquee ══
+// Selection explicite : uniquement des images qui evoquent reellement une regate,
+// la voile, une fete, la gastronomie, la musique ou le patrimoine caribeen. Les
+// plongeurs, plages vides et vues immobilieres du pool precedent sont ecartes.
+// Huit images pertinentes valent mieux que dix trompeuses.
+//
+// Accents ramenes a la palette : #C2622A et #C0C0C0. Les deux accents neon
+// precedents, hors charte, sont retires.
+const EVENT_MARQUEE = [
+  CATEGORY_IMAGES.regate,
+  CATEGORY_IMAGES.carnaval,
+  CATEGORY_IMAGES.voile_traditionnelle,
+  CATEGORY_IMAGES.patrimoine,
+  '/media/quality/boats/gregor-volvo-ocean-race-816438-1920.jpg',
+  CATEGORY_IMAGES.gastronomie,
+  '/media/quality/boats/sporthearts-yacht-4993408-1920.jpg',
+  CATEGORY_IMAGES.musique,
+].map((src, i) => ({ src, accent: i % 2 ? '#C2622A' : '#C0C0C0' }));
 
 // Page Caraibes (ex-/events, deplacee ici : /events est desormais la landing
 // multi-destinations). La page = hero drone + marquee + planisphere filtrable.

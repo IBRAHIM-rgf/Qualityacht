@@ -16,6 +16,20 @@ function HeroBaseline({ className = "" }) {
   );
 }
 
+// Logo du hero DESKTOP.
+// Retire a la demande de la cliente : plus affiche, plus cliquable, absent du
+// DOM. Le code du bloc reste juste en dessous, sous condition, pour pouvoir le
+// remettre a tout moment.
+//
+// POUR LE REMETTRE : repasser SHOW_HERO_LOGO_DESKTOP a true.
+// LOGO_PULSE_DESKTOP commande separement l'animation `pulse`, dont la regle CSS
+// et les keyframes restent intacts dans globals.css.
+//
+// A NOTER : ce logo etait le SEUL lien vers /choices en desktop. La version
+// mobile du hero garde le sien.
+const SHOW_HERO_LOGO_DESKTOP = false;
+const LOGO_PULSE_DESKTOP = false;
+
 export default function HeroBaner() {
   return (
     <>
@@ -33,17 +47,22 @@ export default function HeroBaner() {
           <HeroBaseline className="text-3xl lg:text-4xl" />
         </div>
 
-        <div className="absolute inset-0 flex items-center justify-end px-6 pointer-events-none">
-          <Link href="/choices" className="pulse-animation pointer-events-auto">
-            <Image
-              src="/images/trans.png"
-              alt="Qualityacht Logo"
-              width={350}
-              height={350}
-              className="cursor-pointer"
-            />
-          </Link>
-        </div>
+        {SHOW_HERO_LOGO_DESKTOP && (
+          <div className="absolute inset-0 flex items-center justify-end px-6 pointer-events-none">
+            <Link
+              href="/choices"
+              className={`${LOGO_PULSE_DESKTOP ? 'pulse-animation ' : ''}pointer-events-auto`}
+            >
+              <Image
+                src="/images/trans.png"
+                alt="Qualityacht Logo"
+                width={350}
+                height={350}
+                className="cursor-pointer"
+              />
+            </Link>
+          </div>
+        )}
 
         {/* Configurateur : les trois champs alimentent /yachts, qui les lit reellement. */}
         <div className="absolute inset-x-0 bottom-10 z-20 flex justify-center px-8">

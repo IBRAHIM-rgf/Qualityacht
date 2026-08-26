@@ -48,9 +48,13 @@ export default function Header() {
             <Link href="/charters/on-demand" className="hover:text-white transition">YACHTS FOR<br /> DAY CHARTER</Link>
             <Link href="/charters/destinations" className="hover:text-white transition">Destinations</Link>
           </div>
-        <Link href="#" className="hover:text-white  block md:hidden">
-          <Bitcoin  />
-          </Link> 
+        <Link
+          href="/crypto-payments"
+          aria-label="Crypto Payments"
+          className="hover:text-white block md:hidden focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+        >
+          <Bitcoin aria-hidden />
+        </Link>
         </div>
         {/* Center: Brand name */}
         <Link href="/" className="">
@@ -61,13 +65,16 @@ export default function Header() {
         {/* Right: Desktop links + Burger mobile */}
         <div className="flex items-center gap-9 text-sm text-white/90">
           <Link href="/charters/last-minute" className="hover:text-white transition hidden md:inline">YACHTS FOR <br />LAST MINUTE</Link>
-          {/* <a href="#" className="hover:text-white transition hidden md:inline">SUGGESTIONS</a> */}
           {/* `Link` et non `<a>` : un rechargement complet perd le saut vers l'ancre,
               la page etant encore en cours de mise en page quand le navigateur essaie. */}
           <Link href="/#contact" className="hover:text-white transition hidden md:inline">Contact</Link>
-          <Link href="#" className="hover:text-white transition hidden md:block">
-          <Bitcoin  />
-          </Link> 
+          <Link
+            href="/crypto-payments"
+            aria-label="Crypto Payments"
+            className="hover:text-white transition hidden md:block focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+          >
+            <Bitcoin aria-hidden />
+          </Link>
           <a
             href="https://wa.me/41767365781"
             target="_blank"
@@ -112,10 +119,10 @@ export default function Header() {
               <ul className="space-y-2">
                 <li><Link href="/charters" className="hover:text-white transition">Yacht Charter</Link></li>
                 <li><Link href="/charters/destinations" className="hover:text-white transition">Destinations Charter</Link></li>
-                <li><a href="/sales" className="hover:text-white transition">Sales</a></li>
-                <li><a href="/management" className="hover:text-white transition">Management</a></li>
-                <li><a href="/concierge" className="hover:text-white transition">Concierge</a></li>
-                <li><a href="/crypto-payments" className="hover:text-white transition">Crypto Payments</a></li>
+                <li><Link href="/sales" className="hover:text-white transition">Sales</Link></li>
+                <li><Link href="/management" className="hover:text-white transition">Management</Link></li>
+                <li><Link href="/conciergery" className="hover:text-white transition">Conciergery</Link></li>
+                <li><Link href="/crypto-payments" className="hover:text-white transition">Crypto Payments</Link></li>
               </ul>
             </div>
 
@@ -162,9 +169,8 @@ export default function Header() {
                 <li>Phone: <a href="tel:+41767365781" aria-label="Call Qualityacht on +41 76 736 57 81" className="underline hover:text-white focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">+41 76 736 57 81</a></li>
                 <li><a href="https://wa.me/41767365781" target="_blank" rel="noopener noreferrer" aria-label="Contact Qualityacht on WhatsApp" className="underline hover:text-white focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">WhatsApp</a></li>
                 <li>Office: Zurich</li>
-                <li><a href="/about" className="hover:text-white transition">About</a></li>
-                <li><a href="/charters/destinations" className="hover:text-white transition">Destinations</a></li>
-                <li><a href="/events" className="hover:text-white transition">Events</a></li>
+                <li><Link href="/charters/destinations" className="hover:text-white transition">Destinations</Link></li>
+                <li><Link href="/events" className="hover:text-white transition">Events</Link></li>
               </ul>
             </div>
           </nav>

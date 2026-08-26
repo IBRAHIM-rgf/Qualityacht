@@ -1,54 +1,143 @@
-import Text4Images2Section from "../components/sections/new/Text4Images2Section";
-import Text4ImagesSection from "../components/sections/new/Text4Images";
-import Text2imagesSection from "../components/sections/new/text2images";
-import ImageTextImage from "../components/sections/new/ImageTextImage";
-import FAQAccordion from "../components/sections/common/FAQAccordion";
-import FullWidthBanner from "../components/sections/common/FullWidthBanner";
-import HeroImageBackground from "../components/sections/common/HeroImageBackground";
-import TestimonialsSlider from "../components/sections/common/TestimonialsSlider";
-import ThreeColumnFeatures from "../components/sections/common/ThreeColumnFeatures";
-import TimelineSection from "../components/sections/common/TimelineSection";
+// ══ /luxury-cars-racing ══
+//
+// Remplace l'ancienne page d'attente, qui affichait une phrase generique et une
+// photo de cuisine sans rapport. Reconstruite directement ici : le composant
+// partage Text4Images2Section n'est plus utilise par cette route.
+//
+// IMPORTANT — le depot ne contient AUCUN visuel automobile. Recherche exhaustive
+// faite : les seuls fichiers dont le nom evoque une voiture sont un photographe
+// prenomme Carlos, une photo de cheval et une de cyclisme. Le hero est donc
+// typographique, sans image, plutot qu'illustre par un visuel hors sujet ou
+// telecharge ailleurs.
+//
+// Aucune collection, aucun modele, aucun partenaire et aucun circuit ne sont
+// nommes : rien de tout cela n'est confirme. Voir le rapport pour la liste de ce
+// qui reste a fournir.
 
-const luxuryCarsRacingSections = [
+import Link from 'next/link';
+import { QUALITYACHT } from '../real-estate/partner-data';
+
+export const metadata = {
+  title: 'Luxury Cars & Racing | Qualityacht',
+  description:
+    'Ground transport and track experiences arranged alongside your charter — organised on request through Qualityacht.',
+};
+
+const FOCUS =
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
+
+const CTA_CUIVRE =
+  'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
+  'rounded-full border border-[#C0C0C0] bg-[#26272a] text-[13px] font-semibold uppercase ' +
+  'tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] ' +
+  'transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] ' +
+  'hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] ' + FOCUS;
+
+const CTA_ARGENT =
+  'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
+  'rounded-full border border-[#C0C0C0] bg-[#26272a]/50 text-[13px] font-semibold uppercase ' +
+  'tracking-[0.18em] text-[#C0C0C0] transition-[border-color,box-shadow] duration-300 ' +
+  'hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)] ' + FOCUS;
+
+// Categories de service, formulees sans nommer de marque, de modele ni de
+// circuit, puisqu'aucun n'est confirme.
+const SERVICES = [
   {
-    chooseSection: 0,
-    title: "Luxury Cars & Racing",
-    content: "Discover our Luxury Cars & Racing experiences. (Content coming soon)",
-    images: [
-      "/images/new/17500856938825139008889514837436.jpg"
-    ],
-    // "Explore the Collection" n'est PAS pose : aucune collection de vehicules
-    // n'existe dans le projet et il n'y a donc aucune route reelle vers laquelle
-    // pointer. Seule la prise de contact mene quelque part de reel.
-    cta: { label: "Speak to Our Concierge", href: "/conciergery" }
-  }
-];
-
-const sectionComponents = [
-  Text4Images2Section,
-  Text4ImagesSection,
-  Text2imagesSection,
-  ImageTextImage,
-  FAQAccordion,
-  FullWidthBanner,
-  HeroImageBackground,
-  TestimonialsSlider,
-  ThreeColumnFeatures,
-  TimelineSection,
+    titre: 'Arrival & Transfers',
+    texte:
+      'A car and a driver waiting where you land, and again when you leave the quay. Arranged for the dates of your charter, in the places we already operate.',
+  },
+  {
+    titre: 'At Your Disposal',
+    texte:
+      'A vehicle kept available for the length of your stay, for the days you would rather be ashore than aboard.',
+  },
+  {
+    titre: 'Track & Events',
+    texte:
+      'Circuit days and motorsport weekends can be built around a charter when the calendar allows. We look at what is genuinely open for your dates before proposing anything.',
+  },
 ];
 
 export default function LuxuryCarsRacingPage() {
   return (
-    <main>
-      {luxuryCarsRacingSections.map((section, idx) => {
-        const SectionComponent = sectionComponents[section.chooseSection ?? (idx % sectionComponents.length)];
-        return (
-          <SectionComponent
-            key={idx}
-            {...section}
-          />
-        );
-      })}
+    <main className="bg-[#26272a] text-[#acb0cd] min-h-screen">
+      {/* ══ HERO — typographique, aucun visuel hors sujet ══ */}
+      <section className="relative px-6 md:px-14 pt-28 md:pt-36 pb-14 md:pb-20 border-b border-[#C0C0C0]/10">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.32em] text-[#B87333] mb-3">
+            Qualityacht · On Land
+          </p>
+          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">
+            Luxury Cars &amp; Racing
+          </h1>
+          <p className="mt-6 text-sm md:text-base leading-relaxed text-[#acb0cd]">
+            A charter rarely begins at the quay. What happens on land — how you arrive, what waits for
+            you between two anchorages, the weekend you build around a race — is arranged with the same
+            care as the days at sea.
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/#contact" className={CTA_CUIVRE}>
+              Speak to Our Concierge
+            </Link>
+            <Link href="/conciergery" className={CTA_ARGENT}>
+              Our Concierge Services
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SERVICES ══ */}
+      <section className="px-6 md:px-14 py-16 md:py-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-[#B87333] font-medium mb-2">
+              What We Arrange
+            </p>
+            <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">
+              Three Ways We Work
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            {SERVICES.map((s) => (
+              <article
+                key={s.titre}
+                className="rounded-2xl border border-[#C0C0C0]/20 bg-[#2e2f32] p-7 flex flex-col"
+              >
+                <span aria-hidden className="h-1 w-1 rounded-full bg-[#c2622a] mb-5" />
+                <h3 className="trajan-regular text-lg md:text-xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-snug">
+                  {s.titre}
+                </h3>
+                <p className="mt-4 text-[13px] md:text-[14px] leading-relaxed text-[#acb0cd]">{s.texte}</p>
+              </article>
+            ))}
+          </div>
+
+          <p className="mt-10 max-w-3xl mx-auto text-center text-[12px] leading-relaxed text-[#8b90a0]">
+            Availability depends on the destination, the season and the dates. Nothing on this page is a
+            catalogue: each request is answered individually.
+          </p>
+        </div>
+      </section>
+
+      {/* ══ CTA FINAL ══ */}
+      <section className="px-6 md:px-14 pb-20 md:pb-28">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">
+            Tell Us What You Have In Mind
+          </h2>
+          <p className="mt-5 text-[13px] md:text-base leading-relaxed text-[#acb0cd]">
+            Give us the destination and the dates. We will tell you plainly what can be arranged.
+          </p>
+          <Link href="/#contact" className={`${CTA_CUIVRE} mt-8`}>
+            Speak to Our Concierge
+          </Link>
+          <p className="mt-6 text-[12px] leading-relaxed text-[#8b90a0]">
+            {QUALITYACHT.email} · {QUALITYACHT.phone}
+          </p>
+        </div>
+      </section>
     </main>
   );
 }

@@ -76,7 +76,7 @@ export default async function YachtDetailPage({ params }) {
 
           <Link
             href={offerHref}
-            className="mt-7 inline-flex items-center justify-center px-9 py-3 rounded-full bg-[#c2622a] text-[11px] uppercase tracking-[0.2em] text-gray-900 font-semibold transition-opacity duration-300 hover:opacity-90"
+            className="mt-7 inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] text-[11px] uppercase tracking-[0.2em] text-[#c2622a] font-semibold shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_22px_rgba(194,98,42,0.4)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a] px-9 py-3"
           >
             Make an offer
           </Link>
@@ -107,7 +107,7 @@ export default async function YachtDetailPage({ params }) {
         <div className="relative max-w-4xl mx-auto">
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] md:w-[600px] md:h-[600px] rounded-full border border-[#C0C0C0]/10"
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-[420px] aspect-square md:w-[600px] md:h-[600px] md:max-w-none md:aspect-auto rounded-full border border-[#C0C0C0]/10"
           />
           <div className="relative max-w-3xl mx-auto h-[280px] md:h-[440px] rounded-lg overflow-hidden border border-[#C0C0C0]/15">
             <Image src={encodeURI(gallery[1] || gallery[0])} alt={y.name} fill sizes="(max-width:768px) 100vw, 768px" className="object-cover" />
@@ -192,13 +192,13 @@ export default async function YachtDetailPage({ params }) {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href={offerHref}
-            className="inline-flex items-center justify-center px-9 py-3 rounded-full bg-[#c2622a] text-[11px] uppercase tracking-[0.2em] text-gray-900 font-semibold transition-opacity duration-300 hover:opacity-90"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] text-[11px] uppercase tracking-[0.2em] text-[#c2622a] font-semibold shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_22px_rgba(194,98,42,0.4)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a] px-9 py-3"
           >
             Make an offer
           </Link>
           <Link
             href={detailsHref}
-            className="inline-flex items-center justify-center px-9 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
+            className="inline-flex items-center justify-center px-9 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a]"
           >
             Request full details
           </Link>
@@ -209,7 +209,7 @@ export default async function YachtDetailPage({ params }) {
       <div className="px-6 pb-16 flex justify-center">
         <Link
           href="/sales/motor"
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-[#C0C0C0]/40 text-[11px] uppercase tracking-[0.18em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-[#C0C0C0]/40 text-[11px] uppercase tracking-[0.18em] text-[#acb0cd] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a]"
         >
           <span aria-hidden>&larr;</span>
           All motor yachts

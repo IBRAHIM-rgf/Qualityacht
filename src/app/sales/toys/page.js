@@ -1,36 +1,57 @@
-import Image from 'next/image';
-import Link from 'next/link';
+// ══ /sales/toys ══
+//
+// Remplace l'ancienne page d'attente. AUCUNE marque, AUCUN modele, AUCUN produit
+// et AUCUN prix : rien n'est confirme pour cette categorie.
+//
+// Visuel local deja present dans le depot. Le depot ne contient aucune photo de
+// tender, de chase boat ni de sport nautique : ce visuel marin est le plus
+// proche disponible. Voir le rapport pour la photo definitive a demander.
 
-// Fallback "coming soon" pour la categorie Water Toys & Equipment (encore vide) — vraie
-// page facon privat-jet "Destination inconnue" : fond gris-bleu (gray-900) + nuages.
+import SourcingLanding from '../SourcingLanding';
+
 export const metadata = {
   title: 'Water Toys & Equipment | Qualityacht',
-  description: 'Water toys and equipment for sale — selection coming soon.',
+  description:
+    'Tenders, chase boats and equipment selected around your yacht — each request coordinated with the same care as a yacht acquisition.',
 };
 
-export default function ToysSalesPage() {
+const AXES = [
+  {
+    titre: 'Tenders & Chase Boats',
+    texte:
+      'What follows the yacht matters as much as the yacht. Size, draft, where it stows and who drives it are decided together, before anything is sourced.',
+  },
+  {
+    titre: 'Watersports & Exploration',
+    texte:
+      'What guests actually use, chosen for the water you will be in and for who is aboard — not for the length of the list.',
+  },
+  {
+    titre: 'Equipment Selected Around Your Yacht',
+    texte:
+      'Stowage, davits, power and crew handling set the real limits. We work from those constraints rather than around them.',
+  },
+];
+
+export default function SalesToysPage() {
   return (
-    <div className="min-h-screen relative flex items-center justify-center overflow-hidden text-[#acb0cd]">
-      <div aria-hidden className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gray-900" />
-        <Image src="/images/nuagesAncien.png" alt="" fill className="object-cover opacity-30 grayscale" priority />
-      </div>
-      <div className="relative z-10 text-center px-4">
-        <p className="text-[10px] uppercase tracking-[0.3em] text-[#B87333] mb-4">Qualityacht &middot; Sales</p>
-        <h1 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.12em] text-[#C0C0C0]">
-          Water Toys &amp; Equipment
-        </h1>
-        <div className="relative w-28 h-5 mx-auto my-5">
-          <Image src="/images/title-line.png" alt="" fill className="object-contain" />
-        </div>
-        <p className="text-[#acb0cd]/80 text-base md:text-lg mb-8">Selection coming soon.</p>
-        <Link
-          href="/sales"
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.18em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
-        >
-          <span aria-hidden>&larr;</span> Back to Sales
-        </Link>
-      </div>
-    </div>
+    <SourcingLanding
+      eyebrow="Qualityacht · Equipment &amp; Acquisitions"
+      title="Water Toys &amp; Equipment"
+      intro="From tenders and chase boats to equipment selected around your yacht and your time on the water, Qualityacht coordinates each request with the same care as a yacht acquisition."
+      heroImage="/media/quality/boats/boat-port.jpg"
+      heroAlt="Boat bow heading across shallow turquoise water"
+      heroPosition="object-center"
+      primary={{ label: 'Source Water Toys & Equipment', href: '/sales/enquiry?intent=buy' }}
+      secondary={{ label: 'Speak to a Sales Broker', href: '/sales/enquiry?intent=general' }}
+      axes={AXES}
+      final={{
+        title: 'Build the Right Setup for Your Yacht',
+        texte:
+          'Tell us the yacht, the stowage you have and how you use the water. We will come back with what genuinely fits.',
+        primary: { label: 'Tell Us What You Need', href: '/sales/enquiry?intent=general' },
+        secondary: { label: 'Receive Exclusive Listings', href: '/sales/enquiry?intent=listings' },
+      }}
+    />
   );
 }

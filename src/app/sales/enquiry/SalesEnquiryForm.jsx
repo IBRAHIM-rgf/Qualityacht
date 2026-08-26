@@ -363,7 +363,7 @@ export default function SalesEnquiryForm({ intent, yacht }) {
 
       <div className="mt-12 flex flex-col sm:flex-row items-center gap-4">
         <button type="submit" disabled={status === 'sending'}
-          className="inline-flex items-center justify-center px-9 py-3 rounded-full bg-[#c2622a] text-[11px] uppercase tracking-[0.2em] text-gray-900 font-semibold transition-opacity duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#c2622a] focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-60 disabled:cursor-not-allowed">
+          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] text-[11px] uppercase tracking-[0.2em] text-[#c2622a] font-semibold shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_22px_rgba(194,98,42,0.4)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a] px-9 py-3 disabled:opacity-60 disabled:cursor-not-allowed">
           {status === 'sending' ? 'Sending…' : 'Send enquiry'}
         </button>
         <Link href="/sales/motor" className={secondaryBtn}>Back to yachts for sale</Link>
@@ -374,5 +374,5 @@ export default function SalesEnquiryForm({ intent, yacht }) {
 
 const secondaryBtn =
   'inline-flex items-center justify-center px-8 py-3 rounded-full border border-[#C0C0C0] text-[11px] ' +
-  'uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] ' +
+  'uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#c2622a] ' +
   'hover:text-[#c2622a] focus:outline-none focus:ring-2 focus:ring-[#c2622a] focus:ring-offset-2 focus:ring-offset-gray-900';

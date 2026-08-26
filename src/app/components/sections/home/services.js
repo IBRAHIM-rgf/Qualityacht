@@ -37,7 +37,7 @@ export default function ServicesGrid() {
   />
   <ServiceItem
     title={["MANAGEMENT"]}
-    image="/images/services/management.png"
+    image="/media/client/lydie/2026-08-25/management/management-wave.webp"
     className="top-[100%] left-[36%] md:top-[65%] md:left-[27%]"
     href={"/management"}
   />

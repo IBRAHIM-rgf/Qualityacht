@@ -113,13 +113,13 @@ export default async function SalesEnquiryPage({ searchParams }) {
             <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/sales/motor"
-                className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-[#c2622a] text-[11px] uppercase tracking-[0.2em] text-gray-900 font-semibold transition-opacity duration-300 hover:opacity-90"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] text-[11px] uppercase tracking-[0.2em] text-[#c2622a] font-semibold shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_22px_rgba(194,98,42,0.4)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a] px-8 py-3"
               >
                 See yachts for sale
               </Link>
               <Link
                 href="/sales/enquiry?intent=buy"
-                className="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
+                className="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a]"
               >
                 Tell us what you are looking for
               </Link>

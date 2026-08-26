@@ -3,6 +3,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ChevronLeft, ChevronRight, Heart, MapPin, Calendar, Users, DollarSign, CheckCircle, XCircle, BedDouble, Ruler, Map } from 'lucide-react';
 import { isInCart, toggleCart, subscribeCart, toCartEntry } from '@/lib/quoteCart';
 import { getAnkorImageUrl } from '@/lib/utils';
@@ -196,6 +197,17 @@ export default function YachtCardV2({ yacht, accentColor }) {
             {yacht.available ? <><CheckCircle className="w-4 h-4" />Disponible</> : <><XCircle className="w-4 h-4" />Indisponible</>}
           </span>
         )} */}
+
+        {/* Acces explicite a la fiche : la carte est enveloppee dans un div
+            cliquable, ce qui ne donne ni lien reel ni acces clavier. */}
+        <Link
+          href={`/yacht-detail-v11?name=${encodeURIComponent(yacht.name || '')}`}
+          onClick={(e) => e.stopPropagation()}
+          aria-label={`View ${yacht.name || 'this yacht'}`}
+          className="mt-auto inline-flex min-h-[48px] w-full items-center justify-center text-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-5 py-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-[#c2622a] shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_22px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+        >
+          View Yacht
+        </Link>
       </div>
     </div>
   );
