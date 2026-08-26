@@ -7,13 +7,14 @@ import ItemsGrid from "../../components/ItemsGrid";
 // (« Discover these unique creatures », « Observe these magnificent animals »…),
 // sans rapport avec une page de charter.
 //
-// Visuels :
-//   - 7 destinations recoivent les photos dediees destnation-feature-*.webp,
-//     deja presentes dans le depot ;
-//   - 9 destinations conservent leur photo actuelle, faute de meilleur visuel
-//     local, mais dans une version WebP optimisee rangee sous /destinations/cards/.
-//     Les originaux ne sont ni supprimes ni ecrases. Le rapport liste celles qui
-//     restent a fournir.
+// Visuels : les 16 cartes affichent les photos animalieres d'origine, comme
+// demande. Les 7 destinations qui avaient recu une photo de paysage lors du
+// commit 7cb329c retrouvent leur animal.
+//
+// Les 9 autres pointent sur /destinations/cards/*.webp : c'est exactement la
+// meme photographie que dans /destinations/animals/, seulement convertie en WebP
+// (comparaison visuelle faite, aucun recadrage). Arctic passe ainsi de 2,1 Mo a
+// 20 Ko. Les originaux ne sont ni supprimes ni ecrases.
 //
 // Textes : navigation, paysages et itineraires. Aucune promesse de disponibilite,
 // aucun nombre de yachts, aucune saison garantie, aucune fausse exclusivite.
@@ -48,13 +49,13 @@ const destinations = [
   {
     title: "Eastern Mediterranean",
     description: "Ancient harbours, clear waters and exceptional island itineraries.",
-    image: "/images/destinations/destnation-feature-east-med.webp",
+    image: "/images/destinations/animals/Eastern-Mediterranean.jpg",
     href: "/charters/destinations/eastern-mediterranean",
   },
   {
     title: "Indian Ocean",
     description: "Remote archipelagos, coral lagoons and extraordinary private escapes.",
-    image: "/images/destinations/destnation-feature-indian-ocean.webp",
+    image: "/images/destinations/animals/Indian-Ocean.jpg",
     href: "/charters/destinations/indian-ocean",
   },
   {
@@ -66,13 +67,13 @@ const destinations = [
   {
     title: "North America",
     description: "Rugged headlands, sheltered sounds and classic Atlantic seamanship.",
-    image: "/images/destinations/destnation-feature-north-america.webp",
+    image: "/images/destinations/animals/Nord-America.jpg",
     href: "/charters/destinations/north-america",
   },
   {
     title: "Pacific Ocean",
     description: "Wide ocean passages, coral atolls and anchorages far from anywhere.",
-    image: "/images/destinations/destnation-feature-south-pacific.webp",
+    image: "/images/destinations/animals/Ocean-Pacific.jpeg",
     href: "/charters/destinations/pacific-ocean",
   },
   {
@@ -84,13 +85,13 @@ const destinations = [
   {
     title: "South East Asia",
     description: "Limestone karsts, sheltered bays and island-to-island cruising.",
-    image: "/images/destinations/destnation-feature-south-east-asia.webp",
+    image: "/images/destinations/animals/SOUTH-EAST-ASIA.jpeg",
     href: "/charters/destinations/south-east-asia",
   },
   {
     title: "Western Mediterranean",
     description: "Iconic coastlines, historic ports and refined summer cruising.",
-    image: "/images/destinations/destnation-feature-west-med.webp",
+    image: "/images/destinations/animals/Western-Mediterranean.webp",
     href: "/charters/destinations/western-mediterranean",
   },
   {
@@ -108,7 +109,7 @@ const destinations = [
   {
     title: "Caribbean",
     description: "Turquoise passages, secluded anchorages and island-to-island freedom.",
-    image: "/images/destinations/destnation-feature-caribbean.webp",
+    image: "/images/destinations/animals/caraibes.jpg",
     href: "/charters/destinations/caribbean-v15",
   },
   {

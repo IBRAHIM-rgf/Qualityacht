@@ -18,7 +18,7 @@ import { FISHING_ZONES } from './fishing-zones';
 export const metadata = {
   title: 'Sport Fishing | Qualityacht',
   description:
-    'Offshore and inshore fishing grounds across the Caribbean, reached by private charter — planned with Qualityacht and local licensed professionals.',
+    'Offshore and inshore fishing grounds across the Caribbean, reached by private yacht — planned with Qualityacht and local licensed professionals.',
 };
 
 // Visuel local deja present dans le depot. Aucune image n'a ete telechargee.
@@ -57,7 +57,7 @@ const PRESTATIONS = [
   {
     titre: 'Yacht-Supported Expeditions',
     texte:
-      'Fishing as one part of a charter rather than the whole of it: the yacht moves with you, and the day is built around where you want to be at dawn.',
+      'Fishing as one part of a voyage rather than the whole of it: the yacht moves with you, and the day is built around where you want to be at dawn.',
   },
 ];
 
@@ -89,7 +89,7 @@ export default function SportFishingPage() {
             Caribbean · Tailored Sport Fishing
           </p>
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-            Sport Fishing Charters
+            Sport Fishing
           </h1>
           <p className="mt-5 max-w-2xl text-sm md:text-base leading-relaxed text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
             From blue-water pursuits to shallow flats, Qualityacht coordinates private fishing days and
@@ -100,7 +100,7 @@ export default function SportFishingPage() {
               Explore the Caribbean Fleet
             </Link>
             <Link href="/#contact" className={CTA_ARGENT}>
-              Plan Your Fishing Charter
+              Plan Your Fishing Day
             </Link>
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Bitcoin, MessageCircle, Phone } from "lucide-react";
+import { MessageCircle, Phone } from "lucide-react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
@@ -48,13 +48,6 @@ export default function Header() {
             <Link href="/charters/on-demand" className="hover:text-white transition">YACHTS FOR<br /> DAY CHARTER</Link>
             <Link href="/charters/destinations" className="hover:text-white transition">Destinations</Link>
           </div>
-        <Link
-          href="/crypto-payments"
-          aria-label="Crypto Payments"
-          className="hover:text-white block md:hidden focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
-        >
-          <Bitcoin aria-hidden />
-        </Link>
         </div>
         {/* Center: Brand name */}
         <Link href="/" className="">
@@ -68,13 +61,6 @@ export default function Header() {
           {/* `Link` et non `<a>` : un rechargement complet perd le saut vers l'ancre,
               la page etant encore en cours de mise en page quand le navigateur essaie. */}
           <Link href="/#contact" className="hover:text-white transition hidden md:inline">Contact</Link>
-          <Link
-            href="/crypto-payments"
-            aria-label="Crypto Payments"
-            className="hover:text-white transition hidden md:block focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
-          >
-            <Bitcoin aria-hidden />
-          </Link>
           <a
             href="https://wa.me/41767365781"
             target="_blank"
@@ -122,7 +108,6 @@ export default function Header() {
                 <li><Link href="/sales" className="hover:text-white transition">Sales</Link></li>
                 <li><Link href="/management" className="hover:text-white transition">Management</Link></li>
                 <li><Link href="/conciergery" className="hover:text-white transition">Conciergery</Link></li>
-                <li><Link href="/crypto-payments" className="hover:text-white transition">Crypto Payments</Link></li>
               </ul>
             </div>
 
