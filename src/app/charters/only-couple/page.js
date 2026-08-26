@@ -3,6 +3,10 @@ import { destinations } from "../destinationsData";
 
 // Override : depuis Only Couple, la card Caraibes ouvre une copie dediee
 // (variante texte 'Luxury, Serenity, and Bliss' dans la 2eme section).
+//
+// Hero : la video de bois flotte au coucher de soleil (beach-band.mp4) remplace
+// la photo. Elle passe par le mode cover de ItemsGrid — hauteur reelle,
+// object-cover, sans bande — avec son poster pour prefers-reduced-motion.
 const onlyCoupleDestinations = destinations.map((d) =>
   d.title === 'Caraïbes' ? { ...d, href: '/charters/only-couple/carribbean' } : d
 );
@@ -21,7 +25,9 @@ export default function OnlyCoupleCharter() {
   return (
     <ItemsGrid
       title="Only Couple Charter"
-      heroImage="/images/management/only_couple.jpeg"
+      heroVideo="/media/quality/beach/beach-band.mp4"
+      heroVideoPoster="/media/quality/beach/beach-band.jpg"
+      heroVideoCover
       bgImage="/images/services-bg.png"
       items={onlyCoupleDestinations}
       intro={INTRO}

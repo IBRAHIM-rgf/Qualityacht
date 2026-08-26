@@ -20,6 +20,11 @@ import ItemsGrid from "../../components/ItemsGrid";
 // aucun nombre de yachts, aucune saison garantie, aucune fausse exclusivite.
 //
 // Les 16 routes sont inchangees, y compris /charters/destinations/caribbean-v15.
+//
+// HERO : video aerienne fournie par la cliente. Reencodee pour le web
+// (35,7 Mo en 4K -> 3,7 Mo en 1920px, sans piste audio, fast-start) et servie
+// avec un poster pour prefers-reduced-motion. Seule cette ligne change : les 16
+// visuels animaliers des cartes ne sont pas touches.
 
 const destinations = [
   {
@@ -130,7 +135,9 @@ export default function DestinationsPage() {
   return (
     <ItemsGrid
       title="Destinations"
-      heroImage="/images/charters/destination.png"
+      heroVideo="/media/client/destinations/destinations-hero.mp4"
+      heroVideoPoster="/media/client/destinations/destinations-hero-poster.webp"
+      heroVideoCover
       bgImage="/images/services-bg.png"
       items={destinations}
       intro={
