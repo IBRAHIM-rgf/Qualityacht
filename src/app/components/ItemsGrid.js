@@ -11,6 +11,11 @@ export default function ItemsGrid({
   imageClassName = "rounded-xl",
   imageWrapperClassName = "h-48",
   heroImage = null,
+  // ── Extension optionnelle du hero video (utilisee par /charters/accessible).
+  // Valeurs par defaut : rendu STRICTEMENT identique a l'existant pour tous les
+  // autres consommateurs. Seule la page Accessible passe heroVideo.
+  heroVideoPoster = null,
+  heroVideoCover = false,
   heroVideo = null,
   heroTriptych = null,
   intro = null,
@@ -37,6 +42,7 @@ export default function ItemsGrid({
         <div className="relative w-full pt-[70px] md:pt-0 bg-[#26272a]">
           <div className={`relative w-full overflow-hidden ${
             heroTriptych ? 'h-[62vh] md:h-[85vh] grid grid-cols-3 gap-[2px]' :
+            heroVideo && heroVideoCover ? 'h-[74vh] min-h-[440px] md:h-[84vh] bg-[#26272a]' :
             heroVideo ? 'max-h-[86vh] bg-[#26272a] flex items-center justify-center' :
             'h-[62vh] md:h-[85vh]'
           }`}>
@@ -47,9 +53,34 @@ export default function ItemsGrid({
               ))
             ) : heroVideo ? (
               // eslint-disable-next-line jsx-a11y/media-has-caption
-              <video src={heroVideo} autoPlay muted loop playsInline className="block w-full h-auto max-h-[86vh] object-contain" />
+              <video
+                src={heroVideo}
+                poster={heroVideoPoster || undefined}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className={
+                  heroVideoCover
+                    ? 'block w-full h-full object-cover object-center motion-reduce:hidden'
+                    : 'block w-full h-auto max-h-[86vh] object-contain'
+                }
+              />
             ) : (
               <Image src={heroImage} alt={title} fill priority className="object-cover" sizes="100vw" />
+            )}
+            {/* prefers-reduced-motion : la video est masquee par
+                motion-reduce:hidden, le poster prend sa place. */}
+            {heroVideo && heroVideoCover && heroVideoPoster && (
+              <Image
+                src={heroVideoPoster}
+                alt=""
+                fill
+                priority
+                sizes="100vw"
+                className="hidden motion-reduce:block object-cover object-center"
+              />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-black/30 to-transparent pointer-events-none" />
             <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-6 md:pb-10">

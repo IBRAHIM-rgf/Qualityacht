@@ -2,12 +2,12 @@ import Image from 'next/image';
 import HeroTriptych from './HeroTriptych';
 import RealEstateMap from './RealEstateMap';
 import ProgrammeGrid from './ProgrammeGrid';
-import { MARKETS, PARTNER, QUALITYACHT, whatsappFor } from './partner-data';
+import { MARKETS, PARTNERS, QUALITYACHT, whatsappFor } from './partner-data';
 
 export const metadata = {
   title: 'Real Estate | Qualityacht',
   description:
-    'International real-estate opportunities introduced by Qualityacht through its specialist partner, Gustave Immo — Dubai, Marrakech and Batumi.',
+    'International real-estate opportunities introduced by Qualityacht through its selected partners — Dubai, Marrakech, Batumi and Monaco.',
 };
 
 const FOCUS =
@@ -27,8 +27,11 @@ const CTA_ARGENT =
   'hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)] ' + FOCUS;
 
 // Marrakech et Batumi : aucun programme individuel n'est confirme, on ne montre
-// donc que le marche et les deux portes d'entree.
-const AUTRES_MARCHES = MARKETS.filter((m) => m.id !== 'dubai');
+// donc que le marche et les deux portes d'entree. Monaco en est exclu — il a son
+// propre partenaire et apparait dans la grille partenaires et sur la carte.
+const AUTRES_MARCHES = MARKETS.filter(
+  (m) => m.id !== 'dubai' && m.partnerIds.includes('gustave-immo')
+);
 
 export default function RealEstatePage() {
   return (
@@ -47,41 +50,85 @@ export default function RealEstatePage() {
         </div>
       </section>
 
-      {/* ══ BLOC PARTENAIRE ══ */}
+      {/* ══ GRILLE DES PARTENAIRES ══
+          Structure evolutive : la grille se remplit depuis PARTNERS, donc les
+          futurs partenaires Monaco n'exigeront aucune retouche de ce fichier.
+          Aucune brochure, aucun programme et aucun prix n'est affiche pour un
+          partenaire qui n'en a pas de confirme. */}
       <section className="px-6 md:px-14 pt-14 md:pt-20 pb-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-[#B87333] font-medium">
-            International Real Estate Partner
-          </p>
-          <p className="mt-3 text-sm uppercase tracking-[0.16em] text-[#C0C0C0]">
-            In partnership with {PARTNER.name}
-          </p>
-          <a
-            href={PARTNER.site}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Visit ${PARTNER.name} — opens in a new tab`}
-            className={`mt-6 inline-flex min-h-[48px] items-center justify-center rounded-xl border border-[#C0C0C0]/40 bg-[#2e2f32] px-6 py-3 transition-colors hover:border-[#c2622a] ${FOCUS}`}
-          >
-            <Image
-              src={PARTNER.logo}
-              alt={PARTNER.name}
-              width={140}
-              height={40}
-              className="h-9 w-auto object-contain"
-            />
-          </a>
-          <p className="mt-6 text-[13px] md:text-base leading-relaxed text-[#acb0cd]">
-            Qualityacht connects clients with selected international real-estate opportunities through its
-            specialist partner, {PARTNER.name}.
-          </p>
-          <p className="mt-4 text-[12px] leading-relaxed text-[#8b90a0]">
-            All enquiries are handled by Qualityacht — {QUALITYACHT.email} · {QUALITYACHT.phone}.
-          </p>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-[12px] md:text-[13px] uppercase tracking-[0.24em] text-[#B87333] font-semibold">
+              Our Real Estate Partners
+            </p>
+            <p className="mt-4 max-w-2xl mx-auto text-[15px] md:text-base font-medium leading-[1.75] text-[#acb0cd]">
+              Qualityacht introduces clients to selected partners. Every enquiry is handled by
+              Qualityacht — {QUALITYACHT.email} · {QUALITYACHT.phone}.
+            </p>
+          </div>
+
+          {/* Deux colonnes seulement a partir de lg : a 768px, deux CTA cote a
+              cote dans une demi-largeur debordaient de 2px. */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            {PARTNERS.map((partenaire) => (
+              <article
+                key={partenaire.id}
+                className="rounded-2xl border border-[#C0C0C0]/20 bg-[#2e2f32] p-7 flex flex-col text-center"
+              >
+                {/* La plaque suit la couleur du logo, jamais l'inverse : aucun
+                    logo n'est recolore. Gustave a un wordmark blanc (plaque
+                    sombre) ; BNBRICKEYS est pour moitie gris tres sombre
+                    (#3a3a3a, soit 1,18:1 sur nos fonds) et exige une plaque
+                    claire. La plaque n'affecte que la boite du logo. */}
+                <div
+                  className={`flex items-center justify-center rounded-xl px-6 py-5 min-h-[104px] ${
+                    partenaire.logoPlate === 'light'
+                      ? 'bg-[#f4f4f4]'
+                      : 'bg-[#26272a] border border-[#C0C0C0]/25'
+                  }`}
+                >
+                  <Image
+                    src={partenaire.logoWordmark}
+                    alt={partenaire.name}
+                    width={partenaire.logoWidth}
+                    height={partenaire.logoHeight}
+                    className="w-[180px] md:w-[240px] h-auto object-contain"
+                  />
+                </div>
+
+                <p className="mt-6 text-[15px] md:text-base font-medium leading-[1.75] text-[#acb0cd] flex-1">
+                  {partenaire.type}.
+                </p>
+                <p className="mt-3 text-[14px] uppercase tracking-[0.14em] text-[#C0C0C0]">
+                  {partenaire.markets.join(' · ')}
+                </p>
+
+                <div className="mt-7 flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
+                  <a
+                    href={partenaire.site}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit ${partenaire.name} — opens in a new tab`}
+                    className={CTA_CUIVRE}
+                  >
+                    Visit Partner
+                  </a>
+                  <a
+                    href={whatsappFor(`${partenaire.name} real estate`, partenaire.markets[0])}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={CTA_ARGENT}
+                  >
+                    Contact Qualityacht
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ══ CARTE DES TROIS MARCHES ══ */}
+      {/* ══ CARTE DES MARCHES ══ */}
       <RealEstateMap />
 
       {/* ══ PROGRAMMES DUBAI ══ */}
@@ -99,7 +146,10 @@ export default function RealEstatePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          {/* Deux colonnes a partir de lg seulement : a 768px, les deux CTA
+              d'une carte en demi-largeur debordaient de 2px. Defaut preexistant
+              au lot, corrige ici puisque la page est ouverte. */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             {AUTRES_MARCHES.map((m) => (
               <article
                 key={m.id}
@@ -107,7 +157,7 @@ export default function RealEstatePage() {
               >
                 <h3 className="trajan-regular text-2xl uppercase tracking-[0.08em] text-[#C0C0C0]">{m.name}</h3>
                 <p className="mt-4 text-[13px] leading-relaxed text-[#acb0cd] flex-1">{m.desc}</p>
-                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-3">
                   <a href={m.href} target="_blank" rel="noopener noreferrer" className={CTA_CUIVRE}>
                     Explore the Market
                   </a>

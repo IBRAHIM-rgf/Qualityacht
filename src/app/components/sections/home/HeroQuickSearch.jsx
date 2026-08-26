@@ -40,10 +40,10 @@ const focusRing =
 
 // Le select est transparent et sans chrome : c'est la capsule qui porte le style.
 const selectClass =
-  'w-full bg-transparent border-0 p-0 text-sm text-[#ACB0CD] cursor-pointer appearance-none ' +
+  'w-full bg-transparent border-0 p-0 text-[16px] font-medium text-[#ACB0CD] cursor-pointer appearance-none ' +
   'focus:outline-none focus-visible:underline focus-visible:underline-offset-4';
 
-const eyebrowClass = 'block text-[10px] uppercase tracking-[0.22em] text-[#C0C0C0]';
+const eyebrowClass = 'block text-[12px] font-semibold uppercase tracking-[0.22em] text-[#C0C0C0]';
 
 function buildHref({ destination, capacity, type }) {
   const params = new URLSearchParams();
@@ -109,7 +109,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
                   value={value}
                   onChange={(e) => onChange(e.target.value)}
                   aria-label={`${eyebrow} ${label}`}
-                  className={`${selectClass} text-[15px] leading-snug`}
+                  className={`${selectClass} text-[16px] leading-snug`}
                 >
                   {options.map((o) => (
                     <option key={o.value} value={o.value} className="bg-[#26272a]">
@@ -125,7 +125,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
 
         <button
           type="submit"
-          className={`mt-4 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full border border-[#C0C0C0] bg-[#353739] px-6 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#C2622A] shadow-[0_0_16px_rgba(192,192,192,0.25)] active:bg-[#3f4245] ${focusRing}`}
+          className={`mt-4 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full border border-[#C0C0C0] bg-[#353739] px-6 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#C2622A] shadow-[0_0_16px_rgba(192,192,192,0.25)] active:bg-[#3f4245] ${focusRing}`}
         >
           Share Your Vision
           <ArrowRight aria-hidden className="w-4 h-4" />
@@ -185,7 +185,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
         <div className="flex items-center pl-2 pr-2 py-2 shrink-0">
           <button
             type="submit"
-            className={`inline-flex items-center gap-2 rounded-full border border-[#C0C0C0] bg-[#353739] px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#C2622A] shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-colors duration-300 hover:bg-[#3f4245] ${focusRing}`}
+            className={`inline-flex items-center gap-2 rounded-full border border-[#C0C0C0] bg-[#353739] px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#C2622A] shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-colors duration-300 hover:bg-[#3f4245] ${focusRing}`}
           >
             Share Your Vision
             <ArrowRight aria-hidden className="w-4 h-4" />

@@ -64,8 +64,8 @@ export default function MapClient({ region }) {
     mapInstanceRef.current = map;
 
     // Fond de carte sombre (CartoDB Dark Matter — gratuit, attribution OK)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap · © CARTO',
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
       maxZoom: 18,
     }).addTo(map);
 
@@ -221,6 +221,15 @@ export default function MapClient({ region }) {
   return (
     <div className="min-h-screen bg-[#26272a] text-[#acb0cd] pt-20 md:pt-24 pb-12 px-4 md:px-6">
       <style>{`
+        /* Le fond CARTO dark_all exige desormais une cle : chaque tuile portait
+           le filigrane « API KEY REQUIRED ». Tuiles OpenStreetMap, libres et sans
+           cle ; l'aspect sombre est reproduit par un filtre applique au SEUL
+           calque de tuiles — marqueurs, popups, tooltips et CTA vivent dans
+           d'autres calques et ne sont pas filtres. */
+        .island-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.72) contrast(1.12); }
+        .island-map .leaflet-control-attribution, .island-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:10px !important; }
+        .island-map .leaflet-control-attribution a { color:#acb0cd !important; }
+        .island-map .leaflet-control-zoom a { background:#2e2f32 !important; color:#C0C0C0 !important; border-color:rgba(192,192,192,0.25) !important; }
         .leaflet-tooltip.island-label {
           background: transparent !important;
           border: none !important;
@@ -322,7 +331,7 @@ export default function MapClient({ region }) {
 
         {/* Carte plein largeur */}
         <div className="rounded-xl border border-[#C0C0C0]/30 bg-[#3a3b3f] overflow-hidden h-[500px] md:h-[600px] relative">
-          <div ref={mapRef} className="absolute inset-0" />
+          <div ref={mapRef} className="island-map absolute inset-0" />
           {!leafletReady && (
             <div className="absolute inset-0 flex items-center justify-center bg-[#26272a]/80 text-[#acb0cd]/70 text-sm">
               Chargement de la carte…

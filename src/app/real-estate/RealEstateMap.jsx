@@ -70,8 +70,13 @@ export default function RealEstateMap() {
     const L = window.L;
     const map = L.map(mapRef.current, { center: [32, 30], zoom: 3, scrollWheelZoom: false });
     mapInstance.current = map;
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap © CARTO', maxZoom: 19,
+    // Le fond CARTO dark_all exige desormais une cle : sans elle, chaque tuile
+    // porte le filigrane « API KEY REQUIRED ». On repasse sur les tuiles
+    // OpenStreetMap, libres et sans cle. L'aspect sombre est reproduit par un
+    // filtre CSS applique au seul calque de tuiles (voir .re-map ci-dessous),
+    // afin de ne toucher ni aux marqueurs, ni aux popups, ni aux logos.
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors', maxZoom: 19,
     }).addTo(map);
     const icon = (on) => L.divIcon({ className: 're-marker', html: starMarkerHtml(on), ...starIconSize(on) });
     MARKETS.forEach((m, i) => {
@@ -107,17 +112,26 @@ export default function RealEstateMap() {
         .leaflet-popup.re-popup .leaflet-popup-content { margin:12px; }
         .leaflet-popup.re-popup .leaflet-popup-tip { background:#2e2f32; border:1px solid #B87333; }
         .leaflet-popup.re-popup a.leaflet-popup-close-button { color:#C0C0C0; }
+        /* Assombrissement des tuiles uniquement. .leaflet-tile-pane ne contient
+           que le fond de carte : marqueurs (marker-pane), popups (popup-pane),
+           tooltips et attribution vivent dans d'autres calques et ne sont donc
+           pas filtres. */
+        .re-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.72) contrast(1.12); }
+        .re-map .leaflet-control-attribution, .re-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:10px !important; }
+        .re-map .leaflet-control-attribution a { color:#acb0cd !important; }
+        .re-map .leaflet-control-zoom a { background:#2e2f32 !important; color:#C0C0C0 !important; border-color:rgba(192,192,192,0.25) !important; }
+        .re-map .leaflet-control-zoom a:hover { background:#3a3b3f !important; }
       `}</style>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-6 md:mb-8">
-          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-[#B87333] font-medium mb-2">Three Markets</p>
-          <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">Where Our Partner Operates</h2>
+          <p className="text-[12px] md:text-[13px] uppercase tracking-[0.24em] text-[#B87333] font-semibold mb-2">Our Markets</p>
+          <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">Where Our Partners Operate</h2>
           <p className="mt-4 max-w-2xl mx-auto text-[13px] text-[#8b90a0] leading-relaxed">
-            Tap a marker to open the market. Enquiries are handled by Qualityacht; the partner’s own pages open in a new tab.
+            Tap a marker to open the market. Enquiries are handled by Qualityacht; partner pages open in a new tab.
           </p>
         </div>
         <div className="relative h-[52vh] md:h-[62vh] rounded-2xl overflow-hidden border border-[#C0C0C0]/20 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] bg-[#1a1b1e]">
-          <div ref={mapRef} className="absolute inset-0" />
+          <div ref={mapRef} className="re-map absolute inset-0" />
           {!ready && <div className="absolute inset-0 flex items-center justify-center text-[#acb0cd]/60 text-sm">Loading map…</div>}
         </div>
       </div>

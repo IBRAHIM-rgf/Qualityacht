@@ -13,11 +13,17 @@ const accessibleItems = destinations.map((d) =>
   ACCESSIBLE_GUIDES[d.title] ? { ...d, href: ACCESSIBLE_GUIDES[d.title] } : d
 );
 
+// Le hero video s'effondrait a ~150px : son conteneur n'avait aucune hauteur et
+// la video etait en object-contain, d'ou une large bande vide. On active le mode
+// cover de ItemsGrid, avec une source reencodee (11,8 Mo -> 3,0 Mo, fast-start,
+// sans piste audio) et un poster pour prefers-reduced-motion.
 export default function AccessibleCharter() {
   return (
     <ItemsGrid
       title="Accessible Charter Yacht"
-      heroVideo="/images/yachts/7699189-hd_1920_1080_25fps.mp4"
+      heroVideo="/media/quality/accessibility/accessible-hero.mp4"
+      heroVideoPoster="/media/quality/accessibility/accessible-hero-poster.webp"
+      heroVideoCover
       bgImage="/images/services-bg.png"
       items={accessibleItems}
     />

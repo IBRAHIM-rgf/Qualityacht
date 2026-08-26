@@ -87,8 +87,8 @@ export default function WorldMapClient() {
     mapInstanceRef.current = map;
 
     // Fond NOIR (CARTO dark) remis a la place des tuiles Esri (marron/relief).
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap © CARTO',
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
       maxZoom: 19,
     }).addTo(map);
 
@@ -266,6 +266,15 @@ export default function WorldMapClient() {
           border: 2px solid var(--dot); transform: rotate(45deg);
           cursor: pointer;
         }
+        /* Le fond CARTO dark_all exige desormais une cle : chaque tuile portait
+           le filigrane « API KEY REQUIRED ». Tuiles OpenStreetMap, libres et sans
+           cle ; l'aspect sombre est reproduit par un filtre applique au SEUL
+           calque de tuiles — marqueurs, popups, tooltips et CTA vivent dans
+           d'autres calques et ne sont pas filtres. */
+        .hp-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.72) contrast(1.12); }
+        .hp-map .leaflet-control-attribution, .hp-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:10px !important; }
+        .hp-map .leaflet-control-attribution a { color:#acb0cd !important; }
+        .hp-map .leaflet-control-zoom a { background:#2e2f32 !important; color:#C0C0C0 !important; border-color:rgba(192,192,192,0.25) !important; }
         .leaflet-tooltip.hp-label {
           background: transparent !important; border: none !important; box-shadow: none !important;
           color: #C0C0C0; font-family: system-ui, sans-serif; font-size: 10px; font-weight: 600;
@@ -325,7 +334,7 @@ export default function WorldMapClient() {
           data-no-rise
           className="rounded-2xl border border-[#C0C0C0]/25 bg-[#2e2f32] overflow-hidden h-[460px] md:h-[600px] relative"
         >
-          <div ref={mapRef} className="absolute inset-0" />
+          <div ref={mapRef} className="hp-map absolute inset-0" />
           {!leafletReady && (
             <div className="absolute inset-0 flex items-center justify-center bg-[#26272a]/80 text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60">
               Loading the map

@@ -30,89 +30,96 @@ export default function WorldClassExperience() {
         />
       </div>
 
+      {/* Les sauts de ligne etaient ecrits en dur : cales pour le mobile, ils
+          produisaient sur desktop des lignes tres irregulieres. Ils sont
+          conserves en `md:hidden` — le rendu mobile valide par la cliente est
+          donc inchange — et le navigateur repartit librement les lignes a partir
+          de md. Chaque saut est precede d'une espace explicite : le `<br />`
+          servait de separateur entre les mots, et sans elle « at the<br />center »
+          devenait « thecenter » une fois le saut masque. Sur mobile l'espace
+          tombe en fin de ligne, donc invisible. Aucun texte et aucune couleur
+          n'a ete modifie. */}
       <div
-        className={`max-w-4xl mx-auto space-y-6 text-sm md:text-2xl leading-relaxed text-center transition-all duration-300 ${
+        className={`max-w-4xl mx-auto space-y-6 text-sm md:text-xl leading-relaxed md:leading-[1.8] text-center md:text-left transition-all duration-300 ${
           isExpanded ? "" : "line-clamp-5"
         }`}
       >
         <span className="text-[#bd9973]">
           Wishing to design a society where luxury, sea and adrenaline would be
-          at the<br />
+          at the{' '}<br className="md:hidden" />
           center of activity.
         </span>{" "}
         It is in fact a matter of course: Know how to present a company
-        <br />
+        {' '}<br className="md:hidden" />
         whose DNA would be the image of the craze that drives us.
-        <br />
+        {' '}<br className="md:hidden" />
         <span className="text-[#bd9973]">
           Qualityacht has been in the luxury sector for more than 33 years,
         </span>{" "}
         including 13
-        <br />
+        {' '}<br className="md:hidden" />
         years in the prestigious world of yachting. Very involved in everyday
         life, the
-        <br />
+        {' '}<br className="md:hidden" />
         Qualityacht family has allowed many customers to sail with an
-        <br />
+        {' '}<br className="md:hidden" />
         unmatched commitment.
-        <br />
+        {' '}<br className="md:hidden" />
         Qualityacht is{" "}
         <span className="text-[#bd9973]">
           {" "}
           committed to providing its customers with a customized solution.
-          <br />
+          {' '}<br className="md:hidden" />
         </span>
         It is about facing a wide range of problems, with reactivity and
         imagination,
-        <br />
+        {' '}<br className="md:hidden" />
         while placing the luxury universe as an obvious solution.
-        <br />
+        {' '}<br className="md:hidden" />
         It must be said that the founders of the brand are themselves aware of
         the
-        <br />
+        {' '}<br className="md:hidden" />
         prestige transports they particularly like.
-        <br />
+        {' '}<br className="md:hidden" />
         Our team travels the coves to make you discover or rediscover the charms
         of
-        <br />
+        {' '}<br className="md:hidden" />
         our planet. Paradise destinations and your desires as a guideline to
         create your
-        <br />
+        {' '}<br className="md:hidden" />
         holidays fully ready to embar.
         <span className="text-[#bd9973]">
           {" "}
           Our expertise includes: a collection of sailboats.
-          <br />
+          {' '}<br className="md:hidden" />
           classic sailboats, regattas, different sizes of yachts related to your
           needs.
-          <br />
+          {' '}<br className="md:hidden" />
         </span>
         Thus, the company satisfies various profiles; of the customer who needs a
-        <br />
+        {' '}<br className="md:hidden" />
         comfortable solution aboard a private jet to join the
-        <br />
+        {' '}<br className="md:hidden" />
         Dubai International Horse Fair.
-        <br />
+        {' '}<br className="md:hidden" />
         Drive or be driven in a beautiful sedan to go to the Monaco Grand Prix.
-        <br />
+        {' '}<br className="md:hidden" />
         Meet at the next DJ party with friends in St Barth. All is possible.
-        <br />
-        <br />
+        <span aria-hidden className="block h-5" />
         Our team is thus able to{" "}
         <span className="text-[#bd9973]"> guarantee a 5-star service</span>{" "}
         regardless of the situation
-        <br />
+        {' '}<br className="md:hidden" />
         they face because Qualityacht unites a whole team of professionals from
         various
-        <br />
+        {' '}<br className="md:hidden" />
         backgrounds with a single common thread: Provide the best possible
         service
-        <br />
-        <br />
+        <span aria-hidden className="block h-5" />
         <span className="text-[#bd9973]">
           {" "}
           Far beyond a service provider, we will be your partner.
-          <br />
+          {' '}<br className="md:hidden" />
         </span>
       </div>
 

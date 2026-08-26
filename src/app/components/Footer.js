@@ -29,7 +29,6 @@ export default function Footer() {
             <li><Link href="/charters">Yacht Charter</Link></li>
             <li><Link href="/sales">Sales</Link></li>
             <li><Link href="/management">Management</Link></li>
-            <li><Link href="/conciergery">Conciergery</Link></li>
           </ul>
         </div>
 

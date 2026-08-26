@@ -103,8 +103,8 @@ export default function DiningMap() {
     const L = window.L;
     const map = L.map(mapRef.current, { center: [16.5, -62.5], zoom: 5, scrollWheelZoom: false });
     mapInstance.current = map;
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap © CARTO', maxZoom: 19,
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors', maxZoom: 19,
     }).addTo(map);
     const icon = (on) => L.divIcon({ className: 'ff-marker', html: starMarkerHtml(on), ...starIconSize(on) });
     RESTAURANTS.forEach((r, i) => {
@@ -132,6 +132,15 @@ export default function DiningMap() {
   return (
     <section className="relative bg-[#26272a] px-6 md:px-14 py-16 md:py-24">
       <style>{`
+        /* Le fond CARTO dark_all exige desormais une cle : chaque tuile portait
+           le filigrane « API KEY REQUIRED ». Tuiles OpenStreetMap, libres et sans
+           cle ; l'aspect sombre est reproduit par un filtre applique au SEUL
+           calque de tuiles — marqueurs, popups, tooltips et CTA vivent dans
+           d'autres calques et ne sont pas filtres. */
+        .ff-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.72) contrast(1.12); }
+        .ff-map .leaflet-control-attribution, .ff-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:10px !important; }
+        .ff-map .leaflet-control-attribution a { color:#acb0cd !important; }
+        .ff-map .leaflet-control-zoom a { background:#2e2f32 !important; color:#C0C0C0 !important; border-color:rgba(192,192,192,0.25) !important; }
         .leaflet-tooltip.ff-label { background:#2e2f32 !important; border:1px solid #B87333 !important; color:#efe7d6; font-size:11px; font-weight:600; padding:2px 7px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.5) !important; }
         .leaflet-tooltip.ff-label::before { display:none !important; }
         .leaflet-popup.ff-popup .leaflet-popup-content-wrapper { background:#2e2f32; color:#acb0cd; border:1px solid #B87333; border-radius:12px; box-shadow:0 20px 50px -18px rgba(0,0,0,0.85); }
@@ -148,7 +157,7 @@ export default function DiningMap() {
           </p>
         </div>
         <div className="relative h-[52vh] md:h-[64vh] rounded-2xl overflow-hidden border border-[#C0C0C0]/20 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] bg-[#1a1b1e]">
-          <div ref={mapRef} className="absolute inset-0" />
+          <div ref={mapRef} className="ff-map absolute inset-0" />
           {!ready && <div className="absolute inset-0 flex items-center justify-center text-[#acb0cd]/60 text-sm">Loading map…</div>}
         </div>
       </div>
