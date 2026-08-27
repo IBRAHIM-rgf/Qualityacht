@@ -30,6 +30,10 @@ const HERO_MEDIA = '/images/charters/on-demande.png';
 // Photos fournies par la cliente, deja optimisees en WebP dans le depot.
 const IMG_AVENTURE = '/media/client/lydie/2026-08-25/on-demand/local-adventure.webp';
 const IMG_RENCONTRE = '/media/client/lydie/2026-08-25/on-demand/cultural-encounter.webp';
+// Troisieme photo fournie par la cliente : le bloc Creative Experiences n'en
+// avait pas et affichait un simple filet.
+const IMG_CREATIF =
+  '/media/client/lydie/2026-08-27/on-demand/gallery/creative-experience-ice-fishing.webp';
 
 const FOCUS =
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
@@ -71,9 +75,9 @@ const BLOCS = [
     titre: 'Creative Experiences',
     texte:
       'A shoot, a recording, a project that needs a place no one else has booked. Tell us what you are making and we will look at what can be arranged, where permissions allow.',
-    image: null,
-    alt: '',
-    position: '',
+    image: IMG_CREATIF,
+    alt: 'Person ice fishing in winter equipment',
+    position: 'object-center',
   },
 ];
 

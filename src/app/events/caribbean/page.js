@@ -1,4 +1,5 @@
 import Image from "next/image";
+import EventsHeroPanels from './EventsHeroPanels';
 import Link from "next/link";
 import CaribbeanEventsMap from "../CaribbeanEventsMap";
 import FunMarquee from "@/components/vibe/FunMarquee";
@@ -80,9 +81,11 @@ const EVENT_MARQUEE = [
 export default function EventsCaribbeanPage() {
   return (
     <main>
-      {/* ══ HERO : VUE DRONE D'ILE ══ */}
+      {/* ══ HERO : TROIS PANNEAUX ══
+          Seul le fond change : sur-titre, H1, sous-titre et les deux CTA sont
+          strictement conserves, et rien sous le hero n'est touche. */}
       <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh]">
-        <Image src={encodeURI(HERO_IMAGE)} alt="Caribbean Events" fill priority sizes="100vw" className="object-cover" />
+        <EventsHeroPanels />
         <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Caribbean · Cultural & Nautical Calendar</p>
