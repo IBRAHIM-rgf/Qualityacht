@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import CocomerBand from "@/components/vibe/CocomerBand";
+import OnlyCoupleHeroTriptych from './OnlyCoupleHeroTriptych';
 import { useEffect, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../../../test-region-map/map-data';
@@ -543,13 +544,7 @@ function RevealBlock({ label, title, sub, useTitleLine = false }) {
 
 // ── Page ───────────────────────────────────────────────────────────────────────
 export default function CaribbeanV15Page() {
-  const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
-  useEffect(() => {
-    const el = heroRef.current;
-    if (!el) return;
-    requestAnimationFrame(() => { el.classList.add('revealed'); });
-  }, []);
 
   return (
     <>
@@ -562,51 +557,13 @@ export default function CaribbeanV15Page() {
 
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
-        {/* ══ HERO ══ */}
-        {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
-            Desktop : image pleine largeur (natural ratio), titre OVERLAY en bas avec dégradé. */}
-        <div className="pt-[70px] md:pt-0 bg-[#26272a]">
-          {/* Mobile : image seule */}
-          <div className="relative aspect-[6/5] md:hidden">
-            <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
-          </div>
-          {/* Desktop : photo dediee Yatch_desktop.png (paysage) en pleine largeur, ratio naturel. */}
-          <div className="hidden md:block relative w-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/yachts/Yatch_desktop.png"
-              alt=""
-              className="block w-full h-auto"
-            />
-            {/* Dégradé bas pour lisibilité du texte */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
-            {/* Texte overlay */}
-            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-10 md:pb-16">
-              <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
-                <h1 className="trajan-regular text-6xl lg:text-7xl uppercase tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
-                  The Caribbean
-                </h1>
-                <BurntLine />
-                <p className="text-[#acb0cd] text-xl uppercase tracking-[0.25em] font-light text-center drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
-                  The Ultimate Luxury Yachting Destination
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ══ TITRE mobile (sous l'image, desktop : caché) ══ */}
-        <div className="bg-[#26272a] px-4 py-10 flex flex-col items-center md:hidden">
-          <div className="flex flex-col items-center w-full">
-            <h1 className="trajan-regular text-3xl uppercase tracking-[0.1em] text-[#acb0cd] text-center">
-              The Caribbean
-            </h1>
-            <BurntLine />
-            <p className="text-[#acb0cd] text-sm uppercase tracking-[0.15em] font-light text-center">
-              The Ultimate Luxury Yachting Destination
-            </p>
-          </div>
-        </div>
+        {/* ══ HERO ══
+            Remplace par le triptyque video demande par la cliente. L'ancien hero
+            affichait /images/yachts/yatch2.jpeg sur mobile et
+            /images/yachts/Yatch_desktop.png sur desktop, avec un H1 dans chaque
+            variante : il n'en reste qu'un seul, porte par le composant. Les deux
+            images ne sont pas supprimees du depot, elles servent ailleurs. */}
+        <OnlyCoupleHeroTriptych />
 
         {/* ══ DESCRIPTION (variante Only Couple) ══ */}
         <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">
