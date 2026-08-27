@@ -5,14 +5,19 @@
 // Text4Images2Section n'est plus utilise par cette route, ses autres
 // consommateurs restent intacts.
 //
+// HERO : video officielle fournie par la cliente, servie dans sa version web
+// optimisee (1280x720, 5,1 s, 2,8 Mo, fast-start, sans piste audio). L'original
+// lourd reste dans le depot mais n'est pas reference ici.
+//
 // AUCUNE espece, zone ou reglementation n'est ajoutee ici : tout ce qui est
 // factuel vient de fishing-zones.js, sourcee et tracee dans
 // docs/research/fishing-zones-sources.md. Le texte ci-dessous ne promet ni
 // prise, ni saison, ni disponibilite.
 
-import Image from 'next/image';
 import Link from 'next/link';
 import FishingZonesMap from './FishingZonesMap';
+import HeroVideo from './HeroVideo';
+import FloatingGallery from './FloatingGallery';
 import { FISHING_ZONES } from './fishing-zones';
 
 export const metadata = {
@@ -20,9 +25,6 @@ export const metadata = {
   description:
     'Offshore and inshore fishing grounds across the Caribbean, reached by private yacht — planned with Qualityacht and local licensed professionals.',
 };
-
-// Visuel local deja present dans le depot. Aucune image n'a ete telechargee.
-const HERO_IMAGE = '/media/quality/boats/pexels-frans-van-heerden-201846-625418.jpg';
 
 const FOCUS =
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
@@ -68,14 +70,7 @@ export default function SportFishingPage() {
     <main className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO ══ */}
       <section className="relative w-full h-[62vh] min-h-[440px] md:h-[78vh] overflow-hidden bg-[#26272a]">
-        <Image
-          src={HERO_IMAGE}
-          alt="Motor yacht under way on open water"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center max-md:object-[58%_50%]"
-        />
+        <HeroVideo />
         <div
           aria-hidden
           className="absolute inset-0"
@@ -139,6 +134,9 @@ export default function SportFishingPage() {
           </p>
         </div>
       </section>
+
+      {/* ══ TROIS PHOTOS FLOTTANTES ══ */}
+      <FloatingGallery />
 
       {/* ══ CARTE DES ZONES ══
           Composant et donnees strictement inchanges. Le titre et l'introduction
