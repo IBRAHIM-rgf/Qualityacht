@@ -577,51 +577,86 @@ export default function PetFriendlyCaribbeanPage() {
 
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
 
-        {/* ══ HERO ══ */}
-        {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
-            Desktop : image pleine largeur (natural ratio), titre OVERLAY en bas avec dégradé. */}
-        <div className="pt-[70px] md:pt-0 bg-[#26272a]">
-          {/* Mobile : image seule */}
-          <div className="relative aspect-[6/5] md:hidden">
-            <Image src="/images/yachts/yatch2.jpeg" alt="" fill priority className="object-cover object-center" />
-          </div>
-          {/* Desktop : photo dediee Yatch_desktop.png (paysage) en pleine largeur, ratio naturel. */}
-          <div className="hidden md:block relative w-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/yachts/Yatch_desktop.png"
-              alt=""
-              className="block w-full h-auto"
-            />
-            {/* Dégradé bas pour lisibilité du texte */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
-            {/* Texte overlay */}
-            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-10 md:pb-16">
-              <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
-                <h1 className="trajan-regular text-6xl lg:text-7xl uppercase tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
-                  The Caribbean
-                </h1>
-                <BurntLine />
-                <p className="text-[#acb0cd] text-xl uppercase tracking-[0.25em] font-light text-center drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
-                  Cruising the Islands, Together
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* ══ HERO ══
+            La photo fournie est un portrait 3:4. L'etirer en bandeau large la
+            rognait a l'extreme : le visage remplissait le cadre et le titre
+            passait par-dessus le chien. Deux traitements distincts :
+              - mobile, ou le portrait tombe juste : image plein cadre, titre en
+                overlay sur un degrade sombre neutre ;
+              - desktop : hero en deux colonnes, texte a gauche, photo entiere a
+                droite dans son propre ratio. Aucun voile bleu. */}
 
-        {/* ══ TITRE mobile (sous l'image, desktop : caché) ══ */}
-        <div className="bg-[#26272a] px-4 py-10 flex flex-col items-center md:hidden">
-          <div className="flex flex-col items-center w-full">
-            <h1 className="trajan-regular text-3xl uppercase tracking-[0.1em] text-[#acb0cd] text-center">
+        {/* Mobile */}
+        <section className="relative w-full pt-[70px] h-[76vh] min-h-[480px] overflow-hidden bg-[#26272a] md:hidden">
+          <Image
+            src="/media/client/pet-friendly/compagnon-hero.webp"
+            alt="Guest holding a small dog on the deck of a yacht"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[58%_22%]"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(38,39,42,0.35) 0%, rgba(38,39,42,0.05) 26%, rgba(38,39,42,0.72) 66%, rgba(38,39,42,0.97) 100%)',
+            }}
+          />
+          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-5 pb-9">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-[#bd9973] font-semibold mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+              Pet-Friendly Charter
+            </p>
+            <h1 className="trajan-regular text-3xl uppercase tracking-[0.1em] text-[#acb0cd] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
               The Caribbean
             </h1>
             <BurntLine />
-            <p className="text-[#acb0cd] text-sm uppercase tracking-[0.15em] font-light text-center">
+            <p className="text-[#acb0cd] text-sm uppercase tracking-[0.18em] font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
               Cruising the Islands, Together
             </p>
           </div>
-        </div>
+        </section>
+
+        {/* Desktop : deux colonnes */}
+        <section className="hidden md:grid md:grid-cols-2 w-full h-[86vh] min-h-[560px] bg-[#26272a]">
+          <div className="flex flex-col items-start justify-center px-14 lg:px-20">
+            <div ref={heroRef} className="reveal-up flex flex-col items-start w-full max-w-xl">
+              <p className="text-[13px] uppercase tracking-[0.3em] text-[#bd9973] font-semibold mb-5">
+                Pet-Friendly Charter
+              </p>
+              <h1 className="trajan-regular text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#acb0cd] leading-[1.05]">
+                The Caribbean
+              </h1>
+              <span aria-hidden className="mt-7 mb-6 block h-px w-28 bg-[#bd9973]/70" />
+              <p className="text-[#acb0cd] text-lg uppercase tracking-[0.22em] font-light">
+                Cruising the Islands, Together
+              </p>
+              <p className="mt-7 text-[15px] leading-[1.8] text-[#acb0cd]/85">
+                Turquoise passages, secluded anchorages &mdash; and no one left behind.
+              </p>
+            </div>
+          </div>
+          <div className="relative h-full overflow-hidden">
+            <Image
+              src="/media/client/pet-friendly/compagnon-hero.webp"
+              alt="Guest holding a small dog on the deck of a yacht"
+              fill
+              priority
+              sizes="50vw"
+              className="object-cover object-[55%_35%]"
+            />
+            {/* Raccord doux vers le fond de page, cote gauche et bas. */}
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(90deg, rgba(38,39,42,0.85) 0%, rgba(38,39,42,0) 22%), linear-gradient(180deg, rgba(38,39,42,0) 70%, rgba(38,39,42,0.9) 100%)',
+              }}
+            />
+          </div>
+        </section>
 
         {/* ══ CONTENU EDITORIAL PET-FRIENDLY ══
             Texte fourni par la cliente, repris sans ajout : les engagements
@@ -749,6 +784,29 @@ export default function PetFriendlyCaribbeanPage() {
             >
               Speak to Our Team
             </a>
+          </div>
+        </div>
+
+        {/* ══ BANDE PHOTO ══
+            Les trois autres photos fournies par la cliente, a la place laissee
+            libre par le bandeau video retire. Purement illustratif. */}
+        <div className="bg-[#26272a] px-5 md:px-20 pb-14 md:pb-20">
+          <div className="max-w-5xl mx-auto grid grid-cols-3 gap-3 md:gap-4">
+            {[
+              { src: '/media/client/pet-friendly/paddle.webp', alt: 'Two dogs sitting on a paddleboard in clear water' },
+              { src: '/media/client/pet-friendly/chiot-coucher.webp', alt: 'Puppy asleep on a yacht deck at sunset' },
+              { src: '/media/client/pet-friendly/nage.webp', alt: 'Dog swimming in clear green water' },
+            ].map((photo) => (
+              <div key={photo.src} className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-[#C0C0C0]/20 bg-[#2e2f32]">
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes="(max-width: 768px) 33vw, 300px"
+                  className="object-cover"
+                />
+              </div>
+            ))}
           </div>
         </div>
 
