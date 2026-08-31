@@ -30,7 +30,7 @@ function popupHtml(m) {
   return `
     <div style="width:224px;font-family:system-ui,sans-serif">
       <div style="font-family:var(--font-trajan-regular),serif;text-transform:uppercase;letter-spacing:1px;font-size:14px;color:#C0C0C0;line-height:1.3">${escapeHtml(m.name)}</div>
-      <div style="font-size:12px;color:#acb0cd;opacity:.85;margin-top:6px;line-height:1.45">${escapeHtml(m.desc)}</div>
+      <div style="font-size:14px;color:#acb0cd;opacity:.85;margin-top:6px;line-height:1.45">${escapeHtml(m.desc)}</div>
       <a href="${m.href}" target="_blank" rel="noopener noreferrer" style="${CTA_STYLE}">${escapeHtml(m.cta)}</a>
     </div>`;
 }
@@ -106,7 +106,7 @@ export default function RealEstateMap() {
   return (
     <section className="relative bg-[#26272a] px-6 md:px-14 py-16 md:py-24">
       <style>{`
-        .leaflet-tooltip.re-label { background:#2e2f32 !important; border:1px solid #B87333 !important; color:#efe7d6; font-size:11px; font-weight:600; padding:2px 7px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.5) !important; }
+        .leaflet-tooltip.re-label { background:#2e2f32 !important; border:1px solid #B87333 !important; color:#efe7d6; font-size:13px; font-weight:600; padding:2px 7px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.5) !important; }
         .leaflet-tooltip.re-label::before { display:none !important; }
         .leaflet-popup.re-popup .leaflet-popup-content-wrapper { background:#2e2f32; color:#acb0cd; border:1px solid #B87333; border-radius:12px; box-shadow:0 20px 50px -18px rgba(0,0,0,0.85); }
         .leaflet-popup.re-popup .leaflet-popup-content { margin:12px; }
@@ -117,16 +117,16 @@ export default function RealEstateMap() {
            tooltips et attribution vivent dans d'autres calques et ne sont donc
            pas filtres. */
         .re-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.72) contrast(1.12); }
-        .re-map .leaflet-control-attribution, .re-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:10px !important; }
+        .re-map .leaflet-control-attribution, .re-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:11px !important; }
         .re-map .leaflet-control-attribution a { color:#acb0cd !important; }
         .re-map .leaflet-control-zoom a { background:#2e2f32 !important; color:#C0C0C0 !important; border-color:rgba(192,192,192,0.25) !important; }
         .re-map .leaflet-control-zoom a:hover { background:#3a3b3f !important; }
       `}</style>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-6 md:mb-8">
-          <p className="text-[12px] md:text-[13px] uppercase tracking-[0.24em] text-[#B87333] font-semibold mb-2">Our Markets</p>
+          <p className="text-sm md:text-base uppercase tracking-[0.24em] text-[#B87333] font-semibold mb-2">Our Markets</p>
           <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">Where Our Partners Operate</h2>
-          <p className="mt-4 max-w-2xl mx-auto text-[13px] text-[#8b90a0] leading-relaxed">
+          <p className="mt-4 max-w-2xl mx-auto text-[15px] md:text-base text-[#8b90a0] leading-relaxed">
             Tap a marker to open the market. Enquiries are handled by Qualityacht; partner pages open in a new tab.
           </p>
         </div>

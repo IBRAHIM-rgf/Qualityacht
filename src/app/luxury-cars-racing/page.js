@@ -28,14 +28,14 @@ const FOCUS =
 
 const CTA_CUIVRE =
   'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
-  'rounded-full border border-[#C0C0C0] bg-[#26272a] text-[13px] font-semibold uppercase ' +
+  'rounded-full border border-[#C0C0C0] bg-[#26272a] text-[15px] font-semibold uppercase ' +
   'tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] ' +
   'transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] ' +
   'hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] ' + FOCUS;
 
 const CTA_ARGENT =
   'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
-  'rounded-full border border-[#C0C0C0] bg-[#26272a]/50 text-[13px] font-semibold uppercase ' +
+  'rounded-full border border-[#C0C0C0] bg-[#26272a]/50 text-[15px] font-semibold uppercase ' +
   'tracking-[0.18em] text-[#C0C0C0] transition-[border-color,box-shadow] duration-300 ' +
   'hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)] ' + FOCUS;
 
@@ -65,13 +65,13 @@ export default function LuxuryCarsRacingPage() {
       {/* ══ HERO — typographique, aucun visuel hors sujet ══ */}
       <section className="relative px-6 md:px-14 pt-28 md:pt-36 pb-14 md:pb-20 border-b border-[#C0C0C0]/10">
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.32em] text-[#B87333] mb-3">
+          <p className="text-sm md:text-base uppercase tracking-[0.32em] text-[#B87333] mb-3">
             Qualityacht · On Land
           </p>
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">
             Luxury Cars &amp; Racing
           </h1>
-          <p className="mt-6 text-sm md:text-base leading-relaxed text-[#acb0cd]">
+          <p className="mt-6 text-base md:text-lg leading-relaxed text-[#acb0cd]">
             A charter rarely begins at the quay. What happens on land — how you arrive, what waits for
             you between two anchorages, the weekend you build around a race — is arranged with the same
             care as the days at sea.
@@ -91,7 +91,7 @@ export default function LuxuryCarsRacingPage() {
       <section className="px-6 md:px-14 py-16 md:py-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-[#B87333] font-medium mb-2">
+            <p className="text-sm md:text-base uppercase tracking-[0.24em] text-[#B87333] font-medium mb-2">
               What We Arrange
             </p>
             <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">
@@ -109,12 +109,12 @@ export default function LuxuryCarsRacingPage() {
                 <h3 className="trajan-regular text-lg md:text-xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-snug">
                   {s.titre}
                 </h3>
-                <p className="mt-4 text-[13px] md:text-[14px] leading-relaxed text-[#acb0cd]">{s.texte}</p>
+                <p className="mt-4 text-[15px] md:text-base leading-relaxed text-[#acb0cd]">{s.texte}</p>
               </article>
             ))}
           </div>
 
-          <p className="mt-10 max-w-3xl mx-auto text-center text-[12px] leading-relaxed text-[#8b90a0]">
+          <p className="mt-10 max-w-3xl mx-auto text-center text-[15px] leading-relaxed text-[#8b90a0]">
             Availability depends on the destination, the season and the dates. Nothing on this page is a
             catalogue: each request is answered individually.
           </p>
@@ -127,13 +127,13 @@ export default function LuxuryCarsRacingPage() {
           <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">
             Tell Us What You Have In Mind
           </h2>
-          <p className="mt-5 text-[13px] md:text-base leading-relaxed text-[#acb0cd]">
+          <p className="mt-5 text-base md:text-lg leading-relaxed text-[#acb0cd]">
             Give us the destination and the dates. We will tell you plainly what can be arranged.
           </p>
           <Link href="/#contact" className={`${CTA_CUIVRE} mt-8`}>
             Speak to Our Concierge
           </Link>
-          <p className="mt-6 text-[12px] leading-relaxed text-[#8b90a0]">
+          <p className="mt-6 text-[15px] leading-relaxed text-[#8b90a0]">
             {QUALITYACHT.email} · {QUALITYACHT.phone}
           </p>
         </div>

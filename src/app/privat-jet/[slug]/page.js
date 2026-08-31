@@ -127,10 +127,12 @@ export default function PrivatJetDestinationPage({ params }) {
 
           {/* Texte qui monte sur la photo */}
           <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-4 md:pb-10">
+            {/* Le sur-titre "Private Jets" a ete retire (decision reunion) : en
+                #c2622a il tombait sur les toits orange et la route beige des
+                photos de hero — orange sur orange, illisible, et trop petit.
+                Le h1 porte deja le nom de la destination, et on arrive ici
+                depuis /privat-jet : l'information n'etait pas perdue. */}
             <div ref={heroRef} className="reveal-up flex flex-col items-center text-center w-full">
-              <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-2 md:mb-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
-                Private Jets
-              </p>
               <h1 className="trajan-regular text-2xl md:text-5xl lg:text-6xl uppercase tracking-[0.12em] md:tracking-[0.15em] text-[#acb0cd] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
                 {dest.name}
               </h1>

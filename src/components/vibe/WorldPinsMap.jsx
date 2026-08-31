@@ -68,7 +68,15 @@ export default function WorldPinsMap({
     const L = window.L;
     const map = L.map(mapRef.current, { center, zoom, scrollWheelZoom: false, worldCopyJump: true, minZoom: 2 });
     mapInstance.current = map;
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap © CARTO', maxZoom: 19 }).addTo(map);
+    // Le fond CARTO dark_all exige desormais une cle : sans elle, chaque tuile
+    // porte le filigrane « API KEY REQUIRED » et la legende disparait. On
+    // repasse sur les tuiles OpenStreetMap, libres et sans cle, comme les 16
+    // autres cartes du site. L'aspect sombre est reproduit par un filtre CSS
+    // applique au seul calque de tuiles (voir .wp-map ci-dessous), afin de ne
+    // toucher ni aux marqueurs, ni aux popups, ni aux logos.
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors', maxZoom: 19,
+    }).addTo(map);
     if (hidePins) { const t = setTimeout(() => map.invalidateSize(), 150); return () => clearTimeout(t); }
     items.forEach((it, i) => {
       const m = L.marker(it.coords, { icon: makeIcon(false) }).addTo(map)
@@ -89,8 +97,17 @@ export default function WorldPinsMap({
   return (
     <section className="relative bg-[#26272a] px-6 md:px-14 py-16 md:py-24">
       <style>{`
-        .leaflet-tooltip.wp-label { background:#2e2f32 !important; border:1px solid #B87333 !important; color:#efe7d6; font-size:11px; font-weight:600; padding:2px 7px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.5) !important; }
+        .leaflet-tooltip.wp-label { background:#2e2f32 !important; border:1px solid #B87333 !important; color:#efe7d6; font-size:13px; font-weight:600; padding:3px 8px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.5) !important; }
         .leaflet-tooltip.wp-label::before { display:none !important; }
+        /* Assombrissement des tuiles uniquement. .leaflet-tile-pane ne contient
+           que le fond de carte : marqueurs (marker-pane), popups (popup-pane),
+           tooltips et attribution vivent dans d'autres calques et ne sont donc
+           pas filtres. Identique a RealEstateMap. */
+        .wp-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.72) contrast(1.12); }
+        .wp-map .leaflet-control-attribution, .wp-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:11px !important; }
+        .wp-map .leaflet-control-attribution a { color:#acb0cd !important; }
+        .wp-map .leaflet-control-zoom a { background:#2e2f32 !important; color:#C0C0C0 !important; border-color:rgba(192,192,192,0.25) !important; }
+        .wp-map .leaflet-control-zoom a:hover { background:#3a3b3f !important; }
       `}</style>
       <div className="max-w-7xl mx-auto">
         {(kicker || title) && (
@@ -103,7 +120,7 @@ export default function WorldPinsMap({
         )}
 
         <div className="relative h-[54vh] md:h-[62vh] rounded-2xl overflow-hidden border border-[#C0C0C0]/20 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] bg-[#1a1b1e]">
-          <div ref={mapRef} className="absolute inset-0" />
+          <div ref={mapRef} className="wp-map absolute inset-0" />
           {!ready && <div className="absolute inset-0 flex items-center justify-center text-[#acb0cd]/60 text-sm">Loading map…</div>}
         </div>
 

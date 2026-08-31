@@ -15,14 +15,14 @@ const FOCUS =
 
 const CTA_CUIVRE =
   'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
-  'rounded-full border border-[#C0C0C0] bg-[#26272a] text-[13px] font-semibold uppercase ' +
+  'rounded-full border border-[#C0C0C0] bg-[#26272a] text-[15px] font-semibold uppercase ' +
   'tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] ' +
   'transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] ' +
   'hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] ' + FOCUS;
 
 const CTA_ARGENT =
   'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
-  'rounded-full border border-[#C0C0C0] bg-[#26272a]/50 text-[13px] font-semibold uppercase ' +
+  'rounded-full border border-[#C0C0C0] bg-[#26272a]/50 text-[15px] font-semibold uppercase ' +
   'tracking-[0.18em] text-[#C0C0C0] transition-[border-color,box-shadow] duration-300 ' +
   'hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)] ' + FOCUS;
 
@@ -41,7 +41,7 @@ export default function RealEstatePage() {
         <HeroTriptych />
         <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+          <p className="text-sm md:text-base uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
             A Global Portfolio
           </p>
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
@@ -58,7 +58,7 @@ export default function RealEstatePage() {
       <section className="px-6 md:px-14 pt-14 md:pt-20 pb-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
-            <p className="text-[12px] md:text-[13px] uppercase tracking-[0.24em] text-[#B87333] font-semibold">
+            <p className="text-sm md:text-base uppercase tracking-[0.24em] text-[#B87333] font-semibold">
               Our Real Estate Partners
             </p>
             <p className="mt-4 max-w-2xl mx-auto text-[15px] md:text-base font-medium leading-[1.75] text-[#acb0cd]">
@@ -99,7 +99,7 @@ export default function RealEstatePage() {
                 <p className="mt-6 text-[15px] md:text-base font-medium leading-[1.75] text-[#acb0cd] flex-1">
                   {partenaire.type}.
                 </p>
-                <p className="mt-3 text-[14px] uppercase tracking-[0.14em] text-[#C0C0C0]">
+                <p className="mt-3 text-[15px] md:text-base uppercase tracking-[0.14em] text-[#C0C0C0]">
                   {partenaire.markets.join(' · ')}
                 </p>
 
@@ -138,7 +138,7 @@ export default function RealEstatePage() {
       <section className="px-6 md:px-14 pb-20 md:pb-28 bg-[#26272a]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
-            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-[#B87333] font-medium mb-2">
+            <p className="text-sm md:text-base uppercase tracking-[0.24em] text-[#B87333] font-medium mb-2">
               Also Covered
             </p>
             <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">
@@ -156,7 +156,7 @@ export default function RealEstatePage() {
                 className="rounded-2xl border border-[#C0C0C0]/20 bg-[#2e2f32] p-7 flex flex-col"
               >
                 <h3 className="trajan-regular text-2xl uppercase tracking-[0.08em] text-[#C0C0C0]">{m.name}</h3>
-                <p className="mt-4 text-[13px] leading-relaxed text-[#acb0cd] flex-1">{m.desc}</p>
+                <p className="mt-4 text-[15px] md:text-base leading-relaxed text-[#acb0cd] flex-1">{m.desc}</p>
                 <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-3">
                   <a href={m.href} target="_blank" rel="noopener noreferrer" className={CTA_CUIVRE}>
                     Explore the Market
