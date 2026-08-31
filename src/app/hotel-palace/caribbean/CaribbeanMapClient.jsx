@@ -3,13 +3,11 @@
 // Carte Caraibes de /hotel-palace/caribbean (page dediee, ouverte au clic sur les
 // Caraibes depuis la carte monde).
 //
-// ASPECT (demande client) :
-//  - la MER est le fond gris FONCE #26272a (aucune tuile : la carte est dessinee, pas
-//    photographiee) ;
-//  - la TERRE est en gris CLAIR #3a3b3f, dessinee a partir d'un GeoJSON Natural Earth
-//    10m decoupe sur les Caraibes (caribbean-land.json, vraies cotes) ;
-//  - les FRONTIERES des pays sont en cococo #C0C0C0 ;
-//  - PLUS DE CONTOURS ORANGE autour des zones.
+// ASPECT (choix client, aligne sur la carte monde) :
+//  - FOND = tuiles Esri National Geographic (relief marron + relief de la mer + frontieres
+//    + villes) — le "#1" du comparateur /test-world-relief. Gratuit, sans cle API.
+//  - Le fond gris dessine (GeoJSON caribbean-land.json) a ete remplace par ce basemap ;
+//    le .json reste sur le disque si l'on veut revenir au rendu gris.
 //
 // DEUX NIVEAUX DE ZOOM :
 //  - Niveau 1 (activeSub null) : vue d'ensemble, les 8 sous-regions posees en LABELS
@@ -25,10 +23,8 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { SUBREGIONS, HOTELS_BY_SUB } from '../map-data';
 import { SUB_CENTERS, CITIES, ISLANDS } from './places-data';
-import LAND from './caribbean-land.json';
 
-const SEA = '#26272a';
-const LAND_FILL = '#3a3b3f';
+const SEA = '#26272a'; // fond de repli le temps que les tuiles chargent
 const COCOCO = '#C0C0C0';
 const CARIB_BOUNDS = [[9.5, -85.0], [23.5, -58.0]];
 
@@ -81,21 +77,16 @@ export default function CaribbeanMapClient() {
       minZoom: 4,
       maxZoom: 11,
       scrollWheelZoom: false,
-      attributionControl: false,
+      attributionControl: true, // tuiles Esri : attribution requise
     });
     mapInstanceRef.current = map;
     map.fitBounds(CARIB_BOUNDS);
 
-    // ── TERRE (aucune tuile : le fond gris de .leaflet-container est la mer) ──
-    L.geoJSON(LAND, {
-      style: {
-        color: COCOCO, // frontieres
-        weight: 0.8,
-        opacity: 0.65,
-        fillColor: LAND_FILL,
-        fillOpacity: 1,
-      },
-      interactive: false, // la terre ne capte pas les clics : ce sont les labels qui pilotent
+    // ── FOND = tuiles Esri National Geographic (meme basemap que la carte monde) ──
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; National Geographic',
+      maxZoom: 19,
+      maxNativeZoom: 16,
     }).addTo(map);
 
     // ── Niveau 1 : LOGO Qualityacht (fond transparent) + nom par sous-region, clic -> niveau 2 ──
