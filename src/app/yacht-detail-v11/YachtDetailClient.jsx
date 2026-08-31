@@ -239,9 +239,11 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             From {price}<span className="text-sm text-[#acb0cd]/50"> / {heroUnit}</span>
           </p>
         )}
-        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 mt-2 text-sm text-[#acb0cd] hover:text-[#B03E00] transition-colors">
-          <Info className="w-4 h-4" />
-          <span className="underline-offset-2 hover:underline">Charter Costs Explained</span>
+        {/* Soulignement PERMANENT (et non au survol seul) : sous un prix en
+            text-2xl/3xl, ce lien passait inapercu et n'etait pas clique. */}
+        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 mt-3 text-base md:text-lg text-[#acb0cd] hover:text-[#B03E00] transition-colors">
+          <Info className="w-5 h-5" />
+          <span className="underline underline-offset-4">Charter Costs Explained</span>
         </a>
         {(() => {
           const cabinsCount = Number(yacht.cabins) || Number(bp.cabins) || 0;
@@ -624,9 +626,11 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
 
       {/* ══ LIEN CHARTER COSTS — entre Regions and Rates et Gallery ══ */}
       <div className="max-w-5xl mx-auto px-5 md:px-10 pb-8 text-center">
-        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 text-sm text-[#acb0cd] hover:text-[#B03E00] transition-colors">
-          <Info className="w-4 h-4" />
-          <span className="underline-offset-2 hover:underline">Charter Costs Explained</span>
+        {/* Isole au milieu de la page, un simple texte souligne se perdait.
+            Bouton contour cococo -> orange au survol, comme le reste du site. */}
+        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 rounded-full border border-[#C0C0C0] px-5 py-2 text-base md:text-lg text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] transition-colors">
+          <Info className="w-5 h-5" />
+          <span>Charter Costs Explained</span>
         </a>
       </div>
 

@@ -9,6 +9,15 @@ module.exports = {
   safelist: ["hover:text-red-700"],
   theme: {
   	extend: {
+  		/* Plancher typographique : le site a ete ecrit avec beaucoup de texte en
+  		   text-xs (12px), illisible pour les clients. On remonte l'echelle a 14px
+  		   ici plutot que de reecrire les ~500 occurrences : les variantes
+  		   responsives (md:text-xs) sont couvertes automatiquement.
+  		   Pendant du bloc "PLANCHER TYPOGRAPHIQUE 14px" de src/app/globals.css,
+  		   qui traite les tailles arbitraires text-[8px]..text-[13px]. */
+  		fontSize: {
+  			xs: ['0.875rem', { lineHeight: '1.25rem' }],
+  		},
   		colors: {
 			qy: {
 				antilles: 'rgb(var(--qy-antilles-rgb) / <alpha-value>)',

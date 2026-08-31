@@ -216,3 +216,55 @@ header, footer,h1, h2, h3, h4,.trajan-regular {
     @apply bg-background text-foreground;
   }
 }
+
+/* ── PLANCHER TYPOGRAPHIQUE 14px ──────────────────────────────────────────────
+   Le site a ete ecrit avec beaucoup de texte en 8-13px : les clients ne le
+   lisent pas. On remonte ici toutes les tailles ARBITRAIRES sous 14px, plutot
+   que de reecrire ~700 classes une par une — les pages futures sont couvertes
+   aussi, sans rien avoir a penser.
+   Les classes de l'echelle Tailwind (text-xs) sont traitees en amont, dans
+   theme.extend.fontSize de tailwind.config.js.
+
+   Ce bloc est place APRES @tailwind utilities : pour les regles SANS media
+   query, l'ordre suffit a l'emporter a specificite egale. Surtout pas
+   d'!important ici : ~40 elements portent un couple du type
+   "text-[13px] md:text-base", et un !important sur la classe de base
+   ecraserait la taille desktop.
+
+   Les variantes md: sont un cas a part : Tailwind emet TOUTES ses regles
+   responsives en fin de feuille (octet ~146800 contre ~99600 pour ce bloc),
+   donc l'ordre joue contre nous et .md\:text-\[10px\] resterait a 10px sur
+   desktop. D'ou le prefixe "html" ci-dessous, qui monte la specificite a
+   (0,1,1) face au (0,1,0) de Tailwind — sans le caractere absolu d'!important.
+   Seules les variantes md: existent dans le code (verifie : ni sm:, ni lg:,
+   ni xl: sur ces tailles), d'ou un bloc court.
+
+   Les tailles >= 14px (text-[14px], [15px], [16px], [18px], [24px], [26px])
+   ne sont PAS listees : elles restent telles quelles.
+
+   Pour un label qui doit VRAIMENT rester petit (pastille dense, en-tete de
+   tableau admin), utiliser la classe d'echappement .qy-micro definie plus bas
+   — c'est le seul moyen assume de repasser sous 14px. */
+.text-\[8px\],
+.text-\[9px\],
+.text-\[10px\],
+.text-\[11px\],
+.text-\[12px\],
+.text-\[12\.5px\],
+.text-\[13px\] {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html .md\:text-\[10px\],
+  html .md\:text-\[11px\],
+  html .md\:text-\[13px\] {
+    font-size: 14px;
+  }
+}
+
+/* Echappatoire au plancher ci-dessus. !important assume : elle doit gagner
+   contre la regle de plancher posee sur la meme balise. */
+.qy-micro {
+  font-size: 11px !important;
+}
