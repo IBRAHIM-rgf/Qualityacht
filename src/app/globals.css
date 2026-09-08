@@ -268,3 +268,13 @@ header, footer,h1, h2, h3, h4,.trajan-regular {
 .qy-micro {
   font-size: 11px !important;
 }
+
+/* Hero standard 1400x800 (7:4) + zoom "faux film". Format de reference des heros du site :
+   la section garde le ratio 7:4 sur desktop (mobile : hauteur minimale pour titre + CTA).
+   Le zoom avant/arriere en boucle donne l'illusion d'un plan video sur une image fixe.
+   Echelle de depart 1.04 (et non 1) pour eviter la ligne claire sur les bords. */
+.qy-hero-frame { position: relative; width: 100%; overflow: hidden; min-height: 520px; }
+@media (min-width: 768px) { .qy-hero-frame { aspect-ratio: 7 / 4; min-height: 0; } }
+@keyframes qyHeroZoom { 0% { transform: scale(1.04); } 50% { transform: scale(1.18); } 100% { transform: scale(1.04); } }
+.qy-hero-zoom { transform-origin: 50% 50%; animation: qyHeroZoom 7s ease-in-out infinite; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .qy-hero-zoom { animation: none; transform: scale(1.04); } }
