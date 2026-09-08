@@ -119,7 +119,7 @@ export default function OnDemandCharterPage() {
               Create My Impossible Charter
             </Link>
             <Link href="/yachts" className={CTA_ARGENT}>
-              Explore the Fleet
+              Day Charter
             </Link>
           </div>
         </div>
@@ -218,7 +218,7 @@ export default function OnDemandCharterPage() {
               Start Your On-Demand Charter
             </Link>
             <Link href="/#contact" className={CTA_ARGENT}>
-              Speak to Our Team
+              Discuss Privately
             </Link>
           </div>
         </div>
