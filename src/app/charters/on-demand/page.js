@@ -85,14 +85,14 @@ export default function OnDemandCharterPage() {
   return (
     <main className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO ══ */}
-      <section className="relative w-full h-[70vh] min-h-[520px] md:h-[86vh] overflow-hidden bg-[#26272a]">
+      <section className="qy-hero-frame bg-[#26272a]"> {/* cadre 7:4 (photo 1400x800) + zoom en boucle : .qy-hero-frame / .qy-hero-zoom dans globals.css, format de reference des heros */}
         <Image
           src={HERO_MEDIA}
           alt=""
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="qy-hero-zoom object-cover object-center"
         />
         {/* Voile sombre neutre, uniquement pour la lisibilite. Aucun bleu. */}
         <div
