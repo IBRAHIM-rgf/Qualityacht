@@ -107,7 +107,7 @@ export default function OnDemandCharterPage() {
           <p className="text-[10px] md:text-xs uppercase tracking-[0.32em] text-[#B87333] mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
             On-Demand Charter
           </p>
-          <h1 className="trajan-regular text-2xl md:text-4xl lg:text-5xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-tight max-w-4xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
+          <h1 className="trajan-regular text-2xl md:text-4xl lg:text-5xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-tight max-w-4xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] md:-translate-x-[2ch]">
             Not Just a Yacht. A Story You Could Not Have Lived Any Other Way.
           </h1>
           <p className="mt-5 max-w-2xl text-sm md:text-base leading-relaxed text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
