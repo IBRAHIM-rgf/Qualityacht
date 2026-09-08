@@ -25,7 +25,7 @@ export const metadata = {
 };
 
 // Media du hero. A remplacer par la video validee le moment venu.
-const HERO_MEDIA = '/images/charters/on-demande.png';
+const HERO_MEDIA = '/media/client/lydie/2026-09-08/on-demand/image.jpg'; // 2026-09-08 : photo paddle Oslo (ancien visuel : /images/charters/on-demande.png)
 
 // Photos fournies par la cliente, deja optimisees en WebP dans le depot.
 const IMG_AVENTURE = '/media/client/lydie/2026-08-25/on-demand/local-adventure.webp';
