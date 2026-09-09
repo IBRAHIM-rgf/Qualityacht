@@ -299,3 +299,12 @@ img[src*="title-line"] {
           drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55))
           contrast(1.15) brightness(1.12);
 }
+
+
+/* ── Voile bleu global sur toute la section /sales (layout src/app/sales/layout.js) ──
+   Rappel du fond bleu marine des anciennes pages Sales (commit 5d8f5dd). Le
+   ::before couvre tout le contenu du layout sans intercepter les clics ;
+   isolation: isolate le garde sous le header fixe et au-dessus des calques
+   -z-10 / z-10 des pages. Couleur = bleu marine du site #1b223d. */
+.sales-blue-overlay { position: relative; isolation: isolate; }
+.sales-blue-overlay::before { content: ""; position: absolute; inset: 0; background: rgba(27, 34, 61, 0.18); mix-blend-mode: multiply; pointer-events: none; z-index: 9999; }
