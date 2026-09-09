@@ -64,7 +64,10 @@ export default function PrivatJetPage() {
         className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat py-24 px-4"
         style={{ backgroundImage: "url('/images/services-bg.png')" }}
       >
-        <h2 className="text-3xl md:text-5xl font-bold trajan-regular mb-4 text-center uppercase tracking-wide" style={{ color: '#acb0cd' }}>
+        {/* text-balance : le titre remplissait la largeur bord a bord et se
+            coupait mal selon la fenetre (releve "Coupe ?" du document client).
+            Meme traitement que "Contact Broker Jet". */}
+        <h2 className="text-3xl md:text-5xl font-bold trajan-regular mb-4 text-center uppercase tracking-wide text-balance max-w-4xl" style={{ color: '#acb0cd' }}>
           Private Jet Destinations
         </h2>
         <Image src="/images/title-line.png" alt="" width={200} height={10} className="mx-auto mb-12" />
