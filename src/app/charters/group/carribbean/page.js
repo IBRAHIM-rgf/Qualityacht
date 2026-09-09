@@ -61,7 +61,7 @@ export default function GroupCaribbeanPage() {
             Turquoise passages, secluded anchorages and islands within a short hop of one another — arranged around your dates and the size of your party.
           </p>
           <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
-            <a href="/request-quote" className={CTA_CUIVRE}>Request a Quote</a>
+            <a href="/request-quote" className={CTA_CUIVRE}>Design Your Charter</a>
             <a href="/yachts?destination=caribbean" className={CTA_ARGENT}>Explore the Caribbean Fleet</a>
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function GroupCaribbeanPage() {
           </div>
 
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="/request-quote" className={CTA_CUIVRE}>Request a Quote</a>
+            <a href="/request-quote" className={CTA_CUIVRE}>Design Your Charter</a>
             <a href="/#contact" className={CTA_ARGENT}>Speak to Our Team</a>
           </div>
         </div>

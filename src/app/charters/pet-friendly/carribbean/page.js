@@ -883,7 +883,7 @@ export default function PetFriendlyCaribbeanPage() {
               <a href="/request-quote"
                 style={{ color: '#c2622a', backgroundColor: '#26272a', borderColor: '#C0C0C0' }}
                 className="trajan-regular inline-flex min-h-[48px] items-center justify-center text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border rounded-full hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-all duration-300 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">
-                Request a Quote
+                Design Your Charter
               </a>
               <a href="/charters/destinations/caribbean-v15/exploreyacht"
                 style={{ color: '#C0C0C0', backgroundColor: 'rgba(38,39,42,0.5)', borderColor: '#C0C0C0' }}

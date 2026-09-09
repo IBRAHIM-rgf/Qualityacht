@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { readCart, removeFromCart, subscribeCart } from '@/lib/quoteCart';
-import { Calendar, Users, Ship, Plane, ArrowLeft, Check, ChevronDown } from 'lucide-react';
+import { Calendar, Users, Ship, Plane, ArrowLeft, Check, ChevronDown, Plus } from 'lucide-react';
 
 const STEPS = ['Charter Details', 'Enhancements & Details', 'Thank You!'];
 
@@ -593,8 +593,18 @@ export default function RequestQuoteWizard() {
                   </span>
                 </label>
 
+                {/* Ajouter un bateau : renvoie sur la LISTE et non sur une fiche
+                    (demande client). */}
+                <a
+                  href="/yachts"
+                  className="mt-4 flex items-center justify-center gap-3 w-full md:w-auto md:inline-flex rounded-xl border-2 border-[#C0C0C0] px-6 py-3 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]"
+                >
+                  <Plus className="w-5 h-5" />
+                  Secure Another Yacht
+                </a>
+
                 <div className="pt-2">
-                  <PrimaryButton onClick={goNext} className="w-full md:w-auto px-12 py-4">Continue</PrimaryButton>
+                  <PrimaryButton onClick={goNext} className="w-full md:w-auto px-12 py-4">Secure My Charter</PrimaryButton>
                 </div>
               </div>
             </div>
@@ -663,7 +673,7 @@ export default function RequestQuoteWizard() {
               </label>
 
               <div className="flex items-center justify-between gap-4 pt-4">
-                <GhostButton onClick={goBack} className="inline-flex items-center gap-3 px-6 py-3">
+                <GhostButton onClick={goBack} className="inline-flex items-center gap-3 px-6 py-3 font-bold">
                   <ArrowLeft className="w-5 h-5" /> Go Back
                 </GhostButton>
                 <PrimaryButton onClick={goNext} className="px-12 py-4">Confirm</PrimaryButton>
@@ -680,6 +690,20 @@ export default function RequestQuoteWizard() {
                 Your request for <span className="text-[#bd9973]">{yacht.name}</span> has been received.
                 One of our charter experts will contact you shortly to craft your bespoke itinerary.
               </p>
+              {/* Carte fine au-dessus du bouton de retour : rattrape le client qui
+                  voudrait un second bateau, vers la LISTE et non une fiche.
+                  Deux lignes, lavande puis orange brule, l'ensemble cliquable. */}
+              <a
+                href="/yachts"
+                className="block max-w-md mx-auto rounded-xl border border-[#C0C0C0] bg-black/30 px-6 py-4 mb-4 text-center transition-colors hover:border-[#B03E00]"
+              >
+                <span className="block text-[#acb0cd] text-base leading-snug">
+                  Would you like to secure an additional yacht?
+                </span>
+                <span className="mt-2 block text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium">
+                  Revisit Your Yacht Portfolio
+                </span>
+              </a>
               <a href="/charters/destinations/caribbean-v15"
                 className="inline-block rounded-xl px-10 py-4 border border-[#C0C0C0] bg-black/30 text-[#C0C0C0] text-sm uppercase tracking-[0.2em] hover:text-[#B03E00] hover:border-[#B03E00] transition-colors">
                 Back to Caribbean

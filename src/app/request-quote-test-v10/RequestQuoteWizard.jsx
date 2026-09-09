@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown, X as XIcon, RotateCcw, PawPrint, Accessibility } from 'lucide-react';
+import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown, X as XIcon, RotateCcw, PawPrint, Accessibility, Plus } from 'lucide-react';
 import MonthPicker from '@/components/MonthPicker';
 import JetBookingWidget from '@/components/JetBookingWidget';
 
@@ -669,11 +669,22 @@ export default function RequestQuoteWizard() {
                 </label>
               </div>
 
+              {/* Ajouter un bateau a la selection : renvoie sur la LISTE et non
+                  sur une fiche, pour que le client reparte du catalogue complet
+                  (demande client). Place au-dessus de Go Back. */}
+              <a
+                href="/yachts"
+                className="mt-4 flex items-center justify-center gap-3 w-full rounded-xl border-2 border-[#C0C0C0] px-6 py-3 text-xs md:text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]"
+              >
+                <Plus className="w-4 h-4 md:w-5 md:h-5" />
+                Secure Another Yacht
+              </a>
+
               <div className="pt-2 flex items-center justify-between gap-2 md:gap-4">
-                <GhostButton onClick={() => { if (typeof window !== 'undefined') window.history.back(); }} className="inline-flex items-center gap-2 px-3 py-2 md:gap-3 md:px-6 md:py-3 text-xs md:text-sm shrink-0">
+                <GhostButton onClick={() => { if (typeof window !== 'undefined') window.history.back(); }} className="inline-flex items-center gap-2 px-3 py-2 md:gap-3 md:px-6 md:py-3 text-xs md:text-sm font-bold shrink-0">
                   <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" /> Go Back
                 </GhostButton>
-                <PrimaryButton onClick={goNext} className="px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">Continue</PrimaryButton>
+                <PrimaryButton onClick={goNext} className="px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">Secure My Charter</PrimaryButton>
               </div>
             </div>
           </section>
@@ -808,10 +819,27 @@ export default function RequestQuoteWizard() {
                   </p>
                 </div>
               </div>
-              <a href="/#discovery"
-                className="block w-full text-center rounded-xl px-10 py-4 border-2 border-[#C0C0C0] bg-black/40 text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
-                Back to Homepage
-              </a>
+              <div className="w-full">
+                {/* Carte fine posee au-dessus du retour a l'accueil : elle rattrape
+                    le client qui voudrait un second bateau, et le renvoie sur la
+                    LISTE plutot que sur une fiche. Deux lignes, lavande puis
+                    orange brule, l'ensemble cliquable. */}
+                <a
+                  href="/yachts"
+                  className="block w-full rounded-xl border border-[#C0C0C0] bg-black/30 px-6 py-4 mb-4 text-center transition-colors hover:border-[#B03E00]"
+                >
+                  <span className="block text-[#acb0cd] text-base md:text-lg leading-snug">
+                    Would you like to secure an additional yacht?
+                  </span>
+                  <span className="mt-2 block text-[#B03E00] text-sm md:text-base uppercase tracking-[0.2em] font-medium">
+                    Revisit Your Yacht Portfolio
+                  </span>
+                </a>
+                <a href="/#discovery"
+                  className="block w-full text-center rounded-xl px-10 py-4 border-2 border-[#C0C0C0] bg-black/40 text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+                  Back to Homepage
+                </a>
+              </div>
             </div>
           </section>
 

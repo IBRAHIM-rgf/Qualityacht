@@ -53,7 +53,7 @@ function Spec({ icon: Icon, img, label, value }) {
         <Icon className="w-6 h-6 text-[#B03E00] mb-2" />
       )}
       <span className="text-[#acb0cd] text-base">{hasValue ? value : '—'}</span>
-      <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/50 mt-1">{label}</span>
+      <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#acb0cd] mt-1">{label}</span>
     </div>
   );
 }
@@ -63,7 +63,10 @@ function SpecRow({ icon: Icon, label, value }) {
   return (
     <div className="flex items-center gap-4 py-3 border-b border-[#C0C0C0]/10 last:border-b-0">
       <Icon className="w-5 h-5 text-[#B03E00] shrink-0" />
-      <span className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 flex-1">{label}</span>
+      {/* Libelle en GRAS et pleine opacite (demande client : "les ecritures
+          bleues en gras"). Il etait a 60% d'opacite, donc plus pale que la
+          valeur qu'il annonce. */}
+      <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#acb0cd] flex-1">{label}</span>
       <span className="text-[#C0C0C0] text-sm font-medium">{value}</span>
     </div>
   );
@@ -239,11 +242,12 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             From {price}<span className="text-sm text-[#acb0cd]/50"> / {heroUnit}</span>
           </p>
         )}
-        {/* Soulignement PERMANENT (et non au survol seul) : sous un prix en
-            text-2xl/3xl, ce lien passait inapercu et n'etait pas clique. */}
-        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 mt-3 text-base md:text-lg text-[#acb0cd] hover:text-[#B03E00] transition-colors">
-          <Info className="w-5 h-5" />
-          <span className="underline underline-offset-4">Charter Costs Explained</span>
+        {/* Presque a la taille du prix juste au-dessus (text-2xl/3xl), un cran
+            en dessous pour ne pas le concurrencer. L'icone d'information est en
+            orange et le libelle annonce les deux contenus de la page. */}
+        <a href="/charter-costs-explained" className="inline-flex items-center gap-3 mt-3 text-xl md:text-2xl text-[#acb0cd] hover:text-[#B03E00] transition-colors">
+          <Info className="w-7 h-7 md:w-8 md:h-8 shrink-0 text-[#c2622a]" />
+          <span className="underline underline-offset-4">Charter Costs Explained / Charter Cost Estimator</span>
         </a>
         {(() => {
           const cabinsCount = Number(yacht.cabins) || Number(bp.cabins) || 0;
@@ -259,11 +263,11 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       {/* ══ ENTÊTE : enquire + specs grid ══ */}
       <div className="border-b border-[#C0C0C0]/20">
         <div className="max-w-6xl mx-auto px-5 md:px-10 py-8 flex flex-col lg:flex-row lg:items-center gap-8">
+          {/* "Contact a broker" n'est plus empile sous "Reserve This Yacht" :
+              il est remonte a droite de la carte Base Port, plus bas (demande
+              client). Seul le CTA principal reste ici. */}
           <div className="flex-1 w-full flex flex-col items-stretch lg:items-center gap-6">
             <ReserveButton yacht={yacht} bp={bp} full={full} imgs={imgs} variant="top" />
-            <a href="/request-quote" className="flex items-center justify-center min-h-[48px] w-full lg:w-auto rounded-lg border-2 border-[#C0C0C0] px-3 py-1.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
-              Contact a broker
-            </a>
           </div>
           <div className="lg:flex-[1.4] grid grid-cols-3 sm:grid-cols-6 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] divide-x divide-y sm:divide-y-0 divide-[#C0C0C0]/20">
             <Spec icon={Anchor} label="Builder" value={yacht.make || bp.make} />
@@ -282,7 +286,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
           // Fallback "French Riviera" si vide ou si juste "French" (cas Ankor mal renseigné).
           const displayName = !trimmed || /^french$/i.test(trimmed) ? 'French Riviera' : trimmed;
           return (
-            <div className="max-w-6xl mx-auto px-5 md:px-10 pb-6">
+            <div className="max-w-6xl mx-auto px-5 md:px-10 pb-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="inline-flex items-center gap-3 rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] px-4 py-2">
                 <MapIcon className="w-5 h-5 text-[#B03E00] shrink-0" strokeWidth={2} />
                 <p className="text-base md:text-lg leading-none">
@@ -293,6 +297,14 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
                   </span>
                 </p>
               </div>
+              {/* Remonte ici depuis le bloc CTA du haut : le client le voulait a
+                  DROITE de la carte Base Port. Empile sous elle en mobile. */}
+              <a
+                href="/request-quote"
+                className="inline-flex items-center justify-center min-h-[48px] rounded-lg border-2 border-[#C0C0C0] px-5 py-1.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]"
+              >
+                Contact a broker
+              </a>
             </div>
           );
         })()}
@@ -628,9 +640,9 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       <div className="max-w-5xl mx-auto px-5 md:px-10 pb-8 text-center">
         {/* Isole au milieu de la page, un simple texte souligne se perdait.
             Bouton contour cococo -> orange au survol, comme le reste du site. */}
-        <a href="/charter-costs-explained" className="inline-flex items-center gap-2 rounded-full border border-[#C0C0C0] px-5 py-2 text-base md:text-lg text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] transition-colors">
-          <Info className="w-5 h-5" />
-          <span>Charter Costs Explained</span>
+        <a href="/charter-costs-explained" className="inline-flex items-center gap-3 rounded-full border border-[#C0C0C0] px-6 py-3 text-base md:text-lg text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] transition-colors">
+          <Info className="w-6 h-6 shrink-0 text-[#c2622a]" />
+          <span>Charter Costs Explained / Charter Cost Estimator</span>
         </a>
       </div>
 

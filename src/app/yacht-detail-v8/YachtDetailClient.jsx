@@ -539,7 +539,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       {/* ══ CTA ══ */}
       <div className="max-w-4xl mx-auto px-5 md:px-10 pb-16 text-center">
         <a href="/request-quote-test-v10" className="inline-block rounded-xl border-2 border-[#C0C0C0] px-12 py-4 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
-          Request a Quote
+          Design Your Charter
         </a>
       </div>
 

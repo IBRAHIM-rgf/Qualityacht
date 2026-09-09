@@ -103,7 +103,7 @@ export default function Page() {
           <div className="mt-5">
             <Link href="/request-quote-test-v10"
               className="inline-flex items-center gap-2 rounded-lg border-2 border-[#C0C0C0] px-6 py-2.5 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-colors">
-              Request a Quote
+              Design Your Charter
             </Link>
           </div>
         </div>
