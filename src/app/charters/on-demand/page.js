@@ -118,7 +118,7 @@ export default function OnDemandCharterPage() {
             <Link href="/request-quote" className={CTA_CUIVRE}>
               Create My Impossible Charter
             </Link>
-            <Link href="/yachts" className={CTA_ARGENT}>
+            <Link href="/charters/day-charter" className={CTA_ARGENT}>
               Day Charter
             </Link>
           </div>
