@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import HistoricHub from './HistoricHub';
-import { columns } from './data';
 
 export const metadata = {
   title: 'Caribbean by Land — Monuments, Hiking & Cycling | Qualityacht',
@@ -38,7 +37,7 @@ export default function HistoricSitesCaribbeanPage() {
         </div>
       </div>
 
-      <HistoricHub panels={panels} columns={columns} />
+      <HistoricHub panels={panels} />
     </div>
   );
 }
