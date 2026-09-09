@@ -65,7 +65,7 @@ export default function JetBookingWidget() {
   return (
     <div className="w-full">
       {/* Tabs — cards arrondies, fond commun ; actif = bordure + texte orange */}
-      <div className="flex gap-2 mb-3 max-w-2xl">
+      <div className="flex gap-2 mb-3 max-w-2xl mx-auto">
         {[
           { key: 'one-way', label: 'One Way' },
           { key: 'round-trip', label: 'Round Trip' },
@@ -90,7 +90,7 @@ export default function JetBookingWidget() {
             <div className="grid grid-cols-2 gap-px md:contents">
               {/* FROM */}
               <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 md:flex-1 md:min-w-[160px]">
-                <p className="text-[9px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mb-1">From</p>
+                <p className="text-[13px] font-bold uppercase tracking-[0.25em] text-[#acb0cd] mb-1">From</p>
                 {i === 0 ? (
                   <input value={leg.from} onChange={e => updateLeg(i, 'from', e.target.value)}
                     placeholder="City or airport"
@@ -110,7 +110,7 @@ export default function JetBookingWidget() {
 
               {/* TO */}
               <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 md:flex-1 md:min-w-[160px]">
-                <p className="text-[9px] uppercase tracking-[0.25em] text-[#acb0cd]/60 mb-1">To</p>
+                <p className="text-[13px] font-bold uppercase tracking-[0.25em] text-[#acb0cd] mb-1">To</p>
                 {i === 0 ? (
                   <select value={leg.to} onChange={e => updateLeg(i, 'to', e.target.value)}
                     className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none">

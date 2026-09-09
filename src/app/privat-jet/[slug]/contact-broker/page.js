@@ -54,7 +54,10 @@ export default function ContactBrokerPage() {
         <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 2s ease-out forwards' }}>
           <Image src="/images/private_jet/private-jet_thankyou.jpg" alt="" fill className="object-cover object-top md:object-contain" />
           <div className="absolute inset-0 bg-black/35" />
-          <div className="absolute inset-0 bg-[#e8b44a] mix-blend-multiply opacity-40" />
+          {/* Le calque ambre #e8b44a en mix-blend-multiply virait toute la page au
+              marron — une couleur absente de la palette. Remplace par le fond
+              sombre du site, qui assombrit sans teinter. */}
+          <div className="absolute inset-0 bg-[#26272a] mix-blend-multiply opacity-40" />
         </div>
 
         <h1 className="trajan-regular font-bold text-2xl md:text-4xl text-center uppercase tracking-[0.15em] mb-10 md:mb-14 text-[#C0C0C0] [-webkit-text-stroke:0.6px_#C0C0C0] mt-[10vh]">
@@ -95,18 +98,27 @@ export default function ContactBrokerPage() {
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen pt-[70px] md:pt-24">
       {/* ══ TITRE ══ */}
       <div className="max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-12 text-center">
-        <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-3">
-          Get in touch
+        <p className="text-sm md:text-base font-bold uppercase tracking-[0.4em] text-[#c2622a] mb-3">
+          Submit Your Project
         </p>
-        <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#C0C0C0]">
+        {/* text-balance + tracking reduit sur mobile : le titre se coupait en
+            "CONTACT BROKER" / "JET", le dernier mot seul sur sa ligne. */}
+        <h1 className="trajan-regular text-2xl md:text-5xl uppercase tracking-[0.06em] md:tracking-[0.15em] text-[#C0C0C0] text-balance">
           Contact Broker Jet
         </h1>
         <div className="relative w-32 h-6 mx-auto mt-4 mb-6">
           <Image src="/images/title-line.png" alt="" fill className="object-contain" />
         </div>
-        <p className="text-base md:text-lg max-w-2xl mx-auto leading-relaxed text-[#7cb88a]">
-          Our brokers are available 24/7 to handle all your requests — yacht charter, private jet, transfers.
-          Describe your project in a few lines, we&apos;ll get back to you within 24 hours.
+        {/* Texte fourni par la cliente. Le vert #7cb88a n'appartenait pas a la
+            palette : repasse en lavande #acb0cd. Deux paragraphes distincts,
+            comme dans le document. */}
+        <p className="text-base md:text-lg max-w-2xl mx-auto leading-relaxed text-[#acb0cd]">
+          Our lifestyle concierge advisors are available 24/7 to design every stage of your
+          projects with you — yacht, private jet, VIP transfers.
+        </p>
+        <p className="mt-4 text-base md:text-lg max-w-2xl mx-auto leading-relaxed text-[#acb0cd]">
+          Describe your ideal experience in a few lines;
+          we&apos;ll send you a fully tailored proposal within 24 hours.
         </p>
       </div>
 

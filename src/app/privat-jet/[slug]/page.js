@@ -127,12 +127,16 @@ export default function PrivatJetDestinationPage({ params }) {
 
           {/* Texte qui monte sur la photo */}
           <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-4 md:pb-10">
-            {/* Le sur-titre "Private Jets" a ete retire (decision reunion) : en
-                #c2622a il tombait sur les toits orange et la route beige des
-                photos de hero — orange sur orange, illisible, et trop petit.
-                Le h1 porte deja le nom de la destination, et on arrive ici
-                depuis /privat-jet : l'information n'etait pas perdue. */}
+            {/* Sur-titre "Private Jets" : retire une premiere fois (illisible en
+                #c2622a fin et petit sur les toits orange et le sable des photos),
+                puis RETABLI a la demande du client, plus grand et en gras.
+                La lisibilite vient de trois choses, pas de la couleur : le corps
+                (14/18px au lieu de 10/12), la graisse (bold), et surtout l'ombre
+                portee noire dense qui detache le texte de n'importe quel fond. */}
             <div ref={heroRef} className="reveal-up flex flex-col items-center text-center w-full">
+              <p className="text-sm md:text-lg font-bold uppercase tracking-[0.4em] text-[#c2622a] mb-2 md:mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+                Private Jets
+              </p>
               <h1 className="trajan-regular text-2xl md:text-5xl lg:text-6xl uppercase tracking-[0.12em] md:tracking-[0.15em] text-[#acb0cd] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
                 {dest.name}
               </h1>

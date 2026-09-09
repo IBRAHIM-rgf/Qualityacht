@@ -257,7 +257,7 @@ export default function CaribbeanV4Page() {
       ══════════════════════════════════════════════════════════ */}
       <section className="bg-[#1e1f22] py-20 px-6 md:px-20">
         <div className="max-w-5xl mx-auto text-center">
-          <p className="text-[#bd9973] text-xs uppercase tracking-[0.35em] mb-3 font-light">Get in Touch</p>
+          <p className="text-[#bd9973] text-xs uppercase tracking-[0.35em] mb-3 font-light">Submit Your Project</p>
           <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-white mb-2">
             Contact Our Team
           </h2>

@@ -59,7 +59,7 @@ export default function UniverseSelector() {
       <p aria-live="polite" className="mt-8 text-center text-[13px] leading-relaxed text-[#acb0cd]">
         {choisis.length === 0
           ? 'Pick whatever speaks to you. Nothing is sent from this page — it is simply there to help you put words on what you are after.'
-          : `You have picked ${choisis.length} ${choisis.length > 1 ? 'themes' : 'theme'}: ${choisis.join(', ')}. Mention them when you get in touch and we will build from there.`}
+          : `You have picked ${choisis.length} ${choisis.length > 1 ? 'themes' : 'theme'}: ${choisis.join(', ')}. Mention them when you submit your project and we will build from there.`}
       </p>
     </div>
   );

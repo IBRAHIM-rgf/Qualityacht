@@ -278,3 +278,24 @@ header, footer,h1, h2, h3, h4,.trajan-regular {
 @keyframes qyHeroZoom { 0% { transform: scale(1.04); } 50% { transform: scale(1.18); } 100% { transform: scale(1.04); } }
 .qy-hero-zoom { transform-origin: 50% 50%; animation: qyHeroZoom 15s ease-in-out infinite; will-change: transform; }
 @media (prefers-reduced-motion: reduce) { .qy-hero-zoom { animation: none; transform: scale(1.04); } }
+
+/* ── Trait decoratif sous les titres (title-line.png) ─────────────────────────
+   Le fichier est un filet argente tres clair et tres fin sur fond transparent :
+   sur les photos claires (turquoise d'Oceania, sable, ciel) il disparait
+   completement. Le client l'a signale comme "a rendre plus visible sur tout
+   le site".
+
+   Il est utilise 140 fois dans 63 fichiers : une regle unique ici vaut mieux que
+   140 modifications, et couvre les pages a venir. Le selecteur d'ATTRIBUT vise
+   aussi bien la balise <img> directe que celle produite par next/image, dont le
+   src reecrit (/_next/image?url=%2Fimages%2Ftitle-line.png) contient la chaine.
+
+   Specificite (0,1,1) : l'emporte sur le "img { filter: saturate(1.3) }" plus
+   haut (0,0,1), qui n'a de toute facon aucun effet sur un filet sans couleur.
+   Deux ombres portees : une serree qui fait office de contour, une plus large
+   qui detache le filet du fond. */
+img[src*="title-line"] {
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.85))
+          drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55))
+          contrast(1.15) brightness(1.12);
+}
