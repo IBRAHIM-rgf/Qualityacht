@@ -147,8 +147,11 @@ export default function YachtCardV2({ yacht, accentColor }) {
       <div className="space-y-3 px-4 pb-4 flex-1 flex flex-col">
         {/* Title and Price */}
         <div>
+          {/* Le flex n'avait qu'un seul enfant texte et empechait le nom de
+              revenir a la ligne : un nom long sortait de la carte. Retire au
+              profit d'un retour a la ligne normal. */}
           {yacht.name && (
-            <h3 className="text-xl font-bold  mb-1 flex items-center gap-2">
+            <h3 className="text-xl font-bold mb-1 leading-snug break-words">
               {yacht.name}
             </h3>
           )}

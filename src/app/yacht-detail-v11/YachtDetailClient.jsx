@@ -236,7 +236,11 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
 
       {/* ══ NOM (à gauche) + FROM juste en dessous ══ */}
       <div className="max-w-6xl mx-auto px-5 md:px-10 pt-6 pb-2 text-left">
-        <h1 className="trajan-regular text-3xl md:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0]">{yacht.name}</h1>
+        {/* leading-[1.15] et break-words : a text-6xl, Tailwind pose une hauteur
+            de ligne de 1, trop juste pour une capitale Trajan — les hampes et
+            les accents se retrouvaient rognes en haut comme en bas. Un nom long
+            ou d'un seul tenant debordait aussi de la largeur. */}
+        <h1 className="trajan-regular text-3xl md:text-6xl uppercase tracking-[0.1em] leading-[1.15] break-words text-[#C0C0C0]">{yacht.name}</h1>
         {price && (
           <p className="trajan-regular text-2xl md:text-3xl text-[#acb0cd] mt-2">
             From {price}<span className="text-sm text-[#acb0cd]/50"> / {heroUnit}</span>
