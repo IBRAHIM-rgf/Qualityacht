@@ -18,6 +18,10 @@ export default function ItemsGrid({
   heroVideoCover = false,
   heroVideo = null,
   heroTriptych = null,
+  // Vitesse de lecture par video du triptyque, ex. [1, 1.5, 1] pour n'accelerer
+  // que celle du milieu. Tableau facultatif, aligne sur heroTriptych ; toute
+  // valeur absente vaut 1, donc le rendu reste identique sans cette prop.
+  heroTriptychRates = null,
   intro = null,
 }) {
   // Reveal-up : meme effet de glissement vers le haut que sur caribbean-v15.
@@ -47,9 +51,25 @@ export default function ItemsGrid({
             'h-[62vh] md:h-[85vh]'
           }`}>
             {heroTriptych ? (
-              heroTriptych.map((src) => (
+              heroTriptych.map((src, i) => (
                 // eslint-disable-next-line jsx-a11y/media-has-caption
-                <video key={src} src={src} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+                <video
+                  key={src}
+                  src={src}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  // playbackRate n'existe pas en attribut HTML : il faut le poser
+                  // sur l'element. On le fait sur loadedmetadata, et non via un
+                  // ref, parce que le navigateur remet la vitesse a 1 au
+                  // chargement de la source — un reglage pose trop tot serait
+                  // perdu. La boucle, elle, conserve la vitesse.
+                  onLoadedMetadata={(e) => {
+                    e.currentTarget.playbackRate = heroTriptychRates?.[i] ?? 1;
+                  }}
+                  className="w-full h-full object-cover"
+                />
               ))
             ) : heroVideo ? (
               // eslint-disable-next-line jsx-a11y/media-has-caption

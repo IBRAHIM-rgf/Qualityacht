@@ -21,6 +21,9 @@ export default function LastMinuteCharter() {
         '/media/quality/beach/last-minute-2.mp4',
         '/media/quality/beach/last-minute-3.mp4',
       ]}
+      // Video du milieu acceleree a 1,5x (demande client) ; les deux autres
+      // gardent leur vitesse normale.
+      heroTriptychRates={[1, 1.5, 1]}
       bgImage="/images/services-bg.png"
       items={lastMinuteItems}
     />
