@@ -37,6 +37,10 @@ export default function SourcingLanding({
   heroImage = null,
   heroAlt = '',
   heroPosition = 'object-center',
+  // heroFrame : cadre standard 1400x800 centre (.qy-hero-frame, globals.css) a la
+  // place du hero plein ecran en vh. Demande client 2026-09-09 pour /sales/sailing
+  // (photo 3:2 trop recadree). Defaut false : les autres pages ne changent pas.
+  heroFrame = false,
   primary,
   secondary,
   axes = [],
@@ -46,7 +50,13 @@ export default function SourcingLanding({
     <main className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO ══ */}
       {heroImage ? (
-        <section className="relative w-full h-[58vh] min-h-[420px] md:h-[72vh] overflow-hidden bg-[#26272a]">
+        <section
+          className={
+            heroFrame
+              ? 'qy-hero-frame bg-[#26272a]'
+              : 'relative w-full h-[58vh] min-h-[420px] md:h-[72vh] overflow-hidden bg-[#26272a]'
+          }
+        >
           <Image
             src={heroImage}
             alt={heroAlt}
