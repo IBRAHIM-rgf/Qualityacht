@@ -4,7 +4,7 @@
 //    (recadree via object-cover) ;
 //  - a la place de description/cocomer/ancienne showcase : introNode = l'ECLAT
 //    (collage de cartes : 4 textes + 4 photos + 2 videos horizontales, sans effet
-//    "tout part du centre") + le 2e bandeau video beach-band (arbre bord de mer).
+//    "tout part du centre"). Le 2e bandeau video a ete retire avec la video de bois flotte.
 import Link from 'next/link';
 import CaribbeanV15Page from './CaribbeanV15Base';
 import CaribbeanV20Eclat from './CaribbeanV20Eclat';

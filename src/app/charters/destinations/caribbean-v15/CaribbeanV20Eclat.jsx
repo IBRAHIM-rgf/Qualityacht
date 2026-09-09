@@ -5,12 +5,11 @@
 // vers l'exterieur (fromCenter par defaut).
 // Contenu : 4 cartes TEXTE (les 4 paragraphes) + 4 PHOTOS (yacht / mer / plage
 // turquoise — PAS de cheval ni carnaval, on est un site de YACHT) + 2 VIDEOS
-// HORIZONTALES (dauphins + drone turquoise). Puis le 2e BANDEAU video beach-band.
+// HORIZONTALES (dauphins + drone turquoise). Le 2e bandeau video a ete retire.
 
 import Link from 'next/link';
 import VibeCard from '@/components/vibe/VibeCard';
 import FloatingScatter from '@/components/vibe/FloatingScatter';
-import { VideoBand } from '@/components/vibe/blocks';
 
 // medias — fichiers dedies, inedits ailleurs sur le site (100% yacht / mer / plage turquoise)
 const photoAerial = { src: '/media/quality/eclat-v15/aerial-coves.jpg', desc: 'Aerial beach club, palms and turquoise shallows' };
@@ -19,7 +18,6 @@ const photoDock = { src: '/media/quality/eclat-v15/hidden-anchorages.jpg', desc:
 const photoYacht = { src: '/media/quality/eclat-v15/sail-away.jpg', desc: 'Tender adrift on crystal-clear water' };
 const vidDolphin = { src: '/media/quality/eclat-v15/dolphins.mp4', poster: '/media/quality/eclat-v15/dolphins.jpg' };
 const vidTurq = { src: '/media/quality/eclat-v15/reef-freedive.mp4', poster: '/media/quality/eclat-v15/reef-freedive.jpg' };
-const treeBand = { src: '/media/quality/eclat-v15/sunset-band.mp4', poster: '/media/quality/eclat-v15/sunset-band.jpg' };
 
 // carte texte (meme allure qu'une carte photo)
 function TextCard({ kicker, children }) {
@@ -109,8 +107,10 @@ export default function CaribbeanV20Eclat() {
         </FloatingScatter>
       </section>
 
-      {/* ══ 2e BANDEAU : beach-band (arbre / bois flotte au coucher de soleil) ══ */}
-      <VideoBand media={treeBand} title="Where The Map Runs Out" sub="Powder-white sands, all to yourself" height="h-[60vh] md:h-[80vh]" />
+      {/* Le 2e bandeau "Where The Map Runs Out" portait la video de bois flotte
+          au coucher de soleil (sunset-band.mp4, meme prise que beach-band.mp4).
+          Supprimee du site a la demande du client, sans remplacement : la
+          section entiere disparait plutot que d'afficher un bandeau vide. */}
     </div>
   );
 }

@@ -298,7 +298,7 @@ function BandeauPhoto({ src, srcOld, position = 'center', full = false, aspect, 
   // position le cadrage.
   // Variante VIDEO : boucle muette, filtre gris au repos -> coloré revele au scroll (meme
   // logique de filtres que les images). Aucune transition entre 2 sources : c'est le filtre
-  // qui change. Utilise sur halal (beach-band.mp4).
+  // qui change. (Etait utilise sur halal ; le bandeau y a ete retire avec la video.)
   if (videoSrc) {
     return (
       <div
@@ -606,7 +606,7 @@ export default function CaribbeanV15Page({
   // Defaut true = aucune regression sur les autres pages basees sur la v15.
   showCocomer = true,
   // cocomerAspect : ratio du bandeau cocomer (mode full). Defaut = ratio de l'ancienne
-  // photo. halal le surcharge au ratio de beach-band pour ne pas zoomer/rogner.
+  // photo. Une page peut le surcharger au ratio de sa propre video.
   cocomerAspect = '864 / 1184',
   // cocomerSrc/cocomerSrcOld : image du bandeau cocomer (repos / revelee). Defaut = les 2
   // fichiers cocomer. cocomerFilter/cocomerFilterOld : filtres CSS repos/revele -> quand la
@@ -616,7 +616,8 @@ export default function CaribbeanV15Page({
   cocomerFilter = '',
   cocomerFilterOld = '',
   cocomerContain = false,
-  // cocomerVideo : si fourni, le bandeau cocomer devient une VIDEO (cf. halal : beach-band.mp4).
+  // cocomerVideo : si fourni, le bandeau cocomer devient une VIDEO. Plus aucun
+  // repli par defaut depuis le retrait de la video de bois flotte.
   cocomerVideo = null,
   // showShowcase=true remplace le bandeau cocomer par la section "cartes flottantes"
   // (reproduction de l'animation alethia.earth ; cf. CaribbeanShowcase). Defaut false
@@ -854,7 +855,10 @@ export default function CaribbeanV15Page({
             filterCls={cocomerFilter}
             filterClsOld={cocomerFilterOld}
             contain={cocomerContain}
-            videoSrc={cocomerSrc ? cocomerVideo : (cocomerVideo || '/media/quality/beach/beach-band.mp4')}
+            // Plus de repli sur beach-band.mp4 : la video de bois flotte au
+            // coucher de soleil est supprimee du site, et rien ne la remplace.
+            // Une page voulant une video ici doit la fournir via cocomerVideo.
+            videoSrc={cocomerVideo}
           />
         ) : null}
 
