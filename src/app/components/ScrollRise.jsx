@@ -34,9 +34,17 @@ const SKIP_CLOSEST = '[data-no-rise], .reveal, .reveal-up';
 // DROITE par un balayage (clip-path), et non plus en montant d'en bas. clip-path ne
 // deborde JAMAIS la boite -> aucun risque de scrollbar horizontale, contrairement a un
 // translateX. Le petit fondu adoucit le bord du balayage.
+// Les marges NEGATIVES sont essentielles, pas cosmetiques. inset(0 0 0 0) ne
+// signifie pas "aucune decoupe" : c'est une decoupe pile sur la boite de
+// l'element. Or les capitales Trajan debordent de leur boite par le haut, et
+// l'animation tranchait donc le sommet des lettres sur TOUS les titres du site
+// — signale par le client sur les noms de yachts, "tronques sur le haut".
+// En elargissant la zone de decoupe au-dela de la boite, plus rien n'est rogne,
+// tandis que le balayage de gauche a droite reste identique : seul l'inset de
+// DROITE passe de 100% a sa valeur finale.
 const KEYFRAMES = [
-  { opacity: 0, clipPath: 'inset(0 100% 0 0)' },
-  { opacity: 1, clipPath: 'inset(0 0 0 0)' },
+  { opacity: 0, clipPath: 'inset(-30% 100% -30% -10%)' },
+  { opacity: 1, clipPath: 'inset(-30% -10% -30% -10%)' },
 ];
 const TIMING = { duration: 1600, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' };
 

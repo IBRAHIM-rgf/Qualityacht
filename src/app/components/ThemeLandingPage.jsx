@@ -14,7 +14,11 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
   // heroGradientSoft : degrade plus leger (photo deja sombre au premier plan, cf.
   // /historic-sites : arche du Taj Mahal). Defaut = degrade d'origine partout ailleurs.
   const heroGradient = (
-    <div className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${heroGradientSoft ? 'from-[#26272a]/70 via-[#26272a]/20 to-transparent' : 'from-[#26272a] via-[#26272a]/45 to-[#26272a]/10'}`} />
+    // Le degrade couvre TOUTE la hauteur et finit a to-transparent. Avant, il
+    // etait en h-1/2 colle en bas et s'arretait a /10 : a mi-hauteur, l'opacite
+    // sautait de 10% a zero d'un coup, ce qui tracait une ligne horizontale
+    // visible en travers de la photo (signale par le client sur /events).
+    <div className={`absolute inset-0 bg-gradient-to-t ${heroGradientSoft ? 'from-[#26272a]/70 via-[#26272a]/20 to-transparent' : 'from-[#26272a] via-[#26272a]/45 to-transparent'}`} />
   );
   const heroOverlay = (
     <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-4 md:pb-6">

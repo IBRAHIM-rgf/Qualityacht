@@ -59,7 +59,7 @@ export default function SplitPanels({ panels }) {
                 <div
                   className={`absolute inset-0 transition-opacity duration-700 ${
                     isActive ? 'opacity-100' : 'opacity-100'
-                  } bg-gradient-to-t from-[#26272a] via-[#26272a]/55 to-[#26272a]/15`}
+                  } bg-gradient-to-t from-[#26272a] via-[#26272a]/55 to-transparent`}
                 />
                 <div
                   className={`absolute inset-0 bg-[#26272a] transition-opacity duration-700 ${
