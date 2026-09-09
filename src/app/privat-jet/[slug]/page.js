@@ -99,34 +99,35 @@ export default function PrivatJetDestinationPage({ params }) {
       `}</style>
 
       {/* ══ HERO image région + texte qui monte ══ */}
-      {/* Pleine page : w-full h-auto → image prend toute la largeur, hauteur naturelle.
-          Une fois la photo paysage dediee fournie via heroImage dans data.js,
-          le rendu sera identique a /privat-jet (Private_jet_desktop.png). */}
+      {/* Format 7:4 .qy-hero-frame (globals.css), reference des heros du site.
+          Auparavant l'image etait posee en w-full h-auto : elle etait donc
+          AGRANDIE au-dela de sa taille native des que la fenetre depassait sa
+          largeur (une photo 1400px etiree a 2560px perd en nettete), et la
+          hauteur de la bande dependait du ratio de chaque fichier — d'ou les
+          titres colles en bas sur les photos courtes (Bahamas, Eastern
+          Mediterranean, South East Asia).
+          Le cadre 7:4 donne la meme hauteur a toutes les destinations et
+          affiche les photos, decoupees en 1400x800, a leur taille reelle.
+          heroObjectPosition reste disponible pour recadrer au cas par cas. */}
       <div className="relative z-20 w-full pt-[70px] md:pt-0 bg-[#26272a]">
-        <div className={`relative w-full ${dest.heroCropClass || ''}`}>
-          {dest.heroCropClass ? (
-            <Image
-              src={dest.heroImage || dest.image}
-              alt={dest.name}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-              style={dest.heroObjectPosition ? { objectPosition: dest.heroObjectPosition } : undefined}
-            />
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={dest.heroImage || dest.image}
-              alt={dest.name}
-              className="block w-full h-auto"
-            />
-          )}
+        <div className="qy-hero-frame">
+          <Image
+            src={dest.heroImage || dest.image}
+            alt={dest.name}
+            fill
+            priority
+            sizes="(max-width: 1400px) 100vw, 1400px"
+            className="qy-hero-zoom object-cover"
+            style={dest.heroObjectPosition ? { objectPosition: dest.heroObjectPosition } : undefined}
+          />
           {/* Dégradé bas pour lisibilité du texte */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
 
-          {/* Texte qui monte sur la photo */}
-          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-4 md:pb-10">
+          {/* Texte qui monte sur la photo. Marge basse augmentee (4->8 mobile,
+              10->16 desktop) : le client trouvait le titre colle au bord sur
+              Bahamas et Eastern Mediterranean. Le cadre 7:4 ayant desormais la
+              meme hauteur partout, ce reglage vaut pour les 16 destinations. */}
+          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-8 md:pb-16">
             {/* Sur-titre "Private Jets" : retire une premiere fois (illisible en
                 #c2622a fin et petit sur les toits orange et le sable des photos),
                 puis RETABLI a la demande du client, plus grand et en gras.
