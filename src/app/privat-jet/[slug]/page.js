@@ -123,11 +123,11 @@ export default function PrivatJetDestinationPage({ params }) {
           {/* Dégradé bas pour lisibilité du texte */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
 
-          {/* Texte qui monte sur la photo. Marge basse augmentee (4->8 mobile,
-              10->16 desktop) : le client trouvait le titre colle au bord sur
-              Bahamas et Eastern Mediterranean. Le cadre 7:4 ayant desormais la
-              meme hauteur partout, ce reglage vaut pour les 16 destinations. */}
-          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-8 md:pb-16">
+          {/* Texte qui monte sur la photo. La marge basse par defaut reste celle
+              d'origine ; les destinations dont le client a demande le titre PLUS
+              HAUT (Bahamas, Eastern Mediterranean) surchargent via
+              heroTitleClass dans data.js — reglage par destination, pas global. */}
+          <div className={`absolute inset-x-0 bottom-0 flex flex-col items-center px-4 ${dest.heroTitleClass || 'pb-4 md:pb-10'}`}>
             {/* Sur-titre "Private Jets" : retire une premiere fois (illisible en
                 #c2622a fin et petit sur les toits orange et le sable des photos),
                 puis RETABLI a la demande du client, plus grand et en gras.

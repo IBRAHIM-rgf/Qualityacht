@@ -46,10 +46,10 @@ const comingSoon = [{ island: 'Coming Soon', airports: ['Information coming soon
 // Si heroImage est absent (null), la photo de la card sert de fallback (rendu portrait haut).
 export const destinations = [
   { slug: 'arctic',                 name: 'Arctic',                  image: '/images/private_jet/private_arctic.jpeg',                 heroImage: '/images/private_jet/hero/hero_arctic-v2.jpg',                groups: comingSoon },
-  { slug: 'bahamas',                name: 'Bahamas',                 image: '/images/private_jet/private_bahamas.jpeg',                heroImage: '/images/private_jet/hero/hero_bahamas.png',               groups: comingSoon },
+  { slug: 'bahamas',                name: 'Bahamas',                 image: '/images/private_jet/private_bahamas.jpeg',                heroImage: '/images/private_jet/hero/hero_bahamas.png', heroTitleClass: 'pb-16 md:pb-32',               groups: comingSoon },
   { slug: 'central-america',        name: 'Central America',         image: '/images/private_jet/private_central-america.jpeg',        heroImage: '/images/private_jet/hero/hero_central-america-v2.jpg',       groups: comingSoon },
   { slug: 'east-asia',              name: 'East Asia',               image: '/images/private_jet/private_east-asia.jpeg',              heroImage: '/images/private_jet/hero/hero_east-asia-v2.jpg',             groups: comingSoon },
-  { slug: 'eastern-mediterranean',  name: 'Eastern Mediterranean',   image: '/images/private_jet/private_eastern-mediterranean.jpeg', heroImage: '/images/private_jet/hero/hero_eastern-mediterranean.jpg', groups: comingSoon },
+  { slug: 'eastern-mediterranean',  name: 'Eastern Mediterranean',   image: '/images/private_jet/private_eastern-mediterranean.jpeg', heroImage: '/images/private_jet/hero/hero_eastern-mediterranean.jpg', heroTitleClass: 'pb-16 md:pb-32', groups: comingSoon },
   { slug: 'indian-ocean',           name: 'Indian Ocean',            image: '/images/private_jet/private_indian-ocean.jpeg',           heroImage: '/images/private_jet/hero/hero_indian-ocean-v2.jpg',          groups: comingSoon },
   { slug: 'indonesia',              name: 'Indonesia',               image: '/images/private_jet/private_indonesia.jpeg',              heroImage: '/images/private_jet/hero/hero_indonesia.jpeg',            groups: comingSoon },
   { slug: 'north-america',          name: 'North America',           image: '/images/private_jet/private_nordamerica.jpeg',            heroImage: '/images/private_jet/hero/hero_north-america-v2.png',         groups: comingSoon },
