@@ -6,6 +6,42 @@ import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import YachtList from '@/components/YachtList';
 import YachtFilters from '@/components/YachtFilters';
+import Link from 'next/link';
+import { readCart, subscribeCart } from '@/lib/quoteCart';
+
+// ── Boutons de parcours (demande client 2026-09-10) ──
+// « Return to the Islands » : retour a la section Explore Caribbean Islands.
+// « Proceed to Confirmation — N Yachts Selected » : compteur = selection partagee
+// (lib/quoteCart, alimentee par les coeurs des cartes) ; desactive si vide.
+const ISLANDS_HREF = '/charters/destinations/caribbean-v15#explore-caribbean-islands';
+const CONFIRM_HREF = '/request-quote';
+
+const FOCUS =
+  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
+const BTN_BASE =
+  'inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center text-center px-6 py-2.5 rounded-full border ' +
+  'text-[12px] font-semibold uppercase tracking-[0.16em] transition-[border-color,box-shadow,opacity] duration-300 ' + FOCUS;
+const BTN_ARGENT =
+  BTN_BASE + ' border-[#C0C0C0] bg-[#26272a]/60 backdrop-blur-sm text-[#C0C0C0] hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)]';
+const BTN_CUIVRE =
+  BTN_BASE + ' border-[#C0C0C0] bg-[#26272a] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)]';
+const BTN_OFF =
+  BTN_BASE + ' border-[#C0C0C0]/30 bg-[#26272a]/60 text-[#8b90a0] cursor-not-allowed';
+
+function ProceedButton({ count }) {
+  if (count < 1) {
+    return (
+      <span role="button" aria-disabled="true" className={BTN_OFF}>
+        Select at Least One Yacht to Continue
+      </span>
+    );
+  }
+  return (
+    <Link href={CONFIRM_HREF} className={BTN_CUIVRE}>
+      Proceed to Confirmation &mdash; {count} Yacht{count > 1 ? 's' : ''} Selected
+    </Link>
+  );
+}
 
 const YACHTS_PER_PAGE = 40;
 
@@ -13,6 +49,13 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Nombre de yachts selectionnes (selection partagee, synchronisee entre onglets).
+  const [selectedCount, setSelectedCount] = useState(0);
+  useEffect(() => {
+    setSelectedCount(readCart().length);
+    return subscribeCart((list) => setSelectedCount(list.length));
+  }, []);
 
   const [filters, setFilters] = useState(() => ({
     ...initialFilters,
@@ -181,10 +224,16 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl md:text-4xl font-bold text-[#C0C0C0] mb-2 text-center">Our Yacht Fleet</h1>
-          <p className="text-gray-300">
-            {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
-            {totalYachts && totalYachts > filteredYachts.length && ` (${totalYachts} total)`}
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p className="text-gray-300">
+              {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
+              {totalYachts && totalYachts > filteredYachts.length && ` (${totalYachts} total)`}
+            </p>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <Link href={ISLANDS_HREF} className={BTN_ARGENT}>Return to the Islands</Link>
+              <ProceedButton count={selectedCount} />
+            </div>
+          </div>
         </div>
 
         {/* Filters (horizontal, sticky) */}
@@ -264,6 +313,13 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
             </>
           )}
         </main>
+
+        {/* Bouton de confirmation repete en bas de la liste, aligne a droite */}
+        {filteredYachts.length > 0 && (
+          <div className="mt-8 flex justify-end">
+            <ProceedButton count={selectedCount} />
+          </div>
+        )}
       </div>
     </div>
   );
