@@ -116,11 +116,26 @@ async function fetchYachtsFromAnkor(filters, token) {
     params.set('priceMax', (Number(filters.priceMax) * 100).toString());
   }
 
-  const url = `${ANKOR_API_BASE_URL}/website/search?${params.toString()}`;
+  // Sans aucun filtre, `website/search` ne renvoie que 50 yachts (plafond par
+  // defaut de l'API, constate le 2026-09-10 : estHits = 50 alors que le compte
+  // en donne ~1 950). Avec un filtre, l'API renvoie la liste COMPLETE (pas de
+  // pagination : region=Caribbean → 165/165, minLength=1 → 1 671/1 671). Pour
+  // « tous les yachts », on interroge donc plusieurs filtres larges en parallele
+  // et on fusionne les resultats (dedoublonnes par uri).
+  if (params.toString() === '') {
+    const larges = ['minLength=1', 'sleeps=1', ...Object.values(TYPE_MAP).map(t => `yachtType=${encodeURIComponent(t)}`)];
+    const results = await Promise.all(larges.map(q => fetchAnkorSearchRaw(`${ANKOR_API_BASE_URL}/website/search?${q}`, token, `yachts-${q}`)));
+    const vus = new Map();
+    for (const r of results) for (const h of (r.hits || [])) if (h && h.uri && !vus.has(h.uri)) vus.set(h.uri, h);
+    const hits = [...vus.values()];
+    return { hits, estHits: hits.length };
+  }
 
+  return fetchAnkorSearchRaw(`${ANKOR_API_BASE_URL}/website/search?${params.toString()}`, token, `yachts-${params.toString()}`);
+}
+
+async function fetchAnkorSearchRaw(url, token, cacheKey) {
   try {
-    const cacheKey = `yachts-${params.toString() || 'all'}`;
-
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -352,7 +367,7 @@ export async function fetchYachtsForDestination(destination, onlyIds = null) {
  * Fonction pour récupérer les yachts avec filtres personnalisés
  * Utilisée par la page /yachts
  */
-export async function fetchYachtsWithFilters(filters, onlyIds = null) {
+export async function fetchYachtsWithFilters(filters, onlyIds = null, options = {}) {
   try {
     const token = await fetchAnkorBearerToken();
 
@@ -369,7 +384,13 @@ export async function fetchYachtsWithFilters(filters, onlyIds = null) {
       };
     }
 
-    const vesselDetails = await fetchVesselDetailsBatch(vesselSummaries, token, 20);
+    // summaryOnly : pas d'appel detail par yacht (recherche admin sur ~1 900
+    // yachts). Les cartes sont construites depuis le resume Ankor (nom, photo,
+    // longueur, invites, cabines, annee, chantier) ; le detail est charge au
+    // moment de l'ajout (fetchYachtCardByUri).
+    const vesselDetails = options.summaryOnly
+      ? vesselSummaries.map(() => null)
+      : await fetchVesselDetailsBatch(vesselSummaries, token, 20);
 
     const yachts = vesselSummaries.map((vessel, index) =>
       mapVesselSummaryToYachtCard(vessel, vesselDetails[index], filters)
@@ -389,6 +410,17 @@ export async function fetchYachtsWithFilters(filters, onlyIds = null) {
       totalYachts: 0,
     };
   }
+}
+
+/**
+ * Carte complete (resume + detail Ankor) d'un seul yacht, par uri.
+ * Utilise par l'ajout depuis la recherche admin (qui ne manipule que des resumes).
+ */
+export async function fetchYachtCardByUri(uri, summary = null) {
+  const token = await fetchAnkorBearerToken();
+  const details = await fetchVesselDetails(uri, token);
+  const vessel = summary || { uri, name: details?.blueprint?.name };
+  return mapVesselSummaryToYachtCard(vessel, details, {});
 }
 
 /**
