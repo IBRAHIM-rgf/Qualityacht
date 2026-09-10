@@ -92,11 +92,18 @@ export async function addYachtToSelection(data) {
     ankor_region = null,
     region = null,
     sub_region = null,
+    regions = null,
+    sub_regions = null,
     pets_allowed = false,
     groups_allowed = false,
     water_toys = false,
     extra_info = null,
   } = data;
+  // Listes multi : si non fournies, derivees de la valeur unique.
+  const regionsList = Array.isArray(regions) ? regions : (region ? [region] : []);
+  const subRegionsList = Array.isArray(sub_regions) ? sub_regions : (sub_region ? [sub_region] : []);
+  const primaryRegion = region || regionsList[0] || null;
+  const primarySubRegion = sub_region || subRegionsList[0] || null;
 
   try {
     const countResult = await sql`SELECT COUNT(*) as count FROM yacht_selections`;
@@ -106,14 +113,15 @@ export async function addYachtToSelection(data) {
       INSERT INTO yacht_selections (
         yacht_id, yacht_name, is_visible, is_featured, display_order,
         cached_data, light_data, cached_at, ankor_region,
-        region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info
+        region, sub_region, regions, sub_regions, pets_allowed, groups_allowed, water_toys, extra_info
       )
       VALUES (
         ${yacht_id}, ${yacht_name}, true, false, ${nextOrder},
         ${cached_data ? JSON.stringify(cached_data) : null},
         ${light_data ? JSON.stringify(light_data) : null},
         NOW(), ${ankor_region},
-        ${region}, ${sub_region}, ${pets_allowed}, ${groups_allowed}, ${water_toys}, ${extra_info}
+        ${primaryRegion}, ${primarySubRegion}, ${JSON.stringify(regionsList)}::jsonb, ${JSON.stringify(subRegionsList)}::jsonb,
+        ${pets_allowed}, ${groups_allowed}, ${water_toys}, ${extra_info}
       )
       ON CONFLICT (yacht_id) DO NOTHING
       RETURNING *
@@ -144,11 +152,19 @@ export async function updateYachtEnrichedData(yacht_id, data) {
     tags = null,
     region = null,
     sub_region = null,
+    regions = null,
+    sub_regions = null,
     pets_allowed = null,
     groups_allowed = null,
     water_toys = null,
     extra_info = null,
   } = data;
+  // Multi-selection : quand les listes sont fournies, la valeur unique suit le premier choix
+  // (chaine vide = « aucune », qui vide aussi la colonne unique).
+  const hasRegions = Array.isArray(regions);
+  const hasSubRegions = Array.isArray(sub_regions);
+  const regionValue = hasRegions ? (regions[0] || '') : region;
+  const subRegionValue = hasSubRegions ? (sub_regions[0] || '') : sub_region;
 
   try {
     const rows = await sql`
@@ -165,8 +181,10 @@ export async function updateYachtEnrichedData(yacht_id, data) {
         categories = COALESCE(${categories === null || categories === undefined ? null : JSON.stringify(categories)}::jsonb, categories),
         handicaps = COALESCE(${handicaps === null || handicaps === undefined ? null : JSON.stringify(handicaps)}::jsonb, handicaps),
         tags = COALESCE(${tags}, tags),
-        region = COALESCE(${region}, region),
-        sub_region = COALESCE(${sub_region}, sub_region),
+        region = NULLIF(COALESCE(${regionValue}, region), ''),
+        sub_region = NULLIF(COALESCE(${subRegionValue}, sub_region), ''),
+        regions = COALESCE(${hasRegions ? JSON.stringify(regions) : null}::jsonb, regions),
+        sub_regions = COALESCE(${hasSubRegions ? JSON.stringify(sub_regions) : null}::jsonb, sub_regions),
         pets_allowed = COALESCE(${pets_allowed}, pets_allowed),
         groups_allowed = COALESCE(${groups_allowed}, groups_allowed),
         water_toys = COALESCE(${water_toys}, water_toys),
@@ -485,6 +503,10 @@ export async function ensureV3Schema() {
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS categories JSONB DEFAULT '[]'::jsonb`;
   // Handicaps accommodés par le yacht (multi-sélection) : tableau JSONB d'ids (voir src/lib/handicaps.js).
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS handicaps JSONB DEFAULT '[]'::jsonb`;
+  // Multi-selection des regions / sous-regions ou le yacht apparait (client 2026-09-10).
+  // `region` / `sub_region` (valeur unique) sont conserves = premier choix, pour compatibilite.
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS regions JSONB DEFAULT '[]'::jsonb`;
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS sub_regions JSONB DEFAULT '[]'::jsonb`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_ankor_region ON yacht_selections(ankor_region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_region ON yacht_selections(region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_sub_region ON yacht_selections(sub_region)`;

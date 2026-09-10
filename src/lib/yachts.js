@@ -14,6 +14,24 @@ import { getVisibleYachtIds, getFeaturedYachtIds, getYachtSelections } from '@/l
 //  B. les listes publiques finales sont mises en cache 1 h (tag YACHTS_CACHE_TAG),
 //     invalidees par l'admin a chaque modification de selection (lib/db.js).
 export const YACHTS_CACHE_TAG = 'yachts-visible';
+
+// Regions / sous-regions d'une selection : listes multi (colonnes regions / sub_regions)
+// avec repli sur la valeur unique (region / sub_region) pour les anciennes lignes.
+function parseList(raw) {
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw === 'string') { try { const v = JSON.parse(raw); return Array.isArray(v) ? v : []; } catch { return []; } }
+  return [];
+}
+export function selectionRegions(s) {
+  const list = parseList(s.regions);
+  if (list.length) return list;
+  return s.region ? [s.region] : [];
+}
+export function selectionSubRegions(s) {
+  const list = parseList(s.sub_regions);
+  if (list.length) return list;
+  return s.sub_region ? [s.sub_region] : [];
+}
 const YACHTS_CACHE_SECONDS = 3600;
 
 const ANKOR_API_BASE_URL = "https://api.ankor.io";
@@ -525,9 +543,9 @@ async function fetchVisibleYachtsForSubRegionUncached(region, subRegion) {
     // subRegion null → pas de filtre sous-région (utile pour pages meta-region type Bahamas).
     // subRegion fourni → filtre supplémentaire sur sub_region exact.
     const matchingSelections = selections.filter(s => {
-      if (!s.is_visible || s.region !== region) return false;
+      if (!s.is_visible || !selectionRegions(s).includes(region)) return false;
       if (subRegion === null || subRegion === undefined) return true;
-      return s.sub_region === subRegion;
+      return selectionSubRegions(s).includes(subRegion);
     });
 
     // Aucun yacht taggé → fallback : tous les yachts visibles de la région
@@ -623,7 +641,7 @@ async function fetchVisibleYachtsForDestinationUncached(destination) {
     //    apparaissent quand même côté public.
     const ankorIds = new Set(allYachts.map(y => y.id));
     const overrides = selections
-      .filter(s => s.is_visible && s.region === destination && !ankorIds.has(s.yacht_id))
+      .filter(s => s.is_visible && selectionRegions(s).includes(destination) && !ankorIds.has(s.yacht_id))
       .map(s => ({
         ...yachtFromSelection(s),
         isFeatured: featuredIds.has(s.yacht_id),
