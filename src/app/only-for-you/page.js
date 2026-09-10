@@ -80,7 +80,13 @@ export default function SailingRentalPage() {
           Le H1 de la page vient s'y poser : il reste le SEUL de la page. Le
           cadrage mobile est decale vers la gauche pour garder le catamaran et
           ses passagers dans le cadre malgre le format vertical. */}
-      <section className="relative w-full h-[62vh] min-h-[420px] md:h-[74vh] overflow-hidden bg-[#26272a]">
+      {/* Option 2 (client 2026-09-10) : le fond nuages de la section suivante passe
+          SOUS le hero, pour que la photo s'y fonde sans ligne, comme sur /sales/motor. */}
+      <div
+        className="bg-[#26272a] bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/images/services-bg.png')" }}
+      >
+      <section className="relative w-full h-[62vh] min-h-[420px] md:h-[74vh] overflow-hidden">
         {/* Meme degrade que le hero de /sales/motor (client 2026-09-10) : le masque
             fait disparaitre la photo vers le bas dans le fond de page, le voile
             sombre leger sert uniquement a la lisibilite du titre. */}
@@ -123,10 +129,7 @@ export default function SailingRentalPage() {
         </div>
       </section>
 
-    <section
-      className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat py-24 px-4"
-      style={{ backgroundImage: "url('/images/services-bg.png')" }}
-    >
+    <section className="relative min-h-screen flex flex-col items-center justify-center py-24 px-4">
 
       <p className="max-w-3xl mx-auto text-base md:text-lg text-[#acb0cd] leading-relaxed text-center font-normal normal-case mb-12 px-2">
         Only For You is more than a sailboat charter service&mdash;it&rsquo;s your gateway
@@ -146,6 +149,7 @@ export default function SailingRentalPage() {
         © {new Date().getFullYear()} Qualityacht. All rights reserved.
       </div>
     </section>
+      </div>
     </main>
   );
 }
