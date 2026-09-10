@@ -124,6 +124,9 @@ function adaptYacht(s) {
     cabins: light.cabins || cached.cabins,
     region: s.region,
     sub_region: s.sub_region,
+    // Multi-selection (client 2026-09-10) : listes, repli sur la valeur unique.
+    regions: parseCategories(s.regions).length ? parseCategories(s.regions) : (s.region ? [s.region] : []),
+    sub_regions: parseCategories(s.sub_regions).length ? parseCategories(s.sub_regions) : (s.sub_region ? [s.sub_region] : []),
     ankor_region: s.ankor_region,
     is_visible: s.is_visible !== false,
     is_featured: s.is_featured === true,
@@ -152,9 +155,9 @@ function Dashboard({ yachts }) {
     const bySubRegion = {};
     const byCategory = {};
     for (const y of yachts) {
-      const r = y.region || '_none';
+      const r = (y.regions && y.regions[0]) || y.region || '_none';
       byRegion[r] = (byRegion[r] || 0) + 1;
-      if (y.sub_region) bySubRegion[y.sub_region] = (bySubRegion[y.sub_region] || 0) + 1;
+      for (const sr of (y.sub_regions && y.sub_regions.length ? y.sub_regions : (y.sub_region ? [y.sub_region] : []))) bySubRegion[sr] = (bySubRegion[sr] || 0) + 1;
       for (const c of (y.categories || [])) byCategory[c] = (byCategory[c] || 0) + 1;
     }
     return { total, visible, hidden, featured, byRegion, bySubRegion, byCategory };
@@ -349,18 +352,65 @@ function slugify(s) {
     .replace(/(^-|-$)/g, '');
 }
 
+// ── Cases a cocher Regions / Sous-regions (multi-selection) ──
+// Le yacht apparait sur chaque region et sous-region cochee. Les sous-regions
+// n'apparaissent que sous une region cochee qui en possede (Caraibes, Bahamas).
+function RegionCheckboxes({ regions, subRegions, onChange }) {
+  const toggleRegion = (id) => {
+    const on = regions.includes(id);
+    const nextRegions = on ? regions.filter((r) => r !== id) : [...regions, id];
+    // Region decochee → ses sous-regions sont decochees aussi.
+    const subsOfRegion = SUB_REGIONS_BY_REGION[id] || [];
+    const nextSubs = on ? subRegions.filter((sr) => !subsOfRegion.includes(sr)) : subRegions;
+    onChange(nextRegions, nextSubs);
+  };
+  const toggleSub = (id) => {
+    onChange(regions, subRegions.includes(id) ? subRegions.filter((sr) => sr !== id) : [...subRegions, id]);
+  };
+  return (
+    <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+        {Object.entries(REGION_LABELS).map(([id, label]) => {
+          const on = regions.includes(id);
+          const subs = SUB_REGIONS_BY_REGION[id] || [];
+          return (
+            <div key={id} className={subs.length && on ? 'sm:col-span-2' : ''}>
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <input type="checkbox" checked={on} onChange={() => toggleRegion(id)} className="w-4 h-4 accent-[#B03E00]" />
+                <span className={on ? 'text-[#B03E00] font-medium' : 'text-[#acb0cd]'}>{label}</span>
+              </label>
+              {on && subs.length > 0 && (
+                <div className="mt-1.5 mb-1 ml-6 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                  {subs.map((sid) => {
+                    const son = subRegions.includes(sid);
+                    return (
+                      <label key={sid} className="flex items-center gap-2 text-xs cursor-pointer">
+                        <input type="checkbox" checked={son} onChange={() => toggleSub(sid)} className="w-3.5 h-3.5 accent-[#B03E00]" />
+                        <span className={son ? 'text-[#B03E00]' : 'text-[#acb0cd]/80'}>{SUB_REGION_LABELS[sid] || sid}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function ManualAddTab({ onAdd }) {
   const emptyForm = {
     name: '', type: '', make: '', year: '', refit: '', location: '',
     length: '', guests: '', cabins: '', crew: '', price: '',
-    description: '', images: '', region: '', sub_region: '',
+    description: '', images: '', regions: [], sub_regions: [],
     categories: [], handicaps: [],
     pets_allowed: false, groups_allowed: false, water_toys: false,
     extra_info: '', internal_notes: '',
   };
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
-  const availableSubRegions = SUB_REGIONS_BY_REGION[form.region] || [];
 
   const hasCategory = (id) => form.categories.includes(id);
   const toggleCategory = (id) => setForm((f) => ({
@@ -402,8 +452,10 @@ function ManualAddTab({ onAdd }) {
         crew: form.crew ? Number(form.crew) : null,
         price: form.price.trim() || null,
         description: form.description.trim() || null,
-        region: form.region || null,
-        sub_region: form.sub_region || null,
+        region: form.regions[0] || null,
+        sub_region: form.sub_regions[0] || null,
+        regions: form.regions,
+        sub_regions: form.sub_regions,
         categories: form.categories,
         handicaps: form.handicaps,
         pets_allowed: form.pets_allowed,
@@ -507,26 +559,11 @@ function ManualAddTab({ onAdd }) {
           </div>
         </div>
 
-        {/* Région */}
-        <div className="grid sm:grid-cols-2 gap-3 mt-3 pt-3 border-t border-[#C0C0C0]/10">
-          <div>
-            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Région</label>
-            <select value={form.region} onChange={e => setForm({ ...form, region: e.target.value, sub_region: '' })}
-              className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd]">
-              <option value="">— Aucune —</option>
-              {Object.entries(REGION_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-            </select>
-          </div>
-          {availableSubRegions.length > 0 && (
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Sous-région</label>
-              <select value={form.sub_region} onChange={e => setForm({ ...form, sub_region: e.target.value })}
-                className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd]">
-                <option value="">— Aucune —</option>
-                {availableSubRegions.map(s => <option key={s} value={s}>{SUB_REGION_LABELS[s] || s}</option>)}
-              </select>
-            </div>
-          )}
+        {/* Régions / sous-régions (multi-sélection) */}
+        <div className="mt-3 pt-3 border-t border-[#C0C0C0]/10">
+          <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Régions et sous-régions</label>
+          <RegionCheckboxes regions={form.regions} subRegions={form.sub_regions}
+            onChange={(regions, sub_regions) => setForm((f) => ({ ...f, regions, sub_regions }))} />
         </div>
 
         {/* Description + photos */}
@@ -663,14 +700,14 @@ function BddCatalogueTab({ yachts, onToggleVisible, onToggleFeatured, onDelete, 
   const [search, setSearch] = useState('');
 
   const filtered = useMemo(() => yachts.filter(y => {
-    if (filterRegion && y.region !== filterRegion) return false;
+    if (filterRegion && !(y.regions || []).includes(filterRegion) && y.region !== filterRegion) return false;
     if (filterVisibility === 'visible' && !y.is_visible) return false;
     if (filterVisibility === 'hidden' && y.is_visible) return false;
     if (search && !(y.name || '').toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   }), [yachts, filterRegion, filterVisibility, search]);
 
-  const allRegions = useMemo(() => [...new Set(yachts.map(y => y.region).filter(Boolean))].sort(), [yachts]);
+  const allRegions = useMemo(() => [...new Set(yachts.flatMap(y => (y.regions && y.regions.length ? y.regions : [y.region])).filter(Boolean))].sort(), [yachts]);
 
   return (
     <div>
@@ -722,8 +759,8 @@ function BddCatalogueTab({ yachts, onToggleVisible, onToggleFeatured, onDelete, 
                 {y.length && <span>{y.length}</span>}
                 {y.guests && <span>{y.guests} guests</span>}
                 {y.cabins && <span>{y.cabins} cabines</span>}
-                {y.region && <span className="text-[#B03E00]">{REGION_LABELS[y.region] || y.region}</span>}
-                {y.sub_region && <span className="text-[#B03E00]/70">› {SUB_REGION_LABELS[y.sub_region] || y.sub_region}</span>}
+                {(y.regions || []).length > 0 && <span className="text-[#B03E00]">{y.regions.map(r => REGION_LABELS[r] || r).join(', ')}</span>}
+                {(y.sub_regions || []).length > 0 && <span className="text-[#B03E00]/70">› {y.sub_regions.map(sr => SUB_REGION_LABELS[sr] || sr).join(', ')}</span>}
               </div>
             </div>
 
@@ -804,7 +841,7 @@ function VisibleEditTab({ yachts, onEdit }) {
               <div className="flex flex-wrap gap-2 text-xs text-[#acb0cd]/70 mt-1">
                 {y.length && <span>{y.length}</span>}
                 {y.guests && <span>{y.guests} guests</span>}
-                {y.region && <span>{REGION_LABELS[y.region] || y.region}</span>}
+                {(y.regions || []).length > 0 && <span>{y.regions.map(r => REGION_LABELS[r] || r).join(', ')}</span>}
               </div>
               {y.custom_price && <p className="text-[#B03E00] font-bold text-sm mt-1">{y.custom_price}</p>}
             </div>
@@ -824,8 +861,8 @@ function EditModal({ yacht, onClose, onSave }) {
     custom_title: yacht.custom_title || '',
     custom_description: yacht.custom_description || '',
     custom_price: yacht.custom_price || '',
-    region: yacht.region || '',
-    sub_region: yacht.sub_region || '',
+    regions: Array.isArray(yacht.regions) ? yacht.regions : (yacht.region ? [yacht.region] : []),
+    sub_regions: Array.isArray(yacht.sub_regions) ? yacht.sub_regions : (yacht.sub_region ? [yacht.sub_region] : []),
     categories: Array.isArray(yacht.categories) ? yacht.categories : [],
     handicaps: Array.isArray(yacht.handicaps) ? yacht.handicaps : [],
     pets_allowed: !!yacht.pets_allowed,
@@ -834,7 +871,6 @@ function EditModal({ yacht, onClose, onSave }) {
     extra_info: yacht.extra_info || '',
   });
   const [saving, setSaving] = useState(false);
-  const availableSubRegions = SUB_REGIONS_BY_REGION[form.region] || [];
 
   const hasCategory = (id) => form.categories.includes(id);
   const toggleCategory = (id) => setForm((f) => ({
@@ -888,25 +924,11 @@ function EditModal({ yacht, onClose, onSave }) {
             <input type="text" value={form.custom_price} onChange={e => setForm({ ...form, custom_price: e.target.value })}
               className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
           </div>
-          <div className="grid sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Région</label>
-              <select value={form.region} onChange={e => setForm({ ...form, region: e.target.value, sub_region: '' })}
-                className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd]">
-                <option value="">— Aucune —</option>
-                {Object.entries(REGION_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-              </select>
-            </div>
-            {availableSubRegions.length > 0 && (
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Sous-région</label>
-                <select value={form.sub_region} onChange={e => setForm({ ...form, sub_region: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd]">
-                  <option value="">— Aucune —</option>
-                  {availableSubRegions.map(s => <option key={s} value={s}>{SUB_REGION_LABELS[s] || s}</option>)}
-                </select>
-              </div>
-            )}
+          {/* Régions / sous-régions : cases à cocher, le yacht apparaît sur chaque zone cochée */}
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Régions et sous-régions</label>
+            <RegionCheckboxes regions={form.regions} subRegions={form.sub_regions}
+              onChange={(regions, sub_regions) => setForm((f) => ({ ...f, regions, sub_regions }))} />
           </div>
           {/* Catégories charter (multi-sélection, indépendant des régions) */}
           <div>
@@ -1165,7 +1187,9 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'enrich', yacht_id: id, ...updates }),
       });
-      setRawYachts(prev => prev.map(s => s.yacht_id === id ? { ...s, ...updates } : s));
+      setRawYachts(prev => prev.map(s => s.yacht_id === id
+        ? { ...s, ...updates, region: (updates.regions && updates.regions[0]) || null, sub_region: (updates.sub_regions && updates.sub_regions[0]) || null }
+        : s));
     } catch (e) { console.error(e); }
   };
 
