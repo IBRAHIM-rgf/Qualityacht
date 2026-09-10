@@ -1,14 +1,32 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
+// Restauration 2026-09-10 : mise en page reprise de request-quote-test-v10
+// (demande client), logique de selection conservee via lib/quoteCart (panier
+// partage avec les coeurs des cartes et le CTA des fiches). Sans faux captcha,
+// sans « Restart yachts ».
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown, X as XIcon, PawPrint, Accessibility, Plus } from 'lucide-react';
+import MonthPicker from '@/components/MonthPicker';
+import JetBookingWidget from '@/components/JetBookingWidget';
 import { readCart, removeFromCart, subscribeCart } from '@/lib/quoteCart';
-import { Calendar, Users, Ship, Plane, ArrowLeft, Check, ChevronDown, Plus } from 'lucide-react';
 
 const STEPS = ['Charter Details', 'Enhancements & Details', 'Thank You!'];
 
-const TITLES = ['', 'Mr', 'Mrs', 'Ms', 'Miss', 'Dr', 'Prof', 'Sir', 'Lady'];
+const TITLES = [
+  '',
+  'Mr', 'Mrs', 'Ms', 'Miss', 'Captain', 'Dr', 'Monsieur', 'Mme',
+  'Ambassador', 'Avv.', 'Baron', 'Baroness', 'Chief', 'Colonel', 'Commander',
+  'Count', 'Countess', 'Crown Prince', 'Dame', 'Dott.', 'Dott.ssa',
+  'Duke', 'Earl', 'Frau', 'HE Dr', 'HE Sheikh', 'HE Sheikha', 'Herr',
+  'HH Prince', 'HH Princess', 'HH Sheikh', 'HH Sheikha',
+  'His Excellency', 'His Highness',
+  'HRH', 'HRH Prince', 'HRH Princess', 'HRH Sheikh', 'HRH Sheikha',
+  'Khun', 'Lady', 'Lord', 'M. et Mme', 'Maître', 'Major', 'Messieurs', 'Mlle',
+  'Mr & Mrs', 'President', 'Prince', 'Professor',
+  'Senor', 'Senora', 'Sheikh', 'Sheikha', 'Signor', 'Signora', 'Sir',
+];
 
 // Drapeau dérivé du code ISO2 (impossible d'avoir un drapeau qui ne matche pas le pays)
 const flagFromIso = (iso) =>
@@ -244,35 +262,60 @@ const COUNTRIES = [
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 function StepIndicator({ step }) {
+  const containerRef = useRef(null);
+  const activeRef = useRef(null);
+
+  useEffect(() => {
+    const c = containerRef.current;
+    const a = activeRef.current;
+    if (!c) return;
+    // Charter (1ère étape) reste calé à gauche ; sinon on centre l'étape active
+    if (step === 0 || !a) {
+      c.scrollTo({ left: 0, behavior: 'smooth' });
+      return;
+    }
+    const offset = a.offsetLeft - c.clientWidth / 2 + a.clientWidth / 2;
+    c.scrollTo({ left: Math.max(0, offset), behavior: 'smooth' });
+  }, [step]);
+
   return (
-    <div className="flex items-center justify-center gap-0 max-w-3xl mx-auto px-4 mb-12 md:mb-16">
-      {STEPS.map((label, i) => (
-        <div key={i} className="flex items-center flex-1 last:flex-none">
+    <div
+      ref={containerRef}
+      className="flex items-center justify-start md:justify-center gap-0 max-w-3xl mx-auto px-4 mb-12 md:mb-16 overflow-x-auto md:overflow-visible [&::-webkit-scrollbar]:hidden"
+      style={{ scrollbarWidth: 'none' }}
+    >
+      {STEPS.map((label, i) => {
+        // Une étape est "validée" si elle est avant l'étape courante,
+        // OU si on est sur la dernière étape (Thank You) → tout est complété (suite logique)
+        const done = i < step || step === STEPS.length - 1;
+        return (
+        <div key={i} ref={i === step ? activeRef : null} className="flex items-center shrink-0 md:flex-1 last:flex-none">
           <div className="flex flex-col items-center">
-            {/* Rond : logo transparent (en attente) → logo normal (validé) */}
+            {/* Rond : logo transparent (en attente) → médaillon (validé) */}
             <div
               className="relative w-10 h-10 md:w-12 md:h-12 rounded-full border flex items-center justify-center overflow-hidden transition-all duration-500"
-              style={{ borderColor: '#C0C0C0' }}
+              style={{ borderColor: done ? '#C0C0C0' : 'transparent' }}
             >
               <Image
-                src={i < step ? '/images/logoFondTrans.png' : '/images/trans.png'}
+                src={done ? '/images/logoFondTrans.png' : '/images/trans.png'}
                 alt=""
                 fill
-                className={`object-cover scale-110 transition-opacity duration-500 ${i <= step ? 'opacity-100' : 'opacity-50'}`}
+                className={`object-cover transition-opacity duration-500 ${done ? 'scale-110' : 'scale-150'} ${i <= step ? 'opacity-100' : 'opacity-50'}`}
               />
             </div>
             <span
-              className={`mt-2 text-[12px] md:text-[14px] uppercase tracking-[0.15em] whitespace-nowrap transition-all duration-500 ${i === step ? 'opacity-100' : 'opacity-50'}`}
+              className={`mt-2 text-[12px] md:text-[14px] font-bold uppercase tracking-[0.15em] whitespace-nowrap transition-all duration-500 ${i === step ? 'opacity-100' : 'opacity-50'}`}
               style={{ color: i === step ? '#acb0cd' : '#C0C0C0' }}
             >
               {label}
             </span>
           </div>
           {i < STEPS.length - 1 && (
-            <div className="flex-1 h-px mx-2 md:mx-4 -mt-6" style={{ backgroundColor: '#C0C0C0', opacity: i < step ? 1 : 0.3 }} />
+            <div className="w-10 md:flex-1 h-px mx-2 md:mx-4 -mt-6" style={{ backgroundColor: '#C0C0C0', opacity: done ? 1 : 0.3 }} />
           )}
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -289,11 +332,11 @@ function Field({ label, required, children }) {
   );
 }
 
-// Checkbox intérieur gris #3a3b3f, contour cococo, check orange quand sélectionné
+// Checkbox intérieur gris #3a3b3f, contour cococo, logo Qualityacht quand sélectionné
 function CocoCheckbox({ checked }) {
   return (
-    <span className="w-5 h-5 rounded border border-[#C0C0C0] bg-[#3a3b3f] flex items-center justify-center shrink-0">
-      {checked && <Check className="w-3.5 h-3.5 text-[#c2622a]" strokeWidth={4} />}
+    <span className="relative w-6 h-6 rounded border border-[#C0C0C0] bg-[#3a3b3f] flex items-center justify-center shrink-0 overflow-hidden">
+      {checked && <Image src="/images/trans.png" alt="" fill className="object-cover scale-110" />}
     </span>
   );
 }
@@ -335,7 +378,45 @@ const CALLBACK_SLOTS = (() => {
   return slots;
 })();
 
-function CountryInput({ country, onCountry, value, onValue, placeholder, type = 'tel', extra = '', options = null }) {
+// Sélecteur de pays autonome (pleine largeur, drapeau + nom, sans indicatif) — pour le fuseau/lieu
+function CountryPicker({ country, onCountry }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const selected = COUNTRIES.find(c => c.name === country) || COUNTRIES[0];
+  const filtered = COUNTRIES.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
+
+  return (
+    <div className="relative">
+      <button type="button" onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between gap-2 bg-[#3a3b3f] border border-[#C0C0C0] rounded-xl px-4 py-3 text-[#acb0cd] text-sm focus:outline-none hover:border-[#c2622a]">
+        <span className="flex items-center gap-2"><span className="text-base leading-none">{flagFromIso(selected.iso)}</span> {selected.name}</span>
+        <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => { setOpen(false); setSearch(''); }} />
+          <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-[#2e2f32] border border-[#C0C0C0] rounded-xl shadow-2xl overflow-hidden">
+            <div className="p-2 border-b border-[#C0C0C0]/40">
+              <input autoFocus value={search} onChange={e => setSearch(e.target.value)} placeholder="Search country…"
+                className="w-full bg-[#3a3b3f] border border-[#C0C0C0] rounded-lg px-3 py-2 text-[#acb0cd] text-sm placeholder-[#6a6b6e] focus:outline-none focus:border-[#c2622a]" />
+            </div>
+            <div className="max-h-64 overflow-y-auto">
+              {filtered.map(c => (
+                <button key={c.name} type="button" onClick={() => { onCountry(c.name); setOpen(false); setSearch(''); }}
+                  className={`w-full flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-[#3a3b3f] ${c.name === country ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
+                  <span className="text-base leading-none">{flagFromIso(c.iso)}</span> {c.name}
+                </button>
+              ))}
+              {filtered.length === 0 && <p className="px-4 py-3 text-sm text-[#acb0cd]/60">No country found</p>}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function CountryInput({ country, onCountry, value, onValue, placeholder, type = 'tel', extra = '', options = null, showCode = true }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const selected = COUNTRIES.find(c => c.name === country) || COUNTRIES[0];
@@ -350,7 +431,7 @@ function CountryInput({ country, onCountry, value, onValue, placeholder, type = 
         <button type="button" onClick={() => setOpen(o => !o)}
           className="flex items-center gap-1 bg-[#3a3b3f] border border-[#C0C0C0] border-r-0 rounded-l-xl px-3 py-3 text-[#acb0cd] text-sm whitespace-nowrap focus:outline-none hover:border-[#c2622a]">
           <span className="text-base leading-none">{flagFromIso(selected.iso)}</span>
-          <span>{selected.code}</span>
+          {showCode && <span>{selected.code}</span>}
           <ChevronDown className={`w-3 h-3 ml-0.5 transition-transform ${open ? 'rotate-180' : ''}`} />
         </button>
 
@@ -381,7 +462,7 @@ function CountryInput({ country, onCountry, value, onValue, placeholder, type = 
                   onClick={() => { onCountry(c.name); setOpen(false); setSearch(''); }}
                   className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-[#3a3b3f] ${c.name === country ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
                   <span className="flex items-center gap-2"><span className="text-base leading-none">{flagFromIso(c.iso)}</span> {c.name}</span>
-                  <span className="text-[#acb0cd]/60">{c.code}</span>
+                  {showCode && <span className="text-[#acb0cd]/60">{c.code}</span>}
                 </button>
               ))}
               {filtered.length === 0 && <p className="px-4 py-3 text-sm text-[#acb0cd]/60">No country found</p>}
@@ -408,8 +489,15 @@ export default function RequestQuoteWizard() {
       }
     : null;
 
+  // Support ?step=1 (Contact Info direct) ou ?step=2 — utilisé par "Contact broker".
+  const initialStep = (() => {
+    const s = Number(params.get('step'));
+    return Number.isFinite(s) && s >= 0 && s <= 2 ? s : 0;
+  })();
+  const [step, setStep] = useState(initialStep);
+
   // La selection stockee fait foi : elle peut contenir PLUSIEURS yachts, ajoutes
-  // depuis les coeurs des cartes ou depuis le CTA d'une fiche.
+  // depuis les coeurs des cartes ou depuis le CTA d'une fiche (lib/quoteCart).
   const [boats, setBoats] = useState([]);
   useEffect(() => {
     const lire = () => {
@@ -432,21 +520,38 @@ export default function RequestQuoteWizard() {
     guests: '', type: '', region: '', price: '',
   };
 
-  const [step, setStep] = useState(0);
-
   const [charter, setCharter] = useState({
-    startDate: '', endDate: '', guests: yacht.guests || '', proposeJets: false,
+    startMonth: '', endMonth: '', guests: yacht.guests || '',
+    proposeJets: false, pets: false, accessible: false,
   });
+
+  // 24 mois glissants pour les selects Departure / Return
+  const months = (() => {
+    const out = [];
+    const now = new Date();
+    for (let i = 0; i < 24; i++) {
+      const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+      const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      const label = d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+      out.push({ value, label });
+    }
+    return out;
+  })();
 
   const [contact, setContact] = useState({
     company: '', title: '', firstName: '', lastName: '',
     email: '', email2: '',
-    phoneCountry: 'France', phone: '',
-    waCountry: 'France', whatsapp: '',
-    callbackCountry: 'France', callbackTime: '',
+    phoneCountry: 'Switzerland', phone: '',
+    waCountry: 'Switzerland', whatsapp: '',
+    callbackCountry: 'Switzerland', callbackTime: '',
     contactMethod: 'Email',
     message: '', acceptPolicy: false,
   });
+
+  // Remonter en haut de page à chaque changement d'étape
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [step]);
 
   const goNext = () => setStep(s => Math.min(2, s + 1));
   const goBack = () => setStep(s => Math.max(0, s - 1));
@@ -455,15 +560,18 @@ export default function RequestQuoteWizard() {
     <div className="relative min-h-screen text-[#acb0cd] pt-24 pb-20 px-4 overflow-x-hidden">
       {/* Fond de base */}
       <div className="fixed inset-0 -z-20 bg-[#26272a]" />
-      {/* Fond plein écran Thank You — photo voilier SANS filtre, défile avec le contenu */}
+      {/* Fond plein écran Thank You — la photo arrive APRES un temps de lecture (transition douce) */}
       {step === 2 && (
-        <div className="absolute inset-0 -z-10">
-          <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover" />
-          <div className="absolute inset-0 bg-black/35" />
-        </div>
+        <>
+          <style>{`@keyframes thankPhotoIn{0%{opacity:0;filter:blur(10px);transform:scale(1.08)}100%{opacity:1;filter:blur(0);transform:scale(1)}}`}</style>
+          <div className="absolute inset-0 -z-10" style={{ animation: 'thankPhotoIn 2s ease-out forwards' }}>
+            <Image src="/images/pagesCaraibes/thankyou-sail.jpg" alt="" fill className="object-cover object-top md:object-contain" />
+            <div className="absolute inset-0 bg-black/35" />
+          </div>
+        </>
       )}
 
-      <h1 className="trajan-regular font-bold text-2xl md:text-4xl text-center uppercase tracking-[0.15em] mb-10 md:mb-14 text-[#C0C0C0]">
+      <h1 className={`trajan-regular font-bold text-2xl md:text-4xl text-center uppercase tracking-[0.15em] mb-10 md:mb-14 text-[#C0C0C0] [-webkit-text-stroke:0.6px_#C0C0C0] ${step === 2 ? 'mt-[10vh]' : ''}`}>
         Request Your Next Charter
       </h1>
 
@@ -473,97 +581,45 @@ export default function RequestQuoteWizard() {
       <div className="overflow-hidden max-w-5xl mx-auto">
         <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${step * 100}%)` }}>
 
-          {/* ══ ÉTAPE 1 — CHARTER DETAILS ══ */}
+          {/* ══ ÉTAPE 1 — CHARTER DETAILS (vignettes panier + mois + checkboxes) ══ */}
           <section className="w-full shrink-0 px-1">
-            <div className="grid md:grid-cols-2 gap-8 items-start">
-              {/* Selection de yachts : autant de fiches que de bateaux retenus,
-                  chacune retirable individuellement. */}
-              <div data-testid="quote-selection">
-                {boats.length === 0 && (
-                  <div className="rounded-2xl border border-[#C0C0C0]/50 bg-[#3a3b3f] p-6 text-center">
-                    <p className="text-sm text-[#acb0cd]">No yacht selected yet.</p>
-                    <a
-                      href="/yachts"
-                      className="mt-4 inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
-                    >
-                      Browse the Fleet
-                    </a>
-                  </div>
-                )}
-
-                <div className="space-y-5">
+            <div className="space-y-6">
+              {/* Vignettes des yachts du panier */}
+              {boats.length === 0 ? (
+                <p className="text-center text-sm text-[#acb0cd]/70">Your quote is empty.</p>
+              ) : (
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   {boats.map((b, i) => (
-                    <div key={`${b.id || b.name}-${i}`} data-testid="quote-boat">
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-[#C0C0C0]">
-                        {b.image && <Image src={b.image} alt={b.name || ''} fill className="object-cover" />}
-                      </div>
-                      <div className="mt-4 flex items-start justify-between gap-3">
-                        <h2 className="trajan-regular text-xl md:text-2xl text-[#acb0cd] uppercase tracking-[0.1em]">{b.name}</h2>
-                        <button
-                          type="button"
-                          onClick={() => retirer(b)}
-                          aria-label={`Remove ${b.name || 'this yacht'} from your selection`}
-                          className="shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full border border-[#C0C0C0] text-[#acb0cd] transition-colors hover:border-[#c2622a] hover:text-[#c2622a] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
-                        >
-                          <span aria-hidden className="text-lg leading-none">&times;</span>
+                    <div key={`${b.id || b.name}-${i}`} data-testid="quote-boat" className="relative rounded-xl overflow-hidden border border-[#C0C0C0]">
+                      <div className="relative aspect-[3/4]">
+                        <Image src={b.image} alt={b.name} fill className="object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                        <button type="button" onClick={() => retirer(b)} title="Remove from quote" aria-label={`Remove ${b.name || 'this yacht'} from your selection`}
+                          className="absolute top-2 right-2 w-7 h-7 rounded-full border border-[#C0C0C0] bg-black/40 text-[#C0C0C0] flex items-center justify-center hover:text-[#B03E00] hover:border-[#B03E00] transition-colors">
+                          <XIcon className="w-3.5 h-3.5" />
                         </button>
-                      </div>
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        {b.type && (
-                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd] capitalize">
-                            <Ship className="w-3 h-3 text-[#c2622a]" /> {b.type}
-                          </span>
-                        )}
-                        {b.length && (
-                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
-                            {b.length}
-                          </span>
-                        )}
-                        {b.guests && (
-                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
-                            {b.guests} guests
-                          </span>
-                        )}
-                        {b.cabins && (
-                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
-                            {b.cabins} cabins
-                          </span>
-                        )}
-                        {b.region && (
-                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
-                            {b.region}
-                          </span>
-                        )}
-                        {b.price && (
-                          <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.1em] border border-[#C0C0C0] rounded-lg px-3 py-1 bg-[#3a3b3f] text-[#acb0cd]">
-                            {b.price}/week
-                          </span>
-                        )}
+                        <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                          <h3 className="trajan-regular text-sm text-[#C0C0C0] uppercase tracking-[0.1em]">{b.name}</h3>
+                          <p className="text-[10px] text-[#acb0cd]/80 mt-1">
+                            {[b.length, b.guests && `${b.guests} guests`, b.type].filter(Boolean).join(' · ')}
+                          </p>
+                          {b.price && <p className="text-[10px] text-[#acb0cd]">{b.price}/wk</p>}
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              )}
 
-              {/* Détails charter */}
-              <div className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
-                  <Field label="Departure Date" required>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none" />
-                      <input type="date" value={charter.startDate} onChange={e => setCharter({ ...charter, startDate: e.target.value })}
-                        className={`${inputClass} pl-10 [color-scheme:dark]`} />
-                    </div>
-                  </Field>
-                  <Field label="Return Date" required>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none" />
-                      <input type="date" value={charter.endDate} onChange={e => setCharter({ ...charter, endDate: e.target.value })}
-                        className={`${inputClass} pl-10 [color-scheme:dark]`} />
-                    </div>
-                  </Field>
-                </div>
 
+              {/* Trip details : mois uniquement (24 mois glissants) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <Field label="Departure month" required>
+                  <MonthPicker value={charter.startMonth} onChange={(v) => setCharter({ ...charter, startMonth: v })} placeholder="Select month" />
+                </Field>
+                <Field label="Return month" required>
+                  <MonthPicker value={charter.endMonth} onChange={(v) => setCharter({ ...charter, endMonth: v })} placeholder="Select month" />
+                </Field>
                 <Field label="Number of Guests" required>
                   <div className="relative">
                     <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#c2622a] pointer-events-none" />
@@ -572,18 +628,26 @@ export default function RequestQuoteWizard() {
                       className={`${inputClass} pl-10`} />
                   </div>
                 </Field>
+              </div>
 
-                {/* Confirmation infos filtre — tout en lavande */}
-                <div className="border border-[#C0C0C0] rounded-xl p-4 bg-[#3a3b3f]">
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd] mb-2">Your selection</p>
-                  <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-[#acb0cd]">
-                    <span>{boats.length > 1 ? `Yachts: ${boats.map((b) => b.name).join(', ')}` : `Yacht: ${yacht.name}`}</span>
-                    {yacht.type && <span className="capitalize">Type: {yacht.type}</span>}
-                    {yacht.region && <span>Region: {yacht.region}</span>}
-                  </div>
-                </div>
-
-                {/* Case proposer des jets */}
+              {/* Checkboxes options — style CocoCheckbox (logo Qualityacht quand coché) */}
+              <div className="space-y-2.5">
+                <label onClick={() => setCharter({ ...charter, pets: !charter.pets })}
+                  className="flex items-center gap-3 cursor-pointer select-none">
+                  <CocoCheckbox checked={charter.pets} />
+                  <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
+                    <PawPrint className="w-4 h-4 text-[#c2622a]" />
+                    Pet friendly
+                  </span>
+                </label>
+                <label onClick={() => setCharter({ ...charter, accessible: !charter.accessible })}
+                  className="flex items-center gap-3 cursor-pointer select-none">
+                  <CocoCheckbox checked={charter.accessible} />
+                  <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
+                    <Accessibility className="w-4 h-4 text-[#c2622a]" />
+                    Reduced mobility access required
+                  </span>
+                </label>
                 <label onClick={() => setCharter({ ...charter, proposeJets: !charter.proposeJets })}
                   className="flex items-center gap-3 cursor-pointer select-none">
                   <CocoCheckbox checked={charter.proposeJets} />
@@ -592,20 +656,24 @@ export default function RequestQuoteWizard() {
                     Also propose matching private jets for my trip
                   </span>
                 </label>
+              </div>
 
-                {/* Ajouter un bateau : renvoie sur la LISTE et non sur une fiche
-                    (demande client). */}
-                <a
-                  href="/yachts"
-                  className="mt-4 flex items-center justify-center gap-3 w-full md:w-auto md:inline-flex rounded-xl border-2 border-[#C0C0C0] px-6 py-3 text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]"
-                >
-                  <Plus className="w-5 h-5" />
-                  Secure Another Yacht
-                </a>
+              {/* Ajouter un bateau a la selection : renvoie sur la LISTE et non
+                  sur une fiche, pour que le client reparte du catalogue complet
+                  (demande client). Place au-dessus de Go Back. */}
+              <a
+                href="/yachts"
+                className="mt-4 flex items-center justify-center gap-3 w-full rounded-xl border-2 border-[#C0C0C0] px-6 py-3 text-xs md:text-sm uppercase tracking-[0.2em] font-medium text-[#B03E00] transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]"
+              >
+                <Plus className="w-4 h-4 md:w-5 md:h-5" />
+                Secure Another Yacht
+              </a>
 
-                <div className="pt-2">
-                  <PrimaryButton onClick={goNext} className="w-full md:w-auto px-12 py-4">Secure My Charter</PrimaryButton>
-                </div>
+              <div className="pt-2 flex items-center justify-between gap-2 md:gap-4">
+                <GhostButton onClick={() => { if (typeof window !== 'undefined') window.history.back(); }} className="inline-flex items-center gap-2 px-3 py-2 md:gap-3 md:px-6 md:py-3 text-xs md:text-sm font-bold shrink-0">
+                  <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" /> Go Back
+                </GhostButton>
+                <PrimaryButton onClick={goNext} className="px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">Secure My Charter</PrimaryButton>
               </div>
             </div>
           </section>
@@ -613,6 +681,20 @@ export default function RequestQuoteWizard() {
           {/* ══ ÉTAPE 2 — CONTACT INFORMATION ══ */}
           <section className="w-full shrink-0 px-1">
             <div className="max-w-4xl mx-auto space-y-6">
+              {/* Si l'utilisateur a coché "private jets" en step 0 et n'a pas encore confirmé, on lui propose le widget de réservation jet juste avant la note */}
+              {charter.proposeJets && step === 1 && (
+                <div>
+                  <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#c2622a] mb-3">
+                    Book your private jet
+                  </p>
+                  <JetBookingWidget />
+                </div>
+              )}
+
+              {/* Note d'introduction (bleu lavande) */}
+              <p className="text-sm italic leading-relaxed text-[#acb0cd]">
+                A yacht is the pinnacle of personalization—your desires, your destinations, your legacy. Share your vision, and we will craft an experience beyond imagination.
+              </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Field label="Company"><input value={contact.company} onChange={e => setContact({ ...contact, company: e.target.value })} placeholder="Company" className={inputClass} /></Field>
                 <Field label="Title">
@@ -640,27 +722,38 @@ export default function RequestQuoteWizard() {
                 </Field>
               </div>
 
+              <p className="text-sm italic text-[#acb0cd]/80 pt-1 leading-relaxed">
+                To ensure precise coordination of our schedules, could you please provide:<br />
+                Your preferred time for the call and your current country?
+              </p>
+
               <div className="grid md:grid-cols-2 gap-4">
-                <Field label="Preferred Callback Time">
-                  <CountryInput country={contact.callbackCountry} onCountry={v => setContact({ ...contact, callbackCountry: v })}
-                    value={contact.callbackTime} onValue={v => setContact({ ...contact, callbackTime: v })}
-                    options={CALLBACK_SLOTS} />
+                <Field label="Preferred Time for the Call">
+                  <select value={contact.callbackTime} onChange={e => setContact({ ...contact, callbackTime: e.target.value })}
+                    className={inputClass}>
+                    <option value="" className="bg-[#2e2f32]">Select a time</option>
+                    {CALLBACK_SLOTS.map(o => <option key={o} value={o} className="bg-[#2e2f32]">{o}</option>)}
+                  </select>
                 </Field>
-                <Field label="Preferred Contact Method">
-                  <div className="flex gap-2">
-                    {['Email', 'Phone', 'WhatsApp'].map(m => (
-                      <button key={m} onClick={() => setContact({ ...contact, contactMethod: m })}
-                        className={`flex-1 rounded-xl border px-3 py-3 text-xs uppercase tracking-[0.1em] transition-colors ${
-                          contact.contactMethod === m
-                            ? 'border-[#B03E00] text-[#B03E00]'
-                            : 'border-[#C0C0C0] text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00]'
-                        }`}>
-                        {m}
-                      </button>
-                    ))}
-                  </div>
+                <Field label="Country">
+                  <CountryPicker country={contact.callbackCountry} onCountry={v => setContact({ ...contact, callbackCountry: v })} />
                 </Field>
               </div>
+
+              <Field label="Preferred Contact Method">
+                <div className="flex gap-2">
+                  {['Email', 'Phone', 'WhatsApp'].map(m => (
+                    <button key={m} onClick={() => setContact({ ...contact, contactMethod: m })}
+                      className={`flex-1 rounded-xl border px-3 py-3 text-xs uppercase tracking-[0.1em] bg-[#3a3b3f] transition-colors ${
+                        contact.contactMethod === m
+                          ? 'border-[#B03E00] text-[#B03E00]'
+                          : 'border-[#C0C0C0] text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00]'
+                      }`}>
+                      {m}
+                    </button>
+                  ))}
+                </div>
+              </Field>
 
               <Field label="Message">
                 <textarea rows={5} value={contact.message} onChange={e => setContact({ ...contact, message: e.target.value })} className={`${inputClass} resize-none`} />
@@ -672,42 +765,51 @@ export default function RequestQuoteWizard() {
                 <span className="text-sm text-[#acb0cd]">Accept <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="text-[#c2622a] hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">Privacy Policy</a></span>
               </label>
 
-              <div className="flex items-center justify-between gap-4 pt-4">
-                <GhostButton onClick={goBack} className="inline-flex items-center gap-3 px-6 py-3 font-bold">
-                  <ArrowLeft className="w-5 h-5" /> Go Back
+              <div className="flex items-center justify-between gap-2 md:gap-4 pt-4">
+                <GhostButton onClick={goBack} className="inline-flex items-center gap-2 px-3 py-2 md:gap-3 md:px-6 md:py-3 text-xs md:text-sm shrink-0">
+                  <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" /> Go Back
                 </GhostButton>
-                <PrimaryButton onClick={goNext} className="px-12 py-4">Confirm</PrimaryButton>
+                <PrimaryButton onClick={goNext} className="px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">Secure My Reservation</PrimaryButton>
               </div>
             </div>
           </section>
 
           {/* ══ ÉTAPE 3 — THANK YOU ══ */}
           <section className="w-full shrink-0 px-1">
-            <div className="max-w-2xl mx-auto text-center py-12 md:py-24 px-4">
-              <h2 className="trajan-regular font-bold text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0] mb-4">Thank You!</h2>
-              <div className="w-12 h-px bg-[#c2622a] mx-auto mb-6" />
-              <p className="text-[#acb0cd] leading-relaxed mb-8">
-                Your request for <span className="text-[#bd9973]">{yacht.name}</span> has been received.
-                One of our charter experts will contact you shortly to craft your bespoke itinerary.
-              </p>
-              {/* Carte fine au-dessus du bouton de retour : rattrape le client qui
-                  voudrait un second bateau, vers la LISTE et non une fiche.
-                  Deux lignes, lavande puis orange brule, l'ensemble cliquable. */}
-              <a
-                href="/yachts"
-                className="block max-w-md mx-auto rounded-xl border border-[#C0C0C0] bg-black/30 px-6 py-4 mb-4 text-center transition-colors hover:border-[#B03E00]"
-              >
-                <span className="block text-[#acb0cd] text-base leading-snug">
-                  Would you like to secure an additional yacht?
-                </span>
-                <span className="mt-2 block text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium">
-                  Revisit Your Yacht Portfolio
-                </span>
-              </a>
-              <a href="/charters/destinations/caribbean-v15"
-                className="inline-block rounded-xl px-10 py-4 border border-[#C0C0C0] bg-black/30 text-[#C0C0C0] text-sm uppercase tracking-[0.2em] hover:text-[#B03E00] hover:border-[#B03E00] transition-colors">
-                Back to Caribbean
-              </a>
+            <div className="max-w-2xl mx-auto text-center px-2 md:px-4 pt-24 pb-10 md:py-24 min-h-[80vh] md:min-h-0 flex flex-col items-center justify-between md:justify-center gap-20 md:gap-0">
+              <div className="flex flex-col items-center w-full">
+                <div className="trajan-bold font-bold text-2xl md:text-3xl uppercase tracking-[0.12em] mb-8 md:mb-4" style={{ color: '#B03E00', WebkitTextStroke: '0.8px #B03E00' }}>Grateful</div>
+                <div className="relative w-44 h-10 mx-auto mb-10 md:mb-6 overflow-hidden">
+                  <Image src="/images/title-line.png" alt="" fill className="object-contain scale-x-150 scale-y-[3]" />
+                </div>
+                <div className="w-full rounded-xl border border-[#C0C0C0] bg-black/40 px-5 py-8 md:px-8 md:py-6 md:mb-16">
+                  <p className="text-[#acb0cd] text-base md:text-lg leading-loose">
+                    Your request for <span className="text-[#B03E00] uppercase">{yacht.name}</span> has been received.
+                    One of our charter experts will contact you shortly to craft your bespoke itinerary.
+                  </p>
+                </div>
+              </div>
+              <div className="w-full">
+                {/* Carte fine posee au-dessus du retour a l'accueil : elle rattrape
+                    le client qui voudrait un second bateau, et le renvoie sur la
+                    LISTE plutot que sur une fiche. Deux lignes, lavande puis
+                    orange brule, l'ensemble cliquable. */}
+                <a
+                  href="/yachts"
+                  className="block w-full rounded-xl border border-[#C0C0C0] bg-black/30 px-6 py-4 mb-4 text-center transition-colors hover:border-[#B03E00]"
+                >
+                  <span className="block text-[#acb0cd] text-base md:text-lg leading-snug">
+                    Would you like to secure an additional yacht?
+                  </span>
+                  <span className="mt-2 block text-[#B03E00] text-sm md:text-base uppercase tracking-[0.2em] font-medium">
+                    Revisit Your Yacht Portfolio
+                  </span>
+                </a>
+                <a href="/#discovery"
+                  className="block w-full text-center rounded-xl px-10 py-4 border-2 border-[#C0C0C0] bg-black/40 text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)]">
+                  Back to Homepage
+                </a>
+              </div>
             </div>
           </section>
 
