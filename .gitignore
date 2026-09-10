@@ -73,3 +73,14 @@ RESULTATS_TESTS_REGIONS.txt
 RESULTATS_TESTS_REGIONS_FINAL.txt
 TESTS_COMPLETS_REGIONS.md
 nul
+
+# Fichiers sources et sauvegardes : utiles en local, jamais en ligne.
+# Les photos brutes de "Privat jet new pix" sont deja integrees, recadrees et
+# renommees, dans public/images/private_jet/hero/ ; ce dossier n en est que la
+# copie d origine. Les .PALETTE-BACKUP sont les images d avant retouche couleur.
+public/images/Privat jet new pix/
+public/images/pagesCaraibes/*.PALETTE-BACKUP.*
+public/images/pagesCaraibes/Image collée.png
+
+# Rapports de plantage Windows (grep, etc.)
+*.stackdump
