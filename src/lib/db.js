@@ -1,6 +1,14 @@
 // src/lib/db.js - Client Neon (Vercel Postgres) v2
 
 import { neon } from '@neondatabase/serverless';
+import { revalidateTag } from 'next/cache';
+
+// Les listes publiques de yachts sont mises en cache 1 h (lib/yachts.js, tag
+// 'yachts-visible'). Toute ecriture sur la selection invalide ce cache pour que
+// les changements faits dans l'admin soient visibles immediatement.
+function invalidateYachtsCache() {
+  try { revalidateTag('yachts-visible'); } catch (e) { /* hors contexte requete : ignore */ }
+}
 
 // Connexion Neon (variable auto-injectée par Vercel)
 const sql = neon(process.env.DATABASE_URL);
@@ -75,6 +83,7 @@ export async function getYachtSelectionById(yacht_id) {
  * Ajoute un yacht à la sélection avec ses données Ankor en cache
  */
 export async function addYachtToSelection(data) {
+  invalidateYachtsCache();
   const {
     yacht_id,
     yacht_name,
@@ -120,6 +129,7 @@ export async function addYachtToSelection(data) {
  * Met à jour les infos enrichies d'un yacht
  */
 export async function updateYachtEnrichedData(yacht_id, data) {
+  invalidateYachtsCache();
   const {
     custom_title = null,
     custom_description = null,
@@ -176,6 +186,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
  * Met à jour la visibilité d'un yacht
  */
 export async function updateYachtVisibility(yacht_id, is_visible) {
+  invalidateYachtsCache();
   try {
     const rows = await sql`
       UPDATE yacht_selections
@@ -194,6 +205,7 @@ export async function updateYachtVisibility(yacht_id, is_visible) {
  * Met à jour le statut featured d'un yacht
  */
 export async function updateYachtFeatured(yacht_id, is_featured) {
+  invalidateYachtsCache();
   try {
     const rows = await sql`
       UPDATE yacht_selections
@@ -212,6 +224,7 @@ export async function updateYachtFeatured(yacht_id, is_featured) {
  * Met à jour l'ordre d'affichage de plusieurs yachts (bulk)
  */
 export async function updateYachtOrder(updates) {
+  invalidateYachtsCache();
   try {
     for (const { yacht_id, display_order } of updates) {
       await sql`
@@ -231,6 +244,7 @@ export async function updateYachtOrder(updates) {
  * Supprime un yacht de la sélection
  */
 export async function removeYachtFromSelection(yacht_id) {
+  invalidateYachtsCache();
   try {
     await sql`
       DELETE FROM yacht_selections
@@ -407,6 +421,7 @@ export async function getSelectedYachtIds() {
  * sans toucher aux choix admin (region, sub_region, custom_*).
  */
 export async function bulkUpsertYachts(yachts) {
+  invalidateYachtsCache();
   let inserted = 0;
   let updated = 0;
   let skipped = 0;

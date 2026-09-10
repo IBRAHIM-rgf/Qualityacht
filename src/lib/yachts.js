@@ -1,7 +1,20 @@
 // src/lib/yachts.js - Fonctions partagées pour le fetch des yachts
 
+import { unstable_cache } from 'next/cache';
 import { fetchAnkorBearerToken } from '@/lib/utils';
 import { getVisibleYachtIds, getFeaturedYachtIds, getYachtSelections } from '@/lib/db';
+
+// ── Performance (2026-09-10) ──
+// Les pages publiques n'affichent que les yachts selectionnes dans l'admin.
+// Avant : on telechargeait le detail de TOUTE la flotte Ankor (plusieurs
+// centaines d'appels) puis on filtrait ; la reponse depassait la limite de
+// 2 Mo du cache Next.js et n'etait jamais mise en cache → 15-60 s par visite.
+// Maintenant :
+//  A. `onlyIds` : le detail n'est demande a Ankor que pour les yachts visibles.
+//  B. les listes publiques finales sont mises en cache 1 h (tag YACHTS_CACHE_TAG),
+//     invalidees par l'admin a chaque modification de selection (lib/db.js).
+export const YACHTS_CACHE_TAG = 'yachts-visible';
+const YACHTS_CACHE_SECONDS = 3600;
 
 const ANKOR_API_BASE_URL = "https://api.ankor.io";
 
@@ -252,7 +265,7 @@ function mapVesselSummaryToYachtCard(vessel, vesselDetails, appliedFilters) {
  * Fonction principale pour récupérer les yachts d'une destination
  * Utilisée par les pages de destination
  */
-export async function fetchYachtsForDestination(destination) {
+export async function fetchYachtsForDestination(destination, onlyIds = null) {
   try {
     const token = await fetchAnkorBearerToken();
 
@@ -269,19 +282,20 @@ export async function fetchYachtsForDestination(destination) {
     };
 
     const discoveryResponse = await fetchYachtsFromAnkor(filters, token);
-    const vesselSummaries = discoveryResponse.hits || [];
-    const totalYachtsFound = vesselSummaries.length;
+    const allSummaries = discoveryResponse.hits || [];
+    const totalYachtsFound = allSummaries.length;
+    // onlyIds : ne charger le detail que des yachts demandes (selection admin)
+    const vesselSummaries = onlyIds ? allSummaries.filter(v => onlyIds.has(v.uri)) : allSummaries;
 
     // Si aucun yacht trouvé, retourner un tableau vide
-    if (totalYachtsFound === 0) {
+    if (vesselSummaries.length === 0) {
       return {
         yachts: [],
-        totalYachts: 0,
+        totalYachts: totalYachtsFound,
         filters,
       };
     }
 
-    // Charger TOUS les yachts (plus de limite)
     const vesselDetails = await fetchVesselDetailsBatch(vesselSummaries, token, 20);
 
     const yachts = vesselSummaries.map((vessel, index) =>
@@ -320,22 +334,23 @@ export async function fetchYachtsForDestination(destination) {
  * Fonction pour récupérer les yachts avec filtres personnalisés
  * Utilisée par la page /yachts
  */
-export async function fetchYachtsWithFilters(filters) {
+export async function fetchYachtsWithFilters(filters, onlyIds = null) {
   try {
     const token = await fetchAnkorBearerToken();
 
     const discoveryResponse = await fetchYachtsFromAnkor(filters, token);
-    const vesselSummaries = discoveryResponse.hits || [];
-    const totalYachtsFound = vesselSummaries.length;
+    const allSummaries = discoveryResponse.hits || [];
+    const totalYachtsFound = allSummaries.length;
+    // onlyIds : ne charger le detail que des yachts demandes (selection admin)
+    const vesselSummaries = onlyIds ? allSummaries.filter(v => onlyIds.has(v.uri)) : allSummaries;
 
-    if (totalYachtsFound === 0) {
+    if (vesselSummaries.length === 0) {
       return {
         yachts: [],
-        totalYachts: 0,
+        totalYachts: totalYachtsFound,
       };
     }
 
-    // Charger TOUS les yachts (plus de limite)
     const vesselDetails = await fetchVesselDetailsBatch(vesselSummaries, token, 20);
 
     const yachts = vesselSummaries.map((vessel, index) =>
@@ -363,7 +378,7 @@ export async function fetchYachtsWithFilters(filters) {
  * Utilisé par les pages publiques pour n'afficher que les yachts sélectionnés
  * NOTE: Ne filtre PAS selon les filtres utilisateur - le filtrage se fait côté client
  */
-export async function fetchVisibleYachts(filters = {}) {
+async function fetchVisibleYachtsUncached(filters = {}) {
   try {
     // 1. Récupérer les sélections depuis la base
     const selections = await getYachtSelections();
@@ -393,9 +408,9 @@ export async function fetchVisibleYachts(filters = {}) {
       selections.map(s => [s.yacht_id, s.sub_region])
     );
 
-    // 3. Fetch TOUS les yachts depuis Ankor (SANS les filtres utilisateur)
-    // Le filtrage utilisateur sera fait côté client
-    const { yachts: allYachts, totalYachts } = await fetchYachtsWithFilters({});
+    // 3. Fetch les yachts visibles depuis Ankor (SANS les filtres utilisateur,
+    //    le filtrage utilisateur est fait côté client) — detail limite a visibleIds.
+    const { yachts: allYachts, totalYachts } = await fetchYachtsWithFilters({}, visibleIds);
 
     // 4. Filtrer UNIQUEMENT selon la présélection BDD
     const filteredYachts = allYachts
@@ -497,7 +512,7 @@ function yachtFromSelection(s) {
  * Fallback : si la BDD ne contient aucune sélection, retourne tous les yachts de la région
  * (cohérent avec le comportement de fetchVisibleYachts).
  */
-export async function fetchVisibleYachtsForSubRegion(region, subRegion) {
+async function fetchVisibleYachtsForSubRegionUncached(region, subRegion) {
   try {
     const selections = await getYachtSelections();
 
@@ -524,7 +539,7 @@ export async function fetchVisibleYachtsForSubRegion(region, subRegion) {
     const featuredIds = new Set(matchingSelections.filter(s => s.is_featured).map(s => s.yacht_id));
     const orderMap = new Map(matchingSelections.map(s => [s.yacht_id, s.display_order]));
 
-    const { yachts: allYachts, totalYachts, filters } = await fetchYachtsForDestination(region);
+    const { yachts: allYachts, totalYachts, filters } = await fetchYachtsForDestination(region, visibleIds);
 
     const filteredYachts = allYachts
       .filter(y => visibleIds.has(y.id))
@@ -570,23 +585,23 @@ export async function fetchVisibleYachtsForSubRegion(region, subRegion) {
 /**
  * Version de fetchYachtsForDestination qui respecte les présélections
  */
-export async function fetchVisibleYachtsForDestination(destination) {
+async function fetchVisibleYachtsForDestinationUncached(destination) {
   try {
     // 1. Récupérer sélections depuis la base
     const selections = await getYachtSelections();
 
-    // 2. Fetch les yachts de la destination
-    const { yachts: allYachts, totalYachts, filters } = await fetchYachtsForDestination(destination);
-
     // Si aucune sélection en DB, retourner tous les yachts
     if (!selections || selections.length === 0) {
-      return { yachts: allYachts, totalYachts, filters };
+      return await fetchYachtsForDestination(destination);
     }
 
-    // 3. Créer les maps
+    // 2. Créer les maps
     const visibleIds = new Set(
       selections.filter(s => s.is_visible).map(s => s.yacht_id)
     );
+
+    // 3. Fetch les yachts de la destination — detail limite aux visibles
+    const { yachts: allYachts, totalYachts, filters } = await fetchYachtsForDestination(destination, visibleIds);
     const featuredIds = new Set(
       selections.filter(s => s.is_featured && s.is_visible).map(s => s.yacht_id)
     );
@@ -634,3 +649,38 @@ export async function fetchVisibleYachtsForDestination(destination) {
     return await fetchYachtsForDestination(destination);
   }
 }
+
+// ── Versions mises en cache (1 h, tag YACHTS_CACHE_TAG) des listes publiques ──
+// `_rawEntity` (detail Ankor complet, volumineux) est retire des resultats mis
+// en cache : aucune page publique ne l'utilise, et il ferait depasser la limite
+// de 2 Mo par entree du cache. `_rawBlueprint` et `_rawPricing` sont conserves.
+function slimForCache(result) {
+  if (!result || !Array.isArray(result.yachts)) return result;
+  return {
+    ...result,
+    yachts: result.yachts.map(({ _rawEntity, ...rest }) => rest),
+  };
+}
+
+// Les filtres utilisateur ne sont pas appliques ici (filtrage cote client) :
+// une seule entree de cache pour toutes les pages qui listent la flotte.
+const fetchVisibleYachtsCached = unstable_cache(
+  async () => slimForCache(await fetchVisibleYachtsUncached({})),
+  ['fetchVisibleYachts'],
+  { revalidate: YACHTS_CACHE_SECONDS, tags: [YACHTS_CACHE_TAG] }
+);
+export async function fetchVisibleYachts(_filters = {}) {
+  return fetchVisibleYachtsCached();
+}
+
+export const fetchVisibleYachtsForDestination = unstable_cache(
+  async (destination) => slimForCache(await fetchVisibleYachtsForDestinationUncached(destination)),
+  ['fetchVisibleYachtsForDestination'],
+  { revalidate: YACHTS_CACHE_SECONDS, tags: [YACHTS_CACHE_TAG] }
+);
+
+export const fetchVisibleYachtsForSubRegion = unstable_cache(
+  async (region, subRegion) => slimForCache(await fetchVisibleYachtsForSubRegionUncached(region, subRegion)),
+  ['fetchVisibleYachtsForSubRegion'],
+  { revalidate: YACHTS_CACHE_SECONDS, tags: [YACHTS_CACHE_TAG] }
+);
