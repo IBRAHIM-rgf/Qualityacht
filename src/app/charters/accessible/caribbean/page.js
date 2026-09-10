@@ -333,21 +333,10 @@ export default function CaribbeanAccessibilityGuide() {
         )}
       </div>
 
-      {/* ══ CLOSING NOTE ══ */}
-      {/* Bande bleue conservee, mais aucun texte directement dessus : le texte
-          est pose dans une carte anthracite (demande client 2026-09-10). */}
-      <div className="px-6 md:px-14 py-6 bg-[#1b223d] border-t border-white/10">
-      <div className="max-w-5xl mx-auto flex items-center justify-between gap-6 flex-wrap rounded-2xl bg-[#2e2f32] border border-[#C0C0C0]/20 px-6 py-5">
-        <p className="text-[13px] text-[#acb0cd] leading-relaxed max-w-2xl">
-          Every guest&apos;s requirements are handled individually and in complete confidence.{' '}
-          <span className="text-[#B87333] font-medium">Contact your Charter Coordinator</span> to arrange a dedicated accessibility
-          assessment ahead of embarkation.
-        </p>
-        <span className="flex-none border border-[#C0C0C0]/25 rounded px-4 py-2 text-[12px] tracking-[0.12em] uppercase text-[#acb0cd]">
-          {REGION} Fleet
-        </span>
-      </div>
-      </div>
+      {/* ══ BANDE BLEUE DE FIN ══
+          Aucun texte sur la bande bleu fonce (demande client 2026-09-10) : la note
+          de cloture et le badge « Caribbean Fleet » ont ete retires. */}
+      <div aria-hidden className="h-16 md:h-20 bg-[#1b223d] border-t border-white/10" />
 
       {/* ══ BARRE STICKY : choix + View Yacht ══ */}
       {picked && <div className="h-20" />}
