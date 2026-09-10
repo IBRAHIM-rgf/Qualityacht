@@ -57,8 +57,12 @@ export default function SourcingLanding({
       {/* Filtre de l'ancienne page d'attente sur toute la page (derriere le hero
           aussi, pour que la photo se fonde dans le gris et non dans les nuages
           colores du layout) : fond gris #111827 + nuages gris a 30 %. */}
+      {/* Calque FIXE (taille de l'ecran) et non absolu sur toute la hauteur de la
+          page : l'ancienne page faisait un ecran (min-h-screen), les nuages y
+          etaient donc cadres sur la fenetre. Un calque absolu de 2 300 px les
+          etirait et les rendait meconnaissables. */}
       {belowHeroFilter && (
-        <div aria-hidden className="absolute inset-0 -z-10">
+        <div aria-hidden className="fixed inset-0 -z-10">
           <div className="absolute inset-0 bg-gray-900" />
           <Image src="/images/nuagesAncien.png" alt="" fill sizes="100vw" className="object-cover opacity-30 grayscale" />
         </div>
