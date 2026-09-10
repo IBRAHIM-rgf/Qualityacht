@@ -3,8 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Footer() {
+  // relative z-10 : les fonds fixes/absolus de certaines pages (nuages Sales,
+  // destinations) passaient PAR-DESSUS le footer et le rendaient « transparent ».
+  // Le footer est desormais toujours peint au-dessus, fond #1b223d plein.
   return (
-    <footer className="bg-[#1b223d] text-white py-10 px-6 md:px-20">
+    <footer className="relative z-10 bg-[#1b223d] text-white py-10 px-6 md:px-20">
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 text-sm">
 
         {/* Logo */}
