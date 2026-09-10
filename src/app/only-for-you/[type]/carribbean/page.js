@@ -840,9 +840,15 @@ export default function CaribbeanV15Page({ params }) {
   // Calendrier regatta 2027 : groupement par mois (sans filtre, tous events affiches)
   const regattaByMonth = useMemo(() => groupByMonth(REGATTAS_2027), []);
 
-  // Hero photo (client 2026-09-10) : meme voilier pour les 6 types, mobile et desktop.
-  const heroMobileSrc = '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-sailing.jpg';
-  const heroDesktopSrc = '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-sailing.jpg';
+  // Hero photo (client 2026-09-10) : voilier commun, sauf Trimaran et Traditional
+  // qui ont chacun leur photo. Meme image en mobile et desktop.
+  const HERO_BY_TYPE = {
+    trimaran: '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-trimaran.jpg',
+    traditional: '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-traditional.jpg',
+  };
+  const heroSrc = HERO_BY_TYPE[type] || '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-sailing.jpg';
+  const heroMobileSrc = heroSrc;
+  const heroDesktopSrc = heroSrc;
 
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
