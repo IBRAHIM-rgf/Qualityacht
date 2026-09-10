@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import YachtFiltersCaribbean from './YachtFiltersCaribbean';
 import YachtList from '@/components/YachtList';
+import { useSelectedCount, FleetHeaderRow, FleetFooterRow } from '@/components/FleetActionButtons';
 
 // Accent Qualityacht de la zone flotte (#C2622A). Limite a cette section :
 // le hero et le texte editorial gardent leurs couleurs d'origine.
@@ -41,6 +42,8 @@ export default function SubregionClient({
   hideYachtType = false,
   lengthRangeM,
 }) {
+  // Nombre de yachts selectionnes (selection partagee)
+  const selectedCount = useSelectedCount();
   const [showMore, setShowMore] = useState(false);
   const [heroLit, setHeroLit] = useState(false);
   const heroRef = useRef(null);
@@ -221,9 +224,14 @@ export default function SubregionClient({
             <h2 className="trajan-regular text-xl md:text-3xl text-[#acb0cd] uppercase tracking-[0.1em]">
               Yachts in the Caribbean
             </h2>
-            <p className="text-xl md:text-3xl mt-3" style={{ color: 'var(--qy-antilles)' }}>
-              {filteredYachts.length} yacht{filteredYachts.length !== 1 ? 's' : ''} available
-            </p>
+          </div>
+          {/* Compteur a gauche + boutons de parcours a droite (client 2026-09-10) */}
+          <div className="mb-8">
+            <FleetHeaderRow count={selectedCount}>
+              <p className="text-xl md:text-3xl text-center sm:text-left" style={{ color: 'var(--qy-antilles)' }}>
+                {filteredYachts.length} yacht{filteredYachts.length !== 1 ? 's' : ''} available
+              </p>
+            </FleetHeaderRow>
           </div>
 
           <YachtFiltersCaribbean filters={filters} onChange={setFilters} customToggles={customToggles} hideMotor={hideMotor} boatGroups={boatGroups} hideYachtType={hideYachtType} lengthRangeM={lengthRangeM} />
@@ -241,6 +249,7 @@ export default function SubregionClient({
               <YachtList yachts={filteredYachts} accentColor={FLEET_ACCENT} />
             )}
           </main>
+          {filteredYachts.length > 0 && <FleetFooterRow count={selectedCount} />}
         </div>
       </div>
     </div>
