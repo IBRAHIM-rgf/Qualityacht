@@ -70,22 +70,19 @@ export default function CaribbeanAccessibilityGuide() {
     mq.addEventListener?.('change', apply);
     return () => mq.removeEventListener?.('change', apply);
   }, []);
-  const [picked, setPicked] = useState('');            // handicap principal choisi (id)
+  // Accordeon (client 2026-09-10) : une seule carte ouverte a la fois ; la carte
+  // ouverte est aussi la condition choisie pour « View Yacht ». Tout ferme au chargement.
+  const [picked, setPicked] = useState('');            // carte ouverte / handicap choisi (id)
   const [activeCat, setActiveCat] = useState(null); // null = toutes les categories (plus de filtre « All »)
   const [activeComp, setActiveComp] = useState(null);
   const [search, setSearch] = useState('');
-  const [expanded, setExpanded] = useState(() => new Set());
 
   const seeMatchingYachts = () => {
     if (!picked) return;
     router.push(`${YACHTS_LISTING_PATH}?handicap=${encodeURIComponent(picked)}`);
   };
 
-  const toggle = (key) => setExpanded((prev) => {
-    const next = new Set(prev);
-    if (next.has(key)) next.delete(key); else next.add(key);
-    return next;
-  });
+  const toggleCard = (id) => setPicked((cur) => (cur === id ? '' : id));
 
   const isFiltered = !!activeCat || activeComp || search.trim();
 
@@ -220,7 +217,7 @@ export default function CaribbeanAccessibilityGuide() {
             role="checkbox"
             aria-checked="true"
             aria-disabled="true"
-            className="relative overflow-hidden flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border border-[#B03E00]/60 bg-[#3a3b3f] px-5 py-4 md:px-7 md:py-5 select-none"
+            className="relative overflow-hidden flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border border-[#C2622A]/60 bg-[#26272A] px-5 py-3.5 md:px-7 md:py-4 select-none"
           >
             {/* Logo transparent du site, visible en filigrane */}
             <Image
@@ -254,10 +251,10 @@ export default function CaribbeanAccessibilityGuide() {
                   type="button"
                   aria-pressed={on}
                   onClick={() => setActiveCat(on ? null : c.id)}
-                  className={`min-h-[84px] md:min-h-[96px] rounded-2xl border px-4 py-4 text-center text-[14px] md:text-[15px] font-medium tracking-wide transition-colors ${
+                  className={`min-h-[64px] md:min-h-[72px] rounded-2xl border bg-[#26272A] px-4 py-3 text-center text-[14px] md:text-[15px] font-medium tracking-wide transition-colors duration-300 ${
                     on
-                      ? 'bg-[#B03E00] border-[#B03E00] text-white'
-                      : 'bg-[#3a3b3f] border-[#C0C0C0]/20 text-[#C0C0C0] hover:border-[#B03E00]'
+                      ? 'border-[#C2622A] text-[#C2622A]'
+                      : 'border-[#C0C0C0]/20 text-[#ACB0CD] hover:border-[#C2622A]/60'
                   }`}
                 >
                   {c.label}
@@ -323,8 +320,7 @@ export default function CaribbeanAccessibilityGuide() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
                   {rows.map((r) => (
-                    <Card key={r.id} r={r} open={expanded.has(r.type)} onToggle={() => toggle(r.type)}
-                      selected={picked === r.id} onSelect={() => setPicked(picked === r.id ? '' : r.id)} />
+                    <Card key={r.id} r={r} open={picked === r.id} onToggle={() => toggleCard(r.id)} />
                   ))}
                 </div>
               </section>
@@ -336,7 +332,7 @@ export default function CaribbeanAccessibilityGuide() {
       {/* ══ BANDE BLEUE DE FIN ══
           Aucun texte sur la bande bleu fonce (demande client 2026-09-10) : la note
           de cloture et le badge « Caribbean Fleet » ont ete retires. */}
-      <div aria-hidden className="h-16 md:h-20 bg-[#1b223d] border-t border-white/10" />
+      <div aria-hidden className="h-16 md:h-20 bg-[#1b223d]" />
 
       {/* ══ BARRE STICKY : choix + View Yacht ══ */}
       {picked && <div className="h-20" />}
@@ -366,63 +362,59 @@ function Legend({ dot, label }) {
   );
 }
 
-function Card({ r, open, onToggle, selected, onSelect }) {
+function Card({ r, open, onToggle }) {
   // Niveau d'accompagnement FIXE (defini par l'equipe dans lib/handicaps.js),
-  // affiche en lecture seule : plus de select modifiable (client 2026-09-10).
+  // affiche en lecture seule. Carte compacte : fermee = titre + niveau + chevron ;
+  // ouverte = description, details et « Share with advisors ». Interieur #26272A,
+  // texte #ACB0CD, etat actif signale uniquement par le texte/le filet #C2622A.
   const cc = BOARDING[r.comp] || BOARDING.req;
   return (
     <article
-      onClick={onSelect}
-      className={`relative bg-[#3a3b3f] border rounded-2xl p-5 flex flex-col cursor-pointer transition-colors ${selected ? 'border-[#B03E00] ring-1 ring-[#B03E00]' : 'border-[#C0C0C0]/15 hover:border-[#C0C0C0]/35'}`}
+      className={`relative bg-[#26272A] border rounded-2xl flex flex-col transition-colors duration-300 ${open ? 'border-[#C2622A]' : 'border-[#C0C0C0]/15 hover:border-[#C0C0C0]/35'}`}
     >
-      {selected && (
-        <span className="absolute -top-2 -right-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#B03E00] text-white shadow-lg">
-          <Check size={14} />
-        </span>
-      )}
-      <div className="mb-2.5">
-        <h3 className="text-[#C0C0C0] font-semibold text-[16px] leading-snug">{r.type}</h3>
-      </div>
-
-      <p className="text-[#acb0cd] text-[14px] leading-relaxed">{r.desc}</p>
-
-      {/* Boarding level, fixe et non modifiable */}
-      <div
-        className="mt-3.5 flex items-center gap-2.5 w-full pl-3 pr-3 py-2.5 rounded-lg border text-[13px] font-semibold uppercase tracking-[0.06em]"
-        style={{ color: cc.text, borderColor: cc.border, backgroundColor: cc.bg }}
-        aria-label={`Boarding level: ${cc.label}`}
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={onToggle}
+        className="w-full text-left px-4 py-3.5 flex items-start gap-3 rounded-2xl focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]"
       >
-        <span aria-hidden className="w-[9px] h-[9px] rounded-full flex-none" style={{ backgroundColor: cc.dot }} />
-        {cc.label}
-      </div>
+        <div className="min-w-0 flex-1">
+          <h3 className={`font-semibold text-[15px] leading-snug transition-colors duration-300 ${open ? 'text-[#C2622A]' : 'text-[#ACB0CD]'}`}>{r.type}</h3>
+          <div className="mt-2 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-[#ACB0CD]" aria-label={`Boarding level: ${cc.label}`}>
+            <span aria-hidden className="w-[7px] h-[7px] rounded-full flex-none" style={{ backgroundColor: '#C2622A' }} />
+            {cc.label}
+          </div>
+        </div>
+        <ChevronDown size={16} className={`flex-none mt-0.5 transition-all duration-300 ${open ? 'rotate-180 text-[#C2622A]' : 'text-[#ACB0CD]'}`} />
+      </button>
 
-      {/* Bloc detail repliable (animation hauteur via grid-rows) */}
-      <div className={`grid transition-all duration-300 ease-out ${open ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'}`}>
+      {/* Contenu masque quand la carte est fermee (animation hauteur via grid-rows) */}
+      <div className={`grid transition-all duration-300 ease-out ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
         <div className="overflow-hidden">
-          <div className="space-y-3 border-t border-white/10 pt-4">
+          <div className="px-4 pb-4 space-y-3 border-t border-white/10 pt-3">
+            <p className="text-[#ACB0CD] text-[13.5px] leading-relaxed">{r.desc}</p>
             <Field label="Vessel provisions" value={r.vessel} />
             <Field label="Specialist equipment" value={r.equip} />
             <Field label="Coordination notes" value={r.coord} italic />
+            <div className="pt-1 flex items-center justify-between gap-3 flex-wrap">
+              <button
+                type="button"
+                onClick={onToggle}
+                className="inline-flex items-center gap-1 text-[12px] font-medium uppercase tracking-[0.08em] text-[#C2622A] hover:text-[#B03E00] transition-colors"
+              >
+                See less
+                <ChevronDown size={14} className="rotate-180" />
+              </button>
+              {/* Ouvre le formulaire de devis en mode accessible, pre-rempli avec ce besoin */}
+              <Link
+                href={shareHref(r)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#C0C0C0]/40 px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-[#ACB0CD] hover:border-[#C2622A] hover:text-[#C2622A] transition-colors"
+              >
+                Share with advisors <ArrowRight size={13} />
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
-        <button
-          onClick={(e) => { e.stopPropagation(); onToggle(); }}
-          className="inline-flex items-center gap-1 text-[13px] font-medium uppercase tracking-[0.08em] text-[#c2622a] hover:text-[#B03E00] transition-colors"
-        >
-          {open ? 'See less' : 'See more'}
-          <ChevronDown size={14} className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
-        </button>
-        {/* Ouvre le formulaire de devis en mode accessible, pre-rempli avec ce besoin */}
-        <Link
-          href={shareHref(r)}
-          onClick={(e) => e.stopPropagation()}
-          className="inline-flex items-center gap-1.5 rounded-full border border-[#C0C0C0]/40 px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-[#C0C0C0] hover:border-[#B03E00] hover:text-[#B03E00] transition-colors"
-        >
-          Share with advisors <ArrowRight size={13} />
-        </Link>
       </div>
     </article>
   );
@@ -432,7 +424,7 @@ function Field({ label, value, italic }) {
   return (
     <div>
       <p className="text-[12px] uppercase tracking-[0.14em] text-[#B87333] mb-1">{label}</p>
-      <p className={`text-[13.5px] leading-relaxed ${italic ? 'italic text-[#9498a6]' : 'text-[#acb0cd]'}`}>{value}</p>
+      <p className={`text-[13px] leading-relaxed ${italic ? 'italic text-[#ACB0CD]/80' : 'text-[#ACB0CD]'}`}>{value}</p>
     </div>
   );
 }
