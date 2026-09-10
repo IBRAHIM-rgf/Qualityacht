@@ -877,20 +877,36 @@ export default function CaribbeanV15Page({ params }) {
         {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
             Desktop : image pleine largeur (natural ratio), titre OVERLAY en bas avec dégradé. */}
         <div className="pt-[70px] md:pt-0 bg-[#26272a]">
-          {/* Mobile : image seule */}
-          <div className="relative aspect-[6/5] md:hidden">
+          {/* Mobile : image seule, masquee vers le bas (meme degrade que /sales/motor) */}
+          <div
+            className="relative aspect-[6/5] md:hidden"
+            style={{
+              maskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
+            }}
+          >
             <Image src={heroMobileSrc} alt="" fill priority className="object-cover object-center" />
           </div>
           {/* Desktop : photo dediee paysage en pleine largeur, ratio naturel. */}
           <div className="hidden md:block relative w-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={heroDesktopSrc}
-              alt=""
-              className="block w-full h-auto"
-            />
-            {/* Dégradé bas pour lisibilité du texte */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+            {/* Meme degrade que le hero de /sales/motor (client 2026-09-10) : la photo
+                s'efface vers le bas dans le fond de page ; voile leger pour le titre. */}
+            <div
+              aria-hidden
+              className="relative"
+              style={{
+                maskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroDesktopSrc}
+                alt=""
+                className="block w-full h-auto"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-transparent pointer-events-none" />
+            </div>
             {/* Texte overlay */}
             <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-10 md:pb-16">
               <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
