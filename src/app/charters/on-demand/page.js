@@ -100,26 +100,28 @@ export default function OnDemandCharterPage() {
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(38,39,42,0.55) 0%, rgba(38,39,42,0.28) 26%, rgba(38,39,42,0.76) 62%, rgba(38,39,42,0.97) 100%)',
+              'linear-gradient(180deg, rgba(38,39,42,0.30) 0%, rgba(38,39,42,0.10) 30%, rgba(38,39,42,0.55) 68%, rgba(38,39,42,0.96) 100%), linear-gradient(90deg, rgba(38,39,42,0.45) 0%, rgba(38,39,42,0.20) 45%, rgba(38,39,42,0) 70%)',
           }}
         />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-16">
+        {/* Texte aligne a gauche, colonne limitee a ~55 % en desktop pour degager la
+            partie droite de la photo (demande client 2026-09-10). Centre sur mobile. */}
+        <div className="absolute inset-0 flex flex-col items-center md:items-start justify-end text-center md:text-left px-6 md:px-14 lg:px-20 pb-10 md:pb-8 lg:pb-16">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.32em] text-[#B87333] mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
             On-Demand Charter
           </p>
-          <h1 className="trajan-regular text-2xl md:text-4xl lg:text-5xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-tight max-w-4xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] md:-translate-x-[2ch]">
+          <h1 className="trajan-regular text-2xl md:text-2xl lg:text-5xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-tight max-w-4xl md:max-w-[70%] lg:max-w-[55%] drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
             Not Just a Yacht. A Story You Could Not Have Lived Any Other Way.
           </h1>
-          <p className="mt-5 max-w-2xl text-sm md:text-base leading-relaxed text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          <p className="mt-5 md:mt-3 lg:mt-5 max-w-2xl md:max-w-[60%] lg:max-w-[50%] text-sm md:text-sm lg:text-base leading-relaxed text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
             Tell us what moves you. We will shape the yacht, the setting and the people around an
             experience designed entirely for you.
           </p>
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/request-quote" className={CTA_CUIVRE}>
-              Create My Impossible Charter
-            </Link>
-            <Link href="/charters/day-charter" className={CTA_ARGENT}>
+          <div className="mt-8 md:mt-5 lg:mt-8 flex flex-col sm:flex-row items-center md:items-start justify-center md:justify-start gap-4">
+            <Link href="/charters/day-charter" className={CTA_CUIVRE}>
               Day Charter
+            </Link>
+            <Link href="/#contact" className={CTA_ARGENT}>
+              Discuss Privately
             </Link>
           </div>
         </div>
@@ -214,8 +216,8 @@ export default function OnDemandCharterPage() {
             possible for your dates and your destination.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/request-quote" className={CTA_CUIVRE}>
-              Start Your On-Demand Charter
+            <Link href="/charters/day-charter" className={CTA_CUIVRE}>
+              Day Charter
             </Link>
             <Link href="/#contact" className={CTA_ARGENT}>
               Discuss Privately
