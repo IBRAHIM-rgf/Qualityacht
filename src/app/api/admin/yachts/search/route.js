@@ -28,7 +28,8 @@ export async function GET(request) {
       priceMax: searchParams.get('priceMax') ? parseInt(searchParams.get('priceMax')) : null,
     };
 
-    const result = await fetchYachtsWithFilters(filters);
+    // summaryOnly : la liste complete (~1 900 yachts) sans appel detail par yacht.
+    const result = await fetchYachtsWithFilters(filters, null, { summaryOnly: true });
 
     return NextResponse.json({
       yachts: result.yachts || [],
