@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import YachtList from '@/components/YachtList';
 import YachtFilters from '@/components/YachtFilters';
+import { useSelectedCount, FleetHeaderRow, FleetFooterRow } from '@/components/FleetActionButtons';
 
 const YACHTS_PER_PAGE = 40;
 
@@ -23,6 +24,8 @@ const CARIBBEAN_DESTINATIONS = [
 
 export default function ExploreYachtClient({ initialFilters, initialData, totalYachts, handicapFilter = null }) {
   const pathname = usePathname();
+  // Nombre de yachts selectionnes (selection partagee)
+  const selectedCount = useSelectedCount();
   const [currentPage, setCurrentPage] = useState(1);
 
   const [filters, setFilters] = useState(() => ({
@@ -130,10 +133,12 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
           <h1 className="trajan-regular text-3xl md:text-4xl text-[#C0C0C0] mb-2 text-center uppercase tracking-[0.1em]">
             Caribbean<br />Our Yacht Fleet
           </h1>
-          <p className="text-[#acb0cd] text-center">
-            {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
-            {totalYachts && totalYachts > filteredYachts.length ? ` (${totalYachts} total)` : ''}
-          </p>
+          <FleetHeaderRow count={selectedCount}>
+            <p className="text-[#acb0cd] text-center sm:text-left">
+              {filteredYachts.length} yacht{filteredYachts.length > 1 ? 's' : ''} available
+              {totalYachts && totalYachts > filteredYachts.length ? ` (${totalYachts} total)` : ''}
+            </p>
+          </FleetHeaderRow>
           {handicapFilter && (
             <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm bg-[#B03E00]/15 border border-[#B03E00]/40 text-[#e3a892]">
@@ -214,6 +219,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
             </>
           )}
         </main>
+        {filteredYachts.length > 0 && <FleetFooterRow count={selectedCount} />}
       </div>
     </div>
   );
