@@ -81,24 +81,28 @@ export default function SailingRentalPage() {
           cadrage mobile est decale vers la gauche pour garder le catamaran et
           ses passagers dans le cadre malgre le format vertical. */}
       <section className="relative w-full h-[62vh] min-h-[420px] md:h-[74vh] overflow-hidden bg-[#26272a]">
-        <Image
-          src={HERO_IMAGE}
-          alt="Sailing yachts under way at sunset on open water"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center max-md:object-[38%_50%]"
-        />
-        {/* Voile sombre neutre, uniquement pour la lisibilite du titre. */}
+        {/* Meme degrade que le hero de /sales/motor (client 2026-09-10) : le masque
+            fait disparaitre la photo vers le bas dans le fond de page, le voile
+            sombre leger sert uniquement a la lisibilite du titre. */}
         <div
           aria-hidden
-          className="absolute inset-0"
+          className="absolute inset-0 z-0"
           style={{
-            background:
-              'linear-gradient(180deg, rgba(38,39,42,0.35) 0%, rgba(38,39,42,0.10) 38%, rgba(38,39,42,0.55) 78%, rgba(38,39,42,0.92) 100%)',
+            maskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
           }}
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-12 md:pb-16">
+        >
+          <Image
+            src={HERO_IMAGE}
+            alt="Sailing yachts under way at sunset on open water"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center max-md:object-[38%_50%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-transparent" />
+        </div>
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-6 pb-12 md:pb-16">
           <h1 className="text-3xl md:text-5xl font-bold text-white trajan-regular text-center uppercase tracking-wide drop-shadow-[0_3px_14px_rgba(0,0,0,0.85)]">
             only for you
           </h1>
