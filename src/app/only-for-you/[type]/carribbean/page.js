@@ -876,7 +876,11 @@ export default function CaribbeanV15Page({ params }) {
         {/* ══ HERO ══ */}
         {/* Mobile : aspect-[6/5] + object-cover, titre EN-DESSOUS.
             Desktop : image pleine largeur (natural ratio), titre OVERLAY en bas avec dégradé. */}
-        <div className="pt-[70px] md:pt-0 bg-[#26272a]">
+        {/* Option 2 (client 2026-09-10) : les nuages de la section description passent
+            SOUS le hero (un seul fond continu), pour que la photo s'y fonde sans ligne,
+            comme sur /sales/motor. */}
+        <CloudSection className="bg-[#26272a]" bg="/images/nuagesAncien.png">
+        <div className="pt-[70px] md:pt-0">
           {/* Mobile : image seule, masquee vers le bas (meme degrade que /sales/motor) */}
           <div
             className="relative aspect-[6/5] md:hidden"
@@ -952,7 +956,7 @@ export default function CaribbeanV15Page({ params }) {
         </div>
 
         {/* ══ DESCRIPTION (texte dedie par type voilier ; regatta a sa propre section) ══ */}
-        <CloudSection className="bg-[#26272a] py-14 md:py-28 px-5 md:px-20" bg="/images/nuagesAncien.png">
+        <div className="py-14 md:py-28 px-5 md:px-20">
           {type === 'regatta' ? (
             /* Regatta : texte dedie (remplace l'ancien marqueur vert temporaire). */
             <div className="max-w-4xl mx-auto text-center leading-relaxed text-[#acb0cd]">
@@ -1007,6 +1011,7 @@ export default function CaribbeanV15Page({ params }) {
               </p>
             </div>
           )}
+        </div>
         </CloudSection>
 
         {/* ══ BANDEAU cocomer — couleur au hover 4s ══ */}
