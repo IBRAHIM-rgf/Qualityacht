@@ -298,6 +298,16 @@ export default function MotorSalesPage() {
               <span aria-hidden className="text-[13px] leading-none">&rarr;</span>
             </Link>
           </div>
+          {/* Retour Sales : meme lien tertiaire que sur /sales/sailing et /sales/toys
+              (SourcingLanding). Demande client 2026-09-10. */}
+          <p className="mt-8">
+            <Link
+              href="/sales"
+              className="inline-flex min-h-[48px] items-center text-[11px] uppercase tracking-[0.18em] text-[#acb0cd] underline underline-offset-4 transition-colors hover:text-[#c2622a] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+            >
+              <span aria-hidden className="mr-2">&larr;</span> Back to Sales
+            </Link>
+          </p>
         </div>
       </section>
     </div>
