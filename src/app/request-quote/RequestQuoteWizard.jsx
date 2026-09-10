@@ -490,6 +490,14 @@ export default function RequestQuoteWizard() {
     : null;
 
   // Support ?step=1 (Contact Info direct) ou ?step=2 — utilisé par "Contact broker".
+  // Mode accessible (?accessible=1) — variante demandee par le client le
+  // 2026-09-10 pour le parcours /charters/accessible : titre dedie, Reduced
+  // mobility verrouillee, pas de Pet friendly ni de jets, bouton principal
+  // « Begin your accessible charter journey », pas de message « quote is empty ».
+  const accessibleMode = params.get('accessible') === '1';
+  // Message pre-rempli (ex. besoins d'accessibilite transmis par le guide).
+  const initialMessage = params.get('message') || '';
+
   const initialStep = (() => {
     const s = Number(params.get('step'));
     return Number.isFinite(s) && s >= 0 && s <= 2 ? s : 0;
@@ -522,7 +530,7 @@ export default function RequestQuoteWizard() {
 
   const [charter, setCharter] = useState({
     startMonth: '', endMonth: '', guests: yacht.guests || '',
-    proposeJets: false, pets: false, accessible: false,
+    proposeJets: false, pets: false, accessible: accessibleMode,
   });
 
   // 24 mois glissants pour les selects Departure / Return
@@ -545,7 +553,7 @@ export default function RequestQuoteWizard() {
     waCountry: 'Switzerland', whatsapp: '',
     callbackCountry: 'Switzerland', callbackTime: '',
     contactMethod: 'Email',
-    message: '', acceptPolicy: false,
+    message: initialMessage, acceptPolicy: false,
   });
 
   // Remonter en haut de page à chaque changement d'étape
@@ -572,7 +580,7 @@ export default function RequestQuoteWizard() {
       )}
 
       <h1 className={`trajan-regular font-bold text-2xl md:text-4xl text-center uppercase tracking-[0.15em] mb-10 md:mb-14 text-[#C0C0C0] [-webkit-text-stroke:0.6px_#C0C0C0] ${step === 2 ? 'mt-[10vh]' : ''}`}>
-        Request Your Next Charter
+        {accessibleMode ? 'Design Your Next Accessible Charter' : 'Request Your Next Charter'}
       </h1>
 
       <StepIndicator step={step} />
@@ -586,7 +594,7 @@ export default function RequestQuoteWizard() {
             <div className="space-y-6">
               {/* Vignettes des yachts du panier */}
               {boats.length === 0 ? (
-                <p className="text-center text-sm text-[#acb0cd]/70">Your quote is empty.</p>
+                !accessibleMode && <p className="text-center text-sm text-[#acb0cd]/70">Your quote is empty.</p>
               ) : (
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   {boats.map((b, i) => (
@@ -632,30 +640,47 @@ export default function RequestQuoteWizard() {
 
               {/* Checkboxes options — style CocoCheckbox (logo Qualityacht quand coché) */}
               <div className="space-y-2.5">
-                <label onClick={() => setCharter({ ...charter, pets: !charter.pets })}
-                  className="flex items-center gap-3 cursor-pointer select-none">
-                  <CocoCheckbox checked={charter.pets} />
-                  <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
-                    <PawPrint className="w-4 h-4 text-[#c2622a]" />
-                    Pet friendly
-                  </span>
-                </label>
-                <label onClick={() => setCharter({ ...charter, accessible: !charter.accessible })}
-                  className="flex items-center gap-3 cursor-pointer select-none">
-                  <CocoCheckbox checked={charter.accessible} />
-                  <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
-                    <Accessibility className="w-4 h-4 text-[#c2622a]" />
-                    Reduced mobility access required
-                  </span>
-                </label>
-                <label onClick={() => setCharter({ ...charter, proposeJets: !charter.proposeJets })}
-                  className="flex items-center gap-3 cursor-pointer select-none">
-                  <CocoCheckbox checked={charter.proposeJets} />
-                  <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
-                    <Plane className="w-4 h-4 text-[#c2622a]" />
-                    Also propose matching private jets for my trip
-                  </span>
-                </label>
+                {!accessibleMode && (
+                  <label onClick={() => setCharter({ ...charter, pets: !charter.pets })}
+                    className="flex items-center gap-3 cursor-pointer select-none">
+                    <CocoCheckbox checked={charter.pets} />
+                    <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
+                      <PawPrint className="w-4 h-4 text-[#c2622a]" />
+                      Pet friendly
+                    </span>
+                  </label>
+                )}
+                {accessibleMode ? (
+                  /* Verrouillee : activee par notre equipe, non modifiable par le client. */
+                  <div role="checkbox" aria-checked="true" aria-disabled="true"
+                    className="flex items-center gap-3 select-none rounded-xl border border-[#B03E00]/60 bg-[#3a3b3f] px-4 py-3">
+                    <CocoCheckbox checked />
+                    <span className="text-base flex items-center gap-2 text-[#C0C0C0]">
+                      <Accessibility className="w-5 h-5 text-[#B03E00]" />
+                      Reduced mobility access required
+                    </span>
+                    <span className="ml-auto text-[11px] uppercase tracking-[0.18em] text-[#B03E00]">Included</span>
+                  </div>
+                ) : (
+                  <label onClick={() => setCharter({ ...charter, accessible: !charter.accessible })}
+                    className="flex items-center gap-3 cursor-pointer select-none">
+                    <CocoCheckbox checked={charter.accessible} />
+                    <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
+                      <Accessibility className="w-4 h-4 text-[#c2622a]" />
+                      Reduced mobility access required
+                    </span>
+                  </label>
+                )}
+                {!accessibleMode && (
+                  <label onClick={() => setCharter({ ...charter, proposeJets: !charter.proposeJets })}
+                    className="flex items-center gap-3 cursor-pointer select-none">
+                    <CocoCheckbox checked={charter.proposeJets} />
+                    <span className="text-sm flex items-center gap-2 text-[#acb0cd]">
+                      <Plane className="w-4 h-4 text-[#c2622a]" />
+                      Also propose matching private jets for my trip
+                    </span>
+                  </label>
+                )}
               </div>
 
               {/* Ajouter un bateau a la selection : renvoie sur la LISTE et non
@@ -673,7 +698,7 @@ export default function RequestQuoteWizard() {
                 <GhostButton onClick={() => { if (typeof window !== 'undefined') window.history.back(); }} className="inline-flex items-center gap-2 px-3 py-2 md:gap-3 md:px-6 md:py-3 text-xs md:text-sm font-bold shrink-0">
                   <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" /> Go Back
                 </GhostButton>
-                <PrimaryButton onClick={goNext} className="px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">Secure My Charter</PrimaryButton>
+                <PrimaryButton onClick={goNext} className="px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">{accessibleMode ? 'Begin your accessible charter journey' : 'Secure My Charter'}</PrimaryButton>
               </div>
             </div>
           </section>
