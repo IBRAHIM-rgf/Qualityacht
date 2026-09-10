@@ -246,8 +246,14 @@ function AnkorSearchTab({ existingIds, onAdd }) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(null);
+  // Le catalogue complet fait ~1 700 yachts : afficher tout d'un coup figeait
+  // la page. On affiche par paquets de 60 (bouton « Afficher plus »).
+  const PAGE = 60;
+  const [shown, setShown] = useState(PAGE);
+  const visible = results.slice(0, shown);
 
   const doSearch = async () => {
+    setShown(PAGE);
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -305,7 +311,15 @@ function AnkorSearchTab({ existingIds, onAdd }) {
         {results.length === 0 && !loading && (
           <div className="text-center py-12 text-[#acb0cd]/50">Lance une recherche pour voir les yachts Ankor.</div>
         )}
-        {results.map(yacht => {
+        {loading && (
+          <div className="text-center py-12 text-[#acb0cd]/70 flex items-center justify-center gap-2">
+            <Loader2 className="w-4 h-4 animate-spin" /> Chargement du catalogue Ankor (environ 15 secondes)…
+          </div>
+        )}
+        {results.length > 0 && !loading && (
+          <div className="text-xs text-[#acb0cd]/60 px-1 pb-1">{results.length} yachts trouvés — {Math.min(shown, results.length)} affichés</div>
+        )}
+        {visible.map(yacht => {
           const inBdd = existingIds.has(yacht.id);
           const img = yacht.images?.[0] ? getAnkorImageUrl(yacht.images[0], '320w') : '/placeholder.jpg';
           return (
@@ -336,6 +350,14 @@ function AnkorSearchTab({ existingIds, onAdd }) {
             </div>
           );
         })}
+        {shown < results.length && !loading && (
+          <button
+            onClick={() => setShown((n) => n + PAGE)}
+            className="w-full mt-2 px-4 py-3 rounded-xl border border-[#C0C0C0]/30 text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] text-sm uppercase tracking-wider"
+          >
+            Afficher plus ({results.length - shown} restants)
+          </button>
+        )}
       </div>
     </div>
   );
