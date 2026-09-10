@@ -562,6 +562,19 @@ export default function RequestQuoteWizard() {
   }, [step]);
 
   const goNext = () => setStep(s => Math.min(2, s + 1));
+// Les trois etapes restent cote a cote dans le DOM et le carrousel se contente
+  // de les decaler. L'etape voisine frole alors le bord du overflow-hidden, et son
+  // liseré argente laisse passer une bande verticale claire (signalee par la
+  // cliente sur /request-quote-test-v10, "une bande lumineuse a cote du phone").
+  // On rend donc les etapes inactives reellement impeignables : visibility:hidden
+  // ne peut fuir sous aucun arrondi de sous-pixel, contrairement a un simple clip.
+  // Le masquage est RETARDE de la duree du glissement (500ms) pour que l'etape
+  // sortante reste visible pendant l'animation ; l'apparition, elle, est immediate.
+  // Effet de bord souhaitable : les champs hors ecran sortent de l'ordre de
+  // tabulation, alors qu'aujourd'hui le clavier y entre a l'aveugle.
+  const paneClass = (i) =>
+    `w-full shrink-0 px-1 transition-[visibility] duration-0 ${step === i ? '' : 'invisible delay-500'}`;
+
   const goBack = () => setStep(s => Math.max(0, s - 1));
 
   return (
@@ -590,7 +603,7 @@ export default function RequestQuoteWizard() {
         <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${step * 100}%)` }}>
 
           {/* ══ ÉTAPE 1 — CHARTER DETAILS (vignettes panier + mois + checkboxes) ══ */}
-          <section className="w-full shrink-0 px-1">
+          <section className={paneClass(0)}>
             <div className="space-y-6">
               {/* Vignettes des yachts du panier */}
               {boats.length === 0 ? (
@@ -704,7 +717,7 @@ export default function RequestQuoteWizard() {
           </section>
 
           {/* ══ ÉTAPE 2 — CONTACT INFORMATION ══ */}
-          <section className="w-full shrink-0 px-1">
+          <section className={paneClass(1)}>
             <div className="max-w-4xl mx-auto space-y-6">
               {/* Si l'utilisateur a coché "private jets" en step 0 et n'a pas encore confirmé, on lui propose le widget de réservation jet juste avant la note */}
               {charter.proposeJets && step === 1 && (
@@ -800,7 +813,7 @@ export default function RequestQuoteWizard() {
           </section>
 
           {/* ══ ÉTAPE 3 — THANK YOU ══ */}
-          <section className="w-full shrink-0 px-1">
+          <section className={paneClass(2)}>
             <div className="max-w-2xl mx-auto text-center px-2 md:px-4 pt-24 pb-10 md:py-24 min-h-[80vh] md:min-h-0 flex flex-col items-center justify-between md:justify-center gap-20 md:gap-0">
               <div className="flex flex-col items-center w-full">
                 <div className="trajan-bold font-bold text-2xl md:text-3xl uppercase tracking-[0.12em] mb-8 md:mb-4" style={{ color: '#B03E00', WebkitTextStroke: '0.8px #B03E00' }}>Grateful</div>
