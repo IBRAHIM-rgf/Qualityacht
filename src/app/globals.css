@@ -308,3 +308,9 @@ img[src*="title-line"] {
    -z-10 / z-10 des pages. Couleur = bleu marine du site #1b223d. */
 .sales-blue-overlay { position: relative; isolation: isolate; }
 .sales-blue-overlay::before { content: ""; position: absolute; inset: 0; background: rgba(27, 34, 61, 0.22); mix-blend-mode: normal; pointer-events: none; z-index: 9999; }
+
+/* ── Fond commun de la section /sales : meme nuages que la section
+   "A World-Class Experience" de l'accueil (services-bg.png + voile noir 35 %),
+   fixe derriere tout le scroll. Pose par src/app/sales/layout.js. Demande
+   client 2026-09-10 pour /sales/motor, /sales/sailing et /sales/toys. */
+.qy-sales-bg { position: fixed; inset: 0; z-index: -1; background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/services-bg.png') center / cover no-repeat; }
