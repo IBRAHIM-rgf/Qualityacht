@@ -47,7 +47,8 @@ export default function SourcingLanding({
   final,
 }) {
   return (
-    <main className="bg-[#26272a] text-[#acb0cd]">
+    // Pas de fond propre : le fond nuages commun vient du layout /sales.
+    <main className="text-[#acb0cd]">
       {/* ══ HERO ══ */}
       {heroImage ? (
         <section
