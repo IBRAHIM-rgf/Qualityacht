@@ -83,6 +83,21 @@ export async function POST(request) {
       );
     }
 
+    // Ajout depuis la recherche admin : cached_data n'est qu'un resume Ankor
+    // (pas de _rawEntity). On complete avec le detail du yacht avant stockage,
+    // comme avant, pour conserver photos, description, tarifs.
+    let cachedData = data.cached_data || null;
+    if (cachedData && !cachedData._rawEntity && data.yacht_id) {
+      try {
+        const { fetchYachtCardByUri } = await import('@/lib/yachts');
+        const full = await fetchYachtCardByUri(data.yacht_id, cachedData);
+        if (full) cachedData = { ...cachedData, ...full };
+      } catch (e) {
+        console.error('Enrichissement Ankor a l ajout impossible, resume conserve:', e?.message);
+      }
+    }
+    data.cached_data = cachedData;
+
     const lightData = data.light_data ?? extractLightData(data.cached_data);
     const ankorRegion = data.ankor_region ?? inferAnkorRegion(data.cached_data);
     const finalRegion = data.region || ankorRegion || null;
