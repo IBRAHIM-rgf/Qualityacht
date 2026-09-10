@@ -69,7 +69,7 @@ export default function SportsHeroTriptych() {
   }, []);
 
   return (
-    <section className="relative pt-[70px] md:pt-0 h-[74vh] min-h-[500px] md:h-[86vh] overflow-hidden bg-[#26272a] grid grid-cols-3 gap-[2px]">
+    <section className="relative pt-[70px] md:pt-0 h-[74vh] min-h-[500px] md:h-[86vh] overflow-hidden">
       <style>{`
         .sports-reveal { opacity: 0; transform: translateY(28px); transition: opacity 1.6s ease, transform 1.6s ease; }
         .sports-reveal.revealed { opacity: 1; transform: translateY(0); }
@@ -78,6 +78,16 @@ export default function SportsHeroTriptych() {
         }
       `}</style>
 
+      {/* Triptyque masque vers le bas (client 2026-09-10) : les videos se fondent
+          dans le fond nuages de la page au lieu d'une coupure nette. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 grid grid-cols-3 gap-[2px]"
+        style={{
+          maskImage: 'linear-gradient(to bottom, black 55%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 55%, transparent 100%)',
+        }}
+      >
       {COLONNES.map((col, i) => {
         const enVideo =
           petitEcran === false ? animer : petitEcran === true && animer && i === COLONNE_MOBILE;
@@ -104,6 +114,7 @@ export default function SportsHeroTriptych() {
           />
         );
       })}
+      </div>
 
       {/* Degrade sombre neutre, pour la lisibilite seule. Aucun bleu. */}
       {/* Degrade sombre neutre. Le panneau de droite est une plage tres claire :
@@ -115,12 +126,13 @@ export default function SportsHeroTriptych() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.04) 26%, rgba(0,0,0,0.44) 62%, rgba(0,0,0,0.68) 100%)',
+            'linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.04) 26%, rgba(0,0,0,0.44) 62%, rgba(0,0,0,0.30) 84%, rgba(0,0,0,0) 100%)',
         }}
       />
 
       <div className="absolute inset-x-0 bottom-[7%] md:bottom-[9%] flex flex-col items-center px-4">
-        <div ref={titreRef} className="sports-reveal flex flex-col items-center w-full rounded-3xl px-6 py-6 md:px-10 md:py-8 bg-[#26272a]/45 backdrop-blur-[2px]">
+        {/* Cadre translucide retire (client 2026-09-10) : titre, filet et boutons seuls */}
+        <div ref={titreRef} className="sports-reveal flex flex-col items-center w-full px-6 py-6 md:px-10 md:py-8">
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.12em] md:tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
             Sports Yacht Charter
           </h1>

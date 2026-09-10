@@ -22,13 +22,13 @@ const sportsItems = destinations.map((d) =>
 
 export default function SportsCharter() {
   return (
-    <>
+    // Fond nuages commun (.qy-sales-bg, fixe) + voile bleu 22 % (.sales-blue-overlay),
+    // comme sur les pages Sales — demande client 2026-09-10. Cartes et titres inchanges.
+    <div className="sales-blue-overlay">
+      <div aria-hidden className="qy-sales-bg" />
       <SportsHeroTriptych />
 
-      <section
-        className="relative flex flex-col items-center bg-cover bg-center bg-no-repeat py-24 px-4"
-        style={{ backgroundImage: "url('/images/services-bg.png')" }}
-      >
+      <section className="relative flex flex-col items-center py-24 px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
           {sportsItems.map((item) => (
             <Link
@@ -53,6 +53,6 @@ export default function SportsCharter() {
           ))}
         </div>
       </section>
-    </>
+    </div>
   );
 }
