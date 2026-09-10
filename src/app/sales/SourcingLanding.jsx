@@ -42,8 +42,8 @@ export default function SourcingLanding({
   // (photo 3:2 trop recadree). Defaut false : les autres pages ne changent pas.
   heroFrame = false,
   // belowHeroFilter : filtre de l'ancienne page d'attente (fond gris #111827 +
-  // nuages gris a 30 %) sous le hero uniquement, sans le voile bleu commun. Le
-  // hero garde exactement son rendu (voile bleu 22 % re-applique localement).
+  // nuages gris a 30 %) sur toute la page, sans le voile bleu commun (retire du
+  // hero aussi le 2026-09-10 a la demande du client).
   // Demande client 2026-09-10 pour /sales/sailing. Defaut false.
   belowHeroFilter = false,
   primary,
@@ -94,9 +94,6 @@ export default function SourcingLanding({
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-transparent" />
           </div>
-          {belowHeroFilter && (
-            <div aria-hidden className="absolute inset-0 z-20 pointer-events-none" style={{ background: 'rgba(27, 34, 61, 0.22)' }} />
-          )}
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-14">
             <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-[#B87333] mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
               {eyebrow}
