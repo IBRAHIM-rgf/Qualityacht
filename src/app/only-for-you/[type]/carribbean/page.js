@@ -840,9 +840,9 @@ export default function CaribbeanV15Page({ params }) {
   // Calendrier regatta 2027 : groupement par mois (sans filtre, tous events affiches)
   const regattaByMonth = useMemo(() => groupByMonth(REGATTAS_2027), []);
 
-  // Hero photo : regatta a sa propre photo racing dediee, les autres voiliers gardent le yacht v15.
-  const heroMobileSrc = type === 'regatta' ? '/images/sailing/only for you caraibes.jpg' : '/images/yachts/yatch2.jpeg';
-  const heroDesktopSrc = type === 'regatta' ? '/images/sailing/only for you caraibes.jpg' : '/images/yachts/Yatch_desktop.png';
+  // Hero photo (client 2026-09-10) : meme voilier pour les 6 types, mobile et desktop.
+  const heroMobileSrc = '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-sailing.jpg';
+  const heroDesktopSrc = '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-sailing.jpg';
 
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
