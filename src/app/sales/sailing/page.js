@@ -42,6 +42,7 @@ export default function SalesSailingPage() {
       heroAlt="Sailing yacht under way at sunset"
       heroPosition="object-center max-md:object-[42%_50%]"
       heroFrame
+      belowHeroFilter
       primary={{ label: 'Find a Sailing Yacht', href: '/sales/enquiry?intent=buy' }}
       secondary={{ label: 'Speak to a Sales Broker', href: '/sales/enquiry?intent=general' }}
       axes={AXES}
