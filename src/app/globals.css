@@ -314,3 +314,7 @@ img[src*="title-line"] {
    fixe derriere tout le scroll. Pose par src/app/sales/layout.js. Demande
    client 2026-09-10 pour /sales/motor, /sales/sailing et /sales/toys. */
 .qy-sales-bg { position: fixed; inset: 0; z-index: -1; background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/services-bg.png') center / cover no-repeat; }
+
+/* /sales/sailing (2026-09-10) : le voile bleu commun est retire pour la page
+   (il est re-applique localement sur le hero seul dans SourcingLanding). */
+.sales-blue-overlay:has(.qy-no-blue)::before { display: none; }
