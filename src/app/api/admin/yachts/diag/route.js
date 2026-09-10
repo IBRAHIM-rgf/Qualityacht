@@ -70,6 +70,18 @@ export async function GET(request) {
     // 3. Un filtre region pour comparer.
     const caribbean = await probe(token, 'region=Caribbean');
 
+    // 3b. Toutes les regions Ankor connues + tous les types : comptages pour savoir
+    //     si l'union des requetes filtrees couvre la flotte complete.
+    const REGIONS = ['West Mediterranean','East Mediterranean','Caribbean','Indian Ocean & South East Asia','Australasia & South Pacific','Antarctica','Arabian Gulf','South & Central America','North America','Northern Europe','Africa','Bahamas','Mediterranean','Asia','Europe','Pacific'];
+    const TYPES = ['Motor','Sailing','Catamaran','Gulet','Power Catamaran','Classic','Expedition','Sport fishing'];
+    const compact = (r) => ({ query: r.query, status: r.status, hitsCount: r.hitsCount, estHits: r.meta && r.meta.estHits, ms: r.ms, error: r.error });
+    const byRegion = [];
+    for (const rg of REGIONS) byRegion.push(compact(await probe(token, 'region=' + encodeURIComponent(rg))));
+    const byType = [];
+    for (const ty of TYPES) byType.push(compact(await probe(token, 'yachtType=' + encodeURIComponent(ty))));
+    const misc = [];
+    for (const q of ['minLength=1','sleeps=1','name=a','name=','currency=EUR','charterType=Term','charterType=Day','minLength=1&maxLength=200']) misc.push(compact(await probe(token, q)));
+
     // 4. L'autre endpoint (liste d'entites), si accessible.
     let vesselList = null;
     try {
@@ -79,7 +91,7 @@ export async function GET(request) {
       vesselList = { status: res.status, keys: data && typeof data === 'object' ? Object.keys(data) : null, hitsCount: data && Array.isArray(data.hits) ? data.hits.length : null, head: data ? undefined : text.slice(0, 200) };
     } catch (e) { vesselList = { error: String(e && e.message || e) }; }
 
-    return NextResponse.json({ base, paginationTries: tries, caribbean, vesselList }, { status: 200 });
+    return NextResponse.json({ base, paginationTries: tries, caribbean, byRegion, byType, misc, vesselList }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: String(error && error.message || error) }, { status: 500 });
   }
