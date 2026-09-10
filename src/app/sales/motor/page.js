@@ -72,12 +72,8 @@ function SplitSection({ img, eyebrow, title, children, cta, ctaHref, reverse = f
 export default function MotorSalesPage() {
   return (
     <div className="min-h-screen relative text-[#acb0cd]">
-      {/* Fond "bleu" facon page privat-jet "Destination inconnue" : gris-bleu tres sombre
-          (gray-900) + nuages en gris (nuagesAncien). Fixe -> reste derriere tout le scroll. */}
-      <div aria-hidden className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gray-900" />
-        <Image src="/images/nuagesAncien.png" alt="" fill className="object-cover opacity-30 grayscale" priority />
-      </div>
+      {/* Fond : le fond nuages commun (services-bg) vient du layout /sales —
+          l'ancien calque gray-900 + nuagesAncien a ete retire le 2026-09-10. */}
       {/* ── HERO (titre sobre sur fond photo estompe) ── */}
       <header className="relative overflow-hidden pt-32 md:pt-44 pb-16 md:pb-24 px-6 md:px-14">
         {/* Le masque fait DISPARAITRE la photo vers le bas au lieu de la recouvrir d'une
