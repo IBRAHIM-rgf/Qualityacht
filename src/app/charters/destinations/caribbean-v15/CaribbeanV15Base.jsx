@@ -558,9 +558,9 @@ function BurntLine() {
 }
 
 // ── Section fond ───────────────────────────────────────────────────────────────
-function CloudSection({ children, className = '', bg = '/images/services-bg.png', gray = false }) {
+function CloudSection({ children, className = '', bg = '/images/services-bg.png', gray = false, id }) {
   return (
-    <div className={`relative ${className}`}>
+    <div id={id} className={`relative ${className}`}>
       <div className="absolute inset-0 z-0">
         {/* gray : nuages en gris (grayscale) — utilise sur la halal pour que le fond
             nuageux continue en gris derriere le slide (cf. HalalLateralScroll). */}
@@ -863,7 +863,8 @@ export default function CaribbeanV15Page({
         ) : null}
 
         {/* ══ CARIBBEAN ISLANDS — rectangles 4 + 4 (8 cards) ══ */}
-        <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
+        {/* id : cible du bouton « Return to the Islands » de /yachts (2026-09-10) */}
+        <CloudSection id="explore-caribbean-islands" className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
             {/* Ligne 1 : 2 col mobile / 4 col desktop */}
