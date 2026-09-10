@@ -54,28 +54,33 @@ export default function SourcingLanding({
         <section
           className={
             heroFrame
-              ? 'qy-hero-frame bg-[#26272a]'
-              : 'relative w-full h-[58vh] min-h-[420px] md:h-[72vh] overflow-hidden bg-[#26272a]'
+              ? 'qy-hero-frame'
+              : 'relative w-full h-[58vh] min-h-[420px] md:h-[72vh] overflow-hidden'
           }
         >
-          <Image
-            src={heroImage}
-            alt={heroAlt}
-            fill
-            priority
-            sizes="100vw"
-            className={`object-cover ${heroPosition}`}
-          />
-          {/* Voile sombre neutre, uniquement pour la lisibilite. Aucun bleu. */}
+          {/* Meme degrade que le hero de /sales/motor (demande client 2026-09-10) :
+              le masque fait DISPARAITRE la photo vers le bas au lieu de la recouvrir
+              d'une couleur, le fond nuages du layout reapparait progressivement. Le
+              voile noir leger sert uniquement a garder le titre lisible. */}
           <div
             aria-hidden
-            className="absolute inset-0"
+            className="absolute inset-0 z-0"
             style={{
-              background:
-                'linear-gradient(180deg, rgba(38,39,42,0.52) 0%, rgba(38,39,42,0.22) 30%, rgba(38,39,42,0.74) 60%, rgba(38,39,42,0.97) 100%)',
+              maskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
             }}
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-14">
+          >
+            <Image
+              src={heroImage}
+              alt={heroAlt}
+              fill
+              priority
+              sizes="100vw"
+              className={`object-cover ${heroPosition}`}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-transparent" />
+          </div>
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-14">
             <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-[#B87333] mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
               {eyebrow}
             </p>
