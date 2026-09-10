@@ -69,7 +69,8 @@ function Card({ item }) {
 // Photo fournie par la cliente (Lydie, 25/08/2026) : catamaran horizontal,
 // 1400x800, sans mention de copyright dans ses metadonnees. Elle est deja
 // legere (253 Ko) et n'a donc pas ete reencodee.
-const HERO_IMAGE = '/media/client/lydie/2026-08-25/only-for-you/hero-catamaran.jpg';
+// 2026-09-10 : nouvelle photo client (voiliers au coucher du soleil, 1440x900).
+const HERO_IMAGE = '/media/client/lydie/2026-09-10/only-for-you/hero-sailing-trimaran.jpg';
 
 export default function SailingRentalPage() {
   const items = sailingRentalItems;
@@ -82,7 +83,7 @@ export default function SailingRentalPage() {
       <section className="relative w-full h-[62vh] min-h-[420px] md:h-[74vh] overflow-hidden bg-[#26272a]">
         <Image
           src={HERO_IMAGE}
-          alt="Catamaran under way with guests on board, turquoise water"
+          alt="Sailing yachts under way at sunset on open water"
           fill
           priority
           sizes="100vw"
