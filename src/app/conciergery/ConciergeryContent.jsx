@@ -4,9 +4,9 @@
 //
 // Textes fournis tels quels par le client (anglais americain, non modifies).
 // Mise en forme : aucun gras (font-weight 400), corps en #ACB0CD et expressions
-// mises en avant en #D39478. Tailles agrandies le 2026-09-11 a la demande du
-// client (12/11 px au depart) : 15 px pour les trois premiers paragraphes,
-// 14 px pour le dernier.
+// mises en avant en #D39478. Demande client 2026-09-11 : tout le texte en 18 px
+// et en Liberation Sans (Arial/Helvetica en secours, metriquement identiques,
+// pour les machines ou la police n'est pas installee).
 // Le titre d'origine de la page ("Exclusive Concierge Services") est remis en
 // place au-dessus du texte, avec sa mise en forme d'origine.
 // Les deux photos sont posees a droite, avec l'effet "revelation + zoom lent"
@@ -87,7 +87,13 @@ export default function ConciergeryContent() {
       <section className="px-6 md:px-14 py-14 md:py-20">
         <div
           className="max-w-4xl mx-auto"
-          style={{ color: '#ACB0CD', fontWeight: 400, fontSize: '15px', lineHeight: 1.9 }}
+          style={{
+            color: '#ACB0CD',
+            fontWeight: 400,
+            fontSize: '18px',
+            lineHeight: 1.75,
+            fontFamily: "'Liberation Sans', Arial, Helvetica, sans-serif",
+          }}
         >
           {/* Titre d'origine de la page, remis a la demande du client. */}
           <h2 className="mb-6 text-4xl tracking-tight font-extrabold text-gray-400">
@@ -124,7 +130,7 @@ export default function ConciergeryContent() {
             ratio="16 / 9"
           />
 
-          <p className="mt-8 md:mt-10" style={{ fontSize: '14px' }}>
+          <p className="mt-8 md:mt-10">
             Our team is reachable at <H>any hour, from any timezone</H>, to turn the smallest impulse
             into reality. No forms, no rigid protocol:{' '}
             <H>a conversation, a decision, and it&rsquo;s done</H>.
