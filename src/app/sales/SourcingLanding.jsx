@@ -35,6 +35,9 @@ export default function SourcingLanding({
   title,
   intro,
   heroImage = null,
+  // heroVideo : video de hero a la place de la photo (demande client 2026-09-11
+  // pour /sales/toys). Meme cadre, meme degrade, meme superposition de texte.
+  heroVideo = null,
   heroAlt = '',
   heroPosition = 'object-center',
   // heroFrame : cadre standard 1400x800 centre (.qy-hero-frame, globals.css) a la
@@ -68,7 +71,7 @@ export default function SourcingLanding({
         </div>
       )}
       {/* ══ HERO ══ */}
-      {heroImage ? (
+      {heroImage || heroVideo ? (
         <section
           className={
             heroFrame
@@ -88,14 +91,27 @@ export default function SourcingLanding({
               WebkitMaskImage: 'linear-gradient(to bottom, black 45%, transparent 100%)',
             }}
           >
-            <Image
-              src={heroImage}
-              alt={heroAlt}
-              fill
-              priority
-              sizes="100vw"
-              className={`object-cover ${heroPosition}`}
-            />
+            {heroVideo ? (
+              <video
+                src={heroVideo}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                aria-hidden
+                className={`absolute inset-0 h-full w-full object-cover ${heroPosition}`}
+              />
+            ) : (
+              <Image
+                src={heroImage}
+                alt={heroAlt}
+                fill
+                priority
+                sizes="100vw"
+                className={`object-cover ${heroPosition}`}
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-transparent" />
           </div>
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-14">
