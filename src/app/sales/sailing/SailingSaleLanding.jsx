@@ -58,6 +58,7 @@ export default function SailingSaleLanding({
             />
           </div>
           <div className={styles.overlay} />
+          <div className={styles.bottomFade} />
         </div>
 
         <div className={styles.contentColumn}>
