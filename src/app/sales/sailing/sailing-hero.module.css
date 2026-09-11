@@ -1,20 +1,20 @@
 /* ══ Hero /sales/sailing — CSS scope a la page (client 2026-09-11) ══
    Ken Burns lent depuis le coin superieur droit, voile bleu pour la lisibilite,
-   texte a droite avec apparition douce, cadre 1400x800 independant du fond.
+   texte a droite avec apparition douce, cadre 1440x900 independant du fond.
    Aucune regle globale : ce module n'est importe que par SailingSaleLanding. */
 
-/* Cadre 1400x800 centre (client 2026-09-11) : le hero est un bloc independant
+/* Cadre 1440x900 centre (client 2026-09-11) : le hero est un bloc independant
    du fond nuages, il ne s'y fond pas. */
 .hero {
   position: relative;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
   min-height: 720px;
   overflow: hidden;
 }
 @media (min-width: 768px) {
-  .hero { aspect-ratio: 1400 / 800; min-height: 0; }
+  .hero { aspect-ratio: 1440 / 900; min-height: 0; }
 }
 
 /* Image en mouvement */

@@ -5,7 +5,7 @@
 //  - photo hero-sale-sailing.jpg en mouvement lent (Ken Burns, origine coin
 //    superieur droit), voile bleu, texte a droite avec apparition douce ;
 //  - les deux boutons du hero (les "deux cartes") restent fixes, hors animation ;
-//  - cadre 1400x800 centre, bloc independant du fond nuages, degrade bleu seul.
+//  - cadre 1440x900 centre, bloc independant du fond nuages, degrade bleu seul.
 // Le fond nuages + voile bleu 22 % vient du layout /sales (page de reference) :
 // aucun opt-out ici. Les sections suivantes (Three Ways In, CTA final) et tous
 // les textes sont repris tels quels.
@@ -42,8 +42,13 @@ export default function SailingSaleLanding({
   final,
 }) {
   return (
-    // Pas de fond propre : nuages + voile bleu communs du layout /sales.
-    <main className="text-[#acb0cd]">
+    // Fond nuages commun du layout /sales. Le voile bleu global du layout
+    // (.sales-blue-overlay, au-dessus de toute la page) est desactive ici via
+    // .qy-no-blue (globals.css) et remplace par un voile local pose UNIQUEMENT
+    // sur les nuages (calque fixe sous le contenu) : le hero n'est pas teinte.
+    // Demande client 2026-09-11.
+    <main className="text-[#acb0cd] qy-no-blue">
+      <div aria-hidden className="fixed inset-0 -z-[1] bg-[#1b223d]/[0.22] pointer-events-none" />
       {/* ══ HERO (section independante, hors du fond nuages) ══ */}
       <section className={styles.hero}>
         <div aria-hidden className={styles.visual}>
@@ -53,7 +58,7 @@ export default function SailingSaleLanding({
               alt={heroAlt}
               fill
               priority
-              sizes="(min-width: 1400px) 1400px, 100vw"
+              sizes="(min-width: 1440px) 1440px, 100vw"
               className={styles.image}
             />
           </div>
