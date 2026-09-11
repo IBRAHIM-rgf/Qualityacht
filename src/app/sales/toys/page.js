@@ -40,6 +40,7 @@ export default function SalesToysPage() {
       title="Water Toys &amp; Equipment"
       intro="From tenders and chase boats to equipment selected around your yacht and your time on the water, Qualityacht coordinates each request with the same care as a yacht acquisition."
       heroImage="/media/quality/boats/boat-port.jpg"
+      belowHeroFilter
       heroAlt="Boat bow heading across shallow turquoise water"
       heroPosition="object-center"
       primary={{ label: 'Source Water Toys & Equipment', href: '/sales/enquiry?intent=buy' }}
