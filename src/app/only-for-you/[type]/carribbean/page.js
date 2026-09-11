@@ -842,9 +842,13 @@ export default function CaribbeanV15Page({ params }) {
 
   // Hero photo (client 2026-09-10) : voilier commun, sauf Trimaran et Traditional
   // qui ont chacun leur photo. Meme image en mobile et desktop.
+  // Photos hero dediees par type (fournies par la cliente ; catamaran, regatta
+  // et nouvelle traditional ajoutes le 2026-09-11).
   const HERO_BY_TYPE = {
     trimaran: '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-trimaran.jpg',
-    traditional: '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-traditional.jpg',
+    traditional: '/media/client/lydie/2026-09-11/only-for-you/hero-caribbean-traditional.jpg',
+    catamaran: '/media/client/lydie/2026-09-11/only-for-you/hero-caribbean-catamaran.jpg',
+    regatta: '/media/client/lydie/2026-09-11/only-for-you/hero-caribbean-regatta.jpg',
   };
   const heroSrc = HERO_BY_TYPE[type] || '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-sailing.jpg';
   const heroMobileSrc = heroSrc;
