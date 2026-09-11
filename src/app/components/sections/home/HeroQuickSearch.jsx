@@ -39,9 +39,14 @@ const focusRing =
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c2622a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#3a3b3f]';
 
 // Le select est transparent et sans chrome : c'est la capsule qui porte le style.
+// Couleur de la valeur separee : sur mobile la capsule est sombre (#26272a),
+// sur desktop la barre est claire et floutee, la valeur doit donc etre sombre
+// pour rester lisible (demande client 2026-09-11).
 const selectClass =
-  'w-full bg-transparent border-0 p-0 text-[16px] font-medium text-[#ACB0CD] cursor-pointer appearance-none ' +
+  'w-full bg-transparent border-0 p-0 text-[16px] font-medium cursor-pointer appearance-none ' +
   'focus:outline-none focus-visible:underline focus-visible:underline-offset-4';
+const selectColorMobile = 'text-[#ACB0CD]';
+const selectColorDesktop = 'text-[#e6e8f0]';
 
 const eyebrowClass = 'block text-[12px] font-semibold uppercase tracking-[0.22em] text-[#C0C0C0]';
 
@@ -109,7 +114,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
                   value={value}
                   onChange={(e) => onChange(e.target.value)}
                   aria-label={`${eyebrow} ${label}`}
-                  className={`${selectClass} text-[16px] leading-snug`}
+                  className={`${selectClass} ${selectColorMobile} text-[16px] leading-snug`}
                 >
                   {options.map((o) => (
                     <option key={o.value} value={o.value} className="bg-[#26272a]">
@@ -140,7 +145,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
       method="get"
       onSubmit={onSubmit}
       aria-label="Find your yacht"
-      className="w-full max-w-5xl rounded-full border border-[#C0C0C0]/70 bg-[#3a3b3f]/35 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)]"
+      className="w-full max-w-5xl rounded-full border border-[#C0C0C0]/70 bg-[#26272a]/75 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)]"
     >
       <div className="flex items-stretch">
         {fields.map(({ id, eyebrow, Icon, name, value, onChange, options, label }, i) => (
@@ -165,7 +170,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
                   value={value}
                   onChange={(e) => onChange(e.target.value)}
                   aria-label={`${eyebrow} ${label}`}
-                  className={selectClass}
+                  className={`${selectClass} ${selectColorDesktop}`}
                 >
                   {options.map((o) => (
                     <option key={o.value} value={o.value} className="bg-[#26272a]">
