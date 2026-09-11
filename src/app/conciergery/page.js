@@ -1,28 +1,25 @@
-import Text4ImagesSection from "../components/sections/new/Text4Images";
+// ══ /conciergery ══
+//
+// Refonte du 2026-09-11 (demande client) : hero video (extrait 0–9 s du fichier
+// fourni) puis les quatre paragraphes fournis, avec deux photos posees a droite.
+// L'ancienne mise en page Text4ImagesSection n'est plus utilisee par cette route
+// (le composant partage reste intact pour les autres pages).
 
-// Section conciergerie
-const conciergerieSection = {
-  title: "Exclusive Concierge Services",
-  content:
-    "Beyond expert yacht management, we provide bespoke concierge services designed to elevate your cruising experience to unparalleled levels of comfort and ease. Leveraging our privileged network across the Mediterranean and Caribbean, we expertly coordinate every detail of your voyages.\n\nFrom securing premier berths to arranging exclusive accommodations and dining tailored to your preferences, we orchestrate seamless travel experiences that reflect your lifestyle and desires. Always at your service, we remain available to address any requests or inquiries, ensuring your journeys are as effortless as they are memorable.",
-  images: [
-    "/images/management/photo-1586859392094-6f2017b22a03 (1).jpeg",
-    "/images/management/photo-1632468168457-a4c82df30e8c.jpeg",
-    "/images/management/photo-1650006326113-7e83026a7f32.jpeg",
-    "/images/management/photo-1650006326113-7e83026a7f32 (1).jpeg"
-  ],
+import ConciergeryContent from './ConciergeryContent';
+
+export const metadata = {
+  title: 'Exclusive Concierge Services | Qualityacht',
+  description:
+    'A private playground on every voyage: secret anchorages, forgotten islands and ideas that shift the lines, arranged by Qualityacht.',
 };
 
 export default function ConciergeriePage() {
   return (
-    <main className="bg-[#2e2f32] pt-9"
+    <main
+      className="bg-[#2e2f32]"
       style={{ backgroundImage: 'url(/images/nuagesAncien.png)', backgroundSize: 'contain', backgroundPosition: 'center' }}
     >
-      <Text4ImagesSection
-        title={conciergerieSection.title}
-        content={conciergerieSection.content}
-        images={conciergerieSection.images}
-      />
+      <ConciergeryContent />
     </main>
   );
 }
