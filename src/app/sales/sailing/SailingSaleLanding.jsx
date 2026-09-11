@@ -42,13 +42,17 @@ export default function SailingSaleLanding({
   final,
 }) {
   return (
-    // Fond nuages commun du layout /sales. Le voile bleu global du layout
-    // (.sales-blue-overlay, au-dessus de toute la page) est desactive ici via
-    // .qy-no-blue (globals.css) et remplace par un voile local pose UNIQUEMENT
-    // sur les nuages (calque fixe sous le contenu) : le hero n'est pas teinte.
+    // Filtre de la page de reference (manzellehazel-8bu…/sales/sailing), releve
+    // sur son DOM : fond #111827 (bg-gray-900) + nuages nuagesAncien.png en gris
+    // a 30 %, sans voile par-dessus. Pose en calque fixe sous le contenu, il
+    // recouvre le fond nuages du layout /sales ; le voile bleu global du layout
+    // est desactive via .qy-no-blue (globals.css). Le hero reste un bloc a part.
     // Demande client 2026-09-11.
     <main className="text-[#acb0cd] qy-no-blue">
-      <div aria-hidden className="fixed inset-0 -z-[1] bg-[#1b223d]/[0.22] pointer-events-none" />
+      <div aria-hidden className="fixed inset-0 -z-[1] pointer-events-none">
+        <div className="absolute inset-0 bg-gray-900" />
+        <Image src="/images/nuagesAncien.png" alt="" fill sizes="100vw" className="object-cover opacity-30 grayscale" />
+      </div>
       {/* ══ HERO (section independante, hors du fond nuages) ══ */}
       <section className={styles.hero}>
         <div aria-hidden className={styles.visual}>
