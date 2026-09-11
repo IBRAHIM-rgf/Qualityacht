@@ -4,7 +4,7 @@ import MotorListings from './MotorListings';
 import { YACHTS, SELLING_STEPS, BUYING_STEPS, PUBLICATIONS, BUILDERS, RECENT_SALES } from './data';
 
 // /sales/motor — page COMPLETE calquee sur globaljet.aero/fr/sales : hero sobre sur fond
-// photo estompe, "Highlights" (3 cards compactes + cercle decoratif), "Our Exclusive List"
+// photo estompe, "Highlights" (3 cards compactes), "Our Exclusive List"
 // (sidebar filtres + lignes compactes), puis sections IMAGE+TEXTE cote a cote (valeur
 // ajoutee, vendre, acheter), publications, processus vente/achat, ventes recentes, builders,
 // gestion, contact. Tout transpose au monde MARITIME. AUCUN emoji.
@@ -71,9 +71,15 @@ function SplitSection({ img, eyebrow, title, children, cta, ctaHref, reverse = f
 
 export default function MotorSalesPage() {
   return (
-    <div className="min-h-screen relative text-[#acb0cd]">
-      {/* Fond : le fond nuages commun (services-bg) vient du layout /sales —
-          l'ancien calque gray-900 + nuagesAncien a ete retire le 2026-09-10. */}
+    <div className="min-h-screen relative text-[#acb0cd] qy-no-blue">
+      {/* Fond : meme filtre que /sales/sailing (demande client 2026-09-11) —
+          gris #111827 + nuages nuagesAncien en gris a 30 %, en calque fixe sous
+          le contenu ; le voile bleu commun du layout est desactive via
+          .qy-no-blue (globals.css). */}
+      <div aria-hidden className="fixed inset-0 -z-[1] pointer-events-none">
+        <div className="absolute inset-0 bg-gray-900" />
+        <Image src="/images/nuagesAncien.png" alt="" fill sizes="100vw" className="object-cover opacity-30 grayscale" />
+      </div>
       {/* ── HERO (titre sobre sur fond photo estompe) ── */}
       <header className="relative overflow-hidden pt-32 md:pt-44 pb-16 md:pb-24 px-6 md:px-14">
         {/* Le masque fait DISPARAITRE la photo vers le bas au lieu de la recouvrir d'une
@@ -116,13 +122,9 @@ export default function MotorSalesPage() {
         </div>
       </header>
 
-      {/* ── HIGHLIGHTS (3 cards compactes + cercle decoratif) ── */}
+      {/* ── HIGHLIGHTS (3 cards compactes ; cercle decoratif retire le 2026-09-11 a la demande du client) ── */}
       <section className="relative px-6 md:px-14 py-16 md:py-24">
         <div className="max-w-5xl mx-auto relative">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-[380px] aspect-square md:w-[560px] md:h-[560px] md:max-w-none md:aspect-auto rounded-full border border-[#C0C0C0]/10"
-          />
           <h2 className="relative trajan-regular text-2xl md:text-4xl uppercase tracking-[0.16em] text-[#C0C0C0] text-center mb-12">
             Highlights
           </h2>
