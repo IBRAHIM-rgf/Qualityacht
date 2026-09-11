@@ -5,7 +5,7 @@
 //  - photo hero-sale-sailing.jpg en mouvement lent (Ken Burns, origine coin
 //    superieur droit), voile bleu, texte a droite avec apparition douce ;
 //  - les deux boutons du hero (les "deux cartes") restent fixes, hors animation ;
-//  - transition floue et progressive entre le bas du hero et la section nuages.
+//  - cadre 1400x800 centre, bloc independant du fond nuages, degrade bleu seul.
 // Le fond nuages + voile bleu 22 % vient du layout /sales (page de reference) :
 // aucun opt-out ici. Les sections suivantes (Three Ways In, CTA final) et tous
 // les textes sont repris tels quels.
@@ -53,12 +53,11 @@ export default function SailingSaleLanding({
               alt={heroAlt}
               fill
               priority
-              sizes="100vw"
+              sizes="(min-width: 1400px) 1400px, 100vw"
               className={styles.image}
             />
           </div>
           <div className={styles.overlay} />
-          <div className={styles.blurEdge} />
         </div>
 
         <div className={styles.contentColumn}>

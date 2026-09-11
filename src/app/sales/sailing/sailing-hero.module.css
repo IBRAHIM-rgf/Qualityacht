@@ -1,17 +1,20 @@
 /* ══ Hero /sales/sailing — CSS scope a la page (client 2026-09-11) ══
    Ken Burns lent depuis le coin superieur droit, voile bleu pour la lisibilite,
-   texte a droite avec apparition douce, transition floue vers la section nuages.
+   texte a droite avec apparition douce, cadre 1400x800 independant du fond.
    Aucune regle globale : ce module n'est importe que par SailingSaleLanding. */
 
+/* Cadre 1400x800 centre (client 2026-09-11) : le hero est un bloc independant
+   du fond nuages, il ne s'y fond pas. */
 .hero {
   position: relative;
   width: 100%;
-  height: 66vh;
-  min-height: 600px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 720px;
   overflow: hidden;
 }
 @media (min-width: 768px) {
-  .hero { height: 78vh; min-height: 560px; }
+  .hero { aspect-ratio: 1400 / 800; min-height: 0; }
 }
 
 /* Image en mouvement */
@@ -70,36 +73,19 @@
   }
 }
 
-/* Transition floue vers la section suivante : bande basse qui floute
-   progressivement l'image et s'efface, sans toucher aux boutons. */
-.blurEdge {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 32%;
-  z-index: 2;
-  pointer-events: none;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
-}
-/* Conteneur visuel (image + voile + bande floue) : s'efface vers le bas pour
-   laisser reapparaitre le fond nuages du layout, sans rupture. */
+/* Conteneur visuel (image + voile bleu). Pas de masque ni de flou vers le bas :
+   le hero reste un bloc net, seul le degrade bleu est applique. */
 .visual {
   position: absolute;
   inset: 0;
   z-index: 1;
-  -webkit-mask-image: linear-gradient(to bottom, black 62%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 62%, transparent 100%);
 }
 
 /* Texte a droite, dans la partie bleue */
 .contentColumn {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 3;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
