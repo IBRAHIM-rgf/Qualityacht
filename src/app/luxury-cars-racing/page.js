@@ -45,8 +45,8 @@ const MEDIA = '/media/client/lydie/2026-09-11/luxury-cars';
 const SERVICES = [
   {
     titre: 'Arrival & Transfers',
-    image: `${MEDIA}/arrival-and-transfert.jpg`,
-    alt: 'Bride stepping into a black limousine, the groom holding her bouquet',
+    image: `${MEDIA}/Track-Events.jpg`,
+    alt: 'SUV parked on the sand at sunset, facing the sea',
     texte:
       'A car and a driver waiting where you land, and again when you leave the quay. Arranged for the dates of your charter, in the places we already operate.',
   },
@@ -59,8 +59,8 @@ const SERVICES = [
   },
   {
     titre: 'Track & Events',
-    image: `${MEDIA}/Track-Events.jpg`,
-    alt: 'SUV parked on the sand at sunset, facing the sea',
+    image: `${MEDIA}/arrival-and-transfert.jpg`,
+    alt: 'Bride stepping into a black limousine, the groom holding her bouquet',
     texte:
       'Circuit days and motorsport weekends can be built around a charter when the calendar allows. We look at what is genuinely open for your dates before proposing anything.',
   },
@@ -73,7 +73,7 @@ export default function LuxuryCarsRacingPage() {
           conserve a l'identique), puis le bloc texte existant en dessous.
           La bordure basse (fine bande au-dessus de "What We Arrange") est retiree. ══ */}
       <section className="relative">
-        <div className="relative w-full overflow-hidden bg-[#050505] h-[56vh] min-h-[320px] md:h-[72vh] md:min-h-[480px]">
+        <div className="relative mx-auto w-full max-w-[1440px] overflow-hidden bg-[#050505] aspect-[1440/900]">
           <iframe
             src={`${MEDIA}/luxury-hero-sequence-9.html`}
             title="Luxury Cars & Racing — hero sequence"
@@ -125,7 +125,7 @@ export default function LuxuryCarsRacingPage() {
                 key={s.titre}
                 className="rounded-2xl border border-[#C0C0C0]/20 bg-[#2e2f32] p-7 flex flex-col"
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl mb-6">
+                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl mb-6">
                   <Image
                     src={s.image}
                     alt={s.alt}
