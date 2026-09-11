@@ -4,9 +4,10 @@
 // nomme : la categorie n'a pas de selection publique. La page presente la
 // methode de recherche et ouvre le formulaire Sales existant, sans y toucher.
 //
-// Visuel local deja present dans le depot, ni telecharge ni converti.
+// 2026-09-11 : hero photo client (hero-sale-sailing.jpg), variante locale
+// SailingSaleLanding (Ken Burns, texte a droite, transition floue).
 
-import SourcingLanding from '../SourcingLanding';
+import SailingSaleLanding from './SailingSaleLanding';
 
 export const metadata = {
   title: 'Sailing Yachts for Sale | Qualityacht',
@@ -34,15 +35,12 @@ const AXES = [
 
 export default function SalesSailingPage() {
   return (
-    <SourcingLanding
+    <SailingSaleLanding
       eyebrow="Qualityacht · Brokerage &amp; Acquisitions"
       title="Sailing Yachts for Sale"
       intro="From performance cruisers to classic sailing yachts, our acquisition team searches the public and private market around your programme, preferences and cruising ambitions."
-      heroImage="/images/sailing/classique.jpg"
-      heroAlt="Sailing yacht under way at sunset"
-      heroPosition="object-center max-md:object-[42%_50%]"
-      heroFrame
-      belowHeroFilter
+      heroImage="/images/Sales/hero-sale-sailing.jpg"
+      heroAlt="Aerial view of sailing catamarans anchored in line on deep blue water"
       primary={{ label: 'Find a Sailing Yacht', href: '/sales/enquiry?intent=buy' }}
       secondary={{ label: 'Speak to a Sales Broker', href: '/sales/enquiry?intent=general' }}
       axes={AXES}

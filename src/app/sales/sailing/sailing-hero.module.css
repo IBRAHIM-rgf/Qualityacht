@@ -1,0 +1,137 @@
+/* ══ Hero /sales/sailing — CSS scope a la page (client 2026-09-11) ══
+   Ken Burns lent depuis le coin superieur droit, voile bleu pour la lisibilite,
+   texte a droite avec apparition douce, transition floue vers la section nuages.
+   Aucune regle globale : ce module n'est importe que par SailingSaleLanding. */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 66vh;
+  min-height: 600px;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .hero { height: 78vh; min-height: 560px; }
+}
+
+/* Image en mouvement */
+.imageWrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform-origin: top right;
+  animation: heroKenBurns 18s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes heroKenBurns {
+  0%   { transform: scale(1.02) translate3d(1%, -1%, 0); }
+  50%  { transform: scale(1.10) translate3d(-1%, 1%, 0); }
+  100% { transform: scale(1.16) translate3d(-3%, 2%, 0); }
+}
+/* Mobile : zoom attenue, meme origine (coin superieur droit). */
+@media (max-width: 767px) {
+  .image { animation-name: heroKenBurnsMobile; }
+  @keyframes heroKenBurnsMobile {
+    0%   { transform: scale(1.01) translate3d(0.5%, -0.5%, 0); }
+    50%  { transform: scale(1.05) translate3d(-0.5%, 0.5%, 0); }
+    100% { transform: scale(1.08) translate3d(-1.5%, 1%, 0); }
+  }
+}
+
+/* Voile bleu entre l'image et le texte : dense a droite (zone de texte). */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    rgba(8, 49, 72, 0.12) 0%,
+    rgba(8, 49, 72, 0.52) 55%,
+    rgba(8, 49, 72, 0.92) 100%
+  );
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  /* Mobile : le texte est en bas, la zone bleue contrastee est donc en bas. */
+  .overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(8, 49, 72, 0.15) 0%,
+      rgba(8, 49, 72, 0.62) 35%,
+      rgba(8, 49, 72, 0.94) 100%
+    );
+  }
+}
+
+/* Transition floue vers la section suivante : bande basse qui floute
+   progressivement l'image et s'efface, sans toucher aux boutons. */
+.blurEdge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 32%;
+  z-index: 2;
+  pointer-events: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+}
+/* Conteneur visuel (image + voile + bande floue) : s'efface vers le bas pour
+   laisser reapparaitre le fond nuages du layout, sans rupture. */
+.visual {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(to bottom, black 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 62%, transparent 100%);
+}
+
+/* Texte a droite, dans la partie bleue */
+.contentColumn {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+.content {
+  position: relative;
+  z-index: 3;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: clamp(32px, 8vw, 140px);
+  opacity: 0;
+  transform: translate3d(35px, 0, 0);
+  animation: heroTextReveal 1.4s 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes heroTextReveal {
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+/* Les deux cartes (boutons) : fixes, hors animation. */
+.cards {
+  position: relative;
+  z-index: 3;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: clamp(32px, 8vw, 140px);
+}
+@media (max-width: 767px) {
+  .contentColumn { justify-content: flex-end; align-items: stretch; padding-bottom: 40px; }
+  .content, .cards { max-width: 100%; margin-left: 24px; margin-right: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image, .content { animation: none; }
+  .content { opacity: 1; transform: none; }
+}
