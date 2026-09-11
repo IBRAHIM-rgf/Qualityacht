@@ -3,9 +3,12 @@
 // ══ /conciergery — contenu (client 2026-09-11) ══
 //
 // Textes fournis tels quels par le client (anglais americain, non modifies).
-// Mise en forme demandee : taille 12 px pour les trois premiers paragraphes,
-// 11 px pour le dernier, aucun gras (font-weight 400), corps en #ACB0CD et
-// expressions mises en avant en #D39478.
+// Mise en forme : aucun gras (font-weight 400), corps en #ACB0CD et expressions
+// mises en avant en #D39478. Tailles agrandies le 2026-09-11 a la demande du
+// client (12/11 px au depart) : 15 px pour les trois premiers paragraphes,
+// 14 px pour le dernier.
+// Le titre d'origine de la page ("Exclusive Concierge Services") est remis en
+// place au-dessus du texte, avec sa mise en forme d'origine.
 // Les deux photos sont posees a droite, avec l'effet "revelation + zoom lent"
 // (conciergery.module.css) valide par le client.
 
@@ -84,8 +87,12 @@ export default function ConciergeryContent() {
       <section className="px-6 md:px-14 py-14 md:py-20">
         <div
           className="max-w-4xl mx-auto"
-          style={{ color: '#ACB0CD', fontWeight: 400, fontSize: '12px', lineHeight: 1.9 }}
+          style={{ color: '#ACB0CD', fontWeight: 400, fontSize: '15px', lineHeight: 1.9 }}
         >
+          {/* Titre d'origine de la page, remis a la demande du client. */}
+          <h2 className="mb-6 text-4xl tracking-tight font-extrabold text-gray-400">
+            Exclusive Concierge Services
+          </h2>
           <p>
             We don&rsquo;t just manage yachts. We turn every voyage into a{' '}
             <H>private playground</H>, right where the maps get blurry and everything is still up for
@@ -117,7 +124,7 @@ export default function ConciergeryContent() {
             ratio="16 / 9"
           />
 
-          <p className="mt-8 md:mt-10" style={{ fontSize: '11px' }}>
+          <p className="mt-8 md:mt-10" style={{ fontSize: '14px' }}>
             Our team is reachable at <H>any hour, from any timezone</H>, to turn the smallest impulse
             into reality. No forms, no rigid protocol:{' '}
             <H>a conversation, a decision, and it&rsquo;s done</H>.
