@@ -39,7 +39,7 @@ export default function SalesToysPage() {
       eyebrow="Qualityacht · Equipment &amp; Acquisitions"
       title="Water Toys &amp; Equipment"
       intro="From tenders and chase boats to equipment selected around your yacht and your time on the water, Qualityacht coordinates each request with the same care as a yacht acquisition."
-      heroImage="/media/quality/boats/boat-port.jpg"
+      heroVideo="/media/client/lydie/2026-09-11/sales-toys/hero-water-toys.mp4"
       belowHeroFilter
       heroAlt="Boat bow heading across shallow turquoise water"
       heroPosition="object-center"
