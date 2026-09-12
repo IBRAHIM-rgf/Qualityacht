@@ -849,6 +849,7 @@ export default function CaribbeanV15Page({ params }) {
     traditional: '/media/client/lydie/2026-09-11/only-for-you/hero-caribbean-traditional.jpg',
     catamaran: '/media/client/lydie/2026-09-11/only-for-you/hero-caribbean-catamaran.jpg',
     regatta: '/media/client/lydie/2026-09-11/only-for-you/hero-caribbean-regatta.jpg',
+    'sport-classic': '/media/client/lydie/2026-09-11/only-for-you/hero-caribbean-sport-classic.jpg',
   };
   const heroSrc = HERO_BY_TYPE[type] || '/media/client/lydie/2026-09-10/only-for-you/hero-caribbean-sailing.jpg';
   const heroMobileSrc = heroSrc;
