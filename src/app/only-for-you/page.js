@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import TypewriterIntro from "./TypewriterIntro";
 
 // Cards voiliers (cliquables → pages rentals).
 const sailingRentalItems = [
@@ -131,13 +132,18 @@ export default function SailingRentalPage() {
 
     <section className="relative min-h-screen flex flex-col items-center justify-center py-24 px-4">
 
-      <p className="max-w-3xl mx-auto text-base md:text-lg text-[#acb0cd] leading-relaxed text-center font-normal normal-case mb-12 px-2">
-        Only For You is more than a sailboat charter service&mdash;it&rsquo;s your gateway
-        to unforgettable sailing experiences. Whether you&rsquo;re a seasoned sailor or
-        a first-time adventurer, we craft bespoke journeys that match your aspirations
-        and budget. From intimate family getaways to high-end voyages, every trip is
-        designed with the same commitment to excellence and authenticity.
-      </p>
+      {/* Texte agrandi, en gras, avec effet machine a ecrire au scroll
+          (demande client 2026-09-12). Le texte lui-meme est inchange. */}
+      <TypewriterIntro
+        text={
+          'Only For You is more than a sailboat charter service\u2014it\u2019s your gateway ' +
+          'to unforgettable sailing experiences. Whether you\u2019re a seasoned sailor or ' +
+          'a first-time adventurer, we craft bespoke journeys that match your aspirations ' +
+          'and budget. From intimate family getaways to high-end voyages, every trip is ' +
+          'designed with the same commitment to excellence and authenticity.'
+        }
+        className="max-w-3xl mx-auto min-h-[9.5rem] md:min-h-[11rem] text-lg md:text-2xl text-[#acb0cd] leading-relaxed text-center font-semibold normal-case mb-12 px-2"
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
         {items.map((item) => (
