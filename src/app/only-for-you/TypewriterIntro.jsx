@@ -2,19 +2,17 @@
 
 // ══ /only-for-you — paragraphe d'introduction (client 2026-09-12) ══
 //
-// Le texte est agrandi, mis en gras, et s'ecrit a la machine a ecrire lorsqu'il
-// entre dans l'ecran (une seule fois). Le texte lui-meme n'est pas modifie : il
-// est passe en enfant depuis la page et seulement revele progressivement.
-// `prefers-reduced-motion` : le texte s'affiche d'un coup, sans animation.
+// Le texte est agrandi, mis en gras, et apparait au scroll en fondu + deroule
+// (il monte legerement) lorsqu'il entre dans l'ecran, une seule fois. La machine
+// a ecrire posee plus tot a ete remplacee par cet effet a la demande du client.
+// Le texte lui-meme n'est pas modifie. `prefers-reduced-motion` : affichage
+// immediat, sans animation.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function TypewriterIntro({ text, className = '' }) {
   const ref = useRef(null);
-  const [shown, setShown] = useState(0);
-  const [started, setStarted] = useState(false);
 
-  // Declenchement a l'arrivee dans l'ecran.
   useEffect(() => {
     const el = ref.current;
     if (!el) return undefined;
@@ -23,15 +21,16 @@ export default function TypewriterIntro({ text, className = '' }) {
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce || typeof IntersectionObserver === 'undefined') {
-      setShown(text.length);
-      setStarted(true);
+      el.style.opacity = '1';
+      el.style.transform = 'none';
       return undefined;
     }
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
-            setStarted(true);
+            el.style.opacity = '1';
+            el.style.transform = 'translate3d(0, 0, 0)';
             io.unobserve(el);
           }
         });
@@ -40,34 +39,19 @@ export default function TypewriterIntro({ text, className = '' }) {
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [text.length]);
-
-  // Frappe : ~18 ms par caractere, par petits paquets pour rester fluide.
-  useEffect(() => {
-    if (!started || shown >= text.length) return undefined;
-    const id = setTimeout(() => setShown((n) => Math.min(text.length, n + 2)), 18);
-    return () => clearTimeout(id);
-  }, [started, shown, text.length]);
-
-  const done = shown >= text.length;
+  }, []);
 
   return (
-    <p ref={ref} className={className} aria-label={text}>
-      <span aria-hidden>{text.slice(0, shown)}</span>
-      {/* Curseur de frappe, retire une fois le texte complet. */}
-      {!done && (
-        <span
-          aria-hidden
-          className="inline-block w-[2px] translate-y-[2px] bg-[#c2622a] align-middle"
-          style={{ height: '1em', animation: 'qyCaret 0.9s steps(1) infinite' }}
-        />
-      )}
-      <style jsx>{`
-        @keyframes qyCaret {
-          0%, 49% { opacity: 1; }
-          50%, 100% { opacity: 0; }
-        }
-      `}</style>
+    <p
+      ref={ref}
+      className={className}
+      style={{
+        opacity: 0,
+        transform: 'translate3d(0, 28px, 0)',
+        transition: 'opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
+      }}
+    >
+      {text}
     </p>
   );
 }

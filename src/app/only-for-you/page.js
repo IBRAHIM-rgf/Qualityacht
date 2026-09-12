@@ -132,7 +132,7 @@ export default function SailingRentalPage() {
 
     <section className="relative min-h-screen flex flex-col items-center justify-center py-24 px-4">
 
-      {/* Texte agrandi, en gras, avec effet machine a ecrire au scroll
+      {/* Texte agrandi, en gras, apparition en fondu + deroule au scroll
           (demande client 2026-09-12). Le texte lui-meme est inchange. */}
       <TypewriterIntro
         text={
@@ -142,7 +142,7 @@ export default function SailingRentalPage() {
           'and budget. From intimate family getaways to high-end voyages, every trip is ' +
           'designed with the same commitment to excellence and authenticity.'
         }
-        className="max-w-3xl mx-auto min-h-[9.5rem] md:min-h-[11rem] text-lg md:text-2xl text-[#acb0cd] leading-relaxed text-center font-semibold normal-case mb-12 px-2"
+        className="max-w-3xl mx-auto text-lg md:text-2xl text-[#acb0cd] leading-relaxed text-center font-semibold normal-case mb-12 px-2"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
