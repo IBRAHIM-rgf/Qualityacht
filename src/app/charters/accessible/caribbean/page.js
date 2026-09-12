@@ -284,7 +284,8 @@ export default function CaribbeanAccessibilityGuide() {
         className="px-6 md:px-14 py-10"
         style={{
           backgroundImage: 'url(/images/nuagesAncien.png)',
-          backgroundSize: 'contain',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
           backgroundColor: '#2e2f32',
         }}
@@ -293,13 +294,13 @@ export default function CaribbeanAccessibilityGuide() {
         <div className="max-w-3xl mx-auto text-center mb-10">
           <p className="text-[12px] md:text-[13px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-2">Find your yacht</p>
           <h2 className="trajan-regular text-2xl md:text-3xl text-[#C0C0C0] mb-4">Your Boarding Preference</h2>
-          <p className="text-[13px] md:text-sm text-[#acb0cd] leading-relaxed">
+          <p className="text-base md:text-lg text-[#acb0cd] leading-relaxed">
             For the ultimate white-glove experience, <span className="text-[#C0C0C0] font-medium">Dedicated Companion</span> is required.
           </p>
-          <p className="text-[13px] md:text-sm text-[#acb0cd] leading-relaxed">
+          <p className="text-base md:text-lg text-[#acb0cd] leading-relaxed">
             For a more independent stay, <span className="text-[#C0C0C0] font-medium">Independent Boarding</span> is strongly advised.
           </p>
-          <p className="text-[13px] text-[#8b90a0] mt-4">The boarding level shown on each condition is set by our team and cannot be changed.</p>
+          <p className="text-sm md:text-base text-[#8b90a0] mt-4">The boarding level shown on each condition is set by our team and cannot be changed.</p>
         </div>
 
         {total === 0 ? (
