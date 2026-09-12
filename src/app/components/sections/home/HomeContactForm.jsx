@@ -1,6 +1,7 @@
 'use client';
 
 import { useId, useRef, useState } from 'react';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { REASONS, DEFAULT_REASON, MAX_LENGTHS, validateContact } from '@/lib/contactForm';
 
@@ -127,10 +128,10 @@ export default function HomeContactForm() {
               return (
                 <label
                   key={r.value}
-                  className={`cursor-pointer px-6 py-2 rounded-full border text-sm transition-colors ${FOCUS} ${
+                  className={`cursor-pointer px-6 py-2 rounded-full border bg-[#26272A] text-sm transition-colors ${FOCUS} ${
                     actif
-                      ? 'border-[#C2622A] text-[#C2622A]'
-                      : 'border-[#C0C0C0]/70 text-[#ACB0CD] hover:border-[#C2622A] hover:text-[#C2622A]'
+                      ? 'border-[#C2626A] text-[#C2626A]'
+                      : 'border-[#C0C0C0] text-[#ACB0CD] hover:border-[#C2626A] hover:text-[#C2626A]'
                   }`}
                 >
                   <input
@@ -215,11 +216,25 @@ export default function HomeContactForm() {
 
         <div className="mb-6">
           <label htmlFor={`${uid}-consent`} className="flex items-start gap-3 cursor-pointer">
+            {/* Bouton de confirmation : le logo Qualityacht, transparent tant qu'il
+                n'est pas valide, puis pleinement visible et cercle d'orange une fois
+                clique (demande client 2026-09-12). La case reste une vraie case a
+                cocher pour les lecteurs d'ecran et le clavier. */}
             <input id={`${uid}-consent`} type="checkbox" checked={consent}
               onChange={(e) => { setConsent(e.target.checked); setErrors((p) => ({ ...p, consent: undefined })); }}
               aria-invalid={errors.consent ? 'true' : undefined}
               aria-describedby={errors.consent ? `${uid}-consent-error` : undefined}
-              className="mt-0.5 h-4 w-4 shrink-0 accent-[#C2622A]" />
+              className="sr-only peer" />
+            <span
+              aria-hidden
+              className={`relative mt-0.5 h-10 w-10 shrink-0 rounded-full border transition-all duration-300 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#C2626A] ${
+                consent
+                  ? 'border-[#C2626A] opacity-100 shadow-[0_0_16px_rgba(194,98,106,0.45)]'
+                  : 'border-[#C0C0C0]/60 opacity-40 hover:opacity-70'
+              }`}
+            >
+              <Image src="/images/logoFondTrans.png" alt="" fill sizes="40px" className="object-contain p-1" />
+            </span>
             <span className="text-sm leading-relaxed text-[#ACB0CD]">
               I agree that Qualityacht may use the details above to respond to this enquiry, as described
               in the{' '}
@@ -242,13 +257,24 @@ export default function HomeContactForm() {
           <button
             type="submit"
             disabled={status === 'sending'}
-            className={`inline-flex items-center gap-2 rounded-full border border-[#C0C0C0] bg-[#353739] px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#C2622A] shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-colors duration-300 hover:bg-[#3f4245] disabled:opacity-60 disabled:cursor-not-allowed ${FOCUS}`}
+            className={`qy-cta-pulse inline-flex items-center gap-2 rounded-full border border-[#C0C0C0] bg-[#26272A] px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#C2622A] shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-colors duration-300 hover:border-[#C2626A] disabled:opacity-60 disabled:cursor-not-allowed ${FOCUS}`}
           >
-            {status === 'sending' ? 'Sending…' : 'Send enquiry'}
+            {status === 'sending' ? 'Sending…' : 'Request Private Access'}
             <ArrowRight aria-hidden className="w-4 h-4" />
           </button>
         </div>
       </div>
+      <style jsx global>{`
+        @keyframes qyCtaPulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.62; }
+        }
+        .qy-cta-pulse { animation: qyCtaPulse 2.4s ease-in-out infinite; }
+        .qy-cta-pulse:hover { animation-play-state: paused; opacity: 1; }
+        @media (prefers-reduced-motion: reduce) {
+          .qy-cta-pulse { animation: none; }
+        }
+      `}</style>
     </form>
   );
 }

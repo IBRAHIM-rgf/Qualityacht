@@ -86,7 +86,7 @@ export default function Luxuryandcontactsection() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Contact Qualityacht on WhatsApp"
-              className="rounded-2xl border border-[#C0C0C0]/70 bg-[#3a3b3f]/35 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-between transition-colors hover:bg-[#3a3b3f]/45 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+              className="rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.45),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-between transition-[border-color,box-shadow] duration-300 hover:border-[#C2626A] hover:shadow-[0_0_28px_rgba(194,98,106,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2626A]"
             >
               <div>
                 <h2 className="text-2xl font-medium mb-2 flex items-center gap-2 text-[#C0C0C0]">
@@ -101,31 +101,31 @@ export default function Luxuryandcontactsection() {
 
             {/* Coordonnees confirmees officielles. Meme traitement transparent que la
                 capsule du configurateur du hero. */}
-            <div className="rounded-2xl border border-[#C0C0C0]/70 bg-[#3a3b3f]/35 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-center">
-              <span className="block text-[10px] uppercase tracking-[0.22em] text-[#C0C0C0] mb-2">General</span>
+            <div className="rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-start">
+              <h2 className="text-2xl font-medium mb-2 text-[#C0C0C0]">General</h2>
               <a
                 href="mailto:info@qualityacht.ch"
                 aria-label="Email Qualityacht at info@qualityacht.ch"
-                className="text-lg font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C0C0C0] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+                className="text-xl md:text-2xl font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C2626A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2626A]"
               >
                 info@qualityacht.ch
               </a>
               <a
                 href="tel:+41767365781"
                 aria-label="Call Qualityacht on +41 76 736 57 81"
-                className="text-3xl font-light my-2 text-[#ACB0CD] transition-colors hover:text-[#C0C0C0] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+                className="text-3xl md:text-4xl font-light my-2 text-[#ACB0CD] transition-colors hover:text-[#C2626A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2626A]"
               >
                 +41 76 736 57 81
               </a>
             </div>
 
             {/* Troisieme bloc, comme avant, dedie a la seconde adresse. */}
-            <div className="rounded-2xl border border-[#C0C0C0]/70 bg-[#3a3b3f]/35 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-center">
-              <span className="block text-[10px] uppercase tracking-[0.22em] text-[#C0C0C0] mb-2">Office</span>
+            <div className="rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-start">
+              <h2 className="text-2xl font-medium mb-2 text-[#C0C0C0]">Office</h2>
               <a
                 href="mailto:office@qualityacht.ch"
                 aria-label="Email Qualityacht at office@qualityacht.ch"
-                className="text-lg font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C0C0C0] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
+                className="text-xl md:text-2xl font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C2626A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2626A]"
               >
                 office@qualityacht.ch
               </a>
@@ -135,7 +135,7 @@ export default function Luxuryandcontactsection() {
           </div>
 
           {/* Contact form */}
-          <div className="mt-12 rounded-2xl border border-[#C0C0C0]/70 bg-[#3a3b3f]/35 backdrop-blur-md shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="mt-12 rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-10 grid grid-cols-1">
             <HomeContactForm />
           </div>
         </div>
