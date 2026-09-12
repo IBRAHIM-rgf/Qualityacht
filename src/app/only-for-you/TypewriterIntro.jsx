@@ -16,6 +16,8 @@ export default function TypewriterIntro({ text, className = '' }) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return undefined;
+    // Le texte est visible par defaut (rendu serveur, JS coupe) : on ne le cache
+    // qu'une fois l'observateur en place, pour qu'il ne reste jamais invisible.
     const reduce =
       typeof window !== 'undefined' &&
       window.matchMedia &&
@@ -25,6 +27,8 @@ export default function TypewriterIntro({ text, className = '' }) {
       el.style.transform = 'none';
       return undefined;
     }
+    el.style.opacity = '0';
+    el.style.transform = 'translate3d(0, 28px, 0)';
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -46,9 +50,8 @@ export default function TypewriterIntro({ text, className = '' }) {
       ref={ref}
       className={className}
       style={{
-        opacity: 0,
-        transform: 'translate3d(0, 28px, 0)',
-        transition: 'opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
+        transition:
+          'opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
       }}
     >
       {text}
