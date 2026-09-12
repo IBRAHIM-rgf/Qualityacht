@@ -822,9 +822,41 @@ export default function RequestQuoteWizard() {
                 </div>
                 <div className="w-full rounded-xl border border-[#C0C0C0] bg-black/40 px-5 py-8 md:px-8 md:py-6 md:mb-16">
                   <p className="text-[#acb0cd] text-base md:text-lg leading-loose">
-                    Your request for <span className="text-[#B03E00] uppercase">{yacht.name}</span> has been received.
+                    Your request for{' '}
+                    {/* Tous les yachts selectionnes sont nommes, pas seulement le premier
+                        (demande client 2026-09-12). Quatre au maximum, comme le panier. */}
+                    {(boats.length ? boats : [yacht]).slice(0, 4).map((b, i, arr) => (
+                      <span key={`${b.id || b.name}-${i}`}>
+                        <span className="text-[#B03E00] uppercase">{b.name}</span>
+                        {i < arr.length - 2 ? ', ' : i === arr.length - 2 ? ' and ' : ''}
+                      </span>
+                    ))}{' '}
+                    has been received.
                     One of our charter experts will contact you shortly to craft your bespoke itinerary.
                   </p>
+
+                  {/* Rappel visuel de la selection complete (4 maximum). */}
+                  {boats.length > 0 && (
+                    <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+                      {boats.slice(0, 4).map((b, i) => (
+                        <div
+                          key={`recap-${b.id || b.name}-${i}`}
+                          data-testid="quote-recap-boat"
+                          className="relative rounded-lg overflow-hidden border border-[#C0C0C0]/70"
+                        >
+                          <div className="relative aspect-[3/4]">
+                            <Image src={b.image} alt={b.name} fill sizes="(min-width:768px) 25vw, 50vw" className="object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 p-2">
+                              <h3 className="trajan-regular text-[11px] md:text-xs text-[#C0C0C0] uppercase tracking-[0.08em] leading-tight">
+                                {b.name}
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="w-full">
