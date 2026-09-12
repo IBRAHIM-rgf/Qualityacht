@@ -13,6 +13,11 @@
   background: #050505;
   aspect-ratio: 1920 / 1012;
 }
+/* Mobile : le hero est descendu sous l'en-tete fixe (64 px) pour que la video
+   soit visible en entier et non masquee par le menu. Demande client 2026-09-12. */
+@media (max-width: 767px) {
+  .heroWrap { margin-top: 70px; }
+}
 .heroVideo {
   position: absolute;
   inset: 0;
