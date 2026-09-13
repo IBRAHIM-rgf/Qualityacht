@@ -22,7 +22,9 @@ export const metadata = {
 const heroVideo = one({ cat: 'aerial', kind: 'video', role: 'hero-bg', orientation: 'portrait' });
 const palmiers = one({ cat: 'beach', role: 'section-band', kind: 'image' })?.src;
 
-export default function CaribbeanV15RoutePage() {
+// `quoteHref` : cible du CTA « Design Your Charter ». Reste /request-quote pour
+// /charters/destinations/caribbean-v15 ; la route Day Charter passe ?day=1.
+export default function CaribbeanV15RoutePage({ quoteHref = '/request-quote' }) {
   return (
     <CaribbeanV15Page
       heroNode={
@@ -42,7 +44,7 @@ export default function CaribbeanV15RoutePage() {
               n'est pas modifie. */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/request-quote"
+              href={quoteHref}
               className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
             >
               Design Your Charter
