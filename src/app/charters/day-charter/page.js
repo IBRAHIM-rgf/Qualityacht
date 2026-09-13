@@ -104,8 +104,8 @@ export default function DayCharterPage() {
   return (
     <ItemsGrid
       title="Day Charter"
-      heroVideo="/media/client/destinations/destinations-hero.mp4"
-      heroVideoPoster="/media/client/destinations/destinations-hero-poster.webp"
+      heroVideo="/media/client/lydie/2026-09-13/day-charter/hero-day-charter.mp4"
+      heroVideoPoster="/media/client/lydie/2026-09-13/day-charter/hero-day-charter-poster.jpg"
       heroVideoCover
       bgImage="/images/services-bg.png"
       items={cards}
