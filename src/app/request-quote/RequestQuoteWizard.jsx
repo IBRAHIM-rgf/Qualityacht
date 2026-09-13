@@ -495,6 +495,9 @@ export default function RequestQuoteWizard() {
   // mobility verrouillee, pas de Pet friendly ni de jets, bouton principal
   // « Begin your accessible charter journey », pas de message « quote is empty ».
   const accessibleMode = params.get('accessible') === '1';
+  // Parcours Day Charter uniquement (client 2026-09-13) : titre dedie,
+  // pose par les liens venant de /charters/day-charter (?day=1).
+  const dayCharterMode = params.get('day') === '1';
   // Message pre-rempli (ex. besoins d'accessibilite transmis par le guide).
   const initialMessage = params.get('message') || '';
 
@@ -593,8 +596,17 @@ export default function RequestQuoteWizard() {
       )}
 
       <h1 className={`trajan-regular font-bold text-2xl md:text-4xl text-center uppercase tracking-[0.15em] mb-10 md:mb-14 text-[#C0C0C0] [-webkit-text-stroke:0.6px_#C0C0C0] ${step === 2 ? 'mt-[10vh]' : ''}`}>
-        {accessibleMode ? 'Design Your Next Accessible Charter' : 'Request Your Next Charter'}
+        {accessibleMode
+          ? 'Design Your Next Accessible Charter'
+          : dayCharterMode
+            ? 'Your yacht, your day, your horizon.'
+            : 'Request Your Next Charter'}
       </h1>
+      {dayCharterMode && (
+        <p className="-mt-6 md:-mt-10 mb-10 md:mb-14 text-center text-sm md:text-base tracking-[0.08em] text-[#acb0cd]">
+          Private day charters, tailored to your route.
+        </p>
+      )}
 
       <StepIndicator step={step} />
 
