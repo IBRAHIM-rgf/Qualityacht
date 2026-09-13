@@ -130,8 +130,8 @@ export default function HomeContactForm() {
                   key={r.value}
                   className={`cursor-pointer px-6 py-2 rounded-full border bg-[#26272A] text-sm transition-colors ${FOCUS} ${
                     actif
-                      ? 'border-[#C2626A] text-[#C2626A]'
-                      : 'border-[#C0C0C0] text-[#ACB0CD] hover:border-[#C2626A] hover:text-[#C2626A]'
+                      ? 'border-[#C2622A] text-[#C2622A]'
+                      : 'border-[#C0C0C0] text-[#ACB0CD] hover:border-[#C2622A] hover:text-[#C2622A]'
                   }`}
                 >
                   <input
@@ -227,9 +227,9 @@ export default function HomeContactForm() {
               className="sr-only peer" />
             <span
               aria-hidden
-              className={`relative mt-0.5 h-10 w-10 shrink-0 rounded-full border transition-all duration-300 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#C2626A] ${
+              className={`relative mt-0.5 h-10 w-10 shrink-0 rounded-full border transition-all duration-300 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#C2622A] ${
                 consent
-                  ? 'border-[#C2626A] opacity-100 shadow-[0_0_16px_rgba(194,98,106,0.45)]'
+                  ? 'border-[#C2622A] opacity-100 shadow-[0_0_16px_rgba(194,98,106,0.45)]'
                   : 'border-[#C0C0C0]/60 opacity-40 hover:opacity-70'
               }`}
             >
@@ -257,7 +257,7 @@ export default function HomeContactForm() {
           <button
             type="submit"
             disabled={status === 'sending'}
-            className={`qy-cta-pulse inline-flex items-center gap-2 rounded-full border border-[#C0C0C0] bg-[#26272A] px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#C2622A] shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-colors duration-300 hover:border-[#C2626A] disabled:opacity-60 disabled:cursor-not-allowed ${FOCUS}`}
+            className={`qy-cta-pulse inline-flex items-center gap-2 rounded-full border border-[#C0C0C0] bg-[#26272A] px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#C2622A] shadow-[0_0_16px_rgba(192,192,192,0.25)] transition-colors duration-300 hover:border-[#C2622A] disabled:opacity-60 disabled:cursor-not-allowed ${FOCUS}`}
           >
             {status === 'sending' ? 'Sending…' : 'Request Private Access'}
             <ArrowRight aria-hidden className="w-4 h-4" />

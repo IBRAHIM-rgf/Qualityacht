@@ -86,7 +86,7 @@ export default function Luxuryandcontactsection() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Contact Qualityacht on WhatsApp"
-              className="rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.45),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-between transition-[border-color,box-shadow] duration-300 hover:border-[#C2626A] hover:shadow-[0_0_28px_rgba(194,98,106,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2626A]"
+              className="rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.45),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-between transition-[border-color,box-shadow] duration-300 hover:border-[#C2622A] hover:shadow-[0_0_28px_rgba(194,98,106,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]"
             >
               <div>
                 <h2 className="text-2xl font-medium mb-2 flex items-center gap-2 text-[#C0C0C0]">
@@ -106,14 +106,14 @@ export default function Luxuryandcontactsection() {
               <a
                 href="mailto:info@qualityacht.ch"
                 aria-label="Email Qualityacht at info@qualityacht.ch"
-                className="text-xl md:text-2xl font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C2626A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2626A]"
+                className="text-xl md:text-2xl font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C2622A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]"
               >
                 info@qualityacht.ch
               </a>
               <a
                 href="tel:+41767365781"
                 aria-label="Call Qualityacht on +41 76 736 57 81"
-                className="text-3xl md:text-4xl font-light my-2 text-[#ACB0CD] transition-colors hover:text-[#C2626A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2626A]"
+                className="text-3xl md:text-4xl font-light my-2 text-[#ACB0CD] transition-colors hover:text-[#C2622A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]"
               >
                 +41 76 736 57 81
               </a>
@@ -125,7 +125,7 @@ export default function Luxuryandcontactsection() {
               <a
                 href="mailto:office@qualityacht.ch"
                 aria-label="Email Qualityacht at office@qualityacht.ch"
-                className="text-xl md:text-2xl font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C2626A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2626A]"
+                className="text-xl md:text-2xl font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C2622A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]"
               >
                 office@qualityacht.ch
               </a>
