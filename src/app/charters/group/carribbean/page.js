@@ -115,7 +115,7 @@ export default function GroupCaribbeanPage() {
 
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="/request-quote" className={CTA_CUIVRE}>Design Your Charter</a>
-            <a href="/#contact" className={CTA_ARGENT}>Speak to Our Team</a>
+            <a href="/#contact" className={CTA_ARGENT}>Plan Your Escape</a>
           </div>
         </div>
       </section>
