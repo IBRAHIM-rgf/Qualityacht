@@ -1121,8 +1121,16 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
         });
         await reload();
         alert(`${yacht.name} ajouté en stock. Va dans "Mes bateaux en BDD" pour le publier.`);
+      } else {
+        // Sans cette branche, un echec serveur ne produisait AUCUN retour visible :
+        // le bouton paraissait mort. On remonte l'erreur comme sur l'ajout manuel.
+        const err = await res.json().catch(() => ({}));
+        alert(`Erreur lors de l'ajout de ${yacht.name} : ${err.error || res.status}`);
       }
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+      alert(`Erreur réseau lors de l'ajout de ${yacht.name}.`);
+    }
   };
 
   const onAddManual = async (data) => {
