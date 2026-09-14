@@ -2,7 +2,7 @@ import Image from "next/image";
 import EventsHeroPanels from './EventsHeroPanels';
 import Link from "next/link";
 import CaribbeanEventsMap from "../CaribbeanEventsMap";
-import FunMarquee from "@/components/vibe/FunMarquee";
+import EventsCarousel from "./EventsCarousel";
 import { media } from "@/lib/quality-media";
 import { CARIBBEAN_EVENTS } from "../caribbean-events";
 
@@ -57,25 +57,6 @@ const CARIB_EVENTS = CARIBBEAN_EVENTS.map((e) => ({
   img: CATEGORY_IMAGES[e.category] || IMAGE_NEUTRE,
 }));
 
-// ══ Marquee ══
-// Selection explicite : uniquement des images qui evoquent reellement une regate,
-// la voile, une fete, la gastronomie, la musique ou le patrimoine caribeen. Les
-// plongeurs, plages vides et vues immobilieres du pool precedent sont ecartes.
-// Huit images pertinentes valent mieux que dix trompeuses.
-//
-// Accents ramenes a la palette : #C2622A et #C0C0C0. Les deux accents neon
-// precedents, hors charte, sont retires.
-const EVENT_MARQUEE = [
-  CATEGORY_IMAGES.regate,
-  CATEGORY_IMAGES.carnaval,
-  CATEGORY_IMAGES.voile_traditionnelle,
-  CATEGORY_IMAGES.patrimoine,
-  '/media/quality/boats/gregor-volvo-ocean-race-816438-1920.jpg',
-  CATEGORY_IMAGES.gastronomie,
-  '/media/quality/boats/sporthearts-yacht-4993408-1920.jpg',
-  CATEGORY_IMAGES.musique,
-].map((src, i) => ({ src, accent: i % 2 ? '#C2622A' : '#C0C0C0' }));
-
 // Page Caraibes (ex-/events, deplacee ici : /events est desormais la landing
 // multi-destinations). La page = hero drone + marquee + planisphere filtrable.
 export default function EventsCaribbeanPage() {
@@ -106,12 +87,12 @@ export default function EventsCaribbeanPage() {
         </div>
       </section>
 
-      {/* Rouleau d'images defilant : SOUS le hero, jamais par-dessus
-          (demande client 2026-09-14). `relative z-10` le decolle proprement du
-          hero, qui reste un bloc a part au-dessus. */}
-      <section className="relative z-10 bg-[#26272a] py-10 md:py-14">
-        <FunMarquee items={EVENT_MARQUEE} speed={52} direction="left" />
-      </section>
+      {/* Carrousel : SOUS le hero, jamais par-dessus. Il vit dans son propre
+          fichier (./EventsCarousel) et porte lui-meme le fondu qui relie le
+          hero au contenu de la page. Demande client 2026-09-14. */}
+      <div className="relative z-10">
+        <EventsCarousel />
+      </div>
 
       {/* Carte -> filtres (secteur + categorie) -> cards evenements, tout regroupe */}
       <CaribbeanEventsMap

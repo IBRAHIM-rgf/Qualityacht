@@ -1,0 +1,95 @@
+/* ══ Carrousel Events Caraibes — CSS scope au composant (client 2026-09-14) ══
+   Defilement continu, lent et regulier, sans a-coup ni numerotation.
+   Aucune regle globale : ce module n'est importe que par EventsCarousel. */
+
+.zone {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fondu entre le hero et le contenu de la page : le bas du hero est deja au
+   ton du fond (#26272a). Le fondu prolonge ce ton sur le haut du carrousel, si
+   bien que les vignettes emergent progressivement au lieu d'arriver d'un bloc.
+   Aucune bande sombre rapportee : c'est la couleur de page qui se dissout. */
+.fondu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 210px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(to bottom, #26272a 0%, rgba(38, 39, 42, 0.88) 34%, rgba(38, 39, 42, 0.45) 68%, rgba(38, 39, 42, 0) 100%);
+}
+
+/* Piste : deux series identiques cote a cote, la translation de -50 % boucle
+   exactement sur la seconde — aucun saut visible. */
+.piste {
+  display: flex;
+  width: max-content;
+  gap: 22px;
+  padding: 0 11px;
+  animation: defile 68s linear infinite;
+  will-change: transform;
+}
+@keyframes defile {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+/* Le survol ralentit au lieu de figer : plus doux qu'un arret sec. */
+.zone:hover .piste { animation-duration: 150s; }
+
+/* Masque lateral : les vignettes naissent et disparaissent dans le fond. */
+.masque {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+
+.vignette {
+  position: relative;
+  flex: 0 0 auto;
+  width: 260px;
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(192, 192, 192, 0.22);
+  box-shadow: 0 18px 38px -16px rgba(0, 0, 0, 0.85);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 700ms ease,
+              box-shadow 700ms ease;
+}
+.vignette:hover {
+  transform: translateY(-8px);
+  border-color: rgba(194, 98, 42, 0.75);
+  box-shadow: 0 26px 52px -18px rgba(194, 98, 42, 0.42);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.vignette:hover .image { transform: scale(1.08); }
+
+/* Voile permanent : les photos restent en retrait, dans la tonalite du site. */
+.voile {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(8, 12, 24, 0.55) 0%, rgba(8, 12, 24, 0.12) 45%, rgba(8, 12, 24, 0) 100%);
+}
+
+@media (max-width: 767px) {
+  .piste { gap: 14px; padding: 0 7px; animation-duration: 52s; }
+  .vignette { width: 176px; border-radius: 11px; }
+  .fondu { height: 140px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .piste { animation: none; }
+  .zone { overflow-x: auto; }
+  .vignette, .image { transition: none; }
+}
