@@ -600,7 +600,7 @@ export default function RequestQuoteWizard() {
           ? 'Design Your Next Accessible Charter'
           : dayCharterMode
             ? 'Your yacht, your day, your horizon.'
-            : 'Request Your Next Charter'}
+            : 'Bring Your Charter Project to Life'}
       </h1>
       {dayCharterMode && (
         <p className="-mt-6 md:-mt-10 mb-10 md:mb-14 text-center text-sm md:text-base tracking-[0.08em] text-[#acb0cd]">
