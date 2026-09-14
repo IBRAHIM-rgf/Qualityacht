@@ -74,6 +74,12 @@ export async function POST(request) {
     ensureV3Schema,
   } = await import('@/lib/db');
     const { extractLightData, inferAnkorRegion } = await import('@/lib/yachtCache');
+    // Migration idempotente AVANT toute ecriture (client 2026-09-14).
+    // Les colonnes `regions` / `sub_regions` manquaient en production : le panel
+    // charge ses donnees cote serveur depuis la base, sans passer par le GET de
+    // cette route, donc ensureV3Schema() n'y tournait jamais et l'INSERT echouait
+    // en 500. ALTER ... IF NOT EXISTS = no-op si les colonnes sont deja la.
+    await ensureV3Schema();
     const data = await request.json();
 
     if (!data.yacht_id) {
@@ -156,6 +162,9 @@ export async function PATCH(request) {
     ensureV3Schema,
   } = await import('@/lib/db');
     const { extractLightData, inferAnkorRegion } = await import('@/lib/yachtCache');
+    // Meme garantie que sur le POST : les mises a jour ecrivent aussi dans
+    // `regions` / `sub_regions`.
+    await ensureV3Schema();
     const data = await request.json();
     const { action } = data;
 
