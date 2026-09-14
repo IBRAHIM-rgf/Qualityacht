@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { MARKETS, PARTNER, QUALITYACHT } from '../real-estate/partner-data';
 
 export const metadata = {
-  title: 'Invest With Impact | Qualityacht',
+  title: 'Beyond The Ordinary | Qualityacht',
   description:
     'Tangible assets, curated opportunities and a long-term perspective — international real-estate introductions arranged by Qualityacht with its specialist partner.',
 };
@@ -84,7 +84,7 @@ export default function InvestWithImpactPage() {
             Qualityacht · Investment
           </p>
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-            Invest With Impact
+            Beyond The Ordinary
           </h1>
           <p className="mt-5 max-w-2xl text-[15px] md:text-base font-medium leading-[1.75] text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
             Tangible assets, chosen one by one, held for the long term — and someone alongside you
