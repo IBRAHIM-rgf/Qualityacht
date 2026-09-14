@@ -4,7 +4,7 @@ import HomeContactForm from "./HomeContactForm";
 
 const activeItems = [
     { index: 0, title: ['Private Jet'], image: "/images/gridLosange/jet2.png", link: "/privat-jet" },
-    { index: 3, title: ['Invest with Impact'], image: "/images/new/invest.jpg", link: "/invest-with-impact" },
+    { index: 3, title: ['Beyond the Ordinary'], image: "/images/new/invest.jpg", link: "/invest-with-impact" },
     { index: 4, title: ['Hotel & Palace'], image: "/images/new/FB_IMG_1749967381497.jpg", link: "/hotel-palace" },
     { index: 7, title: ['Art & Culture'], image: "/images/new/photo-1715627211239-f9961ad5f794.jpeg", link: "/art-culture" },
     { index: 8, title: ['Horses','&','Riding'], image: "/images/gridLosange/cheval2.png", link: "/horses-riding" },
