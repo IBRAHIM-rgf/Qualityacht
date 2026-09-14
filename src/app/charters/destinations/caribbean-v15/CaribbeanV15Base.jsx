@@ -652,6 +652,11 @@ export default function CaribbeanV15Page({
   grayClouds = false,
   // heroNode : remplace ENTIEREMENT le hero (image + titre mobile) par un noeud libre
   // (ex. un hero video). Defaut null = hero image d'origine (aucune regression).
+  // heroSansMedia : le bloc hero est conserve (hauteur, titre, sous-titre,
+  // degrade) mais SANS video ni photo — seul le fond du site reste.
+  // Demande client 2026-09-14 pour /charters/halal/caribbean. Par defaut
+  // false : aucune des autres pages qui utilisent cette base n'est affectee.
+  heroSansMedia = false,
   heroNode = null,
   // heroVideo : si fourni, le hero devient une VIDEO plein cadre (boucle muette) avec le
   // titre en overlay. Defaut = la video aerienne (toutes les pages Caraibes v15 sauf halal,
@@ -696,10 +701,12 @@ export default function CaribbeanV15Page({
       <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
 
         {/* ══ HERO ══ (heroNode remplace tout le hero si fourni ; sinon heroVideo -> video) */}
-        {heroNode ? heroNode : heroVideo ? (
+        {heroNode ? heroNode : (heroVideo || heroSansMedia) ? (
           <section className="relative pt-[70px] md:pt-0 h-[70vh] md:h-[86vh] overflow-hidden bg-[#26272a]">
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <video src={heroVideo} autoPlay muted loop playsInline className={`absolute inset-0 w-full h-full ${heroVideoContain ? 'object-contain object-center' : 'object-cover'}`} style={heroVideoContain ? undefined : { objectPosition: '50% 75%' }} />
+            {heroVideo && (
+              <video src={heroVideo} autoPlay muted loop playsInline className={`absolute inset-0 w-full h-full ${heroVideoContain ? 'object-contain object-center' : 'object-cover'}`} style={heroVideoContain ? undefined : { objectPosition: '50% 75%' }} />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
             {/* Titre SOUS le nageur (visible vers 32% de hauteur dans la video) */}
             <div className={`absolute inset-x-0 flex flex-col items-center px-4 ${heroTextLow ? 'bottom-[8%] md:bottom-[10%]' : 'top-[46%]'}`}>
