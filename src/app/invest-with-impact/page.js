@@ -20,7 +20,8 @@ export const metadata = {
 };
 
 // Visuel local, deja present et documente dans docs/research/gustave-immo-assets.md.
-const HERO_IMAGE = '/images/partners/gustave-immo/piazza-roma-valencia.webp';
+// Photo hero fournie par le client (2026-09-14).
+const HERO_IMAGE = '/media/client/lydie/2026-09-14/invest-hero/hero-marina.jpg';
 
 const FOCUS =
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
@@ -65,7 +66,7 @@ export default function InvestWithImpactPage() {
       <section className="relative w-full h-[62vh] min-h-[440px] md:h-[76vh] overflow-hidden bg-[#26272a]">
         <Image
           src={HERO_IMAGE}
-          alt="Aerial view of a residential development at night"
+          alt="Aerial view of a marina with berthed yachts"
           fill
           priority
           sizes="100vw"
