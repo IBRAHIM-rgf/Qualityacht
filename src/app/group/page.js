@@ -42,6 +42,23 @@ const CTA_LIGNE =
   'hover:border-[#C2622A] hover:text-[#C2622A] focus:outline-none focus-visible:outline ' +
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]';
 
+/* Variantes hero : meme style, avec un fond sombre opaque derriere le bouton
+   pour rester lisibles par-dessus la photo. */
+const CTA_PLEIN_HERO =
+  'inline-flex min-h-[48px] items-center justify-center px-8 py-3.5 rounded-full ' +
+  'border border-[#C2622A] bg-[#17181B]/80 backdrop-blur-[3px] text-[12px] font-semibold ' +
+  'uppercase tracking-[0.2em] text-[#C2622A] transition-[background-color] duration-500 ' +
+  'hover:bg-[#17181B]/92 focus:outline-none focus-visible:outline focus-visible:outline-2 ' +
+  'focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]';
+
+const CTA_LIGNE_HERO =
+  'inline-flex min-h-[48px] items-center justify-center px-8 py-3.5 rounded-full ' +
+  'border border-[rgba(192,192,192,0.55)] bg-[#17181B]/80 backdrop-blur-[3px] text-[12px] ' +
+  'font-semibold uppercase tracking-[0.2em] text-[#C0C0C0] transition-[border-color,color] ' +
+  'duration-500 hover:border-[#C2622A] hover:text-[#C2622A] focus:outline-none ' +
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+  'focus-visible:outline-[#C2622A]';
+
 const LIEN_CARTE =
   'mt-6 inline-flex items-center gap-2 text-[11px] font-semibold uppercase ' +
   'tracking-[0.2em] text-[#C2622A] transition-opacity duration-500 hover:opacity-70 ' +
@@ -155,16 +172,6 @@ export default function QualityachtGroupPage() {
       {/* ══ HERO ══ */}
       <section className={`${styles.hero} pt-[70px] md:pt-0`}>
         <div aria-hidden className={styles.heroMedia}>
-          {/* Fond : la meme photo, floutee et assombrie, pour prolonger les cotes. */}
-          <Image
-            src={HERO}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className={styles.heroBackdrop}
-          />
-          {/* Premier plan : la photo entiere, nette et centree. */}
           <Image
             src={HERO}
             alt="Aerial view of a marina canal with berthed boats, waterfront residences and palms"
@@ -194,8 +201,8 @@ export default function QualityachtGroupPage() {
             innovative solutions for life at sea.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="#activities" className={CTA_PLEIN}>Discover Our Activities</Link>
-            <Link href="#contact" className={CTA_LIGNE}>Speak To Our Team</Link>
+            <Link href="#activities" className={CTA_PLEIN_HERO}>Discover Our Activities</Link>
+            <Link href="#contact" className={CTA_LIGNE_HERO}>Speak To Our Team</Link>
           </div>
         </div>
       </section>
