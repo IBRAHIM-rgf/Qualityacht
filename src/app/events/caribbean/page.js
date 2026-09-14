@@ -84,10 +84,10 @@ export default function EventsCaribbeanPage() {
       {/* ══ HERO : TROIS PANNEAUX ══
           Seul le fond change : sur-titre, H1, sous-titre et les deux CTA sont
           strictement conserves, et rien sous le hero n'est touche. */}
-      <section className="relative pt-[70px] md:pt-0 h-[58vh] md:h-[78vh]">
+      <section className="relative pt-[70px] md:pt-0 bg-[#04070D]">
         <EventsHeroPanels />
-        <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Caribbean · Cultural & Nautical Calendar</p>
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">Exclusive Event Experiences</h1>
           <div className="relative w-28 md:w-40 h-5 mt-4"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
@@ -106,8 +106,10 @@ export default function EventsCaribbeanPage() {
         </div>
       </section>
 
-      {/* Rouleau d'images defilant, EN HAUT (juste sous le hero) */}
-      <section className="bg-[#26272a] py-10 md:py-14">
+      {/* Rouleau d'images defilant : SOUS le hero, jamais par-dessus
+          (demande client 2026-09-14). `relative z-10` le decolle proprement du
+          hero, qui reste un bloc a part au-dessus. */}
+      <section className="relative z-10 bg-[#26272a] py-10 md:py-14">
         <FunMarquee items={EVENT_MARQUEE} speed={52} direction="left" />
       </section>
 
