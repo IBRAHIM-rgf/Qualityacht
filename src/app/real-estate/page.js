@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import HeroTriptych from './HeroTriptych';
 import RealEstateMap from './RealEstateMap';
 import ProgrammeGrid from './ProgrammeGrid';
 import { MARKETS, PARTNERS, QUALITYACHT, whatsappFor } from './partner-data';
@@ -9,6 +8,9 @@ export const metadata = {
   description:
     'International real-estate opportunities introduced by Qualityacht through its selected partners — Dubai, Marrakech, Batumi and Monaco.',
 };
+
+// Photo hero fournie par le client (2026-09-15) — verticale, montree entiere.
+const HERO_IMAGE = '/media/client/lydie/2026-09-15/real-estate/hero-cliff-night.jpg';
 
 const FOCUS =
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
@@ -36,17 +38,35 @@ const AUTRES_MARCHES = MARKETS.filter(
 export default function RealEstatePage() {
   return (
     <main className="bg-[#26272a] text-[#acb0cd]">
-      {/* HERO — triptyque video, variantes optimisees, poster par colonne */}
-      <section className="relative pt-[70px] md:pt-0 h-[62vh] md:h-[85vh] bg-[#26272a] overflow-hidden grid grid-cols-3 gap-[2px]">
-        <HeroTriptych />
-        <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
-          <p className="text-sm md:text-base uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-            A Global Portfolio
-          </p>
-          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
-            Real Estate
-          </h1>
+      {/* HERO — cadre 1400 x 900 px sur desktop. La photo est verticale : elle
+          est montree ENTIERE (object-contain, calee a droite). Le cote texte
+          est un aplat #26272A, demande par le client. Aucun rognage. */}
+      <section className="relative mx-auto max-w-[1400px] pt-[70px] md:pt-0 h-[70vh] min-h-[460px] lg:h-[900px] bg-[#26272a] overflow-hidden">
+        {/* Premier plan : la photo ENTIERE, nette, calee a droite. Elle est
+            placee SOUS l'en-tete fixe du site, sinon celui-ci recouvrait le
+            haut de l'image (le yacht disparaissait). */}
+        <div className="absolute left-0 right-0 top-[70px] bottom-0">
+          <Image
+            src={HERO_IMAGE}
+            alt="Cliffside villa lit at night above the sea, with a yacht passing offshore"
+            fill
+            priority
+            sizes="100vw"
+            className="object-contain object-right"
+          />
+        </div>
+        <div className="absolute inset-0 flex flex-col items-start justify-center text-left px-6 md:px-14">
+          <div className="max-w-xl">
+            <p className="text-sm md:text-base uppercase tracking-[0.35em] text-[#B87333] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+              A Global Portfolio
+            </p>
+            <h1 className="trajan-regular text-3xl md:text-5xl lg:text-[3.35rem] uppercase tracking-[0.08em] text-[#C0C0C0] leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+              Real Estate &amp; Private Residences
+            </h1>
+            <p className="mt-6 text-[15px] md:text-lg font-medium leading-[1.8] text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              From yacht to residence: one private office for your life between sea and shore.
+            </p>
+          </div>
         </div>
       </section>
 
