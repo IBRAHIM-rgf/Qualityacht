@@ -14,8 +14,10 @@ export default function VideoHero({
   videoPortrait,
   posterPortrait,
   kicker,
+  overTitle,                    // ligne facultative juste au-dessus du titre
   title,
   subtitle,
+  ruleColor,                    // couleur unie du trait sous le titre (defaut : degrade cuivre)
   height = 'screen',            // 'screen' | 'tall'
   align = 'center',             // 'center' | 'bottom'
   objectPosition = 'center',    // cadrage video (ex. 'top' pour couper le bas plutot que le haut)
@@ -79,6 +81,13 @@ export default function VideoHero({
             </span>
           </Reveal>
         )}
+        {overTitle && (
+          <Reveal variant="fade" delay={150}>
+            <p className="trajan-regular text-[13px] sm:text-base lg:text-lg uppercase tracking-[0.34em] text-[#C0C0C0] mb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
+              {overTitle}
+            </p>
+          </Reveal>
+        )}
         <Reveal variant="blur" delay={200} duration={1200}>
           <h1 className="trajan-regular text-4xl sm:text-6xl lg:text-7xl uppercase tracking-[0.12em] text-[#acb0cd] leading-[1.05] drop-shadow-[0_3px_16px_rgba(0,0,0,0.75)] max-w-5xl">
             {title}
@@ -86,7 +95,9 @@ export default function VideoHero({
         </Reveal>
         {/* Trait accent anime */}
         <Reveal variant="scale" delay={550}>
-          <span className="block h-[2px] w-24 md:w-32 my-5 rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #c2622a 30%, #bd9973 70%, transparent)' }} />
+          <span className="block h-[2px] w-24 md:w-32 my-5 rounded-full" style={{ background: ruleColor
+            ? `linear-gradient(90deg, transparent, ${ruleColor} 30%, ${ruleColor} 70%, transparent)`
+            : 'linear-gradient(90deg, transparent, #c2622a 30%, #bd9973 70%, transparent)' }} />
         </Reveal>
         {subtitle && (
           <Reveal variant="up" delay={650}>
