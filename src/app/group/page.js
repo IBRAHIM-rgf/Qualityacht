@@ -172,16 +172,6 @@ export default function QualityachtGroupPage() {
       {/* ══ HERO ══ */}
       <section className={`${styles.hero} pt-[70px] md:pt-0`}>
         <div aria-hidden className={styles.heroMedia}>
-          {/* Fond : la meme photo, floutee et assombrie, pour prolonger les cotes. */}
-          <Image
-            src={HERO}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className={styles.heroBackdrop}
-          />
-          {/* Premier plan : la photo entiere, nette et centree. */}
           <Image
             src={HERO}
             alt="Aerial view of a marina canal with berthed boats, waterfront residences and palms"
@@ -191,6 +181,7 @@ export default function QualityachtGroupPage() {
             className={styles.heroImg}
           />
         </div>
+        <div aria-hidden className={styles.heroGrade} />
         <div aria-hidden className={styles.heroVeil} />
 
         <div className={styles.heroContent}>
