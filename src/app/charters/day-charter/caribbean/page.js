@@ -8,5 +8,12 @@ import CaribbeanV15RoutePage from '../../destinations/caribbean-v15/page';
 export { metadata } from '../../destinations/caribbean-v15/page';
 
 export default function DayCharterCaribbeanPage() {
-  return <CaribbeanV15RoutePage quoteHref="/request-quote?day=1" />;
+  return (
+    <CaribbeanV15RoutePage
+      quoteHref="/request-quote?day=1"
+      heroOverTitle="Day Charter"
+      quoteLabel="Create Your Day at Sea"
+      heroRuleColor="#C0C0C0"
+    />
+  );
 }
