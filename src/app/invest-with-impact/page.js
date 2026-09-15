@@ -63,7 +63,9 @@ export default function InvestWithImpactPage() {
   return (
     <main className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO ══ */}
-      <section className="relative w-full h-[62vh] min-h-[440px] md:h-[76vh] overflow-hidden bg-[#26272a]">
+      {/* Cadre 1400 x 800 px sur desktop, centre ; la photo reste en cover,
+          jamais etiree. Lumiere chaude de fin de journee + voile sombre. */}
+      <section className="relative w-full max-w-[1400px] mx-auto h-[62vh] min-h-[440px] md:h-[76vh] lg:h-[800px] overflow-hidden bg-[#26272a]">
         <Image
           src={HERO_IMAGE}
           alt="Aerial view of a marina with berthed yachts"
@@ -71,6 +73,17 @@ export default function InvestWithImpactPage() {
           priority
           sizes="100vw"
           className="object-cover object-center"
+          style={{ filter: 'saturate(1.07) contrast(1.03) brightness(1.03) sepia(0.10) hue-rotate(-8deg)' }}
+        />
+        {/* Lumiere chaude rasante, discrete, par-dessus la photo. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            mixBlendMode: 'soft-light',
+            background:
+              'radial-gradient(58% 48% at 78% 22%, rgba(243,186,122,0.26) 0%, transparent 66%), radial-gradient(70% 55% at 50% 18%, rgba(226,202,160,0.16) 0%, transparent 62%), linear-gradient(180deg, transparent 38%, rgba(18,48,52,0.30) 100%)',
+          }}
         />
         <div
           aria-hidden
@@ -80,10 +93,7 @@ export default function InvestWithImpactPage() {
               'linear-gradient(180deg, rgba(38,39,42,0.55) 0%, rgba(38,39,42,0.28) 30%, rgba(38,39,42,0.72) 52%, rgba(38,39,42,0.88) 74%, rgba(38,39,42,0.97) 100%)',
           }}
         />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-16">
-          <p className="text-[12px] md:text-[13px] uppercase tracking-[0.32em] text-[#B87333] font-semibold mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
-            Qualityacht · Investment
-          </p>
+        <div className="absolute inset-0 flex flex-col items-start justify-end text-left px-6 md:px-14 pb-10 md:pb-16">
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             Beyond The Ordinary
           </h1>
@@ -91,7 +101,7 @@ export default function InvestWithImpactPage() {
             Tangible assets, chosen one by one, held for the long term — and someone alongside you
             from the first conversation to the keys.
           </p>
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-start gap-4">
             <Link href="/real-estate" className={CTA_CUIVRE}>
               Explore Real Estate Opportunities
             </Link>
