@@ -20,8 +20,8 @@ export const metadata = {
 };
 
 // Visuel local, deja present et documente dans docs/research/gustave-immo-assets.md.
-// Photo hero fournie par le client (2026-09-14).
-const HERO_IMAGE = '/media/client/lydie/2026-09-14/invest-hero/hero-marina.jpg';
+// Photo hero fournie par le client : version paysage (2026-09-15).
+const HERO_IMAGE = '/media/client/lydie/2026-09-14/invest-hero/hero-marina-paysage.jpg';
 
 const FOCUS =
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
@@ -72,9 +72,23 @@ export default function InvestWithImpactPage() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="object-cover object-center heroKenBurns"
           style={{ filter: 'saturate(1.07) contrast(1.03) brightness(1.03) sepia(0.10) hue-rotate(-8deg)' }}
         />
+        <style>{`
+          .heroKenBurns {
+            transform-origin: center;
+            animation: luxuryZoom 24s ease-in-out infinite alternate;
+            will-change: transform;
+          }
+          @keyframes luxuryZoom {
+            from { transform: scale(1); }
+            to   { transform: scale(1.06); }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .heroKenBurns { animation: none; }
+          }
+        `}</style>
         {/* Lumiere chaude rasante, discrete, par-dessus la photo. */}
         <div
           aria-hidden
@@ -90,7 +104,10 @@ export default function InvestWithImpactPage() {
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(38,39,42,0.55) 0%, rgba(38,39,42,0.28) 30%, rgba(38,39,42,0.72) 52%, rgba(38,39,42,0.88) 74%, rgba(38,39,42,0.97) 100%)',
+              /* Voile vertical leger + voile lateral cote texte : le bas de la
+                 photo reste clair, le titre reste lisible. */
+              'linear-gradient(90deg, rgba(38,39,42,0.62) 0%, rgba(38,39,42,0.34) 38%, rgba(38,39,42,0.06) 68%, transparent 100%), ' +
+              'linear-gradient(180deg, rgba(38,39,42,0.34) 0%, rgba(38,39,42,0.10) 28%, rgba(38,39,42,0.18) 62%, rgba(38,39,42,0.30) 100%)',
           }}
         />
         <div className="absolute inset-0 flex flex-col items-start justify-end text-left px-6 md:px-14 pb-10 md:pb-16">
