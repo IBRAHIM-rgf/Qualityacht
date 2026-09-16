@@ -11,6 +11,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { House, Sofa, Flower2, Droplet, Waves } from 'lucide-react';
 import { MARKETS, PARTNER, QUALITYACHT } from '../real-estate/partner-data';
 
 export const metadata = {
@@ -54,6 +55,56 @@ const PRINCIPES = [
     titre: 'Long-Term Perspective',
     texte:
       'We work on the assumption that you are building something to keep. Decisions are discussed calmly, with the time they deserve.',
+  },
+];
+
+// Cartes activites — images fournies par le client (2026-09-16), utilisees
+// telles quelles, jamais deformees (object-fit: cover).
+const ACTIVITES = [
+  {
+    id: 'real-estate',
+    Icone: House,
+    titre: 'International Real Estate',
+    texte: 'Selected properties and development opportunities in sought-after destinations.',
+    image: '/media/client/lydie/2026-09-16/activities/real-estate.jpg',
+    alt: 'Aerial view of a waterfront estate on a wooded headland',
+    filtre: 'brightness(.82) saturate(.95)',
+  },
+  {
+    id: 'luxury-living',
+    Icone: Sofa,
+    titre: 'Luxury Living',
+    texte: 'Furniture, rugs and linens chosen for interiors with character and lasting appeal.',
+    image: '/media/client/lydie/2026-09-16/activities/luxury-living.jpg',
+    alt: 'Dark living room with a grey sofa, cushions and a marble coffee table',
+    filtre: 'brightness(.62) saturate(.85)',
+  },
+  {
+    id: 'wellness',
+    Icone: Flower2,
+    titre: 'Wellness & Care',
+    texte: 'Products and experiences built around comfort, balance and everyday well-being.',
+    image: '/media/client/lydie/2026-09-16/activities/wellness.jpg',
+    alt: 'Woman resting on a sofa by candlelight against a dark botanical wall',
+    filtre: 'brightness(.58) saturate(.85)',
+  },
+  {
+    id: 'technology',
+    Icone: Droplet,
+    titre: 'Onboard & Residence Technology',
+    texte: 'Advanced water-filtration and technical solutions for yachts and residences.',
+    image: '/media/client/lydie/2026-09-16/activities/technology.jpg',
+    alt: 'A water droplet rippling a deep blue surface',
+    filtre: 'brightness(.68) saturate(.90)',
+  },
+  {
+    id: 'water-toys',
+    Icone: Waves,
+    titre: 'Water Toys',
+    texte: 'Premium equipment for movement, play and unforgettable moments on the water.',
+    image: '/media/client/lydie/2026-09-16/activities/water-toys.jpg',
+    alt: 'Red jet ski resting on wet sand at sunset',
+    filtre: 'brightness(.62) saturate(.88)',
   },
 ];
 
@@ -176,6 +227,111 @@ export default function InvestWithImpactPage() {
             is decided.
           </p>
         </div>
+      </section>
+
+      {/* ══ ACTIVITES — cinq cartes premium ══
+          Chaque carte a deux zones distinctes : l'image en haut, sans aucun
+          texte ni pictogramme dessus, puis un bloc sombre qui porte l'icone,
+          le titre et la description. */}
+      <section className="px-6 md:px-14 pb-16 md:pb-24">
+        <div className="activitiesWrap mx-auto">
+          <div className="text-center mb-10 md:mb-12">
+            <p className="text-[12px] md:text-[13px] uppercase tracking-[0.24em] text-[#B87333] font-semibold mb-2">
+              What We Do
+            </p>
+            <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">
+              Our Activities
+            </h2>
+          </div>
+          <div className="activitiesGrid">
+            {ACTIVITES.map(({ id, Icone, titre, texte, image, alt, filtre }) => (
+              <article key={id} className="activityCard">
+                <div className="activityImage">
+                  <Image
+                    src={image}
+                    alt={alt}
+                    width={900}
+                    height={600}
+                    sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 20vw"
+                    style={{ filter: filtre }}
+                  />
+                </div>
+                <div className="activityContent">
+                  <Icone className="activityIcon" strokeWidth={1.4} fill="none" aria-hidden />
+                  <h3>{titre}</h3>
+                  <p>{texte}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+        <style>{`
+          .activitiesWrap { max-width: 1320px; }
+          .activitiesGrid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 22px;
+          }
+          .activityCard {
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #26272A;
+            border: 1px solid rgba(192, 192, 192, 0.22);
+            border-radius: 6px;
+          }
+          .activityImage {
+            height: 150px;
+            overflow: hidden;
+          }
+          .activityImage img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            object-position: center;
+          }
+          .activityContent {
+            flex: 1;
+            min-height: 145px;
+            padding: 18px 14px 20px;
+            text-align: center;
+            background: #26272A;
+          }
+          .activityIcon {
+            width: 27px;
+            height: 27px;
+            margin: 0 auto 12px;
+            color: #C2622A;
+          }
+          .activityContent h3 {
+            margin: 0;
+            color: #C0C0C0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.45;
+            letter-spacing: 2.2px;
+            text-transform: uppercase;
+          }
+          .activityContent p {
+            margin: 10px 0 0;
+            color: #ACB0CD;
+            font-size: 13px;
+            line-height: 1.5;
+          }
+          /* Tablette : trois puis deux colonnes, jamais cinq cartes ecrasees. */
+          @media (max-width: 1279px) {
+            .activitiesGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+          }
+          @media (max-width: 899px) {
+            .activitiesGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          }
+          @media (max-width: 639px) {
+            .activitiesGrid { grid-template-columns: 1fr; }
+            .activityImage { height: 180px; }
+          }
+        `}</style>
       </section>
 
       {/* ══ PARTENAIRE ══ */}
