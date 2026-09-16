@@ -63,6 +63,8 @@ const PRINCIPES = [
 const ACTIVITES = [
   {
     id: 'real-estate',
+    href: '/international-real-estate',
+    ariaLabel: 'Explore International Real Estate',
     Icone: House,
     titre: 'International Real Estate',
     texte: 'Selected properties and development opportunities in sought-after destinations.',
@@ -72,6 +74,8 @@ const ACTIVITES = [
   },
   {
     id: 'luxury-living',
+    href: '/luxury-living',
+    ariaLabel: 'Explore Luxury Living',
     Icone: Sofa,
     titre: 'Luxury Living',
     texte: 'Furniture, rugs and linens chosen for interiors with character and lasting appeal.',
@@ -81,6 +85,8 @@ const ACTIVITES = [
   },
   {
     id: 'wellness',
+    href: '/wellness-care',
+    ariaLabel: 'Explore Wellness and Care',
     Icone: Flower2,
     titre: 'Wellness & Care',
     texte: 'Products and experiences built around comfort, balance and everyday well-being.',
@@ -90,6 +96,8 @@ const ACTIVITES = [
   },
   {
     id: 'technology',
+    href: '/onboard-residence-technology',
+    ariaLabel: 'Explore Onboard and Residence Technology',
     Icone: Droplet,
     titre: 'Onboard & Residence Technology',
     texte: 'Advanced water-filtration and technical solutions for yachts and residences.',
@@ -99,6 +107,8 @@ const ACTIVITES = [
   },
   {
     id: 'water-toys',
+    href: '/water-toys',
+    ariaLabel: 'Explore Water Toys',
     Icone: Waves,
     titre: 'Water Toys',
     texte: 'Premium equipment for movement, play and unforgettable moments on the water.',
@@ -244,8 +254,9 @@ export default function InvestWithImpactPage() {
             </h2>
           </div>
           <div className="activitiesGrid">
-            {ACTIVITES.map(({ id, Icone, titre, texte, image, alt, filtre }) => (
-              <article key={id} className="activityCard">
+            {ACTIVITES.map(({ id, href, ariaLabel, Icone, titre, texte, image, alt, filtre }) => (
+              /* Toute la carte est un lien interne (next/link), meme onglet. */
+              <Link key={id} href={href} aria-label={ariaLabel} className="activityCard">
                 <div className="activityImage">
                   <Image
                     src={image}
@@ -255,13 +266,14 @@ export default function InvestWithImpactPage() {
                     sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 20vw"
                     style={{ filter: filtre }}
                   />
+                  <span className="activityHint" aria-hidden>Explore collection</span>
                 </div>
                 <div className="activityContent">
                   <Icone className="activityIcon" strokeWidth={1.4} fill="none" aria-hidden />
                   <h3>{titre}</h3>
                   <p>{texte}</p>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -280,8 +292,21 @@ export default function InvestWithImpactPage() {
             background: #26272A;
             border: 1px solid rgba(192, 192, 192, 0.22);
             border-radius: 6px;
+            color: inherit;
+            text-decoration: none;
+            transition: border-color 600ms ease, box-shadow 600ms ease;
+          }
+          .activityCard:hover {
+            border-color: rgba(194, 98, 42, 0.55);
+            box-shadow: 0 14px 34px -22px rgba(0, 0, 0, 0.8);
+          }
+          .activityCard:focus { outline: none; }
+          .activityCard:focus-visible {
+            outline: 2px solid #C2622A;
+            outline-offset: 3px;
           }
           .activityImage {
+            position: relative;
             height: 150px;
             overflow: hidden;
           }
@@ -291,6 +316,35 @@ export default function InvestWithImpactPage() {
             display: block;
             object-fit: cover;
             object-position: center;
+            transform: scale(1);
+            transition: transform 1400ms cubic-bezier(.2,.7,.2,1), filter 700ms ease;
+          }
+          .activityCard:hover .activityImage img {
+            transform: scale(1.05);
+          }
+          /* Libelle discret, en fondu au survol / au focus clavier. */
+          .activityHint {
+            position: absolute;
+            left: 0; right: 0; bottom: 10px;
+            text-align: center;
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #C0C0C0;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 600ms ease, transform 600ms ease;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+            pointer-events: none;
+          }
+          .activityCard:hover .activityHint,
+          .activityCard:focus-visible .activityHint {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .activityCard, .activityImage img, .activityHint { transition: none; }
+            .activityCard:hover .activityImage img { transform: none; }
           }
           .activityContent {
             flex: 1;
