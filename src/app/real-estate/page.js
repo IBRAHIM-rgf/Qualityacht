@@ -63,7 +63,7 @@ export default function RealEstatePage() {
               A Global Portfolio
             </p>
             {/* Titre en trois lignes : chaque ligne remonte de sous son masque. */}
-            <h1 className="reTitle trajan-regular text-3xl md:text-5xl lg:text-[3.35rem] uppercase tracking-[0.08em] text-[#C0C0C0] leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+            <h1 className="reTitle trajan-regular text-3xl md:text-5xl lg:text-[3.35rem] uppercase tracking-[0.08em] text-[#C0C0C0] leading-[1.15] md:leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
               <span className="reLine"><span>Real Estate &amp;</span></span>
               <span className="reLine"><span>Private</span></span>
               <span className="reLine"><span>Residences</span></span>
@@ -94,21 +94,17 @@ export default function RealEstatePage() {
           }
           .reEyebrow { animation: reFadeUp 0.9s cubic-bezier(.2,.7,.3,1) 0.15s forwards; }
           .reSub     { animation: reFadeUp 1s   cubic-bezier(.2,.7,.3,1) 1.24s forwards; }
-          /* Le masque de chaque ligne deborde legerement au-dessus et en dessous
-             du corps de texte : les hauts de lettres (le S, le R...) et les
-             jambages ne sont plus rognes par overflow: hidden. La marge
-             negative annule ce debord pour garder l'interligne d'origine. */
           .reLine {
             display: block;
-            overflow: hidden;
-            padding: 0.18em 0.08em 0.12em 0;
-            margin-top: -0.18em;
-            margin-bottom: -0.12em;
+            /* Masque par clip-path plutot qu'overflow: hidden : la zone visible
+               deborde de la boite de ligne (hauts de lettres, jambages) sans
+               toucher a la mise en page ni a l'interligne. */
+            clip-path: inset(-0.45em -0.2em -0.35em 0);
           }
           .reLine > span {
             display: inline-block;
             opacity: 0;
-            transform: translateY(125%);
+            transform: translateY(170%);
             animation: reRiseIn 1s cubic-bezier(.2,.8,.2,1) forwards;
           }
           .reLine:nth-child(1) > span { animation-delay: 0.45s; }
