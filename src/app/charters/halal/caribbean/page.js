@@ -83,9 +83,9 @@ export default function HalalCaribbeanPage() {
       heroImageMobile={HERO_IMAGE}
       heroImageDesktop={HERO_IMAGE}
       showDescription={false}
-      // Bandeau cocomer retire : il ne portait que la video de bois flotte au
-      // coucher de soleil, supprimee du site a la demande du client. Rien ne la
-      // remplace, le bandeau disparait donc entierement (plus de showCocomer).
+      // Bandeau cocomer (photo de bois flotte au coucher de soleil) retire a la
+      // demande du client (2026-09-16). Rien ne le remplace.
+      showCocomer={false}
       palmiersSrc="/images/pagesCaraibes/beach-562145.jpg"
       palmiersAspect="4000 / 3000"
       palmiersSrcOld="/images/pagesCaraibes/beach-562145.jpg"
