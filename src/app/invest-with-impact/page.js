@@ -63,30 +63,52 @@ export default function InvestWithImpactPage() {
   return (
     <main className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO ══ */}
-      {/* Cadre 1400 x 800 px sur desktop, centre ; la photo reste en cover,
-          jamais etiree. Lumiere chaude de fin de journee + voile sombre. */}
-      <section className="relative w-full max-w-[1400px] mx-auto h-[62vh] min-h-[440px] md:h-[76vh] lg:h-[800px] overflow-hidden bg-[#26272a]">
+      {/* Cadre 1400 px de large, hauteur mini 800 px. La photo couvre toute la
+          section (object-cover, recadrage 60% pour garder les bateaux et les
+          residences a droite) et le bloc de texte tient la colonne de gauche,
+          aligne a gauche et centre verticalement. */}
+      <section className="heroInvest relative w-full max-w-[1400px] mx-auto min-h-[600px] md:min-h-[800px] overflow-hidden bg-[#26272a]">
         <Image
           src={HERO_IMAGE}
           alt="Aerial view of a marina with berthed yachts"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center heroKenBurns"
+          className="heroInvestImg"
           style={{ filter: 'saturate(1.07) contrast(1.03) brightness(1.03) sepia(0.10) hue-rotate(-8deg)' }}
         />
         <style>{`
-          .heroKenBurns {
-            transform-origin: center;
+          .heroInvestImg {
+            object-fit: cover;
+            object-position: 60% center;
+            transform-origin: center center;
             animation: luxuryZoom 24s ease-in-out infinite alternate;
             will-change: transform;
+            z-index: 0;
           }
           @keyframes luxuryZoom {
             from { transform: scale(1); }
-            to   { transform: scale(1.06); }
+            to   { transform: scale(1.07); }
           }
+          /* Voile sombre : dense a gauche derriere le texte, transparent a droite. */
+          .heroInvest::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+              90deg,
+              rgba(15, 16, 16, 0.72) 0%,
+              rgba(15, 16, 16, 0.38) 46%,
+              rgba(15, 16, 16, 0.18) 100%
+            );
+            pointer-events: none;
+            z-index: 1;
+          }
+          /* z-index seul : le positionnement vient des classes utilitaires, sinon
+             un position: relative ici casserait le centrage vertical. */
+          .heroInvestContent { z-index: 2; text-align: left; }
           @media (prefers-reduced-motion: reduce) {
-            .heroKenBurns { animation: none; }
+            .heroInvestImg { animation: none; }
           }
         `}</style>
         {/* Lumiere chaude rasante, discrete, par-dessus la photo. */}
@@ -94,37 +116,29 @@ export default function InvestWithImpactPage() {
           aria-hidden
           className="absolute inset-0 pointer-events-none"
           style={{
+            zIndex: 1,
             mixBlendMode: 'soft-light',
             background:
-              'radial-gradient(58% 48% at 78% 22%, rgba(243,186,122,0.26) 0%, transparent 66%), radial-gradient(70% 55% at 50% 18%, rgba(226,202,160,0.16) 0%, transparent 62%), linear-gradient(180deg, transparent 38%, rgba(18,48,52,0.30) 100%)',
+              'radial-gradient(58% 48% at 78% 22%, rgba(243,186,122,0.26) 0%, transparent 66%), radial-gradient(70% 55% at 50% 18%, rgba(226,202,160,0.16) 0%, transparent 62%)',
           }}
         />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              /* Voile vertical leger + voile lateral cote texte : le bas de la
-                 photo reste clair, le titre reste lisible. */
-              'linear-gradient(90deg, rgba(38,39,42,0.62) 0%, rgba(38,39,42,0.34) 38%, rgba(38,39,42,0.06) 68%, transparent 100%), ' +
-              'linear-gradient(180deg, rgba(38,39,42,0.34) 0%, rgba(38,39,42,0.10) 28%, rgba(38,39,42,0.18) 62%, rgba(38,39,42,0.30) 100%)',
-          }}
-        />
-        <div className="absolute inset-0 flex flex-col items-start justify-end text-left px-6 md:px-14 pb-10 md:pb-16">
-          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-            Beyond The Ordinary
-          </h1>
-          <p className="mt-5 max-w-2xl text-[15px] md:text-base font-medium leading-[1.75] text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-            Tangible assets, chosen one by one, held for the long term — and someone alongside you
-            from the first conversation to the keys.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-start gap-4">
-            <Link href="/real-estate" className={CTA_CUIVRE}>
-              Explore Real Estate Opportunities
-            </Link>
-            <Link href="/#contact" className={CTA_ARGENT}>
-              Speak to Our Team
-            </Link>
+        <div className="heroInvestContent absolute inset-0 flex items-center px-6 md:px-14">
+          <div className="w-full md:w-1/2 max-w-xl">
+            <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+              Beyond The Ordinary
+            </h1>
+            <p className="mt-5 text-[15px] md:text-base font-medium leading-[1.75] text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              Tangible assets, chosen one by one, held for the long term — and someone alongside you
+              from the first conversation to the keys.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-start gap-4">
+              <Link href="/real-estate" className={CTA_CUIVRE}>
+                Explore Real Estate Opportunities
+              </Link>
+              <Link href="/#contact" className={CTA_ARGENT}>
+                Speak to Our Team
+              </Link>
+            </div>
           </div>
         </div>
       </section>
