@@ -94,15 +94,21 @@ export default function RealEstatePage() {
           }
           .reEyebrow { animation: reFadeUp 0.9s cubic-bezier(.2,.7,.3,1) 0.15s forwards; }
           .reSub     { animation: reFadeUp 1s   cubic-bezier(.2,.7,.3,1) 1.24s forwards; }
+          /* Le masque de chaque ligne deborde legerement au-dessus et en dessous
+             du corps de texte : les hauts de lettres (le S, le R...) et les
+             jambages ne sont plus rognes par overflow: hidden. La marge
+             negative annule ce debord pour garder l'interligne d'origine. */
           .reLine {
             display: block;
             overflow: hidden;
-            padding-bottom: 0.06em;
+            padding: 0.18em 0.08em 0.12em 0;
+            margin-top: -0.18em;
+            margin-bottom: -0.12em;
           }
           .reLine > span {
             display: inline-block;
             opacity: 0;
-            transform: translateY(105%);
+            transform: translateY(125%);
             animation: reRiseIn 1s cubic-bezier(.2,.8,.2,1) forwards;
           }
           .reLine:nth-child(1) > span { animation-delay: 0.45s; }
