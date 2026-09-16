@@ -1,6 +1,5 @@
 import Image from "next/image";
 import LosangeComposen from "../../losangecomposen";
-import HomeContactForm from "./HomeContactForm";
 
 const activeItems = [
     { index: 0, title: ['Private Jet'], image: "/images/gridLosange/jet2.png", link: "/privat-jet" },
@@ -74,71 +73,9 @@ export default function Luxuryandcontactsection() {
 
 
 
-        {/* <LosangeComposen/> */}
-        {/* Cible de l'ancre #contact du header. `id="discovery"` reste sur la section
-            englobante : /request-quote-test-v10 pointe vers /#discovery. */}
-        <div id="contact" className=" py-16 px-4 md:px-24 scroll-mt-24">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
-            {/* WhatsApp box : toute la carte est cliquable. Numero officiel confirme,
-                identique au telephone. Aucune mention d'horaires. */}
-            <a
-              href="https://wa.me/41767365781"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Contact Qualityacht on WhatsApp"
-              className="rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.45),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-between transition-[border-color,box-shadow] duration-300 hover:border-[#C2622A] hover:shadow-[0_0_28px_rgba(194,98,106,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]"
-            >
-              <div>
-                <h2 className="text-2xl font-medium mb-2 flex items-center gap-2 text-[#C0C0C0]">
-                  <span className="text-3xl" aria-hidden>🟢</span> WhatsApp
-                </h2>
-                <p className="text-sm text-[#ACB0CD]">
-                  Manage your enquiries and bookings on the go via private chat with our team
-                </p>
-              </div>
-              <span className="mt-4 text-sm text-[#C2622A]" aria-hidden>↗</span>
-            </a>
-
-            {/* Coordonnees confirmees officielles. Meme traitement transparent que la
-                capsule du configurateur du hero. */}
-            <div className="rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-start">
-              <h2 className="text-2xl font-medium mb-2 text-[#C0C0C0]">General</h2>
-              <a
-                href="mailto:info@qualityacht.ch"
-                aria-label="Email Qualityacht at info@qualityacht.ch"
-                className="text-xl md:text-2xl font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C2622A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]"
-              >
-                info@qualityacht.ch
-              </a>
-              <a
-                href="tel:+41767365781"
-                aria-label="Call Qualityacht on +41 76 736 57 81"
-                className="text-3xl md:text-4xl font-light my-2 text-[#ACB0CD] transition-colors hover:text-[#C2622A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]"
-              >
-                +41 76 736 57 81
-              </a>
-            </div>
-
-            {/* Troisieme bloc, comme avant, dedie a la seconde adresse. */}
-            <div className="rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-6 flex flex-col justify-start">
-              <h2 className="text-2xl font-medium mb-2 text-[#C0C0C0]">Office</h2>
-              <a
-                href="mailto:office@qualityacht.ch"
-                aria-label="Email Qualityacht at office@qualityacht.ch"
-                className="text-xl md:text-2xl font-medium text-[#ACB0CD] break-all transition-colors hover:text-[#C2622A] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2622A]"
-              >
-                office@qualityacht.ch
-              </a>
-            </div>
-            
-            
-          </div>
-
-          {/* Contact form */}
-          <div className="mt-12 rounded-2xl border border-[#C0C0C0] bg-[#3A3B3F] shadow-[0_0_24px_rgba(192,192,192,0.18),0_18px_48px_rgba(0,0,0,0.45)] p-10 grid grid-cols-1">
-            <HomeContactForm />
-          </div>
-        </div>
+        {/* Bloc contact (WhatsApp, General, Office, formulaire) retire a la
+            demande du client (2026-09-17) : une page contact dediee le
+            remplacera. HomeContactForm reste dans le depot, inutilise ici. */}
       </div>
 
 
