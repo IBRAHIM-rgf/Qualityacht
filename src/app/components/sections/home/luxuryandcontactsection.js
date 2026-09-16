@@ -12,7 +12,7 @@ const activeItems = [
   ];
 const activeItems2 = [
     { index: 0, title: ['Historic Sites'], image: "/images/new/pexels-gibran-riojas-2153089565-32551597.jpg", link: "/historic-sites" },
-    { index: 3, title: ['Partners'], image: "/images/gridLosange/fish.jpg", link: "/partners" },
+    { index: 3, title: ['Partners'], image: "/images/gridLosange/partners-pen.jpg", link: "/partners" },
     { index: 4, title: ['Events'], image: "/images/new/fillemasque.png", link: "/events" },
     { index: 7, title: ['Sport Fishing'], image: "/images/new/pexels-valentina-bondarenko-111153662-10076104.jpg", link: "/sport-fishing" },
     { index: 8, title: ['Luxury Cars', '& ','Racing'], image: "/images/gridLosange/luxury.png", link: "/luxury-cars-racing" },
