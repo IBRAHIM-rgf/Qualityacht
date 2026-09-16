@@ -57,17 +57,68 @@ export default function RealEstatePage() {
         </div>
         <div className="absolute inset-0 flex flex-col items-start justify-center text-left px-6 md:px-14">
           <div className="max-w-xl">
-            <p className="text-sm md:text-base uppercase tracking-[0.35em] text-[#B87333] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+            {/* Trait lumineux : se deploie de gauche a droite, il ouvre la sequence. */}
+            <span aria-hidden className="reRule" />
+            <p className="reEyebrow text-sm md:text-base uppercase tracking-[0.35em] text-[#B87333] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
               A Global Portfolio
             </p>
-            <h1 className="trajan-regular text-3xl md:text-5xl lg:text-[3.35rem] uppercase tracking-[0.08em] text-[#C0C0C0] leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
-              Real Estate &amp; Private Residences
+            {/* Titre en trois lignes : chaque ligne remonte de sous son masque. */}
+            <h1 className="reTitle trajan-regular text-3xl md:text-5xl lg:text-[3.35rem] uppercase tracking-[0.08em] text-[#C0C0C0] leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+              <span className="reLine"><span>Real Estate &amp;</span></span>
+              <span className="reLine"><span>Private</span></span>
+              <span className="reLine"><span>Residences</span></span>
             </h1>
-            <p className="mt-6 text-[15px] md:text-lg font-medium leading-[1.8] text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+            <p className="reSub mt-6 text-[15px] md:text-lg font-medium leading-[1.8] text-[#acb0cd] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
               From yacht to residence: one private office for your life between sea and shore.
             </p>
           </div>
         </div>
+        {/* Sequence d'apparition, en CSS pur (aucune librairie, aucun JS) : les
+            retards d'animation reproduisent exactement le sequencage demande —
+            trait 0ms, sur-titre 150ms, lignes du titre 450ms + 180ms chacune,
+            sous-titre juste apres la derniere ligne. */}
+        <style>{`
+          .reRule {
+            display: block;
+            width: 46px;
+            height: 1px;
+            margin-bottom: 22px;
+            background: #B87333;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: reGrowLine 0.7s ease-out 0s forwards;
+          }
+          .reEyebrow, .reSub {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          .reEyebrow { animation: reFadeUp 0.9s cubic-bezier(.2,.7,.3,1) 0.15s forwards; }
+          .reSub     { animation: reFadeUp 1s   cubic-bezier(.2,.7,.3,1) 1.24s forwards; }
+          .reLine {
+            display: block;
+            overflow: hidden;
+            padding-bottom: 0.06em;
+          }
+          .reLine > span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(105%);
+            animation: reRiseIn 1s cubic-bezier(.2,.8,.2,1) forwards;
+          }
+          .reLine:nth-child(1) > span { animation-delay: 0.45s; }
+          .reLine:nth-child(2) > span { animation-delay: 0.63s; }
+          .reLine:nth-child(3) > span { animation-delay: 0.81s; }
+          @keyframes reGrowLine { to { transform: scaleX(1); } }
+          @keyframes reFadeUp   { to { opacity: 1; transform: translateY(0); } }
+          @keyframes reRiseIn   { to { opacity: 1; transform: translateY(0); } }
+          @media (prefers-reduced-motion: reduce) {
+            .reRule, .reEyebrow, .reSub, .reLine > span {
+              animation: none !important;
+              opacity: 1 !important;
+              transform: none !important;
+            }
+          }
+        `}</style>
       </section>
 
       {/* ══ GRILLE DES PARTENAIRES ══
