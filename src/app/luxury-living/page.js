@@ -27,7 +27,7 @@ export default function Page() {
       heroPosition='50% 60%'
       intro='Luxury Living brings together a considered selection of furniture, textiles and decorative pieces for homes and yachts alike. We favour natural materials, quiet lines and makers who still work by hand, so that every piece settles into a space rather than competing with it.'
       sections={SECTIONS}
-      cta={{ titre: 'Furnish With Intent', texte: 'Share the space you are working on, at home or on board. We will suggest pieces that fit it, and arrange delivery wherever you are.', label: 'Speak To Our Team', href: '/#contact' }}
+      cta={{ titre: 'Furnish With Intent', texte: 'Share the space you are working on, at home or on board. We will suggest pieces that fit it, and arrange delivery wherever you are.', label: 'Speak To Our Team', href: '/contact' }}
     />
   );
 }
