@@ -125,7 +125,7 @@ export default function PartnersPage() {
             If your work would genuinely add something to what our clients experience, we would like
             to hear from you.
           </p>
-          <Link href="/#contact" className={`${CTA_CUIVRE} mt-8 inline-flex flex-none`}>
+          <Link href="/contact" className={`${CTA_CUIVRE} mt-8 inline-flex flex-none`}>
             Contact Qualityacht
           </Link>
         </div>
