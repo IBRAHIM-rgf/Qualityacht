@@ -196,7 +196,7 @@ export default function InvestWithImpactPage() {
               <Link href="/real-estate" className={CTA_CUIVRE}>
                 Explore Real Estate Opportunities
               </Link>
-              <Link href="/#contact" className={CTA_ARGENT}>
+              <Link href="/contact" className={CTA_ARGENT}>
                 Speak to Our Team
               </Link>
             </div>
@@ -441,7 +441,7 @@ export default function InvestWithImpactPage() {
           <p className="mt-5 text-[15px] md:text-base font-medium leading-[1.75] text-[#acb0cd]">
             Tell us what you are trying to build. We will tell you honestly whether we can help.
           </p>
-          <Link href="/#contact" className={`${CTA_CUIVRE} mt-8`}>
+          <Link href="/contact" className={`${CTA_CUIVRE} mt-8`}>
             Discuss Your Investment Goals
           </Link>
         </div>
