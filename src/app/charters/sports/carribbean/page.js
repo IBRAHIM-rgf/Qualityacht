@@ -58,7 +58,7 @@ export default function SportsCaribbeanPage() {
           </p>
           <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
             <a href="/yachts?destination=caribbean" className={CTA_CUIVRE}>Explore the Caribbean Fleet</a>
-            <a href="/#contact" className={CTA_ARGENT}>Speak to Our Team</a>
+            <a href="/contact" className={CTA_ARGENT}>Speak to Our Team</a>
           </div>
         </div>
       </section>
@@ -108,7 +108,7 @@ export default function SportsCaribbeanPage() {
 
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="/yachts?destination=caribbean" className={CTA_CUIVRE}>Explore the Caribbean Fleet</a>
-            <a href="/#contact" className={CTA_ARGENT}>Speak to Our Team</a>
+            <a href="/contact" className={CTA_ARGENT}>Speak to Our Team</a>
           </div>
         </div>
       </section>
