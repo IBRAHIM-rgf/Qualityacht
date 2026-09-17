@@ -60,7 +60,7 @@ export default function CaribbeanV15RoutePage({
               {quoteLabel}
             </Link>
             <Link
-              href="/#contact"
+              href="/contact"
               className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a]/40 backdrop-blur-sm px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#C0C0C0] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
             >
               Contact a Broker
