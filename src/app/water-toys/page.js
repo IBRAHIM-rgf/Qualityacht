@@ -27,7 +27,7 @@ export default function Page() {
       heroPosition='55% 50%'
       intro='Water Toys covers everything that turns an anchorage into a playground: from tenders and jet skis to boards, e-foils and inflatables. We select equipment for build quality and ease of use, and we can arrange supply, delivery to the yacht and seasonal storage.'
       sections={SECTIONS}
-      cta={{ titre: 'Equip Your Season', texte: 'Tell us the yacht and the kind of days you have in mind. We will put together the right selection and handle delivery on board.', label: 'Discover Water Toys', href: '/#contact' }}
+      cta={{ titre: 'Equip Your Season', texte: 'Tell us the yacht and the kind of days you have in mind. We will put together the right selection and handle delivery on board.', label: 'Discover Water Toys', href: '/contact' }}
     />
   );
 }
