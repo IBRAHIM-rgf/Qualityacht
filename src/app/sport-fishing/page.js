@@ -94,7 +94,7 @@ export default function SportFishingPage() {
             <Link href="/yachts?destination=caribbean" className={CTA_CUIVRE}>
               Explore the Caribbean Fleet
             </Link>
-            <Link href="/#contact" className={CTA_ARGENT}>
+            <Link href="/contact" className={CTA_ARGENT}>
               Plan Your Fishing Day
             </Link>
           </div>
@@ -159,7 +159,7 @@ export default function SportFishingPage() {
             right private experience.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/#contact" className={CTA_CUIVRE}>
+            <Link href="/contact" className={CTA_CUIVRE}>
               Speak to Our Team
             </Link>
             <Link href="/yachts?destination=caribbean" className={CTA_ARGENT}>
