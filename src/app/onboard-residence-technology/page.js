@@ -27,7 +27,7 @@ export default function Page() {
       heroPosition='50% 55%'
       intro='Good technology on board is the kind you stop noticing. Our technical partners specialise in water quality and systems that keep a yacht or a waterfront residence running cleanly, quietly and reliably, with maintenance planned rather than improvised.'
       sections={SECTIONS}
-      cta={{ titre: 'Discuss Your Installation', texte: 'Describe the vessel or residence and what you would like to improve. We will connect you with the right technical partner.', label: 'Explore Marine Solutions', href: '/#contact' }}
+      cta={{ titre: 'Discuss Your Installation', texte: 'Describe the vessel or residence and what you would like to improve. We will connect you with the right technical partner.', label: 'Explore Marine Solutions', href: '/contact' }}
     />
   );
 }
