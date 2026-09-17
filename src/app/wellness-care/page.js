@@ -27,7 +27,7 @@ export default function Page() {
       heroPosition='60% 50%'
       intro='Wellness & Care is about the small rituals that make a day feel lighter: what you use, where you rest, how you recover after time at sea. We select products and partners that take those rituals seriously, with natural formulations and experiences shaped around the individual.'
       sections={SECTIONS}
-      cta={{ titre: 'Make Room For Yourself', texte: 'Tell us how you like to unwind. We will put together products, treatments or a retreat that follow your pace.', label: 'Speak To Our Team', href: '/#contact' }}
+      cta={{ titre: 'Make Room For Yourself', texte: 'Tell us how you like to unwind. We will put together products, treatments or a retreat that follow your pace.', label: 'Speak To Our Team', href: '/contact' }}
     />
   );
 }
