@@ -120,7 +120,7 @@ export default function OnDemandCharterPage() {
             <Link href="/charters/day-charter" className={CTA_CUIVRE}>
               Day Charter
             </Link>
-            <Link href="/#contact" className={CTA_ARGENT}>
+            <Link href="/contact" className={CTA_ARGENT}>
               Discuss Privately
             </Link>
           </div>
@@ -219,7 +219,7 @@ export default function OnDemandCharterPage() {
             <Link href="/charters/day-charter" className={CTA_CUIVRE}>
               Day Charter
             </Link>
-            <Link href="/#contact" className={CTA_ARGENT}>
+            <Link href="/contact" className={CTA_ARGENT}>
               Discuss Privately
             </Link>
           </div>
