@@ -97,7 +97,7 @@ export default function LuxuryCarsRacingPage() {
             care as the days at sea.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/#contact" className={CTA_CUIVRE}>
+            <Link href="/contact" className={CTA_CUIVRE}>
               Speak to Our Concierge
             </Link>
             <Link href="/conciergery" className={CTA_ARGENT}>
@@ -159,7 +159,7 @@ export default function LuxuryCarsRacingPage() {
           <p className="mt-5 text-base md:text-lg leading-relaxed text-[#acb0cd]">
             Give us the destination and the dates. We will tell you plainly what can be arranged.
           </p>
-          <Link href="/#contact" className={`${CTA_CUIVRE} mt-8`}>
+          <Link href="/contact" className={`${CTA_CUIVRE} mt-8`}>
             Speak to Our Concierge
           </Link>
           <p className="mt-6 text-[15px] leading-relaxed text-[#8b90a0]">
