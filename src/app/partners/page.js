@@ -11,6 +11,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { PARTNERS } from './partners-data';
+import FroggyGourmetCard from './FroggyGourmetCard';
 
 export const metadata = {
   title: 'Our Partners | Qualityacht',
@@ -61,11 +62,8 @@ export default function PartnersPage() {
       {/* ══ GRILLE PARTENAIRES ══ */}
       <section className="px-6 md:px-14 py-16 md:py-20">
         <div className="max-w-5xl mx-auto">
-          <ul
-            className={`grid gap-6 items-start list-none p-0 m-0 ${
-              PARTNERS.length > 1 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'
-            }`}
-          >
+          {/* Deux partenaires : Gustave Immo (donnees) + Froggy Gourmet (carte dediee). */}
+          <ul className="grid gap-6 items-start list-none p-0 m-0 grid-cols-1 md:grid-cols-2">
             {PARTNERS.map((p) => (
               <li key={p.id}>
                 <article className="h-full rounded-2xl border border-[#C0C0C0]/20 bg-[#2e2f32] p-7 md:p-8 flex flex-col">
@@ -110,6 +108,9 @@ export default function PartnersPage() {
                 </article>
               </li>
             ))}
+            <li>
+              <FroggyGourmetCard />
+            </li>
           </ul>
         </div>
       </section>
