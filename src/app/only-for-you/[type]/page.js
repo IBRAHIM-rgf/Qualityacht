@@ -183,7 +183,7 @@ export default function RentalTypePage({ params }) {
               studied case by case, depending on the yacht, the season and what is actually available
               at the time. Tell us where you have in mind and we will look into it.
             </p>
-            <Link href="/#contact" className={`${CTA_ARGENT} mt-6 w-auto`}>
+            <Link href="/contact" className={`${CTA_ARGENT} mt-6 w-auto`}>
               Speak to Our Team
             </Link>
           </div>
