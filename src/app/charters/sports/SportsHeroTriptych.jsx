@@ -141,7 +141,7 @@ export default function SportsHeroTriptych() {
             <a href="/yachts?destination=caribbean" className={CTA_CUIVRE}>
               Explore Sports Yachts
             </a>
-            <a href="/#contact" className={CTA_ARGENT}>
+            <a href="/contact" className={CTA_ARGENT}>
               Plan Your Charter
             </a>
           </div>
