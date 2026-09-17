@@ -60,7 +60,7 @@ export default function Header() {
           <Link href="/charters/last-minute" className="hover:text-white transition hidden md:inline">YACHTS FOR <br />LAST MINUTE</Link>
           {/* `Link` et non `<a>` : un rechargement complet perd le saut vers l'ancre,
               la page etant encore en cours de mise en page quand le navigateur essaie. */}
-          <Link href="/#contact" className="hover:text-white transition hidden md:inline">Contact</Link>
+          <Link href="/contact" className="hover:text-white transition hidden md:inline">Contact</Link>
           <a
             href="https://wa.me/41767365781"
             target="_blank"
