@@ -11,6 +11,7 @@ import { Calendar, Users, Ship, Plane, ArrowLeft, ChevronDown, X as XIcon, PawPr
 import MonthPicker from '@/components/MonthPicker';
 import JetBookingWidget from '@/components/JetBookingWidget';
 import { readCart, removeFromCart, subscribeCart } from '@/lib/quoteCart';
+import { readDayCharterJourney } from '@/lib/dayCharterJourney';
 
 const STEPS = ['Charter Details', 'Enhancements & Details', 'Thank You!'];
 
@@ -497,7 +498,11 @@ export default function RequestQuoteWizard() {
   const accessibleMode = params.get('accessible') === '1';
   // Parcours Day Charter uniquement (client 2026-09-13) : titre dedie,
   // pose par les liens venant de /charters/day-charter (?day=1).
-  const dayCharterMode = params.get('day') === '1';
+  // Etendu (client 2026-09-18) : le signal est aussi memorise par le header sur
+  // tout le parcours Day Charter (regions, iles, yachts...), voir lib/dayCharterJourney.
+  const [dayJourney, setDayJourney] = useState(false);
+  useEffect(() => { setDayJourney(readDayCharterJourney()); }, []);
+  const dayCharterMode = !accessibleMode && (params.get('day') === '1' || dayJourney);
   // Message pre-rempli (ex. besoins d'accessibilite transmis par le guide).
   const initialMessage = params.get('message') || '';
 
