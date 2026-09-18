@@ -22,6 +22,56 @@ export function labelForReason(v) {
 
 // Longueurs maximales. Le serveur REFUSE tout depassement, il ne tronque pas :
 // tronquer masquerait une charge abusive au lieu de la signaler.
+// Catalogue des experiences proposees sur /contact. Le serveur n'accepte que
+// ces libelles : ils finissent dans l'e-mail, jamais une valeur libre.
+export const CONTACT_EXPERIENCE_GROUPS = [
+  {
+    title: 'Yacht Charter',
+    items: [
+      'Day Charter',
+      'Last-Minute Charter',
+      'Yacht Charter',
+      'Pet-Friendly Yacht Charter',
+      'Accessible Charter Yacht',
+      'Couple’s Charter',
+      'Group Yacht Charter',
+      'Sports Yacht Charter',
+      'Tailored Halal Private Charter Services',
+    ],
+  },
+  {
+    title: 'Yacht Sales',
+    items: ['Motor Yacht Sales & Acquisitions', 'Sailing Yachts for Sale', 'Water Toys & Equipment'],
+  },
+  {
+    title: 'Luxury Experiences',
+    items: ['Beyond the Ordinary', 'Private Jet', 'Luxury Real Estate', 'Sport Fishing'],
+  },
+];
+
+export const CONTACT_EXPERIENCES = CONTACT_EXPERIENCE_GROUPS.flatMap((g) => g.items);
+
+export const CONTACT_LANGUAGES = [
+  { id: 'mandarin', label: 'Mandarin', native: '普通话' },
+  { id: 'cantonese', label: 'Cantonese', native: '粤语' },
+];
+
+export function isValidLanguage(v) {
+  return typeof v === 'string' && CONTACT_LANGUAGES.some((l) => l.id === v);
+}
+
+export function labelForLanguage(v) {
+  const l = CONTACT_LANGUAGES.find((x) => x.id === v);
+  return l ? `${l.label} (${l.native})` : null;
+}
+
+/** Ne garde que les libelles connus, sans doublon, dans l'ordre du catalogue. */
+export function normalizeExperiences(list) {
+  if (!Array.isArray(list)) return [];
+  const wanted = new Set(list.filter((x) => typeof x === 'string'));
+  return CONTACT_EXPERIENCES.filter((x) => wanted.has(x));
+}
+
 export const MAX_LENGTHS = {
   fullName: 120,
   email: 254,
@@ -37,6 +87,8 @@ export const FIELD_LABELS = {
   phone: 'Phone',
   company: 'Company',
   message: 'Message',
+  experiences: 'Experiences',
+  language: 'Preferred language',
 };
 
 // Refuse aussi les caracteres de controle : une adresse contenant \r ou \n
@@ -71,6 +123,12 @@ export function validateContact(data) {
   }
   if (!String(data.phone || '').trim()) {
     errors.phone = 'Please enter a phone number.';
+  }
+  if (data.experiences !== undefined && !Array.isArray(data.experiences)) {
+    errors.experiences = 'Please select at least one experience.';
+  }
+  if (data.language && !isValidLanguage(data.language)) {
+    errors.language = 'Please choose a valid language.';
   }
   if (!data.consent) {
     errors.consent = 'Please confirm we may use your details to answer your enquiry.';
