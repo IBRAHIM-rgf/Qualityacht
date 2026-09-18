@@ -13,7 +13,9 @@ import nodemailer from 'nodemailer';
 import {
   FIELD_LABELS,
   MAX_LENGTHS,
+  labelForLanguage,
   labelForReason,
+  normalizeExperiences,
   validateContact,
 } from '@/lib/contactForm';
 
@@ -88,6 +90,8 @@ export async function POST(request) {
     phone: clean(payload?.phone),
     company: clean(payload?.company),
     message: clean(payload?.message),
+    experiences: normalizeExperiences(payload?.experiences),
+    language: typeof payload?.language === 'string' && payload.language ? clean(payload.language) : '',
     consent: payload?.consent === true,
   };
 
@@ -109,6 +113,8 @@ export async function POST(request) {
     [FIELD_LABELS.email, data.email],
     [FIELD_LABELS.phone, data.phone],
     ...(data.company ? [[FIELD_LABELS.company, data.company]] : []),
+    ...(data.experiences.length ? [[FIELD_LABELS.experiences, data.experiences.join('\n')]] : []),
+    ...(data.language ? [[FIELD_LABELS.language, labelForLanguage(data.language)]] : []),
     ...(data.message ? [[FIELD_LABELS.message, data.message]] : []),
     ['Consent', 'Given — may use these details to answer this enquiry'],
   ];
