@@ -12,6 +12,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { PARTNERS } from './partners-data';
 import FroggyGourmetCard from './FroggyGourmetCard';
+import GenaAppCard from './GenaAppCard';
 
 export const metadata = {
   title: 'Our Partners | Qualityacht',
@@ -110,6 +111,9 @@ export default function PartnersPage() {
             ))}
             <li>
               <FroggyGourmetCard />
+            </li>
+            <li>
+              <GenaAppCard />
             </li>
           </ul>
         </div>
