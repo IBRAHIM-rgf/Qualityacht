@@ -1,5 +1,4 @@
 import Image from "next/image";
-import EventsHeroPanels from './EventsHeroPanels';
 import Link from "next/link";
 import CaribbeanEventsMap from "../CaribbeanEventsMap";
 import EventsCarousel from "./EventsCarousel";
@@ -18,9 +17,9 @@ export const metadata = {
 // controles un par un — jamais choisis d'apres leur nom. Aucune image externe,
 // aucun hotlink.
 //
-// Hero : course au large avec equipage, le visuel evenementiel le plus fort
-// disponible localement. Il remplace une vue de drone generique.
-const HERO_IMAGE = '/media/quality/boats/gregor-volvo-ocean-race-816438-1920.jpg';
+// Hero : photo aerienne (baie + voiliers) avec zoom lent, ex-hero de /events,
+// echangee avec les trois panneaux video partis sur /events (client 2026-09-18).
+const HERO_IMAGE = '/media/quality/aerial/hugh-whyte-k3abfa6ayzy-unsplash.jpg';
 
 // ══ Illustration editoriale PAR CATEGORIE ══
 //
@@ -62,11 +61,16 @@ const CARIB_EVENTS = CARIBBEAN_EVENTS.map((e) => ({
 export default function EventsCaribbeanPage() {
   return (
     <main>
-      {/* ══ HERO : TROIS PANNEAUX ══
+      {/* ══ HERO : PHOTO AERIENNE ══
           Seul le fond change : sur-titre, H1, sous-titre et les deux CTA sont
           strictement conserves, et rien sous le hero n'est touche. */}
-      <section className="relative pt-[70px] md:pt-0 bg-[#04070D]">
-        <EventsHeroPanels />
+      <section className="relative pt-[70px] md:pt-0 overflow-hidden h-[60vh] md:h-[82vh] bg-[#26272a]">
+        <style>{`
+          .events-hero-zoom { animation: eventsHeroZoom 9s ease-in-out infinite alternate; will-change: transform; }
+          @keyframes eventsHeroZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
+          @media (prefers-reduced-motion: reduce) { .events-hero-zoom { animation: none !important; } }
+        `}</style>
+        <Image src={HERO_IMAGE} alt="Exclusive Event Experiences" fill priority sizes="100vw" className="object-cover object-center saturate-[1.4] contrast-[1.1] brightness-[1.03] events-hero-zoom" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Caribbean · Cultural & Nautical Calendar</p>
