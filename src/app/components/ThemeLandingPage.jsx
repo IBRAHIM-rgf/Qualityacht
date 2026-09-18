@@ -10,7 +10,7 @@ import { destinations } from '../charters/destinationsData';
 // /historic-sites et /horses-riding ont ainsi exactement le meme traitement.
 const HERO_BOOST = 'saturate-[1.4] contrast-[1.1] brightness-[1.03]';
 
-export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false, animated = false, hideHeroText = false, heroGradientSoft = false, heroZoomDuration = '9s' }) {
+export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false, animated = false, hideHeroText = false, heroGradientSoft = false, heroZoomDuration = '9s', heroNode = null }) {
   // heroGradientSoft : degrade plus leger (photo deja sombre au premier plan, cf.
   // /historic-sites : arche du Taj Mahal). Defaut = degrade d'origine partout ailleurs.
   const heroGradient = (
@@ -49,7 +49,15 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
           HERO_BOOST : couleurs plus vives (saturation + contraste legerement remontes).
           Pose sur la PHOTO seule — le degrade et le titre sont des freres, ils ne sont
           pas affectes. Meme parti pris que les panneaux de historic-sites/caribbean-v3. */}
-      {heroFullPhoto ? (
+      {heroNode ? (
+        // Fond de hero fourni par la page (ex. /events : les trois panneaux video),
+        // degrade et textes inchanges par-dessus.
+        <section className="relative pt-[70px] md:pt-0 bg-[#04070D]">
+          {heroNode}
+          {heroGradient}
+          {!hideHeroText && heroOverlay}
+        </section>
+      ) : heroFullPhoto ? (
         // Dezoom max : photo entiere (ratio naturel), aucun crop
         <section className="relative pt-[70px]">
           <div className="relative">
