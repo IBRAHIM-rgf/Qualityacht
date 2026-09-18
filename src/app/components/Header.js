@@ -5,12 +5,21 @@ import Image from "next/image";
 import { MessageCircle, Phone } from "lucide-react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { syncDayCharterJourney } from "@/lib/dayCharterJourney";
 
 const MOBILE_MENU_ID = 'mobile-menu-panel';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const burgerRef = useRef(null);
+  const pathname = usePathname();
+
+  // Parcours Day Charter : memorise a l'entree de la section, efface a l'entree
+  // d'une autre section. Lu par /request-quote pour son titre.
+  useEffect(() => {
+    if (pathname) syncDayCharterJourney(pathname);
+  }, [pathname]);
 
   // Escape ferme le menu et rend le focus au bouton, pour ne pas perdre
   // l'utilisateur au clavier.
