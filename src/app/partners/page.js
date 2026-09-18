@@ -36,27 +36,52 @@ const CTA_ARGENT =
   'tracking-[0.18em] text-[#C0C0C0] transition-[border-color,box-shadow] duration-300 ' +
   'hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)] ' + FOCUS;
 
+const HERO_VIDEO = '/media/client/lydie/2026-09-18/partners-hero/hero-rays.mp4';
+const HERO_POSTER = '/media/client/lydie/2026-09-18/partners-hero/hero-rays-poster.jpg';
+
 export default function PartnersPage() {
   return (
     <main className="bg-[#26272a] text-[#acb0cd] min-h-screen">
-      {/* ══ HERO — typographique, aucun logo fictif ══ */}
-      <section className="relative px-6 md:px-14 pt-28 md:pt-36 pb-14 md:pb-20 border-b border-[#C0C0C0]/10">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.32em] text-[#B87333] mb-3">
-            Qualityacht · Trusted Expertise
-          </p>
-          <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">
-            Our Partners
-          </h1>
-          <div className="relative w-28 md:w-40 h-5 mt-5 mx-auto">
-            <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+      {/* ══ HERO — video de fond (raies), textes inchanges par-dessus ══
+          Meme principe que VideoHero : lecture auto muette en boucle, poster
+          de secours, degrade sombre pour la lisibilite, hauteur ~78svh. */}
+      <section className="relative w-full h-[78svh] min-h-[520px] overflow-hidden bg-[#26272a] border-b border-[#C0C0C0]/10">
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={HERO_POSTER}
+        >
+          <source src={HERO_VIDEO} type="video/mp4" />
+        </video>
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(38,39,42,0.55) 0%, rgba(38,39,42,0.25) 30%, rgba(38,39,42,0.25) 60%, #26272a 100%)',
+          }}
+        />
+        <div className="relative z-10 h-full flex items-center px-6 md:px-14 pt-[70px]">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-[10px] md:text-xs uppercase tracking-[0.32em] text-[#B87333] mb-3">
+              Qualityacht · Trusted Expertise
+            </p>
+            <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight md:leading-[1.15]">
+              Our Partners
+            </h1>
+            <div className="relative w-28 md:w-40 h-5 mt-5 mx-auto">
+              <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+            </div>
+            <p className="mt-6 text-sm md:text-base leading-relaxed text-[#acb0cd] [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]">
+              There are things we do ourselves, and things we would rather entrust to someone who does
+              them better. Qualityacht works with a small number of selected specialists so that what
+              surrounds a charter — and what follows it — is held to the same standard as the charter
+              itself.
+            </p>
           </div>
-          <p className="mt-6 text-sm md:text-base leading-relaxed text-[#acb0cd]">
-            There are things we do ourselves, and things we would rather entrust to someone who does
-            them better. Qualityacht works with a small number of selected specialists so that what
-            surrounds a charter — and what follows it — is held to the same standard as the charter
-            itself.
-          </p>
         </div>
       </section>
 
