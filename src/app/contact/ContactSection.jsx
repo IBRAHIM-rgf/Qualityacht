@@ -7,38 +7,17 @@
 // des sections destinations du site : fond nuageux, Trajan pour les titres,
 // Montserrat pour le reste, palette #26272a / #C0C0C0 / #acb0cd / #c2622a.
 
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
+import {
+  CONTACT_EXPERIENCE_GROUPS as GROUPS,
+  CONTACT_LANGUAGES,
+  DEFAULT_REASON,
+  validateContact,
+} from '@/lib/contactForm';
 
-const GROUPS = [
-  {
-    title: 'Yacht Charter',
-    items: [
-      'Day Charter',
-      'Last-Minute Charter',
-      'Yacht Charter',
-      'Pet-Friendly Yacht Charter',
-      'Accessible Charter Yacht',
-      'Couple’s Charter',
-      'Group Yacht Charter',
-      'Sports Yacht Charter',
-      'Tailored Halal Private Charter Services',
-    ],
-  },
-  {
-    title: 'Yacht Sales',
-    items: ['Motor Yacht Sales & Acquisitions', 'Sailing Yachts for Sale', 'Water Toys & Equipment'],
-  },
-  {
-    title: 'Luxury Experiences',
-    items: ['Beyond the Ordinary', 'Private Jet', 'Luxury Real Estate', 'Sport Fishing'],
-  },
-];
-
-const LANGUAGES = [
-  { id: 'mandarin', flag: '🇨🇳', label: 'Mandarin', native: '普通话' },
-  { id: 'cantonese', flag: '🇭🇰', label: 'Cantonese', native: '粤语' },
-];
+const FLAGS = { mandarin: '🇨🇳', cantonese: '🇭🇰' };
+const LANGUAGES = CONTACT_LANGUAGES.map((l) => ({ ...l, flag: FLAGS[l.id] }));
 
 const FOCUS =
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
@@ -59,6 +38,12 @@ export default function ContactSection() {
   const [selected, setSelected] = useState(() => new Set());
   const [language, setLanguage] = useState(null);
   const [notice, setNotice] = useState('');
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState('idle'); // idle | sending | sent
+  const [consent, setConsent] = useState(false);
+  const [sentTo, setSentTo] = useState('');
+  const honeypotRef = useRef(null);
+  const uid = useId();
 
   const hasSelection = useMemo(() => selected.size > 0, [selected]);
 
@@ -71,14 +56,75 @@ export default function ContactSection() {
     setNotice('');
   };
 
-  const onSubmit = (e) => {
+  const clearError = (name) => setErrors((p) => (p[name] ? { ...p, [name]: undefined } : p));
+
+  const onSubmit = async (e) => {
     e.preventDefault();
+    if (status === 'sending') return;
     if (!hasSelection) {
       setNotice('Please select at least one experience before continuing.');
       return;
     }
-    setNotice('Your private enquiry is ready to be submitted.');
+
+    const form = new FormData(e.currentTarget);
+    const firstName = String(form.get('firstName') || '').trim();
+    const lastName = String(form.get('lastName') || '').trim();
+    const payload = {
+      reason: DEFAULT_REASON,
+      fullName: [firstName, lastName].filter(Boolean).join(' '),
+      email: String(form.get('email') || ''),
+      phone: String(form.get('phone') || ''),
+      message: String(form.get('message') || ''),
+      experiences: [...selected],
+      language: language || '',
+      consent,
+    };
+
+    const { ok, errors: found } = validateContact(payload);
+    if (!String(payload.message).trim()) found.message = 'Please enter your message.';
+    if (!ok || found.message) {
+      setErrors(found);
+      setNotice('Please complete the highlighted fields.');
+      return;
+    }
+
+    setErrors({});
+    setNotice('');
+    setStatus('sending');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, website: honeypotRef.current?.value || '' }),
+      });
+      const body = await res.json().catch(() => ({}));
+      // La confirmation exige `delivered` : une reponse honeypot ne doit jamais
+      // faire croire a un envoi.
+      if (res.ok && body.ok === true && body.delivered === true) {
+        setSentTo(payload.email.trim());
+        setStatus('sent');
+        return;
+      }
+      if (res.status === 400 && body.errors) {
+        setErrors(body.errors);
+        setNotice('Please complete the highlighted fields.');
+      } else if (res.status === 503) {
+        setNotice('Our enquiry service is temporarily unavailable. Please contact us on WhatsApp.');
+      } else {
+        setNotice('Your enquiry could not be sent. Please try again in a moment.');
+      }
+    } catch {
+      setNotice('Your enquiry could not be sent. Please try again in a moment.');
+    }
+    setStatus('idle');
   };
+
+  const field = (name) =>
+    `${INPUT}${errors[name] ? ' border-[#c2622a]' : ''}`;
+  const Err = ({ name }) =>
+    errors[name] ? (
+      <p id={`${uid}-${name}-error`} className="mt-1 text-[12px] text-[#c2622a]" role="alert">{errors[name]}</p>
+    ) : null;
 
   return (
     <section className="relative overflow-hidden bg-[#1b223d]">
@@ -141,17 +187,59 @@ export default function ContactSection() {
             and highly personalised response.
           </p>
 
+          {status === 'sent' ? (
+            <div className="py-6 text-center" role="status">
+              <p className="text-xl text-[#C0C0C0]">Thank you — your private enquiry has been sent.</p>
+              <p className="mt-3 text-sm text-[#acb0cd]">
+                We will reply to <span className="text-[#c2622a]">{sentTo}</span> shortly.
+              </p>
+            </div>
+          ) : (
           <form onSubmit={onSubmit} noValidate className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            <label className="sr-only" htmlFor="c-first">First Name</label>
-            <input id="c-first" name="firstName" required placeholder="First Name" autoComplete="given-name" className={INPUT} />
-            <label className="sr-only" htmlFor="c-last">Last Name</label>
-            <input id="c-last" name="lastName" required placeholder="Last Name" autoComplete="family-name" className={INPUT} />
-            <label className="sr-only" htmlFor="c-email">Email Address</label>
-            <input id="c-email" name="email" type="email" required placeholder="Email Address" autoComplete="email" className={INPUT} />
-            <label className="sr-only" htmlFor="c-phone">Phone Number</label>
-            <input id="c-phone" name="phone" type="tel" placeholder="Phone Number" autoComplete="tel" className={INPUT} />
-            <label className="sr-only" htmlFor="c-message">Message</label>
-            <textarea id="c-message" name="message" required placeholder="Message" rows={5} className={`${INPUT} sm:col-span-2 min-h-[120px] resize-y`} />
+            {/* Honeypot : hors flux et hors tabulation. */}
+            <div aria-hidden className="absolute w-px h-px -left-[9999px] overflow-hidden">
+              <label htmlFor={`${uid}-website`}>Leave this field empty</label>
+              <input id={`${uid}-website`} ref={honeypotRef} type="text" name="website" tabIndex={-1} autoComplete="off" />
+            </div>
+            <div>
+              <label className="sr-only" htmlFor="c-first">First Name</label>
+              <input id="c-first" name="firstName" required placeholder="First Name" autoComplete="given-name" className={field('fullName')} onChange={() => clearError('fullName')} />
+              <Err name="fullName" />
+            </div>
+            <div>
+              <label className="sr-only" htmlFor="c-last">Last Name</label>
+              <input id="c-last" name="lastName" required placeholder="Last Name" autoComplete="family-name" className={field('fullName')} onChange={() => clearError('fullName')} />
+            </div>
+            <div>
+              <label className="sr-only" htmlFor="c-email">Email Address</label>
+              <input id="c-email" name="email" type="email" required placeholder="Email Address" autoComplete="email" className={field('email')} onChange={() => clearError('email')} />
+              <Err name="email" />
+            </div>
+            <div>
+              <label className="sr-only" htmlFor="c-phone">Phone Number</label>
+              <input id="c-phone" name="phone" type="tel" required placeholder="Phone Number" autoComplete="tel" className={field('phone')} onChange={() => clearError('phone')} />
+              <Err name="phone" />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="sr-only" htmlFor="c-message">Message</label>
+              <textarea id="c-message" name="message" required placeholder="Message" rows={5} className={`${field('message')} min-h-[120px] resize-y`} onChange={() => clearError('message')} />
+              <Err name="message" />
+            </div>
+
+            {/* ── Consentement ── */}
+            <div className="sm:col-span-2">
+              <label htmlFor={`${uid}-consent`} className="flex items-start gap-3 cursor-pointer text-[13px] leading-[1.6] text-[#acb0cd]">
+                <input
+                  id={`${uid}-consent`}
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => { setConsent(e.target.checked); clearError('consent'); }}
+                  className="mt-1 h-4 w-4 shrink-0 accent-[#c2622a]"
+                />
+                <span>I agree that Qualityacht may use my details to answer my enquiry.</span>
+              </label>
+              <Err name="consent" />
+            </div>
 
             {/* ── Langues ── */}
             <div className="sm:col-span-2 mt-4 text-center">
@@ -185,13 +273,14 @@ export default function ContactSection() {
             <div className="sm:col-span-2 flex justify-center">
               <button
                 type="submit"
-                disabled={!hasSelection}
+                disabled={!hasSelection || status === 'sending'}
                 className={`inline-flex min-h-[48px] items-center justify-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[12px] md:text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow,opacity] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#C0C0C0] disabled:hover:shadow-[0_0_18px_rgba(192,192,192,0.35)] ${FOCUS}`}
               >
-                Begin Your Private Conversation
+                {status === 'sending' ? 'Sending…' : 'Begin Your Private Conversation'}
               </button>
             </div>
           </form>
+          )}
         </div>
       </div>
     </section>
