@@ -2,6 +2,7 @@ import Image from 'next/image';
 import RealEstateMap from './RealEstateMap';
 import ProgrammeGrid from './ProgrammeGrid';
 import { MARKETS, PARTNERS, QUALITYACHT, whatsappFor } from './partner-data';
+import InfinityPropertyCard from './InfinityPropertyCard';
 
 export const metadata = {
   title: 'Real Estate | Qualityacht',
@@ -197,6 +198,7 @@ export default function RealEstatePage() {
                 </div>
               </article>
             ))}
+            <InfinityPropertyCard />
           </div>
         </div>
       </section>
