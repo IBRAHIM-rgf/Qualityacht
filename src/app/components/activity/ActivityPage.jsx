@@ -35,20 +35,23 @@ export default function ActivityPage({
   gallery = [],      // [{ src, alt }] — optionnel
   cta,               // { titre, texte, label, href }
   Icone,
+  heroNode = null,   // fond de hero fourni par la page (ex. diaporama) a la place de la photo
 }) {
   return (
     <main className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO ══ */}
       <section className="activityHero relative w-full max-w-[1400px] mx-auto min-h-[560px] md:min-h-[720px] overflow-hidden bg-[#26272a]">
-        <Image
-          src={heroImage}
-          alt={heroAlt}
-          fill
-          priority
-          sizes="100vw"
-          className="activityHeroImg"
-          style={{ objectPosition: heroPosition }}
-        />
+        {heroNode || (
+          <Image
+            src={heroImage}
+            alt={heroAlt}
+            fill
+            priority
+            sizes="100vw"
+            className="activityHeroImg"
+            style={{ objectPosition: heroPosition }}
+          />
+        )}
         <style>{`
           .activityHeroImg {
             object-fit: cover;
