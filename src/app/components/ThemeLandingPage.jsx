@@ -54,7 +54,8 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
         // degrade et textes inchanges par-dessus.
         <section className="relative pt-[70px] md:pt-0 bg-[#04070D]">
           {heroNode}
-          {heroGradient}
+          {/* Pas de voile sombre : les videos restent nettes (client 2026-09-20),
+              le titre garde son ombre portee pour la lisibilite. */}
           {!hideHeroText && heroOverlay}
         </section>
       ) : heroFullPhoto ? (
