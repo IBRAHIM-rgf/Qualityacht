@@ -9,6 +9,7 @@
 
 import { useId, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
+import { getCountries, getCountryCallingCode } from 'libphonenumber-js/min';
 import {
   CONTACT_EXPERIENCE_GROUPS as GROUPS,
   CONTACT_LANGUAGES,
@@ -17,6 +18,23 @@ import {
 } from '@/lib/contactForm';
 
 const FLAGS = { mandarin: '🇨🇳', cantonese: '🇭🇰' };
+
+// Indicatifs internationaux : drapeau (emoji regional) + indicatif, tous les
+// pays de libphonenumber, tries par nom anglais, Suisse preselectionnee.
+const flagOf = (iso) =>
+  String.fromCodePoint(...[...iso.toUpperCase()].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
+const countryName = (() => {
+  try {
+    const dn = new Intl.DisplayNames(['en'], { type: 'region' });
+    return (iso) => dn.of(iso) || iso;
+  } catch {
+    return (iso) => iso;
+  }
+})();
+const DIAL_CODES = getCountries()
+  .map((iso) => ({ iso, code: `+${getCountryCallingCode(iso)}`, name: countryName(iso), flag: flagOf(iso) }))
+  .sort((a, b) => a.name.localeCompare(b.name, 'en'));
+const DEFAULT_COUNTRY = 'CH';
 const LANGUAGES = CONTACT_LANGUAGES.map((l) => ({ ...l, flag: FLAGS[l.id] }));
 
 const FOCUS =
@@ -41,6 +59,8 @@ export default function ContactSection() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle | sending | sent
   const [consent, setConsent] = useState(false);
+  const [country, setCountry] = useState(DEFAULT_COUNTRY);
+  const dial = DIAL_CODES.find((c) => c.iso === country) || DIAL_CODES[0];
   const [sentTo, setSentTo] = useState('');
   const honeypotRef = useRef(null);
   const uid = useId();
@@ -73,7 +93,10 @@ export default function ContactSection() {
       reason: DEFAULT_REASON,
       fullName: [firstName, lastName].filter(Boolean).join(' '),
       email: String(form.get('email') || ''),
-      phone: String(form.get('phone') || ''),
+      phone: (() => {
+        const local = String(form.get('phone') || '').trim();
+        return local ? `${dial.code} ${local}` : '';
+      })(),
       message: String(form.get('message') || ''),
       experiences: [...selected],
       language: language || '',
@@ -128,10 +151,9 @@ export default function ContactSection() {
 
   return (
     <section className="relative overflow-hidden bg-[#1b223d]">
-      {/* Fond nuageux du site (le meme que les sections destinations), filtre bleu. */}
+      {/* Fond bleu uni (nuages retires, client 2026-09-20), fondu vers #26272a en bas. */}
       <div className="absolute inset-0 z-0" aria-hidden>
-        <Image src="/images/services-bg.png" alt="" fill className="object-cover opacity-55" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#05070c73] via-transparent to-[#26272a]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#26272a]" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-8 pt-28 md:pt-36 pb-20 md:pb-28">
@@ -216,8 +238,35 @@ export default function ContactSection() {
               <Err name="email" />
             </div>
             <div>
-              <label className="sr-only" htmlFor="c-phone">Phone Number</label>
-              <input id="c-phone" name="phone" type="tel" required placeholder="Phone Number" autoComplete="tel" className={field('phone')} onChange={() => clearError('phone')} />
+              <div className="flex gap-2">
+                {/* Affichage ferme : drapeau + indicatif ; la liste native (drapeau,
+                    pays, indicatif) s'ouvre par-dessus via le select transparent. */}
+                <div className="relative shrink-0">
+                  <div aria-hidden className={`${INPUT} flex items-center gap-2 whitespace-nowrap pr-8 select-none`}>
+                    <span className="text-lg leading-none">{dial.flag}</span>
+                    <span>{dial.code}</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#acb0cd]/80 text-[10px]">▼</span>
+                  </div>
+                  <label className="sr-only" htmlFor="c-country">Country code</label>
+                  <select
+                    id="c-country"
+                    name="country"
+                    value={country}
+                    onChange={(e) => { setCountry(e.target.value); clearError('phone'); }}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  >
+                    {DIAL_CODES.map((c) => (
+                      <option key={c.iso} value={c.iso}>
+                        {c.flag} {c.name} ({c.code})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <label className="sr-only" htmlFor="c-phone">Phone Number</label>
+                  <input id="c-phone" name="phone" type="tel" required placeholder="Phone Number" autoComplete="tel-national" className={field('phone')} onChange={() => clearError('phone')} />
+                </div>
+              </div>
               <Err name="phone" />
             </div>
             <div className="sm:col-span-2">
