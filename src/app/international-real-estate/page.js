@@ -3,6 +3,7 @@
 // Meme identite visuelle que la section cartes ; gabarit partage ActivityPage.
 import ActivityPage from '../components/activity/ActivityPage';
 import { House, Building2, MapPin, Handshake } from 'lucide-react';
+import IreHeroSlides from './IreHeroSlides';
 
 export const metadata = {
   title: 'International Real Estate | Qualityacht',
@@ -22,6 +23,9 @@ export default function Page() {
       eyebrow='International Real Estate'
       title='Property Without Borders'
       subtitle='Selected properties and development opportunities in the destinations our clients already sail to.'
+      // Hero : diaporama des 5 images du fichier client (2026-09-20), textes
+      // conserves par-dessus.
+      heroNode={<IreHeroSlides />}
       heroImage='/media/client/lydie/2026-09-16/activities/real-estate.jpg'
       heroAlt='Aerial view of a waterfront estate on a wooded headland'
       heroPosition='50% 45%'
