@@ -2,6 +2,15 @@
 // Page d'activite reliee a la carte du meme nom sur /invest-with-impact.
 // Meme identite visuelle que la section cartes ; gabarit partage ActivityPage.
 import ActivityPage from '../components/activity/ActivityPage';
+import ActivityHeroSlides from '../components/activity/ActivityHeroSlides';
+
+// Hero : diaporama du fichier client hero-impact-mobile.html (2026-09-20) —
+// 6 images sur PC, 5 sur telephone (la 3e est PC seulement). Textes conserves.
+const H = '/media/client/lydie/2026-09-20/luxury-living-hero';
+const HERO_SLIDES = [1, 2, 3, 4, 5, 6].map((n) => ({
+  desktop: `${H}/slide-${n}.webp`,
+  mobile: n === 3 ? null : `${H}/slide-${n}-mobile.webp`,
+}));
 import { Sofa, Armchair, Layers, Sparkles } from 'lucide-react';
 
 export const metadata = {
@@ -22,6 +31,7 @@ export default function Page() {
       eyebrow='Luxury Living'
       title='Objects With Presence'
       subtitle='Furniture, rugs, linens and refined pieces chosen to shape interiors with character and lasting appeal.'
+      heroNode={<ActivityHeroSlides slides={HERO_SLIDES} />}
       heroImage='/media/client/lydie/2026-09-16/activities/luxury-living.jpg'
       heroAlt='Dark living room with a grey sofa, cushions and a marble coffee table'
       heroPosition='50% 60%'
