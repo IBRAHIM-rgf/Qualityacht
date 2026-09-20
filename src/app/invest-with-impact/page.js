@@ -124,11 +124,12 @@ export default function InvestWithImpactPage() {
   return (
     <main className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO ══ */}
-      {/* Cadre 1400 px de large, hauteur mini 800 px. La photo couvre toute la
-          section (object-cover, recadrage 60% pour garder les bateaux et les
-          residences a droite) et le bloc de texte tient la colonne de gauche,
-          aligne a gauche et centre verticalement. */}
-      <section className="heroInvest relative w-full max-w-[1400px] mx-auto min-h-[600px] md:min-h-[800px] overflow-hidden bg-[#26272a]">
+      {/* Cadre 1400 px de large. Sur PC la section prend le ratio exact de la
+          photo (3:2, soit 1400x933) : image entiere, aucun recadrage — on voit
+          les bateaux du fond comme les palmiers du bas (client 2026-09-20). Sur
+          mobile, hauteur mini 600 px et couverture. Le bloc de texte tient la
+          colonne de gauche, aligne a gauche et centre verticalement. */}
+      <section className="heroInvest relative w-full max-w-[1400px] mx-auto mt-[70px] min-h-[600px] md:min-h-0 md:aspect-[3/2] overflow-hidden bg-[#26272a]">
         <Image
           src={HERO_IMAGE}
           alt="Aerial view of a marina with berthed yachts"
@@ -141,7 +142,7 @@ export default function InvestWithImpactPage() {
         <style>{`
           .heroInvestImg {
             object-fit: cover;
-            object-position: 60% center;
+            object-position: center center;
             transform-origin: center center;
             animation: luxuryZoom 24s ease-in-out infinite alternate;
             will-change: transform;
