@@ -10,6 +10,7 @@ const H = '/media/client/lydie/2026-09-20/luxury-living-hero';
 const HERO_SLIDES = [1, 2, 3, 4, 5, 6].map((n) => ({
   desktop: `${H}/slide-${n}.webp`,
   mobile: n === 3 ? null : `${H}/slide-${n}-mobile.webp`,
+  desktopOnly: n === 3,
 }));
 import { Sofa, Armchair, Layers, Sparkles } from 'lucide-react';
 
