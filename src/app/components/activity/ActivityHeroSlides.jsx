@@ -4,7 +4,8 @@
 // Meme mecanique que le fichier client hero-*.html (2026-09-20) : fondu croise
 // 1600 ms, chaque image affichee 5500 ms, couverture totale du cadre, versions
 // verticales dediees sous 700 px, arc en bas dans la couleur de la page.
-// Une image sans version mobile est « PC seulement » : ignoree sur telephone.
+// Une image marquee desktopOnly est ignoree sur telephone ; une image sans
+// version mobile y est affichee en version PC (cadrage cover).
 // Seule la 1re image se charge d'abord, les autres apres le chargement de la
 // page. Sous prefers-reduced-motion : image fixe.
 
@@ -40,7 +41,7 @@ export default function ActivityHeroSlides({ slides }) {
     const id = setInterval(() => {
       setCurrent((c) => {
         let next = (c + 1) % slides.length;
-        while (mobile && !slides[next].mobile) next = (next + 1) % slides.length;
+        while (mobile && slides[next].desktopOnly) next = (next + 1) % slides.length;
         return next;
       });
     }, DELAY);
@@ -51,7 +52,7 @@ export default function ActivityHeroSlides({ slides }) {
     <>
       <div aria-hidden className="absolute inset-0 z-0">
         {slides.map((s, i) => {
-          const desktopOnly = !s.mobile;
+          const desktopOnly = s.desktopOnly === true;
           const eager = (i === 0 || loaded) && !(mobile && desktopOnly);
           return (
             <picture key={s.desktop} className="contents">
