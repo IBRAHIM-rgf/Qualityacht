@@ -4,10 +4,11 @@
 import ActivityPage from '../components/activity/ActivityPage';
 import ActivityHeroSlides from '../components/activity/ActivityHeroSlides';
 
-// Hero : diaporama du fichier client hero-CARE.html (2026-09-22) — 6 images,
-// memes visuels sur PC et telephone. Textes conserves par-dessus.
+// Hero : diaporama des fichiers client hero-CARE.html (6 images PC) et
+// hero-MCARE.html (5 images verticales telephone), 2026-09-22. Textes conserves.
 const H = '/media/client/lydie/2026-09-22/wellness-care-hero';
 const HERO_SLIDES = [1, 2, 3, 4, 5, 6].map((n) => ({ desktop: `${H}/slide-${n}.webp` }));
+const HERO_SLIDES_MOBILE = [1, 2, 3, 4, 5].map((n) => ({ desktop: `${H}/mobile-${n}.webp` }));
 import { Flower2, Leaf, HeartPulse, Sun } from 'lucide-react';
 
 export const metadata = {
@@ -28,7 +29,7 @@ export default function Page() {
       eyebrow='Wellness & Care'
       title='Designed For Well-Being'
       subtitle='Thoughtful products and experiences that bring comfort, balance and a deeper sense of well-being into everyday life.'
-      heroNode={<ActivityHeroSlides slides={HERO_SLIDES} />}
+      heroNode={<ActivityHeroSlides slides={HERO_SLIDES} mobileSlides={HERO_SLIDES_MOBILE} />}
       heroImage='/media/client/lydie/2026-09-16/activities/wellness.jpg'
       heroAlt='Woman resting on a sofa by candlelight against a dark botanical wall'
       heroPosition='60% 50%'
