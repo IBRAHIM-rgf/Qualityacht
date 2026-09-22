@@ -2,6 +2,12 @@
 // Page d'activite reliee a la carte du meme nom sur /invest-with-impact.
 // Meme identite visuelle que la section cartes ; gabarit partage ActivityPage.
 import ActivityPage from '../components/activity/ActivityPage';
+import ActivityHeroSlides from '../components/activity/ActivityHeroSlides';
+
+// Hero : diaporama du fichier client hero-CARE.html (2026-09-22) — 6 images,
+// memes visuels sur PC et telephone. Textes conserves par-dessus.
+const H = '/media/client/lydie/2026-09-22/wellness-care-hero';
+const HERO_SLIDES = [1, 2, 3, 4, 5, 6].map((n) => ({ desktop: `${H}/slide-${n}.webp` }));
 import { Flower2, Leaf, HeartPulse, Sun } from 'lucide-react';
 
 export const metadata = {
@@ -22,6 +28,7 @@ export default function Page() {
       eyebrow='Wellness & Care'
       title='Designed For Well-Being'
       subtitle='Thoughtful products and experiences that bring comfort, balance and a deeper sense of well-being into everyday life.'
+      heroNode={<ActivityHeroSlides slides={HERO_SLIDES} />}
       heroImage='/media/client/lydie/2026-09-16/activities/wellness.jpg'
       heroAlt='Woman resting on a sofa by candlelight against a dark botanical wall'
       heroPosition='60% 50%'
