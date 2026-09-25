@@ -42,10 +42,12 @@ export default function RealEstatePage() {
       {/* HERO — cadre 1400 x 900 px sur desktop. La photo est verticale : elle
           est montree ENTIERE (object-contain, calee a droite). Le cote texte
           est un aplat #26272A, demande par le client. Aucun rognage. */}
-      <section className="relative mx-auto max-w-[1400px] pt-[70px] md:pt-0 h-[70vh] min-h-[460px] lg:h-[900px] bg-[#26272a] overflow-hidden">
+      <section className="relative mx-auto max-w-[1400px] pt-[70px] md:pt-0 h-[100svh] min-h-[560px] md:h-[70vh] md:min-h-[460px] lg:h-[900px] bg-[#26272a] overflow-hidden">
         {/* Premier plan : la photo ENTIERE, nette, calee a droite. Elle est
             placee SOUS l'en-tete fixe du site, sinon celui-ci recouvrait le
-            haut de l'image (le yacht disparaissait). */}
+            haut de l'image (le yacht disparaissait).
+            Telephone (client 2026-09-25) : la photo remplit l'ecran (cover,
+            centree), voile sombre en bas, textes en bas avec les marges. */}
         <div className="absolute left-0 right-0 top-[70px] bottom-0">
           <Image
             src={HERO_IMAGE}
@@ -53,10 +55,15 @@ export default function RealEstatePage() {
             fill
             priority
             sizes="100vw"
-            className="object-contain object-right"
+            className="object-cover object-center md:object-contain md:object-right"
+          />
+          <div
+            aria-hidden
+            className="md:hidden absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0) 35%, rgba(38,39,42,0.55) 62%, rgba(38,39,42,0.96) 100%)' }}
           />
         </div>
-        <div className="absolute inset-0 flex flex-col items-start justify-center text-left px-6 md:px-14">
+        <div className="absolute inset-0 flex flex-col items-start justify-end pb-10 md:pb-0 md:justify-center text-left px-6 md:px-14">
           <div className="max-w-xl">
             {/* Trait lumineux : se deploie de gauche a droite, il ouvre la sequence. */}
             <span aria-hidden className="reRule" />
