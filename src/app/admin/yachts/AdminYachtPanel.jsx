@@ -148,7 +148,7 @@ function adaptYacht(s) {
 // ════════════════════════════════════════════════════════════
 // TARIFS SAISON / RÉGION (éditeur de cartes « Regions and Rates »)
 // ════════════════════════════════════════════════════════════
-const EMPTY_RATE = { group: 'summer', title: '', subtitle: '', price: '', currency: 'EUR', unit: 'WEEK', zones: '' };
+const EMPTY_RATE = { group: 'summer', title: '', subtitle: '', price: '', currency: 'EUR', unit: 'WEEK', zones: '', apa: false, vat: false };
 const RATE_INPUT = 'w-full px-3 py-2 bg-[#2a2a30] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] text-sm focus:border-[#B03E00] outline-none';
 
 // Ligne d'edition : `zones` est une chaine (virgules) le temps de la saisie.
@@ -218,6 +218,16 @@ function PricingEditor({ rates, onChange }) {
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Zones (séparées par des virgules)</label>
             <input type="text" value={r.zones} onChange={(e) => update(i, { zones: e.target.value })}
               placeholder="Balearic Sea, Corsica, France, Italy" className={RATE_INPUT} />
+          </div>
+          <div className="flex flex-wrap gap-5">
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={!!r.apa} onChange={(e) => update(i, { apa: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+              <span className="text-[#acb0cd]">+ APA <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
+            </label>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={!!r.vat} onChange={(e) => update(i, { vat: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+              <span className="text-[#acb0cd]">+ VAT <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
+            </label>
           </div>
         </div>
       ))}
