@@ -20,6 +20,8 @@ function formatMoney(cents, currency) {
 }
 
 function seasonGroup(s) {
+  // Tarifs saisis dans l'admin : la periode (Summer / Winter) est choisie a la main.
+  if (s?._group === 'summer' || s?._group === 'winter') return s._group;
   const name = (s?.name || '').toLowerCase();
   const zones = (s?.inclusionZones || []).map((z) => (z?.label || '').toLowerCase()).join(' ');
   // Fêtes de fin d'année → toujours Winter
