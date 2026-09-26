@@ -587,6 +587,12 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
                   {total}<span className="text-sm text-[#acb0cd]/50"> {unitLabel[p.unit] || ''}</span>
                 </p>
               )}
+              {/* Tarifs admin : APA / VAT en sus, coches dans l'admin */}
+              {(s._apa || s._vat) && (
+                <p className="text-[11px] uppercase tracking-[0.25em] text-[#acb0cd]/70 -mt-2">
+                  {[s._apa && '+ APA', s._vat && '+ VAT'].filter(Boolean).join('  ·  ')}
+                </p>
+              )}
               {ZonesBlock}
             </div>
           );
