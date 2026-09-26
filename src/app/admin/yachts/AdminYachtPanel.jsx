@@ -12,6 +12,7 @@ import {
   Database, Globe, Loader2, Users,
 } from 'lucide-react';
 import { HANDICAPS_BY_CAT, HANDICAP_LABELS, parseHandicaps } from '@/lib/handicaps';
+import { normalizeCustomPricing, PRICING_CURRENCIES } from '@/lib/customPricing';
 
 // ════════════════════════════════════════════════════════════
 // CONSTANTES
@@ -139,7 +140,93 @@ function adaptYacht(s) {
     groups_allowed: s.groups_allowed,
     water_toys: s.water_toys,
     extra_info: s.extra_info,
+    // Tarifs saison / region saisis dans l'admin (voir lib/customPricing.js).
+    custom_pricing: normalizeCustomPricing(s.custom_pricing),
   };
+}
+
+// ════════════════════════════════════════════════════════════
+// TARIFS SAISON / RÉGION (éditeur de cartes « Regions and Rates »)
+// ════════════════════════════════════════════════════════════
+const EMPTY_RATE = { group: 'summer', title: '', subtitle: '', price: '', currency: 'EUR', unit: 'WEEK', zones: '' };
+const RATE_INPUT = 'w-full px-3 py-2 bg-[#2a2a30] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] text-sm focus:border-[#B03E00] outline-none';
+
+// Ligne d'edition : `zones` est une chaine (virgules) le temps de la saisie.
+function ratesToForm(rows) {
+  return normalizeCustomPricing(rows).map((r) => ({ ...r, price: String(r.price), zones: r.zones.join(', ') }));
+}
+
+function PricingEditor({ rates, onChange }) {
+  const update = (i, patch) => onChange(rates.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
+  const remove = (i) => onChange(rates.filter((_, idx) => idx !== i));
+  const add = () => onChange([...rates, { ...EMPTY_RATE }]);
+  const groupLabel = { summer: 'Summer', winter: 'Winter' };
+  return (
+    <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-3">
+      <p className="text-[#acb0cd]/60 text-xs">
+        Chaque carte apparaît dans « Regions and Rates » sur la fiche du bateau. Dès qu'une carte est
+        saisie, ces tarifs remplacent ceux d'Ankor ; le prix le plus bas devient le prix de la liste.
+      </p>
+      {rates.length === 0 && (
+        <p className="text-[#acb0cd]/40 text-xs italic">Aucun tarif saisi — les tarifs Ankor s'affichent.</p>
+      )}
+      {rates.map((r, i) => (
+        <div key={i} className="rounded-lg border border-[#C0C0C0]/20 p-3 space-y-2 relative">
+          <button type="button" onClick={() => remove(i)} title="Supprimer cette carte"
+            className="absolute top-2 right-2 text-[#acb0cd]/50 hover:text-[#e3a892]">
+            <X className="w-4 h-4" />
+          </button>
+          <div className="grid sm:grid-cols-[110px_1fr_1fr] gap-2">
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Période</label>
+              <select value={r.group} onChange={(e) => update(i, { group: e.target.value })} className={RATE_INPUT}>
+                {Object.entries(groupLabel).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Titre</label>
+              <input type="text" value={r.title} onChange={(e) => update(i, { title: e.target.value })}
+                placeholder="Mediterranean High Season" className={RATE_INPUT} />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Sous-titre (optionnel)</label>
+              <input type="text" value={r.subtitle} onChange={(e) => update(i, { subtitle: e.target.value })}
+                placeholder="May" className={RATE_INPUT} />
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-[1fr_100px_110px] gap-2">
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Prix</label>
+              <input type="text" inputMode="numeric" value={r.price} onChange={(e) => update(i, { price: e.target.value })}
+                placeholder="495000" className={RATE_INPUT} />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Devise</label>
+              <select value={r.currency} onChange={(e) => update(i, { currency: e.target.value })} className={RATE_INPUT}>
+                {PRICING_CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Unité</label>
+              <select value={r.unit} onChange={(e) => update(i, { unit: e.target.value })} className={RATE_INPUT}>
+                <option value="WEEK">Week</option>
+                <option value="DAY">Day</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Zones (séparées par des virgules)</label>
+            <input type="text" value={r.zones} onChange={(e) => update(i, { zones: e.target.value })}
+              placeholder="Balearic Sea, Corsica, France, Italy" className={RATE_INPUT} />
+          </div>
+        </div>
+      ))}
+      <button type="button" onClick={add}
+        className="px-4 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 text-sm font-medium flex items-center gap-1">
+        <Plus className="w-4 h-4" /> Ajouter une carte de tarif
+      </button>
+    </div>
+  );
 }
 
 // ════════════════════════════════════════════════════════════
@@ -891,6 +978,7 @@ function EditModal({ yacht, onClose, onSave }) {
     groups_allowed: !!yacht.groups_allowed,
     water_toys: !!yacht.water_toys,
     extra_info: yacht.extra_info || '',
+    custom_pricing: ratesToForm(yacht.custom_pricing),
   });
   const [saving, setSaving] = useState(false);
 
@@ -918,7 +1006,8 @@ function EditModal({ yacht, onClose, onSave }) {
 
   const save = async () => {
     setSaving(true);
-    await onSave(yacht.id, form);
+    // Les lignes incompletes (sans titre ou sans prix) sont ignorees.
+    await onSave(yacht.id, { ...form, custom_pricing: normalizeCustomPricing(form.custom_pricing) });
     setSaving(false);
     onClose();
   };
@@ -945,6 +1034,11 @@ function EditModal({ yacht, onClose, onSave }) {
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Prix affiché</label>
             <input type="text" value={form.custom_price} onChange={e => setForm({ ...form, custom_price: e.target.value })}
               className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
+          </div>
+          {/* Tarifs par saison / région → section « Regions and Rates » de la fiche */}
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Tarifs par saison et région</label>
+            <PricingEditor rates={form.custom_pricing} onChange={(custom_pricing) => setForm((f) => ({ ...f, custom_pricing }))} />
           </div>
           {/* Régions / sous-régions : cases à cocher, le yacht apparaît sur chaque zone cochée */}
           <div>

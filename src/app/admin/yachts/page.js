@@ -35,7 +35,9 @@ export default async function AdminYachtsPage({ searchParams }) {
   try {
     // Chargement APRES verification de la session : sans authentification, aucun
     // module susceptible d'ouvrir une connexion n'est initialise.
-    const { getSelectedYachtsWithData, getSelectionStats } = await import('@/lib/db');
+    const { getSelectedYachtsWithData, getSelectionStats, ensureV3Schema } = await import('@/lib/db');
+    // Colonnes recentes (dont custom_pricing) creees si besoin avant lecture.
+    await ensureV3Schema();
     // Fetch les sélections et stats depuis la base de données
     const [dbSelections, dbStats] = await Promise.all([
       getSelectedYachtsWithData(),
