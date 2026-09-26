@@ -1,7 +1,8 @@
 // src/lib/customPricing.js — Tarifs saisis dans l'admin (par saison / région).
 //
 // Stockage : colonne jsonb `custom_pricing` de yacht_selections, tableau de cartes :
-//   { group: 'summer'|'winter', title, subtitle, price, currency, unit: 'WEEK'|'DAY', zones: [] }
+//   { group: 'summer'|'winter', title, subtitle, price, currency, unit: 'WEEK'|'DAY', zones: [],
+//     apa: bool, vat: bool }   (apa / vat coches = « + APA » / « + VAT », en sus du prix)
 // `price` est en unites de devise (ex. 495000), pas en centimes.
 //
 // Quand un yacht a au moins une carte, ces tarifs remplacent ceux d'Ankor :
@@ -54,6 +55,8 @@ export function normalizeCustomPricing(raw) {
       currency: PRICING_CURRENCIES.includes(row.currency) ? row.currency : 'EUR',
       unit: PRICING_UNITS.includes(row.unit) ? row.unit : 'WEEK',
       zones: cleanZones(row.zones),
+      apa: row.apa === true || row.apa === 'true',
+      vat: row.vat === true || row.vat === 'true',
     });
   }
   return out;
@@ -84,6 +87,8 @@ export function customPricingToAnkor(rows) {
     effectiveDates: [],
     petsAllowed: false,
     _group: r.group,
+    _apa: r.apa,
+    _vat: r.vat,
     _custom: true,
   }));
   const minOf = (unit) => {
