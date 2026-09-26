@@ -61,6 +61,12 @@ export function generateAnkorJWT() {
 let cachedToken = null;
 let tokenExpiry = null;
 
+/** Oublie le jeton en cache (a appeler quand Ankor repond 401). */
+export function invalidateAnkorToken() {
+  cachedToken = null;
+  tokenExpiry = null;
+}
+
 /**
  * Récupère un Bearer Token OAuth depuis l'API Ankor
  */
@@ -103,7 +109,11 @@ export async function fetchAnkorBearerToken() {
     
     // Mise en cache (expire 5 min avant pour sécurité)
     cachedToken = data.access_token;
-    tokenExpiry = Date.now() + ((data.expires || 3600) - 300) * 1000;
+    // Ankor renvoie la duree sous `expires` ou `expires_in` (secondes) ; si elle
+    // manque, on garde le jeton 10 min seulement pour ne pas servir un jeton
+    // perime (les appels renvoyaient 401 avec un jeton garde 55 min).
+    const ttl = Number(data.expires ?? data.expires_in) || 600;
+    tokenExpiry = Date.now() + Math.max(ttl - 300, 60) * 1000;
     
     console.log('✅ Token OAuth récupéré avec succès');
     

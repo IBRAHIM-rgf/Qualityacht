@@ -1,7 +1,7 @@
 // src/lib/yachts.js - Fonctions partagées pour le fetch des yachts
 
 import { unstable_cache } from 'next/cache';
-import { fetchAnkorBearerToken } from '@/lib/utils';
+import { fetchAnkorBearerToken, invalidateAnkorToken } from '@/lib/utils';
 import { getVisibleYachtIds, getFeaturedYachtIds, getYachtSelections } from '@/lib/db';
 import { applyCustomPricingToYacht } from '@/lib/customPricing';
 
@@ -142,7 +142,7 @@ async function fetchYachtsFromAnkor(filters, token) {
   return fetchAnkorSearchRaw(`${ANKOR_API_BASE_URL}/website/search?${params.toString()}`, token, `yachts-${params.toString()}`);
 }
 
-async function fetchAnkorSearchRaw(url, token, cacheKey) {
+async function fetchAnkorSearchRaw(url, token, cacheKey, retry = true) {
   try {
     const response = await fetch(url, {
       headers: {
@@ -155,6 +155,13 @@ async function fetchAnkorSearchRaw(url, token, cacheKey) {
     });
 
     if (response.status === 401) {
+      // Jeton perime ou revoque : on en redemande un et on reessaie une fois
+      // (la recherche admin par region renvoyait 0 bateau a cause de ce 401).
+      if (retry) {
+        invalidateAnkorToken();
+        const fresh = await fetchAnkorBearerToken();
+        return fetchAnkorSearchRaw(url, fresh, cacheKey, false);
+      }
       throw new Error("Erreur 401: Jeton d'accès Ankor manquant ou invalide.");
     }
     if (!response.ok) {
@@ -188,6 +195,11 @@ async function fetchVesselDetails(uri, token, retries = 2) {
         }
       });
 
+      if (response.status === 401 && attempt < retries) {
+        invalidateAnkorToken();
+        token = await fetchAnkorBearerToken();
+        continue;
+      }
       if (!response.ok) {
         if (attempt === retries) {
           return null;
