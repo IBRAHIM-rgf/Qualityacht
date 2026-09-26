@@ -2,6 +2,7 @@
 
 import { neon } from '@neondatabase/serverless';
 import { revalidateTag } from 'next/cache';
+import { customPricingToAnkor, applyCustomPricingToYacht } from './customPricing';
 
 // Les listes publiques de yachts sont mises en cache 1 h (lib/yachts.js, tag
 // 'yachts-visible'). Toute ecriture sur la selection invalide ce cache pour que
@@ -158,7 +159,10 @@ export async function updateYachtEnrichedData(yacht_id, data) {
     groups_allowed = null,
     water_toys = null,
     extra_info = null,
+    custom_pricing = null,
   } = data;
+  // Tarifs admin (saison / region) : tableau complet a chaque sauvegarde ([] = efface).
+  const hasCustomPricing = Array.isArray(custom_pricing);
   // Multi-selection : quand les listes sont fournies, la valeur unique suit le premier choix
   // (chaine vide = « aucune », qui vide aussi la colonne unique).
   const hasRegions = Array.isArray(regions);
@@ -189,6 +193,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
         groups_allowed = COALESCE(${groups_allowed}, groups_allowed),
         water_toys = COALESCE(${water_toys}, water_toys),
         extra_info = COALESCE(${extra_info}, extra_info),
+        custom_pricing = COALESCE(${hasCustomPricing ? JSON.stringify(custom_pricing) : null}::jsonb, custom_pricing),
         updated_at = NOW()
       WHERE yacht_id = ${yacht_id}
       RETURNING *
@@ -322,7 +327,7 @@ export async function getSelectedYachtsWithData() {
         category, categories, handicaps, tags, custom_title, custom_description, custom_price,
         custom_highlights, internal_notes, cached_data, light_data, ankor_region,
         region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info,
-        created_at, updated_at
+        custom_pricing, created_at, updated_at
       FROM yacht_selections
       ORDER BY display_order ASC
     `;
@@ -361,7 +366,7 @@ export async function getSelectionYachtFullByName(name) {
   try {
     const pattern = `%${name}%`;
     const rows = await sql`
-      SELECT yacht_id, yacht_name, cached_data, light_data, full_data, region, sub_region
+      SELECT *
       FROM yacht_selections
       WHERE yacht_name ILIKE ${pattern}
          OR cached_data->>'name' ILIKE ${pattern}
@@ -375,7 +380,7 @@ export async function getSelectionYachtFullByName(name) {
     const full = typeof r.full_data === 'string' ? JSON.parse(r.full_data) : (r.full_data || null);
     // Reconstruire le mapping affichable (priorité cached > light)
     const merged = { ...light, ...cached };
-    return {
+    const base = {
       id: r.yacht_id,
       name: r.yacht_name || merged.name,
       region: r.region,
@@ -386,6 +391,14 @@ export async function getSelectionYachtFullByName(name) {
         ? [full.blueprint.images[0], ...full.blueprint.images.slice(1)]
         : (merged.images || (light.hero_image ? [light.hero_image] : [])),
       full,
+    };
+    // Tarifs saisis dans l'admin : ils remplacent le pricing Ankor de la fiche.
+    const customAnkor = customPricingToAnkor(r.custom_pricing);
+    if (!customAnkor) return base;
+    const withPrice = applyCustomPricingToYacht(base, r.custom_pricing);
+    return {
+      ...withPrice,
+      full: { ...(full || {}), pricing: { ...((full && full.pricing) || {}), ...customAnkor } },
     };
   } catch (error) {
     console.error('Erreur getSelectionYachtFullByName:', error);
@@ -507,6 +520,9 @@ export async function ensureV3Schema() {
   // `region` / `sub_region` (valeur unique) sont conserves = premier choix, pour compatibilite.
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS regions JSONB DEFAULT '[]'::jsonb`;
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS sub_regions JSONB DEFAULT '[]'::jsonb`;
+  // Tarifs saisis dans l'admin par saison / region (client 2026-09-26) : tableau JSONB
+  // de cartes { group, title, subtitle, price, currency, unit, zones } (voir lib/customPricing.js).
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS custom_pricing JSONB DEFAULT '[]'::jsonb`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_ankor_region ON yacht_selections(ankor_region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_region ON yacht_selections(region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_sub_region ON yacht_selections(sub_region)`;

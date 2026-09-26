@@ -3,6 +3,14 @@
 import { unstable_cache } from 'next/cache';
 import { fetchAnkorBearerToken } from '@/lib/utils';
 import { getVisibleYachtIds, getFeaturedYachtIds, getYachtSelections } from '@/lib/db';
+import { applyCustomPricingToYacht } from '@/lib/customPricing';
+
+// Tarifs saisis dans l'admin (custom_pricing) : quand un yacht en a, son prix de
+// carte devient le plus bas des tarifs saisis (a la place du prix Ankor).
+function withCustomPricing(list, selections) {
+  const map = new Map((selections || []).map((s) => [s.yacht_id, s.custom_pricing]));
+  return list.map((y) => applyCustomPricingToYacht(y, map.get(y.id)));
+}
 
 // ── Performance (2026-09-10) ──
 // Les pages publiques n'affichent que les yachts selectionnes dans l'admin.
@@ -487,7 +495,7 @@ async function fetchVisibleYachtsUncached(filters = {}) {
         category: categoryMap.get(s.yacht_id) || null,
       }));
 
-    const merged = [...filteredYachts, ...overrides];
+    const merged = withCustomPricing([...filteredYachts, ...overrides], selections);
 
     // 5. Trier : featured en premier, puis par ordre d'affichage
     merged.sort((a, b) => {
@@ -613,7 +621,7 @@ async function fetchVisibleYachtsForSubRegionUncached(region, subRegion) {
         subRegion,
       }));
 
-    const merged = [...filteredYachts, ...overrides];
+    const merged = withCustomPricing([...filteredYachts, ...overrides], selections);
 
     merged.sort((a, b) => {
       if (a.isFeatured && !b.isFeatured) return -1;
@@ -680,7 +688,7 @@ async function fetchVisibleYachtsForDestinationUncached(destination) {
         displayOrder: orderMap.get(s.yacht_id) ?? 999,
       }));
 
-    const merged = [...filteredYachts, ...overrides];
+    const merged = withCustomPricing([...filteredYachts, ...overrides], selections);
 
     // 6. Trier : featured d'abord, puis displayOrder
     merged.sort((a, b) => {
