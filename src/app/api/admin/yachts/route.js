@@ -162,6 +162,7 @@ export async function PATCH(request) {
     ensureV3Schema,
   } = await import('@/lib/db');
     const { extractLightData, inferAnkorRegion } = await import('@/lib/yachtCache');
+    const { normalizeCustomPricing } = await import('@/lib/customPricing');
     // Meme garantie que sur le POST : les mises a jour ecrivent aussi dans
     // `regions` / `sub_regions`.
     await ensureV3Schema();
@@ -214,6 +215,7 @@ export async function PATCH(request) {
           groups_allowed,
           water_toys,
           extra_info,
+          custom_pricing,
         } = data;
         if (!yacht_id) {
           return NextResponse.json({ error: 'yacht_id requis' }, { status: 400 });
@@ -234,6 +236,8 @@ export async function PATCH(request) {
           groups_allowed,
           water_toys,
           extra_info,
+          // Tarifs saison / region : tableau normalise ([] efface), undefined = inchange.
+          custom_pricing: Array.isArray(custom_pricing) ? normalizeCustomPricing(custom_pricing) : undefined,
         });
         return NextResponse.json({ success: true, selection: result });
       }
