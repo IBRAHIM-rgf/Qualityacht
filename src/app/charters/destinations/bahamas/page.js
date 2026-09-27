@@ -1,21 +1,17 @@
-import YachtPageClient from '@/app/yachts/YachtPageClient';
-import { fetchVisibleYachtsForDestination } from '@/lib/yachts';
+// /charters/destinations/bahamas — page destination (client 2026-09-27) :
+// hero video, « Destinations by Region » (16 iles officielles), puis
+// « Popular Destinations » (fleurs). La liste des bateaux a ete retiree de
+// cette page ; une page flotte dediee sera creee plus tard (comme les Caraibes).
+
+import { BahamasHero, BahamasDestinationsByRegion } from './BahamasRegions';
 import BahamasPopularDestinations from './BahamasPopularDestinations';
 
-export const dynamic = 'force-dynamic';
-
-export default async function Page() {
-  const { yachts, totalYachts, filters } = await fetchVisibleYachtsForDestination('bahamas');
-
+export default function Page() {
   return (
-    <>
-      {/* Section « Popular Destinations » (fleurs), meme rendu que caribbean-v15. */}
+    <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
+      <BahamasHero />
+      <BahamasDestinationsByRegion />
       <BahamasPopularDestinations />
-      <YachtPageClient
-        initialFilters={filters}
-        initialData={yachts}
-        totalYachts={totalYachts}
-      />
-    </>
+    </div>
   );
 }
