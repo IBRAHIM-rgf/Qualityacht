@@ -16,7 +16,7 @@ function getIslandCoords(name) {
 
 // ── Données rectangles (8 items : 4 + 4) ──────────────────────────────────────
 // image = nouvelle (repos) ; imageOld = ancienne colorée (apparaît au survol)
-const caribbeanIslands = [
+export const caribbeanIslands = [
   { name: 'Greater Antilles',      image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/carabbean/greater-antilles-v11' },
   { name: 'Leeward Islands',       image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/charters/destinations/carabbean/leeward-islands-v11' },
   { name: 'Leeward Antilles',      image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/charters/destinations/carabbean/leeward-antilles-v11' },
@@ -224,11 +224,12 @@ function useScrollOscillate({ index = 0, sequentialStepMs = 200, randomMaxMs = 1
 // ── Carte rectangulaire ────────────────────────────────────────────────────────
 // En vue : cascade en ordre au scroll bas, aléatoire au scroll haut, puis
 // oscillation perpétuelle filtrée ↔ originale toutes les 6s (transitions 3s).
-function DestCard({ name, image, imageOld, href, index = 0 }) {
+export function DestCard({ name, image, imageOld, href, index = 0 }) {
   const [ref, lit, setLit] = useScrollOscillate({ index, sequentialStepMs: 400, randomMaxMs: 2000, intervalMs: 8000 });
   function handleClick(e) {
     e.preventDefault(); setLit(true);
-    setTimeout(() => { window.location.href = href; }, 800);
+    // Sans lien (ex. /charters/destinations/bahamas) : la carte s'eclaire seulement.
+    if (href) setTimeout(() => { window.location.href = href; }, 800);
   }
   return (
     <a ref={ref} href={href} onClick={handleClick}
