@@ -7,10 +7,10 @@
 // Donnees : fichier client « Bahamas_16_Iles_Officielles2.xlsx » (16 iles officielles).
 // Coordonnees : positions approximatives de chaque lieu (carte affichee au zoom 5).
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { MapPin } from 'lucide-react';
-import { IslandMapModal, CloudSection, RevealBlock } from '../caribbean-v15/CaribbeanV15Base';
+import { IslandMapModal, CloudSection, RevealBlock, DestCard, caribbeanIslands } from '../caribbean-v15/CaribbeanV15Base';
 
 const HERO = '/media/client/lydie/2026-09-27/bahamas-hero';
 
@@ -94,13 +94,56 @@ function IslandGroup({ group, defaultOpen, onIslandSelect }) {
 }
 
 export function BahamasHero() {
+  // Meme effet que le titre du hero Caraibes : apparition en fondu + montee (2.8 s).
+  const titleRef = useRef(null);
+  useEffect(() => {
+    const el = titleRef.current;
+    if (el) requestAnimationFrame(() => el.classList.add('revealed'));
+  }, []);
   return (
     <section className="relative pt-[70px] md:pt-0 h-[70vh] md:h-[86vh] overflow-hidden bg-[#26272a]">
+      <style>{`
+        .reveal-up { opacity: 0; transform: translateY(40px); transition: opacity 2.8s ease, transform 2.8s ease; }
+        .reveal-up.revealed { opacity: 1; transform: translateY(0); }
+      `}</style>
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video src={`${HERO}/hero.mp4`} poster={`${HERO}/poster.jpg`} autoPlay muted loop playsInline
         className="absolute inset-0 w-full h-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
+      {/* Titre dans la partie foncee (eau profonde, a gauche de la video). Mobile : en bas. */}
+      <div className="absolute inset-x-0 bottom-[8%] md:bottom-auto md:inset-x-auto md:left-[4%] md:top-1/2 md:-translate-y-1/2 md:w-[30%] flex flex-col items-center px-4">
+        <div ref={titleRef} className="reveal-up flex flex-col items-center w-full">
+          <h1 className="trajan-regular text-4xl md:text-5xl lg:text-6xl uppercase tracking-[0.15em] leading-tight text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+            The Bahamas
+          </h1>
+          <div className="relative w-32 h-6 mx-auto my-4 md:my-6">
+            <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+          </div>
+        </div>
+      </div>
     </section>
+  );
+}
+
+// Grille de photos : 16 cartes (une par ile officielle), memes photos et meme
+// effet que la grille Caraibes en attendant les photos Bahamas (client 2026-09-27).
+export function BahamasIslandsGrid() {
+  const cards = GROUPS.map((g, i) => {
+    const photo = caribbeanIslands[i % caribbeanIslands.length];
+    return { name: g.name, image: photo.image, imageOld: photo.imageOld };
+  });
+  const rows = [0, 4, 8, 12].map((start) => cards.slice(start, start + 4));
+  return (
+    <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
+      <div className="max-w-7xl mx-auto">
+        <RevealBlock label="Explore" title="Bahamas Islands" sub="The most sought-after islands for luxury yacht charters" />
+        {rows.map((row, r) => (
+          <div key={r} className={`grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 ${r < rows.length - 1 ? 'mb-px' : ''}`}>
+            {row.map((c, i) => <DestCard key={c.name} index={r * 4 + i} {...c} />)}
+          </div>
+        ))}
+      </div>
+    </CloudSection>
   );
 }
 
