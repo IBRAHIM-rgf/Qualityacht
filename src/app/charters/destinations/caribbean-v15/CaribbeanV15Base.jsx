@@ -382,7 +382,7 @@ function CircleCard({ name, image, nameBelow = false }) {
 
 // ── Modal carte : un point sur l'île cliquée ──────────────────────────────────
 // Leaflet chargé via CDN (comme test-region-map). island = { name, coords }.
-function IslandMapModal({ island, onClose }) {
+export function IslandMapModal({ island, onClose }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const [leafletReady, setLeafletReady] = useState(false);
@@ -558,7 +558,7 @@ function BurntLine() {
 }
 
 // ── Section fond ───────────────────────────────────────────────────────────────
-function CloudSection({ children, className = '', bg = '/images/services-bg.png', gray = false, id }) {
+export function CloudSection({ children, className = '', bg = '/images/services-bg.png', gray = false, id }) {
   return (
     <div id={id} className={`relative ${className}`}>
       <div className="absolute inset-0 z-0">
@@ -571,7 +571,7 @@ function CloudSection({ children, className = '', bg = '/images/services-bg.png'
   );
 }
 
-function RevealBlock({ label, title, sub, useTitleLine = false }) {
+export function RevealBlock({ label, title, sub, useTitleLine = false }) {
   const ref = useReveal();
   return (
     <div ref={ref} className="text-center mb-10 md:mb-14 reveal-up">
