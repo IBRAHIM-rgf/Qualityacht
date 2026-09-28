@@ -40,7 +40,7 @@ function CircleCard({ name, slug }) {
         <div className="relative w-[130px] h-[130px] md:w-[155px] md:h-[155px] rounded-full overflow-hidden">
           <Image src={`${D}/${slug}-gray.jpg`} alt={name} fill sizes="160px" className={img} />
           <Image
-            src={`${D}/${slug}-color.jpg`} alt="" aria-hidden fill sizes="160px"
+            src={`${D}/${slug}-color-v2.jpg`} alt="" aria-hidden fill sizes="160px"
             className={img} style={{ opacity: lit ? 1 : 0 }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />

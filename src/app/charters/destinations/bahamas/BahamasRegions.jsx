@@ -14,7 +14,7 @@ import { IslandMapModal, CloudSection, RevealBlock, DestCard, caribbeanIslands, 
 
 const HERO = '/media/client/lydie/2026-09-27/bahamas-hero';
 const CARDS = '/media/client/lydie/2026-09-28/bahamas-cards';
-const BAHAMAS_CARD_PHOTOS = 7;
+const BAHAMAS_CARD_PHOTOS = 8;
 
 // [nom, lat, lng] — fichier client « Bahamas_8_Groupes2.xlsx » (8 groupes).
 const GROUPS = [
