@@ -73,6 +73,8 @@ export default function CaribbeanV15RoutePage({
       showDescription={false}
       palmiersSrc={palmiers}
       palmiersAspect="3 / 2"
+      // Bandeau palmiers retire a la demande du client (2026-09-28).
+      showPalmiers={false}
       introNode={<CaribbeanV20Eclat />}
     />
   );

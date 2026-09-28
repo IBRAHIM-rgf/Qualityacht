@@ -50,7 +50,7 @@ const popularDestinations = [
 ];
 
 // ── FAQ ────────────────────────────────────────────────────────────────────────
-const faqItems = [
+export const faqItems = [
   {
     q: 'How flexible are charter durations?',
     a: 'Your yacht experience can last from a weekend escape to a month-long voyage, depending on availability. While week-long charters are standard, we gladly accommodate shorter or extended stays tailored to your schedule.',
@@ -261,12 +261,13 @@ export function DestCard({ name, image, imageOld, href, index = 0 }) {
 }
 
 // ── Bandeau st-barth + CTA — brightness filtré au début, couleur normale au scroll
-function StBarthBandeau({ children }) {
+// src : photo du bandeau (defaut = photo Caraibes ; /charters/destinations/bahamas passe la sienne).
+export function StBarthBandeau({ children, src = '/images/destinations/Caraibes_charters.png' }) {
   const [ref, lit] = useScrollLit(200);
   return (
     <div ref={ref} className="relative h-[55vh] md:h-[75vh] overflow-hidden">
       <Image
-        src="/images/destinations/Caraibes_charters.png"
+        src={src}
         alt=""
         fill
         className={`object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${lit ? 'brightness-100 blur-0' : 'brightness-50 blur-md'}`}
@@ -526,7 +527,7 @@ function IslandGroup({ group, defaultOpen, onIslandSelect }) {
 }
 
 // ── Accordéon FAQ ─────────────────────────────────────────────────────────────
-function FaqItem({ q, a }) {
+export function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="border-b border-white/10">
@@ -629,6 +630,9 @@ export default function CaribbeanV15Page({
   // la section Destinations by Region) — cf. /charters/halal/caribbean qui y met la photo
   // "beach". palmiersAspect = son ratio (mode full). Defaut null = bandeau palmiers d'origine.
   palmiersSrc = null,
+  // showPalmiers=false : retire le bandeau palmiers/beach (client 2026-09-28 sur
+  // /charters/destinations/caribbean-v15). Defaut true = aucune regression ailleurs.
+  showPalmiers = true,
   palmiersAspect = null,
   palmiersSrcOld = null,
   // palmiersFilter : filtre CSS du bandeau palmiers/beach au repos ; palmiersFilterOld : filtre
@@ -909,6 +913,7 @@ export default function CaribbeanV15Page({
         </CloudSection>
 
         {/* ══ BANDEAU palmiers (remplacable via palmiersSrc — cf. halal : beach) ══ */}
+        {showPalmiers && (
         <BandeauPhoto
           src={palmiersSrc || '/images/pagesCaraibes/palmierscaraibes.jpeg'}
           srcOld={palmiersSrc ? palmiersSrcOld : '/images/pagesCaraibes/palmierscaraibes-original.jpeg'}
@@ -917,6 +922,7 @@ export default function CaribbeanV15Page({
           filterCls={palmiersFilter}
           filterClsOld={palmiersFilterOld}
         />
+        )}
 
         {/* ══ POPULAR DESTINATIONS — cercles slider ══ */}
         <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
