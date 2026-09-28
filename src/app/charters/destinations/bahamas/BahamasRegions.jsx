@@ -13,6 +13,8 @@ import { MapPin } from 'lucide-react';
 import { IslandMapModal, CloudSection, RevealBlock, DestCard, caribbeanIslands, StBarthBandeau, FaqItem, faqItems } from '../caribbean-v15/CaribbeanV15Base';
 
 const HERO = '/media/client/lydie/2026-09-27/bahamas-hero';
+const CARDS = '/media/client/lydie/2026-09-28/bahamas-cards';
+const BAHAMAS_CARD_PHOTOS = 7;
 
 // [nom, lat, lng] — fichier client « Bahamas_8_Groupes2.xlsx » (8 groupes).
 const GROUPS = [
@@ -174,7 +176,14 @@ export function BahamasHero() {
 // Grille de photos : 8 cartes 4 + 4 (une par groupe), memes photos et meme
 // effet que la grille Caraibes en attendant les photos Bahamas (client 2026-09-27).
 export function BahamasIslandsGrid() {
+  // Photos Bahamas du client (2026-09-28) : version filtree au repos, couleur revelee,
+  // meme transition que la grille Caraibes. 7 photos recues pour 8 cartes : la 8e garde
+  // provisoirement la photo Caraibes en attendant la sienne.
   const cards = GROUPS.map((g, i) => {
+    if (i < BAHAMAS_CARD_PHOTOS) {
+      const n = i + 1;
+      return { name: g.name, image: `${CARDS}/card-${n}-filtered.jpg`, imageOld: `${CARDS}/card-${n}-color.jpg` };
+    }
     const photo = caribbeanIslands[i % caribbeanIslands.length];
     return { name: g.name, image: photo.image, imageOld: photo.imageOld };
   });
