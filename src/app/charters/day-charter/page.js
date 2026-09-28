@@ -20,6 +20,7 @@ const cards = [
     title: "Bahamas",
     description: "Shallow banks, powder sand cays and short hops between anchorages.",
     image: "/images/destinations/cards/bahamas-card.webp",
+    href: "/charters/day-charter/bahamas",
   },
   {
     title: "Central America",
