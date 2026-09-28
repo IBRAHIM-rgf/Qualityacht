@@ -4,7 +4,7 @@
 // Meme composant et meme mise en scene que /charters/destinations/caribbean-v15
 // (CaribbeanV20Eclat), avec les photos et videos Bahamas du client (2026-09-28).
 // Chaque media garde son format d'origine (aucun recadrage) : photo portrait en
-// 3/4, video verticale en 9/16. Textes des 4 cartes : repris de la page Caraibes.
+// 3/4, video verticale en 9/16. Textes des 4 cartes : specifiques aux Bahamas.
 
 import Link from 'next/link';
 import VibeCard from '@/components/vibe/VibeCard';
@@ -31,26 +31,30 @@ function TextCard({ kicker, children }) {
 }
 
 const hl = 'text-[#bd9973] font-semibold';
+// Textes Bahamas (client 2026-09-28). Chiffre des iles : site officiel du
+// gouvernement des Bahamas (bahamas.gov.bs) — « 700 islands and 2,400 cays ».
 const T1 = (
   <TextCard kicker="Paradise">
-    A paradise of <span className={hl}>turquoise waters</span>, <span className={hl}>powder-white beaches</span> and{' '}
-    <span className={hl}>vibrant coral reefs</span> — the world's premier destination for luxury yacht charters.
+    <span className={hl}>Crystal-clear waters</span>, <span className={hl}>powder-white sand</span> and the most dazzling{' '}
+    <span className={hl}>shades of turquoise</span> — The Bahamas is paradise, a short hop from Florida.
   </TextCard>
 );
 const T2 = (
   <TextCard kicker="Glamour & legend">
-    From the pirate legends of the Leeward and Windward Islands to the{' '}
-    <span className={hl}>Michelin-starred tables</span> of St. Martin and St. Barts — an unparalleled sailing experience.
+    From the <span className={hl}>pirate legends of Nassau</span> to the glamour of <span className={hl}>Paradise Island</span> and the
+    famous <span className={hl}>swimming pigs of the Exumas</span> — history and high style, side by side.
   </TextCard>
 );
 const T3 = (
-  <TextCard kicker="700+ islands">
-    <span className={hl}>Twenty-six nations</span> and over <span className={hl}>seven hundred islands</span>, cays and islets — crystal-clear seas and palm-fringed shores.
+  <TextCard kicker="700 islands & 2,400 cays">
+    <span className={hl}>700 islands</span> and <span className={hl}>2,400 cays</span> — secluded anchorages, shimmering sandbars
+    and private beaches reachable only by sea.
   </TextCard>
 );
 const T4 = (
   <TextCard kicker="Curated around you">
-    The glamour of <span className={hl}>Turks &amp; Caicos</span>, the sophistication of <span className={hl}>St. Barts</span>, private islands reachable only by sea — crafted for the extraordinary.
+    Island-hopping from <span className={hl}>Nassau</span> to <span className={hl}>the Exumas</span>, the pink sands of{' '}
+    <span className={hl}>Harbour Island</span> and private cays — every itinerary tailored to you.
   </TextCard>
 );
 
@@ -84,7 +88,7 @@ export default function BahamasEclat() {
             href="/yachts?destination=caribbean"
             className="group mt-8 inline-flex min-h-[48px] items-center justify-center gap-3 rounded-full border border-[#C0C0C0] bg-[#2e2f32]/60 px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#acb0cd] transition-colors duration-300 hover:border-[#c2622a] hover:text-[#c2622a] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
           >
-            Explore the Caribbean Fleet
+            Explore the Bahamas Fleet
             <span aria-hidden className="text-[#c2622a] transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
           </Link>
         </FloatingScatter>
