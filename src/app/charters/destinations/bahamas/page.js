@@ -5,11 +5,14 @@
 
 import { BahamasHero, BahamasIslandsGrid, BahamasDestinationsByRegion, BahamasCtaAndFaq } from './BahamasRegions';
 import BahamasPopularDestinations from './BahamasPopularDestinations';
+import BahamasEclat from './BahamasEclat';
 
 export default function Page() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
       <BahamasHero />
+      {/* Eclat (cartes flottantes), comme la page Caraibes : juste sous le hero. */}
+      <BahamasEclat />
       <BahamasIslandsGrid />
       <BahamasDestinationsByRegion />
       <BahamasPopularDestinations />
