@@ -3,7 +3,7 @@
 // « Popular Destinations » (fleurs). La liste des bateaux a ete retiree de
 // cette page ; une page flotte dediee sera creee plus tard (comme les Caraibes).
 
-import { BahamasHero, BahamasIslandsGrid, BahamasDestinationsByRegion } from './BahamasRegions';
+import { BahamasHero, BahamasIslandsGrid, BahamasDestinationsByRegion, BahamasCtaAndFaq } from './BahamasRegions';
 import BahamasPopularDestinations from './BahamasPopularDestinations';
 
 export default function Page() {
@@ -13,6 +13,7 @@ export default function Page() {
       <BahamasIslandsGrid />
       <BahamasDestinationsByRegion />
       <BahamasPopularDestinations />
+      <BahamasCtaAndFaq />
     </div>
   );
 }
