@@ -33,13 +33,13 @@ export const PARTNERS = [
   {
     id: 'bn-brickeys',
     name: 'BNBRICKEYS',
-    site: 'https://www.bnbrickeys.com/',
-    // Logo officiel recupere sur leur site puis stocke localement (aucun hotlink
-    // du CDN externe), recadre de ses marges. Identite et couleurs inchangees.
-    logo: '/images/partners/bn-brickeys/logo.webp',
-    logoWordmark: '/images/partners/bn-brickeys/logo.webp',
-    logoWidth: 760,
-    logoHeight: 324,
+    // Client 2026-09-28 : logo Balkin Monaco Real Estate | Knight Frank et lien
+    // balkin.mc a la place de BnB Rickeys (textes de la carte inchanges).
+    site: 'https://www.balkin.mc/fr',
+    logo: '/images/partners/balkin-logo.png',
+    logoWordmark: '/images/partners/balkin-logo.png',
+    logoWidth: 953,
+    logoHeight: 145,
     // « RICKEYS » est gris tres sombre (#3a3a3a) : 1,18:1 sur nos cartes, donc
     // illisible. Ce logo exige un fond clair pour rester fidele a l'identite du
     // partenaire plutot que d'etre recolore.
@@ -111,7 +111,7 @@ export const MARKETS = [
     name: 'Monaco',
     coords: [43.7384, 7.4246],
     cta: 'Visit BNBRICKEYS',
-    href: 'https://www.bnbrickeys.com/',
+    href: 'https://www.balkin.mc/fr',
     desc: 'Luxury stays and curated properties in Monaco and the surrounding areas. No individual property or price is confirmed at this stage.',
   },
 ];
