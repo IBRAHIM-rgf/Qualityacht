@@ -50,6 +50,9 @@ export const PARTNERS = [
     type: 'Luxury stays and curated properties in Monaco and the surrounding areas',
     markets: ['Monaco'],
     hasProgrammes: false,
+    // Client 2026-09-29 : a la place de « Visit Partner » et « Contact
+    // Qualityacht », un seul bouton vert qui ouvre la page video Monaco.
+    selection: { label: 'Selection MONACO', href: '/real-estate/monaco' },
   },
 ];
 

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Image from 'next/image';
 import RealEstateMap from './RealEstateMap';
 import ProgrammeGrid from './ProgrammeGrid';
@@ -22,6 +23,12 @@ const CTA_CUIVRE =
   'tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] ' +
   'transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] ' +
   'hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] ' + FOCUS;
+
+// Bouton vert emeraude (client 2026-09-29) : carte Balkin -> page Monaco.
+const CTA_VERT =
+  'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
+  'rounded-full bg-[#1f7a4d] text-[15px] font-semibold uppercase tracking-[0.18em] text-white ' +
+  'transition-colors duration-300 hover:bg-[#186540] ' + FOCUS;
 
 const CTA_ARGENT =
   'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
@@ -184,6 +191,13 @@ export default function RealEstatePage() {
                   {partenaire.markets.join(' · ')}
                 </p>
 
+                {partenaire.selection ? (
+                  <div className="mt-7 flex justify-center">
+                    <Link href={partenaire.selection.href} className={CTA_VERT}>
+                      {partenaire.selection.label}
+                    </Link>
+                  </div>
+                ) : (
                 <div className="mt-7 flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
                   <a
                     href={partenaire.site}
@@ -203,6 +217,7 @@ export default function RealEstatePage() {
                     Contact Qualityacht
                   </a>
                 </div>
+                )}
               </article>
             ))}
             <InfinityPropertyCard />
