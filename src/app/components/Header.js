@@ -54,7 +54,7 @@ export default function Header() {
           </Link>
           
           <div className="hidden md:flex gap-9 text-sm items-center text-white/90">
-            <Link href="/charters/day-charter" className="hover:text-white transition">YACHTS FOR<br /> DAY CHARTER</Link>
+            <Link href="/charters/on-demand" className="hover:text-white transition">YACHTS FOR<br /> DAY CHARTER</Link>
             <Link href="/charters/destinations" className="hover:text-white transition">Destinations</Link>
           </div>
         </div>
