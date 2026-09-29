@@ -17,14 +17,11 @@ export default function LastMinuteCharter() {
   return (
     <ItemsGrid
       title="Last-Minute Charter"
-      heroTriptych={[
-        '/media/quality/beach/last-minute-1.mp4',
-        '/media/quality/beach/last-minute-2.mp4',
-        '/media/quality/beach/last-minute-3.mp4',
-      ]}
-      // Video du milieu acceleree a 1,5x (demande client) ; les deux autres
-      // gardent leur vitesse normale.
-      heroTriptychRates={[1, 1.5, 1]}
+      // Hero video unique fournie par le client (2026-09-29), affichee en
+      // entier et sans degrade flou par-dessus.
+      heroVideo="/media/client/lydie/2026-09-29/last-minute-hero.mp4"
+      heroVideoPoster="/media/client/lydie/2026-09-29/last-minute-hero.jpg"
+      heroVideoFull
       bgImage="/images/services-bg.png"
       items={lastMinuteItems}
     />
