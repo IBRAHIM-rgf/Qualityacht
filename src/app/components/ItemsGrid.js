@@ -16,6 +16,10 @@ export default function ItemsGrid({
   // autres consommateurs. Seule la page Accessible passe heroVideo.
   heroVideoPoster = null,
   heroVideoCover = false,
+  // heroVideoFull : video 16:9 affichee en entier (cadre au meme ratio, aucun
+  // recadrage) et sans degrade sombre/flou par-dessus — page Last-Minute
+  // (client 2026-09-29). Defaut false = inchange pour les autres pages.
+  heroVideoFull = false,
   heroVideo = null,
   heroTriptych = null,
   // Vitesse de lecture par video du triptyque, ex. [1, 1.5, 1] pour n'accelerer
@@ -43,9 +47,10 @@ export default function ItemsGrid({
           cote (heroTriptych, pour les videos verticales/etroites qui laisseraient trop
           de vide lateral en single video) + titre en overlay qui glisse vers le haut */}
       {(heroImage || heroVideo || heroTriptych) && (
-        <div className="relative w-full pt-[70px] md:pt-0 bg-[#26272a]">
+        <div className={`relative w-full pt-[70px] ${heroVideo && heroVideoFull ? 'md:pt-[64px]' : 'md:pt-0'} bg-[#26272a]`}>
           <div className={`relative w-full overflow-hidden ${
             heroTriptych ? 'h-[62vh] md:h-[85vh] grid grid-cols-3 gap-[2px]' :
+            heroVideo && heroVideoFull ? 'aspect-video bg-[#26272a]' :
             heroVideo && heroVideoCover ? 'h-[74vh] min-h-[440px] md:h-[84vh] bg-[#26272a]' :
             heroVideo ? 'max-h-[86vh] bg-[#26272a] flex items-center justify-center' :
             'h-[62vh] md:h-[85vh]'
@@ -82,7 +87,9 @@ export default function ItemsGrid({
                 playsInline
                 preload="metadata"
                 className={
-                  heroVideoCover
+                  heroVideoFull
+                    ? 'block w-full h-full object-cover object-center'
+                    : heroVideoCover
                     ? 'block w-full h-full object-cover object-center motion-reduce:hidden'
                     : 'block w-full h-auto max-h-[86vh] object-contain'
                 }
@@ -102,7 +109,9 @@ export default function ItemsGrid({
                 className="hidden motion-reduce:block object-cover object-center"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-black/30 to-transparent pointer-events-none" />
+            {!(heroVideo && heroVideoFull) && (
+              <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-black/30 to-transparent pointer-events-none" />
+            )}
             <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-6 md:pb-10">
               <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
                 <h1 className="text-3xl md:text-5xl font-bold text-[#acb0cd] trajan-regular mb-3 text-center uppercase tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
