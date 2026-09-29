@@ -18,18 +18,23 @@ export default function BahamasRoutePage({
   heroOverTitle = null,
   quoteLabel = 'Design Your Charter',
   heroRuleColor = null,
+  // Parcours Last Minute (/charters/last-minute/bahamas) : pastille et sous-titre.
+  heroKicker = 'Qualityacht · Bahamas',
+  heroSubtitle = 'The Ultimate Luxury Yachting Destination',
 }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
       <VideoHero
         videoLandscape={`${HERO}/hero.mp4`}
         posterLandscape={`${HERO}/poster.jpg`}
-        kicker="Qualityacht · Bahamas"
+        kicker={heroKicker}
         overTitle={heroOverTitle}
         ruleColor={heroRuleColor}
         title="The Bahamas"
-        subtitle="The Ultimate Luxury Yachting Destination"
+        subtitle={heroSubtitle}
         align="center"
+        // Titre descendu au centre vertical du hero (client 2026-09-29).
+        contentClassName="pt-[210px] md:pt-[190px]"
       >
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
