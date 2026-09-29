@@ -100,7 +100,7 @@ const ACTIVITES = [
     ariaLabel: 'Explore Onboard and Residence Technology',
     Icone: Droplet,
     titre: 'Onboard & Residence Technology',
-    texte: 'Advanced water-filtration and technical solutions for yachts and residences.',
+    texte: 'Luxury technology for yachts and villas.',
     image: '/media/client/lydie/2026-09-16/activities/technology.jpg',
     alt: 'A water droplet rippling a deep blue surface',
     filtre: 'brightness(.68) saturate(.90)',
