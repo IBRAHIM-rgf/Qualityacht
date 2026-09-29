@@ -27,6 +27,11 @@ export default function ItemsGrid({
   // valeur absente vaut 1, donc le rendu reste identique sans cette prop.
   heroTriptychRates = null,
   intro = null,
+  // heroNode : hero fourni tel quel (ex. VideoHero avec CTA, hub /charters —
+  // client 2026-09-29). afterNode : blocs rendus apres la grille (bandeau CTA
+  // + FAQ). Par defaut null = rendu inchange pour toutes les autres pages.
+  heroNode = null,
+  afterNode = null,
 }) {
   // Reveal-up : meme effet de glissement vers le haut que sur caribbean-v15.
   const heroRef = useRef(null);
@@ -46,7 +51,9 @@ export default function ItemsGrid({
       {/* Hero optionnel : image, video pleine largeur, ou triptyque de 3 videos cote a
           cote (heroTriptych, pour les videos verticales/etroites qui laisseraient trop
           de vide lateral en single video) + titre en overlay qui glisse vers le haut */}
-      {(heroImage || heroVideo || heroTriptych) && (
+      {heroNode}
+
+      {!heroNode && (heroImage || heroVideo || heroTriptych) && (
         <div className={`relative w-full pt-[70px] ${heroVideo && heroVideoFull ? 'md:pt-[64px]' : 'md:pt-0'} bg-[#26272a]`}>
           <div className={`relative w-full overflow-hidden ${
             heroTriptych ? 'h-[62vh] md:h-[85vh] grid grid-cols-3 gap-[2px]' :
@@ -125,11 +132,11 @@ export default function ItemsGrid({
       )}
 
       <section
-        className={`relative ${(heroImage || heroVideo || heroTriptych) ? "" : "min-h-screen justify-center"} flex flex-col items-center bg-cover bg-center bg-no-repeat py-24 px-4`}
+        className={`relative ${(heroNode || heroImage || heroVideo || heroTriptych) ? "" : "min-h-screen justify-center"} flex flex-col items-center bg-cover bg-center bg-no-repeat py-24 px-4`}
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
         {/* Titre + ligne affichés seulement sans hero (sinon déjà dans le hero) */}
-        {!(heroImage || heroVideo || heroTriptych) && (
+        {!(heroNode || heroImage || heroVideo || heroTriptych) && (
           <>
             <h1 className="text-3xl md:text-5xl font-bold text-[#acb0cd] trajan-regular mb-4 text-center uppercase tracking-wide">
               {title}
@@ -194,10 +201,21 @@ export default function ItemsGrid({
         })}
       </div>
 
-        <div className="mt-16 text-center text-gray-500 text-xs">
-          © {new Date().getFullYear()} Qualityacht. All rights reserved.
-        </div>
+        {!afterNode && (
+          <div className="mt-16 text-center text-gray-500 text-xs">
+            © {new Date().getFullYear()} Qualityacht. All rights reserved.
+          </div>
+        )}
       </section>
+
+      {afterNode && (
+        <>
+          {afterNode}
+          <div className="bg-[#26272a] py-8 text-center text-gray-500 text-xs">
+            © {new Date().getFullYear()} Qualityacht. All rights reserved.
+          </div>
+        </>
+      )}
     </>
   );
 }

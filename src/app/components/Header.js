@@ -54,7 +54,7 @@ export default function Header() {
           </Link>
           
           <div className="hidden md:flex gap-9 text-sm items-center text-white/90">
-            <Link href="/charters/on-demand" className="hover:text-white transition">YACHTS FOR<br /> DAY CHARTER</Link>
+            <Link href="/charters/day-charter" className="hover:text-white transition">YACHTS FOR<br /> DAY CHARTER</Link>
             <Link href="/charters/destinations" className="hover:text-white transition">Destinations</Link>
           </div>
         </div>
@@ -125,6 +125,7 @@ export default function Header() {
               <h3 className="font-semibold mb-3 uppercase underline decoration-[#B87333] underline-offset-8 text-sm tracking-wider">On-Demand Charter</h3>
               <ul className="space-y-2">
                 <li><Link href="/charters/on-demand" className="hover:text-white transition">On-Demand Yacht Charter</Link></li>
+                <li><Link href="/charters/day-charter" className="hover:text-white transition">Day Charter</Link></li>
                 <li><Link href="/charters/pet-friendly" className="hover:text-white transition">Pet-Friendly Yacht Charter</Link></li>
                 <li><Link href="/charters/last-minute" className="hover:text-white transition">Last-Minute Charter</Link></li>
                 <li><Link href="/charters/accessible" className="hover:text-white transition">Accessible Charter Yacht</Link></li>
@@ -139,6 +140,7 @@ export default function Header() {
                 <li><Link href="/charters/group" className="hover:text-white transition">Group Yacht Charter</Link></li>
                 <li><Link href="/charters/sports" className="hover:text-white transition">Sports Yacht Charter</Link></li>
                 <li><Link href="/charters/halal" className="hover:text-white transition">Tailored Halal Private Charter</Link></li>
+                <li><Link href="/charters/only-couple" className="hover:text-white transition">Only Couple Charter</Link></li>
               </ul>
             </div>
 
