@@ -42,7 +42,7 @@ export default function RealEstatePage() {
       {/* HERO — cadre 1400 x 900 px sur desktop. La photo est verticale : elle
           est montree ENTIERE (object-contain, calee a droite). Le cote texte
           est un aplat #26272A, demande par le client. Aucun rognage. */}
-      <section className="relative mx-auto max-w-[1400px] pt-[70px] md:pt-0 h-[100svh] min-h-[560px] md:h-[70vh] md:min-h-[460px] lg:h-[900px] bg-[#26272a] overflow-hidden">
+      <section className="relative mx-auto max-w-[1440px] pt-[70px] md:pt-0 h-[100svh] min-h-[560px] md:h-[70vh] md:min-h-[460px] lg:h-[800px] bg-[#26272a] overflow-hidden">
         {/* Premier plan : la photo ENTIERE, nette, calee a droite. Elle est
             placee SOUS l'en-tete fixe du site, sinon celui-ci recouvrait le
             haut de l'image (le yacht disparaissait).
