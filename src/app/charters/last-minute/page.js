@@ -6,6 +6,7 @@ import { destinations } from "../destinationsData";
 // mesure (cle = titre exact dans destinationsData).
 const LAST_MINUTE_GUIDES = {
   Caraïbes: "/charters/last-minute/caribbean",
+  Bahamas: "/charters/last-minute/bahamas",
 };
 
 const lastMinuteItems = destinations.map((d) =>
