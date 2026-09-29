@@ -39,8 +39,14 @@ export default function LastMinuteHero() {
       <div className="relative z-10 h-full flex flex-col items-center justify-center px-5 text-center pt-[210px] md:pt-[190px]">
         <Reveal variant="fade" delay={100}>
           <span className="inline-block rounded-full border border-[#C0C0C0]/50 bg-[#26272a]/50 backdrop-blur-sm px-4 py-1.5 text-[10px] md:text-xs uppercase tracking-[0.32em] text-[#c2622a] mb-5">
-            Qualityacht · Last Minute Caribbean
+            Qualityacht · Caribbean
           </span>
+        </Reveal>
+        {/* « Last Minute » en blanc sous la pastille, comme « Day Charter » (VideoHero overTitle). */}
+        <Reveal variant="fade" delay={150}>
+          <p className="trajan-regular text-[13px] sm:text-base lg:text-lg uppercase tracking-[0.34em] text-[#C0C0C0] mb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
+            Last Minute
+          </p>
         </Reveal>
         <Reveal variant="blur" delay={200} duration={1200}>
           <h1 className="trajan-regular text-4xl sm:text-6xl lg:text-7xl uppercase tracking-[0.12em] text-[#acb0cd] leading-[1.05] drop-shadow-[0_3px_16px_rgba(0,0,0,0.75)] max-w-5xl">
@@ -48,7 +54,7 @@ export default function LastMinuteHero() {
           </h1>
         </Reveal>
         <Reveal variant="scale" delay={550}>
-          <span className="block h-[2px] w-24 md:w-32 my-5 rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #c2622a 30%, #bd9973 70%, transparent)' }} />
+          <span className="block h-[2px] w-24 md:w-32 my-5 rounded-full" style={{ background: 'linear-gradient(90deg, transparent, #C0C0C0 30%, #C0C0C0 70%, transparent)' }} />
         </Reveal>
         <Reveal variant="up" delay={650}>
           <p className="text-[#acb0cd] text-base md:text-2xl uppercase tracking-[0.22em] font-light max-w-2xl drop-shadow-[0_1px_8px_rgba(0,0,0,0.7)]">
