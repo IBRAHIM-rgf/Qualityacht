@@ -24,6 +24,9 @@ export default function VideoHero({
   tintA = 'rgba(47,214,196,0.20)',   // glow turquoise
   tintB = 'rgba(255,122,89,0.18)',   // glow corail
   children,                     // CTA(s)
+  // contentClassName : classes ajoutees au bloc de contenu (ex. un padding-top pour
+  // descendre le titre au centre du hero, cf. pages Bahamas). Defaut '' = inchange.
+  contentClassName = '',
 }) {
   const vidL = useRef(null);
   const vidP = useRef(null);
@@ -73,7 +76,7 @@ export default function VideoHero({
       />
 
       {/* Contenu */}
-      <div className={`relative z-10 h-full flex flex-col items-center ${justify} px-5 text-center`}>
+      <div className={`relative z-10 h-full flex flex-col items-center ${justify} px-5 text-center ${contentClassName}`}>
         {kicker && (
           <Reveal variant="fade" delay={100}>
             <span className="inline-block rounded-full border border-[#C0C0C0]/50 bg-[#26272a]/50 backdrop-blur-sm px-4 py-1.5 text-[10px] md:text-xs uppercase tracking-[0.32em] text-[#c2622a] mb-5">
