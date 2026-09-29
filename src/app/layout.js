@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import BackButton from "./components/BackButton";
 import ScrollRise from "./components/ScrollRise";
 import { Michroma, Montserrat } from 'next/font/google';
 
@@ -122,6 +123,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${geistSans.variable} ${michroma.variable} ${geistMono.variable} ${eurostileFont.variable} ${trajanRegular.variable} ${trajanBold.variable} ${montserrat.variable} `}>
       <body className="bg-[#303135] text-gray-900 antialiased flex flex-col min-h-screen">
         <Header />
+        <BackButton />
         <main className="flex-1">{children}</main>
         <Footer />
         {/* Montee des textes au scroll sur TOUT le site (voir ScrollRise + globals.css) */}
