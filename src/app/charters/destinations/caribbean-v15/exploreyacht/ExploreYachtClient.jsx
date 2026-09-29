@@ -142,10 +142,10 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
           {handicapFilter && (
             <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm bg-[#B03E00]/15 border border-[#B03E00]/40 text-[#e3a892]">
-                Adapté pour : <strong className="font-semibold">{handicapFilter.label}</strong>
+                Suitable for: <strong className="font-semibold">{handicapFilter.label}</strong>
               </span>
               <a href={pathname} className="text-[#c2622a] hover:text-[#B03E00] text-sm underline-offset-2 hover:underline">
-                Voir tous les yachts
+                View all yachts
               </a>
             </div>
           )}
