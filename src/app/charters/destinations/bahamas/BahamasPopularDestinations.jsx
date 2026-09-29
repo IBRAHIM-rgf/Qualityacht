@@ -4,7 +4,8 @@
 // Meme section que /charters/destinations/caribbean-v15 : sur-titre cuivre
 // « Anchorages & Marinas », titre « Popular Destinations », trait, puis 5 cercles
 // qui passent du gris a la couleur au survol / toucher (demande client 2026-09-27).
-// Chaque fleur a sa version grise et sa version couleur fournies par la cliente :
+// Au repos : photo couleur vive ; au survol : nouvelle photo aux tons chauds
+// (client 2026-09-29, les photos grises ne sont plus utilisees) :
 // fondu de l'une a l'autre, avec le meme zoom et la meme luminosite que la v15.
 
 import Image from 'next/image';
@@ -38,7 +39,7 @@ function CircleCard({ name, slug }) {
         style={{ borderColor: '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.3s' }}
       >
         <div className="relative w-[130px] h-[130px] md:w-[155px] md:h-[155px] rounded-full overflow-hidden">
-          <Image src={`${D}/${slug}-gray.jpg`} alt={name} fill sizes="160px" className={img} />
+          <Image src={`${D}/${slug}-color.jpg`} alt={name} fill sizes="160px" className={img} />
           <Image
             src={`${D}/${slug}-color-v2.jpg`} alt="" aria-hidden fill sizes="160px"
             className={img} style={{ opacity: lit ? 1 : 0 }}
