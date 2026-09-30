@@ -12,7 +12,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { House, Sofa, Flower2, Droplet, Waves } from 'lucide-react';
-import { MARKETS, PARTNER, QUALITYACHT } from '../real-estate/partner-data';
 
 export const metadata = {
   title: 'Beyond The Ordinary | Qualityacht',
@@ -119,7 +118,6 @@ const ACTIVITES = [
 ];
 
 export default function InvestWithImpactPage() {
-  const marches = MARKETS.map((m) => m.name).join(' · ');
 
   return (
     <main className="bg-[#26272a] text-[#acb0cd]">
@@ -389,49 +387,7 @@ export default function InvestWithImpactPage() {
         `}</style>
       </section>
 
-      {/* ══ PARTENAIRE ══ */}
-      <section className="px-6 md:px-14 pb-16 md:pb-24">
-        <div className="max-w-3xl mx-auto rounded-2xl border border-[#C0C0C0]/25 bg-[#2e2f32] p-8 md:p-10 text-center">
-          <p className="text-[12px] md:text-[13px] uppercase tracking-[0.24em] text-[#B87333] font-semibold">
-            In Partnership with {PARTNER.name}
-          </p>
-          <a
-            href={PARTNER.site}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Visit ${PARTNER.name} — opens in a new tab`}
-            className={`mt-7 inline-flex min-h-[48px] items-center justify-center rounded-xl border border-[#C0C0C0]/40 bg-[#26272a] px-7 py-5 transition-colors hover:border-[#c2622a] ${FOCUS}`}
-          >
-            {/* logo-wordmark.webp : meme fichier recadre de son vide (le carre
-                420x420 n'etait rempli qu'a 24%). Ratio 416x118 conserve, donc
-                180px de large sur mobile et 240px a partir de md, sans
-                deformation ni recoloration. */}
-            <Image
-              src={PARTNER.logoWordmark}
-              alt={PARTNER.name}
-              width={416}
-              height={118}
-              className="w-[180px] md:w-[240px] h-auto object-contain"
-            />
-          </a>
-          <p className="mt-7 text-[15px] md:text-base font-medium leading-[1.75] text-[#acb0cd]">
-            {PARTNER.name} is our international real-estate partner. Their work covers{' '}
-            <span className="text-[#C0C0C0]">{marches}</span>, and it is through them that the
-            opportunities presented on this site are sourced.
-          </p>
-          <p className="mt-4 text-[14px] leading-[1.7] text-[#8b90a0]">
-            Your enquiry stays with Qualityacht — {QUALITYACHT.email} · {QUALITYACHT.phone}.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/real-estate" className={CTA_CUIVRE}>
-              Discover Real Estate
-            </Link>
-            <a href={PARTNER.site} target="_blank" rel="noopener noreferrer" className={CTA_ARGENT}>
-              Visit {PARTNER.name}
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* Carte partenaire Gustave Immo retiree a la demande du client (2026-09-30). */}
 
       {/* ══ CTA FINAL ══ */}
       <section className="px-6 md:px-14 pb-20 md:pb-28">
