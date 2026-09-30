@@ -115,6 +115,9 @@ export default function RealEstateMap() {
            tooltips et attribution vivent dans d'autres calques et ne sont donc
            pas filtres. */
         .re-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.72) contrast(1.12); }
+        /* Fond sombre sous les tuiles : sans lui, les joints entre tuiles (vue monde,
+           zoom fractionnaire) laissent voir le gris clair par defaut de Leaflet. */
+        .re-map.leaflet-container { background:#1a1b1e; }
         .re-map .leaflet-control-attribution, .re-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:11px !important; }
         .re-map .leaflet-control-attribution a { color:#acb0cd !important; }
         .re-map .leaflet-control-zoom a { background:#2e2f32 !important; color:#C0C0C0 !important; border-color:rgba(192,192,192,0.25) !important; }
