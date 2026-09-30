@@ -106,6 +106,9 @@ export default function WorldPinsMap({
            tooltips et attribution vivent dans d'autres calques et ne sont donc
            pas filtres. Identique a RealEstateMap. */
         .wp-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.72) contrast(1.12); }
+        /* Fond sombre sous les tuiles : sans lui, les joints entre tuiles (vue monde,
+           zoom fractionnaire) laissent voir le gris clair par defaut de Leaflet. */
+        .wp-map.leaflet-container { background:#1a1b1e; }
         .wp-map .leaflet-control-attribution, .wp-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:11px !important; }
         .wp-map .leaflet-control-attribution a { color:#acb0cd !important; }
         .wp-map .leaflet-control-zoom a { background:#2e2f32 !important; color:#C0C0C0 !important; border-color:rgba(192,192,192,0.25) !important; }
