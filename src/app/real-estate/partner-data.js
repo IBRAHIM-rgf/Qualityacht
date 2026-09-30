@@ -113,8 +113,10 @@ export const MARKETS = [
     partnerIds: ['bn-brickeys'],
     name: 'Monaco',
     coords: [43.7384, 7.4246],
-    cta: 'Visit BNBRICKEYS',
-    href: 'https://www.balkin.mc/fr',
+    // Client 2026-09-30 : bouton « Explore Monaco » vers la page Monaco du site
+    // (au lieu de « Visit BNBRICKEYS » -> balkin.mc).
+    cta: 'Explore Monaco',
+    href: '/real-estate/monaco',
     desc: 'Luxury stays and curated properties in Monaco and the surrounding areas. No individual property or price is confirmed at this stage.',
   },
 ];

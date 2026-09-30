@@ -27,12 +27,33 @@ const CTA_STYLE = [
   'text-align:center', 'line-height:1.2',
 ].join(';');
 
+// Point Caraibes (client 2026-09-30) : meme marqueur que les autres marches,
+// uniquement sur la carte (pas dans MARKETS, pour ne rien changer ailleurs).
+// Pas de lien pour l'instant : le bouton s'affiche sans etre cliquable.
+const MAP_POINTS = [
+  ...MARKETS,
+  {
+    id: 'caribbean',
+    name: 'Caribbean',
+    coords: [18.0708, -63.0501],
+    cta: 'Explore SXM, Antigua, Bahamas',
+    href: null,
+    desc: 'Curated properties across Saint-Martin, Antigua and the Bahamas.',
+  },
+];
+
 function popupHtml(m) {
+  // Lien interne (ex. /real-estate/monaco) : meme onglet ; externe : nouvel onglet.
+  const cta = !m.href
+    ? `<span style="${CTA_STYLE};cursor:default">${escapeHtml(m.cta)}</span>`
+    : m.href.startsWith('/')
+      ? `<a href="${m.href}" style="${CTA_STYLE}">${escapeHtml(m.cta)}</a>`
+      : `<a href="${m.href}" target="_blank" rel="noopener noreferrer" style="${CTA_STYLE}">${escapeHtml(m.cta)}</a>`;
   return `
     <div style="width:224px;font-family:system-ui,sans-serif">
       <div style="font-family:var(--font-trajan-regular),serif;text-transform:uppercase;letter-spacing:1px;font-size:14px;color:#C0C0C0;line-height:1.3">${escapeHtml(m.name)}</div>
-      <div style="font-size:14px;color:#acb0cd;opacity:.85;margin-top:6px;line-height:1.45">${escapeHtml(m.desc)}</div>
-      <a href="${m.href}" target="_blank" rel="noopener noreferrer" style="${CTA_STYLE}">${escapeHtml(m.cta)}</a>
+      ${m.desc ? `<div style="font-size:14px;color:#acb0cd;opacity:.85;margin-top:6px;line-height:1.45">${escapeHtml(m.desc)}</div>` : ''}
+      ${cta}
     </div>`;
 }
 
@@ -80,7 +101,7 @@ export default function RealEstateMap() {
       attribution: '© OpenStreetMap contributors', maxZoom: 19,
     }).addTo(map);
     const icon = (on) => L.divIcon({ className: 're-marker', html: starMarkerHtml(on), ...starIconSize(on) });
-    MARKETS.forEach((m, i) => {
+    MAP_POINTS.forEach((m, i) => {
       const mk = L.marker(m.coords, { icon: icon(false) }).addTo(map)
         .bindTooltip(m.name, { direction: 'top', offset: [0, -14], className: 're-label' })
         .bindPopup(popupHtml(m), { className: 're-popup', maxWidth: 248, closeButton: true });
