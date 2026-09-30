@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../../../test-region-map/map-data';
 import CaribbeanShowcase from './CaribbeanShowcase';
+import { WORLD_MAP_OPTIONS, fitWholeWorld, darkMapCss } from '@/lib/darkWorldMap';
 
 // Coordonnées d'une île par son nom (depuis map-data.js).
 // Fallback défensif (ISLANDS || []) — évite un crash si l'import n'est pas
@@ -423,6 +424,7 @@ export function IslandMapModal({ island, onClose }) {
       center: island.coords,
       zoom: 5,
       scrollWheelZoom: false,
+      ...WORLD_MAP_OPTIONS,
     });
     mapInstanceRef.current = map;
 
@@ -440,8 +442,9 @@ export function IslandMapModal({ island, onClose }) {
     L.marker(island.coords, { icon }).addTo(map)
       .bindTooltip(island.name, { permanent: true, direction: 'right', offset: [10, 0], className: 'island-modal-label' });
 
-    // La modal s'ouvre après le rendu → recalcule la taille de la carte
-    const t = setTimeout(() => map.invalidateSize(), 150);
+    // La modal s'ouvre après le rendu → recalcule la taille de la carte, puis
+    // ouvre sur le monde entier (client 2026-09-30).
+    const t = setTimeout(() => fitWholeWorld(map), 150);
     return () => { clearTimeout(t); map.remove(); mapInstanceRef.current = null; };
   }, [leafletReady, island]);
 
@@ -465,6 +468,7 @@ export function IslandMapModal({ island, onClose }) {
           padding: 2px 7px; letter-spacing: 0.2px; border-radius: 6px;
         }
         .leaflet-tooltip.island-modal-label::before { display: none !important; }
+        ${darkMapCss('island-dark-map')}
       `}</style>
       <div className="relative w-full max-w-3xl bg-[#2e2f32] rounded-2xl border border-[#C0C0C0]/30 overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
@@ -478,7 +482,7 @@ export function IslandMapModal({ island, onClose }) {
           </button>
         </div>
         <div className="relative h-[55vh] md:h-[60vh] bg-[#3a3b3f]">
-          <div ref={mapRef} className="absolute inset-0" />
+          <div ref={mapRef} className="island-dark-map absolute inset-0" />
           {!leafletReady && (
             <div className="absolute inset-0 flex items-center justify-center text-[#acb0cd]/70 text-sm">
               Chargement de la carte…
