@@ -17,8 +17,8 @@ export default function LastMinuteBahamasPage() {
       heroRuleColor="#C0C0C0"
       heroSubtitle="The Bahamas, Ready When You Are"
       quoteLabel="Design Your Last Minute Charter"
-      heroVideo="/media/client/lydie/2026-09-29/last-minute-hero.mp4"
-      heroPoster="/media/client/lydie/2026-09-29/last-minute-hero.jpg"
+      heroVideo="/media/client/lydie/2026-09-30/lm-bahamas-hero.mp4"
+      heroPoster="/media/client/lydie/2026-09-30/lm-bahamas-hero.jpg"
     />
   );
 }
