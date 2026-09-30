@@ -30,9 +30,9 @@ const ROWS = [
   { src: `${P}/Photo-10-vue-ou-dernier-plan-fort.jpg`, title: 'Circulation & Private Amenities', text: 'Includes 1 private parking space, a basement cellar, and a laundry room.' },
 ];
 
-// Galerie privee : photos 11 a 20. Seules 11 a 16 ont ete recues ; ajouter
-// les suivantes ici des qu'elles arrivent (le compteur s'adapte seul).
-const GALLERY_EXTRA = [11, 12, 13, 14, 15, 16].map((n) => `${P}/${n}galerie-privee-complete.jpg`);
+// Galerie privee : photos 11 a 20 (17 a 20 recues le 2026-09-30). Ajouter
+// d.autres photos ici si besoin (le compteur s.adapte seul).
+const GALLERY_EXTRA = [11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((n) => `${P}/${n}galerie-privee-complete.jpg`);
 const ALL_PHOTOS = [...ROWS.map((r) => r.src), ...GALLERY_EXTRA];
 
 const BTN_PRIMARY =
