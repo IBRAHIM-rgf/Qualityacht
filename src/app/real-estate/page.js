@@ -46,23 +46,23 @@ const AUTRES_MARCHES = MARKETS.filter(
 export default function RealEstatePage() {
   return (
     <main className="bg-[#26272a] text-[#acb0cd]">
-      {/* HERO — cadre 1400 x 900 px sur desktop. La photo est verticale : elle
-          est montree ENTIERE (object-contain, calee a droite). Le cote texte
-          est un aplat #26272A, demande par le client. Aucun rognage. */}
-      <section className="relative mx-auto max-w-[1440px] pt-[70px] md:pt-0 h-[100svh] min-h-[560px] md:h-[70vh] md:min-h-[460px] lg:h-[800px] bg-[#26272a] overflow-hidden">
+      {/* HERO — cadre 1440 x 800 px sur desktop, entierement visible sous l'en-tete
+          fixe (lg:mt-[70px]). La photo (verticale) REMPLIT le cadre : object-cover,
+          centree — recadrage accepte par le client (2026-09-30). */}
+      <section className="relative mx-auto max-w-[1440px] pt-[70px] md:pt-0 lg:mt-[70px] h-[100svh] min-h-[560px] md:h-[70vh] md:min-h-[460px] lg:h-[800px] bg-[#26272a] overflow-hidden">
         {/* Premier plan : la photo ENTIERE, nette, calee a droite. Elle est
             placee SOUS l'en-tete fixe du site, sinon celui-ci recouvrait le
             haut de l'image (le yacht disparaissait).
             Telephone (client 2026-09-25) : la photo remplit l'ecran (cover,
             centree), voile sombre en bas, textes en bas avec les marges. */}
-        <div className="absolute left-0 right-0 top-[70px] bottom-0">
+        <div className="absolute left-0 right-0 top-[70px] lg:top-0 bottom-0">
           <Image
             src={HERO_IMAGE}
             alt="Cliffside villa lit at night above the sea, with a yacht passing offshore"
             fill
             priority
             sizes="100vw"
-            className="object-cover object-center md:object-contain md:object-right"
+            className="object-cover object-center"
           />
           <div
             aria-hidden
