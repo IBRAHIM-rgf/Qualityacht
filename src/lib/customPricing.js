@@ -121,3 +121,60 @@ export function applyCustomPricingToYacht(yacht, rows) {
     customPricing: normalizeCustomPricing(rows),
   };
 }
+
+// ── Day Charter (client 2026-09-30) ──
+// Colonne jsonb `day_charter` de yacht_selections :
+//   { enabled: bool, price, currency, apa: bool, vat: bool }
+// Case cochee dans l'admin = le yacht apparait dans le parcours Day Charter,
+// avec ce prix a la journee (visible uniquement dans ce parcours).
+
+/** Normalise la valeur brute ; renvoie toujours un objet complet. */
+export function normalizeDayCharter(raw) {
+  let v = raw;
+  if (typeof v === 'string') {
+    try { v = JSON.parse(v); } catch { v = null; }
+  }
+  if (!v || typeof v !== 'object' || Array.isArray(v)) v = {};
+  const price = Number(String(v.price ?? '').replace(/[\s'’]/g, '').replace(',', '.'));
+  return {
+    enabled: v.enabled === true || v.enabled === 'true',
+    price: Number.isFinite(price) && price > 0 ? Math.round(price) : null,
+    currency: PRICING_CURRENCIES.includes(v.currency) ? v.currency : 'EUR',
+    apa: v.apa === true || v.apa === 'true',
+    vat: v.vat === true || v.vat === 'true',
+  };
+}
+
+/** Yacht propose en Day Charter (case cochee). */
+export function isDayCharterYacht(yacht) {
+  return !!(yacht && yacht.dayCharter && yacht.dayCharter.enabled);
+}
+
+/** « 12 500 € » ou null si aucun prix saisi. */
+export function formatDayCharterPrice(dc) {
+  if (!dc || !dc.price) return null;
+  return formatCustomPrice(dc.price, dc.currency);
+}
+
+/** Entree au format Ankor pricingInfo (rendu « Day Charter » de la fiche). */
+export function dayCharterToPricingInfo(dc) {
+  if (!dc || !dc.price) return null;
+  return {
+    name: 'Day Charter',
+    pricing: { unit: 'DAY', currency: dc.currency, total: dc.price * 100 },
+    inclusionZones: [],
+    effectiveDates: [],
+    petsAllowed: false,
+    _apa: dc.apa,
+    _vat: dc.vat,
+    _custom: true,
+  };
+}
+
+/** Parcours Day Charter : ne garde que les yachts coches, avec leur prix jour. */
+export function applyDayCharterMode(list, on) {
+  if (!on) return list || [];
+  return (list || [])
+    .filter(isDayCharterYacht)
+    .map((y) => ({ ...y, dayPrice: formatDayCharterPrice(y.dayCharter) }));
+}

@@ -6,6 +6,8 @@
 // fiches) qui ne portent pas ?day=1, le signal est memorise dans le navigateur
 // le temps de la visite, puis efface des qu'on entre dans une autre section.
 
+import { useEffect, useState } from 'react';
+
 export const DAY_CHARTER_KEY = 'qy-day-charter-journey';
 
 /** Pages qui DEMARRENT le parcours Day Charter. */
@@ -50,4 +52,12 @@ export function syncDayCharterJourney(pathname) {
   } catch {
     /* stockage indisponible : le lien ?day=1 du hero continue de fonctionner */
   }
+}
+
+// Hook client : true quand le visiteur est dans le parcours Day Charter
+// (lu apres montage, sessionStorage n'existant pas cote serveur).
+export function useDayCharterJourney() {
+  const [on, setOn] = useState(false);
+  useEffect(() => { setOn(readDayCharterJourney()); }, []);
+  return on;
 }

@@ -2,7 +2,7 @@
 
 import { neon } from '@neondatabase/serverless';
 import { revalidateTag } from 'next/cache';
-import { customPricingToAnkor, applyCustomPricingToYacht } from './customPricing';
+import { customPricingToAnkor, applyCustomPricingToYacht, normalizeDayCharter } from './customPricing';
 
 // Les listes publiques de yachts sont mises en cache 1 h (lib/yachts.js, tag
 // 'yachts-visible'). Toute ecriture sur la selection invalide ce cache pour que
@@ -160,7 +160,10 @@ export async function updateYachtEnrichedData(yacht_id, data) {
     water_toys = null,
     extra_info = null,
     custom_pricing = null,
+    day_charter = null,
   } = data;
+  // Day Charter (case + prix a la journee) : objet complet a chaque sauvegarde.
+  const hasDayCharter = day_charter && typeof day_charter === 'object' && !Array.isArray(day_charter);
   // Tarifs admin (saison / region) : tableau complet a chaque sauvegarde ([] = efface).
   const hasCustomPricing = Array.isArray(custom_pricing);
   // Multi-selection : quand les listes sont fournies, la valeur unique suit le premier choix
@@ -194,6 +197,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
         water_toys = COALESCE(${water_toys}, water_toys),
         extra_info = COALESCE(${extra_info}, extra_info),
         custom_pricing = COALESCE(${hasCustomPricing ? JSON.stringify(custom_pricing) : null}::jsonb, custom_pricing),
+        day_charter = COALESCE(${hasDayCharter ? JSON.stringify(day_charter) : null}::jsonb, day_charter),
         updated_at = NOW()
       WHERE yacht_id = ${yacht_id}
       RETURNING *
@@ -327,7 +331,7 @@ export async function getSelectedYachtsWithData() {
         category, categories, handicaps, tags, custom_title, custom_description, custom_price,
         custom_highlights, internal_notes, cached_data, light_data, ankor_region,
         region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info,
-        custom_pricing, created_at, updated_at
+        custom_pricing, day_charter, created_at, updated_at
       FROM yacht_selections
       ORDER BY display_order ASC
     `;
@@ -392,6 +396,8 @@ export async function getSelectionYachtFullByName(name) {
         : (merged.images || (light.hero_image ? [light.hero_image] : [])),
       full,
     };
+    // Day Charter (case + prix admin), utilise par la fiche dans ce parcours.
+    base.dayCharter = normalizeDayCharter(r.day_charter);
     // Tarifs saisis dans l'admin : ils remplacent le pricing Ankor de la fiche.
     const customAnkor = customPricingToAnkor(r.custom_pricing);
     if (!customAnkor) return base;
@@ -523,6 +529,8 @@ export async function ensureV3Schema() {
   // Tarifs saisis dans l'admin par saison / region (client 2026-09-26) : tableau JSONB
   // de cartes { group, title, subtitle, price, currency, unit, zones } (voir lib/customPricing.js).
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS custom_pricing JSONB DEFAULT '[]'::jsonb`;
+  // Day Charter (client 2026-09-30) : { enabled, price, currency, apa, vat } (voir lib/customPricing.js).
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS day_charter JSONB DEFAULT '{}'::jsonb`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_ankor_region ON yacht_selections(ankor_region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_region ON yacht_selections(region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_sub_region ON yacht_selections(sub_region)`;
