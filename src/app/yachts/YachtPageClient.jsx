@@ -8,6 +8,8 @@ import YachtList from '@/components/YachtList';
 import YachtFilters from '@/components/YachtFilters';
 import Link from 'next/link';
 import { readCart, subscribeCart } from '@/lib/quoteCart';
+import { useDayCharterJourney } from '@/lib/dayCharterJourney';
+import { applyDayCharterMode } from '@/lib/customPricing';
 
 // ── Boutons de parcours (demande client 2026-09-10) ──
 // « Return to the Islands » : retour a la section Explore Caribbean Islands.
@@ -63,8 +65,11 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
     priceMax: initialFilters.priceMax || '',
   }));
 
+  const dayMode = useDayCharterJourney();
   const filteredYachts = useMemo(() => {
-    let result = [...initialData];
+    // Parcours Day Charter : seuls les yachts coches « Day Charter » (admin),
+    // avec leur prix a la journee (client 2026-09-30).
+    let result = [...applyDayCharterMode(initialData || [], dayMode)];
 
     // Filter by type
     if (filters.type) {
@@ -162,7 +167,7 @@ export default function YachtPageClient({ initialFilters, initialData, totalYach
       return lb - la;
     });
     return result;
-  }, [initialData, filters]);
+  }, [initialData, filters, dayMode]);
 
   // Paginate filtered yachts
   const totalPages = Math.ceil(filteredYachts.length / YACHTS_PER_PAGE);
