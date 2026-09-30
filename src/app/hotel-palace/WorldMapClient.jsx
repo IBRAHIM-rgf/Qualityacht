@@ -16,6 +16,7 @@
 //
 // AUCUN emoji.
 
+import { WORLD_BOUNDS, WORLD_MAP_OPTIONS, fitWholeWorld } from '@/lib/darkWorldMap';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -80,9 +81,9 @@ export default function WorldMapClient() {
     const map = L.map(mapRef.current, {
       center: WORLD_VIEW.center,
       zoom: WORLD_VIEW.zoom,
-      minZoom: 2,
       scrollWheelZoom: false,
       worldCopyJump: true,
+      ...WORLD_MAP_OPTIONS,
     });
     mapInstanceRef.current = map;
 
@@ -161,7 +162,11 @@ export default function WorldMapClient() {
       layersRef.current.emerging.push({ name: p.name, layer: marker });
     });
 
+    // Ouverture sur le monde entier (client 2026-09-30).
+    const tWorld = setTimeout(() => fitWholeWorld(map), 150);
+
     return () => {
+      clearTimeout(tWorld);
       map.remove();
       mapInstanceRef.current = null;
       layersRef.current = { world: [], subs: [], emerging: [] };
@@ -182,7 +187,8 @@ export default function WorldMapClient() {
       world.forEach(({ layer }) => show(layer));
       subs.forEach(({ layer }) => hide(layer));
       emerging.forEach(({ layer }) => hide(layer));
-      map.flyTo(WORLD_VIEW.center, WORLD_VIEW.zoom, { duration: 1 });
+      // Retour a la vue monde entier (client 2026-09-30).
+      map.flyToBounds(WORLD_BOUNDS, { padding: [8, 8], duration: 1 });
       return;
     }
 
