@@ -7,6 +7,7 @@
 // sont plus separees sous la carte, tout est SUR la carte. Selection editoriale, AUCUNE
 // affiliation. Textes en anglais (coherent avec le reste du site).
 
+import { WORLD_MAP_OPTIONS, fitWholeWorld } from '@/lib/darkWorldMap';
 import { useEffect, useRef, useState } from 'react';
 import { media } from '@/lib/quality-media';
 import { starMarkerHtml, starIconSize } from '@/lib/star-marker';
@@ -101,7 +102,7 @@ export default function DiningMap() {
   useEffect(() => {
     if (!ready || !mapRef.current || mapInstance.current) return;
     const L = window.L;
-    const map = L.map(mapRef.current, { center: [16.5, -62.5], zoom: 5, scrollWheelZoom: false });
+    const map = L.map(mapRef.current, { center: [16.5, -62.5], zoom: 5, scrollWheelZoom: false, ...WORLD_MAP_OPTIONS });
     mapInstance.current = map;
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors', maxZoom: 19,
@@ -114,7 +115,8 @@ export default function DiningMap() {
       m.on('click', () => setActive(i));
       markers.current[i] = m;
     });
-    const t = setTimeout(() => map.invalidateSize(), 150);
+    // Ouverture sur le monde entier (client 2026-09-30).
+    const t = setTimeout(() => fitWholeWorld(map), 150);
     return () => clearTimeout(t);
   }, [ready]);
 
