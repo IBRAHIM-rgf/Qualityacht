@@ -5,6 +5,7 @@
 // sur un hotel (popup : photo aerienne + nom + lieu + etoiles + courte desc).
 // Critere de selection : piscine privee. Selection editoriale, AUCUNE affiliation.
 
+import { WORLD_MAP_OPTIONS, fitWholeWorld } from '@/lib/darkWorldMap';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { media } from '@/lib/quality-media';
@@ -61,7 +62,7 @@ export default function HotelMap() {
   useEffect(() => {
     if (!ready || !mapRef.current || mapInstance.current) return;
     const L = window.L;
-    const map = L.map(mapRef.current, { center: [17.6, -63.2], zoom: 6, scrollWheelZoom: false });
+    const map = L.map(mapRef.current, { center: [17.6, -63.2], zoom: 6, scrollWheelZoom: false, ...WORLD_MAP_OPTIONS });
     mapInstance.current = map;
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors', maxZoom: 19 }).addTo(map);
     // Logo etoile (SVG, fond transparent) a la place du point plein.
@@ -71,7 +72,8 @@ export default function HotelMap() {
         .bindTooltip(h.name, { direction: 'top', offset: [0, -8], className: 'ho-label' })
         .bindPopup(popupHtml(h), { className: 'ho-popup', maxWidth: 240, closeButton: true });
     });
-    const t = setTimeout(() => map.invalidateSize(), 150);
+    // Ouverture sur le monde entier (client 2026-09-30).
+    const t = setTimeout(() => fitWholeWorld(map), 150);
     return () => clearTimeout(t);
   }, [ready]);
 
