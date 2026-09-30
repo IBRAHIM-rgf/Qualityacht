@@ -155,10 +155,14 @@ export default function YachtCardV2({ yacht, accentColor }) {
               {yacht.name}
             </h3>
           )}
-          {yacht.pricePerHour && (
+          {/* Parcours Day Charter : prix a la journee saisi dans l'admin (client 2026-09-30). */}
+          {yacht.dayPrice && (
+            <p className=" text-sm mb-1">Price : <span className="font-semibold">{yacht.dayPrice}/day</span></p>
+          )}
+          {!yacht.dayPrice && yacht.pricePerHour && (
             <p className=" text-sm mb-1">Price : <span className="font-semibold">{yacht.pricePerHour}/week</span></p>
           )}
-          {yacht.price && !yacht.pricePerHour && (
+          {!yacht.dayPrice && yacht.price && !yacht.pricePerHour && (
             <p className=" text-sm mb-1">Prix : <span className="font-semibold">{yacht.price}</span></p>
           )}
         </div>
