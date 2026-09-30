@@ -6,6 +6,8 @@ import Image from 'next/image';
 import YachtList from '@/components/YachtList';
 import YachtFilters from '@/components/YachtFilters';
 import { useSelectedCount, FleetHeaderRow, FleetFooterRow } from '@/components/FleetActionButtons';
+import { useDayCharterJourney } from '@/lib/dayCharterJourney';
+import { applyDayCharterMode } from '@/lib/customPricing';
 
 const YACHTS_PER_PAGE = 40;
 
@@ -52,8 +54,11 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
     destination: '',
   }));
 
+  const dayMode = useDayCharterJourney();
   const filteredYachts = useMemo(() => {
-    let result = [...initialData];
+    // Parcours Day Charter : seuls les yachts coches « Day Charter » (admin),
+    // avec leur prix a la journee (client 2026-09-30).
+    let result = [...applyDayCharterMode(initialData || [], dayMode)];
 
     if (filters.type) {
       result = result.filter(y => y.type && y.type.toLowerCase() === filters.type.toLowerCase());
@@ -106,7 +111,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
       return lb - la;
     });
     return result;
-  }, [initialData, filters]);
+  }, [initialData, filters, dayMode]);
 
   const totalPages = Math.ceil(filteredYachts.length / YACHTS_PER_PAGE);
   const paginatedYachts = useMemo(() => {
