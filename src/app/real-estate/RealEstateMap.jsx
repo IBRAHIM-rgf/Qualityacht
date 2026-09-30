@@ -6,6 +6,7 @@
 // en place sur le site (fond sombre CARTO, marqueurs au logo Qualityacht via le
 // helper partage lib/star-marker) et le meme style de popup.
 
+import { WORLD_MAP_OPTIONS, fitWholeWorld } from '@/lib/darkWorldMap';
 import { useEffect, useRef, useState } from 'react';
 import { starMarkerHtml, starIconSize } from '@/lib/star-marker';
 import { MARKETS } from './partner-data';
@@ -68,7 +69,7 @@ export default function RealEstateMap() {
   useEffect(() => {
     if (!ready || !mapRef.current || mapInstance.current) return;
     const L = window.L;
-    const map = L.map(mapRef.current, { center: [32, 30], zoom: 3, scrollWheelZoom: false });
+    const map = L.map(mapRef.current, { center: [32, 30], zoom: 3, scrollWheelZoom: false, ...WORLD_MAP_OPTIONS });
     mapInstance.current = map;
     // Le fond CARTO dark_all exige desormais une cle : sans elle, chaque tuile
     // porte le filigrane « API KEY REQUIRED ». On repasse sur les tuiles
@@ -86,11 +87,8 @@ export default function RealEstateMap() {
       mk.on('click', () => setActive(i));
       markers.current[i] = mk;
     });
-    // Cadrage automatique sur les trois marches, du Maroc a la Georgie.
-    const t = setTimeout(() => {
-      map.invalidateSize();
-      map.fitBounds(L.latLngBounds(MARKETS.map((m) => m.coords)), { padding: [56, 56], maxZoom: 5 });
-    }, 150);
+    // Ouverture sur le monde entier (client 2026-09-30).
+    const t = setTimeout(() => fitWholeWorld(map), 150);
     return () => clearTimeout(t);
   }, [ready]);
 
