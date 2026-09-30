@@ -11,6 +11,8 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import YachtFiltersCaribbean from './YachtFiltersCaribbean';
 import YachtList from '@/components/YachtList';
 import { useSelectedCount, FleetHeaderRow, FleetFooterRow } from '@/components/FleetActionButtons';
+import { useDayCharterJourney } from '@/lib/dayCharterJourney';
+import { applyDayCharterMode } from '@/lib/customPricing';
 
 // Accent Qualityacht de la zone flotte (#C2622A). Limite a cette section :
 // le hero et le texte editorial gardent leurs couleurs d'origine.
@@ -62,8 +64,11 @@ export default function SubregionClient({
     minLength: '', maxLength: '', currency: '', petFriendly: false, groupFriendly: false,
   });
 
+  const dayMode = useDayCharterJourney();
   const filteredYachts = useMemo(() => {
-    let result = [...(initialData || [])];
+    // Parcours Day Charter : seuls les yachts coches « Day Charter » (admin),
+    // avec leur prix a la journee (client 2026-09-30).
+    let result = [...applyDayCharterMode(initialData || [], dayMode)];
     if (filters.type) result = result.filter((y) => y.type && y.type.toLowerCase() === filters.type.toLowerCase());
     if (filters.capacity) result = result.filter((y) => Number(y.capacity || y.guests || 0) >= Number(filters.capacity));
     if (filters.minLength) result = result.filter((y) => (parseFloat(String(y.length).replace(/[^0-9.]/g, '')) || 0) >= Number(filters.minLength));
@@ -89,7 +94,7 @@ export default function SubregionClient({
       return lb - la;
     });
     return result;
-  }, [initialData, filters]);
+  }, [initialData, filters, dayMode]);
 
   // Découpe les top islands en lignes de 3 pour le hero
   const islandRows = useMemo(() => {
