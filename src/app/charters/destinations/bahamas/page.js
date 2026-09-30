@@ -21,12 +21,16 @@ export default function BahamasRoutePage({
   // Parcours Last Minute (/charters/last-minute/bahamas) : pastille et sous-titre.
   heroKicker = 'Qualityacht · Bahamas',
   heroSubtitle = 'The Ultimate Luxury Yachting Destination',
+  // Video du hero : par defaut celle des Bahamas ; le parcours Last Minute passe
+  // sa propre video (client 2026-09-30).
+  heroVideo = `${HERO}/hero.mp4`,
+  heroPoster = `${HERO}/poster.jpg`,
 }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
       <VideoHero
-        videoLandscape={`${HERO}/hero.mp4`}
-        posterLandscape={`${HERO}/poster.jpg`}
+        videoLandscape={heroVideo}
+        posterLandscape={heroPoster}
         kicker={heroKicker}
         overTitle={heroOverTitle}
         ruleColor={heroRuleColor}
