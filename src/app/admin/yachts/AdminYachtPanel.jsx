@@ -12,7 +12,7 @@ import {
   Database, Globe, Loader2, Users,
 } from 'lucide-react';
 import { HANDICAPS_BY_CAT, HANDICAP_LABELS, parseHandicaps } from '@/lib/handicaps';
-import { normalizeCustomPricing, PRICING_CURRENCIES } from '@/lib/customPricing';
+import { normalizeCustomPricing, normalizeDayCharter, PRICING_CURRENCIES } from '@/lib/customPricing';
 
 // ════════════════════════════════════════════════════════════
 // CONSTANTES
@@ -142,6 +142,8 @@ function adaptYacht(s) {
     extra_info: s.extra_info,
     // Tarifs saison / region saisis dans l'admin (voir lib/customPricing.js).
     custom_pricing: normalizeCustomPricing(s.custom_pricing),
+    // Day Charter : case + prix a la journee (client 2026-09-30).
+    day_charter: normalizeDayCharter(s.day_charter),
   };
 }
 
@@ -235,6 +237,51 @@ function PricingEditor({ rates, onChange }) {
         className="px-4 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 text-sm font-medium flex items-center gap-1">
         <Plus className="w-4 h-4" /> Ajouter une carte de tarif
       </button>
+    </div>
+  );
+}
+
+// Day Charter (client 2026-09-30) : case a cocher ; cochee, le yacht apparait
+// dans le parcours Day Charter du site avec ce prix a la journee.
+function DayCharterEditor({ value, onChange }) {
+  const set = (patch) => onChange({ ...value, ...patch });
+  return (
+    <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-3">
+      <label className="flex items-center gap-2 text-sm cursor-pointer">
+        <input type="checkbox" checked={!!value.enabled} onChange={(e) => set({ enabled: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+        <span className="text-[#acb0cd] font-medium">Day Charter</span>
+      </label>
+      <p className="text-[#acb0cd]/60 text-xs">
+        Cochée : le bateau apparaît dans la section Day Charter du site (seuls les bateaux cochés y
+        apparaissent) et ce prix à la journée remplace ses autres tarifs dans ce parcours uniquement.
+      </p>
+      {value.enabled && (
+        <>
+          <div className="grid sm:grid-cols-[1fr_100px] gap-2">
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Prix Day Charter (par jour)</label>
+              <input type="text" inputMode="numeric" value={value.price ?? ''} onChange={(e) => set({ price: e.target.value })}
+                placeholder="12000" className={RATE_INPUT} />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Devise</label>
+              <select value={value.currency || 'EUR'} onChange={(e) => set({ currency: e.target.value })} className={RATE_INPUT}>
+                {PRICING_CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-5">
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={!!value.apa} onChange={(e) => set({ apa: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+              <span className="text-[#acb0cd]">+ APA <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
+            </label>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={!!value.vat} onChange={(e) => set({ vat: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+              <span className="text-[#acb0cd]">+ VAT <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
+            </label>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -989,6 +1036,7 @@ function EditModal({ yacht, onClose, onSave }) {
     water_toys: !!yacht.water_toys,
     extra_info: yacht.extra_info || '',
     custom_pricing: ratesToForm(yacht.custom_pricing),
+    day_charter: (() => { const d = normalizeDayCharter(yacht.day_charter); return { ...d, price: d.price ? String(d.price) : '' }; })(),
   });
   const [saving, setSaving] = useState(false);
 
@@ -1017,7 +1065,11 @@ function EditModal({ yacht, onClose, onSave }) {
   const save = async () => {
     setSaving(true);
     // Les lignes incompletes (sans titre ou sans prix) sont ignorees.
-    await onSave(yacht.id, { ...form, custom_pricing: normalizeCustomPricing(form.custom_pricing) });
+    await onSave(yacht.id, {
+      ...form,
+      custom_pricing: normalizeCustomPricing(form.custom_pricing),
+      day_charter: normalizeDayCharter(form.day_charter),
+    });
     setSaving(false);
     onClose();
   };
@@ -1049,6 +1101,11 @@ function EditModal({ yacht, onClose, onSave }) {
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Tarifs par saison et région</label>
             <PricingEditor rates={form.custom_pricing} onChange={(custom_pricing) => setForm((f) => ({ ...f, custom_pricing }))} />
+          </div>
+          {/* Day Charter : case + prix a la journee (parcours Day Charter uniquement) */}
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Day Charter</label>
+            <DayCharterEditor value={form.day_charter} onChange={(day_charter) => setForm((f) => ({ ...f, day_charter }))} />
           </div>
           {/* Régions / sous-régions : cases à cocher, le yacht apparaît sur chaque zone cochée */}
           <div>
