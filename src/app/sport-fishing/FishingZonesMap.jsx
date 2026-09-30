@@ -123,6 +123,9 @@ export default function FishingZonesMap() {
            calque de tuiles — marqueurs, popups, tooltips et CTA vivent dans
            d'autres calques et ne sont pas filtres. */
         .sf-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.72) contrast(1.12); }
+        /* Fond sombre sous les tuiles : sans lui, les joints entre tuiles (vue monde,
+           zoom fractionnaire) laissent voir le gris clair par defaut de Leaflet. */
+        .sf-map.leaflet-container { background:#1a1b1e; }
         .sf-map .leaflet-control-attribution, .sf-map .leaflet-control-attribution span { background:rgba(38,39,42,0.88) !important; color:#8b90a0 !important; font-size:10px !important; }
         .sf-map .leaflet-control-attribution a { color:#acb0cd !important; }
         .sf-map .leaflet-control-zoom a { background:#2e2f32 !important; color:#C0C0C0 !important; border-color:rgba(192,192,192,0.25) !important; }
