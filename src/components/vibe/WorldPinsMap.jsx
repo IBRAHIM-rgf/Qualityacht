@@ -5,6 +5,7 @@
 // items : [{ name, place, coords:[lat,lng], badge, when?, desc, img }]
 // Palette Qualityacht (fond sombre CARTO dark) ; JAMAIS de blanc.
 
+import { WORLD_MAP_OPTIONS, fitWholeWorld } from '@/lib/darkWorldMap';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { starMarkerHtml, starIconSize } from '@/lib/star-marker';
@@ -66,7 +67,7 @@ export default function WorldPinsMap({
   useEffect(() => {
     if (!ready || !mapRef.current || mapInstance.current) return;
     const L = window.L;
-    const map = L.map(mapRef.current, { center, zoom, scrollWheelZoom: false, worldCopyJump: true, minZoom: 2 });
+    const map = L.map(mapRef.current, { center, zoom, scrollWheelZoom: false, worldCopyJump: true, ...WORLD_MAP_OPTIONS });
     mapInstance.current = map;
     // Le fond CARTO dark_all exige desormais une cle : sans elle, chaque tuile
     // porte le filigrane « API KEY REQUIRED » et la legende disparait. On
@@ -77,14 +78,15 @@ export default function WorldPinsMap({
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors', maxZoom: 19,
     }).addTo(map);
-    if (hidePins) { const t = setTimeout(() => map.invalidateSize(), 150); return () => clearTimeout(t); }
+    if (hidePins) { const t = setTimeout(() => fitWholeWorld(map), 150); return () => clearTimeout(t); }
     items.forEach((it, i) => {
       const m = L.marker(it.coords, { icon: makeIcon(false) }).addTo(map)
         .bindTooltip(it.name, { direction: 'top', offset: [0, -6], className: 'wp-label' });
       m.on('click', () => setActive(i));
       markers.current[i] = m;
     });
-    const t = setTimeout(() => map.invalidateSize(), 150);
+    // Ouverture sur le monde entier (client 2026-09-30).
+    const t = setTimeout(() => fitWholeWorld(map), 150);
     return () => clearTimeout(t);
   }, [ready]);
 
