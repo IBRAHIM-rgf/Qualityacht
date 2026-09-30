@@ -1,22 +1,13 @@
-import VideoHero from '@/components/vibe/VideoHero';
-
 // Page ouverte par le bouton vert « Selection MONACO » de la carte Balkin
-// (/real-estate) — client 2026-09-29 : hero video Monaco + titre.
-const D = '/media/client/lydie/2026-09-29';
+// (/real-estate). Contenu (client 2026-09-30) : voir MonacoSelectionClient.
+import MonacoSelectionClient from './MonacoSelectionClient';
 
 export const metadata = {
-  title: 'Selection Monaco | Qualityacht',
+  title: 'Monaco Private Residences | Qualityacht',
+  description:
+    'A private selection of two Monaco residences, carefully chosen from the portfolio of Balkin Monaco Real Estate.',
 };
 
 export default function MonacoSelectionPage() {
-  return (
-    <main className="bg-[#26272a]">
-      <VideoHero
-        videoLandscape={`${D}/monaco-hero.mp4`}
-        posterLandscape={`${D}/monaco-hero.jpg`}
-        title="Selection Monaco"
-        align="center"
-      />
-    </main>
-  );
+  return <MonacoSelectionClient />;
 }
