@@ -10,6 +10,7 @@
 // est soutenue par une source officielle, tracee dans FISHING_ZONES_SOURCES.md.
 // Aucune reglementation, aucun quota, aucune saison presentee comme une regle.
 
+import { WORLD_MAP_OPTIONS, fitWholeWorld } from '@/lib/darkWorldMap';
 import { useEffect, useRef, useState } from 'react';
 import { starMarkerHtml, starIconSize } from '@/lib/star-marker';
 import { FISHING_ZONES } from './fishing-zones';
@@ -85,7 +86,7 @@ export default function FishingZonesMap() {
   useEffect(() => {
     if (!ready || !mapRef.current || mapInstance.current) return;
     const L = window.L;
-    const map = L.map(mapRef.current, { center: [16.5, -68], zoom: 5, scrollWheelZoom: false });
+    const map = L.map(mapRef.current, { center: [16.5, -68], zoom: 5, scrollWheelZoom: false, ...WORLD_MAP_OPTIONS });
     mapInstance.current = map;
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors', maxZoom: 19,
@@ -98,15 +99,8 @@ export default function FishingZonesMap() {
       m.on('click', () => setActive(i));
       markers.current[i] = m;
     });
-    // Cadrage sur les zones plutot qu'un centre fixe : sinon la vue laisse un
-    // large vide a l'ouest en desktop et coupe les Petites Antilles en mobile.
-    const t = setTimeout(() => {
-      map.invalidateSize();
-      map.fitBounds(L.latLngBounds(FISHING_ZONES.map((z) => z.coords)), {
-        padding: [42, 42],
-        maxZoom: 6,
-      });
-    }, 150);
+    // Ouverture sur le monde entier (client 2026-09-30).
+    const t = setTimeout(() => fitWholeWorld(map), 150);
     return () => clearTimeout(t);
   }, [ready]);
 
