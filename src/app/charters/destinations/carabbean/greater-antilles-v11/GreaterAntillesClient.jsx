@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useState, useMemo, useEffect } from 'react';
 import YachtFiltersCaribbean from './YachtFiltersCaribbean';
 import YachtList from '@/components/YachtList';
+import { useDayCharterJourney } from '@/lib/dayCharterJourney';
+import { applyDayCharterMode } from '@/lib/customPricing';
 
 // ── Ligne décorative ────────────────────────────────────────────────────────
 function BurntLine() {
@@ -39,8 +41,11 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
     groupFriendly: false,
   });
 
+  const dayMode = useDayCharterJourney();
   const filteredYachts = useMemo(() => {
-    let result = [...initialData];
+    // Parcours Day Charter : seuls les yachts coches « Day Charter » (admin),
+    // avec leur prix a la journee (client 2026-09-30).
+    let result = [...applyDayCharterMode(initialData || [], dayMode)];
     if (filters.type) {
       result = result.filter(y => y.type && y.type.toLowerCase() === filters.type.toLowerCase());
     }
@@ -68,7 +73,7 @@ export default function GreaterAntillesClient({ initialData, totalYachts }) {
     if (filters.petFriendly) result = result.filter(y => y.pets_allowed === true || y.petFriendly === true);
     if (filters.groupFriendly) result = result.filter(y => y.groups_allowed === true || y.groupFriendly === true);
     return result;
-  }, [initialData, filters]);
+  }, [initialData, filters, dayMode]);
 
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-hidden">
