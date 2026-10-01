@@ -1,5 +1,4 @@
 import ItemsGrid from "../../components/ItemsGrid";
-import PetFriendlyIntro from "./PetFriendlyIntro";
 import { destinations } from "../destinationsData";
 
 // Hero : photo du dalmatien fournie par la cliente, optimisee en WebP
@@ -11,6 +10,8 @@ import { destinations } from "../destinationsData";
 // destinationsData.js n'est pas touche (cle = titre exact du jeu de donnees).
 const PET_GUIDES = {
   "Caraïbes": "/charters/pet-friendly/carribbean",
+  // Page Pet-Friendly Bahamas (client 2026-10-01).
+  Bahamas: "/charters/pet-friendly/bahamas",
 };
 
 const petItems = destinations.map((d) =>
@@ -21,9 +22,7 @@ export default function PetFriendlyCharter() {
   return (
     <ItemsGrid
       title="Pet-Friendly Charter"
-      // Hero + 2 sections avec les 3 photos du client (2026-10-01), style de la
-      // page Pet-Friendly Caraibes ; la grille des destinations suit, inchangee.
-      heroNode={<PetFriendlyIntro key="pet-intro" />}
+      heroImage="/media/client/pet-friendly/dalmatien-hero.webp"
       bgImage="/images/services-bg.png"
       items={petItems}
     />

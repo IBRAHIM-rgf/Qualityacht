@@ -1,4 +1,5 @@
-// ══ /charters/pet-friendly — hero + 2 sections (client 2026-10-01) ══
+// ══ Pet-Friendly — hero + 2 sections (client 2026-10-01), utilise par
+//    /charters/pet-friendly/bahamas (deplace depuis /charters/pet-friendly) ══
 // Meme style que /charters/pet-friendly/carribbean : fond #26272a, titres Trajan
 // lavande, sur-titre cuivre clair, filet, CTA du site. Les 3 photos du client,
 // dans l'ordre demande (1 hero, 2 deuxieme section, 3 troisieme section), sont
@@ -24,7 +25,11 @@ function Rule() {
   return <span aria-hidden className="mt-7 mb-6 block h-px w-28 bg-[#bd9973]/70" />;
 }
 
-export default function PetFriendlyIntro() {
+export default function PetFriendlyIntro({
+  kicker = 'Qualityacht',
+  title = 'Pet-Friendly Charter',
+  subtitle = 'Your Companion, Welcome Aboard',
+}) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO — image 1 ══ */}
@@ -43,14 +48,14 @@ export default function PetFriendlyIntro() {
         </div>
         <div className="flex flex-col items-center text-center px-5 pt-8 pb-4">
             <p className="text-[11px] uppercase tracking-[0.3em] text-[#bd9973] font-semibold mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
-              Qualityacht
+              {kicker}
             </p>
             <h1 className="trajan-regular text-3xl uppercase tracking-[0.1em] text-[#acb0cd] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-              Pet-Friendly Charter
+              {title}
             </h1>
             <span aria-hidden className="my-4 block h-px w-24 bg-[#bd9973]/70" />
             <p className="text-[#acb0cd] text-sm uppercase tracking-[0.18em] font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-              Your Companion, Welcome Aboard
+              {subtitle}
             </p>
         </div>
       </section>
@@ -59,12 +64,12 @@ export default function PetFriendlyIntro() {
       <section className="hidden md:flex w-full h-[86vh] min-h-[560px] pt-[64px] bg-[#26272a]">
         <div className="flex-1 flex flex-col items-start justify-center px-14 lg:px-20">
           <div className="flex flex-col items-start w-full max-w-xl">
-            <p className="text-[13px] uppercase tracking-[0.3em] text-[#bd9973] font-semibold mb-5">Qualityacht</p>
+            <p className="text-[13px] uppercase tracking-[0.3em] text-[#bd9973] font-semibold mb-5">{kicker}</p>
             <h1 className="trajan-regular text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#acb0cd] leading-[1.05]">
-              Pet-Friendly Charter
+              {title}
             </h1>
             <Rule />
-            <p className="text-[#acb0cd] text-lg uppercase tracking-[0.22em] font-light">Your Companion, Welcome Aboard</p>
+            <p className="text-[#acb0cd] text-lg uppercase tracking-[0.22em] font-light">{subtitle}</p>
           </div>
         </div>
         <div className="relative h-full aspect-[2/3] shrink-0">
