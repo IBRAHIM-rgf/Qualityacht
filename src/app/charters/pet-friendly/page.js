@@ -1,4 +1,5 @@
 import ItemsGrid from "../../components/ItemsGrid";
+import PetFriendlyIntro from "./PetFriendlyIntro";
 import { destinations } from "../destinationsData";
 
 // Hero : photo du dalmatien fournie par la cliente, optimisee en WebP
@@ -20,7 +21,9 @@ export default function PetFriendlyCharter() {
   return (
     <ItemsGrid
       title="Pet-Friendly Charter"
-      heroImage="/media/client/pet-friendly/dalmatien-hero.webp"
+      // Hero + 2 sections avec les 3 photos du client (2026-10-01), style de la
+      // page Pet-Friendly Caraibes ; la grille des destinations suit, inchangee.
+      heroNode={<PetFriendlyIntro key="pet-intro" />}
       bgImage="/images/services-bg.png"
       items={petItems}
     />
