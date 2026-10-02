@@ -66,7 +66,9 @@ function TextBlock({ item }) {
 // Phrase d'accroche des 3 photos (au-dessus du slide).
 const TAGLINE = 'Halal without compromise. Luxury without noise.';
 
-export default function HalalLateralScroll({ intro = null, paragraphs = [], photos = [], alt = 'Caribbean halal charter' }) {
+// tagline : phrase d'accroche (defaut = celle des Caraibes) ; alts : alt par photo
+// (sinon `alt` commun). Cf. /charters/halal/bahamas.
+export default function HalalLateralScroll({ intro = null, paragraphs = [], photos = [], alt = 'Caribbean halal charter', alts = null, tagline = TAGLINE }) {
   const wrapRef = useRef(null);
   const trackRef = useRef(null);
   const rootRef = useRef(null);
@@ -172,7 +174,7 @@ export default function HalalLateralScroll({ intro = null, paragraphs = [], phot
       {/* Phrase d'accroche des 3 photos */}
       <div className="relative z-10 px-6 md:px-14 pt-6 md:pt-12 text-center">
         <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">
-          {TAGLINE}
+          {tagline}
         </h2>
       </div>
 
@@ -182,7 +184,7 @@ export default function HalalLateralScroll({ intro = null, paragraphs = [], phot
           <div key={src} className="space-y-5">
             <TextBlock item={paragraphs[i]} />
             <div className="h-[58vh]">
-              <Photo src={src} alt={alt} priority={i === 0} boost={i === 0} />
+              <Photo src={src} alt={alts?.[i] || alt} priority={i === 0} boost={i === 0} />
             </div>
           </div>
         ))}
@@ -204,7 +206,7 @@ export default function HalalLateralScroll({ intro = null, paragraphs = [], phot
             {photos.map((src, i) => (
               <div key={src} className="shrink-0 w-screen h-full grid grid-cols-2 gap-10 px-[6vw]">
                 <TextBlock item={paragraphs[i]} />
-                <Photo src={src} alt={alt} priority={i === 0} boost={i === 0} />
+                <Photo src={src} alt={alts?.[i] || alt} priority={i === 0} boost={i === 0} />
               </div>
             ))}
           </div>
