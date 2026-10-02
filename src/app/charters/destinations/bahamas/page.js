@@ -25,6 +25,9 @@ export default function BahamasRoutePage({
   // sa propre video (client 2026-09-30).
   heroVideo = `${HERO}/hero.mp4`,
   heroPoster = `${HERO}/poster.jpg`,
+  // Cases « Bahamas Islands » cliquables vers la page de chaque groupe d'iles
+  // (client 2026-10-02) : uniquement sur /charters/destinations/bahamas.
+  islandLinks = true,
 }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
@@ -57,7 +60,7 @@ export default function BahamasRoutePage({
       </VideoHero>
       {/* Eclat (cartes flottantes), comme la page Caraibes : juste sous le hero. */}
       <BahamasEclat />
-      <BahamasIslandsGrid />
+      <BahamasIslandsGrid linked={islandLinks} />
       <BahamasDestinationsByRegion />
       <BahamasPopularDestinations />
       <BahamasCtaAndFaq />
