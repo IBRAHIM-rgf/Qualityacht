@@ -7,6 +7,7 @@ import { destinations } from "../destinationsData";
 // les autres ici au fur et a mesure (cle = titre exact dans destinationsData).
 const ACCESSIBLE_GUIDES = {
   "Caraïbes": "/charters/accessible/caribbean",
+  Bahamas: "/charters/accessible/bahamas",
 };
 
 const accessibleItems = destinations.map((d) =>
