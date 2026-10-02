@@ -4,6 +4,7 @@ import { unstable_cache } from 'next/cache';
 import { fetchAnkorBearerToken, invalidateAnkorToken } from '@/lib/utils';
 import { getVisibleYachtIds, getFeaturedYachtIds, getYachtSelections } from '@/lib/db';
 import { applyCustomPricingToYacht, normalizeDayCharter } from '@/lib/customPricing';
+import { applyOverridesToCard } from '@/lib/yachtOverrides';
 
 // Tarifs saisis dans l'admin (custom_pricing) : quand un yacht en a, son prix de
 // carte devient le plus bas des tarifs saisis (a la place du prix Ankor).
@@ -13,7 +14,9 @@ function withCustomPricing(list, selections) {
   const map = new Map((selections || []).map((s) => [s.yacht_id, s]));
   return list.map((y) => {
     const sel = map.get(y.id);
-    const priced = applyCustomPricingToYacht(y, sel?.custom_pricing);
+    // Fiche modifiee dans l'admin (client 2026-10-02) : champs modifies prioritaires.
+    const edited = applyOverridesToCard(y, sel?.overrides);
+    const priced = applyCustomPricingToYacht(edited, sel?.custom_pricing);
     return { ...priced, dayCharter: normalizeDayCharter(sel?.day_charter) };
   });
 }

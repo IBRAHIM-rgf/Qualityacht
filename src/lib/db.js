@@ -3,6 +3,7 @@
 import { neon } from '@neondatabase/serverless';
 import { revalidateTag } from 'next/cache';
 import { customPricingToAnkor, applyCustomPricingToYacht, normalizeDayCharter } from './customPricing';
+import { applyOverridesToDetail, normalizeOverrides } from './yachtOverrides';
 
 // Les listes publiques de yachts sont mises en cache 1 h (lib/yachts.js, tag
 // 'yachts-visible'). Toute ecriture sur la selection invalide ce cache pour que
@@ -161,7 +162,11 @@ export async function updateYachtEnrichedData(yacht_id, data) {
     extra_info = null,
     custom_pricing = null,
     day_charter = null,
+    overrides = null,
   } = data;
+  // Fiche bateau modifiee dans l'admin (client 2026-10-02) : objet complet des champs
+  // modifies a chaque sauvegarde ({} = tout revient aux donnees d'origine).
+  const hasOverrides = overrides && typeof overrides === 'object' && !Array.isArray(overrides);
   // Day Charter (case + prix a la journee) : objet complet a chaque sauvegarde.
   const hasDayCharter = day_charter && typeof day_charter === 'object' && !Array.isArray(day_charter);
   // Tarifs admin (saison / region) : tableau complet a chaque sauvegarde ([] = efface).
@@ -198,6 +203,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
         extra_info = COALESCE(${extra_info}, extra_info),
         custom_pricing = COALESCE(${hasCustomPricing ? JSON.stringify(custom_pricing) : null}::jsonb, custom_pricing),
         day_charter = COALESCE(${hasDayCharter ? JSON.stringify(day_charter) : null}::jsonb, day_charter),
+        overrides = COALESCE(${hasOverrides ? JSON.stringify(normalizeOverrides(overrides)) : null}::jsonb, overrides),
         updated_at = NOW()
       WHERE yacht_id = ${yacht_id}
       RETURNING *
@@ -331,7 +337,7 @@ export async function getSelectedYachtsWithData() {
         category, categories, handicaps, tags, custom_title, custom_description, custom_price,
         custom_highlights, internal_notes, cached_data, light_data, ankor_region,
         region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info,
-        custom_pricing, day_charter, created_at, updated_at
+        custom_pricing, day_charter, overrides, created_at, updated_at
       FROM yacht_selections
       ORDER BY display_order ASC
     `;
@@ -377,25 +383,37 @@ export async function getSelectionYachtFullByName(name) {
          OR light_data->>'name' ILIKE ${pattern}
       LIMIT 1
     `;
-    if (!rows[0]) return null;
-    const r = rows[0];
+    let r = rows[0];
+    // Nom modifie dans la fiche admin : les cartes du site pointent vers ce nom.
+    if (!r) {
+      try {
+        const byOverride = await sql`
+          SELECT * FROM yacht_selections WHERE overrides->>'name' ILIKE ${pattern} LIMIT 1
+        `;
+        r = byOverride[0];
+      } catch (e) { /* colonne overrides pas encore creee : ignore */ }
+    }
+    if (!r) return null;
     const cached = typeof r.cached_data === 'string' ? JSON.parse(r.cached_data) : (r.cached_data || {});
     const light = typeof r.light_data === 'string' ? JSON.parse(r.light_data) : (r.light_data || {});
     const full = typeof r.full_data === 'string' ? JSON.parse(r.full_data) : (r.full_data || null);
     // Reconstruire le mapping affichable (priorité cached > light)
     const merged = { ...light, ...cached };
-    const base = {
+    const fullData = full;
+    const base0 = {
       id: r.yacht_id,
       name: r.yacht_name || merged.name,
       region: r.region,
       subRegion: r.sub_region,
       ...merged,
       // L'image principale et la galerie viennent de full.blueprint.images si dispo
-      images: full?.blueprint?.images?.length
-        ? [full.blueprint.images[0], ...full.blueprint.images.slice(1)]
+      images: fullData?.blueprint?.images?.length
+        ? [fullData.blueprint.images[0], ...fullData.blueprint.images.slice(1)]
         : (merged.images || (light.hero_image ? [light.hero_image] : [])),
-      full,
+      full: fullData,
     };
+    // Fiche modifiee dans l'admin : les champs modifies remplacent ceux d'Ankor.
+    const base = applyOverridesToDetail(base0, r.overrides);
     // Day Charter (case + prix admin), utilise par la fiche dans ce parcours.
     base.dayCharter = normalizeDayCharter(r.day_charter);
     // Tarifs saisis dans l'admin : ils remplacent le pricing Ankor de la fiche.
@@ -404,7 +422,7 @@ export async function getSelectionYachtFullByName(name) {
     const withPrice = applyCustomPricingToYacht(base, r.custom_pricing);
     return {
       ...withPrice,
-      full: { ...(full || {}), pricing: { ...((full && full.pricing) || {}), ...customAnkor } },
+      full: { ...(withPrice.full || {}), pricing: { ...((withPrice.full && withPrice.full.pricing) || {}), ...customAnkor } },
     };
   } catch (error) {
     console.error('Erreur getSelectionYachtFullByName:', error);
@@ -531,6 +549,9 @@ export async function ensureV3Schema() {
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS custom_pricing JSONB DEFAULT '[]'::jsonb`;
   // Day Charter (client 2026-09-30) : { enabled, price, currency, apa, vat } (voir lib/customPricing.js).
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS day_charter JSONB DEFAULT '{}'::jsonb`;
+  // Fiche bateau modifiee dans l'admin (client 2026-10-02) : champs modifies uniquement
+  // (voir lib/yachtOverrides.js).
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS overrides JSONB DEFAULT '{}'::jsonb`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_ankor_region ON yacht_selections(ankor_region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_region ON yacht_selections(region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_sub_region ON yacht_selections(sub_region)`;
