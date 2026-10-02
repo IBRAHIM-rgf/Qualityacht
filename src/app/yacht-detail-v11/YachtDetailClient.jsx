@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { addToCart, toCartEntry } from '@/lib/quoteCart';
 import { useDayCharterJourney } from '@/lib/dayCharterJourney';
-import { dayCharterToPricingInfo, formatDayCharterPrice } from '@/lib/customPricing';
+import { dayCharterToPricingInfo, dayCharterToPricingInfos, formatDayCharterPrice } from '@/lib/customPricing';
 import { getAnkorImageUrl } from '@/lib/utils';
 import {
   Ruler, Users, BedDouble, Anchor, Calendar, ChevronLeft, ChevronRight, X, Map as MapIcon,
@@ -202,7 +202,9 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
   const entertainment = Array.isArray(bp.entertainment) ? bp.entertainment : [];
   const tenders = Array.isArray(bp.tenders) ? bp.tenders : [];
   const crew = Array.isArray(full.crew) ? full.crew : [];
-  const seasons = dayEntry ? [dayEntry] : (Array.isArray(pricing.pricingInfo) ? pricing.pricingInfo : []);
+  // Parcours Day Charter : tous les prix saisis (lieu + periode), client 2026-10-02.
+  const dayEntries = dayEntry ? dayCharterToPricingInfos(yacht.dayCharter) : [];
+  const seasons = dayEntry ? (dayEntries.length ? dayEntries : [dayEntry]) : (Array.isArray(pricing.pricingInfo) ? pricing.pricingInfo : []);
 
   // Détecte l'unité dominante pour le label "From X / week|day|hour" du hero.
   // Si le yacht n'a que des saisons en DAY → "/ day", que des HOUR → "/ day" aussi
