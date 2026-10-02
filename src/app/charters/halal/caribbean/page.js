@@ -75,8 +75,8 @@ const INTRO =
 export default function HalalCaribbeanPage() {
   return (
     <CaribbeanV15Page
-      // Hero video d'avant le 2026-09-14 remis a la demande du client (2026-10-02).
-      heroVideo="/media/quality/halal/hero-halal.mp4"
+      // Hero video fourni par le client (2026-10-02, video_allegee_1080p.mp4).
+      heroVideo="/media/client/halal-caribbean/2026-10-02/hero.mp4"
       heroImageMobile={HERO_IMAGE}
       heroImageDesktop={HERO_IMAGE}
       showDescription={false}
