@@ -48,16 +48,18 @@ const PARAGRAPHS = [
   },
 ];
 
+// Photos du slide (client 2026-10-02) : ordre impose 1, 2, 3.
+const M2 = '/media/client/halal-bahamas/2026-10-02';
 const PHOTOS = [
-  `${M}/section-1-understated-elegance.jpg`,
-  `${M}/section-2-halal-integrated.jpg`,
-  `${M}/section-3-singular-experience.jpg`,
+  `${M2}/1_bahamas_halal_leger.jpg`,
+  `${M2}/2_bahamas_halal_leger.jpg`,
+  `${M2}/3_bahamas_halal_leger.jpg`,
 ];
 
 const ALTS = [
-  'Secluded white-sand beach and turquoise water in the Bahamas',
   'Guest on the deck of a private yacht at dusk',
   'Coffee and alcohol-free beverages served in a quiet lounge',
+  'Sailing over turquoise water in the Bahamas',
 ];
 
 export default function HalalBahamasPage() {
