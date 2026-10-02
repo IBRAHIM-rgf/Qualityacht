@@ -11,6 +11,7 @@ export default function DayCharterBahamasPage() {
       heroOverTitle="Day Charter"
       quoteLabel="Create Your Day at Sea"
       heroRuleColor="#C0C0C0"
+      islandLinks={false}
     />
   );
 }
