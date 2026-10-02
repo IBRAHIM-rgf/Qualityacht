@@ -156,7 +156,19 @@ export default function YachtCardV2({ yacht, accentColor }) {
             </h3>
           )}
           {/* Parcours Day Charter : prix a la journee saisi dans l'admin (client 2026-09-30). */}
-          {yacht.dayPrice && (
+          {/* Plusieurs prix Day Charter (client 2026-10-02) : chaque prix avec son lieu et sa periode. */}
+          {yacht.dayPrices?.length > 0 ? (
+            <div className="mb-1 space-y-1">
+              {yacht.dayPrices.map((r, i) => (
+                <p key={i} className=" text-sm">
+                  Price : <span className="font-semibold">{r.price}/day</span>
+                  {(r.location || r.period) && (
+                    <span className="block text-xs opacity-75">{[r.location, r.period].filter(Boolean).join(' · ')}</span>
+                  )}
+                </p>
+              ))}
+            </div>
+          ) : yacht.dayPrice && (
             <p className=" text-sm mb-1">Price : <span className="font-semibold">{yacht.dayPrice}/day</span></p>
           )}
           {!yacht.dayPrice && yacht.pricePerHour && (
