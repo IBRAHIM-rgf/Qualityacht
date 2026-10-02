@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { HANDICAPS_BY_CAT, HANDICAP_LABELS, parseHandicaps } from '@/lib/handicaps';
 import { normalizeCustomPricing, normalizeDayCharter, PRICING_CURRENCIES } from '@/lib/customPricing';
+import { OVERRIDE_TEXT_FIELDS, normalizeOverrides, mergeSourceAndOverrides, diffOverrides, isSupportedImage } from '@/lib/yachtOverrides';
 
 // ════════════════════════════════════════════════════════════
 // CONSTANTES
@@ -115,10 +116,12 @@ function adaptYacht(s) {
   };
   const light = parse(s.light_data);
   const cached = parse(s.cached_data);
-  const heroRaw = light.hero_image || cached.images?.[0] || null;
+  // Fiche modifiee (client 2026-10-02) : nom et photo modifies affiches aussi ici.
+  const ov = normalizeOverrides(s.overrides);
+  const heroRaw = ov.images?.[0] || light.hero_image || cached.images?.[0] || null;
   return {
     id: s.yacht_id,
-    name: s.yacht_name || light.name || cached.name,
+    name: ov.name || s.yacht_name || light.name || cached.name,
     image: heroRaw ? getAnkorImageUrl(heroRaw, '320w') : '/placeholder.jpg',
     length: light.length || cached.length,
     guests: light.guests || cached.guests || cached.capacity,
@@ -144,6 +147,7 @@ function adaptYacht(s) {
     custom_pricing: normalizeCustomPricing(s.custom_pricing),
     // Day Charter : case + prix a la journee (client 2026-09-30).
     day_charter: normalizeDayCharter(s.day_charter),
+    overrides: ov,
   };
 }
 
@@ -242,9 +246,21 @@ function PricingEditor({ rates, onChange }) {
 }
 
 // Day Charter (client 2026-09-30) : case a cocher ; cochee, le yacht apparait
-// dans le parcours Day Charter du site avec ce prix a la journee.
+// dans le parcours Day Charter du site. Plusieurs prix possibles (client 2026-10-02),
+// chacun avec sa periode (dates) et son lieu.
+const EMPTY_DAY_RATE = { price: '', currency: 'EUR', from: '', to: '', location: '', apa: false, vat: false };
+
+function dayCharterToForm(raw) {
+  const d = normalizeDayCharter(raw);
+  return { enabled: d.enabled, rates: d.rates.map((r) => ({ ...r, price: String(r.price) })) };
+}
+
 function DayCharterEditor({ value, onChange }) {
+  const rates = Array.isArray(value.rates) ? value.rates : [];
   const set = (patch) => onChange({ ...value, ...patch });
+  const update = (i, patch) => set({ rates: rates.map((r, idx) => (idx === i ? { ...r, ...patch } : r)) });
+  const remove = (i) => set({ rates: rates.filter((_, idx) => idx !== i) });
+  const add = () => set({ rates: [...rates, { ...EMPTY_DAY_RATE }] });
   return (
     <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-3">
       <label className="flex items-center gap-2 text-sm cursor-pointer">
@@ -253,35 +269,223 @@ function DayCharterEditor({ value, onChange }) {
       </label>
       <p className="text-[#acb0cd]/60 text-xs">
         Cochée : le bateau apparaît dans la section Day Charter du site (seuls les bateaux cochés y
-        apparaissent) et ce prix à la journée remplace ses autres tarifs dans ce parcours uniquement.
+        apparaissent) avec tous les prix ci-dessous (prix, période, lieu), dans ce parcours uniquement.
       </p>
       {value.enabled && (
         <>
-          <div className="grid sm:grid-cols-[1fr_100px] gap-2">
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Prix Day Charter (par jour)</label>
-              <input type="text" inputMode="numeric" value={value.price ?? ''} onChange={(e) => set({ price: e.target.value })}
-                placeholder="12000" className={RATE_INPUT} />
+          {rates.length === 0 && (
+            <p className="text-[#acb0cd]/40 text-xs italic">Aucun prix saisi — ajoute au moins un prix.</p>
+          )}
+          {rates.map((r, i) => (
+            <div key={i} className="rounded-lg border border-[#C0C0C0]/20 p-3 space-y-2 relative">
+              <button type="button" onClick={() => remove(i)} title="Supprimer ce prix"
+                className="absolute top-2 right-2 text-[#acb0cd]/50 hover:text-[#e3a892]">
+                <X className="w-4 h-4" />
+              </button>
+              <div className="grid sm:grid-cols-[1fr_100px] gap-2 pr-6">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Prix (par jour)</label>
+                  <input type="text" inputMode="numeric" value={r.price ?? ''} onChange={(e) => update(i, { price: e.target.value })}
+                    placeholder="12000" className={RATE_INPUT} />
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Devise</label>
+                  <select value={r.currency || 'EUR'} onChange={(e) => update(i, { currency: e.target.value })} className={RATE_INPUT}>
+                    {PRICING_CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Du</label>
+                  <input type="date" value={r.from || ''} onChange={(e) => update(i, { from: e.target.value })} className={RATE_INPUT} />
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Au</label>
+                  <input type="date" value={r.to || ''} onChange={(e) => update(i, { to: e.target.value })} className={RATE_INPUT} />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Lieu</label>
+                <input type="text" value={r.location || ''} onChange={(e) => update(i, { location: e.target.value })}
+                  placeholder="Saint-Tropez" className={RATE_INPUT} />
+              </div>
+              <div className="flex flex-wrap gap-5">
+                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input type="checkbox" checked={!!r.apa} onChange={(e) => update(i, { apa: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+                  <span className="text-[#acb0cd]">+ APA <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
+                </label>
+                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input type="checkbox" checked={!!r.vat} onChange={(e) => update(i, { vat: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+                  <span className="text-[#acb0cd]">+ VAT <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
+                </label>
+              </div>
             </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Devise</label>
-              <select value={value.currency || 'EUR'} onChange={(e) => set({ currency: e.target.value })} className={RATE_INPUT}>
-                {PRICING_CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-5">
-            <label className="flex items-center gap-2 text-sm cursor-pointer">
-              <input type="checkbox" checked={!!value.apa} onChange={(e) => set({ apa: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
-              <span className="text-[#acb0cd]">+ APA <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
-            </label>
-            <label className="flex items-center gap-2 text-sm cursor-pointer">
-              <input type="checkbox" checked={!!value.vat} onChange={(e) => set({ vat: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
-              <span className="text-[#acb0cd]">+ VAT <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
-            </label>
-          </div>
+          ))}
+          <button type="button" onClick={add}
+            className="px-4 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 text-sm font-medium flex items-center gap-1">
+            <Plus className="w-4 h-4" /> Ajouter un prix
+          </button>
         </>
       )}
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// FICHE BATEAU (client 2026-10-02) : toutes les informations du bateau,
+// pre-remplies depuis Ankor / la saisie manuelle, modifiables.
+// ════════════════════════════════════════════════════════════
+function ChipListEditor({ label, items, onChange, placeholder }) {
+  const [draft, setDraft] = useState('');
+  const add = () => {
+    const v = draft.trim();
+    if (!v) return;
+    onChange([...(items || []), v]);
+    setDraft('');
+  };
+  return (
+    <div>
+      <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">{label}</label>
+      {(items || []).length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-2">
+          {items.map((it, i) => (
+            <span key={`${it}-${i}`} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-[#2a2a30] border border-[#C0C0C0]/30 text-[#acb0cd]">
+              {it}
+              <button type="button" onClick={() => onChange(items.filter((_, idx) => idx !== i))} className="text-[#acb0cd]/60 hover:text-[#e3a892]">
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+      <div className="flex gap-2">
+        <input type="text" value={draft} onChange={(e) => setDraft(e.target.value)} placeholder={placeholder}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); add(); } }} className={RATE_INPUT} />
+        <button type="button" onClick={add}
+          className="px-3 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 text-sm flex items-center gap-1 whitespace-nowrap">
+          <Plus className="w-4 h-4" /> Ajouter
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ImagesEditor({ images, onChange }) {
+  const [draft, setDraft] = useState('');
+  const list = images || [];
+  const move = (i, d) => {
+    const j = i + d;
+    if (j < 0 || j >= list.length) return;
+    const next = [...list];
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  };
+  const add = () => {
+    const v = draft.trim();
+    if (!v) return;
+    onChange([...list, v]);
+    setDraft('');
+  };
+  return (
+    <div>
+      <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Photos (la 1ère = photo principale)</label>
+      <p className="text-[#acb0cd]/50 text-xs mb-2">Liens acceptés sur le site : photos Ankor, Unsplash (images.unsplash.com) ou Firebase Storage.</p>
+      {list.length === 0 && <p className="text-[#acb0cd]/40 text-xs italic mb-2">Aucune photo.</p>}
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-2">
+        {list.map((src, i) => (
+          <div key={`${src}-${i}`} className="relative rounded-lg overflow-hidden border border-[#C0C0C0]/20 bg-[#2a2a30]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={getAnkorImageUrl(src, '320w') || src} alt="" className="w-full h-20 object-cover" />
+            {i === 0 && <span className="absolute top-1 left-1 text-[9px] uppercase tracking-wider bg-[#B03E00] text-white rounded px-1">Principale</span>}
+            {!isSupportedImage(src) && (
+              <span className="absolute inset-x-1 top-6 text-[9px] leading-tight bg-black/80 text-[#e3a892] rounded px-1 py-0.5">Hébergeur non pris en charge : non affichée sur le site</span>
+            )}
+            <div className="flex justify-between bg-[#2a2a30]/90 text-[#acb0cd] text-xs">
+              <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="px-2 py-0.5 disabled:opacity-30" title="Avancer">◀</button>
+              <button type="button" onClick={() => onChange(list.filter((_, idx) => idx !== i))} className="px-2 py-0.5 hover:text-[#e3a892]" title="Retirer"><X className="w-3 h-3" /></button>
+              <button type="button" onClick={() => move(i, 1)} disabled={i === list.length - 1} className="px-2 py-0.5 disabled:opacity-30" title="Reculer">▶</button>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex gap-2">
+        <input type="text" value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="URL d'une photo"
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); add(); } }} className={RATE_INPUT} />
+        <button type="button" onClick={add}
+          className="px-3 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 text-sm flex items-center gap-1 whitespace-nowrap">
+          <Plus className="w-4 h-4" /> Ajouter
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ToysEditor({ toys, onChange }) {
+  const list = toys || [];
+  const update = (i, patch) => onChange(list.map((t, idx) => (idx === i ? { ...t, ...patch } : t)));
+  return (
+    <div>
+      <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Water toys (nom + quantité)</label>
+      <div className="space-y-2 mb-2">
+        {list.map((t, i) => (
+          <div key={i} className="grid grid-cols-[1fr_80px_auto] gap-2">
+            <input type="text" value={t.label} onChange={(e) => update(i, { label: e.target.value })} className={RATE_INPUT} />
+            <input type="text" inputMode="numeric" value={t.quantity || ''} onChange={(e) => update(i, { quantity: e.target.value })} placeholder="Qté" className={RATE_INPUT} />
+            <button type="button" onClick={() => onChange(list.filter((_, idx) => idx !== i))} className="text-[#acb0cd]/60 hover:text-[#e3a892] px-1" title="Retirer">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ))}
+      </div>
+      <button type="button" onClick={() => onChange([...list, { label: '', quantity: '' }])}
+        className="px-3 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 text-sm flex items-center gap-1">
+        <Plus className="w-4 h-4" /> Ajouter un water toy
+      </button>
+    </div>
+  );
+}
+
+function YachtInfoEditor({ info, source, onChange }) {
+  const set = (patch) => onChange({ ...info, ...patch });
+  const changed = (k) => source && JSON.stringify(info[k] ?? '') !== JSON.stringify(source[k] ?? '');
+  const textFields = OVERRIDE_TEXT_FIELDS.filter(([k]) => k !== 'description');
+  return (
+    <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-4">
+      <p className="text-[#acb0cd]/60 text-xs">
+        Informations reprises automatiquement du bateau (Ankor ou ajout manuel). Ce que tu modifies ici
+        remplace l'information d'origine sur le site ; un champ modifié est marqué en orange.
+      </p>
+      <div className="grid sm:grid-cols-2 gap-2">
+        {textFields.map(([k, label]) => (
+          <div key={k}>
+            <label className={`block text-[10px] uppercase tracking-wider mb-1 ${changed(k) ? 'text-[#B03E00]' : 'text-[#acb0cd]/50'}`}>
+              {label}{changed(k) && ' · modifié'}
+            </label>
+            {k === 'type' ? (
+              <select value={info.type || ''} onChange={(e) => set({ type: e.target.value })} className={RATE_INPUT}>
+                <option value="">— Non renseigné —</option>
+                {Object.entries(TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                {info.type && !TYPE_LABELS[info.type] && <option value={info.type}>{info.type}</option>}
+              </select>
+            ) : (
+              <input type="text" value={info[k] ?? ''} onChange={(e) => set({ [k]: e.target.value })} className={RATE_INPUT} />
+            )}
+          </div>
+        ))}
+      </div>
+      <div>
+        <label className={`block text-[10px] uppercase tracking-wider mb-1 ${changed('description') ? 'text-[#B03E00]' : 'text-[#acb0cd]/50'}`}>
+          Description{changed('description') && ' · modifiée'}
+        </label>
+        <textarea rows={5} value={info.description ?? ''} onChange={(e) => set({ description: e.target.value })}
+          className={`${RATE_INPUT} resize-y`} />
+      </div>
+      <ImagesEditor images={info.images} onChange={(images) => set({ images })} />
+      <ChipListEditor label="Équipements (Amenities)" items={info.amenities} onChange={(amenities) => set({ amenities })} placeholder="Ex : Jacuzzi" />
+      <ChipListEditor label="Divertissements (Entertainment)" items={info.entertainment} onChange={(entertainment) => set({ entertainment })} placeholder="Ex : Satellite TV" />
+      <ToysEditor toys={info.toys} onChange={(toys) => set({ toys })} />
+      <ChipListEditor label="Tenders" items={info.tenders} onChange={(tenders) => set({ tenders })} placeholder="Ex : Williams 445" />
     </div>
   );
 }
@@ -1036,9 +1240,36 @@ function EditModal({ yacht, onClose, onSave }) {
     water_toys: !!yacht.water_toys,
     extra_info: yacht.extra_info || '',
     custom_pricing: ratesToForm(yacht.custom_pricing),
-    day_charter: (() => { const d = normalizeDayCharter(yacht.day_charter); return { ...d, price: d.price ? String(d.price) : '' }; })(),
+    day_charter: dayCharterToForm(yacht.day_charter),
   });
   const [saving, setSaving] = useState(false);
+
+  // ── Fiche bateau pre-remplie (client 2026-10-02) ──
+  const [details, setDetails] = useState({ loading: true, error: false, source: null });
+  const [info, setInfo] = useState(null);
+  // Tarifs Ankor pre-remplis : n'ecrasent rien tant qu'ils ne sont pas modifies.
+  const [pricingPrefilled, setPricingPrefilled] = useState(false);
+  const [pricingTouched, setPricingTouched] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const res = await fetch(`/api/admin/yachts/details?yacht_id=${encodeURIComponent(yacht.id)}`);
+        if (!res.ok) throw new Error(String(res.status));
+        const data = await res.json();
+        if (!alive) return;
+        setDetails({ loading: false, error: false, source: data.source });
+        setInfo(mergeSourceAndOverrides(data.source, data.overrides));
+        if (!normalizeCustomPricing(yacht.custom_pricing).length && Array.isArray(data.ankorRates) && data.ankorRates.length) {
+          setForm((f) => ({ ...f, custom_pricing: data.ankorRates }));
+          setPricingPrefilled(true);
+        }
+      } catch (e) {
+        if (alive) setDetails({ loading: false, error: true, source: null });
+      }
+    })();
+    return () => { alive = false; };
+  }, [yacht.id, yacht.custom_pricing]);
 
   const hasCategory = (id) => form.categories.includes(id);
   const toggleCategory = (id) => setForm((f) => ({
@@ -1065,11 +1296,16 @@ function EditModal({ yacht, onClose, onSave }) {
   const save = async () => {
     setSaving(true);
     // Les lignes incompletes (sans titre ou sans prix) sont ignorees.
-    await onSave(yacht.id, {
+    const updates = {
       ...form,
       custom_pricing: normalizeCustomPricing(form.custom_pricing),
       day_charter: normalizeDayCharter(form.day_charter),
-    });
+    };
+    // Tarifs Ankor seulement pre-remplis et non modifies : on ne touche a rien.
+    if (pricingPrefilled && !pricingTouched) delete updates.custom_pricing;
+    // Fiche : seuls les champs differents de l'origine sont enregistres.
+    if (details.source && info) updates.overrides = diffOverrides(details.source, info);
+    await onSave(yacht.id, updates);
     setSaving(false);
     onClose();
   };
@@ -1082,6 +1318,21 @@ function EditModal({ yacht, onClose, onSave }) {
           <button onClick={onClose} className="text-[#acb0cd]/60 hover:text-white"><X className="w-5 h-5" /></button>
         </div>
         <div className="p-5 space-y-4">
+          {/* Fiche bateau : toutes les informations, pre-remplies et modifiables */}
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Informations du bateau</label>
+            {details.loading && (
+              <div className="bg-[#3a3b3f] rounded-lg p-3 text-sm text-[#acb0cd]/70 flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" /> Chargement des informations du bateau…
+              </div>
+            )}
+            {details.error && (
+              <div className="bg-[#3a3b3f] rounded-lg p-3 text-sm text-[#e3a892]">
+                Impossible de charger les informations du bateau. Les autres réglages restent modifiables.
+              </div>
+            )}
+            {info && <YachtInfoEditor info={info} source={details.source} onChange={setInfo} />}
+          </div>
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-1">Titre personnalisé</label>
             <input type="text" value={form.custom_title} onChange={e => setForm({ ...form, custom_title: e.target.value })}
@@ -1100,7 +1351,13 @@ function EditModal({ yacht, onClose, onSave }) {
           {/* Tarifs par saison / région → section « Regions and Rates » de la fiche */}
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Tarifs par saison et région</label>
-            <PricingEditor rates={form.custom_pricing} onChange={(custom_pricing) => setForm((f) => ({ ...f, custom_pricing }))} />
+            {pricingPrefilled && !pricingTouched && (
+              <p className="text-[#acb0cd]/60 text-xs mb-2">
+                Tarifs pré-remplis depuis Ankor. Tant que tu ne les modifies pas, rien ne change ; dès que tu en modifies un,
+                ces cartes remplacent les tarifs Ankor sur le site.
+              </p>
+            )}
+            <PricingEditor rates={form.custom_pricing} onChange={(custom_pricing) => { setPricingTouched(true); setForm((f) => ({ ...f, custom_pricing })); }} />
           </div>
           {/* Day Charter : case + prix a la journee (parcours Day Charter uniquement) */}
           <div>
