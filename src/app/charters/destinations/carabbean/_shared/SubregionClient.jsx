@@ -47,6 +47,10 @@ export default function SubregionClient({
   fleetTitle = 'Yachts in the Caribbean',
   // Taille du titre du hero en grand ecran (noms longs : plus petit).
   titleLgClass = 'lg:text-7xl',
+  // filterByBoatClass : le filtre « Boat Class » (boatGroups) filtre vraiment la
+  // liste, d'apres y.boatClasses (page /only-for-you/caribbean, client 2026-10-02).
+  // Defaut false = comportement inchange ailleurs.
+  filterByBoatClass = false,
 }) {
   // Nombre de yachts selectionnes (selection partagee)
   const selectedCount = useSelectedCount();
@@ -74,6 +78,7 @@ export default function SubregionClient({
     // avec leur prix a la journee (client 2026-09-30).
     let result = [...applyDayCharterMode(initialData || [], dayMode)];
     if (filters.type) result = result.filter((y) => y.type && y.type.toLowerCase() === filters.type.toLowerCase());
+    if (filterByBoatClass && filters.boatClass) result = result.filter((y) => (y.boatClasses || []).includes(filters.boatClass));
     if (filters.capacity) result = result.filter((y) => Number(y.capacity || y.guests || 0) >= Number(filters.capacity));
     if (filters.minLength) result = result.filter((y) => (parseFloat(String(y.length).replace(/[^0-9.]/g, '')) || 0) >= Number(filters.minLength));
     if (filters.maxLength) result = result.filter((y) => (parseFloat(String(y.length).replace(/[^0-9.]/g, '')) || 0) <= Number(filters.maxLength));
@@ -98,7 +103,7 @@ export default function SubregionClient({
       return lb - la;
     });
     return result;
-  }, [initialData, filters, dayMode]);
+  }, [initialData, filters, dayMode, filterByBoatClass]);
 
   // Découpe les top islands en lignes de 3 pour le hero
   const islandRows = useMemo(() => {
