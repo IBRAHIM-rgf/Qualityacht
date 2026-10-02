@@ -21,13 +21,16 @@ const M = '/media/client/halal-bahamas/2026-10-01';
 const HERO_VIDEO = '/media/client/halal-bahamas/2026-10-02/hero.mp4';
 const HERO_POSTER = '/media/client/halal-bahamas/2026-10-02/hero-poster.jpg';
 
+// Photos client du 2026-10-02 (galerie : 5 photos dans l'ordre donne ; slide : 1, 2, 3).
+const M2 = '/media/client/halal-bahamas/2026-10-02';
+
 // Galerie : ordre exact demande par le client.
 const PANELS = [
-  { number: '1', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: `${M}/gallery-1-set-sail.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
-  { number: '2', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: `${M}/gallery-2-turquoise-water.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
-  { number: '3', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: `${M}/gallery-3-private-anchorage.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
-  { number: '4', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: `${M}/gallery-4-family-moment.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
-  { number: '5', title: 'Halal Cuisine', desc: 'A private chef and a fully halal galley — refined menus and alcohol-free pairings, shaped around your table.', img: `${M}/gallery-5-halal-cuisine.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
+  { number: '1', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: `${M2}/gallery-1.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
+  { number: '2', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: `${M2}/gallery-2.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
+  { number: '3', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: `${M2}/gallery-3.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
+  { number: '4', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: `${M2}/gallery-4.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
+  { number: '5', title: 'Halal Cuisine', desc: 'A private chef and a fully halal galley — refined menus and alcohol-free pairings, shaped around your table.', img: `${M2}/gallery-5.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
 ];
 
 const INTRO =
@@ -51,7 +54,6 @@ const PARAGRAPHS = [
 ];
 
 // Photos du slide (client 2026-10-02) : ordre impose 1, 2, 3.
-const M2 = '/media/client/halal-bahamas/2026-10-02';
 const PHOTOS = [
   `${M2}/1_bahamas_halal_leger.jpg`,
   `${M2}/2_bahamas_halal_leger.jpg`,
