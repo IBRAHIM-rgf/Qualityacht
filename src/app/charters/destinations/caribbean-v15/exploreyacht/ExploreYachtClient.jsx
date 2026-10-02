@@ -24,7 +24,9 @@ const CARIBBEAN_DESTINATIONS = [
   { value: 'emerging-destinations', label: 'Emerging Destinations' },
 ];
 
-export default function ExploreYachtClient({ initialFilters, initialData, totalYachts, handicapFilter = null }) {
+// regionTitle / destinationOptions : titre et filtre destination (defaut Caraibes ;
+// /charters/accessible/bahamas/yacht passe Bahamas, client 2026-10-02).
+export default function ExploreYachtClient({ initialFilters, initialData, totalYachts, handicapFilter = null, regionTitle = 'Caribbean', destinationOptions = CARIBBEAN_DESTINATIONS }) {
   const pathname = usePathname();
   // Nombre de yachts selectionnes (selection partagee)
   const selectedCount = useSelectedCount();
@@ -136,7 +138,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
         {/* Header */}
         <div className="mb-6">
           <h1 className="trajan-regular text-3xl md:text-4xl text-[#C0C0C0] mb-2 text-center uppercase tracking-[0.1em]">
-            Caribbean<br />Our Yacht Fleet
+            {regionTitle}<br />Our Yacht Fleet
           </h1>
           <FleetHeaderRow count={selectedCount}>
             <p className="text-[#acb0cd] text-center sm:text-left">
@@ -157,7 +159,7 @@ export default function ExploreYachtClient({ initialFilters, initialData, totalY
         </div>
 
         {/* Filters (mobile bouton orange) */}
-        <YachtFilters filters={filters} onChange={setFilters} mobileButtonClass="text-[#B03E00]" mobileLabelClass="border border-[#C0C0C0] rounded-full px-5 py-2" customDestinations={CARIBBEAN_DESTINATIONS} />
+        <YachtFilters filters={filters} onChange={setFilters} mobileButtonClass="text-[#B03E00]" mobileLabelClass="border border-[#C0C0C0] rounded-full px-5 py-2" customDestinations={destinationOptions} />
 
         {/* Yacht Grid */}
         <main className="mt-6">
