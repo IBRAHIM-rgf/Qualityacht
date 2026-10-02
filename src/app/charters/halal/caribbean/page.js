@@ -75,11 +75,8 @@ const INTRO =
 export default function HalalCaribbeanPage() {
   return (
     <CaribbeanV15Page
-      // Video de bois flotte retiree a la demande du client (2026-09-14) : rien
-      // ne la remplace. Le bloc du haut est conserve tel quel (hauteur, titre,
-      // sous-titre, degrade), sur le fond du site.
-      heroVideo={null}
-      heroSansMedia
+      // Hero video d'avant le 2026-09-14 remis a la demande du client (2026-10-02).
+      heroVideo="/media/quality/halal/hero-halal.mp4"
       heroImageMobile={HERO_IMAGE}
       heroImageDesktop={HERO_IMAGE}
       showDescription={false}
