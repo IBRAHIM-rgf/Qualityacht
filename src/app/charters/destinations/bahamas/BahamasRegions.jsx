@@ -175,7 +175,7 @@ export function BahamasHero() {
 
 // Grille de photos : 8 cartes 4 + 4 (une par groupe), memes photos et meme
 // effet que la grille Caraibes en attendant les photos Bahamas (client 2026-09-27).
-export function BahamasIslandsGrid() {
+export function BahamasIslandsGrid({ sub = 'The most sought-after islands for luxury yacht charters' } = {}) {
   // Photos Bahamas du client (2026-09-28) : version filtree au repos, couleur revelee,
   // meme transition que la grille Caraibes. 7 photos recues pour 8 cartes : la 8e garde
   // provisoirement la photo Caraibes en attendant la sienne.
@@ -191,7 +191,7 @@ export function BahamasIslandsGrid() {
   return (
     <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
       <div className="max-w-7xl mx-auto">
-        <RevealBlock label="Explore" title="Bahamas Islands" sub="The most sought-after islands for luxury yacht charters" />
+        <RevealBlock label="Explore" title="Bahamas Islands" sub={sub} />
         {rows.map((row, r) => (
           <div key={r} className={`grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 ${r < rows.length - 1 ? 'mb-px' : ''}`}>
             {row.map((c, i) => <DestCard key={c.name} index={r * 4 + i} {...c} />)}
@@ -202,7 +202,7 @@ export function BahamasIslandsGrid() {
   );
 }
 
-export function BahamasDestinationsByRegion() {
+export function BahamasDestinationsByRegion({ sub = '' } = {}) {
   const [activeIsland, setActiveIsland] = useState(null);
   const main = GROUPS.slice(0, -2);
   const last = GROUPS.slice(-2);
@@ -214,7 +214,7 @@ export function BahamasDestinationsByRegion() {
       `}</style>
       <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
         <div className="max-w-7xl mx-auto">
-          <RevealBlock label="Archipelagos" title="Destinations by Region" sub="" />
+          <RevealBlock label="Archipelagos" title="Destinations by Region" sub={sub} />
           {/* 3 + 3 puis les 2 derniers centres en paire (comme la v15) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
             {main.map((group, i) => (
@@ -237,7 +237,10 @@ export function BahamasDestinationsByRegion() {
 
 // Bandeau CTA « Ready to Sail » + FAQ : copie conforme de la fin de page Caraibes
 // (client 2026-09-28), photo Bahamas et titre « Plan Your Bahamas Charter ».
-export function BahamasCtaAndFaq() {
+export function BahamasCtaAndFaq({
+  ctaTitle = 'Plan Your Bahamas Charter',
+  ctaText = 'Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.',
+} = {}) {
   return (
     <>
       <StBarthBandeau src="/media/client/lydie/2026-09-28/bahamas-cta/atlantis.jpg">
@@ -245,12 +248,12 @@ export function BahamasCtaAndFaq() {
           <div className="rounded-2xl border border-[#C0C0C0] bg-[#3a3b3f]/20 backdrop-blur-sm px-3 md:px-4 py-1.5 md:py-2 max-w-xs md:max-w-xl">
             <p className="text-[10px] md:text-sm uppercase tracking-[0.3em] mb-2 md:mb-3 text-[#acb0cd]">Ready to Sail</p>
             <h2 className="trajan-regular text-xl md:text-5xl uppercase tracking-[0.08em] md:tracking-[0.12em] leading-tight text-[#acb0cd]">
-              Plan Your Bahamas Charter
+              {ctaTitle}
             </h2>
           </div>
           <div className="rounded-2xl border border-[#C0C0C0] bg-[#3a3b3f]/20 backdrop-blur-sm px-3 md:px-4 py-1.5 md:py-2 max-w-xs md:max-w-md">
             <p className="text-sm md:text-base leading-relaxed text-[#acb0cd]">
-              Our team of experts is available 24/7 to create your bespoke yachting itinerary across the Caribbean.
+              {ctaText}
             </p>
           </div>
           <a href="/charters/destinations/caribbean-v15/exploreyacht"

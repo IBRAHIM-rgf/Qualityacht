@@ -54,7 +54,7 @@ function CircleCard({ name, slug }) {
   );
 }
 
-export default function BahamasPopularDestinations() {
+export default function BahamasPopularDestinations({ sub = '' } = {}) {
   const revealRef = useRef(null);
   useEffect(() => {
     const el = revealRef.current;
@@ -78,6 +78,7 @@ export default function BahamasPopularDestinations() {
           <div className="relative w-32 h-6 mx-auto my-4 md:my-6">
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
+          {sub && <p className="text-[#acb0cd]/50 text-sm md:text-base uppercase tracking-[0.1em] px-4">{sub}</p>}
         </div>
         <div className="flex overflow-x-auto snap-x snap-mandatory gap-0 md:gap-1 pt-2 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
           {DESTINATIONS.map((d) => <CircleCard key={d.slug} {...d} />)}
