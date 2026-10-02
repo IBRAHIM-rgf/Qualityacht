@@ -217,6 +217,7 @@ export async function PATCH(request) {
           extra_info,
           custom_pricing,
           day_charter,
+          overrides,
         } = data;
         if (!yacht_id) {
           return NextResponse.json({ error: 'yacht_id requis' }, { status: 400 });
@@ -241,6 +242,8 @@ export async function PATCH(request) {
           custom_pricing: Array.isArray(custom_pricing) ? normalizeCustomPricing(custom_pricing) : undefined,
           // Day Charter : objet normalise, undefined = inchange.
           day_charter: day_charter && typeof day_charter === 'object' ? normalizeDayCharter(day_charter) : undefined,
+          // Fiche bateau : champs modifies uniquement ({} = retour aux donnees d'origine), undefined = inchange.
+          overrides: overrides && typeof overrides === 'object' && !Array.isArray(overrides) ? overrides : undefined,
         });
         return NextResponse.json({ success: true, selection: result });
       }
