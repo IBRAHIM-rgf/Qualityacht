@@ -16,8 +16,10 @@ export const metadata = {
 };
 
 const M = '/media/client/halal-bahamas/2026-10-01';
-const HERO_VIDEO = `${M}/hero.mp4`;
-const HERO_POSTER = `${M}/gallery-3-private-anchorage.jpg`;
+// Video du hero fournie par le client (2026-10-02, « hero bahamas halal », 4K
+// ramenee en 1080p pour le web) ; poster = sa premiere image.
+const HERO_VIDEO = '/media/client/halal-bahamas/2026-10-02/hero.mp4';
+const HERO_POSTER = '/media/client/halal-bahamas/2026-10-02/hero-poster.jpg';
 
 // Galerie : ordre exact demande par le client.
 const PANELS = [
