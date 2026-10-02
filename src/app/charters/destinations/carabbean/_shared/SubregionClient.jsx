@@ -43,6 +43,10 @@ export default function SubregionClient({
   boatGroups = null,
   hideYachtType = false,
   lengthRangeM,
+  // Titre de la flotte (defaut Caraibes ; pages Bahamas : « Yachts in the Bahamas »).
+  fleetTitle = 'Yachts in the Caribbean',
+  // Taille du titre du hero en grand ecran (noms longs : plus petit).
+  titleLgClass = 'lg:text-7xl',
 }) {
   // Nombre de yachts selectionnes (selection partagee)
   const selectedCount = useSelectedCount();
@@ -130,7 +134,7 @@ export default function SubregionClient({
         />
         <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-10 md:pb-16 z-10 px-4">
           <div ref={heroRef} className="reveal-up flex flex-col items-center w-full">
-            <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center">
+            <h1 className={`trajan-regular text-3xl md:text-6xl ${titleLgClass} uppercase tracking-[0.1em] md:tracking-[0.15em] text-[#acb0cd] text-center max-w-full break-words`}>
               {name}
             </h1>
             {islandRows.length > 0 && (
@@ -227,7 +231,7 @@ export default function SubregionClient({
               Available Fleet
             </p>
             <h2 className="trajan-regular text-xl md:text-3xl text-[#acb0cd] uppercase tracking-[0.1em]">
-              Yachts in the Caribbean
+              {fleetTitle}
             </h2>
           </div>
           {/* Compteur a gauche + boutons de parcours a droite (client 2026-09-10) */}
