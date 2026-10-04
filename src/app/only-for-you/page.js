@@ -34,6 +34,7 @@ const CTA_ARGENT =
 //   - vers la presentation detaillee du type de voilier.
 // L'image et le titre ouvrent la presentation detaillee.
 function Card({ item }) {
+  const slug = item.href.replace('/only-for-you/', '');
   return (
     <article className="min-w-0 rounded-2xl p-6 flex flex-col items-center text-center">
       <Link
@@ -55,8 +56,8 @@ function Card({ item }) {
       </Link>
 
       <div className="mt-5 w-full flex flex-col gap-3">
-        {/* Page Caraibes de tous les bateaux Only for You (client 2026-10-02). */}
-        <Link href="/only-for-you/caribbean" className={CTA_CUIVRE}>
+        {/* Page Caraibes des bateaux Only for You, filtree sur ce type (client 2026-10-04). */}
+        <Link href={`/only-for-you/caribbean?type=${slug}`} className={CTA_CUIVRE}>
           Explore in the Caribbean
         </Link>
         <Link href={item.href} className={CTA_ARGENT}>
