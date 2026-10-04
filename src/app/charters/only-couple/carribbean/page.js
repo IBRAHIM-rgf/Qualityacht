@@ -17,15 +17,16 @@ function getIslandCoords(name) {
 
 // ── Données rectangles (8 items : 4 + 4) ──────────────────────────────────────
 // image = nouvelle (repos) ; imageOld = ancienne colorée (apparaît au survol)
+// href : page bateaux Only Couple de chaque case (client 2026-10-04).
 const caribbeanIslands = [
-  { name: 'Greater Antilles',      image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/destinations/carabbean/greater-antilles-v11' },
-  { name: 'Leeward Islands',       image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/charters/destinations/carabbean/leeward-islands-v11' },
-  { name: 'Leeward Antilles',      image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/charters/destinations/carabbean/leeward-antilles-v11' },
-  { name: 'Windward Islands',      image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/charters/destinations/carabbean/windward-islands-v11' },
-  { name: 'Turks & Caicos',        image: '/images/pagesCaraibes/turks_caicos.png',      imageOld: '/images/destinations/Turks and Caicos-original.jpg',    href: '/charters/destinations/carabbean/turks-caicos-v11' },
-  { name: 'Trinidad & Tobago',     image: '/images/pagesCaraibes/unnamed.jpg',           imageOld: '/images/destinations/Trinidad and Tobago-original.jpg', href: '/charters/destinations/carabbean/trinidad-tobago-v11' },
-  { name: 'Grand Cayman',          image: '/images/pagesCaraibes/grand_cayman.png',      imageOld: '/images/destinations/Cayman Islands-original.jpg',      href: '/charters/destinations/carabbean/grand-cayman-v11' },
-  { name: 'Emerging Destinations', image: '/images/pagesCaraibes/emergencyfilter.jpg',   imageOld: '/images/pagesCaraibes/emergency.png',                    href: '/charters/destinations/carabbean/emerging-destinations-v11' },
+  { name: 'Greater Antilles',      image: '/images/pagesCaraibes/greater_antilles.png',  imageOld: '/images/destinations/gretar antilles-original.jpg',     href: '/charters/only-couple/carribbean/greater-antilles' },
+  { name: 'Leeward Islands',       image: '/images/pagesCaraibes/leeward_island.png',    imageOld: '/images/destinations/Leeward Islands-original.jpg',     href: '/charters/only-couple/carribbean/leeward-islands' },
+  { name: 'Leeward Antilles',      image: '/images/pagesCaraibes/leeward_antilles.png',  imageOld: '/images/destinations/The Leeward Antilles-original.jpg', href: '/charters/only-couple/carribbean/leeward-antilles' },
+  { name: 'Windward Islands',      image: '/images/pagesCaraibes/windward_island.png',   imageOld: '/images/destinations/the Windward Islands-original.jpg', href: '/charters/only-couple/carribbean/windward-islands' },
+  { name: 'Turks & Caicos',        image: '/images/pagesCaraibes/turks_caicos.png',      imageOld: '/images/destinations/Turks and Caicos-original.jpg',    href: '/charters/only-couple/carribbean/turks-caicos' },
+  { name: 'Trinidad & Tobago',     image: '/images/pagesCaraibes/unnamed.jpg',           imageOld: '/images/destinations/Trinidad and Tobago-original.jpg', href: '/charters/only-couple/carribbean/trinidad-tobago' },
+  { name: 'Grand Cayman',          image: '/images/pagesCaraibes/grand_cayman.png',      imageOld: '/images/destinations/Cayman Islands-original.jpg',      href: '/charters/only-couple/carribbean/grand-cayman' },
+  { name: 'Emerging Destinations', image: '/images/pagesCaraibes/emergencyfilter.jpg',   imageOld: '/images/pagesCaraibes/emergency.png',                    href: '/charters/only-couple/carribbean/emerging-destinations' },
 ];
 
 // ── Groupes accordéon ──────────────────────────────────────────────────────────

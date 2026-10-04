@@ -43,7 +43,8 @@ function BurntLine() {
   );
 }
 
-export default function OnlyCoupleHeroTriptych() {
+// title : titre du hero (defaut « The Caribbean » ; page Only Couple Bahamas, client 2026-10-04).
+export default function OnlyCoupleHeroTriptych({ title = 'The Caribbean' } = {}) {
   const titreRef = useRef(null);
   const [petitEcran, setPetitEcran] = useState(null);
   const [animer, setAnimer] = useState(true);
@@ -117,7 +118,7 @@ export default function OnlyCoupleHeroTriptych() {
       <div className="absolute inset-x-0 flex flex-col items-center px-4 bottom-[8%] md:bottom-[10%]">
         <div ref={titreRef} className="reveal-up flex flex-col items-center w-full">
           <h1 className="trajan-regular text-3xl md:text-6xl lg:text-7xl uppercase tracking-[0.12em] md:tracking-[0.15em] text-[#acb0cd] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
-            The Caribbean
+            {title}
           </h1>
           <BurntLine />
           <p className="text-[#acb0cd] text-xs md:text-xl uppercase tracking-[0.18em] md:tracking-[0.25em] font-light text-center drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
