@@ -19,7 +19,8 @@ export default function LastMinuteBahamasPage() {
       quoteLabel="Design Your Last Minute Charter"
       heroVideo="/media/client/lydie/2026-09-30/lm-bahamas-hero.mp4"
       heroPoster="/media/client/lydie/2026-09-30/lm-bahamas-hero.jpg"
-      islandLinks={false}
+      // 8 cases -> page bateaux de chaque case (client 2026-10-04).
+      islandLinkBase="/charters/last-minute/bahamas"
     />
   );
 }
