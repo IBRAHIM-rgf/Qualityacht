@@ -50,11 +50,15 @@ const SUB_REGION_LABELS = {
   'exumas': 'Exumas',
   'abacos': 'Abacos',
   'eleuthera': 'Eleuthera & Harbour Island',
+  'grand-bahama': 'Grand Bahama',
+  'andros': 'Andros',
+  'bimini-berry': 'Bimini & Berry Islands',
+  'out-islands': 'Îles du Sud / Out Islands',
 };
 
 const SUB_REGIONS_BY_REGION = {
   caribbean: ['greater-antilles', 'leeward-islands', 'windward-islands', 'leeward-antilles', 'turks-caicos', 'trinidad-tobago', 'bvi', 'grand-cayman'],
-  bahamas: ['nassau', 'exumas', 'abacos', 'eleuthera'],
+  bahamas: ['nassau', 'grand-bahama', 'exumas', 'abacos', 'eleuthera', 'andros', 'bimini-berry', 'out-islands'],
 };
 
 // Axe "Catégories charter" — indépendant des régions géo, multi-sélection.
