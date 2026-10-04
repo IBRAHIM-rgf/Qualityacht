@@ -8,6 +8,10 @@ import HalalLateralScroll from '../caribbean/HalalLateralScroll';
 import HalalBahamasHero from './HalalBahamasHero';
 import { BahamasIslandsGrid, BahamasDestinationsByRegion, BahamasCtaAndFaq } from '../../destinations/bahamas/BahamasRegions';
 import BahamasPopularDestinations from '../../destinations/bahamas/BahamasPopularDestinations';
+import HalalYachtsSection from '../HalalYachtsSection';
+import { getHalalYachts } from '@/lib/halalYachts';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Halal Private Charter — The Bahamas | Qualityacht',
@@ -66,7 +70,9 @@ const ALTS = [
   'Sailing over turquoise water in the Bahamas',
 ];
 
-export default function HalalBahamasPage() {
+export default async function HalalBahamasPage() {
+  // Bateaux coches « Halal Charter » + Bahamas dans l'admin (client 2026-10-04).
+  const halalYachts = await getHalalYachts('bahamas');
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
       <HalalBahamasHero
@@ -77,6 +83,7 @@ export default function HalalBahamasPage() {
       />
       <MouseExpandPanels panels={PANELS} />
       <HalalLateralScroll intro={INTRO} tagline={TAGLINE} paragraphs={PARAGRAPHS} photos={PHOTOS} alts={ALTS} />
+      <HalalYachtsSection yachts={halalYachts} region="The Bahamas" />
       {/* Suite de /charters/destinations/bahamas a partir de « Explore Bahamas Islands » */}
       <BahamasIslandsGrid sub="Secluded islands, calm waters and anchorages reserved for you" />
       <BahamasDestinationsByRegion />
