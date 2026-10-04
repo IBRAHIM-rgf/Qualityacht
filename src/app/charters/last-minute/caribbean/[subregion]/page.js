@@ -1,0 +1,14 @@
+// /charters/last-minute/caribbean/<subregion> — page d'une case Caraibes du parcours Last Minute : bateaux coches Last Minute Charter + sous-region de la case (client 2026-10-04).
+import { CaseYachtsPage, caseMetadata } from '../../../_shared/categoryCasePages';
+
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }) {
+  const { subregion: slug } = await params;
+  return caseMetadata('caribbean', slug, 'Last-Minute Charter Caribbean');
+}
+
+export default async function Page({ params }) {
+  const { subregion: slug } = await params;
+  return <CaseYachtsPage region="caribbean" slug={slug} category="last-minute" />;
+}
