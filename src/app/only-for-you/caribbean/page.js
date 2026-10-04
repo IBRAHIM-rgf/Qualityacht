@@ -43,7 +43,12 @@ const config = {
   filterByBoatClass: true,
 };
 
-export default async function OnlyForYouCaribbeanPage() {
+// ?type=<slug> (bouton « Explore in the Caribbean » d'un type, client 2026-10-04) :
+// le filtre « Boat Class » arrive pre-selectionne sur ce type (modifiable).
+export default async function OnlyForYouCaribbeanPage({ searchParams }) {
+  const sp = (await searchParams) || {};
+  const wanted = typeof sp.type === 'string' ? `only-for-you/${sp.type}` : '';
+  const initialBoatClass = TYPES.some((t) => t.value === wanted) ? wanted : '';
   try {
     const selections = await getYachtSelections();
     // Types Only for You de chaque bateau coche Caraibes.
@@ -58,9 +63,9 @@ export default async function OnlyForYouCaribbeanPage() {
     const yachts = (all || [])
       .filter((y) => typesById.has(y.id))
       .map((y) => ({ ...y, boatClasses: typesById.get(y.id) }));
-    return <SubregionClient {...config} initialData={yachts} totalYachts={yachts.length} />;
+    return <SubregionClient {...config} initialBoatClass={initialBoatClass} initialData={yachts} totalYachts={yachts.length} />;
   } catch (error) {
     console.error('Only for You Caribbean page error:', error);
-    return <SubregionClient {...config} initialData={[]} totalYachts={0} />;
+    return <SubregionClient {...config} initialBoatClass={initialBoatClass} initialData={[]} totalYachts={0} />;
   }
 }
