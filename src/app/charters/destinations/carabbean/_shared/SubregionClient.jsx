@@ -51,6 +51,9 @@ export default function SubregionClient({
   // liste, d'apres y.boatClasses (page /only-for-you/caribbean, client 2026-10-02).
   // Defaut false = comportement inchange ailleurs.
   filterByBoatClass = false,
+  // initialBoatClass : filtre « Boat Class » pre-selectionne a l'arrivee (ex. ?type=catamaran
+  // depuis /only-for-you). Defaut '' = aucun.
+  initialBoatClass = '',
 }) {
   // Nombre de yachts selectionnes (selection partagee)
   const selectedCount = useSelectedCount();
@@ -70,6 +73,7 @@ export default function SubregionClient({
   const [filters, setFilters] = useState({
     type: '', destination: 'caribbean', capacity: '', priceMax: '', priceMin: '',
     minLength: '', maxLength: '', currency: '', petFriendly: false, groupFriendly: false,
+    boatClass: initialBoatClass || '',
   });
 
   const dayMode = useDayCharterJourney();
