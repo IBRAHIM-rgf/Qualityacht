@@ -24,12 +24,6 @@ const CTA_CUIVRE =
   'transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] ' +
   'hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] ' + FOCUS;
 
-// Bouton vert emeraude (client 2026-09-29) : carte Balkin -> page Monaco.
-const CTA_VERT =
-  'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
-  'rounded-full bg-[#1f7a4d] text-[15px] font-semibold uppercase tracking-[0.18em] text-white ' +
-  'transition-colors duration-300 hover:bg-[#186540] ' + FOCUS;
-
 const CTA_ARGENT =
   'inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 ' +
   'rounded-full border border-[#C0C0C0] bg-[#26272a]/50 text-[15px] font-semibold uppercase ' +
@@ -191,9 +185,10 @@ export default function RealEstatePage() {
                   {partenaire.markets.join(' · ')}
                 </p>
 
+                {/* Bouton « Selection MONACO » : style normal des boutons (client 2026-10-04), plus de vert. */}
                 {partenaire.selection ? (
                   <div className="mt-7 flex justify-center">
-                    <Link href={partenaire.selection.href} className={CTA_VERT}>
+                    <Link href={partenaire.selection.href} className={CTA_CUIVRE}>
                       {partenaire.selection.label}
                     </Link>
                   </div>
