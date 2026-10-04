@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { ISLANDS } from '../../../test-region-map/map-data';
 import CaribbeanShowcase from './CaribbeanShowcase';
+import { caribbeanCaseHref } from '../../_shared/caribbeanSubregions';
 import { WORLD_MAP_OPTIONS, fitWholeWorld, darkMapCss } from '@/lib/darkWorldMap';
 
 // Coordonnées d'une île par son nom (depuis map-data.js).
@@ -596,6 +597,10 @@ export function RevealBlock({ label, title, sub, useTitleLine = false }) {
 // Le hero est parametrable (mêmes valeurs qu'avant par defaut) pour permettre de
 // reutiliser tout le contenu v15 avec un hero different — cf. /charters/halal/caribbean.
 export default function CaribbeanV15Page({
+  // islandHrefBase : les 8 cases « Caribbean Islands » ouvrent la page bateaux de chaque
+  // case dans un parcours (ex. '/charters/last-minute/caribbean', client 2026-10-04).
+  // Defaut null = liens d'origine vers les pages sous-regions.
+  islandHrefBase = null,
   heroImageMobile = '/images/yachts/yatch2.jpeg',
   heroImageDesktop = '/images/yachts/Yatch_desktop.png',
   heroTitle = 'The Caribbean',
@@ -685,6 +690,9 @@ export default function CaribbeanV15Page({
 } = {}) {
   const heroRef = useRef(null);
   const [activeIsland, setActiveIsland] = useState(null);
+  const islandCards = islandHrefBase
+    ? caribbeanIslands.map((c) => ({ ...c, href: caribbeanCaseHref(islandHrefBase, c.name) || c.href }))
+    : caribbeanIslands;
   // Bloc description : seul le 1er paragraphe est visible ; les 3 suivants sont
   // replies derriere un bouton "See more".
   const [descOpen, setDescOpen] = useState(false);
@@ -885,11 +893,11 @@ export default function CaribbeanV15Page({
             <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
             {/* Ligne 1 : 2 col mobile / 4 col desktop */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
-              {caribbeanIslands.slice(0, 4).map((island, i) => <DestCard key={i} index={i} {...island} />)}
+              {islandCards.slice(0, 4).map((island, i) => <DestCard key={i} index={i} {...island} />)}
             </div>
             {/* Ligne 2 : 2 col mobile / 4 col desktop */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
-              {caribbeanIslands.slice(4, 8).map((island, i) => <DestCard key={i} index={4 + i} {...island} />)}
+              {islandCards.slice(4, 8).map((island, i) => <DestCard key={i} index={4 + i} {...island} />)}
             </div>
           </div>
         </CloudSection>
