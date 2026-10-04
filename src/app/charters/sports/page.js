@@ -14,6 +14,8 @@ import SportsHeroTriptych from "./SportsHeroTriptych";
 // destinationsData.js reste intact.
 const SPORTS_GUIDES = {
   "Caraïbes": "/charters/sports/carribbean",
+  // Bahamas (client 2026-10-04) : page Sports Bahamas.
+  "Bahamas": "/charters/sports/bahamas",
 };
 
 const sportsItems = destinations.map((d) =>
