@@ -205,7 +205,8 @@ export function formatDayRatePeriod(r) {
 export function dayCharterRatesForDisplay(dc) {
   return ((dc && dc.rates) || []).map((r) => ({
     price: formatCustomPrice(r.price, r.currency),
-    period: formatDayRatePeriod(r),
+    // Dates retirees de l'admin (client 2026-10-04) : plus affichees sur le site.
+    period: '',
     location: r.location,
     apa: r.apa,
     vat: r.vat,
@@ -213,7 +214,7 @@ export function dayCharterRatesForDisplay(dc) {
 }
 
 function rateToPricingInfo(r) {
-  const period = formatDayRatePeriod(r);
+  const period = ''; // dates plus affichees (client 2026-10-04)
   const name = r.location
     ? (period ? `${r.location} - ${period}` : r.location)
     : (period ? `Day Charter - ${period}` : 'Day Charter');
