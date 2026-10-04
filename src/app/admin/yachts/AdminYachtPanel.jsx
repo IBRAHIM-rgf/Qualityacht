@@ -275,7 +275,7 @@ function DayCharterEditor({ value, onChange }) {
       </label>
       <p className="text-[#acb0cd]/60 text-xs">
         Cochée : le bateau apparaît dans la section Day Charter du site (seuls les bateaux cochés y
-        apparaissent) avec tous les prix ci-dessous (prix, période, lieu), dans ce parcours uniquement.
+        apparaissent) avec tous les prix ci-dessous (prix, lieu), dans ce parcours uniquement.
       </p>
       {value.enabled && (
         <>
@@ -299,16 +299,6 @@ function DayCharterEditor({ value, onChange }) {
                   <select value={r.currency || 'EUR'} onChange={(e) => update(i, { currency: e.target.value })} className={RATE_INPUT}>
                     {PRICING_CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
-                </div>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Du</label>
-                  <input type="date" value={r.from || ''} onChange={(e) => update(i, { from: e.target.value })} className={RATE_INPUT} />
-                </div>
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Au</label>
-                  <input type="date" value={r.to || ''} onChange={(e) => update(i, { to: e.target.value })} className={RATE_INPUT} />
                 </div>
               </div>
               <div>
