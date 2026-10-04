@@ -46,6 +46,7 @@ const SUB_REGION_LABELS = {
   'trinidad-tobago': 'Trinidad & Tobago',
   'bvi': 'British Virgin Islands',
   'grand-cayman': 'Grand Cayman',
+  'emerging-destinations': 'Emerging Destinations',
   'nassau': 'Nassau & New Providence',
   'exumas': 'Exumas',
   'abacos': 'Abacos',
@@ -57,7 +58,7 @@ const SUB_REGION_LABELS = {
 };
 
 const SUB_REGIONS_BY_REGION = {
-  caribbean: ['greater-antilles', 'leeward-islands', 'windward-islands', 'leeward-antilles', 'turks-caicos', 'trinidad-tobago', 'bvi', 'grand-cayman'],
+  caribbean: ['greater-antilles', 'leeward-islands', 'windward-islands', 'leeward-antilles', 'turks-caicos', 'trinidad-tobago', 'bvi', 'grand-cayman', 'emerging-destinations'],
   bahamas: ['nassau', 'grand-bahama', 'exumas', 'abacos', 'eleuthera', 'andros', 'bimini-berry', 'out-islands'],
 };
 
@@ -81,6 +82,8 @@ const CHARTER_CATEGORIES = [
   { id: 'accessible',   label: 'Accessible Yacht Charter' },
   // Halal (client 2026-10-04) : listes « Halal-Friendly Yachts » des pages Halal.
   { id: 'halal',        label: 'Halal Charter' },
+  // Sport (client 2026-10-04) : flottes « Explore the ... Fleet » des pages Sports.
+  { id: 'sport',        label: 'Sport Yacht Charter' },
 ];
 
 // Map clé → libellé lisible (sections + sous-catégories).
