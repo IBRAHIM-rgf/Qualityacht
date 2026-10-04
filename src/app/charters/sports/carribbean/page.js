@@ -8,6 +8,9 @@
 
 import HeroVideo from './HeroVideo';
 
+// « Explore the Caribbean Fleet » (client 2026-10-04) : ouvre /charters/sports/carribbean/fleet,
+// uniquement les bateaux coches « Sport Yacht Charter » + Caraibes dans l'admin.
+
 export const metadata = {
   title: 'Caribbean Sports Yacht Charters | Qualityacht',
   description:
@@ -57,7 +60,7 @@ export default function SportsCaribbeanPage() {
             Fast cruising, tenders and watersports across the islands — planned around your dates, your group and what the conditions actually allow.
           </p>
           <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
-            <a href="/yachts?destination=caribbean" className={CTA_CUIVRE}>Explore the Caribbean Fleet</a>
+            <a href="/charters/sports/carribbean/fleet" className={CTA_CUIVRE}>Explore the Caribbean Fleet</a>
             <a href="/contact" className={CTA_ARGENT}>Speak to Our Team</a>
           </div>
         </div>
@@ -107,7 +110,7 @@ export default function SportsCaribbeanPage() {
           </div>
 
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="/yachts?destination=caribbean" className={CTA_CUIVRE}>Explore the Caribbean Fleet</a>
+            <a href="/charters/sports/carribbean/fleet" className={CTA_CUIVRE}>Explore the Caribbean Fleet</a>
             <a href="/contact" className={CTA_ARGENT}>Speak to Our Team</a>
           </div>
         </div>
