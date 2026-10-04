@@ -30,7 +30,7 @@ const M2 = '/media/client/halal-bahamas/2026-10-02';
 
 // Galerie : ordre exact demande par le client.
 const PANELS = [
-  { number: '1', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: `${M2}/gallery-1.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
+  { number: '1', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: `${M2}/gallery-1.jpg`, imgPosition: '50% 100%', href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
   { number: '2', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: `${M2}/gallery-2.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
   { number: '3', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: `${M2}/gallery-3.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
   { number: '4', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: `${M2}/gallery-4.jpg`, href: '/yachts?destination=bahamas', ctaLabel: 'Explore the Fleet' },
