@@ -48,7 +48,7 @@ export default function MouseExpandPanels({ panels = [], height = 'h-[70vh] md:h
                 fill
                 sizes="70vw"
                 className="object-cover"
-                style={{ transform: isActive ? 'scale(1)' : 'scale(1.12)', transition: 'transform 1.2s cubic-bezier(0.22,1,0.36,1)', filter: 'saturate(1.08)' }}
+                style={{ objectPosition: p.imgPosition || '50% 50%', transform: isActive ? 'scale(1)' : 'scale(1.12)', transition: 'transform 1.2s cubic-bezier(0.22,1,0.36,1)', filter: 'saturate(1.08)' }}
               />
               {/* voile : sombre uniforme si inactif, degrade bas si actif */}
               <div
@@ -117,7 +117,7 @@ export default function MouseExpandPanels({ panels = [], height = 'h-[70vh] md:h
       <div className="md:hidden flex flex-col gap-1">
         {panels.map((p, i) => (
           <div key={i} className="relative h-64 overflow-hidden">
-            <Image src={p.img} alt={p.title} fill sizes="100vw" className="object-cover" style={{ filter: 'saturate(1.08)' }} />
+            <Image src={p.img} alt={p.title} fill sizes="100vw" className="object-cover" style={{ objectPosition: p.imgPosition || '50% 50%', filter: 'saturate(1.08)' }} />
             <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(38,39,42,0.1) 0%, transparent 40%, rgba(38,39,42,0.9) 100%)' }} />
             <div className="absolute inset-0 flex flex-col justify-end p-6">
               <span className="text-[#C0C0C0]/50 text-3xl font-light leading-none">{p.number}</span>
