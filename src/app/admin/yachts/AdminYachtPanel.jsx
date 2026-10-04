@@ -75,6 +75,8 @@ const CHARTER_CATEGORIES = [
   },
   { id: 'last-minute',  label: 'Last Minute Charter' },
   { id: 'accessible',   label: 'Accessible Yacht Charter' },
+  // Halal (client 2026-10-04) : listes « Halal-Friendly Yachts » des pages Halal.
+  { id: 'halal',        label: 'Halal Charter' },
 ];
 
 // Map clé → libellé lisible (sections + sous-catégories).
