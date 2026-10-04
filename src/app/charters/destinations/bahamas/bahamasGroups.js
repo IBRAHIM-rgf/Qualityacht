@@ -5,17 +5,18 @@
 export const CARDS = '/media/client/lydie/2026-09-28/bahamas-cards';
 export const BAHAMAS_CARD_PHOTOS = 8;
 
+// key : sous-region de l'admin (client 2026-10-04), pour les pages bateaux des cases.
 export const GROUPS = [
-  { name: 'Nassau & Paradise Island', islands: [
+  { name: 'Nassau & Paradise Island', key: 'nassau', islands: [
     ['New Providence', 25.03, -77.4],
     ['Nassau', 25.06, -77.35],
     ['Paradise Island', 25.08, -77.32],
     ['Rose Island', 25.1, -77.2]] },
-  { name: 'Grand Bahama', islands: [
+  { name: 'Grand Bahama', key: 'grand-bahama', islands: [
     ['Freeport', 26.53, -78.7],
     ['Lucaya', 26.51, -78.65],
     ['West End', 26.69, -78.97]] },
-  { name: 'The Exumas', islands: [
+  { name: 'The Exumas', key: 'exumas', islands: [
     ['Ship Channel Cay', 24.82, -76.83],
     ["Allan's Cay", 24.75, -76.84],
     ['Highborne Cay', 24.71, -76.82],
@@ -31,7 +32,7 @@ export const GROUPS = [
     ['Georgetown', 23.51, -75.78],
     ['Stocking Island', 23.53, -75.76],
     ['Little Exuma', 23.45, -75.62]] },
-  { name: 'The Abacos', islands: [
+  { name: 'The Abacos', key: 'abacos', islands: [
     ['Great Abaco', 26.4, -77.1],
     ['Marsh Harbour', 26.54, -77.06],
     ['Treasure Cay', 26.67, -77.29],
@@ -45,7 +46,7 @@ export const GROUPS = [
     ['Lubbers Quarters Cay', 26.49, -76.99],
     ['No Name Cay', 26.73, -77.25],
     ['Scotland Cay', 26.63, -77.07]] },
-  { name: 'Eleuthera & Harbour Island', islands: [
+  { name: 'Eleuthera & Harbour Island', key: 'eleuthera', islands: [
     ['Eleuthera', 25.1, -76.15],
     ['Gregory Town', 25.39, -76.56],
     ["Governor's Harbour", 25.2, -76.24],
@@ -55,13 +56,13 @@ export const GROUPS = [
     ['Dunmore Town', 25.5, -76.64],
     ['Spanish Wells', 25.54, -76.75],
     ['Current Cut', 25.4, -76.79]] },
-  { name: 'Andros', islands: [
+  { name: 'Andros', key: 'andros', islands: [
     ['North Andros', 24.7, -78.0],
     ['Mangrove Cay', 24.25, -77.65],
     ['South Andros', 23.95, -77.6],
     ['Andros Town', 24.7, -77.77],
     ['Fresh Creek', 24.73, -77.79]] },
-  { name: 'Bimini & Berry Islands', islands: [
+  { name: 'Bimini & Berry Islands', key: 'bimini-berry', islands: [
     ['North Bimini', 25.73, -79.28],
     ['South Bimini', 25.7, -79.29],
     ['Gun Cay', 25.57, -79.3],
@@ -69,7 +70,7 @@ export const GROUPS = [
     ['Chub Cay', 25.41, -77.9],
     ["Frazer's Hog Cay", 25.4, -77.84],
     ["Bond's Cay", 25.52, -77.77]] },
-  { name: 'Îles du Sud / Out Islands', islands: [
+  { name: 'Îles du Sud / Out Islands', key: 'out-islands', islands: [
     ['Cat Island', 24.4, -75.55],
     ['New Bight', 24.29, -75.42],
     ["Arthur's Town", 24.62, -75.67],

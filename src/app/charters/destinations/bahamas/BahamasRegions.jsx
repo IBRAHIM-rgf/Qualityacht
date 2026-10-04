@@ -84,14 +84,16 @@ export function BahamasHero() {
 // effet que la grille Caraibes en attendant les photos Bahamas (client 2026-09-27).
 // linked : chaque case ouvre la page de son groupe d'iles (client 2026-10-02,
 // page /charters/destinations/bahamas uniquement).
-export function BahamasIslandsGrid({ sub = 'The most sought-after islands for luxury yacht charters', linked = false } = {}) {
+// linkBase : adresse de base des pages des cases (parcours Day Charter, Last Minute,
+// Only Couple : client 2026-10-04). Defaut = pages destination Bahamas.
+export function BahamasIslandsGrid({ sub = 'The most sought-after islands for luxury yacht charters', linked = false, linkBase = '/charters/destinations/bahamas' } = {}) {
   // Photos Bahamas du client (2026-09-28) : version filtree au repos, couleur revelee,
   // meme transition que la grille Caraibes. 7 photos recues pour 8 cartes : la 8e garde
   // provisoirement la photo Caraibes en attendant la sienne.
   const cards = GROUPS.map((g, i) => {
     if (i < BAHAMAS_CARD_PHOTOS) {
       const n = i + 1;
-      return { name: g.name, image: `${CARDS}/card-${n}-filtered.jpg`, imageOld: `${CARDS}/card-${n}-color.jpg`, href: linked ? `/charters/destinations/bahamas/${groupSlug(g.name)}` : undefined };
+      return { name: g.name, image: `${CARDS}/card-${n}-filtered.jpg`, imageOld: `${CARDS}/card-${n}-color.jpg`, href: linked ? `${linkBase}/${groupSlug(g.name)}` : undefined };
     }
     const photo = caribbeanIslands[i % caribbeanIslands.length];
     return { name: g.name, image: photo.image, imageOld: photo.imageOld };

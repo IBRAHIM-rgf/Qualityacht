@@ -28,6 +28,8 @@ export default function BahamasRoutePage({
   // Cases « Bahamas Islands » cliquables vers la page de chaque groupe d'iles
   // (client 2026-10-02) : uniquement sur /charters/destinations/bahamas.
   islandLinks = true,
+  // Base des pages des cases (parcours Day Charter / Last Minute, client 2026-10-04).
+  islandLinkBase = '/charters/destinations/bahamas',
 }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
@@ -60,7 +62,7 @@ export default function BahamasRoutePage({
       </VideoHero>
       {/* Eclat (cartes flottantes), comme la page Caraibes : juste sous le hero. */}
       <BahamasEclat />
-      <BahamasIslandsGrid linked={islandLinks} />
+      <BahamasIslandsGrid linked={islandLinks} linkBase={islandLinkBase} />
       <BahamasDestinationsByRegion />
       <BahamasPopularDestinations />
       <BahamasCtaAndFaq />
