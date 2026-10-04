@@ -8,7 +8,10 @@ import { destinations } from "../destinationsData";
 // la photo. Elle passe par le mode cover de ItemsGrid — hauteur reelle,
 // object-cover, sans bande — avec son poster pour prefers-reduced-motion.
 const onlyCoupleDestinations = destinations.map((d) =>
-  d.title === 'Caraïbes' ? { ...d, href: '/charters/only-couple/carribbean' } : d
+  d.title === 'Caraïbes' ? { ...d, href: '/charters/only-couple/carribbean' }
+    // Case Bahamas (client 2026-10-04) : page Bahamas du parcours Only Couple.
+    : d.title === 'Bahamas' ? { ...d, href: '/charters/only-couple/bahamas' }
+    : d
 );
 
 const INTRO = (
