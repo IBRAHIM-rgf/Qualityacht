@@ -2,6 +2,10 @@ import CaribbeanV15Page from '../../destinations/caribbean-v15/CaribbeanV15Base'
 import HalalLateralScroll from './HalalLateralScroll';
 import MouseExpandPanels from '@/components/vibe/MouseExpandPanels';
 import { one } from '@/lib/quality-media';
+import HalalYachtsSection from '../HalalYachtsSection';
+import { getHalalYachts } from '@/lib/halalYachts';
+
+export const dynamic = 'force-dynamic';
 
 // Panneaux "COMO" (s'etendent selon la souris) — experiences halal Caraibes.
 // Ordre voulu par le client : Set Sail, Turquoise Waters, Private Anchorages, Family
@@ -72,7 +76,9 @@ const PARAGRAPHS = [
 const INTRO =
   'The Caribbean remain an underrated destination for halal, even though they offer an exceptional setting for enjoying a luxury experience in complete peace of mind. Thanks to our extensive connections in the halal food industry, we are able to create a refined culinary experience perfectly tailored to the expectations of our most demanding clients.';
 
-export default function HalalCaribbeanPage() {
+export default async function HalalCaribbeanPage() {
+  // Bateaux coches « Halal Charter » + Caraibes dans l'admin (client 2026-10-04).
+  const halalYachts = await getHalalYachts('caribbean');
   return (
     <CaribbeanV15Page
       // Hero video fourni par le client (2026-10-02, video_allegee_1080p.mp4).
@@ -98,6 +104,7 @@ export default function HalalCaribbeanPage() {
           <MouseExpandPanels panels={PANELS} />
           {/* intro + slide lateral d'origine, en dessous */}
           <HalalLateralScroll intro={INTRO} paragraphs={PARAGRAPHS} photos={PHOTOS} />
+          <HalalYachtsSection yachts={halalYachts} region="The Caribbean" />
         </>
       }
     />
