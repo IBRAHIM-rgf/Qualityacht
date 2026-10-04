@@ -11,7 +11,8 @@ export default function DayCharterBahamasPage() {
       heroOverTitle="Day Charter"
       quoteLabel="Create Your Day at Sea"
       heroRuleColor="#C0C0C0"
-      islandLinks={false}
+      // 8 cases -> page bateaux de chaque case (client 2026-10-04).
+      islandLinkBase="/charters/day-charter/bahamas"
     />
   );
 }
