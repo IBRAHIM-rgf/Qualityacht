@@ -15,6 +15,9 @@ export default function PetFriendlyBahamasPage() {
         kicker="Pet-Friendly Charter"
         title="The Bahamas"
         subtitle="Cruising the Islands, Together"
+        // Hero du client (2026-10-05).
+        heroImage="/media/client/pet-friendly/2026-10-05/hero-sleeping-cat.webp"
+        heroAlt="White and tabby cat sleeping on a cushion"
       />
     </main>
   );
