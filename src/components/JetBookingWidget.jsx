@@ -5,11 +5,11 @@
 // du wizard /request-quote-test-v10 quand l'utilisateur a coché "private jets".
 //
 // Toute logique d'état est interne ; pas besoin de prop pour fonctionner.
-// Aéroports source : caribbeanJetGroups (seule région active actuellement).
+// Aéroports : Caraïbes puis Bahamas (selection region > iles > aeroport, client 2026-10-05).
 
-import { useState, useMemo } from 'react';
-import { Calendar, Clock, User, Plane, Plus, X as XIcon } from 'lucide-react';
-import { caribbeanJetGroups } from '../app/privat-jet/data';
+import { useState, useMemo, useEffect } from 'react';
+import { Calendar, Clock, User, Plane, Plus, X as XIcon, ChevronRight, ChevronLeft, ChevronDown } from 'lucide-react';
+import { caribbeanJetGroups, bahamasJetGroups } from '../app/privat-jet/data';
 
 function parseAirport(str) {
   const m = str.match(/^(.+?)\s*\(([A-Z]{2,4})\)\s*[—-]\s*(.+)$/);
@@ -17,9 +17,84 @@ function parseAirport(str) {
   return null;
 }
 
-const CARIBBEAN_AIRPORTS = caribbeanJetGroups.flatMap(({ island, airports }) =>
-  airports.map(parseAirport).filter(Boolean).map(a => ({ island, ...a }))
+// Selection d'aeroport en 3 niveaux (client 2026-10-05) : region (Caribbean, Bahamas...)
+// puis ses iles / groupes d'iles, puis leurs aeroports. Pour ajouter une region :
+// une ligne de plus dans REGIONS.
+const REGIONS = [
+  { name: 'Caribbean', groups: caribbeanJetGroups },
+  { name: 'Bahamas', groups: bahamasJetGroups },
+].map((r) => ({
+  name: r.name,
+  groups: r.groups
+    .map(({ island, airports }) => ({ island, airports: airports.map(parseAirport).filter(Boolean) }))
+    .filter((g) => g.airports.length),
+}));
+
+const AIRPORT_LABELS = new Map(
+  REGIONS.flatMap((r) => r.groups.flatMap((g) => g.airports.map((a) => [`${a.code}|${g.island}`, `${a.name} (${a.code})`])))
 );
+
+function AirportPicker({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const [region, setRegion] = useState(null);
+  const [group, setGroup] = useState(null);
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+  const openPicker = () => { setRegion(null); setGroup(null); setOpen(true); };
+  const back = () => (group ? setGroup(null) : setRegion(null));
+  const title = group ? group.island : region ? region.name : 'Select airport…';
+  const row = 'w-full flex items-center justify-between gap-3 px-4 py-3 text-left text-sm text-[#C0C0C0] border-b border-[#C0C0C0]/10 hover:bg-[#3a3b3f] hover:text-[#c2622a] transition-colors';
+  return (
+    <>
+      <button type="button" onClick={openPicker}
+        className="w-full flex items-center justify-between gap-2 bg-transparent text-left text-sm focus:outline-none">
+        <span className="truncate text-[#C0C0C0]">{AIRPORT_LABELS.get(value) || 'Select airport…'}</span>
+        <ChevronDown className="w-4 h-4 text-[#acb0cd] shrink-0" />
+      </button>
+      {open && (
+        <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-black/60 p-0 md:p-6" onClick={() => setOpen(false)}>
+          <div role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}
+            className="w-full md:max-w-md max-h-[80vh] flex flex-col rounded-t-2xl md:rounded-2xl border border-[#C0C0C0]/30 bg-[#26272a] shadow-[0_20px_50px_-10px_rgba(0,0,0,0.9)]">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-[#C0C0C0]/20">
+              {region && (
+                <button type="button" onClick={back} aria-label="Back" className="text-[#acb0cd] hover:text-[#c2622a]">
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+              )}
+              <p className="flex-1 text-[13px] font-bold uppercase tracking-[0.2em] text-[#acb0cd] truncate">{title}</p>
+              <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="text-[#acb0cd] hover:text-[#c2622a]">
+                <XIcon className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto">
+              {!region && REGIONS.map((r) => (
+                <button key={r.name} type="button" onClick={() => setRegion(r)} className={row}>
+                  <span>{r.name}</span><ChevronRight className="w-4 h-4 shrink-0" />
+                </button>
+              ))}
+              {region && !group && region.groups.map((g) => (
+                <button key={g.island} type="button" onClick={() => setGroup(g)} className={row}>
+                  <span>{g.island}</span><ChevronRight className="w-4 h-4 shrink-0" />
+                </button>
+              ))}
+              {group && group.airports.map((a, idx) => (
+                <button key={`${a.code}-${idx}`} type="button"
+                  onClick={() => { onChange(`${a.code}|${group.island}`); setOpen(false); }}
+                  className={row}>
+                  <span>{a.name} ({a.code})<span className="block text-xs text-[#acb0cd]/70">{a.size}</span></span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 
 const AIRCRAFT_TYPES = [
   'Any',
@@ -96,15 +171,7 @@ export default function JetBookingWidget() {
                     placeholder="City or airport"
                     className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none placeholder-[#6a6b6e]" />
                 ) : (
-                  <select value={leg.from} onChange={e => updateLeg(i, 'from', e.target.value)}
-                    className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none">
-                    <option value="" className="bg-[#2e2f32]">Select airport…</option>
-                    {CARIBBEAN_AIRPORTS.map((a, idx) => (
-                      <option key={`${a.island}-${a.code}-${idx}`} value={`${a.code}|${a.island}`} className="bg-[#2e2f32]">
-                        {a.island} — {a.name} ({a.code})
-                      </option>
-                    ))}
-                  </select>
+                  <AirportPicker value={leg.from} onChange={v => updateLeg(i, 'from', v)} />
                 )}
               </div>
 
@@ -112,15 +179,7 @@ export default function JetBookingWidget() {
               <div className="px-4 py-3 bg-[#26272a] border-r border-[#C0C0C0]/20 md:flex-1 md:min-w-[160px]">
                 <p className="text-[13px] font-bold uppercase tracking-[0.25em] text-[#acb0cd] mb-1">To</p>
                 {i === 0 ? (
-                  <select value={leg.to} onChange={e => updateLeg(i, 'to', e.target.value)}
-                    className="w-full bg-transparent text-[#C0C0C0] text-sm focus:outline-none">
-                    <option value="" className="bg-[#2e2f32]">Select airport…</option>
-                    {CARIBBEAN_AIRPORTS.map((a, idx) => (
-                      <option key={`${a.island}-${a.code}-${idx}`} value={`${a.code}|${a.island}`} className="bg-[#2e2f32]">
-                        {a.island} — {a.name} ({a.code})
-                      </option>
-                    ))}
-                  </select>
+                  <AirportPicker value={leg.to} onChange={v => updateLeg(i, 'to', v)} />
                 ) : (
                   <input value={leg.to} onChange={e => updateLeg(i, 'to', e.target.value)}
                     placeholder="City or airport"
