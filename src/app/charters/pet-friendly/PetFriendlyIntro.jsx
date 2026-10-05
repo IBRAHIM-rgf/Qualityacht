@@ -29,6 +29,10 @@ export default function PetFriendlyIntro({
   kicker = 'Qualityacht',
   title = 'Pet-Friendly Charter',
   subtitle = 'Your Companion, Welcome Aboard',
+  // Photo du hero (2:3, montree entiere). Defaut = photo d'origine ; page Bahamas :
+  // photo du client 2026-10-05.
+  heroImage = `${P}/hero-beach-dogs.webp`,
+  heroAlt = 'Young man standing in the sea at dusk with two white dogs',
 }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
@@ -38,8 +42,8 @@ export default function PetFriendlyIntro({
       <section className="md:hidden relative w-full pt-[70px] bg-[#26272a]">
         <div className="relative w-full aspect-[2/3]">
           <Image
-            src={`${P}/hero-beach-dogs.webp`}
-            alt="Young man standing in the sea at dusk with two white dogs"
+            src={heroImage}
+            alt={heroAlt}
             fill
             priority
             sizes="100vw"
@@ -74,8 +78,8 @@ export default function PetFriendlyIntro({
         </div>
         <div className="relative h-full aspect-[2/3] shrink-0">
           <Image
-            src={`${P}/hero-beach-dogs.webp`}
-            alt="Young man standing in the sea at dusk with two white dogs"
+            src={heroImage}
+            alt={heroAlt}
             fill
             priority
             sizes="(min-width: 768px) 60vh, 100vw"
