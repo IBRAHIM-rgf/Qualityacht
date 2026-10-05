@@ -33,6 +33,9 @@ export default function PetFriendlyIntro({
   // photo du client 2026-10-05.
   heroImage = `${P}/hero-beach-dogs.webp`,
   heroAlt = 'Young man standing in the sea at dusk with two white dogs',
+  // Photo seule sous le hero (client 2026-10-05 : l'ancienne photo du hero, gardee
+  // sur la page Bahamas). { src, alt } ; defaut null = rien.
+  afterHeroImage = null,
 }) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
@@ -87,6 +90,14 @@ export default function PetFriendlyIntro({
           />
         </div>
       </section>
+
+      {afterHeroImage && (
+        <section className="px-5 md:px-14 lg:px-20 pt-16 md:pt-24">
+          <div className="relative w-full max-w-md mx-auto aspect-[2/3] rounded-2xl overflow-hidden border border-[#C0C0C0]/20 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)]">
+            <Image src={afterHeroImage.src} alt={afterHeroImage.alt} fill sizes="(min-width: 768px) 28rem, 100vw" className="object-contain bg-[#2e2f32]" />
+          </div>
+        </section>
+      )}
 
       {/* ══ SECTION 2 — image 2 a gauche, texte a droite ══ */}
       <section className="px-5 md:px-14 lg:px-20 py-16 md:py-24">
