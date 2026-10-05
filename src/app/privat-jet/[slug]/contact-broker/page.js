@@ -37,6 +37,9 @@ export default function ContactBrokerPage() {
 
   const handleSubmit = (e) => {
     e?.preventDefault?.();
+    // Pas d'envoi tant que « Accept Privacy Policy » et « I'm not a robot » ne sont pas
+    // coches (client 2026-10-05).
+    if (!contact.acceptPolicy || !contact.notRobot) return;
     setSent(true);
     // Remonte tout en haut pour voir le titre + message de confirmation
     requestAnimationFrame(() => {
@@ -265,8 +268,8 @@ export default function ContactBrokerPage() {
                 <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" /> Go Back
               </Link>
 
-              <button type="submit"
-                className="border-2 border-[#C0C0C0] rounded-xl text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm">
+              <button type="submit" disabled={!contact.acceptPolicy || !contact.notRobot}
+                className="border-2 border-[#C0C0C0] rounded-xl text-[#B03E00] text-sm uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#B03E00]/10 shadow-[0_4px_15px_rgba(192,192,192,0.3)] hover:shadow-[0_6px_20px_rgba(192,192,192,0.4)] px-6 py-2.5 md:px-12 md:py-4 text-xs md:text-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent">
                 Confirm
               </button>
             </div>
