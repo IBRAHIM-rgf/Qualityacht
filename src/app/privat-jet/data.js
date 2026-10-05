@@ -37,6 +37,19 @@ export const caribbeanJetGroups = [
   { island: 'Sombrero Island', airports: ['No airport'] },
 ];
 
+// Aeroports Bahamas par groupe d'iles (fichier client « privat jet bahamas.pdf », 2026-10-05).
+// Type de jet : d'apres le tableau Large / Medium / Light du client.
+export const bahamasJetGroups = [
+  { island: 'Nassau & Paradise Island', airports: ['Lynden Pindling International Airport (NAS) — all jets'] },
+  { island: 'Grand Bahama', airports: ['Grand Bahama International Airport (FPO) — all jets'] },
+  { island: 'The Exumas', airports: ['Exuma International Airport (GGT) — all jets', 'Staniel Cay Airport (TYM) — light jets'] },
+  { island: 'The Abacos', airports: ['Treasure Cay Airport (TCB) — all jets', 'Leonard M. Thompson International Airport (MHH) — medium & light jets'] },
+  { island: 'Eleuthera & Harbour Island', airports: ["Governor's Harbour Airport (GHB) — all jets", 'Rock Sound Airport (RSD) — medium & light jets', 'North Eleuthera Airport (ELH) — medium & light jets'] },
+  { island: 'Andros', airports: ['San Andros Airport (SAQ) — light jets', 'Congo Town Airport (TZN) — light jets', 'Andros Town Airport (ASD) — light jets'] },
+  { island: 'Bimini & Berry Islands', airports: ['South Bimini Airport (BIM) — medium & light jets', 'Chub Cay Airport (CCZ) — medium & light jets', 'Great Harbour Cay Airport (GHC) — light jets'] },
+  { island: 'Îles du Sud / Out Islands', airports: ['San Salvador International Airport (ZSA) — all jets', 'Inagua Airport (IGA) — medium & light jets', 'Stella Maris Airport (SML) — light jets', "Deadman's Cay Airport (LGI) — light jets", 'New Bight Airport (TBI) — light jets', 'Mayaguana Airport (MYG) — light jets'] },
+];
+
 const comingSoon = [{ island: 'Coming Soon', airports: ['Information coming soon'] }];
 
 // Ordre identique à /charters/destinations
