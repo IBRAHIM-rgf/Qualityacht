@@ -18,6 +18,8 @@ export default function PetFriendlyBahamasPage() {
         // Hero du client (2026-10-05).
         heroImage="/media/client/pet-friendly/2026-10-05/hero-sleeping-cat.webp"
         heroAlt="White and tabby cat sleeping on a cushion"
+        // Ancienne photo du hero, remise juste sous le hero (client 2026-10-05).
+        afterHeroImage={{ src: '/media/client/pet-friendly/2026-10-01/hero-beach-dogs.webp', alt: 'Young man standing in the sea at dusk with two white dogs' }}
       />
     </main>
   );
