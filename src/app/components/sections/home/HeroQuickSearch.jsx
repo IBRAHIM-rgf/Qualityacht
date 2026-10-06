@@ -17,6 +17,8 @@ import { MapPin, Users, Ship, ArrowRight, ChevronDown } from 'lucide-react';
 const DESTINATIONS = [
   { value: '', label: 'All destinations' },
   { value: 'caribbean', label: 'Caribbean' },
+  // Bahamas (client 2026-10-06).
+  { value: 'bahamas', label: 'Bahamas' },
 ];
 
 const GUESTS = [
