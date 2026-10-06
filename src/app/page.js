@@ -9,7 +9,10 @@ import Luxuryandcontactsection from "./components/sections/home/luxuryandcontact
 
 export default function Home() {
   return (
-    <div className="w-screen text-[#acb0cd] bg-[#303135] overflow-x-hidden">
+    // overflow-x-clip (et non -hidden) : -hidden faisait de cette div une zone qui
+    // defile verticalement ; en bas de page, la molette la faisait defiler et
+    // decouvrait une bande grise (#303135) au-dessus du footer (client 2026-10-06).
+    <div className="w-screen text-[#acb0cd] bg-[#303135] overflow-x-clip">
       {/* HeroBaner */}
       <HeroBaner />
       <WorldClassExperience />
