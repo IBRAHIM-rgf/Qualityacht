@@ -13,6 +13,8 @@ export default function HistoricSitesPage() {
       heroImage="/images/monument historic/jivan-garcha-Lul2or0sxNk-unsplash (1) (1).jpg"
       intro="Forts, plantation houses, sunken cities and Georgian towns — landmarks of historic consequence, with exclusive private access and after-hours experiences arranged at each."
       caribbeanHref="/historic-sites/caribbean"
+      // Case Bahamas (client 2026-10-09) : sites historiques des Bahamas.
+      links={{ Bahamas: '/historic-sites/bahamas' }}
       animated
       heroGradientSoft
     />
