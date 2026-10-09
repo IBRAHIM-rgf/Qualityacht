@@ -10,7 +10,8 @@ export const metadata = {
   title: 'Bahamas Sailing Regattas — 2026 | Qualityacht',
 };
 
-const HERO = '/media/client/lydie/2026-09-27/bahamas-hero/poster.jpg';
+// Hero fourni par le client (2026-10-09) : voilier au coucher du soleil.
+const HERO = '/media/client/2026-10-09/hero-regatta-bahamas.jpg';
 
 export default async function RegattaBahamasPage({ params }) {
   const { type } = await params;
