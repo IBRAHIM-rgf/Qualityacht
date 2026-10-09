@@ -173,6 +173,33 @@ export default function RentalTypePage({ params }) {
             </div>
           </article>
 
+          {/* Regates : case Bahamas (client 2026-10-09) -> calendrier des regates Bahamas. */}
+          {type === 'regatta' && (
+            <article className="mt-8 rounded-2xl border border-[#C0C0C0]/25 bg-[#2e2f32] overflow-hidden">
+              <div className="relative aspect-[16/9] md:aspect-[21/9]">
+                <Image
+                  src="/media/client/lydie/2026-09-27/bahamas-hero/poster.jpg"
+                  alt="The Bahamas"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 900px"
+                  className="object-cover"
+                />
+                <div
+                  aria-hidden
+                  className="absolute inset-0 bg-gradient-to-t from-[#26272a]/95 via-[#26272a]/35 to-transparent"
+                />
+                <h3 className="absolute inset-x-0 bottom-0 p-6 trajan-regular text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                  The Bahamas
+                </h3>
+              </div>
+              <div className="p-6 md:p-8 text-center">
+                <Link href={`/only-for-you/${type}/bahamas`} className={CTA_CUIVRE}>
+                  {`Explore ${boat.name} in the Bahamas`}
+                </Link>
+              </div>
+            </article>
+          )}
+
           {/* Autres destinations : aucune fausse disponibilite affichee. */}
           <div className="mt-8 rounded-2xl border border-[#C0C0C0]/25 bg-[#2e2f32]/70 p-7 md:p-8 text-center">
             <h3 className="trajan-regular text-lg md:text-xl uppercase tracking-[0.08em] text-[#C0C0C0]">
