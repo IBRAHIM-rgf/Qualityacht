@@ -22,6 +22,8 @@ const CATEGORY_LABEL = {
   'all jets': 'All jets',
   'medium/large jets': 'Medium & large jets',
   'medium jets': 'Medium jets',
+  // Bahamas (client 2026-10-05) : aeroports acceptant medium et light jets.
+  'medium & light jets': 'Medium & light jets',
   'light jets': 'Light jets',
   'stol aircraft only': 'STOL aircraft only',
 };
@@ -39,6 +41,7 @@ function categoryRank(label) {
   if (l.includes('all jets')) return 1;
   if (l.includes('medium & large') || l.includes('medium/large')) return 2;
   if (l.includes('medium jets')) return 3;
+  if (l.includes('medium & light')) return 3.5;
   if (l.includes('light jets')) return 4;
   if (l.includes('stol')) return 5;
   return 99;
