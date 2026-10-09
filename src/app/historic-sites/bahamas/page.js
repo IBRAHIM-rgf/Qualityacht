@@ -1,16 +1,20 @@
-// /historic-sites/bahamas — sites historiques des Bahamas (client 2026-10-09), ouverte par
-// la case Bahamas de /historic-sites. Meme presentation que les monuments Caraibes
-// (/historic-sites/caribbean/monuments) : tuiles photo, vue agrandie au clic avec la
-// description, la periode historique et l'experience VIP.
+// /historic-sites/bahamas — hub Bahamas (client 2026-10-09), meme presentation que
+// /historic-sites/caribbean : en-tete puis 3 tuiles (Historic Monuments, Hiking, Cycling).
+// Monuments ouvre /historic-sites/bahamas/monuments ; Hiking et Cycling : « Coming Soon »
+// en attendant les listes du client.
 import Image from 'next/image';
-import Link from 'next/link';
-import ExperienceColumns from '../caribbean-v2/ExperienceColumns';
-import { BAHAMAS_HERITAGE } from './data';
+import HistoricHub from '../caribbean/HistoricHub';
 
 export const metadata = {
-  title: 'Bahamas — Heritage Sites | Qualityacht',
-  description: 'Curated cultural and historic excursions across The Bahamas, for private yacht clients.',
+  title: 'Bahamas by Land — Monuments, Hiking & Cycling | Qualityacht',
+  description: 'Heritage sites, hiking and cycling across The Bahamas, for private yacht clients.',
 };
+
+const panels = [
+  { key: 'monuments', title: 'Historic Monuments', img: '/media/client/lydie/2026-09-28/bahamas-cards/card-1-color.jpg' },
+  { key: 'hiking', title: 'Hiking', img: '/media/client/lydie/2026-09-27/bahamas-flowers/andros-color.jpg', soon: true },
+  { key: 'cycling', title: 'Cycling', img: '/media/client/lydie/2026-09-28/bahamas-cards/card-5-color.jpg', soon: true },
+];
 
 export default function HistoricSitesBahamasPage() {
   return (
@@ -21,28 +25,18 @@ export default function HistoricSitesBahamasPage() {
             Bahamas · Private Client Guide
           </p>
           <h1 className="trajan-regular text-3xl md:text-5xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight">
-            Bahamas — Heritage Sites
+            The Bahamas by Land
           </h1>
           <div className="relative w-32 md:w-40 h-6 mt-4">
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
           <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em]">
-            {BAHAMAS_HERITAGE.subtitle}
+            Monuments · Hiking · Cycling
           </p>
         </div>
       </div>
 
-      <ExperienceColumns columns={[BAHAMAS_HERITAGE]} />
-
-      <div className="pb-16 flex justify-center">
-        <Link
-          href="/historic-sites"
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-[#C0C0C0] text-[15px] uppercase tracking-[0.18em] text-[#acb0cd] transition-colors duration-300 hover:border-[#B03E00] hover:text-[#c2622a]"
-        >
-          <span aria-hidden>&larr;</span>
-          Historic Sites
-        </Link>
-      </div>
+      <HistoricHub panels={panels} basePath="/historic-sites/bahamas" />
     </div>
   );
 }
