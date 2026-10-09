@@ -27,6 +27,10 @@ function CloudSection({ children, className = '', bg = '/images/nuagesAncien.png
 const CARIBBEAN_IMAGE =
   destinationItems.find((d) => d.caribbean)?.image || '/images/destinations/animals/caraibes.jpg';
 
+// Photo Bahamas de la meme grille (client 2026-10-09 : comme la case Caraibes).
+const BAHAMAS_IMAGE =
+  destinationItems.find((d) => d.title === 'Bahamas')?.image || '/images/destinations/animals/Bahamas.jpg';
+
 const FOCUS =
   'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
 
@@ -178,7 +182,7 @@ export default function RentalTypePage({ params }) {
             <article className="mt-8 rounded-2xl border border-[#C0C0C0]/25 bg-[#2e2f32] overflow-hidden">
               <div className="relative aspect-[16/9] md:aspect-[21/9]">
                 <Image
-                  src="/media/client/lydie/2026-09-27/bahamas-hero/poster.jpg"
+                  src={BAHAMAS_IMAGE}
                   alt="The Bahamas"
                   fill
                   sizes="(max-width: 768px) 100vw, 900px"
