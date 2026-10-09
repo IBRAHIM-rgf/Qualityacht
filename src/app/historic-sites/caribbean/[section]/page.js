@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ExperienceColumns from '../../caribbean-v2/ExperienceColumns';
 import { columns, SECTION_META } from '../data';
+import MonumentIslands from '../MonumentIslands';
+import { CARIBBEAN_HERITAGE_ISLANDS } from '../heritageIslands';
 
 // Page dediee a UNE section de /historic-sites/caribbean (Monuments, Hiking ou
 // Cycling). Le hub ouvre desormais chaque tuile dans un NOUVEL ONGLET, ce qui
@@ -47,7 +49,7 @@ export default async function HistoricSectionPage({ params }) {
           <div className="relative w-32 md:w-40 h-6 mt-4">
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
           </div>
-          {column.subtitle && (
+          {column.subtitle && section !== 'monuments' && (
             <p className="mt-3 text-[13px] text-[#8b90a0] uppercase tracking-[0.14em]">
               {column.subtitle}
             </p>
@@ -55,7 +57,21 @@ export default async function HistoricSectionPage({ params }) {
         </div>
       </div>
 
-      <ExperienceColumns columns={[column]} />
+      {/* Monuments : choix de l'ile (client 2026-10-09). La Jamaique reste la premiere. */}
+      {section === 'monuments' ? (
+        <MonumentIslands
+          islands={[
+            { key: 'jamaica', name: 'Jamaica', column },
+            ...CARIBBEAN_HERITAGE_ISLANDS.map((i) => ({
+              key: i.key,
+              name: i.name,
+              column: { key: 'monuments', title: column.title, subtitle: i.name, variant: 'monument', items: i.items },
+            })),
+          ]}
+        />
+      ) : (
+        <ExperienceColumns columns={[column]} />
+      )}
 
       <div className="pb-16 flex justify-center">
         <Link
