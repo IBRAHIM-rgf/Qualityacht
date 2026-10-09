@@ -10,17 +10,24 @@
 
 import Image from 'next/image';
 
-export default function HistoricHub({ panels }) {
+// Lien (nouvel onglet) ou, pour une section a venir, simple bloc non cliquable.
+function Tile({ soon, href, className, children }) {
+  if (soon) return <div className={className}>{children}</div>;
+  return <a href={href} target="_blank" rel="noopener noreferrer" className={className}>{children}</a>;
+}
+
+// basePath : adresse de base des sections (defaut Caraibes ; Bahamas, client 2026-10-09).
+// panel.soon : tuile non cliquable « Coming Soon » (section pas encore fournie).
+export default function HistoricHub({ panels, basePath = '/historic-sites/caribbean' }) {
   return (
     <div className="px-4 md:px-10 lg:px-14 py-14 md:py-20">
       <div className="max-w-7xl mx-auto rounded-3xl overflow-hidden border border-[#C0C0C0]/20 bg-[#2e2f32] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)]">
         <div className="flex flex-col md:flex-row h-auto md:h-[60vh] md:min-h-[420px]">
           {panels.map((p, i) => (
-            <a
+            <Tile
               key={p.key}
-              href={`/historic-sites/caribbean/${p.key}`}
-              target="_blank"
-              rel="noopener noreferrer"
+              soon={p.soon}
+              href={`${basePath}/${p.key}`}
               className={`group relative overflow-hidden text-left transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] flex-1 ${
                 i > 0 ? 'border-t md:border-t-0 md:border-l border-[#C0C0C0]/15' : ''
               } h-[220px] md:h-auto`}
@@ -40,12 +47,12 @@ export default function HistoricHub({ panels }) {
                   {p.title}
                 </h2>
                 <span className="mt-4 inline-flex items-center gap-2 px-5 py-2 rounded-full border text-[15px] uppercase tracking-[0.18em] transition-colors duration-300 border-[#C0C0C0] text-[#acb0cd] group-hover:border-[#c2622a] group-hover:text-[#c2622a]">
-                  Discover
+                  {p.soon ? 'Coming Soon' : 'Discover'}
                   {/* Fleche sortante : signale que le lien ouvre un nouvel onglet. */}
-                  <span aria-hidden className="leading-none">&#8599;</span>
+                  {!p.soon && <span aria-hidden className="leading-none">&#8599;</span>}
                 </span>
               </div>
-            </a>
+            </Tile>
           ))}
         </div>
       </div>
