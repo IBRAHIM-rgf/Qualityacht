@@ -93,6 +93,12 @@ const cards = [
     description: "Reef-lined coasts, open water and remote islands across the South Seas.",
     image: "/images/destinations/cards/oceania-card.webp",
   },
+  // Antarctica (client 2026-10-10) : a venir, carte sans lien.
+  {
+    title: "Antarctica",
+    description: "Discover the remarkable wildlife of the icy waters of Antarctica.",
+    image: "/images/destinations/cards/antarctica-card.webp",
+  },
 ];
 
 export const metadata = {
