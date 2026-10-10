@@ -2,6 +2,7 @@
 // sur le modele de la page Bahamas : meme hero video (kicker, titre, trait,
 // sous-titre, 2 boutons). Les sections suivantes (iles, regions, FAQ...) seront
 // ajoutees quand le client aura fourni leur contenu.
+// (Republie 2026-10-10 : le deploiement de la video avait fini apres celui de la page.)
 
 import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
