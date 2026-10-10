@@ -123,11 +123,12 @@ const destinations = [
     image: "/images/destinations/cards/oceania-card.webp",
     href: "/charters/destinations/oceania",
   },
-  // Antarctica (client 2026-10-10) : a venir, carte sans lien.
+  // Antarctica (client 2026-10-10) : ouvre la page destination Antarctica.
   {
     title: "Antarctica",
     description: "Discover the remarkable wildlife of the icy waters of Antarctica.",
     image: "/images/destinations/cards/antarctica-card.webp",
+    href: "/charters/destinations/antarctica",
   },
 ];
 
