@@ -35,6 +35,7 @@ export const WORLD_DESTINATIONS = [
   { title: 'Oman Gulf',             label: 'Oman Gulf',             coords: [23.6, 58.5],    anchor: 'Muscat',              ready: false },
   { title: 'Indian Ocean',          label: 'Indian Ocean',          coords: [3.2, 73.2],     anchor: 'Maldives',            ready: false },
   { title: 'Africa',                label: 'Africa',                coords: [-6.2, 39.3],    anchor: 'Zanzibar',            ready: false },
+  { title: 'Antarctica',            label: 'Antarctica',            coords: [-64.8, -62.9],  anchor: 'Antarctic Peninsula', ready: false },
 ];
 
 // ── CARAIBES ─────────────────────────────────────────────────────────────────────
