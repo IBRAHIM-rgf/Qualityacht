@@ -34,6 +34,9 @@ const FLEET_CTA =
   'focus:outline-none focus-visible:outline focus-visible:outline-2 ' +
   'focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]';
 
+// Libelle au singulier quand le compte vaut 1 (« 1 destination », « 1 venue »).
+const SINGULAR = { destinations: 'destination', venues: 'venue' };
+
 const VIP_TONE = {
   'Very High': 'text-[#bd9973] border-[#bd9973]/40',
   High: 'text-[#B87333] border-[#B87333]/40',
@@ -153,7 +156,7 @@ function SubRegion({ region, section, artGroups, cultureRows, fleetBySub, flat }
               {region.name}
             </h2>
             <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-[#B87333]">
-              {empty ? 'Nothing listed yet' : `${count} ${label}`}
+              {empty ? 'Nothing listed yet' : `${count} ${count === 1 ? (SINGULAR[label] || label) : label}`}
             </p>
           </div>
 
