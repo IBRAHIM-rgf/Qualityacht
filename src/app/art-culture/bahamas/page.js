@@ -10,7 +10,7 @@ export const metadata = {
 
 // /art-culture/bahamas (client 2026-10-10), calquee sur /art-culture/caribbean : hero,
 // puis les 2 cards ART / CULTURE avec les textes fournis par le client. ART ouvre les
-// lieux par groupe d'iles ; CULTURE est « Coming Soon » (pas encore de contenu).
+// lieux par groupe d'iles ; CULTURE ouvre le calendrier culturel (une bande The Bahamas).
 const HERO_IMAGE = '/media/client/lydie/2026-09-27/bahamas-hero/poster.jpg';
 
 const panels = [
@@ -34,7 +34,7 @@ const panels = [
     title: SECTIONS.culture.title,
     eyebrow: SECTIONS.culture.eyebrow,
     img: SECTIONS.culture.img,
-    soon: true,
+    href: '/art-culture/bahamas/culture',
     text: 'Bahamian culture unfolds through a graceful blend of island heritage, creative expression, and effortless warmth. From Nassau’s storied streets to the quiet cays of the Out Islands, each experience reveals a distinct sense of place—refined, welcoming, and deeply rooted in the sea.',
     bullets: [
       'Privileged access to historic estates, museums, and cultural landmarks',

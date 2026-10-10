@@ -1,7 +1,8 @@
 // Donnees de /art-culture/bahamas (client 2026-10-10), calquees sur /art-culture/caribbean.
 //  - SUBREGIONS : les 8 groupes d'iles des Bahamas (memes noms/photos que les 8 cases Bahamas).
 //  - ART : lieux fournis par le client (« bahamas_art_venues.html »), textes repris tels quels.
-//  - CULTURE : pas encore de calendrier fourni (la card Culture est « Coming Soon »).
+//  - CULTURE : calendrier fourni par le client (« Culture · The Bahamas · Destinations »,
+//              2026-10-10) : une seule bande « The Bahamas » avec ses 8 destinations.
 // AUCUN emoji.
 
 import { GROUPS, CARDS, groupSlug } from '../../charters/destinations/bahamas/bahamasGroups';
@@ -269,7 +270,29 @@ const ART_RAW = [
 
 export const ART = ART_RAW.map(({ index, ...a }) => ({ ...a, sub: SUBREGIONS[index].slug }));
 
-export const CULTURE = [];
+// Culture : une seule bande « The Bahamas » (comme une sous-region de Culture Caraibes).
+export const CULTURE_REGION = {
+  slug: 'bahamas',
+  name: 'The Bahamas',
+  img: '/media/client/lydie/2026-09-27/bahamas-hero/poster.jpg',
+};
+FLEET_BY_SUBREGION.bahamas = '/charters/destinations/bahamas';
+
+// [nom, niveau VIP, periode culturelle, saison, mois de charter, note] — textes du client.
+const CULTURE_RAW = [
+  ['Nassau & Paradise Island', 'High', 'Junkanoo parades, galleries and heritage museums', 'DEC-APR', 'DEC-APR', 'Rich culture within easy reach of the harbour'],
+  ['Grand Bahama', 'Medium', 'Maritime museum, Lucayan heritage and island gardens', 'DEC-APR', 'DEC-APR', 'Relaxed cultural stopover with nature'],
+  ['The Exumas', 'Very High', 'Family Island Regatta, Loyalist heritage and straw craft', 'APR', 'MAR-MAY', 'Iconic cruising ground, strong sense of place'],
+  ['The Abacos', 'High', 'Loyalist villages, boatbuilding heritage and island roots festivals', 'DEC-APR', 'NOV-MAY', 'Charming, walkable settlements by sea'],
+  ['Eleuthera & Harbour Island', 'High', 'Pink sand, Dunmore Town galleries and island food festivals', 'DEC-JUN', 'DEC-MAY', 'Elegant, artistic and unhurried'],
+  ['Andros', 'Medium', 'Androsia batik, Red Bays heritage and wild blue holes', 'NOV-APR', 'NOV-APR', 'Remote, authentic and expedition-style'],
+  ['Bimini & Berry Islands', 'High', 'Hemingway heritage, mosaic art and short Atlantic crossings', 'DEC-APR', 'DEC-APR', 'Intimate, close to Florida, small-scale'],
+  ['Southern Bahamas / Out Islands', 'Medium', 'Father Jerome’s churches, quiet villages and old traditions', 'DEC-APR', 'MAR-MAY', 'For curious travellers, limited infrastructure'],
+];
+
+export const CULTURE = CULTURE_RAW.map(([name, vip, period, season, months, note]) => ({
+  name, sub: 'bahamas', vip, period, season, months, note,
+}));
 
 export const SECTIONS = {
   art: {
