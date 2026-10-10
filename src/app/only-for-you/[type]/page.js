@@ -96,11 +96,6 @@ export default function RentalTypePage({ params }) {
               <p className="text-[#acb0cd]/80 text-xs md:text-sm uppercase tracking-[0.2em] font-light mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">
                 {boat.tagline}
               </p>
-              {/* Le hero n'avait aucun CTA : il fallait faire defiler pres de
-                  1 900 px avant de trouver la premiere action. */}
-              <Link href={`/only-for-you/${type}/carribbean`} className={`${CTA_CUIVRE} mt-6`}>
-                Explore in the Caribbean
-              </Link>
             </div>
           </div>
         </div>
@@ -169,11 +164,6 @@ export default function RentalTypePage({ params }) {
               <h3 className="absolute inset-x-0 bottom-0 p-6 trajan-regular text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                 The Caribbean
               </h3>
-            </div>
-            <div className="p-6 md:p-8 text-center">
-              <Link href={`/only-for-you/${type}/carribbean`} className={CTA_CUIVRE}>
-                {`Explore ${boat.name} in the Caribbean`}
-              </Link>
             </div>
           </article>
 
