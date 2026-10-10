@@ -74,6 +74,7 @@ export const destinations = [
   { slug: 'northern-europe',        name: 'Northern Europe',         image: '/images/private_jet/private_northern-europe.jpeg',        heroImage: '/images/private_jet/hero/hero_northern-europe-v2.jpg',       groups: comingSoon },
   { slug: 'caribbean',              name: 'Caribbean',               image: '/images/private_jet/private_caribbean.jpg',                heroImage: '/images/private_jet/hero/hero_caribbean.jpg',             groups: caribbeanJetGroups, heroObjectPosition: '50% 60%' },
   { slug: 'oceania',                name: 'Oceania',                 image: '/images/private_jet/private_oceania.jpeg',                heroImage: '/images/private_jet/hero/hero_oceania-v2.jpg',               groups: comingSoon },
+  { slug: 'antarctica',             name: 'Antarctica',              image: '/images/private_jet/private_antarctica.jpg',              heroImage: '/images/private_jet/private_antarctica.jpg',             groups: comingSoon },
 ];
 
 export function getDestinationBySlug(slug) {
