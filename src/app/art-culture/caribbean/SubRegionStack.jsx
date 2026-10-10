@@ -41,15 +41,17 @@ const VIP_TONE = {
   Low: 'text-[#acb0cd]/60 border-[#C0C0C0]/15',
 };
 
-function ArtVenues({ groups }) {
+function ArtVenues({ groups, flat = false }) {
   return (
     <div className="space-y-8">
       {groups.map((g) => (
         <div key={g.island}>
+          {!flat && (
           <div className="flex items-center gap-3 mb-4">
             <h3 className="trajan-regular text-base md:text-lg text-[#C0C0C0] whitespace-nowrap">{g.island}</h3>
             <div className="flex-1 h-px bg-[#B87333]/25" />
           </div>
+          )}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
             {g.venues.map((v) => (
               <article
@@ -114,13 +116,16 @@ function CultureRows({ rows }) {
   );
 }
 
-function SubRegion({ region, section, artGroups, cultureRows }) {
+function SubRegion({ region, section, artGroups, cultureRows, fleetBySub, flat }) {
   const [open, setOpen] = useState(false);
-  const count = section === 'art' ? artGroups.length : cultureRows.length;
-  const label = section === 'art' ? 'islands with venues' : 'destinations';
+  // flat (Bahamas) : un seul bloc par region -> on compte les lieux, sans titre d'ile.
+  const count = section === 'art'
+    ? (flat ? artGroups.reduce((n, g) => n + g.venues.length, 0) : artGroups.length)
+    : cultureRows.length;
+  const label = section === 'art' ? (flat ? 'venues' : 'islands with venues') : 'destinations';
   const empty = count === 0;
   // Pas de CTA sur une sous-region vide, ni sur un slug hors mapping.
-  const fleetHref = empty ? null : FLEET_BY_SUBREGION[region.slug];
+  const fleetHref = empty ? null : fleetBySub[region.slug];
 
   return (
     <section id={region.slug}>
@@ -174,7 +179,7 @@ function SubRegion({ region, section, artGroups, cultureRows }) {
       >
         <div className="overflow-hidden">
           <div className="p-6 md:p-8 border-t border-[#C0C0C0]/10">
-            {section === 'art' ? <ArtVenues groups={artGroups} /> : <CultureRows rows={cultureRows} />}
+            {section === 'art' ? <ArtVenues groups={artGroups} flat={flat} /> : <CultureRows rows={cultureRows} />}
 
             {open && fleetHref && (
               <div className="mt-8 flex justify-center">
@@ -190,7 +195,9 @@ function SubRegion({ region, section, artGroups, cultureRows }) {
   );
 }
 
-export default function SubRegionStack({ regions, section, artBySub, cultureBySub }) {
+// fleetBySub / flat : utilises par /art-culture/bahamas (client 2026-10-10) ; les
+// Caraibes gardent leurs valeurs par defaut, rendu inchange.
+export default function SubRegionStack({ regions, section, artBySub, cultureBySub, fleetBySub = FLEET_BY_SUBREGION, flat = false }) {
   return (
     <div className="mx-auto w-full max-w-3xl">
       {regions.map((r) => (
@@ -200,6 +207,8 @@ export default function SubRegionStack({ regions, section, artBySub, cultureBySu
           section={section}
           artGroups={artBySub[r.slug] || []}
           cultureRows={cultureBySub[r.slug] || []}
+          fleetBySub={fleetBySub}
+          flat={flat}
         />
       ))}
     </div>

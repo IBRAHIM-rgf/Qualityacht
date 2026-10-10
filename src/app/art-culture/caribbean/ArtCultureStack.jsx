@@ -25,6 +25,11 @@ function Bullet({ children }) {
   );
 }
 
+function Row({ soon, href, children }) {
+  if (soon) return <div className="group block">{children}</div>;
+  return <Link href={href} className="group block">{children}</Link>;
+}
+
 export default function ArtCultureStack({ cards }) {
   return (
     <div className="relative">
@@ -45,7 +50,8 @@ export default function ArtCultureStack({ cards }) {
           // 2e ligne (CULTURE) inversee : la card texte passe a gauche, la photo a droite.
           const reversed = i % 2 === 1;
           return (
-            <Link key={c.key} href={c.href} className="group block">
+            // c.soon (Bahamas Culture, client 2026-10-10) : ligne non cliquable « Coming Soon ».
+            <Row key={c.key} soon={c.soon} href={c.href}>
               <div className="grid md:grid-cols-2 gap-6 md:gap-10 md:items-start">
                 {/* CARD PHOTO (separee) + nom EN GRAND */}
                 <div
@@ -90,14 +96,16 @@ export default function ArtCultureStack({ cards }) {
                     </ul>
                   )}
                   <span className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-[#C0C0C0] text-[11px] uppercase tracking-[0.18em] text-[#acb0cd] transition-colors duration-300 group-hover:border-[#B03E00] group-hover:text-[#c2622a]">
-                    Discover
-                    <span aria-hidden className="text-[13px] leading-none">
-                      &rarr;
-                    </span>
+                    {c.soon ? 'Coming Soon' : 'Discover'}
+                    {!c.soon && (
+                      <span aria-hidden className="text-[13px] leading-none">
+                        &rarr;
+                      </span>
+                    )}
                   </span>
                 </div>
               </div>
-            </Link>
+            </Row>
           );
         })}
       </div>
