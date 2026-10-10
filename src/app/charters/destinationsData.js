@@ -17,4 +17,6 @@ export const destinations = [
   { title: "Northern Europe",       description: "Meet these animals in the icy waters of Northern Europe.",                  image: "/images/destinations/animals/articbynortherneurope.jpg",   href: "/charters/destinations/arctic-northern-europe" },
   { title: "Caraïbes",              description: "Discover more species in the Caribbean regions.",                          image: "/images/destinations/animals/caraibes.jpg",                href: "/charters/carribbean" },
   { title: "Oceania",               description: "Explore the unique marine wildlife of Oceania.",                           image: "/images/destinations/animals/oceania.jpeg",                href: "/charters/destinations/oceania" },
+  // Antarctica (client 2026-10-10) : a venir, sans lien pour l'instant.
+  { title: "Antarctica",            description: "Discover the remarkable wildlife of the icy waters of Antarctica.",       image: "/images/destinations/animals/Antarctica.jpg" },
 ];
