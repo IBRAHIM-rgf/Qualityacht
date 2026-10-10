@@ -11,7 +11,8 @@ export const metadata = {
 // /art-culture/bahamas (client 2026-10-10), calquee sur /art-culture/caribbean : hero,
 // puis les 2 cards ART / CULTURE avec les textes fournis par le client. ART ouvre les
 // lieux par groupe d'iles ; CULTURE ouvre le calendrier culturel (une bande The Bahamas).
-const HERO_IMAGE = '/media/client/lydie/2026-09-27/bahamas-hero/poster.jpg';
+// Hero fourni par le client (2026-10-10) : tour « Welcome to Ocean Cay ».
+const HERO_IMAGE = '/media/client/2026-10-10/art-culture-bahamas/hero-ocean-cay.jpg';
 
 const panels = [
   {
@@ -50,17 +51,19 @@ const panels = [
 export default function BahamasArtCulturePage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
-      {/* HERO : photo montree en entier (meme parti que la page Caraibes). */}
+      {/* HERO : photo verticale (900x1200) -> cadre de hauteur fixe, photo cadree
+          a l'affichage (object-cover), fichier non recadre. */}
       <section className="relative pt-[70px] md:pt-0">
-        <Image
-          src={HERO_IMAGE}
-          alt="Art & Culture — Bahamas"
-          width={1440}
-          height={900}
-          priority
-          sizes="100vw"
-          className="block w-full h-auto saturate-[1.4] contrast-[1.1] brightness-[1.03]"
-        />
+        <div className="relative w-full h-[75vh] md:h-[85vh]">
+          <Image
+            src={HERO_IMAGE}
+            alt="Art & Culture — Bahamas"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[50%_25%]"
+          />
+        </div>
         <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#26272a]/90 via-[#26272a]/40 to-transparent" />
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-6 md:pb-10">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">

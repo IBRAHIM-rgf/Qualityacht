@@ -292,11 +292,12 @@ export const SECTIONS = {
   art: {
     title: 'Art',
     eyebrow: 'Bahamas · Galleries, Artists & Island Expression',
-    img: `${CARDS}/card-1-color.jpg`,
+    // Photos des cards fournies par le client (2026-10-10).
+    img: '/media/client/2026-10-10/art-culture-bahamas/art-carnival-float.jpg',
   },
   culture: {
     title: 'Culture',
     eyebrow: 'Bahamas · Heritage, Festivals & Island Rhythms',
-    img: `${CARDS}/card-3-color.jpg`,
+    img: '/media/client/2026-10-10/art-culture-bahamas/culture-macaw-portrait.jpg',
   },
 };
