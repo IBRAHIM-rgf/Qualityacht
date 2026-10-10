@@ -2,11 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import SubRegionStack from '../../caribbean/SubRegionStack';
-import { ART, CULTURE, SECTIONS, SUBREGIONS, CULTURE_REGION, FLEET_BY_SUBREGION } from '../data';
+import { ART, CULTURE, SECTIONS, SUBREGIONS, FLEET_BY_SUBREGION } from '../data';
 
 // /art-culture/bahamas/art (client 2026-10-10), calquee sur /art-culture/caribbean/art :
-// les 8 groupes d'iles empiles, un clic deplie les lieux. /culture : une seule bande
-// « The Bahamas » qui deplie les 8 destinations (fichier client 2026-10-10).
+// les 8 groupes d'iles empiles, un clic deplie les lieux. /culture : les memes 8 bandes,
+// chacune deplie sa carte culturelle (comme /art-culture/caribbean/culture).
 
 export function generateStaticParams() {
   return Object.keys(SECTIONS).map((section) => ({ section }));
@@ -52,7 +52,7 @@ export default async function BahamasArtCultureSectionPage({ params }) {
 
       <div className="py-10 md:py-14">
         <SubRegionStack
-          regions={section === 'art' ? SUBREGIONS : [CULTURE_REGION]}
+          regions={SUBREGIONS}
           section={section}
           artBySub={groupBySub(ART)}
           cultureBySub={groupBySub(CULTURE)}
