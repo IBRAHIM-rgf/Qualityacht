@@ -52,6 +52,7 @@ const regions = [
   { name: 'Africa',                 image: '/images/destinations/animals/africa.jpeg',                 groups: soon },
   { name: 'Northern Europe',        image: '/images/destinations/animals/articbynortherneurope.jpg',   groups: soon },
   { name: 'Oceania',                image: '/images/destinations/animals/oceania.jpeg',                groups: soon },
+  { name: 'Antarctica',             image: '/images/destinations/animals/Antarctica.jpg',              groups: soon },
 ];
 
 // ── Card ───────────────────────────────────────────────────────────────────────
