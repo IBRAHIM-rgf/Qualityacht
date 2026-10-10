@@ -2,7 +2,7 @@
 //  - SUBREGIONS : les 8 groupes d'iles des Bahamas (memes noms/photos que les 8 cases Bahamas).
 //  - ART : lieux fournis par le client (« bahamas_art_venues.html »), textes repris tels quels.
 //  - CULTURE : calendrier fourni par le client (« Culture · The Bahamas · Destinations »,
-//              2026-10-10) : une seule bande « The Bahamas » avec ses 8 destinations.
+//              2026-10-10) : une carte par groupe d'iles.
 // AUCUN emoji.
 
 import { GROUPS, CARDS, groupSlug } from '../../charters/destinations/bahamas/bahamasGroups';
@@ -270,14 +270,6 @@ const ART_RAW = [
 
 export const ART = ART_RAW.map(({ index, ...a }) => ({ ...a, sub: SUBREGIONS[index].slug }));
 
-// Culture : une seule bande « The Bahamas » (comme une sous-region de Culture Caraibes).
-export const CULTURE_REGION = {
-  slug: 'bahamas',
-  name: 'The Bahamas',
-  img: '/media/client/lydie/2026-09-27/bahamas-hero/poster.jpg',
-};
-FLEET_BY_SUBREGION.bahamas = '/charters/destinations/bahamas';
-
 // [nom, niveau VIP, periode culturelle, saison, mois de charter, note] — textes du client.
 const CULTURE_RAW = [
   ['Nassau & Paradise Island', 'High', 'Junkanoo parades, galleries and heritage museums', 'DEC-APR', 'DEC-APR', 'Rich culture within easy reach of the harbour'],
@@ -290,8 +282,10 @@ const CULTURE_RAW = [
   ['Southern Bahamas / Out Islands', 'Medium', 'Father Jerome’s churches, quiet villages and old traditions', 'DEC-APR', 'MAR-MAY', 'For curious travellers, limited infrastructure'],
 ];
 
-export const CULTURE = CULTURE_RAW.map(([name, vip, period, season, months, note]) => ({
-  name, sub: 'bahamas', vip, period, season, months, note,
+// Une carte par groupe d'iles (meme ordre que les 8 groupes) : une bande par groupe,
+// comme les sous-regions de Culture Caraibes (client 2026-10-10).
+export const CULTURE = CULTURE_RAW.map(([name, vip, period, season, months, note], i) => ({
+  name, sub: SUBREGIONS[i].slug, vip, period, season, months, note,
 }));
 
 export const SECTIONS = {
