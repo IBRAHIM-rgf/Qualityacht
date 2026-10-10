@@ -2,19 +2,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import SubRegionStack from '../../caribbean/SubRegionStack';
-import { ART, CULTURE, SECTIONS, SUBREGIONS, FLEET_BY_SUBREGION } from '../data';
+import { ART, CULTURE, SECTIONS, SUBREGIONS, CULTURE_REGION, FLEET_BY_SUBREGION } from '../data';
 
 // /art-culture/bahamas/art (client 2026-10-10), calquee sur /art-culture/caribbean/art :
-// les 8 groupes d'iles empiles, un clic deplie les lieux. Culture : pas encore de
-// contenu (card « Coming Soon »), donc pas de page.
+// les 8 groupes d'iles empiles, un clic deplie les lieux. /culture : une seule bande
+// « The Bahamas » qui deplie les 8 destinations (fichier client 2026-10-10).
 
 export function generateStaticParams() {
-  return [{ section: 'art' }];
+  return Object.keys(SECTIONS).map((section) => ({ section }));
 }
 
 export async function generateMetadata({ params }) {
   const { section } = await params;
-  const s = section === 'art' ? SECTIONS.art : null;
+  const s = SECTIONS[section];
   if (!s) return {};
   return {
     title: `${s.title} — Bahamas by Island Group | Qualityacht`,
@@ -31,8 +31,8 @@ function groupBySub(items) {
 
 export default async function BahamasArtCultureSectionPage({ params }) {
   const { section } = await params;
-  if (section !== 'art') notFound();
-  const s = SECTIONS.art;
+  const s = SECTIONS[section];
+  if (!s) notFound();
 
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
@@ -52,21 +52,23 @@ export default async function BahamasArtCultureSectionPage({ params }) {
 
       <div className="py-10 md:py-14">
         <SubRegionStack
-          regions={SUBREGIONS}
-          section="art"
+          regions={section === 'art' ? SUBREGIONS : [CULTURE_REGION]}
+          section={section}
           artBySub={groupBySub(ART)}
           cultureBySub={groupBySub(CULTURE)}
           fleetBySub={FLEET_BY_SUBREGION}
-          flat
+          flat={section === 'art'}
         />
       </div>
 
+      {section === 'art' && (
       <div className="bg-[#1b223d] border-t border-white/10 px-6 md:px-14 py-5">
         <p className="text-[11px] text-[#7a8094] max-w-4xl mx-auto text-center leading-relaxed">
           ★ Signature Selection — venues recommended as a priority for ultra-premium private
           clients. All private access arranged on request through your concierge.
         </p>
       </div>
+      )}
 
       <div className="py-14 flex justify-center">
         <Link
