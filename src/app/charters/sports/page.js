@@ -32,10 +32,13 @@ export default function SportsCharter() {
 
       <section className="relative flex flex-col items-center py-24 px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
-          {sportsItems.map((item) => (
-            <Link
+          {sportsItems.map((item) => {
+            // Carte sans lien (Antarctica, a venir) : simple bloc non cliquable.
+            const Card = item.href ? Link : 'div';
+            return (
+            <Card
               key={item.title}
-              href={item.href}
+              {...(item.href ? { href: item.href } : {})}
               className="min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
             >
               <div className="w-full relative mb-6 overflow-hidden h-48">
@@ -51,8 +54,9 @@ export default function SportsCharter() {
                 {item.title}
               </h2>
               <p className="text-[#C0C0C0] text-sm">{item.description}</p>
-            </Link>
-          ))}
+            </Card>
+            );
+          })}
         </div>
       </section>
     </div>
