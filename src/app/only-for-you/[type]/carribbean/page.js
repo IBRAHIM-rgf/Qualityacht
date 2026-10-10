@@ -934,9 +934,6 @@ export default function CaribbeanV15Page({ params }) {
                   <Link href="/request-quote" className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 rounded-full border border-[#C0C0C0] bg-[#26272a] text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">
                     Design Your Charter
                   </Link>
-                  <Link href="/charters/destinations/caribbean-v15/exploreyacht" className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 rounded-full border border-[#C0C0C0] bg-[#26272a]/50 backdrop-blur-sm text-[13px] font-semibold uppercase tracking-[0.18em] text-[#C0C0C0] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">
-                    Explore the Caribbean Fleet
-                  </Link>
                 </div>
               </div>
             </div>
@@ -956,9 +953,6 @@ export default function CaribbeanV15Page({ params }) {
               <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href="/request-quote" className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 rounded-full border border-[#C0C0C0] bg-[#26272a] text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">
                   Design Your Charter
-                </Link>
-                <Link href="/charters/destinations/caribbean-v15/exploreyacht" className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center px-8 py-3.5 rounded-full border border-[#C0C0C0] bg-[#26272a]/50 backdrop-blur-sm text-[13px] font-semibold uppercase tracking-[0.18em] text-[#C0C0C0] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_18px_rgba(194,98,42,0.35)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]">
-                  Explore the Caribbean Fleet
                 </Link>
               </div>
           </div>
@@ -1127,11 +1121,6 @@ export default function CaribbeanV15Page({ params }) {
               </p>
             </div>
 
-            <a href="/charters/destinations/caribbean-v15/exploreyacht"
-              style={{ color: '#c2622a', backgroundColor: '#26272a', borderColor: '#C0C0C0' }}
-              className="trajan-regular text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] px-7 md:px-10 py-3 md:py-4 border rounded-full hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-all duration-300">
-              Explore the Caribbean Fleet
-            </a>
           </div>
         </StBarthBandeau>
 
