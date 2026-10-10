@@ -63,17 +63,22 @@ export default function HalalPrivateCharterPage() {
             <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">Destinations</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {destinations.map((d) => (
+            {destinations.map((d) => {
               // Sur la page halal, les cartes Caraibes et Bahamas menent a leurs pages halal dediees.
-              <Link key={d.title} href={HALAL_PAGES[d.title] || d.href} className="group min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform">
+              // Carte sans lien (Antarctica, a venir) : simple bloc non cliquable.
+              const href = HALAL_PAGES[d.title] || d.href;
+              const Card = href ? Link : 'div';
+              return (
+              <Card key={d.title} {...(href ? { href } : {})} className="group min-w-0 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform">
                 <div className="w-full relative mb-6 overflow-hidden h-48 rounded-xl">
                   <Image src={d.image} alt={d.title} fill className="object-cover rounded-xl" sizes="(max-width:768px) 100vw, 33vw" />
                 </div>
                 <h3 className="text-lg font-semibold text-[#acb0cd] trajan-regular uppercase text-center break-words leading-tight w-full group-hover:text-[#c2622a] transition-colors duration-300">
                   {d.title}
                 </h3>
-              </Link>
-            ))}
+              </Card>
+              );
+            })}
           </div>
         </div>
       </section>
