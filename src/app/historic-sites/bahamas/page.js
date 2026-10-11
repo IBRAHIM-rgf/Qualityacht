@@ -1,7 +1,7 @@
 // /historic-sites/bahamas — hub Bahamas (client 2026-10-09), meme presentation que
 // /historic-sites/caribbean : en-tete puis 3 tuiles (Historic Monuments, Hiking, Cycling).
-// Monuments ouvre /historic-sites/bahamas/monuments ; Hiking et Cycling : « Coming Soon »
-// en attendant les listes du client.
+// Monuments et Hiking ouvrent leur page (/monuments, /hiking) ; Cycling : « Coming Soon »
+// en attendant la liste du client.
 import Image from 'next/image';
 import HistoricHub from '../caribbean/HistoricHub';
 
@@ -12,7 +12,7 @@ export const metadata = {
 
 const panels = [
   { key: 'monuments', title: 'Historic Monuments', img: '/media/client/lydie/2026-09-28/bahamas-cards/card-1-color.jpg' },
-  { key: 'hiking', title: 'Hiking', img: '/media/client/lydie/2026-09-27/bahamas-flowers/andros-color.jpg', soon: true },
+  { key: 'hiking', title: 'Hiking', img: '/media/client/lydie/2026-09-27/bahamas-flowers/andros-color.jpg' },
   { key: 'cycling', title: 'Cycling', img: '/media/client/lydie/2026-09-28/bahamas-cards/card-5-color.jpg', soon: true },
 ];
 
