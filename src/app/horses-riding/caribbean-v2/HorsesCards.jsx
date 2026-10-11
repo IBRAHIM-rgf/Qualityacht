@@ -84,15 +84,17 @@ function PanelCard({ label, children }) {
 // ── Circuit saisonnier ─────────────────────────────────────────────────────────
 export function CircuitCard({ circuit }) {
   const [open, setOpen] = useState(false);
+  // Bahamas (client 2026-10-11) : extremites, nb d'etapes et texte fournis tels quels.
   const stops = circuit.route.split('→').map((s) => s.trim());
   const endpoints = stops.length > 1 ? `${stops[0]} → ${stops[stops.length - 1]}` : stops[0];
+  const stopsLabel = circuit.stopsLabel || `${stops.length} stops`;
 
   return (
     <div className={SHELL}>
       <CardHeader title={circuit.name} subtitle={endpoints} pill={circuit.dates} />
 
       <div className="px-5 pb-4 flex flex-wrap gap-1.5">
-        <span className={TAG}>{stops.length} stops</span>
+        <span className={TAG}>{stopsLabel}</span>
       </div>
 
       <button onClick={() => setOpen((v) => !v)} className={READ_MORE}>
@@ -101,7 +103,7 @@ export function CircuitCard({ circuit }) {
 
       {open && (
         <div className={PANEL}>
-          <PanelCard label="The Route">{circuit.route}</PanelCard>
+          <PanelCard label="The Route">{circuit.detail || circuit.route}</PanelCard>
         </div>
       )}
     </div>
@@ -114,7 +116,7 @@ export function CircuitCard({ circuit }) {
 // puis accordeon qui REGROUPE toutes les iles de la sous-region (nom + saison + Riding/Racing).
 export function RegionGroupCard({ region }) {
   const [open, setOpen] = useState(false);
-  const regionHref = REGION_LINKS[region.name];
+  const regionHref = region.href || REGION_LINKS[region.name];
   const count = region.islands.length;
   const label = `${count} ${count > 1 ? 'islands' : 'island'}`;
 
@@ -160,10 +162,18 @@ export function RegionGroupCard({ region }) {
                   </h4>
                   <span className={DATE_PILL}>{island.season}</span>
                 </div>
+                {/* lines (Bahamas) : etiquettes fournies par le client (Riding, Shows, Family). */}
+                {island.lines ? island.lines.map(([tag, text]) => (
+                  <p key={tag} className="text-sm md:text-base leading-relaxed text-[#acb0cd]/85">
+                    <span className={`${TAG} mr-2 align-middle`}>{tag}</span>
+                    {text}
+                  </p>
+                )) : (
                 <p className="text-sm md:text-base leading-relaxed text-[#acb0cd]/85">
                   <span className={`${TAG} mr-2 align-middle`}>Riding</span>
                   {island.riding}
                 </p>
+                )}
                 {hasRacing && (
                   <p className="text-sm md:text-base leading-relaxed text-[#acb0cd]/85">
                     <span className={`${TAG} mr-2 align-middle`}>Racing</span>
