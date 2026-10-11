@@ -20,3 +20,172 @@ export const BAHAMAS_HERITAGE = {
     {"name": "Dolphin House Museum", "meta": "North Bimini · Yacht access", "desc": "The Dolphin House Museum is a whimsical folk-art environment created by local artist Ashley Saunders. Constructed from conch shells, coral, and recycled materials, the structure reflects Bimini's maritime culture and creative spirit. It stands as a unique testament to island ingenuity and artistic expression. Built over several decades beginning in the 1980s by Ashley Saunders, a Bimini native and self-taught artist. A grassroots heritage site celebrated for its eccentric charm and cultural authenticity.", "experience": "A private tour with a local artist or cultural guide, a hands-on shell-craft workshop, and a curated seafood lunch at a waterfront restaurant with views of Bimini's turquoise shallows.", "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-7-color.jpg"},
   ],
 };
+
+// Randonnees des Bahamas (document client « Bahamas_Private_Hiking_Experiences_Client_Edition »,
+// 2026-10-11), presentees comme les randonnees Caraibes (/historic-sites/caribbean/hiking).
+// Repris : nom, sous-region, difficulte, distance, duree, description (sous « VIP experience »,
+// comme les Caraibes), marinas (acces yacht).
+// NON publies (informations commerciales internes du document) : prix indicatifs, contacts
+// VIP, commissions, taxes/frais. Photo : celle du groupe d'iles, en attendant celles du client.
+export const BAHAMAS_HIKING = {
+  key: 'hiking',
+  title: 'Hiking',
+  subtitle: '14 exceptional hikes · VIP access from the yacht',
+  variant: 'hike',
+  items: [
+    {
+        "name": "Queen’s Staircase & Fort Fincastle Walk",
+        "location": "New Providence / Nassau",
+        "level": "Easy",
+        "distance": "1.5–2 km",
+        "duration": "1–2 h",
+        "yacht": true,
+        "vip": "Historic urban walk combining the 66-step Queen’s Staircase with Fort Fincastle and Government Hill. Best suited to a private cultural itinerary with shaded sections and panoramic harbor views.",
+        "access": "Atlantis Marina; Albany Marina; Palm Cay Marina; Nassau Harbour Club & Marina",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-1-color.jpg"
+    },
+    {
+        "name": "Primeval Forest National Park Nature Trail",
+        "location": "New Providence / Nassau",
+        "level": "Easy to Moderate",
+        "distance": "2–4 km",
+        "duration": "1.5–2.5 h",
+        "yacht": true,
+        "vip": "A guided walk through ancient coppice forest, limestone formations and sinkholes in one of New Providence’s protected national parks.",
+        "access": "Palm Cay Marina; Albany Marina; Atlantis Marina",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-1-color.jpg"
+    },
+    {
+        "name": "Lucayan National Park Cave & Forest Walk",
+        "location": "Freeport / East Grand Bahama",
+        "level": "Easy to Moderate",
+        "distance": "2–5 km",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "A cultural and nature excursion through coastal forest, mangroves, archaeological areas and the Lucayan cave system. Cave access requires an authorized route and guide where applicable.",
+        "access": "Old Bahama Bay Marina; Port Lucaya Marina; Ocean Reef Yacht Club",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-2-color.jpg"
+    },
+    {
+        "name": "Rand Nature Centre Trail",
+        "location": "Freeport",
+        "level": "Easy",
+        "distance": "1–3 km",
+        "duration": "1–2 h",
+        "yacht": true,
+        "vip": "A gentle private nature walk through native Bahamian flora, botanical areas and bird habitat, suitable for guests seeking a relaxed cultural and ecological experience.",
+        "access": "Port Lucaya Marina; Old Bahama Bay Marina",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-2-color.jpg"
+    },
+    {
+        "name": "Moriah Harbour Cay Coastal Trail",
+        "location": "Great Exuma / Georgetown",
+        "level": "Easy to Moderate",
+        "distance": "3–6 km",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "A low-impact coastal walk across protected island terrain with mangroves, tidal flats, beaches and broad views over the Exuma Banks. Conditions depend on tides and weather.",
+        "access": "Highbourne Cay Marina; Staniel Cay Yacht Club; Emerald Bay Marina; Palm Cay Marina as Nassau staging point",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-3-color.jpg"
+    },
+    {
+        "name": "Abaco National Park Nature Trails",
+        "location": "Great Abaco / Marsh Harbour",
+        "level": "Easy to Moderate",
+        "distance": "3–8 km",
+        "duration": "2–4 h",
+        "yacht": true,
+        "vip": "A private nature walk through pine forest, coppice and protected wetland habitats. The experience is best arranged with a local naturalist because trail conditions and access can change.",
+        "access": "Conch Inn Marina; Marsh Harbour Marina; Treasure Cay Marina; Hope Town Harbour",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-4-color.jpg"
+    },
+    {
+        "name": "Hope Town Lighthouse & Settlement Walk",
+        "location": "Elbow Cay / Hope Town",
+        "level": "Easy",
+        "distance": "2–4 km",
+        "duration": "1.5–2.5 h",
+        "yacht": true,
+        "vip": "A gentle heritage walk through the historic settlement, past Loyalist-era architecture and toward the Elbow Reef Lighthouse. Lighthouse access is subject to opening hours and local authorization.",
+        "access": "Hope Town Harbour; Marsh Harbour Marina; Conch Inn Marina",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-4-color.jpg"
+    },
+    {
+        "name": "Dunmore Town Heritage Walking Tour",
+        "location": "Harbour Island / Dunmore Town",
+        "level": "Easy",
+        "distance": "2–5 km",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "A refined private walk through pastel Loyalist cottages, historic churches, narrow lanes and waterfront heritage areas in one of the Bahamas’ most distinctive settlements.",
+        "access": "Valentine’s Resort & Marina; Harbour Island Club; Spanish Wells Yacht Haven",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-5-color.jpg"
+    },
+    {
+        "name": "Preacher’s Cave & Gregory Town Coastal Walk",
+        "location": "North Eleuthera",
+        "level": "Easy to Moderate",
+        "distance": "3–6 km",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "A cultural and coastal walk combining Preacher’s Cave, dramatic shoreline scenery and local settlements. The route includes uneven ground and may be slippery after rain.",
+        "access": "Cape Eleuthera Marina; Valentine’s Resort & Marina; Spanish Wells Yacht Haven",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-5-color.jpg"
+    },
+    {
+        "name": "Blue Holes National Park Nature Walk",
+        "location": "North Andros / Fresh Creek",
+        "level": "Moderate",
+        "distance": "3–8 km",
+        "duration": "2–4 h",
+        "yacht": true,
+        "vip": "A guided inland walk through coppice forest toward Andros’ famous blue holes, with opportunities for interpretation of geology, freshwater systems and Lucayan heritage.",
+        "access": "Morgan’s Bluff Harbour; Fresh Creek anchorage; Small Hope Bay area",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-6-color.jpg"
+    },
+    {
+        "name": "Bimini Nature Trail & Cultural Walk",
+        "location": "North Bimini / Alice Town",
+        "level": "Easy",
+        "distance": "2–5 km",
+        "duration": "1.5–3 h",
+        "yacht": true,
+        "vip": "A relaxed guided walk combining Bimini’s settlement history, local cultural landmarks, shoreline scenery and interpretation of the island’s maritime heritage.",
+        "access": "Resorts World Bimini Marina; Bimini Big Game Club Marina; Brown’s Marina",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-7-color.jpg"
+    },
+    {
+        "name": "Mount Alvernia & The Hermitage Summit Walk",
+        "location": "Cat Island / Mount Alvernia",
+        "level": "Moderate",
+        "distance": "2–5 km",
+        "duration": "1.5–3 h",
+        "yacht": true,
+        "vip": "A short but steep walk to The Hermitage, a stone monastery on Mount Alvernia, with panoramic views and a strong spiritual and cultural character.",
+        "access": "New Bight anchorage; Arthur’s Town anchorage; Stella Maris Resort Marina",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-8-color.jpg"
+    },
+    {
+        "name": "Columbus Monument & Long Bay Coastal Walk",
+        "location": "San Salvador / Cockburn Town",
+        "level": "Easy",
+        "distance": "2–5 km",
+        "duration": "1.5–3 h",
+        "yacht": true,
+        "vip": "A coastal heritage walk to the traditional Columbus landing area, combining ocean views, Lucayan history and quiet shoreline terrain.",
+        "access": "Guanahani Beach Club area; Cockburn Town anchorage; Riding Rock Resort Marina",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-8-color.jpg"
+    },
+    {
+        "name": "Dean’s Blue Hole & Coastal Nature Walk",
+        "location": "Long Island / Clarence Town",
+        "level": "Easy to Moderate",
+        "distance": "3–6 km",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "A private coastal and natural-history walk around one of the world’s deepest marine blue holes, with limestone terrain and open Atlantic scenery.",
+        "access": "Stella Maris Resort Marina; Salt Pond anchorage; Clarence Town anchorage",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-8-color.jpg"
+    }
+],
+};
