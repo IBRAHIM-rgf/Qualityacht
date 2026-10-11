@@ -110,7 +110,7 @@ function HikeTile({ item, index, fallbackImg }) {
       <div className="px-4 pt-3 flex flex-wrap gap-1.5">
         <span className={HTAG}>{item.level}</span>
         <span className={HTAG}>{item.distance}</span>
-        <span className={HTAG}>{item.elevation}</span>
+        {item.elevation && <span className={HTAG}>{item.elevation}</span>}
         <span className={HTAG}>{item.duration}</span>
       </div>
 
