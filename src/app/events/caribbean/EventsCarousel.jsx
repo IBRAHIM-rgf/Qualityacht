@@ -29,11 +29,13 @@ const PHOTOS = [
   { src: `${D}/ev-11.jpg`, alt: 'Crew raising the sail of a traditional Caribbean yole' },
 ];
 
-export default function EventsCarousel() {
+// photos / label (client 2026-10-12) : /events/bahamas reutilise ce meme carrousel
+// avec ses propres photos ; sans props, la page Caraibes reste identique.
+export default function EventsCarousel({ photos = PHOTOS, label = 'Caribbean events in pictures' }) {
   // La piste est rendue deux fois : la copie n'est la que pour la boucle, elle
   // est retiree aux lecteurs d'ecran.
   const serie = (copie) =>
-    PHOTOS.map((p, i) => (
+    photos.map((p, i) => (
       <figure key={`${copie}-${p.src}`} className={styles.vignette}>
         <Image
           src={p.src}
@@ -49,7 +51,7 @@ export default function EventsCarousel() {
     ));
 
   return (
-    <section className={`${styles.zone} bg-[#26272a] py-14 md:py-20`} aria-label="Caribbean events in pictures">
+    <section className={`${styles.zone} bg-[#26272a] py-14 md:py-20`} aria-label={label}>
       <div aria-hidden className={styles.fondu} />
       <div className={styles.masque}>
         <div className={styles.piste}>
