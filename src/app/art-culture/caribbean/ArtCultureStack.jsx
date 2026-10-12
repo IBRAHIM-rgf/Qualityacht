@@ -54,8 +54,9 @@ export default function ArtCultureStack({ cards }) {
             <Row key={c.key} soon={c.soon} href={c.href}>
               <div className="grid md:grid-cols-2 gap-6 md:gap-10 md:items-start">
                 {/* CARD PHOTO (separee) + nom EN GRAND */}
+                {/* c.photoHeight (Bahamas Art, client 2026-10-12) : cadre photo plus haut pour cette seule card. */}
                 <div
-                  className={`relative h-[40vh] md:h-[60vh] overflow-hidden rounded-3xl border border-[#C0C0C0]/20 shadow-[0_30px_80px_-45px_rgba(0,0,0,0.9)] ${
+                  className={`relative ${c.photoHeight || 'h-[40vh] md:h-[60vh]'} overflow-hidden rounded-3xl border border-[#C0C0C0]/20 shadow-[0_30px_80px_-45px_rgba(0,0,0,0.9)] ${
                     reversed ? 'md:order-2' : ''
                   }`}
                 >
