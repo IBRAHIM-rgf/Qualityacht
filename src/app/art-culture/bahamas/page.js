@@ -21,6 +21,8 @@ const panels = [
     title: SECTIONS.art.title,
     eyebrow: SECTIONS.art.eyebrow,
     img: SECTIONS.art.img,
+    // Cadre photo plus haut (client 2026-10-12) : l'homme au perroquet plus grand a l'ecran.
+    photoHeight: 'h-[60vh] md:h-[85vh]',
     href: '/art-culture/bahamas/art',
     text: 'Bahamian art brings together vivid island expression, maritime heritage, and a distinctly contemporary point of view. From Nassau’s evolving gallery scene to intimate studios across the Out Islands, each encounter offers a thoughtful cultural dimension to life at sea.',
     bullets: [
