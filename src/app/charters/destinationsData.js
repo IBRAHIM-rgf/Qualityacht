@@ -1,7 +1,7 @@
 // Les 16 destinations — source unique, réutilisée par /charters/destinations
 // et par chaque sous-page de charter (cards de /charters).
 export const destinations = [
-  { title: "Arctic",                description: "Discover these unique creatures in the cold waters of the Arctic.",        image: "/images/destinations/animals/Arctic.png",                  href: "/charters/destinations/arctic" },
+  { title: "The Arctic",                description: "Discover these unique creatures in the cold waters of the Arctic.",        image: "/images/destinations/animals/Arctic.png",                  href: "/charters/destinations/arctic" },
   { title: "Bahamas",               description: "Observe these magnificent animals in the turquoise waters of the Bahamas.", image: "/images/destinations/animals/Bahamas.jpg",                 href: "/charters/destinations/bahamas" },
   { title: "Central America",       description: "Meet the colorful wildlife of Central America in its warm waters.",         image: "/images/destinations/animals/Central-America.jpg",         href: "/charters/destinations/central-america" },
   { title: "East Asia",             description: "Explore the marine diversity of East Asia.",                                image: "/images/destinations/animals/EAST-ASIA.jpg",               href: "/charters/destinations/east-asia" },
@@ -18,5 +18,5 @@ export const destinations = [
   { title: "Caraïbes",              description: "Discover more species in the Caribbean regions.",                          image: "/images/destinations/animals/caraibes.jpg",                href: "/charters/carribbean" },
   { title: "Oceania",               description: "Explore the unique marine wildlife of Oceania.",                           image: "/images/destinations/animals/oceania.jpeg",                href: "/charters/destinations/oceania" },
   // Antarctica (client 2026-10-10) : a venir, sans lien pour l'instant.
-  { title: "Antarctica",            description: "Discover the remarkable wildlife of the icy waters of Antarctica.",       image: "/images/destinations/animals/Antarctica.jpg" },
+  { title: "The Antarctica",            description: "Discover the remarkable wildlife of the icy waters of Antarctica.",       image: "/images/destinations/animals/Antarctica.jpg" },
 ];
