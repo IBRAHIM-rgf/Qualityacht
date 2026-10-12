@@ -11,9 +11,9 @@ export const metadata = {
 };
 
 const panels = [
-  { key: 'monuments', title: 'Historic Monuments', img: '/media/client/lydie/2026-09-28/bahamas-cards/card-1-color.jpg' },
-  { key: 'hiking', title: 'Hiking', img: '/media/client/lydie/2026-09-27/bahamas-flowers/andros-color.jpg' },
-  { key: 'cycling', title: 'Cycling', img: '/media/client/lydie/2026-09-28/bahamas-cards/card-5-color.jpg', soon: true },
+  { key: 'monuments', title: 'Historic Monuments', img: '/images/stephan-hinni-ZHdkEO_oFRc-unsplash.jpg' },
+  { key: 'hiking', title: 'Hiking', img: '/images/isaw-company-hBtl2SojFic-unsplash.jpg' },
+  { key: 'cycling', title: 'Cycling', img: '/images/carlos-mendoza-utvLhSfiqpo-unsplash(1).jpg', soon: true },
 ];
 
 export default function HistoricSitesBahamasPage() {
