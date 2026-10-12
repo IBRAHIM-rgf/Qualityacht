@@ -1,14 +1,34 @@
 // /events/bahamas — Events Bahamas (client 2026-10-12), calquee sur /events/caribbean :
 // meme hero (photo fournie par le client, sur-titre, titre, sous-titre, 2 boutons).
-// Le calendrier des evenements sera ajoute quand le client aura fourni la liste.
+// + carrousel photos (client 2026-10-12). Le calendrier des evenements sera ajoute quand le client aura fourni la liste.
 import Image from "next/image";
 import Link from "next/link";
+import EventsCarousel from "../caribbean/EventsCarousel";
 
 export const metadata = {
   title: "Bahamas Events | Qualityacht",
 };
 
 const HERO = "/media/client/2026-10-12/events-bahamas-hero.webp";
+
+// Carrousel (client 2026-10-12) : meme composant que /events/caribbean, photos
+// fournies par le client dans l'ordre recu, fichiers non recadres (cadrage a l'affichage).
+const CD = "/media/client/2026-10-12/events-bahamas-carousel";
+const CAROUSEL = [
+  { src: `${CD}/evb-01.jpg`, alt: "Junkanoo dancer in a costume decorated with billiard balls" },
+  { src: `${CD}/evb-02.jpg`, alt: "Silhouette kicking up sea spray at sunset" },
+  { src: `${CD}/evb-03.jpg`, alt: "Queen conch shells on display" },
+  { src: `${CD}/evb-04.jpg`, alt: "Street drummer playing a snare drum" },
+  { src: `${CD}/evb-05.jpg`, alt: "Keyboard player and microphone at an open-air concert" },
+  { src: `${CD}/evb-06.jpg`, alt: "Sportfishing yacht at sunset" },
+  { src: `${CD}/evb-07.jpg`, alt: "Nurse sharks gliding in turquoise shallows" },
+  { src: `${CD}/evb-08.jpg`, alt: "Freediver swimming among sharks in open water" },
+  { src: `${CD}/evb-09.jpg`, alt: "Carnival guest in a feathered straw hat" },
+  { src: `${CD}/evb-10.jpg`, alt: "Friends laughing on a beach volleyball court" },
+  { src: `${CD}/evb-11.jpg`, alt: "Beachfront dinner table set with red roses" },
+  { src: `${CD}/evb-12.jpg`, alt: "Colorful water slide tower under a blue sky" },
+  { src: `${CD}/evb-13.jpg`, alt: "Night beach volleyball under floodlights" },
+];
 
 export default function EventsBahamasPage() {
   return (
@@ -39,6 +59,11 @@ export default function EventsBahamasPage() {
           </div>
         </div>
       </section>
+
+      {/* Carrousel SOUS le hero, comme sur /events/caribbean. */}
+      <div className="relative z-10">
+        <EventsCarousel photos={CAROUSEL} label="Bahamas events in pictures" />
+      </div>
     </main>
   );
 }
