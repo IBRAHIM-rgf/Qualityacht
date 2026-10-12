@@ -8,7 +8,7 @@ export const metadata = {
 // Photos des cards destination (public/images/horse). Les 16 destinations ont
 // leur photo horse dediee ; fallback sur l'image par defaut si une clef manque.
 const HORSE_IMAGES = {
-  'Arctic': '/images/horse/horse artic.png',
+  'The Arctic': '/images/horse/horse artic.png',
   'Bahamas': '/images/horse/horse bahamas.png',
   'Central America': '/images/horse/Central America.png',
   'East Asia': '/images/horse/horse East asia.png',
