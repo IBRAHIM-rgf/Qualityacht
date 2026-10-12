@@ -19,7 +19,7 @@
 export const WORLD_VIEW = { center: [20, -25], zoom: 4 };
 
 export const WORLD_DESTINATIONS = [
-  { title: 'Arctic',                label: 'Arctic',                coords: [78.2, 15.6],    anchor: 'Svalbard',            ready: false },
+  { title: 'The Arctic',                label: 'The Arctic',                coords: [78.2, 15.6],    anchor: 'Svalbard',            ready: false },
   { title: 'Northern Europe',       label: 'Northern Europe',       coords: [60.4, 5.3],     anchor: 'Norwegian fjords',    ready: false },
   { title: 'Western Mediterranean', label: 'Western Mediterranean', coords: [43.6, 7.3],     anchor: 'French Riviera',      ready: false },
   { title: 'Eastern Mediterranean', label: 'Eastern Mediterranean', coords: [37.0, 25.3],    anchor: 'Aegean Sea',          ready: false },
@@ -35,7 +35,7 @@ export const WORLD_DESTINATIONS = [
   { title: 'Oman Gulf',             label: 'Oman Gulf',             coords: [23.6, 58.5],    anchor: 'Muscat',              ready: false },
   { title: 'Indian Ocean',          label: 'Indian Ocean',          coords: [3.2, 73.2],     anchor: 'Maldives',            ready: false },
   { title: 'Africa',                label: 'Africa',                coords: [-6.2, 39.3],    anchor: 'Zanzibar',            ready: false },
-  { title: 'Antarctica',            label: 'Antarctica',            coords: [-64.8, -62.9],  anchor: 'Antarctic Peninsula', ready: false },
+  { title: 'The Antarctica',            label: 'The Antarctica',            coords: [-64.8, -62.9],  anchor: 'Antarctic Peninsula', ready: false },
 ];
 
 // ── CARAIBES ─────────────────────────────────────────────────────────────────────
