@@ -101,7 +101,7 @@ export function getSailingTypeBySlug(slug) {
 // Les 16 destinations (même ordre que /charters/destinations) — affichées
 // en bas de chaque page voilier. Pas de href : affichage seul.
 export const destinationItems = [
-  { title: 'Arctic',                image: '/images/destinations/animals/Arctic.png' },
+  { title: 'The Arctic',                image: '/images/destinations/animals/Arctic.png' },
   { title: 'Bahamas',               image: '/images/destinations/animals/Bahamas.jpg' },
   { title: 'Central America',       image: '/images/destinations/animals/Central-America.jpg' },
   { title: 'East Asia',             image: '/images/destinations/animals/EAST-ASIA.jpg' },
