@@ -4,6 +4,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import EventsCarousel from "../caribbean/EventsCarousel";
+import CaribbeanEventsMap from "../CaribbeanEventsMap";
+import { BAHAMAS_EVENTS, BAHAMAS_SECTORS } from "./bahamas-events";
 
 export const metadata = {
   title: "Bahamas Events | Qualityacht",
@@ -29,6 +31,21 @@ const CAROUSEL = [
   { src: `${CD}/evb-12.jpg`, alt: "Colorful water slide tower under a blue sky" },
   { src: `${CD}/evb-13.jpg`, alt: "Night beach volleyball under floodlights" },
 ];
+
+// Calendrier (client 2026-10-12), calque sur /events/caribbean : une photo par
+// categorie, prise parmi les photos du carrousel (choix du client).
+const CATEGORY_IMAGES = {
+  carnaval: `${CD}/evb-01.jpg`,
+  voile: `${CD}/evb-06.jpg`,
+  gastronomie: `${CD}/evb-03.jpg`,
+  musique: `${CD}/evb-04.jpg`,
+  peche: `${CD}/evb-06.jpg`,
+  plongee: `${CD}/evb-08.jpg`,
+  sport: `${CD}/evb-10.jpg`,
+  lifestyle: `${CD}/evb-11.jpg`,
+  patrimoine: `${CD}/evb-09.jpg`,
+};
+const EVENTS = BAHAMAS_EVENTS.map((e) => ({ ...e, img: CATEGORY_IMAGES[e.category] }));
 
 export default function EventsBahamasPage() {
   return (
@@ -64,6 +81,17 @@ export default function EventsBahamasPage() {
       <div className="relative z-10">
         <EventsCarousel photos={CAROUSEL} label="Bahamas events in pictures" />
       </div>
+
+      {/* Carte -> filtres (groupe d'iles + categorie) -> cards, comme Caraibes. */}
+      <CaribbeanEventsMap
+        items={EVENTS}
+        sectorList={BAHAMAS_SECTORS}
+        center={[24.6, -76.8]}
+        zoom={6}
+        kicker="Across The Islands"
+        title="The Bahamas Event Calendar"
+        intro="Follow the rhythm of the islands through regattas, Junkanoo, culinary traditions, music and sport."
+      />
     </main>
   );
 }
