@@ -28,7 +28,7 @@ import ItemsGrid from "../../components/ItemsGrid";
 
 const destinations = [
   {
-    title: "Arctic",
+    title: "The Arctic",
     description: "High-latitude cruising among glaciers, fjords and long polar light.",
     image: "/images/destinations/cards/arctic-card.webp",
     href: "/charters/destinations/arctic",
@@ -125,7 +125,7 @@ const destinations = [
   },
   // Antarctica (client 2026-10-10) : ouvre la page destination Antarctica.
   {
-    title: "Antarctica",
+    title: "The Antarctica",
     description: "Discover the remarkable wildlife of the icy waters of Antarctica.",
     image: "/images/destinations/cards/antarctica-card.webp",
     href: "/charters/destinations/antarctica",
