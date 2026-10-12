@@ -13,7 +13,7 @@ export const metadata = {
 const panels = [
   { key: 'monuments', title: 'Historic Monuments', img: '/images/stephan-hinni-ZHdkEO_oFRc-unsplash.jpg' },
   { key: 'hiking', title: 'Hiking', img: '/images/isaw-company-hBtl2SojFic-unsplash.jpg' },
-  { key: 'cycling', title: 'Cycling', img: '/images/carlos-mendoza-utvLhSfiqpo-unsplash(1).jpg', soon: true },
+  { key: 'cycling', title: 'Cycling', img: '/images/carlos-mendoza-utvLhSfiqpo-unsplash(1).jpg' },
 ];
 
 export default function HistoricSitesBahamasPage() {
