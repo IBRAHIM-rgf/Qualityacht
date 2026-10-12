@@ -292,12 +292,12 @@ export const SECTIONS = {
   art: {
     title: 'Art',
     eyebrow: 'Bahamas · Galleries, Artists & Island Expression',
-    // Photos des cards fournies par le client (2026-10-10).
-    img: '/media/client/2026-10-10/art-culture-bahamas/art-carnival-float.jpg',
+    // Photos des cards fournies par le client (permutees le 2026-10-12 : Art = portrait, Culture = tour Ocean Cay).
+    img: '/media/client/2026-10-10/art-culture-bahamas/culture-macaw-portrait.jpg',
   },
   culture: {
     title: 'Culture',
     eyebrow: 'Bahamas · Heritage, Festivals & Island Rhythms',
-    img: '/media/client/2026-10-10/art-culture-bahamas/culture-macaw-portrait.jpg',
+    img: '/media/client/2026-10-10/art-culture-bahamas/hero-ocean-cay.jpg',
   },
 };

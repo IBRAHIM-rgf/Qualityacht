@@ -11,8 +11,8 @@ export const metadata = {
 // /art-culture/bahamas (client 2026-10-10), calquee sur /art-culture/caribbean : hero,
 // puis les 2 cards ART / CULTURE avec les textes fournis par le client. ART ouvre les
 // lieux par groupe d'iles ; CULTURE ouvre le calendrier culturel (une bande The Bahamas).
-// Hero fourni par le client (2026-10-10) : tour « Welcome to Ocean Cay ».
-const HERO_IMAGE = '/media/client/2026-10-10/art-culture-bahamas/hero-ocean-cay.jpg';
+// Hero fourni par le client (2026-10-12) : char de carnaval (photos permutees a sa demande).
+const HERO_IMAGE = '/media/client/2026-10-10/art-culture-bahamas/art-carnival-float.jpg';
 
 const panels = [
   {
