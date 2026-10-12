@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MapPin, Users, Ship, ArrowRight, ChevronDown } from 'lucide-react';
+// Fleches vers le bas retirees (client 2026-10-12).
+import { MapPin, Users, Ship, ArrowRight } from 'lucide-react';
 
 /**
  * Configurateur du hero. Chaque champ correspond a un parametre que /yachts lit
@@ -125,7 +126,6 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
                   ))}
                 </select>
               </div>
-              <ChevronDown aria-hidden className="w-4 h-4 shrink-0 text-[#C0C0C0]/55 pointer-events-none" />
             </label>
           ))}
         </div>
@@ -181,10 +181,6 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
                   ))}
                 </select>
               </div>
-              <ChevronDown
-                aria-hidden
-                className="w-4 h-4 shrink-0 text-[#C0C0C0]/55 transition-colors duration-300 group-hover:text-[#C0C0C0] pointer-events-none"
-              />
             </label>
           </div>
         ))}
