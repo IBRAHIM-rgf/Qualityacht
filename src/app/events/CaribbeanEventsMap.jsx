@@ -14,16 +14,21 @@ const CAT_LABELS = {
   patrimoine: 'Heritage', carnaval: 'Carnival', gastronomie: 'Gastronomy',
   musique: 'Music', ferie: 'Public Holiday', regate: 'Regatta',
   voile_traditionnelle: 'Traditional Sailing',
+  // Categories du calendrier Bahamas (client 2026-10-12).
+  voile: 'Sailing', lifestyle: 'Lifestyle', sport: 'Sport',
+  peche: 'Sport Fishing', plongee: 'Diving',
 };
 
-export default function CaribbeanEventsMap({ items, kicker, title, intro }) {
+// sectorList / center / zoom (client 2026-10-12) : reutilise par /events/bahamas, dont
+// les evenements portent deja leur `sector`. Sans ces props, Caraibes inchange.
+export default function CaribbeanEventsMap({ items, kicker, title, intro, sectorList = SECTORS, center = [15.5, -66], zoom = 5 }) {
   const itemsWithSector = useMemo(
-    () => items.map((e) => ({ ...e, sector: toSector(e.island) })),
+    () => items.map((e) => ({ ...e, sector: e.sector || toSector(e.island) })),
     [items]
   );
   const sectors = useMemo(
-    () => SECTORS.filter((s) => itemsWithSector.some((e) => e.sector === s)),
-    [itemsWithSector]
+    () => sectorList.filter((s) => itemsWithSector.some((e) => e.sector === s)),
+    [itemsWithSector, sectorList]
   );
   // Categories connues (CAT_LABELS) affichees individuellement ; toute categorie
   // presente dans les donnees mais absente de CAT_LABELS tombe sous "Other".
@@ -84,8 +89,8 @@ export default function CaribbeanEventsMap({ items, kicker, title, intro }) {
       kicker={kicker}
       title={title}
       intro={filtered.length === 0 ? 'No event matches this filter — try another sector or category.' : intro}
-      center={[15.5, -66]}
-      zoom={5}
+      center={center}
+      zoom={zoom}
       between={filters}
     />
   );
