@@ -189,3 +189,256 @@ export const BAHAMAS_HIKING = {
     }
 ],
 };
+
+
+// Cycling Bahamas (client 2026-10-12) : 20 parcours du PDF client (16 + 4 « Explorer »),
+// dans l'ordre recu, textes tels quels. Meme presentation que le Cycling Caraibes ;
+// photo = celle du groupe d'iles du parcours (comme BAHAMAS_HIKING).
+export const BAHAMAS_CYCLING = {
+  key: 'cycling',
+  title: 'Cycling',
+  subtitle: '20 routes across The Bahamas · VIP access from the yacht',
+  variant: 'hike',
+  items: [
+    {
+        "name": "Nassau – Paradise Island Coastal Heritage Loop",
+        "location": "Nassau & Paradise Island, Bahamas",
+        "level": "Moderate",
+        "distance": "42 km",
+        "elevation": "+180 m",
+        "duration": "3–4 h",
+        "yacht": true,
+        "vip": "Private road bikes or premium e-bikes are delivered dockside for a curated ride through historic Nassau, the waterfront and Paradise Island. Add a private beach-club pause, an oceanfront villa lunch or a sunset return across Nassau Harbour, followed by a chef-prepared Bahamian dinner on board.",
+        "access": "Berth in Nassau and arrange dockside bike delivery through the yacht concierge. Paradise Island is reached by private road escort or harbour transfer, subject to marina berth allocation, local traffic and captain’s itinerary.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-1-color.jpg"
+    },
+    {
+        "name": "Nassau – South Ocean & Clifton Coast Ride",
+        "location": "New Providence, Bahamas",
+        "level": "Easy–Moderate",
+        "distance": "36 km",
+        "elevation": "+120 m",
+        "duration": "3–4 h",
+        "yacht": true,
+        "vip": "A private coastal ride toward Clifton, combining quiet residential roads, open-water viewpoints and a guided stop near the heritage coastline. Extend the experience with a secluded beach setup, a private snorkelling tender excursion or a refined Bahamian rum-and-conch tasting.",
+        "access": "Use a Nassau marina base or a suitable western New Providence anchorage, subject to conditions. Private road transfers, bicycles and guide service are arranged from the yacht.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-1-color.jpg"
+    },
+    {
+        "name": "Great Exuma – George Town to Tropic of Cancer Beach",
+        "location": "The Exumas, Bahamas",
+        "level": "Moderate",
+        "distance": "58 km",
+        "elevation": "+260 m",
+        "duration": "4–5 h",
+        "yacht": true,
+        "vip": "A signature Great Exuma ride along the Queen’s Highway, with luminous water views, limestone terrain and remote island character. Pause for a private picnic near Tropic of Cancer Beach, a chef-led seafood lunch and an optional ocean swim before a discreet return to the yacht.",
+        "access": "Base the yacht in the Georgetown area or at a suitable full-service marina. A private vehicle transfers guests and bicycles to the route start; final logistics depend on the yacht’s berth, weather and local road conditions.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-3-color.jpg"
+    },
+    {
+        "name": "Exuma Cays – Staniel Cay Island Explorer",
+        "location": "The Exumas, Bahamas",
+        "level": "Easy",
+        "distance": "18 km",
+        "elevation": "+85 m",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "A compact, yacht-led island ride designed for guests cruising the Exuma Cays. Explore quiet lanes and local viewpoints before continuing by tender to a sandbar lunch, Thunderball Grotto snorkelling or a private visit to Big Major Cay.",
+        "access": "Moor or anchor near Staniel Cay subject to the captain’s planning and local conditions. Bicycles may be brought from the yacht or pre-arranged locally, with tender transfers coordinated in advance.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-3-color.jpg"
+    },
+    {
+        "name": "Little Exuma – Williams Town & Salt Pond Coastal Loop",
+        "location": "The Exumas, Bahamas",
+        "level": "Moderate",
+        "distance": "32 km",
+        "elevation": "+150 m",
+        "duration": "3–4 h",
+        "yacht": true,
+        "vip": "A quieter Great Exuma alternative, tracing Little Exuma’s coastal settlements, hidden coves and salt-pond landscapes. Finish with a private beach table, grilled local lobster, chilled Champagne and a sunset tender collection.",
+        "access": "Reach the route from a Georgetown or Emerald Bay yacht base using a private vehicle and bike trailer. Support vehicle and advance route confirmation are recommended.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-3-color.jpg"
+    },
+    {
+        "name": "Eleuthera – Glass Window Bridge to Gregory Town",
+        "location": "Eleuthera, Bahamas",
+        "level": "Moderate",
+        "distance": "48 km",
+        "elevation": "+310 m",
+        "duration": "4–5 h",
+        "yacht": true,
+        "vip": "A dramatic north-Eleuthera ride linking the Glass Window area, pineapple country and Atlantic-facing coastal scenery. The private version includes a chef-prepared lunch, a guided ocean stop and an optional visit with a local grower or island host.",
+        "access": "Use a yacht base near Spanish Wells, Harbour Island or an appropriate Eleuthera anchorage. Guests, bicycles and guide are transferred privately to the northern route start.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-5-color.jpg"
+    },
+    {
+        "name": "Harbour Island – Pink Sands & Dunmore Town Cruiser Loop",
+        "location": "Harbour Island, Bahamas",
+        "level": "Easy",
+        "distance": "16 km",
+        "elevation": "+60 m",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "An elegant, low-effort e-bike or beach-cruiser circuit through Dunmore Town, pastel colonial cottages and Pink Sands Beach. Conclude with a reserved beach cabana, discreet cocktail service and a tender return to the yacht.",
+        "access": "Arrive by yacht near Harbour Island and coordinate tender landing to the local dock. Bicycles should be pre-positioned by the concierge; compact e-bikes or classic cruisers are preferred for the island’s scale.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-5-color.jpg"
+    },
+    {
+        "name": "South Eleuthera – Rock Sound to Cape Eleuthera Coast Ride",
+        "location": "Eleuthera, Bahamas",
+        "level": "Moderate",
+        "distance": "52 km",
+        "elevation": "+280 m",
+        "duration": "4–5 h",
+        "yacht": true,
+        "vip": "A longer coastal expedition across southern Eleuthera, pairing blue-hole landscapes, quiet settlements and Atlantic views. Include a guide vehicle, chilled refreshment service, a private lunch and optional snorkelling along Exuma Sound.",
+        "access": "Cape Eleuthera provides a practical southern yacht gateway. Arrange bicycles, guide and support vehicle before arrival; routing remains subject to weather, road conditions and vessel schedule.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-5-color.jpg"
+    },
+    {
+        "name": "Great Abaco – Marsh Harbour to Hope Town Coastal Ride",
+        "location": "The Abacos, Bahamas",
+        "level": "Moderate",
+        "distance": "45 km",
+        "elevation": "+190 m",
+        "duration": "4–5 h",
+        "yacht": true,
+        "vip": "A refined island-road itinerary between Marsh Harbour and the Hope Town approach, through lagoons, pine landscapes and Abaco’s nautical heritage. Enhance the day with a private tender crossing, an oceanfront lunch and a guided visit around Hope Town.",
+        "access": "Base the yacht in Marsh Harbour or another suitable Abaco marina. Bicycles are transferred privately to the start point, with any inter-island tender or ferry coordination arranged in advance.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-4-color.jpg"
+    },
+    {
+        "name": "Elbow Cay – Hope Town & Tahiti Beach Ride",
+        "location": "The Abacos, Bahamas",
+        "level": "Easy–Moderate",
+        "distance": "22 km",
+        "elevation": "+110 m",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "An intimate e-bike ride across Elbow Cay, linking Hope Town’s historic lanes, Atlantic beaches and Tahiti Beach. Add a private beach lunch, paddleboard stop or a Champagne sunset cruise through the Sea of Abaco.",
+        "access": "Approach Hope Town Harbour by yacht or tender, subject to draft and conditions. Lightweight e-bikes and a local guide should be arranged ahead of time.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-4-color.jpg"
+    },
+    {
+        "name": "Great Abaco – Treasure Cay Beach & Green Turtle Cay Circuit",
+        "location": "The Abacos, Bahamas",
+        "level": "Easy–Moderate",
+        "distance": "30 km",
+        "elevation": "+130 m",
+        "duration": "3–4 h",
+        "yacht": true,
+        "vip": "A beach-led experience around Treasure Cay, extended by tender toward Green Turtle Cay for a curated Bahamian lunch in New Plymouth. The afternoon returns through the calm, luminous waters of the Sea of Abaco.",
+        "access": "Use Treasure Cay or a nearby suitable marina / anchorage as the operational base. Green Turtle Cay is incorporated by tender or yacht according to draft, weather and captain’s route planning.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-4-color.jpg"
+    },
+    {
+        "name": "Grand Bahama – Port Lucaya & Fortune Bay Coastal Loop",
+        "location": "Grand Bahama Island, Bahamas",
+        "level": "Easy",
+        "distance": "32 km",
+        "elevation": "+95 m",
+        "duration": "3–4 h",
+        "yacht": true,
+        "vip": "A smooth, accessible coastal ride through Port Lucaya and Fortune Bay, designed for leisure cyclists and families. Add a private Bahamian brunch, a beach-club pause or a guided visit to Grand Bahama’s natural landscapes.",
+        "access": "Use a Port Lucaya or Freeport-area marina as the yacht base. Bikes can be delivered dockside, with a private guide and vehicle support arranged by the concierge.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-2-color.jpg"
+    },
+    {
+        "name": "West End – Old Bahama Bay Coast Ride",
+        "location": "Grand Bahama Island, Bahamas",
+        "level": "Moderate",
+        "distance": "40 km",
+        "elevation": "+110 m",
+        "duration": "3–4 h",
+        "yacht": true,
+        "vip": "A low-traffic western Grand Bahama ride for guests arriving from Florida or the northern Bahamas. Pair coastal cycling with bonefishing, a private beach barbecue, watersports and sunset aperitifs back on board.",
+        "access": "Use West End as the yacht arrival point where suitable. Bikes, private guide and a support vehicle should be staged in advance, subject to yacht clearance and weather conditions.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-2-color.jpg"
+    },
+    {
+        "name": "Bimini – North Bimini Island Ride & Sapona Excursion",
+        "location": "Bimini, Bahamas",
+        "level": "Easy",
+        "distance": "20 km",
+        "elevation": "+45 m",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "A relaxed island ride through Alice Town, local heritage points and Bimini’s fishing culture, followed by a private tender excursion toward the Sapona wreck for snorkelling. Return for a sunset conch-and-lobster supper aboard the yacht.",
+        "access": "Dock at a suitable Bimini marina or arrange protected anchorage according to the captain’s plan. This experience works particularly well as a refined short shore activity on a Miami–Bahamas itinerary.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-7-color.jpg"
+    },
+    {
+        "name": "Andros – Andros Town Blue Hole & Coast Loop",
+        "location": "Andros, Bahamas",
+        "level": "Easy",
+        "distance": "28 km",
+        "elevation": "+70 m",
+        "duration": "3–4 h",
+        "yacht": true,
+        "vip": "A more remote, nature-led ride through local roads, mangroves and blue-hole country, followed by a private naturalist-led visit and a yacht-chef picnic. This is a distinctive experience for guests seeking an authentic, expedition-style Bahamas day.",
+        "access": "Treat Andros as a bespoke expedition call. Tender landing, bicycles, guide and support logistics must be confirmed in advance, taking account of local infrastructure, weather and vessel schedule.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-6-color.jpg"
+    },
+    {
+        "name": "Great Harbour Cay Island Circuit",
+        "location": "The Berry Islands, Bahamas",
+        "level": "Easy",
+        "distance": "28 km",
+        "elevation": "+75 m",
+        "duration": "2–3 h",
+        "yacht": true,
+        "vip": "A discreet island circuit through the Berry Islands, with quiet roads, remote beaches and expansive water views. The private version can include a yacht-chef picnic, a beach setup, paddleboards and a sunset cocktail served from the tender.",
+        "access": "Use Great Harbour Cay as the preferred operational point. Docking or anchoring, bike staging and shore transfer must be confirmed in advance with the captain and local operators.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-7-color.jpg"
+    },
+    {
+        "name": "Cat Island Heritage & Mount Alvernia Ride",
+        "location": "Cat Island, Bahamas",
+        "level": "Moderate",
+        "distance": "42 km",
+        "elevation": "+240 m",
+        "duration": "4–5 h",
+        "yacht": true,
+        "vip": "A slow-travel ride through Cat Island’s villages, coastal roads and elevated interior, with an optional cultural stop and private island lunch.",
+        "access": "Tender landing and support vehicle are essential. Final route and shore logistics must be confirmed locally.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-8-color.jpg"
+    },
+    {
+        "name": "Long Island – Dean’s Blue Hole Coastal Circuit",
+        "location": "Long Island, Bahamas",
+        "level": "Moderate",
+        "distance": "56 km",
+        "elevation": "+190 m",
+        "duration": "4–5 h",
+        "yacht": true,
+        "vip": "A long, cinematic coastal route combining quiet roads, dramatic blue-water scenery and a private stop near Dean’s Blue Hole.",
+        "access": "Use a suitable southern or northern Long Island arrival point according to itinerary. Pre-arranged bike transport and vehicle support are required.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-8-color.jpg"
+    },
+    {
+        "name": "San Salvador – Discovery Bay & Cockburn Town Loop",
+        "location": "San Salvador, Bahamas",
+        "level": "Easy–Moderate",
+        "distance": "34 km",
+        "elevation": "+120 m",
+        "duration": "3–4 h",
+        "yacht": true,
+        "vip": "A private exploration of San Salvador’s coastal roads, clear-water bays and historic island atmosphere, designed as a calm full-day yacht shore experience.",
+        "access": "Tender landing, guide, bike delivery and return timing should be planned in advance with local support.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-8-color.jpg"
+    },
+    {
+        "name": "Rum Cay – Port Nelson Wilderness Ride",
+        "location": "Rum Cay, Bahamas",
+        "level": "Moderate",
+        "distance": "30 km",
+        "elevation": "+100 m",
+        "duration": "3–4 h",
+        "yacht": true,
+        "vip": "A remote, wilderness-oriented ride for adventurous yacht guests, with unspoiled scenery and a private picnic in a secluded coastal setting.",
+        "access": "Port Nelson area access is strictly expedition-style. Tender operations and full support logistics depend on weather, anchorage and vessel planning.",
+        "img": "/media/client/lydie/2026-09-28/bahamas-cards/card-8-color.jpg"
+    }
+],
+};
