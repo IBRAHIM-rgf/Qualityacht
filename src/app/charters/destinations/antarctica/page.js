@@ -20,7 +20,7 @@ export default function AntarcticaPage() {
         videoLandscape={`${HERO}/hero.mp4`}
         posterLandscape={`${HERO}/poster.jpg`}
         kicker="Qualityacht · Antarctica"
-        title="Antarctica"
+        title="The Antarctica"
         subtitle="The Ultimate Luxury Yachting Destination"
         align="center"
         contentClassName="pt-[210px] md:pt-[190px]"
