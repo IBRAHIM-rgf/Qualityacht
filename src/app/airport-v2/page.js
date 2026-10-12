@@ -37,7 +37,7 @@ const soon = [{ island: 'Coming Soon', airports: ['Airport information coming so
 // ── Données destinations ───────────────────────────────────────────────────────
 const regions = [
   { name: 'Caribbean',              image: '/images/destinations/animals/caraibes.jpg',               groups: caribbeanGroups },
-  { name: 'Arctic',                 image: '/images/destinations/animals/Arctic.png',                  groups: soon },
+  { name: 'The Arctic',                 image: '/images/destinations/animals/Arctic.png',                  groups: soon },
   { name: 'Bahamas',                image: '/images/destinations/animals/Bahamas.jpg',                 groups: soon },
   { name: 'Central America',        image: '/images/destinations/animals/Central-America.jpg',         groups: soon },
   { name: 'East Asia',              image: '/images/destinations/animals/EAST-ASIA.jpg',               groups: soon },
