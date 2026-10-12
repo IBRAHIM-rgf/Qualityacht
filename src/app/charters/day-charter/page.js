@@ -12,7 +12,7 @@ import ItemsGrid from "../../components/ItemsGrid";
 
 const cards = [
   {
-    title: "Arctic",
+    title: "The Arctic",
     description: "High-latitude cruising among glaciers, fjords and long polar light.",
     image: "/images/destinations/cards/arctic-card.webp",
   },
@@ -95,7 +95,7 @@ const cards = [
   },
   // Antarctica (client 2026-10-10) : a venir, carte sans lien.
   {
-    title: "Antarctica",
+    title: "The Antarctica",
     description: "Discover the remarkable wildlife of the icy waters of Antarctica.",
     image: "/images/destinations/cards/antarctica-card.webp",
   },
