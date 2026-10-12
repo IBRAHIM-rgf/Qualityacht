@@ -58,7 +58,7 @@ const comingSoon = [{ island: 'Coming Soon', airports: ['Information coming soon
 // CONVENTION : fichier deposé dans /public/images/private_jet/hero/ avec le nom hero_<slug>.<ext>
 // Si heroImage est absent (null), la photo de la card sert de fallback (rendu portrait haut).
 export const destinations = [
-  { slug: 'arctic',                 name: 'Arctic',                  image: '/images/private_jet/private_arctic.jpeg',                 heroImage: '/images/private_jet/hero/hero_arctic-v2.jpg',                groups: comingSoon },
+  { slug: 'arctic',                 name: 'The Arctic',                  image: '/images/private_jet/private_arctic.jpeg',                 heroImage: '/images/private_jet/hero/hero_arctic-v2.jpg',                groups: comingSoon },
   { slug: 'bahamas',                name: 'Bahamas',                 image: '/images/private_jet/private_bahamas.jpeg',                heroImage: '/media/client/2026-10-09/hero-private-jet-bahamas.jpg', heroTitleClass: 'pb-16 md:pb-32',               groups: bahamasJetGroups },
   { slug: 'central-america',        name: 'Central America',         image: '/images/private_jet/private_central-america.jpeg',        heroImage: '/images/private_jet/hero/hero_central-america-v2.jpg',       groups: comingSoon },
   { slug: 'east-asia',              name: 'East Asia',               image: '/images/private_jet/private_east-asia.jpeg',              heroImage: '/images/private_jet/hero/hero_east-asia-v2.jpg',             groups: comingSoon },
@@ -74,7 +74,7 @@ export const destinations = [
   { slug: 'northern-europe',        name: 'Northern Europe',         image: '/images/private_jet/private_northern-europe.jpeg',        heroImage: '/images/private_jet/hero/hero_northern-europe-v2.jpg',       groups: comingSoon },
   { slug: 'caribbean',              name: 'Caribbean',               image: '/images/private_jet/private_caribbean.jpg',                heroImage: '/images/private_jet/hero/hero_caribbean.jpg',             groups: caribbeanJetGroups, heroObjectPosition: '50% 60%' },
   { slug: 'oceania',                name: 'Oceania',                 image: '/images/private_jet/private_oceania.jpeg',                heroImage: '/images/private_jet/hero/hero_oceania-v2.jpg',               groups: comingSoon },
-  { slug: 'antarctica',             name: 'Antarctica',              image: '/images/private_jet/private_antarctica.jpg',              heroImage: '/images/private_jet/private_antarctica.jpg',             groups: comingSoon },
+  { slug: 'antarctica',             name: 'The Antarctica',              image: '/images/private_jet/private_antarctica.jpg',              heroImage: '/images/private_jet/private_antarctica.jpg',             groups: comingSoon },
 ];
 
 export function getDestinationBySlug(slug) {
