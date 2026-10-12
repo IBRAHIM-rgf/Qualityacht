@@ -12,6 +12,7 @@ export const metadata = {
 // puis les 2 cards ART / CULTURE avec les textes fournis par le client. ART ouvre les
 // lieux par groupe d'iles ; CULTURE ouvre le calendrier culturel (une bande The Bahamas).
 // Hero fourni par le client (2026-10-12) : char de carnaval (photos permutees a sa demande).
+// (redeploiement 2026-10-12)
 const HERO_IMAGE = '/media/client/2026-10-10/art-culture-bahamas/art-carnival-float.jpg';
 
 const panels = [
