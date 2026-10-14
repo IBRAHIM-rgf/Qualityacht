@@ -117,4 +117,6 @@ export const destinationItems = [
   { title: 'Northern Europe',       image: '/images/destinations/animals/articbynortherneurope.jpg' },
   { title: 'Caraïbes',              image: '/images/destinations/animals/caraibes.jpg', caribbean: true },
   { title: 'Oceania',               image: '/images/destinations/animals/oceania.jpeg' },
+  // Ajoutee (client 2026-10-14) : toutes les destinations dans chaque case.
+  { title: 'The Antarctica',        image: '/images/destinations/animals/Antarctica.jpg' },
 ];
