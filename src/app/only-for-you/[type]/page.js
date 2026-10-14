@@ -148,24 +148,6 @@ export default function RentalTypePage({ params }) {
             </div>
           </div>
 
-          <article className="rounded-2xl border border-[#C0C0C0]/25 bg-[#2e2f32] overflow-hidden">
-            <div className="relative aspect-[16/9] md:aspect-[21/9]">
-              <Image
-                src={CARIBBEAN_IMAGE}
-                alt="The Caribbean"
-                fill
-                sizes="(max-width: 768px) 100vw, 900px"
-                className="object-cover"
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-[#26272a]/95 via-[#26272a]/35 to-transparent"
-              />
-              <h3 className="absolute inset-x-0 bottom-0 p-6 trajan-regular text-2xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-                The Caribbean
-              </h3>
-            </div>
-          </article>
 
           {/* Regates : case Bahamas (client 2026-10-09) -> calendrier des regates Bahamas. */}
           {type === 'regatta' && (
@@ -193,6 +175,25 @@ export default function RentalTypePage({ params }) {
               </div>
             </article>
           )}
+
+          {/* Toutes les destinations dans chaque case (client 2026-10-14), Caraibes
+              compris ; Bahamas reste en grand pour Regatta : pas de doublon. */}
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+            {/* The Caribbean : meme taille que les autres, en premier (client 2026-10-14). */}
+            {[{ title: 'The Caribbean', image: CARIBBEAN_IMAGE }, ...destinationItems
+              .filter((d) => !d.caribbean && !(type === 'regatta' && d.title === 'Bahamas'))]
+              .map((d) => (
+                <article key={d.title} className="rounded-2xl border border-[#C0C0C0]/25 bg-[#2e2f32] overflow-hidden">
+                  <div className="relative aspect-[4/3]">
+                    <Image src={d.image} alt={d.title} fill sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 300px" className="object-cover" />
+                    <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#26272a]/95 via-[#26272a]/35 to-transparent" />
+                    <h3 className="absolute inset-x-0 bottom-0 p-4 trajan-regular text-base md:text-lg uppercase tracking-[0.1em] text-[#C0C0C0] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                      {d.title}
+                    </h3>
+                  </div>
+                </article>
+              ))}
+          </div>
 
           {/* Autres destinations : aucune fausse disponibilite affichee. */}
           <div className="mt-8 rounded-2xl border border-[#C0C0C0]/25 bg-[#2e2f32]/70 p-7 md:p-8 text-center">
