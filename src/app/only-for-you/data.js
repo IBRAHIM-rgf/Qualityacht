@@ -94,6 +94,26 @@ export const sailingTypes = [
   },
 ];
 
+// Cle de region de l'admin pour chaque case (client 2026-10-15). The Antarctica n'a
+// pas de region dans l'admin : pas de cle (liste vide).
+export const DESTINATION_REGION = {
+  'the-arctic': 'arctic',
+  'bahamas': 'bahamas',
+  'central-america': 'central-america',
+  'east-asia': 'east-asia',
+  'eastern-mediterranean': 'east-mediterranean',
+  'indian-ocean': 'indian-ocean',
+  'indonesia': 'indonesia',
+  'north-america': 'north-america',
+  'pacific-ocean': 'pacific-ocean',
+  'oman-gulf': 'arabian-gulf',
+  'south-east-asia': 'south-east-asia',
+  'western-mediterranean': 'west-mediterranean',
+  'africa': 'africa',
+  'northern-europe': 'northern-europe',
+  'oceania': 'oceania',
+};
+
 export function getDestinationBySlug(slug) {
   return destinationItems.find((d) => d.slug === slug) || null;
 }
