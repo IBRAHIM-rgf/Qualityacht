@@ -163,6 +163,7 @@ export async function PATCH(request) {
   } = await import('@/lib/db');
     const { extractLightData, inferAnkorRegion } = await import('@/lib/yachtCache');
     const { normalizeCustomPricing, normalizeDayCharter } = await import('@/lib/customPricing');
+    const { normalizeCharterModel } = await import('@/lib/charterModel');
     // Meme garantie que sur le POST : les mises a jour ecrivent aussi dans
     // `regions` / `sub_regions`.
     await ensureV3Schema();
@@ -217,6 +218,7 @@ export async function PATCH(request) {
           extra_info,
           custom_pricing,
           day_charter,
+          charter_model,
           overrides,
         } = data;
         if (!yacht_id) {
@@ -242,6 +244,8 @@ export async function PATCH(request) {
           custom_pricing: Array.isArray(custom_pricing) ? normalizeCustomPricing(custom_pricing) : undefined,
           // Day Charter : objet normalise, undefined = inchange.
           day_charter: day_charter && typeof day_charter === 'object' ? normalizeDayCharter(day_charter) : undefined,
+          // Modele tarifaire charter (client 2026-10-15) : objet normalise, undefined = inchange.
+          charter_model: charter_model && typeof charter_model === 'object' && !Array.isArray(charter_model) ? normalizeCharterModel(charter_model) : undefined,
           // Fiche bateau : champs modifies uniquement ({} = retour aux donnees d'origine), undefined = inchange.
           overrides: overrides && typeof overrides === 'object' && !Array.isArray(overrides) ? overrides : undefined,
         });
