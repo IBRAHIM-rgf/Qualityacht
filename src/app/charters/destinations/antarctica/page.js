@@ -6,6 +6,7 @@
 
 import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
+import AntarcticaRegions from './AntarcticaRegions';
 
 const HERO = '/media/client/2026-10-10/antarctica-hero';
 
@@ -40,6 +41,8 @@ export default function AntarcticaPage() {
           </Link>
         </div>
       </VideoHero>
+      {/* Destinations by Region (client 2026-10-15), comme North America. */}
+      <AntarcticaRegions />
     </div>
   );
 }
