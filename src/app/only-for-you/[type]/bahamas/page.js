@@ -1,21 +1,31 @@
 // /only-for-you/regatta/bahamas — regates aux Bahamas 2026 par zone (client 2026-10-09),
 // ouverte par la case Bahamas de /only-for-you/regatta. Les autres types n'ont pas de
-// page Bahamas pour l'instant (404).
+// page Bahamas propre : ils affichent la page « voilier + destination » (client 2026-10-14).
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RegattaBahamasClient from './RegattaBahamasClient';
+import DestinationHero from '../[destination]/DestinationHero';
+import { getSailingTypeBySlug, getDestinationBySlug } from '../../data';
 
-export const metadata = {
-  title: 'Bahamas Sailing Regattas — 2026 | Qualityacht',
-};
+export async function generateMetadata({ params }) {
+  const { type } = await params;
+  if (type === 'regatta') return { title: 'Bahamas Sailing Regattas — 2026 | Qualityacht' };
+  const boat = getSailingTypeBySlug(type);
+  return boat ? { title: `${boat.name} — Bahamas | Qualityacht` } : {};
+}
 
 // Hero fourni par le client (2026-10-09) : voilier au coucher du soleil.
 const HERO = '/media/client/2026-10-09/hero-regatta-bahamas.jpg';
 
 export default async function RegattaBahamasPage({ params }) {
   const { type } = await params;
-  if (type !== 'regatta') notFound();
+  if (type !== 'regatta') {
+    const boat = getSailingTypeBySlug(type);
+    const dest = getDestinationBySlug('bahamas');
+    if (!boat || !dest) notFound();
+    return <DestinationHero boat={boat} typeSlug={type} title={dest.title} image={dest.image} />;
+  }
   return (
     <main className="bg-[#26272a] text-[#acb0cd] min-h-screen">
       <section className="relative h-[60vh] md:h-[72vh] min-h-[420px] overflow-hidden">
