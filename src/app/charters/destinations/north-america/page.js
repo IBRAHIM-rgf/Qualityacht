@@ -6,6 +6,7 @@
 import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
 import NorthAmericaRegions from './NorthAmericaRegions';
+import NorthAmericaRegionCards from './NorthAmericaRegionCards';
 
 const HERO = '/media/client/2026-10-15/north-america-hero';
 
@@ -40,6 +41,8 @@ export default function NorthAmericaPage() {
           </Link>
         </div>
       </VideoHero>
+      {/* Cases des regions (client 2026-10-15), comme les cases Bahamas. */}
+      <NorthAmericaRegionCards />
       <NorthAmericaRegions />
     </div>
   );
