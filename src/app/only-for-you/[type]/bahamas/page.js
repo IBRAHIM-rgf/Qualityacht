@@ -1,12 +1,14 @@
 // /only-for-you/regatta/bahamas — regates aux Bahamas 2026 par zone (client 2026-10-09),
 // ouverte par la case Bahamas de /only-for-you/regatta. Les autres types n'ont pas de
-// page Bahamas propre : ils affichent la page « voilier + destination » (client 2026-10-14).
+// page Bahamas propre : ils affichent la liste des yachts Only for You Bahamas filtree sur le type (client 2026-10-15).
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RegattaBahamasClient from './RegattaBahamasClient';
-import DestinationHero from '../[destination]/DestinationHero';
+import OnlyForYouRegionYachts from '../../OnlyForYouRegionYachts';
 import { getSailingTypeBySlug, getDestinationBySlug } from '../../data';
+
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }) {
   const { type } = await params;
@@ -24,7 +26,7 @@ export default async function RegattaBahamasPage({ params }) {
     const boat = getSailingTypeBySlug(type);
     const dest = getDestinationBySlug('bahamas');
     if (!boat || !dest) notFound();
-    return <DestinationHero boat={boat} typeSlug={type} title={dest.title} image={dest.image} />;
+    return <OnlyForYouRegionYachts region="bahamas" name={dest.title} heroImage={dest.image} type={type} fleetTitle="Yachts in the Bahamas" guideArticle="the" />;
   }
   return (
     <main className="bg-[#26272a] text-[#acb0cd] min-h-screen">
