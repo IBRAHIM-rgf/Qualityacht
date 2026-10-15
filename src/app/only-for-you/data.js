@@ -94,29 +94,34 @@ export const sailingTypes = [
   },
 ];
 
+export function getDestinationBySlug(slug) {
+  return destinationItems.find((d) => d.slug === slug) || null;
+}
+
 export function getSailingTypeBySlug(slug) {
   return sailingTypes.find((t) => t.slug === slug) || null;
 }
 
-// Les 16 destinations (même ordre que /charters/destinations) — affichées
-// en bas de chaque page voilier. Pas de href : affichage seul.
+// Les destinations (même ordre que /charters/destinations) — affichées en bas de
+// chaque page voilier. `slug` (client 2026-10-14) : chaque case ouvre
+// /only-for-you/<type>/<slug> (Caraïbes : page /carribbean existante).
 export const destinationItems = [
-  { title: 'The Arctic',                image: '/images/destinations/animals/Arctic.png' },
-  { title: 'Bahamas',               image: '/images/destinations/animals/Bahamas.jpg' },
-  { title: 'Central America',       image: '/images/destinations/animals/Central-America.jpg' },
-  { title: 'East Asia',             image: '/images/destinations/animals/EAST-ASIA.jpg' },
-  { title: 'Eastern Mediterranean', image: '/images/destinations/animals/Eastern-Mediterranean.jpg' },
-  { title: 'Indian Ocean',          image: '/images/destinations/animals/Indian-Ocean.jpg' },
-  { title: 'Indonesia',             image: '/images/destinations/animals/Indonesia.jpg' },
-  { title: 'North America',         image: '/images/destinations/animals/Nord-America.jpg' },
-  { title: 'Pacific Ocean',         image: '/images/destinations/animals/Ocean-Pacific.jpeg' },
-  { title: 'Oman Gulf',             image: '/images/destinations/animals/Oman-Gulf.jpeg' },
-  { title: 'South East Asia',       image: '/images/destinations/animals/SOUTH-EAST-ASIA.jpeg' },
-  { title: 'Western Mediterranean', image: '/images/destinations/animals/Western-Mediterranean.webp' },
-  { title: 'Africa',                image: '/images/destinations/animals/africa.jpeg' },
-  { title: 'Northern Europe',       image: '/images/destinations/animals/articbynortherneurope.jpg' },
+  { slug: 'the-arctic', title: 'The Arctic',                image: '/images/destinations/animals/Arctic.png' },
+  { slug: 'bahamas', title: 'Bahamas',               image: '/images/destinations/animals/Bahamas.jpg' },
+  { slug: 'central-america', title: 'Central America',       image: '/images/destinations/animals/Central-America.jpg' },
+  { slug: 'east-asia', title: 'East Asia',             image: '/images/destinations/animals/EAST-ASIA.jpg' },
+  { slug: 'eastern-mediterranean', title: 'Eastern Mediterranean', image: '/images/destinations/animals/Eastern-Mediterranean.jpg' },
+  { slug: 'indian-ocean', title: 'Indian Ocean',          image: '/images/destinations/animals/Indian-Ocean.jpg' },
+  { slug: 'indonesia', title: 'Indonesia',             image: '/images/destinations/animals/Indonesia.jpg' },
+  { slug: 'north-america', title: 'North America',         image: '/images/destinations/animals/Nord-America.jpg' },
+  { slug: 'pacific-ocean', title: 'Pacific Ocean',         image: '/images/destinations/animals/Ocean-Pacific.jpeg' },
+  { slug: 'oman-gulf', title: 'Oman Gulf',             image: '/images/destinations/animals/Oman-Gulf.jpeg' },
+  { slug: 'south-east-asia', title: 'South East Asia',       image: '/images/destinations/animals/SOUTH-EAST-ASIA.jpeg' },
+  { slug: 'western-mediterranean', title: 'Western Mediterranean', image: '/images/destinations/animals/Western-Mediterranean.webp' },
+  { slug: 'africa', title: 'Africa',                image: '/images/destinations/animals/africa.jpeg' },
+  { slug: 'northern-europe', title: 'Northern Europe',       image: '/images/destinations/animals/articbynortherneurope.jpg' },
   { title: 'Caraïbes',              image: '/images/destinations/animals/caraibes.jpg', caribbean: true },
-  { title: 'Oceania',               image: '/images/destinations/animals/oceania.jpeg' },
+  { slug: 'oceania', title: 'Oceania',               image: '/images/destinations/animals/oceania.jpeg' },
   // Ajoutee (client 2026-10-14) : toutes les destinations dans chaque case.
-  { title: 'The Antarctica',        image: '/images/destinations/animals/Antarctica.jpg' },
+  { slug: 'the-antarctica', title: 'The Antarctica',        image: '/images/destinations/animals/Antarctica.jpg' },
 ];
