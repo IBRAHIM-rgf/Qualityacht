@@ -57,11 +57,17 @@ const SUB_REGION_LABELS = {
   'andros': 'Andros',
   'bimini-berry': 'Bimini & Berry Islands',
   'out-islands': 'Îles du Sud / Out Islands',
+  // Amerique du Nord (client 2026-10-15) : cases de la page North America.
+  'east-coast-us': 'East Coast United States',
+  'west-coast-us': 'West Coast United States',
+  'canada': 'Canada',
+  'miami': 'Miami',
 };
 
 const SUB_REGIONS_BY_REGION = {
   caribbean: ['greater-antilles', 'leeward-islands', 'windward-islands', 'leeward-antilles', 'turks-caicos', 'trinidad-tobago', 'bvi', 'grand-cayman', 'emerging-destinations'],
   bahamas: ['nassau', 'grand-bahama', 'exumas', 'abacos', 'eleuthera', 'andros', 'bimini-berry', 'out-islands'],
+  'north-america': ['east-coast-us', 'west-coast-us', 'canada', 'miami'],
 };
 
 // Axe "Catégories charter" — indépendant des régions géo, multi-sélection.
