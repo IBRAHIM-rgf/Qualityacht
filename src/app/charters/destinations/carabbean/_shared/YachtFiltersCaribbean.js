@@ -58,7 +58,9 @@ const DEFAULT_TOGGLES = [
   { key: 'couplesFriendly', label: 'Couples Friendly' },
 ];
 
-export default function YachtFiltersCaribbean({ filters, onChange, customToggles = null, hideMotor = false, boatGroups = null, hideYachtType = false, lengthRangeM = DEFAULT_LENGTH_RANGE_M }) {
+// hideCaribbeanDestination (client 2026-10-15) : masque « Caribbean Destination » sur les
+// pages Only for You hors Caraibes. Defaut false = inchange.
+export default function YachtFiltersCaribbean({ filters, onChange, customToggles = null, hideMotor = false, boatGroups = null, hideYachtType = false, lengthRangeM = DEFAULT_LENGTH_RANGE_M, hideCaribbeanDestination = false }) {
   // Bornes du slider Length (m + pieds derives) — par defaut 10-140 m, surchargeable par page.
   const MIN_LENGTH_M = lengthRangeM[0];
   const MAX_LENGTH_M = lengthRangeM[1];
@@ -202,13 +204,13 @@ export default function YachtFiltersCaribbean({ filters, onChange, customToggles
                 </select>
               </div>
             )}
-            <div>
+            {!hideCaribbeanDestination && <div>
               <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Caribbean Destination</label>
               <select value={localFilters.destination} onChange={e => handleChange('destination', e.target.value)}
                 className="w-full px-4 py-3 bg-[#3a3b3f] border border-white/20 rounded-xl text-[#acb0cd] accent-qy-antilles">
                 {DESTINATIONS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
               </select>
-            </div>
+            </div>}
             <div>
               <label className="block text-sm font-medium text-[#C0C0C0] mb-2">Charter Dates</label>
               <div className="grid grid-cols-2 gap-2">

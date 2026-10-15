@@ -54,6 +54,9 @@ export default function SubregionClient({
   // initialBoatClass : filtre « Boat Class » pre-selectionne a l'arrivee (ex. ?type=catamaran
   // depuis /only-for-you). Defaut '' = aucun.
   initialBoatClass = '',
+  // Masque le filtre « Caribbean Destination » (Only for You hors Caraibes, 2026-10-15).
+  hideCaribbeanDestination = false,
+  guideArticle = 'the',
 }) {
   // Nombre de yachts selectionnes (selection partagee)
   const selectedCount = useSelectedCount();
@@ -183,7 +186,9 @@ export default function SubregionClient({
         <div className="max-w-3xl mx-auto text-center leading-relaxed space-y-6 py-16 md:py-24">
 
           <h2 className="trajan-regular text-lg md:text-2xl text-[#acb0cd] leading-snug">
-            The Ultimate Yacht Charter Guide to the{' '}
+            {/* guideArticle (2026-10-15) : article avant le nom ('' pour « Africa »,
+                « The Arctic »…). Defaut 'the' = inchange (Caraibes, Bahamas). */}
+            The Ultimate Yacht Charter Guide to{guideArticle ? ` ${guideArticle}` : ''}{' '}
             <span style={{ color: '#bd9973' }}>{name}</span>
             {subTitle && <>:{' '}{subTitle}</>}
           </h2>
@@ -252,7 +257,7 @@ export default function SubregionClient({
             </FleetHeaderRow>
           </div>
 
-          <YachtFiltersCaribbean filters={filters} onChange={setFilters} customToggles={customToggles} hideMotor={hideMotor} boatGroups={boatGroups} hideYachtType={hideYachtType} lengthRangeM={lengthRangeM} />
+          <YachtFiltersCaribbean filters={filters} onChange={setFilters} customToggles={customToggles} hideMotor={hideMotor} boatGroups={boatGroups} hideYachtType={hideYachtType} lengthRangeM={lengthRangeM} hideCaribbeanDestination={hideCaribbeanDestination} />
 
           <main className="mt-6">
             {filteredYachts.length === 0 ? (
