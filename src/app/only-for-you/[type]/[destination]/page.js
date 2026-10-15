@@ -1,8 +1,11 @@
-// /only-for-you/<type>/<destination> (client 2026-10-14) — voir DestinationHero.
-// Caraibes (/carribbean) et Bahamas (/bahamas) ont leur propre dossier.
+// /only-for-you/<type>/<destination> (client 2026-10-14/15) : meme modele que la case
+// The Caribbean — liste des yachts « Only for You » de la destination, filtree sur le
+// type de voilier. Caraibes (/only-for-you/caribbean) et Bahamas (/bahamas) a part.
 import { notFound } from 'next/navigation';
-import { getSailingTypeBySlug, getDestinationBySlug } from '../../data';
-import DestinationHero from './DestinationHero';
+import { getSailingTypeBySlug, getDestinationBySlug, DESTINATION_REGION } from '../../data';
+import OnlyForYouRegionYachts from '../../OnlyForYouRegionYachts';
+
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }) {
   const { type, destination } = await params;
@@ -17,5 +20,13 @@ export default async function OnlyForYouDestinationPage({ params }) {
   const boat = getSailingTypeBySlug(type);
   const dest = getDestinationBySlug(destination);
   if (!boat || !dest) notFound();
-  return <DestinationHero boat={boat} typeSlug={type} title={dest.title} image={dest.image} />;
+  return (
+    <OnlyForYouRegionYachts
+      region={DESTINATION_REGION[dest.slug] || null}
+      name={dest.title}
+      heroImage={dest.image}
+      type={type}
+      fleetTitle={`Yachts in ${dest.title.replace(/^The /, 'the ')}`}
+    />
+  );
 }
