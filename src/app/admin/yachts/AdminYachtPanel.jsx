@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { HANDICAPS_BY_CAT, HANDICAP_LABELS, parseHandicaps } from '@/lib/handicaps';
 import { normalizeCustomPricing, normalizeDayCharter, PRICING_CURRENCIES } from '@/lib/customPricing';
+import { normalizeCharterModel } from '@/lib/charterModel';
+import CharterModelEditor from './CharterModelEditor';
 import { OVERRIDE_TEXT_FIELDS, normalizeOverrides, mergeSourceAndOverrides, diffOverrides, isSupportedImage } from '@/lib/yachtOverrides';
 
 // ════════════════════════════════════════════════════════════
@@ -156,6 +158,8 @@ function adaptYacht(s) {
     custom_pricing: normalizeCustomPricing(s.custom_pricing),
     // Day Charter : case + prix a la journee (client 2026-09-30).
     day_charter: normalizeDayCharter(s.day_charter),
+    // Modele tarifaire charter (client 2026-10-15), admin uniquement.
+    charter_model: normalizeCharterModel(s.charter_model),
     overrides: ov,
   };
 }
@@ -1240,6 +1244,7 @@ function EditModal({ yacht, onClose, onSave }) {
     extra_info: yacht.extra_info || '',
     custom_pricing: ratesToForm(yacht.custom_pricing),
     day_charter: dayCharterToForm(yacht.day_charter),
+    charter_model: normalizeCharterModel(yacht.charter_model),
   });
   const [saving, setSaving] = useState(false);
 
@@ -1299,6 +1304,7 @@ function EditModal({ yacht, onClose, onSave }) {
       ...form,
       custom_pricing: normalizeCustomPricing(form.custom_pricing),
       day_charter: normalizeDayCharter(form.day_charter),
+      charter_model: normalizeCharterModel(form.charter_model),
     };
     // Tarifs Ankor seulement pre-remplis et non modifies : on ne touche a rien.
     if (pricingPrefilled && !pricingTouched) delete updates.custom_pricing;
@@ -1362,6 +1368,11 @@ function EditModal({ yacht, onClose, onSave }) {
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Day Charter</label>
             <DayCharterEditor value={form.day_charter} onChange={(day_charter) => setForm((f) => ({ ...f, day_charter }))} />
+          </div>
+          {/* Modele tarifaire charter (client 2026-10-15) : admin uniquement, etape 1. */}
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Modèle tarifaire charter</label>
+            <CharterModelEditor value={form.charter_model} onChange={(charter_model) => setForm((f) => ({ ...f, charter_model }))} />
           </div>
           {/* Régions / sous-régions : cases à cocher, le yacht apparaît sur chaque zone cochée */}
           <div>
