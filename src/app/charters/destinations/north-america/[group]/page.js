@@ -23,8 +23,8 @@ export default async function NorthAmericaRegionPage({ params }) {
   if (!g) notFound();
   const config = {
     name: g.name,
-    heroImage: NA_CARD_PHOTO,
-    heroImageOriginal: NA_CARD_PHOTO,
+    heroImage: g.photo || NA_CARD_PHOTO,
+    heroImageOriginal: g.photo || NA_CARD_PHOTO,
     topIslands: g.places,
     fleetTitle: 'Yachts in North America',
     hideCaribbeanDestination: true,
