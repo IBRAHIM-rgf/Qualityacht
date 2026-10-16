@@ -17,7 +17,7 @@ export default function NorthAmericaRegionCards() {
           <RevealBlock label="Explore" title="North America Regions" />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
             {NA_GROUPS.map((g, i) => (
-              <DestCard key={g.slug} index={i} name={g.name} image={NA_CARD_PHOTO} imageOld={NA_CARD_PHOTO}
+              <DestCard key={g.slug} index={i} name={g.name} image={g.photo || NA_CARD_PHOTO} imageOld={g.photo || NA_CARD_PHOTO}
                 href={`/charters/destinations/north-america/${g.slug}`} />
             ))}
           </div>
