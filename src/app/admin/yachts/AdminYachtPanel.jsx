@@ -62,6 +62,7 @@ const SUB_REGION_LABELS = {
   'west-coast-us': 'West Coast United States',
   'canada': 'Canada',
   'miami': 'Miami',
+  'mexico': 'Mexico',
   // Mediterranee Ouest (client 2026-10-16) : admin uniquement pour l'instant.
   'french-riviera-monaco': 'French Riviera & Monaco',
   'south-of-france': 'South of France',
@@ -83,7 +84,7 @@ const SUB_REGION_LABELS = {
 const SUB_REGIONS_BY_REGION = {
   caribbean: ['greater-antilles', 'leeward-islands', 'windward-islands', 'leeward-antilles', 'turks-caicos', 'trinidad-tobago', 'bvi', 'grand-cayman', 'emerging-destinations'],
   bahamas: ['nassau', 'grand-bahama', 'exumas', 'abacos', 'eleuthera', 'andros', 'bimini-berry', 'out-islands'],
-  'north-america': ['east-coast-us', 'west-coast-us', 'canada', 'miami'],
+  'north-america': ['east-coast-us', 'west-coast-us', 'canada', 'miami', 'mexico'],
   'west-mediterranean': ['french-riviera-monaco', 'south-of-france', 'corsica', 'sardinia', 'balearic-islands', 'spain-mainland', 'italian-riviera-liguria', 'tuscany', 'lazio', 'campania', 'amalfi-coast', 'sicily-islands', 'gibraltar', 'morocco', 'tunisia'],
 };
 
