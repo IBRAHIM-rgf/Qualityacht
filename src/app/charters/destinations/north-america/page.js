@@ -8,6 +8,7 @@ import VideoHero from '@/components/vibe/VideoHero';
 import NorthAmericaRegions from './NorthAmericaRegions';
 import NorthAmericaRegionCards from './NorthAmericaRegionCards';
 import BahamasPopularDestinations from '../bahamas/BahamasPopularDestinations';
+import NorthAmericaCta from './NorthAmericaCta';
 
 // Ronds fleurs (client 2026-10-19), meme section que Bahamas : photo filtree au repos,
 // couleur au survol. Noms = les 5 regions (choix du client).
@@ -57,6 +58,7 @@ export default function NorthAmericaPage() {
       <NorthAmericaRegionCards />
       <NorthAmericaRegions />
       <BahamasPopularDestinations items={NA_FLOWERS} />
+      <NorthAmericaCta />
     </div>
   );
 }
