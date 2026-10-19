@@ -32,6 +32,16 @@ const REGIONS = [
     ['Quebec', [['Quebec City', 46.81, -71.21], ['Montreal', 45.5, -73.57]]],
     ['Nova Scotia', [['Halifax', 44.65, -63.57], ['Cape Breton', 46.25, -60.75]]],
   ] },
+  // Mexique (client 2026-10-19, fichier « liste pour mexique »).
+  { name: 'Mexico', subs: [
+    ['Sea of Cortez', [['La Paz', 24.14, -110.31], ['Espíritu Santo', 24.46, -110.34], ['Balandra', 24.32, -110.33], ['Isla San José', 24.95, -110.62], ['Loreto', 26.01, -111.34]]],
+    ['Baja California Sur', [['Cabo San Lucas', 22.89, -109.91], ['San José del Cabo', 23.06, -109.7], ['Cabo Pulmo', 23.44, -109.43], ['East Cape', 23.55, -109.48]]],
+    ['Mexican Caribbean', [['Cancún', 21.16, -86.85], ['Isla Mujeres', 21.23, -86.73], ['Isla Contoy', 21.49, -86.79], ['Playa del Carmen', 20.63, -87.07], ['Cozumel', 20.42, -86.92], ['Tulum', 20.21, -87.47]]],
+    ['Yucatán North Coast', [['Holbox', 21.52, -87.38], ['Río Lagartos', 21.6, -88.16], ['Celestún', 20.86, -90.4]]],
+    ['Pacific Mainland', [['Puerto Vallarta', 20.65, -105.23], ['Bahía de Banderas', 20.7, -105.4], ['Sayulita', 20.87, -105.44], ['Punta Mita', 20.77, -105.52]]],
+    ['Costa Alegre', [['Careyes', 19.44, -105.03], ['Chamela Bay', 19.55, -105.1], ['Manzanillo', 19.05, -104.32]]],
+    ['Oaxaca Pacific Coast', [['Huatulco', 15.77, -96.13], ['Puerto Escondido', 15.86, -97.07], ['Bahías de Huatulco', 15.72, -96.2]]],
+  ] },
 ];
 
 function RegionGroup({ region, onSelect }) {

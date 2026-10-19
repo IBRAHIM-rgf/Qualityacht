@@ -15,4 +15,6 @@ export const NA_GROUPS = [
   { name: 'Canada', key: 'canada', slug: 'canada', photo: '/media/client/2026-10-16/north-america-cards/canada.jpg',
     places: ['British Columbia', 'Ontario', 'Quebec', 'Nova Scotia'] },
   { name: 'Miami', key: 'miami', slug: 'miami', photo: '/media/client/2026-10-16/north-america-cards/miami.jpg', places: ['Miami'] },
+  { name: 'Mexico', key: 'mexico', slug: 'mexico', photo: '/media/client/2026-10-19/north-america-cards/mexico.jpg',
+    places: ['Sea of Cortez', 'Baja California Sur', 'Mexican Caribbean', 'Yucatán North Coast', 'Pacific Mainland', 'Costa Alegre', 'Oaxaca Pacific Coast'] },
 ];
