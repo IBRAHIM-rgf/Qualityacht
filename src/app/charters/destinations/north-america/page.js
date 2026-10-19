@@ -7,6 +7,18 @@ import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
 import NorthAmericaRegions from './NorthAmericaRegions';
 import NorthAmericaRegionCards from './NorthAmericaRegionCards';
+import BahamasPopularDestinations from '../bahamas/BahamasPopularDestinations';
+
+// Ronds fleurs (client 2026-10-19), meme section que Bahamas : photo filtree au repos,
+// couleur au survol. Noms = les 5 regions (choix du client).
+const F = '/media/client/2026-10-19/north-america-flowers';
+const NA_FLOWERS = [
+  { name: 'East Coast United States', slug: 'dogwood', rest: `${F}/dogwood-filtered.jpg`, hover: `${F}/dogwood-color.jpg` },
+  { name: 'West Coast United States', slug: 'poppy', rest: `${F}/poppy-filtered.jpg`, hover: `${F}/poppy-color.jpg` },
+  { name: 'Canada', slug: 'rose', rest: `${F}/rose-filtered.jpg`, hover: `${F}/rose-color.jpg` },
+  { name: 'Miami', slug: 'orange-blossom', rest: `${F}/orange-blossom-filtered.jpg`, hover: `${F}/orange-blossom-color.jpg` },
+  { name: 'Mexico', slug: 'dahlia', rest: `${F}/dahlia-filtered.jpg`, hover: `${F}/dahlia-color.jpg` },
+];
 
 const HERO = '/media/client/2026-10-15/north-america-hero';
 
@@ -44,6 +56,7 @@ export default function NorthAmericaPage() {
       {/* Cases des regions (client 2026-10-15), comme les cases Bahamas. */}
       <NorthAmericaRegionCards />
       <NorthAmericaRegions />
+      <BahamasPopularDestinations items={NA_FLOWERS} />
     </div>
   );
 }
