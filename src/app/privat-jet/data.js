@@ -50,6 +50,17 @@ export const bahamasJetGroups = [
   { island: 'Îles du Sud / Out Islands', airports: ['San Salvador International Airport (ZSA) — all jets', 'Inagua Airport (IGA) — medium & light jets', 'Stella Maris Airport (SML) — light jets', "Deadman's Cay Airport (LGI) — light jets", 'New Bight Airport (TBI) — light jets', 'Mayaguana Airport (MYG) — light jets'] },
 ];
 
+// Aeroports Amerique du Nord — Mexique (fichier client « Region-Sub-RegionsAirportGateway-JetSize.csv », 2026-10-19).
+export const northAmericaJetGroups = [
+  { island: 'Sea of Cortez', airports: ['La Paz Airport (LAP) — La Paz, Espíritu Santo, Balandra — Light, Medium & Large Jets', 'Loreto International Airport (LTO) — Loreto — Aircraft-specific confirmation required'] },
+  { island: 'Baja California Sur', airports: ['Cabo San Lucas Airport (CSL) — Cabo San Lucas — Light, Medium & Large Jets', 'Los Cabos International Airport (SJD) — San José del Cabo, East Cape — Light, Medium & Large Jets'] },
+  { island: 'Mexican Caribbean', airports: ['Cancún International Airport (CUN) — Cancún, Isla Mujeres, Riviera Maya — Light, Medium & Large Jets'] },
+  { island: 'Yucatán North Coast', airports: ['Mérida International Airport (MID) — Holbox, Río Lagartos, Celestún — Aircraft-specific confirmation required'] },
+  { island: 'Pacific Mainland', airports: ['Puerto Vallarta Airport (PVR) — Puerto Vallarta, Punta Mita, Bahía de Banderas — Light, Medium & Large Jets'] },
+  { island: 'Costa Alegre', airports: ['Playa de Oro Airport (ZLO) — Careyes, Chamela Bay, Manzanillo — Aircraft-specific confirmation required'] },
+  { island: 'Oaxaca Pacific Coast', airports: ['Huatulco International Airport (HUX) — Huatulco — Light, Medium & Large Jets'] },
+];
+
 const comingSoon = [{ island: 'Coming Soon', airports: ['Information coming soon'] }];
 
 // Ordre identique à /charters/destinations
@@ -65,7 +76,7 @@ export const destinations = [
   { slug: 'eastern-mediterranean',  name: 'Eastern Mediterranean',   image: '/images/private_jet/private_eastern-mediterranean.jpeg', heroImage: '/images/private_jet/hero/hero_eastern-mediterranean.jpg', heroTitleClass: 'pb-16 md:pb-32', groups: comingSoon },
   { slug: 'indian-ocean',           name: 'Indian Ocean',            image: '/images/private_jet/private_indian-ocean.jpeg',           heroImage: '/images/private_jet/hero/hero_indian-ocean-v2.jpg',          groups: comingSoon },
   { slug: 'indonesia',              name: 'Indonesia',               image: '/images/private_jet/private_indonesia.jpeg',              heroImage: '/images/private_jet/hero/hero_indonesia.jpeg',            groups: comingSoon },
-  { slug: 'north-america',          name: 'North America',           image: '/images/private_jet/private_nordamerica.jpeg',            heroImage: '/images/private_jet/hero/hero_north-america-v2.png',         groups: comingSoon },
+  { slug: 'north-america',          name: 'North America',           image: '/images/private_jet/private_nordamerica.jpeg',            heroImage: '/images/private_jet/hero/hero_north-america-v2.png',         groups: northAmericaJetGroups },
   { slug: 'pacific-ocean',          name: 'Pacific Ocean',           image: '/images/private_jet/private_pacific-ocean.jpeg',          heroImage: '/images/private_jet/hero/hero_pacific-ocean.jpg',         groups: comingSoon },
   { slug: 'oman-gulf',              name: 'Oman Gulf',               image: '/images/private_jet/private_oman-gulf.jpeg',              heroImage: '/images/private_jet/hero/hero_oman-gulf-v2.jpg',            groups: comingSoon },
   { slug: 'south-east-asia',        name: 'South East Asia',         image: '/images/private_jet/private_south-east-asia.jpeg',        heroImage: '/images/private_jet/hero/hero_south-east-asia-v2.jpg',       groups: comingSoon },
