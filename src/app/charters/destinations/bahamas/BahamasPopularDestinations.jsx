@@ -20,7 +20,7 @@ const DESTINATIONS = [
   { name: 'The Abacos', slug: 'abacos' },
 ];
 
-function CircleCard({ name, slug }) {
+function CircleCard({ name, slug, rest, hover }) {
   const [lit, setLit] = useState(false);
   const timerRef = useRef(null);
   const activate = () => { clearTimeout(timerRef.current); setLit(true); };
@@ -39,9 +39,9 @@ function CircleCard({ name, slug }) {
         style={{ borderColor: '#C0C0C0', transform: lit ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.3s' }}
       >
         <div className="relative w-[130px] h-[130px] md:w-[155px] md:h-[155px] rounded-full overflow-hidden">
-          <Image src={`${D}/${slug}-color-v2.jpg`} alt={name} fill sizes="160px" className={img} />
+          <Image src={rest || `${D}/${slug}-color-v2.jpg`} alt={name} fill sizes="160px" className={img} />
           <Image
-            src={`${D}/${slug}-color.jpg`} alt="" aria-hidden fill sizes="160px"
+            src={hover || `${D}/${slug}-color.jpg`} alt="" aria-hidden fill sizes="160px"
             className={img} style={{ opacity: lit ? 1 : 0 }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
@@ -54,7 +54,8 @@ function CircleCard({ name, slug }) {
   );
 }
 
-export default function BahamasPopularDestinations({ sub = '' } = {}) {
+// `items` (optionnel) : autre liste { name, slug, rest, hover } — ex. page North America.
+export default function BahamasPopularDestinations({ sub = '', items = DESTINATIONS } = {}) {
   const revealRef = useRef(null);
   useEffect(() => {
     const el = revealRef.current;
@@ -81,7 +82,7 @@ export default function BahamasPopularDestinations({ sub = '' } = {}) {
           {sub && <p className="text-[#acb0cd]/50 text-sm md:text-base uppercase tracking-[0.1em] px-4">{sub}</p>}
         </div>
         <div className="flex overflow-x-auto snap-x snap-mandatory gap-0 md:gap-1 pt-2 pb-4 -mx-4 px-4 scrollbar-hide md:justify-center md:flex-wrap md:overflow-visible md:mx-0 md:px-0">
-          {DESTINATIONS.map((d) => <CircleCard key={d.slug} {...d} />)}
+          {items.map((d) => <CircleCard key={d.slug} {...d} />)}
         </div>
       </div>
       <style>{`
