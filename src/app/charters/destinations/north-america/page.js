@@ -21,7 +21,7 @@ const NA_FLOWERS = [
   { name: 'Mexico', slug: 'dahlia', rest: `${F}/dahlia-filtered.jpg`, hover: `${F}/dahlia-color.jpg` },
 ];
 
-const HERO = '/media/client/2026-10-15/north-america-hero';
+const HERO = '/media/client/2026-10-20/north-america-hero';
 
 export const metadata = {
   title: 'North America | Qualityacht',
