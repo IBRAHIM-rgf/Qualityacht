@@ -15,7 +15,7 @@ export default function NorthAmericaRegionCards() {
       <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
         <div className="max-w-7xl mx-auto">
           <RevealBlock label="Explore" title="North America Regions" />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-px">
             {NA_GROUPS.map((g, i) => (
               <DestCard key={g.slug} index={i} name={g.name} image={g.photoFiltered || g.photo || NA_CARD_PHOTO} imageOld={g.photo || NA_CARD_PHOTO}
                 href={`/charters/destinations/north-america/${g.slug}`} />
