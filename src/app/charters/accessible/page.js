@@ -8,6 +8,7 @@ import { destinations } from "../destinationsData";
 const ACCESSIBLE_GUIDES = {
   "Caraïbes": "/charters/accessible/caribbean",
   Bahamas: "/charters/accessible/bahamas",
+  "North America": "/charters/accessible/north-america",
 };
 
 const accessibleItems = destinations.map((d) =>
