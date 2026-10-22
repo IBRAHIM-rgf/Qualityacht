@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import HalalFaq from './HalalFaq';
+import { SiloLinks } from '../../halal-yacht-charter/_silo/SiloPage';
 import { destinations } from '../destinationsData';
 
 export const metadata = {
@@ -99,6 +100,9 @@ export default function HalalPrivateCharterPage() {
         </div>
         <HalalFaq />
       </section>
+
+      {/* ══ Silo SEO : liens vers toutes les pages halal (client 2026-10-23) ══ */}
+      <SiloLinks />
 
       {/* ══ CTA ══ (fond gris sombre, PAS le navy du footer : la derniere section
           doit se distinguer du footer #1b223d) */}
