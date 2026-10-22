@@ -41,7 +41,7 @@ export default function HalalPrivateCharterPage() {
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-12 md:pb-16">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3">Qualityacht · Private Charter</p>
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
-            Halal Yacht<br />Charter
+            Tailored Halal<br />Private Charter
           </h1>
           <BurntLine className="mt-4" />
         </div>
