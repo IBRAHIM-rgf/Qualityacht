@@ -10,13 +10,15 @@ import { BahamasIslandsGrid, BahamasDestinationsByRegion, BahamasCtaAndFaq } fro
 import BahamasPopularDestinations from '../../destinations/bahamas/BahamasPopularDestinations';
 import HalalYachtsSection from '../HalalYachtsSection';
 import { getHalalYachts } from '@/lib/halalYachts';
+import HalalFaq from '../HalalFaq';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Halal Private Charter — The Bahamas | Qualityacht',
+  title: 'Halal Yacht Charter Bahamas | Qualityacht',
   description:
     'Discreet, halal-friendly private yacht charter across the Bahamas — Nassau, Paradise Island and the Exumas — with refined halal catering and alcohol-free service arranged in complete confidence.',
+  alternates: { canonical: 'https://www.qualityacht.ch/halal-yacht-charter/bahamas' },
 };
 
 const M = '/media/client/halal-bahamas/2026-10-01';
@@ -38,7 +40,7 @@ const PANELS = [
 ];
 
 const INTRO =
-  'For our most discerning guests, the Bahamas offer a rare combination: absolute privacy, world-class service, and an environment where every detail can be aligned with their values. Through our exclusive network of trusted partners across the islands, we design a seamless, high-end experience—from yacht selection to shore-side arrangements—crafted for discretion, refinement, and complete peace of mind.';
+  'A private halal yacht charter in the Bahamas — Muslim-friendly, alcohol-free and served by a halal chef. For our most discerning guests, the Bahamas offer a rare combination: absolute privacy, world-class service, and an environment where every detail can be aligned with their values. Through our exclusive network of trusted partners across the islands, we design a seamless, high-end experience—from yacht selection to shore-side arrangements—crafted for discretion, refinement, and complete peace of mind.';
 
 const TAGLINE = 'Halal, without compromise. Luxury, chartered in silence.';
 
@@ -78,12 +80,13 @@ export default async function HalalBahamasPage() {
       <HalalBahamasHero
         video={HERO_VIDEO}
         poster={HERO_POSTER}
-        title="Bahamas"
-        subtitle="The Ultimate Luxury Yachting Destination"
+        title="Halal Yacht Charter Bahamas"
+        subtitle="Private · Muslim-Friendly · Alcohol-Free"
       />
       <MouseExpandPanels panels={PANELS} />
       <HalalLateralScroll intro={INTRO} tagline={TAGLINE} paragraphs={PARAGRAPHS} photos={PHOTOS} alts={ALTS} />
       <HalalYachtsSection yachts={halalYachts} region="The Bahamas" />
+      <HalalFaq />
       {/* Suite de /charters/destinations/bahamas a partir de « Explore Bahamas Islands » */}
       <BahamasIslandsGrid sub="Secluded islands, calm waters and anchorages reserved for you" />
       <BahamasDestinationsByRegion />
