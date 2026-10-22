@@ -43,7 +43,7 @@ const charterItems = [
 		title: "Tailored Halal Private Charter",
 		description: "A fully halal charter shaped around your family, your faith, and the way you like to travel.",
 		image: "/images/halal/vecteezy_woman-in-hijab-gazes-thoughtfully-at-the-ocean-while_69947790.jpg",
-		href: "/charters/halal",
+		href: "/halal-yacht-charter",
 	},
 	{
 		title: "Group Yacht Charter",
