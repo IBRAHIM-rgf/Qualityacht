@@ -86,7 +86,13 @@ export default async function HalalBahamasPage() {
       <MouseExpandPanels panels={PANELS} />
       <HalalLateralScroll intro={INTRO} tagline={TAGLINE} paragraphs={PARAGRAPHS} photos={PHOTOS} alts={ALTS} />
       <HalalYachtsSection yachts={halalYachts} region="The Bahamas" />
-      <HalalFaq />
+      <HalalFaq
+        withSection
+        extra={[
+            { q: 'Can we sail from Miami to the Bahamas?', a: 'Yes, on request. Our halal yacht charter from Miami to the Bahamas crosses the Gulf Stream to Bimini and beyond.' },
+            { q: 'Do you offer halal catamaran charters in the Bahamas?', a: 'Yes, on request. Catamarans are available for halal charters in the Bahamas.' },
+          ]}
+      />
       {/* Suite de /charters/destinations/bahamas a partir de « Explore Bahamas Islands » */}
       <BahamasIslandsGrid sub="Secluded islands, calm waters and anchorages reserved for you" />
       <BahamasDestinationsByRegion />
