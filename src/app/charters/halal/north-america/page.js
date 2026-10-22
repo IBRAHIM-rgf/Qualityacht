@@ -12,13 +12,15 @@ import NorthAmericaCta from '../../destinations/north-america/NorthAmericaCta';
 import BahamasPopularDestinations from '../../destinations/bahamas/BahamasPopularDestinations';
 import HalalYachtsSection from '../HalalYachtsSection';
 import { getHalalYachts } from '@/lib/halalYachts';
+import HalalFaq from '../HalalFaq';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Halal Private Charter — North America | Qualityacht',
+  title: 'Halal Yacht Charter USA & Miami | Qualityacht',
   description:
     'Discreet, halal-friendly private yacht charter across the East and West Coasts of the United States, Canada and Mexico, arranged in complete confidence.',
+  alternates: { canonical: 'https://www.qualityacht.ch/halal-yacht-charter/usa' },
 };
 
 // Hero : video du hero de /charters/destinations/north-america (pas de video halal dediee).
@@ -40,7 +42,7 @@ const PANELS = [
 
 // Textes fournis par le client (2026-10-22).
 const INTRO =
-  'From the East and West Coasts of the United States to Canada and Mexico, North America offers a distinctive setting for a private halal yacht charter. We shape each journey around your values and personal preferences, bringing together carefully selected yachts, discreet service, and thoughtfully coordinated shore-side arrangements. Halal-friendly requirements are integrated with care and discretion, creating a refined experience in which privacy, comfort, and peace of mind remain paramount.';
+  'From Miami and the East and West Coasts of the United States to Canada and Mexico, North America offers a distinctive setting for a private halal yacht charter. We shape each journey around your values and personal preferences, bringing together carefully selected yachts, discreet service, and thoughtfully coordinated shore-side arrangements. Halal-friendly requirements are integrated with care and discretion, creating a refined experience in which privacy, comfort, and peace of mind remain paramount. Every yacht can be arranged alcohol-free, with a halal chef and halal catering on board.';
 
 const TAGLINE = 'Halal, without compromise. Luxury, chartered in silence.';
 
@@ -87,12 +89,13 @@ export default async function HalalNorthAmericaPage() {
       <HalalBahamasHero
         video={`${HERO}/hero.mp4`}
         poster={`${HERO}/poster.jpg`}
-        title="North America"
-        subtitle="The Ultimate Luxury Yachting Destination"
+        title="Halal Yacht Charter USA"
+        subtitle="Private · Muslim-Friendly · Alcohol-Free"
       />
       <MouseExpandPanels panels={PANELS} />
       <HalalLateralScroll intro={INTRO} tagline={TAGLINE} paragraphs={PARAGRAPHS} photos={PHOTOS} alts={ALTS} />
       <HalalYachtsSection yachts={halalYachts} region="North America" />
+      <HalalFaq />
       {/* Suite de /charters/destinations/north-america a partir des cases regions */}
       <NorthAmericaRegionCards />
       <NorthAmericaRegions />
