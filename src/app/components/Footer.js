@@ -50,7 +50,7 @@ export default function Footer() {
           <ul className="space-y-2 text-[#acb0cd]">
             <li><Link href="/charters/group">Group Yacht Charter</Link></li>
             <li><Link href="/charters/sports">Sports Yacht Charter</Link></li>
-            <li><Link href="/charters/halal">Tailored Halal Private Charter</Link></li>
+            <li><Link href="/halal-yacht-charter">Tailored Halal Private Charter</Link></li>
           </ul>
         </div>
 
