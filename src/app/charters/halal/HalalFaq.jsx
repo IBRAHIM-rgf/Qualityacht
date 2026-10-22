@@ -5,8 +5,8 @@ import { useState } from 'react';
 // FAQ "Discreet Details" — halal private charter.
 const FAQ = [
   {
-    q: 'Is your service halal-friendly?',
-    a: 'Absolutely. With extensive experience in halal-friendly hospitality, we curate private yacht experiences with refined catering, alcohol-free arrangements, and meticulous attention to detail.',
+    q: 'What is a halal yacht charter?',
+    a: 'A halal yacht charter is a private, Muslim-friendly yacht rental with halal catering, an alcohol-free environment and prayer-friendly arrangements. With extensive experience in halal-friendly hospitality, we curate private yacht experiences with refined catering, alcohol-free arrangements, and meticulous attention to detail.',
   },
   {
     q: 'Is privacy a priority?',
@@ -29,8 +29,16 @@ const FAQ = [
     a: 'Certainly. We specialise in fully private charters for guests who value seclusion, ease, and understated elegance.',
   },
   {
-    q: 'Can you assist with special catering requests?',
-    a: 'Certainly. From halal-friendly menus to specific dietary preferences, every detail is handled with care.',
+    q: 'Can I book a yacht charter with a halal chef?',
+    a: 'Yes. Every halal yacht charter can include a private halal chef and halal catering, from halal-friendly menus to specific dietary preferences, with every detail handled with care.',
+  },
+  {
+    q: 'Can the yacht be alcohol-free?',
+    a: 'Yes. On request, your alcohol-free yacht charter is arranged with no alcohol served on board and refined alcohol-free beverages in its place.',
+  },
+  {
+    q: 'Where do you offer halal yacht charters?',
+    a: 'In the Caribbean, the Bahamas and the USA, including Miami, as well as across our other destinations.',
   },
   {
     q: 'How early should we reserve?',

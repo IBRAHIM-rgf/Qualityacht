@@ -4,12 +4,14 @@ import HalalFaq from './HalalFaq';
 import { destinations } from '../destinationsData';
 
 export const metadata = {
-  title: 'Tailored Halal Private Charter | Qualityacht',
+  title: 'Halal Yacht Charter | Private & Muslim-Friendly | Qualityacht',
   description:
-    'A fully halal private yacht charter shaped around your family and your faith — halal galley, alcohol-free ambiance, a quiet space for prayer, privacy and bespoke itineraries.',
+    'Private halal yacht charter and halal yacht rental: Muslim-friendly, alcohol-free yachts with a halal chef and halal catering on board.',
+  alternates: { canonical: 'https://www.qualityacht.ch/halal-yacht-charter' },
 };
 
-const HALAL_PAGES = { 'Caraïbes': '/charters/halal/caribbean', Bahamas: '/charters/halal/bahamas', 'North America': '/charters/halal/north-america' };
+// Adresses SEO (client 2026-10-23) ; les anciennes /charters/halal/... redirigent (next.config.mjs).
+const HALAL_PAGES = { 'Caraïbes': '/halal-yacht-charter/caribbean', Bahamas: '/halal-yacht-charter/bahamas', 'North America': '/halal-yacht-charter/usa' };
 
 const HERO_IMAGE = '/images/halal/7945425-portrait-3138562.jpg';
 
@@ -33,12 +35,12 @@ export default function HalalPrivateCharterPage() {
     <div className="bg-[#26272a] text-[#acb0cd]">
       {/* ══ HERO — portrait plein cadre, titre en overlay (ancienne version restauree) ══ */}
       <section className="relative pt-[70px] md:pt-0 h-[72vh] md:h-[88vh]">
-        <Image src={HERO_IMAGE} alt="Tailored Halal Private Charter" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: '50% 28%' }} />
+        <Image src={HERO_IMAGE} alt="Halal Yacht Charter" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: '50% 28%' }} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-transparent" />
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-12 md:pb-16">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3">Qualityacht · Private Charter</p>
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
-            Tailored Halal<br />Private Charter
+            Halal Yacht<br />Charter
           </h1>
           <BurntLine className="mt-4" />
         </div>
@@ -49,7 +51,8 @@ export default function HalalPrivateCharterPage() {
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-[11px] uppercase tracking-[0.3em] text-[#B87333] mb-4">A Private Halal Charter</p>
           <p className="text-[#acb0cd]/85 text-sm md:text-base leading-relaxed mt-6 max-w-2xl mx-auto">
-            With extensive experience in halal-friendly travel, we curate discreet private yacht experiences for an
+            Qualityacht arranges luxury halal yacht charter and halal yacht rental, with Muslim-friendly,
+            alcohol-free yachts and a halal chef on board. With extensive experience in halal-friendly travel, we curate discreet private yacht experiences for an
             international clientele that values understatement, precision, and impeccable service.
           </p>
         </div>
