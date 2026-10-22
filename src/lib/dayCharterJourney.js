@@ -24,6 +24,7 @@ export function isDayCharterExit(pathname) {
   if (pathname === '/charters/destinations/caribbean-v18') return true;
   return [
     '/charters/halal',
+    '/halal-yacht-charter',
     '/charters/group',
     '/charters/pet-friendly',
     '/charters/accessible',
