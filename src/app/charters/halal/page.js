@@ -9,7 +9,7 @@ export const metadata = {
     'A fully halal private yacht charter shaped around your family and your faith — halal galley, alcohol-free ambiance, a quiet space for prayer, privacy and bespoke itineraries.',
 };
 
-const HALAL_PAGES = { 'Caraïbes': '/charters/halal/caribbean', Bahamas: '/charters/halal/bahamas' };
+const HALAL_PAGES = { 'Caraïbes': '/charters/halal/caribbean', Bahamas: '/charters/halal/bahamas', 'North America': '/charters/halal/north-america' };
 
 const HERO_IMAGE = '/images/halal/7945425-portrait-3138562.jpg';
 
