@@ -24,7 +24,7 @@ export const metadata = {
 };
 
 // Hero : video du hero de /charters/destinations/north-america (pas de video halal dediee).
-const HERO = '/media/client/2026-10-15/north-america-hero';
+const HERO = '/media/client/2026-10-23/north-america-hero';
 
 // Photos client du 2026-10-22, dans l'ordre donne : galerie 1 a 5, puis slide 1 a 3.
 const M = '/media/client/halal-north-america/2026-10-22';
@@ -89,7 +89,7 @@ export default async function HalalNorthAmericaPage() {
       <HalalBahamasHero
         video={`${HERO}/hero.mp4`}
         poster={`${HERO}/poster.jpg`}
-        title="Halal Yacht Charter USA"
+        title="North America"
         subtitle="Private · Muslim-Friendly · Alcohol-Free"
       />
       <MouseExpandPanels panels={PANELS} />
