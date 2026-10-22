@@ -9,6 +9,7 @@ import NorthAmericaRegions from './NorthAmericaRegions';
 import NorthAmericaRegionCards from './NorthAmericaRegionCards';
 import BahamasPopularDestinations from '../bahamas/BahamasPopularDestinations';
 import NorthAmericaCta from './NorthAmericaCta';
+import NorthAmericaEclat from './NorthAmericaEclat';
 
 // Ronds fleurs (client 2026-10-19), meme section que Bahamas : photo filtree au repos,
 // couleur au survol. Noms = les 5 regions (choix du client).
@@ -55,6 +56,8 @@ export default function NorthAmericaPage() {
         </div>
       </VideoHero>
       {/* Cases des regions (client 2026-10-15), comme les cases Bahamas. */}
+      {/* Eclat (cartes flottantes), comme la page Bahamas : juste sous le hero. */}
+      <NorthAmericaEclat />
       <NorthAmericaRegionCards />
       <NorthAmericaRegions />
       <BahamasPopularDestinations items={NA_FLOWERS} />
