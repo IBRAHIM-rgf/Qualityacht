@@ -59,9 +59,9 @@ const PARAGRAPHS = [
   },
 ];
 
-// Ordre client (2026-10-23) : homme sur le yacht (coupe sous les pieds, demande
+// Ordre client (2026-10-23) : homme sur le yacht (coupe juste au-dessus des pieds, demande
 // client), cabane face a la mer, chateau.
-const PHOTOS = ['/media/client/halal-north-america/2026-10-23/slide-1.jpg', `${M}/slide-2.jpg`, `${M}/slide-1.jpg`];
+const PHOTOS = ['/media/client/halal-north-america/2026-10-23/slide-1b.jpg', `${M}/slide-2.jpg`, `${M}/slide-1.jpg`];
 
 const ALTS = [
   'Guest on the deck of a private yacht in Miami',
