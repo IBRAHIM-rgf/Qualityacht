@@ -4,6 +4,7 @@ import MouseExpandPanels from '@/components/vibe/MouseExpandPanels';
 import { one } from '@/lib/quality-media';
 import HalalYachtsSection from '../HalalYachtsSection';
 import { getHalalYachts } from '@/lib/halalYachts';
+import HalalFaq from '../HalalFaq';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,9 +25,10 @@ const PANELS = [
 //    facon Mamounia (cf. HalalLateralScroll, technique reprise de caribbean-v16),
 //  - le bloc "A paradise of turquoise waters..." de la v15 masque (showDescription).
 export const metadata = {
-  title: 'Halal Private Charter — The Caribbean | Qualityacht',
+  title: 'Halal Yacht Charter Caribbean | Qualityacht',
   description:
     'Tailored halal private yacht charter across the Caribbean: curated itineraries, discreet service, and cuisine prepared to your requirements.',
+  alternates: { canonical: 'https://www.qualityacht.ch/halal-yacht-charter/caribbean' },
 };
 
 const HERO_IMAGE = '/images/halal/fruits_1440x800.jpg';
@@ -74,7 +76,7 @@ const PARAGRAPHS = [
 
 // Ancien texte du rail : remonte SOUS LE HERO, centre (prop intro de la v15).
 const INTRO =
-  'The Caribbean remain an underrated destination for halal, even though they offer an exceptional setting for enjoying a luxury experience in complete peace of mind. Thanks to our extensive connections in the halal food industry, we are able to create a refined culinary experience perfectly tailored to the expectations of our most demanding clients.';
+  'A luxury halal yacht charter in the Caribbean, with a halal chef and alcohol-free service on board. The Caribbean remain an underrated destination for halal, even though they offer an exceptional setting for enjoying a luxury experience in complete peace of mind. Thanks to our extensive connections in the halal food industry, we are able to create a refined culinary experience perfectly tailored to the expectations of our most demanding clients.';
 
 export default async function HalalCaribbeanPage() {
   // Bateaux coches « Halal Charter » + Caraibes dans l'admin (client 2026-10-04).
@@ -98,6 +100,8 @@ export default async function HalalCaribbeanPage() {
       hideDefaultFlowers
       grayClouds
       heroTextLow
+      heroTitle="Halal Yacht Charter Caribbean"
+      heroSubtitle="Private · Muslim-Friendly · Alcohol-Free"
       introNode={
         <>
           {/* Section "COMO" : panneaux qui s'etendent selon la souris */}
@@ -105,6 +109,7 @@ export default async function HalalCaribbeanPage() {
           {/* intro + slide lateral d'origine, en dessous */}
           <HalalLateralScroll intro={INTRO} paragraphs={PARAGRAPHS} photos={PHOTOS} />
           <HalalYachtsSection yachts={halalYachts} region="The Caribbean" />
+          <HalalFaq />
         </>
       }
     />
