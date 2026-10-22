@@ -5,9 +5,9 @@ import { SiloLinks } from '../../halal-yacht-charter/_silo/SiloPage';
 import { destinations } from '../destinationsData';
 
 export const metadata = {
-  title: 'Halal Yacht Charter | Private & Muslim-Friendly | Qualityacht',
+  title: 'Halal Yacht Charter | #1 Private Halal Yachts Worldwide | Qualityacht',
   description:
-    'Private halal yacht charter and halal yacht rental: Muslim-friendly, alcohol-free yachts with a halal chef and halal catering on board.',
+    'Qualityacht is the global specialist in private halal yacht charters: certified halal catering, alcohol-free yachts, prayer-friendly service and complete privacy in Miami, the Bahamas, the Caribbean and worldwide.',
   alternates: { canonical: 'https://www.qualityacht.ch/halal-yacht-charter' },
 };
 
@@ -51,10 +51,15 @@ export default function HalalPrivateCharterPage() {
       <section className="bg-[#26272a] py-16 md:py-24 px-6 md:px-14">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-[11px] uppercase tracking-[0.3em] text-[#B87333] mb-4">A Private Halal Charter</p>
+          <h2 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-tight">
+            The World’s Leading Private Halal Yacht Charter Specialist
+          </h2>
+          {/* Texte d'introduction exact fourni par le client (2026-10-23). */}
           <p className="text-[#acb0cd]/85 text-sm md:text-base leading-relaxed mt-6 max-w-2xl mx-auto">
-            Qualityacht arranges luxury halal yacht charter and halal yacht rental, with Muslim-friendly,
-            alcohol-free yachts and a halal chef on board. With extensive experience in halal-friendly travel, we curate discreet private yacht experiences for an
-            international clientele that values understatement, precision, and impeccable service.
+            Qualityacht is the global specialist in private halal yacht charters. We arrange fully crewed, alcohol-free
+            yachts with certified halal catering, dedicated halal galleys, prayer-friendly arrangements and complete
+            privacy. From Miami and the Bahamas to the Caribbean, Mediterranean and beyond, we create bespoke halal yacht
+            charters for Muslim families, private celebrations, Eid getaways and luxury escapes from North America.
           </p>
         </div>
       </section>
