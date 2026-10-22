@@ -26,6 +26,15 @@ const nextConfig = {
         },
       ],
     },
+    // Adresses SEO halal (client 2026-10-23) : anciennes adresses -> nouvelles (301).
+    async redirects() {
+      return [
+        { source: '/charters/halal', destination: '/halal-yacht-charter', permanent: true },
+        { source: '/charters/halal/caribbean', destination: '/halal-yacht-charter/caribbean', permanent: true },
+        { source: '/charters/halal/bahamas', destination: '/halal-yacht-charter/bahamas', permanent: true },
+        { source: '/charters/halal/north-america', destination: '/halal-yacht-charter/usa', permanent: true },
+      ];
+    },
     async headers() {
       return [
         {
