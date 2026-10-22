@@ -109,7 +109,12 @@ export default async function HalalCaribbeanPage() {
           {/* intro + slide lateral d'origine, en dessous */}
           <HalalLateralScroll intro={INTRO} paragraphs={PARAGRAPHS} photos={PHOTOS} />
           <HalalYachtsSection yachts={halalYachts} region="The Caribbean" />
-          <HalalFaq />
+          <HalalFaq
+            withSection
+            extra={[
+            { q: 'Do you offer halal motor yacht charters in the Caribbean?', a: 'Yes, on request. Motor yachts are available for halal charters across the Caribbean.' },
+          ]}
+          />
         </>
       }
     />
