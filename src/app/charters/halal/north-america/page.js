@@ -95,7 +95,13 @@ export default async function HalalNorthAmericaPage() {
       <MouseExpandPanels panels={PANELS} />
       <HalalLateralScroll intro={INTRO} tagline={TAGLINE} paragraphs={PARAGRAPHS} photos={PHOTOS} alts={ALTS} />
       <HalalYachtsSection yachts={halalYachts} region="North America" />
-      <HalalFaq />
+      <HalalFaq
+        withSection
+        extra={[
+            { q: 'Do you offer a private halal yacht charter in Miami?', a: 'Yes. On request, we arrange a private halal yacht charter in Miami, with a halal chef and an alcohol-free environment on board.' },
+            { q: 'Where can a halal yacht charter start?', a: 'On request, a halal yacht charter can start from Miami, New York or Toronto, among other ports, including a halal yacht charter from Miami to the Bahamas.' },
+          ]}
+      />
       {/* Suite de /charters/destinations/north-america a partir des cases regions */}
       <NorthAmericaRegionCards />
       <NorthAmericaRegions />
