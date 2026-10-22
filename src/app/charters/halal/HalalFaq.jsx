@@ -41,6 +41,30 @@ const FAQ = [
     a: 'In the Caribbean, the Bahamas and the USA, including Miami, as well as across our other destinations.',
   },
   {
+    q: 'Do you offer halal yacht charters for Muslim families?',
+    a: 'Yes. Every charter can be shaped around Muslim families, with halal catering, an alcohol-free environment and a calm, private atmosphere for all ages.',
+  },
+  {
+    q: 'Can I book a halal yacht charter with no alcohol on board?',
+    a: 'Yes. On request, no alcohol is served on board and refined alcohol-free beverages are arranged in its place.',
+  },
+  {
+    q: 'Is a halal yacht charter with female crew possible?',
+    a: 'Yes, on request. We can arrange yachts with female crew members, subject to availability.',
+  },
+  {
+    q: 'Can we charter a yacht for Eid or Ramadan?',
+    a: 'Yes, on request. We arrange halal yacht charters for Eid celebrations and during Ramadan, with suhoor and iftar timings respected on board.',
+  },
+  {
+    q: 'Is there a prayer space on board?',
+    a: 'Yes, on request. A quiet, clean space is prepared for prayer on board, with the qibla direction indicated.',
+  },
+  {
+    q: 'Can the charter include a private chef?',
+    a: 'Yes. On request, each halal yacht charter can include a private halal chef.',
+  },
+  {
     q: 'How early should we reserve?',
     a: 'For the most refined experience and the best vessel selection, we recommend reserving well in advance.',
   },
@@ -70,12 +94,30 @@ function FaqItem({ q, a }) {
   );
 }
 
-export default function HalalFaq() {
-  return (
+// extra : questions propres a une region, affichees en premier (client 2026-10-23).
+// withSection : ajoute le meme cadre que la page Halal (fond nuages, « Discreet Details »),
+// utilise sur les pages regions.
+export default function HalalFaq({ extra = [], withSection = false } = {}) {
+  const list = (
     <div className="max-w-3xl mx-auto">
-      {FAQ.map((item) => (
+      {[...extra, ...FAQ].map((item) => (
         <FaqItem key={item.q} {...item} />
       ))}
     </div>
+  );
+  if (!withSection) return list;
+  return (
+    <section
+      className="relative py-16 md:py-24 px-6 md:px-14 bg-[#2e2f32]"
+      style={{ backgroundImage: "url('/images/nuagesAncien.png')", backgroundSize: 'contain', backgroundPosition: 'center' }}
+    >
+      <div className="max-w-3xl mx-auto text-center mb-10 md:mb-12">
+        <p className="text-[11px] uppercase tracking-[0.3em] text-[#B87333] mb-4">Discreet Details</p>
+        <p className="text-[#acb0cd] text-base md:text-lg leading-relaxed">
+          For guests who value discretion, refinement, and a fully tailored experience.
+        </p>
+      </div>
+      {list}
+    </section>
   );
 }
