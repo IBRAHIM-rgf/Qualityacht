@@ -15,9 +15,9 @@ import NorthAmericaEclat from './NorthAmericaEclat';
 // couleur au survol. Noms = les 5 regions (choix du client).
 const F = '/media/client/2026-10-19/north-america-flowers';
 const NA_FLOWERS = [
-  { name: 'East Coast United States', slug: 'dogwood', rest: `${F}/dogwood-filtered.jpg`, hover: `${F}/dogwood-color.jpg` },
+  { name: 'East Coast United States', slug: 'rose', rest: `${F}/rose-filtered.jpg`, hover: `${F}/rose-color.jpg` },
   { name: 'West Coast United States', slug: 'poppy', rest: `${F}/poppy-filtered.jpg`, hover: `${F}/poppy-color.jpg` },
-  { name: 'Canada', slug: 'rose', rest: `${F}/rose-filtered.jpg`, hover: `${F}/rose-color.jpg` },
+  { name: 'Canada', slug: 'dogwood', rest: `${F}/dogwood-filtered.jpg`, hover: `${F}/dogwood-color.jpg` },
   { name: 'Miami', slug: 'orange-blossom', rest: `${F}/orange-blossom-filtered.jpg`, hover: `${F}/orange-blossom-color.jpg` },
   { name: 'Mexico', slug: 'dahlia', rest: `${F}/dahlia-filtered.jpg`, hover: `${F}/dahlia-color.jpg` },
 ];
