@@ -29,12 +29,13 @@ const M = '/media/client/halal-north-america/2026-10-22';
 
 // Galerie : textes des panneaux de la page Bahamas, chaque titre place sur la photo
 // qui lui correspond (cuisine, famille, yacht, mouillage, eaux turquoise).
+// Ordre client (2026-10-23) : bateau, eau turquoise, paillotes, famille, cuisine.
 const PANELS = [
-  { number: '1', title: 'Halal Cuisine', desc: 'A private chef and a fully halal galley — refined menus and alcohol-free pairings, shaped around your table.', img: `${M}/gallery-1.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
-  { number: '2', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: `${M}/gallery-2.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
-  { number: '3', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: `${M}/gallery-3.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
-  { number: '4', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: `${M}/gallery-4.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
-  { number: '5', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: `${M}/gallery-5.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
+  { number: '1', title: 'Set Sail', desc: 'Your own crewed yacht across seven hundred islands — the deck closes on request, the ladder drops when you say.', img: `${M}/gallery-3.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
+  { number: '2', title: 'Turquoise Waters', desc: 'Powder-white sands and crystal lagoons, anchored far from the crowds.', img: `${M}/gallery-5.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
+  { number: '3', title: 'Private Anchorages', desc: 'From the sky to secluded coves that few ever reach.', img: `${M}/gallery-4.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
+  { number: '4', title: 'Family Moments', desc: 'Days made for everyone aboard — modest, joyful and endlessly private.', img: `${M}/gallery-2.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
+  { number: '5', title: 'Halal Cuisine', desc: 'A private chef and a fully halal galley — refined menus and alcohol-free pairings, shaped around your table.', img: `${M}/gallery-1.jpg`, href: '/yachts?destination=north-america', ctaLabel: 'Explore the Fleet' },
 ];
 
 // Textes fournis par le client (2026-10-22).
@@ -58,12 +59,14 @@ const PARAGRAPHS = [
   },
 ];
 
-const PHOTOS = [`${M}/slide-1.jpg`, `${M}/slide-2.jpg`, `${M}/slide-3.jpg`];
+// Ordre client (2026-10-23) : homme sur le yacht (coupe sous les pieds, demande
+// client), cabane face a la mer, chateau.
+const PHOTOS = ['/media/client/halal-north-america/2026-10-23/slide-1.jpg', `${M}/slide-2.jpg`, `${M}/slide-1.jpg`];
 
 const ALTS = [
-  'Castle spires above the trees in Florida',
-  'Private cabana opening onto turquoise water at sunset',
   'Guest on the deck of a private yacht in Miami',
+  'Private cabana opening onto turquoise water at sunset',
+  'Castle spires above the trees in Florida',
 ];
 
 // Ronds fleurs : memes que /charters/destinations/north-america.
