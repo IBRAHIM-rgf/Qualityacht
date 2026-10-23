@@ -39,6 +39,7 @@ export default function HorsesRidingPage() {
         'Western Mediterranean': '/horses-riding/western-mediterranean',
         'Eastern Mediterranean': '/horses-riding/eastern-mediterranean',
         'Bahamas': '/horses-riding/bahamas',
+        'North America': '/horses-riding/north-america',
         'Indian Ocean': '/horses-riding/indian-ocean',
       }}
       cardImages={HORSE_IMAGES}
