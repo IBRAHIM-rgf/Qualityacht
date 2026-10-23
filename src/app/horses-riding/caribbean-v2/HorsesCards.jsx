@@ -118,7 +118,9 @@ export function RegionGroupCard({ region }) {
   const [open, setOpen] = useState(false);
   const regionHref = region.href || REGION_LINKS[region.name];
   const count = region.islands.length;
-  const label = `${count} ${count > 1 ? 'islands' : 'island'}`;
+  // unit : [singulier, pluriel] — ex. ['subregion', 'subregions'] (North America). Defaut : iles.
+  const [one, many] = region.unit || ['island', 'islands'];
+  const label = `${count} ${count > 1 ? many : one}`;
 
   return (
     <div className={`${SHELL} group flex flex-col`}>
