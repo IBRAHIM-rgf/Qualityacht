@@ -14,7 +14,7 @@ export default function HistoricSitesPage() {
       intro="Forts, plantation houses, sunken cities and Georgian towns — landmarks of historic consequence, with exclusive private access and after-hours experiences arranged at each."
       caribbeanHref="/historic-sites/caribbean"
       // Case Bahamas (client 2026-10-09) : sites historiques des Bahamas.
-      links={{ Bahamas: '/historic-sites/bahamas' }}
+      links={{ Bahamas: '/historic-sites/bahamas', 'North America': '/historic-sites/north-america' }}
       animated
       heroGradientSoft
     />
