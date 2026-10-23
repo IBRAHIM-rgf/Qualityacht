@@ -1,6 +1,6 @@
 // /historic-sites/north-america — hub Amerique du Nord (client 2026-10-23), meme
 // presentation que /historic-sites/bahamas : en-tete puis 3 tuiles. Monuments ouvre sa
-// page ; Hiking et Cycling : « Coming Soon » en attendant les listes du client.
+// page ; Cycling ouvre sa page (client 2026-10-23) ; Hiking : « Coming Soon ».
 import Image from 'next/image';
 import HistoricHub from '../caribbean/HistoricHub';
 
@@ -12,7 +12,7 @@ export const metadata = {
 const panels = [
   { key: 'monuments', title: 'Historic Monuments', img: '/images/stephan-hinni-ZHdkEO_oFRc-unsplash.jpg' },
   { key: 'hiking', title: 'Hiking', img: '/images/isaw-company-hBtl2SojFic-unsplash.jpg', soon: true },
-  { key: 'cycling', title: 'Cycling', img: '/images/carlos-mendoza-utvLhSfiqpo-unsplash(1).jpg', soon: true },
+  { key: 'cycling', title: 'Cycling', img: '/images/carlos-mendoza-utvLhSfiqpo-unsplash(1).jpg' },
 ];
 
 export default function HistoricSitesNorthAmericaPage() {
