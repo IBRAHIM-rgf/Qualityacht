@@ -2,7 +2,7 @@
 //  - SUBREGIONS : les 20 sous-regions (East Coast US, West Coast US, Canada, Mexico).
 //  - CULTURE : fichier client « America_Culture_Season_Charter_Cards » : une carte par
 //              sous-region (niveau VIP, theme, saison, mois de charter, note).
-//  - ART : en attente des contenus du client (card « Coming Soon » sur la page).
+//  - ART : fichier client « America_Art_Selection_Cards » : un lieu par sous-region.
 // Photos : photos North America deja sur le site, en attendant celles du client.
 // AUCUN emoji.
 
@@ -40,7 +40,32 @@ export const FLEET_BY_SUBREGION = Object.fromEntries(
   SUB_RAW.map(([slug, , , group]) => [slug, `/charters/destinations/north-america/${group}`])
 );
 
-export const ART = [];
+// ART : fichier client « America_Art_Selection_Cards » (2026-10-23) : un lieu par sous-region
+// (meme ordre que SUBREGIONS), textes repris tels quels ; ★ = Signature Selection.
+const ART_RAW = [
+  { index: 0, venues: [{"type": "Museum", "name": "Gibbes Museum of Art — Charleston", "signature": false, "desc": "American art rooted in Charleston’s cultural history. The collection and changing exhibitions connect the region’s artistic heritage with contemporary perspectives and a wider international conversation."}] },
+  { index: 1, venues: [{"type": "Museum", "name": "Norton Museum of Art — West Palm Beach", "signature": true, "desc": "American, European, Chinese and contemporary art, alongside photography. Collection galleries, changing exhibitions and sculpture offer a considered introduction to Palm Beach County’s cultural landscape."}] },
+  { index: 2, venues: [{"type": "Museum", "name": "The Ringling Museum of Art — Sarasota", "signature": true, "desc": "European painting, sculpture and decorative arts meet works from a wide range of cultures. Architecture and gardens enrich a visit to this distinctive museum on Sarasota’s bayfront estate."}] },
+  { index: 3, venues: [{"type": "Museum", "name": "Key West Museum of Art & History — Key West", "signature": false, "desc": "Art and local history within the historic Custom House. Exhibitions illuminate the people, creative life and maritime identity of Key West, placing the island’s distinctive character in context."}] },
+  { index: 4, venues: [{"type": "Museum", "name": "Telfair Museums — Savannah", "signature": false, "desc": "A museum group connecting art, architecture and local history. The contemporary Jepson Center and historic Telfair Academy offer complementary perspectives, while the Owens–Thomas House and Slave Quarters interprets Savannah’s past."}] },
+  { index: 5, venues: [{"type": "Museum", "name": "The Museum of Modern Art — New York", "signature": true, "desc": "Modern and contemporary art across painting, sculpture, photography, film and design. Collection displays and changing exhibitions trace influential artistic ideas through works by artists from around the world."}] },
+  { index: 6, venues: [{"type": "Museum", "name": "RISD Museum — Providence", "signature": false, "desc": "Art and design across periods, cultures and media, presented within the creative setting of the Rhode Island School of Design. A thoughtful encounter with craftsmanship, visual expression and the creative process."}] },
+  { index: 7, venues: [{"type": "Museum", "name": "San Francisco Museum of Modern Art — San Francisco", "signature": true, "desc": "Modern and contemporary art, photography, architecture and design in expansive galleries. The collection and changing exhibitions connect international artistic practice with the creative culture of the Bay Area."}] },
+  { index: 8, venues: [{"type": "Museum", "name": "Seattle Art Museum — Seattle", "signature": false, "desc": "A broad encounter with art from different cultures and periods. The downtown museum’s collections and changing exhibitions form part of a wider institution that also includes the Seattle Asian Art Museum and Olympic Sculpture Park."}] },
+  { index: 9, venues: [{"type": "Museum", "name": "Art Gallery of Greater Victoria — Victoria", "signature": false, "desc": "A public art collection and changing exhibitions on Vancouver Island. The gallery offers encounters with regional and international art within an intimate setting, adding a cultural dimension to a Victoria visit."}] },
+  { index: 10, venues: [{"type": "Museum", "name": "Art Gallery of Ontario — Toronto", "signature": true, "desc": "Historical and contemporary art across a substantial collection and a changing exhibition program. A major downtown cultural destination, offering varied perspectives on Canadian and international artistic expression."}] },
+  { index: 11, venues: [{"type": "Museum", "name": "Montreal Museum of Fine Arts — Montreal", "signature": true, "desc": "Quebec, Canadian and international art across multiple pavilions. Collections and exhibitions bring visual art, history and design into dialogue, creating a varied introduction to Montreal’s cultural life."}] },
+  { index: 12, venues: [{"type": "Museum", "name": "Art Gallery of Nova Scotia — Halifax", "signature": false, "desc": "Atlantic Canada’s largest art museum. Regional art and wider Canadian and international perspectives introduce Nova Scotia’s creative heritage through collections and changing exhibitions in downtown Halifax."}] },
+  { index: 13, venues: [{"type": "Museum", "name": "Museo de Arte de Baja California Sur — La Paz", "signature": false, "desc": "A dedicated space for modern and contemporary art in central La Paz. Exhibitions introduce artistic practice connected to Baja California Sur alongside broader creative perspectives."}] },
+  { index: 14, venues: [{"type": "Gallery District", "name": "Gallery District — San José del Cabo", "signature": false, "desc": "Painting, sculpture, photography and design across galleries in the historic center. The seasonal Art Walk brings the district to life; participating venues and current schedules should be checked before a visit."}] },
+  { index: 15, venues: [{"type": "Underwater Museum", "name": "MUSA — Cancún & Isla Mujeres", "signature": false, "desc": "Underwater sculpture installations bring contemporary art into a marine setting. Visits depend on the chosen site and an authorized water-based excursion, with access shaped by sea conditions and the visitor’s activity requirements."}] },
+  { index: 16, venues: [{"type": "Public Art", "name": "Holbox Murals — Holbox Island", "signature": false, "desc": "Village walls become an open-air setting for colorful murals reflecting island life, wildlife and Mexican culture. A leisurely walk reveals works by local and visiting artists; individual murals may change over time."}] },
+  { index: 17, venues: [{"type": "Gallery", "name": "Galería Pacífico — Puerto Vallarta", "signature": false, "desc": "Established in 1987, the gallery presents painting and sculpture, primarily by Mexican artists and artists working in Mexico. An introduction to contemporary expression within Puerto Vallarta’s gallery scene."}] },
+  { index: 18, venues: [{"type": "Sculpture", "name": "La Copa del Sol — Careyes", "signature": false, "desc": "A monumental sculptural work conceived by Careyes founder Gian Franco Brignone. Overlooking the Pacific, its striking form draws architecture, art and landscape into a single experience. Visiting arrangements require advance confirmation."}] },
+  { index: 19, venues: [{"type": "Art Foundation", "name": "Fundación Casa Wabi — near Puerto Escondido", "signature": true, "desc": "Contemporary art, architecture and coastal landscape within a complex designed by Tadao Ando. The foundation connects artistic projects with local communities; visits follow the foundation’s scheduled reservation system."}] },
+];
+
+export const ART = ART_RAW.map(({ index, venues }) => ({ island: SUBREGIONS[index].name, venues, sub: SUBREGIONS[index].slug }));
 
 // [niveau VIP, theme culturel, saison, charter, note] — textes du client, meme ordre.
 const CULTURE_RAW = [
@@ -73,7 +98,7 @@ export const CULTURE = CULTURE_RAW.map(([vip, period, season, months, note], i) 
 export const SECTIONS = {
   art: {
     title: 'Art',
-    eyebrow: 'America · Galleries, Artists & Regional Expression',
+    eyebrow: 'America · Museums, Galleries & Exhibitions',
     img: `${C}/east-coast.jpg`,
   },
   culture: {

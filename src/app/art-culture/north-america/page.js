@@ -10,7 +10,7 @@ export const metadata = {
 
 // /art-culture/north-america (client 2026-10-23), calquee sur /art-culture/bahamas : hero,
 // puis les 2 cards ART / CULTURE. CULTURE (textes du client) ouvre les 20 sous-regions ;
-// ART : « Coming Soon » en attendant les contenus du client.
+// ART (2026-10-23) : les 20 lieux du fichier client « America_Art_Selection_Cards ».
 // Photos : photos North America deja sur le site, en attendant celles du client.
 const HERO_IMAGE = '/media/client/2026-10-16/north-america-cards/east-coast.jpg';
 
@@ -20,9 +20,7 @@ const panels = [
     title: SECTIONS.art.title,
     eyebrow: SECTIONS.art.eyebrow,
     img: SECTIONS.art.img,
-    soon: true,
-    text: '',
-    bullets: [],
+    href: '/art-culture/north-america/art',
   },
   {
     key: 'culture',
