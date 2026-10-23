@@ -5,8 +5,8 @@ import SubRegionStack from '../../caribbean/SubRegionStack';
 import { ART, CULTURE, SECTIONS, SUBREGIONS, FLEET_BY_SUBREGION } from '../data';
 
 // /art-culture/north-america/culture (client 2026-10-23), calquee sur /art-culture/bahamas :
-// les 20 sous-regions empilees, chacune deplie sa carte culturelle. /art : en attente
-// des contenus du client (page non generee tant que ART est vide).
+// les 20 sous-regions empilees, chacune deplie sa carte culturelle. /art : un lieu par
+// sous-region (fichier client du 2026-10-23).
 
 export function generateStaticParams() {
   return Object.keys(SECTIONS).filter((k) => k !== 'art' || ART.length).map((section) => ({ section }));
