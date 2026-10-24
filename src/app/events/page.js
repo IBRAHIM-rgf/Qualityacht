@@ -22,7 +22,7 @@ export default function EventsPage() {
       intro="Carnivals, heritage feasts, regattas and the great social calendars of the world — a curated reference through the destinations that shape a season, chosen for excellence and for what they bring to a charter at anchor."
       caribbeanHref="/events/caribbean"
       // Case Bahamas (client 2026-10-12) : page Events Bahamas.
-      links={{ Bahamas: '/events/bahamas' }}
+      links={{ Bahamas: '/events/bahamas', 'North America': '/events/north-america' }}
       animated
     />
   );
