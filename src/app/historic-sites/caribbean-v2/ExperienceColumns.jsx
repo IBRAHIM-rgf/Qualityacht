@@ -130,25 +130,19 @@ function HikeTile({ item, index, fallbackImg }) {
   );
 }
 
-// ── Tuile MONUMENT : photo + nom + meta, la carte entiere ouvre la vue agrandie ──
-// L'accordeon "Read more" interne a ete remplace : le clic sur la carte ouvre
-// desormais MonumentFeature (cf. plus bas), qui occupe la largeur des 3 colonnes
-// sur environ deux hauteurs de carte — soit l'equivalent de 6 cartes.
-function MonumentTile({ item, index, fallbackImg, onOpen, isOpen }) {
+// ── Tuile MONUMENT : meme ouverture que les cartes Hiking / Cycling (client
+// 2026-10-24) : photo + nom + meta, puis bouton Read more / Show less qui deplie
+// la description et l'experience privee DANS la carte (chaque carte independante).
+// Remplace l'ancienne vue agrandie au-dessus de la grille.
+function MonumentTile({ item, index, fallbackImg }) {
+  const [open, setOpen] = useState(false);
   const src = item.img || fallbackImg;
   return (
     <figure
-      className={`reveal group relative rounded-2xl overflow-hidden border transition-all duration-700 flex flex-col ${
-        isOpen ? 'border-[#B03E00]' : 'border-[#C0C0C0]/15 hover:border-[#B03E00]/50'
-      } bg-[#3a3b3f]/70 backdrop-blur-sm`}
+      className="reveal group relative rounded-2xl overflow-hidden border border-[#C0C0C0]/15 bg-[#3a3b3f]/70 backdrop-blur-sm transition-all duration-700 hover:border-[#B03E00]/50 flex flex-col"
       style={{ transitionDelay: `${(index % 4) * 90}ms` }}
     >
-      <button
-        type="button"
-        onClick={() => onOpen(item, src)}
-        aria-expanded={isOpen}
-        className="relative aspect-[3/2] overflow-hidden w-full text-left cursor-pointer"
-      >
+      <div className="relative aspect-[3/2] overflow-hidden">
         <Image
           src={encodeURI(src)}
           alt={item.name}
@@ -160,68 +154,24 @@ function MonumentTile({ item, index, fallbackImg, onOpen, isOpen }) {
         <figcaption className={CAPTION_BAND}>
           <h3 className={TILE_NAME}>{item.name}</h3>
           {item.meta && <p className={TILE_META}>{item.meta}</p>}
-          <span className="mt-2 block text-[15px] uppercase tracking-[0.2em] text-[#c2622a]">
-            {isOpen ? 'Showing above' : 'View larger'}
-          </span>
-        </figcaption>
-      </button>
-    </figure>
-  );
-}
-
-// ── Vue agrandie d'un monument : largeur des 3 colonnes, ~2 hauteurs de carte ──
-// Rendue au-dessus de la grille pour pouvoir couvrir toute la largeur : les
-// cartes vivent dans des <section> en colonne, une tuile ne peut donc pas
-// s'etendre sur les colonnes voisines depuis sa place.
-function MonumentFeature({ item, src, onClose }) {
-  return (
-    <figure className="relative mb-8 md:mb-10 rounded-2xl overflow-hidden border border-[#B03E00]/40 bg-[#2e2f32] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] animate-[featureIn_320ms_ease-out]">
-      <style>{`
-        @keyframes featureIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
-      `}</style>
-
-      <div className="relative aspect-[16/9] md:aspect-[21/9]">
-        <Image
-          src={encodeURI(src)}
-          alt={item.name}
-          fill
-          sizes="100vw"
-          className="object-cover saturate-[1.55] contrast-[1.15] brightness-[1.04]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#26272a]/92 via-[#26272a]/25 to-transparent" />
-
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute top-4 right-4 inline-flex items-center gap-2 rounded-full border border-[#C0C0C0] bg-[#26272a]/85 px-4 py-2 text-[15px] uppercase tracking-[0.18em] text-[#acb0cd] transition-colors hover:border-[#B03E00] hover:text-[#B03E00]"
-        >
-          Close
-          <span aria-hidden className="leading-none">×</span>
-        </button>
-
-        <figcaption className="absolute inset-x-0 bottom-0 px-6 py-5 md:px-8 md:py-6 bg-[#26272a]/92 backdrop-blur-[2px] border-t border-[#C0C0C0]/20">
-          <h3 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-tight">
-            {item.name}
-          </h3>
-          {item.meta && (
-            <p className="mt-2 text-base md:text-lg uppercase tracking-[0.14em] text-[#B87333]">{item.meta}</p>
-          )}
         </figcaption>
       </div>
 
       {(item.desc || item.experience) && (
-        <div className="px-6 py-6 md:px-8 md:py-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
-          {item.desc && (
-            <p className="text-base md:text-lg leading-relaxed text-[#acb0cd]">{item.desc}</p>
-          )}
-          {item.experience && (
-            <div className="space-y-2">
-              <span className={HTAG}>Private experience</span>
-              <p className="text-base md:text-lg leading-relaxed text-[#acb0cd]">{item.experience}</p>
+        <>
+          <button onClick={() => setOpen((v) => !v)} className={HREAD}>
+            {open ? 'Show less' : 'Read more'}
+          </button>
+
+          {open && (
+            <div className="px-4 py-3 border-t border-[#C0C0C0]/15 space-y-3 bg-[#26272a]/40">
+              {item.desc && (
+                <p className="text-[15px] md:text-base leading-relaxed text-[#acb0cd]/85">{item.desc}</p>
+              )}
+              {item.experience && <HikeInfo label="Private experience">{item.experience}</HikeInfo>}
             </div>
           )}
-        </div>
+        </>
       )}
     </figure>
   );
@@ -243,13 +193,6 @@ export default function ExperienceColumns({ columns }) {
   // sous-colonnes (decalage vertical + trait de separation), sans re-afficher
   // l'en-tete de colonne (deja porte par la tuile cliquee au-dessus).
   const single = columns.length === 1;
-
-  // Monument affiche en grand ({ item, src }). Un seul a la fois ; recliquer la
-  // meme carte referme. La photo resolue est memorisee au clic pour que la vue
-  // agrandie n'ait pas a recalculer le cycle des photos de sous-region.
-  const [featured, setFeatured] = useState(null);
-  const openMonument = (item, src) =>
-    setFeatured((f) => (f && f.item === item ? null : { item, src }));
 
   useEffect(() => {
     const root = rootRef.current;
@@ -308,17 +251,6 @@ export default function ExperienceColumns({ columns }) {
                   )}
                 </header>
 
-                {/* Vue agrandie AU-DESSUS de la grille : elle doit couvrir les
-                    3 colonnes, ce qu'une tuile ne peut pas faire depuis sa
-                    <section> en colonne. */}
-                {featured && (
-                  <MonumentFeature
-                    item={featured.item}
-                    src={featured.src}
-                    onClose={() => setFeatured(null)}
-                  />
-                )}
-
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
                   {subCols.map((items, sci) => {
                     const subOffset = subCols.slice(0, sci).reduce((n, c) => n + c.length, 0);
@@ -332,7 +264,7 @@ export default function ExperienceColumns({ columns }) {
                         {items.map((item, i) => {
                           const fb = SUBREGION_PHOTOS[(subOffset + i) % SUBREGION_PHOTOS.length];
                           if (col.variant === 'hike') return <HikeTile key={item.name} item={item} index={i} fallbackImg={fb} />;
-                          if (col.variant === 'monument') return <MonumentTile key={item.name} item={item} index={i} fallbackImg={fb} onOpen={openMonument} isOpen={featured?.item === item} />;
+                          if (col.variant === 'monument') return <MonumentTile key={item.name} item={item} index={i} fallbackImg={fb} />;
                           return <Tile key={item.name} item={item} index={i} fallbackImg={fb} />;
                         })}
                       </section>
@@ -345,13 +277,6 @@ export default function ExperienceColumns({ columns }) {
         </div>
       ) : (
         <div className="max-w-7xl mx-auto">
-        {featured && (
-          <MonumentFeature
-            item={featured.item}
-            src={featured.src}
-            onClose={() => setFeatured(null)}
-          />
-        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
           {columns.map((col, ci) => (
             <section
@@ -377,7 +302,7 @@ export default function ExperienceColumns({ columns }) {
               {col.items.map((item, i) => {
                 const fb = SUBREGION_PHOTOS[(colOffset[ci] + i) % SUBREGION_PHOTOS.length];
                 if (col.variant === 'hike') return <HikeTile key={item.name} item={item} index={i} fallbackImg={fb} />;
-                if (col.variant === 'monument') return <MonumentTile key={item.name} item={item} index={i} fallbackImg={fb} onOpen={openMonument} isOpen={featured?.item === item} />;
+                if (col.variant === 'monument') return <MonumentTile key={item.name} item={item} index={i} fallbackImg={fb} />;
                 return <Tile key={item.name} item={item} index={i} fallbackImg={fb} />;
               })}
             </section>
