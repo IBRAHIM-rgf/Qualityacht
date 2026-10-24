@@ -99,11 +99,11 @@ export const SECTIONS = {
   art: {
     title: 'Art',
     eyebrow: 'America · Museums, Galleries & Exhibitions',
-    img: `${C}/east-coast.jpg`,
+    img: '/media/client/2026-10-24/art-culture-north-america/art-statue.jpg',
   },
   culture: {
     title: 'Culture',
     eyebrow: 'America · Heritage, Traditions & Celebrations',
-    img: `${E}/vancouver.jpg`,
+    img: '/media/client/2026-10-24/art-culture-north-america/culture-dancer.jpg',
   },
 };
