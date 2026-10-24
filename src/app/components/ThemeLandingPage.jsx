@@ -6,11 +6,13 @@ import { destinations } from '../charters/destinationsData';
 // Hero + intro + grille des 16 destinations en cards VERTICALES (portrait 3/4 +
 // titre dessous, style /only-for-you). Une card est cliquable si Caraïbes
 // (caribbeanHref) ou si son titre est dans `links`. `cardImages` surcharge la photo.
+// `cardAspect` (optionnel) : format des cartes (portrait 3/4 par defaut).
+// `cardPositions` (optionnel) : cadrage d'affichage par carte (object-position), sans recadrer le fichier.
 // Couleurs du hero rendues plus vives. Constante partagee : /art-culture,
 // /historic-sites et /horses-riding ont ainsi exactement le meme traitement.
 const HERO_BOOST = 'saturate-[1.4] contrast-[1.1] brightness-[1.03]';
 
-export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, heroFullPhoto = false, animated = false, hideHeroText = false, heroGradientSoft = false, heroZoomDuration = '9s', heroNode = null }) {
+export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, caribbeanHref, links = {}, cardImages = {}, cardPositions = {}, cardAspect = 'aspect-[3/4]', heroFullPhoto = false, animated = false, hideHeroText = false, heroGradientSoft = false, heroZoomDuration = '9s', heroNode = null }) {
   // heroGradientSoft : degrade plus leger (photo deja sombre au premier plan, cf.
   // /historic-sites : arche du Taj Mahal). Defaut = degrade d'origine partout ailleurs.
   const heroGradient = (
@@ -103,12 +105,13 @@ export default function ThemeLandingPage({ eyebrow, title, heroImage, intro, car
               const img = cardImages[d.title] || d.image;
               const card = (
                 <>
-                  <div className={`w-full relative overflow-hidden aspect-[3/4] rounded-xl mb-4 ${animated ? 'shadow-[0_22px_50px_-16px_rgba(0,0,0,0.8)]' : ''}`}>
+                  <div className={`w-full relative overflow-hidden ${cardAspect} rounded-xl mb-4 ${animated ? 'shadow-[0_22px_50px_-16px_rgba(0,0,0,0.8)]' : ''}`}>
                     <Image
                       src={encodeURI(img)}
                       alt={label}
                       fill
                       sizes="(max-width:768px) 80vw, 25vw"
+                      style={cardPositions[d.title] ? { objectPosition: cardPositions[d.title] } : undefined}
                       className={`object-cover rounded-xl transition-transform duration-500 ${isCaribbean ? 'origin-right scale-[1.06] group-hover:scale-110' : 'group-hover:scale-105'}`}
                     />
                   </div>
