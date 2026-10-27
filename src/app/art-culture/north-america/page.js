@@ -12,7 +12,7 @@ export const metadata = {
 // puis les 2 cards ART / CULTURE. CULTURE (textes du client) ouvre les 20 sous-regions ;
 // ART (2026-10-23) : les 20 lieux du fichier client « America_Art_Selection_Cards ».
 // Photos : photos North America deja sur le site, en attendant celles du client.
-const HERO_IMAGE = '/media/client/2026-10-16/north-america-cards/east-coast.jpg';
+const HERO_IMAGE = '/media/client/2026-10-27/art-culture-north-america-hero.jpg';
 
 const panels = [
   {
@@ -51,7 +51,7 @@ export default function NorthAmericaArtCulturePage() {
             fill
             priority
             sizes="100vw"
-            className="object-cover"
+            className="object-cover object-top"
           />
         </div>
         <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#26272a]/90 via-[#26272a]/40 to-transparent" />
