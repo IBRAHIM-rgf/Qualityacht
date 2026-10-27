@@ -51,6 +51,8 @@ const cards = [
     title: "North America",
     description: "Rugged headlands, sheltered sounds and classic Atlantic seamanship.",
     image: "/images/destinations/animals/Nord-America.jpg",
+    // Page Day Charter North America (client 2026-10-27).
+    href: "/charters/day-charter/north-america",
   },
   {
     title: "Pacific Ocean",
