@@ -43,19 +43,15 @@ const panels = [
 export default function NorthAmericaArtCulturePage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] min-h-screen">
-      <section className="relative pt-[70px] md:pt-0">
-        <div className="relative w-full h-[75vh] md:h-[85vh]">
-          <Image
-            src={HERO_IMAGE}
-            alt="Art & Culture — North America"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-top"
-          />
-        </div>
-        <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#26272a]/90 via-[#26272a]/40 to-transparent" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-6 md:pb-10">
+      {/* HERO (client 2026-10-27) : photo entiere (ratio naturel, aucun recadrage) et titre
+          centre sur la photo ; sur mobile le titre passe sous la photo. */}
+      <section className="pt-[70px]">
+        <div className="relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={HERO_IMAGE} alt="Art & Culture — North America" className="block w-full h-auto" />
+          <div className="hidden md:block absolute inset-0 bg-[#26272a]/30" />
+          <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#26272a] to-transparent" />
+          <div className="relative md:absolute md:inset-0 flex flex-col items-center justify-center text-center px-6 py-8 md:py-0">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
             North America · Private Client Edition
           </p>
@@ -67,6 +63,7 @@ export default function NorthAmericaArtCulturePage() {
           </p>
           <div className="relative w-28 md:w-40 h-6 mt-4">
             <Image src="/images/title-line.png" alt="" fill className="object-contain" />
+          </div>
           </div>
         </div>
       </section>
