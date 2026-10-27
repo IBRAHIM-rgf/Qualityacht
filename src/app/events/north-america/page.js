@@ -1,6 +1,6 @@
 // /events/north-america — Events North America (PDF client 2026-10-23), calquee sur
 // /events/bahamas : meme hero, meme carte + filtres + cards. Pas de carrousel (aucune
-// photo fournie) ; hero provisoire = poster du hero de la page destination North America.
+// photo fournie) . Hero = photo fournie par le client (2026-10-27).
 import Image from "next/image";
 import Link from "next/link";
 import CaribbeanEventsMap from "../CaribbeanEventsMap";
@@ -10,7 +10,7 @@ export const metadata = {
   title: "North America Events | Qualityacht",
 };
 
-const HERO = "/media/client/2026-10-23/north-america-hero/poster.jpg";
+const HERO = "/media/client/2026-10-27/events-north-america-hero.jpg";
 
 // Pas de photos fournies dans le PDF : photo provisoire par secteur = photo de la
 // case region (page destination North America), en attendant les photos du client.
