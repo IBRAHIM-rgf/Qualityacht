@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation';
 import SubregionClient from '../destinations/carabbean/_shared/SubregionClient';
 import { GROUPS, CARDS, groupSlug } from '../destinations/bahamas/bahamasGroups';
 import { CARIBBEAN_SUBREGIONS } from './caribbeanSubregions';
+import { NA_GROUPS, NA_CARD_PHOTO } from '../destinations/north-america/northAmericaGroups';
 import { getCategoryYachts } from '@/lib/categoryYachts';
 
 function findBahamas(slug) {
@@ -40,7 +41,25 @@ function findCaribbean(slug) {
   };
 }
 
+// Cases North America (client 2026-10-27) : /charters/day-charter/north-america/<region>.
+function findNorthAmerica(slug) {
+  const g = NA_GROUPS.find((x) => x.slug === slug);
+  if (!g) return null;
+  return {
+    region: 'north-america',
+    key: g.key,
+    name: g.name,
+    heroImage: g.photo || NA_CARD_PHOTO,
+    heroImageOriginal: g.photo || NA_CARD_PHOTO,
+    topIslands: g.places,
+    fleetTitle: 'Yachts in North America',
+    hideCaribbeanDestination: true,
+    guideArticle: g.name.startsWith('East') || g.name.startsWith('West') ? 'the' : '',
+  };
+}
+
 function findCase(region, slug) {
+  if (region === 'north-america') return findNorthAmerica(slug);
   return region === 'bahamas' ? findBahamas(slug) : findCaribbean(slug);
 }
 
