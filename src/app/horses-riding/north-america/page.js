@@ -20,7 +20,7 @@ export const metadata = {
 };
 
 // Photo provisoire (mediatheque du site) en attendant celle du client.
-const HERO = '/media/quality/horses/robglenister-horse-4475581_1920.jpg';
+const HERO = '/media/client/2026-10-27/horses-north-america-hero.jpg';
 
 const stats = [
   { value: '20', label: 'Regions covered' },
