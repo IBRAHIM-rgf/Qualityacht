@@ -188,8 +188,10 @@ export default function NorthAmericaHorsesRidingPage() {
         <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={encodeURI(HERO)} alt="Horses & Riding — North America" className="block w-full h-auto" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-transparent" />
-          <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-4 md:pb-6">
+          {/* Titre centre sur la photo entiere (client 2026-10-27) ; sous la photo sur mobile. */}
+          <div className="hidden md:block absolute inset-0 bg-[#26272a]/35" />
+          <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#26272a] to-transparent" />
+          <div className="relative md:absolute md:inset-0 flex flex-col items-center justify-center text-center px-6 py-8 md:py-0">
             <div className="hero-rise flex flex-col items-center">
               <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[#B87333] font-medium mb-3">
                 America 2027 · Private Client Guide
