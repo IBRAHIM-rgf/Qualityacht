@@ -5,7 +5,7 @@
 import { DestCard, CloudSection, RevealBlock } from '../caribbean-v15/CaribbeanV15Base';
 import { NA_GROUPS, NA_CARD_PHOTO } from './northAmericaGroups';
 
-export default function NorthAmericaRegionCards() {
+export default function NorthAmericaRegionCards({ linkBase = '/charters/destinations/north-america' }) {
   return (
     <>
       <style>{`
@@ -18,7 +18,7 @@ export default function NorthAmericaRegionCards() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-px">
             {NA_GROUPS.map((g, i) => (
               <DestCard key={g.slug} index={i} name={g.name} image={g.photoFiltered || g.photo || NA_CARD_PHOTO} imageOld={g.photo || NA_CARD_PHOTO}
-                href={`/charters/destinations/north-america/${g.slug}`} />
+                href={`${linkBase}/${g.slug}`} />
             ))}
           </div>
         </div>

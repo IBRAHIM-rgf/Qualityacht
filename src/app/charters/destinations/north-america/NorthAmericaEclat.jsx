@@ -73,11 +73,34 @@ const scatterCards = [
 
 const mobileNodes = [P(photoVancouver), T1, Vd(vid1), T2, P(photoCenote), T3, Vd(vid2), T4, P(photoCancun)];
 
-export default function NorthAmericaEclat() {
+// Eclat de la page Day Charter North America (client 2026-10-27) : 3 photos puis
+// 2 videos, places dans l'ordre recu sur les 5 emplacements medias (meme ordre
+// d'apparition que la page destination). Largeurs adaptees au format de chaque media
+// (aucun recadrage). Memes textes que la page destination.
+const SLOTS = [
+  { key: 'm1', pos: { left: '24%', top: '4%' }, depth: -30, fd: '6.5s', d: 150 },
+  { key: 'm2', pos: { right: '1%', top: '2%' }, depth: 52, fd: '8.5s', d: 300 },
+  { key: 'm3', pos: { left: '0.5%', top: '27%' }, depth: -44, fd: '6.8s', d: 450 },
+  { key: 'm4', pos: { left: '0.5%', bottom: '18%' }, depth: -50, fd: '8s', d: 750 },
+  { key: 'm5', pos: { right: '1%', bottom: '25%' }, depth: 46, fd: '6.2s', d: 900 },
+];
+const TEXT_SLOTS = scatterCards.filter((c) => c.key.startsWith('t'));
+const mediaNode = (m) => (m.video ? Vd(m) : P(m));
+
+export default function NorthAmericaEclat({ media = null }) {
+  const cards = media
+    ? [
+        ...TEXT_SLOTS,
+        ...SLOTS.map((sl, i) => ({ ...sl, pos: { ...sl.pos, width: media[i].width }, node: mediaNode(media[i]) })),
+      ]
+    : scatterCards;
+  const mobile = media
+    ? [mediaNode(media[0]), T1, mediaNode(media[1]), T2, mediaNode(media[2]), T3, mediaNode(media[3]), T4, mediaNode(media[4])]
+    : mobileNodes;
   return (
     <div className="bg-[#26272a] text-[#acb0cd]">
       <section className="px-4 md:px-16 py-16 md:py-24">
-        <FloatingScatter cards={scatterCards} mobileNodes={mobileNodes} minHeightClass="lg:min-h-[1180px]" revealDurationMs={2800}>
+        <FloatingScatter cards={cards} mobileNodes={mobile} minHeightClass="lg:min-h-[1180px]" revealDurationMs={2800}>
           <span className="inline-block rounded-full border border-[#C0C0C0]/40 bg-[#2e2f32] px-4 py-1.5 text-[10px] md:text-xs uppercase tracking-[0.3em] text-[#c2622a] mb-6">At a glance</span>
           <h2 className="trajan-regular text-2xl md:text-4xl lg:text-5xl uppercase tracking-[0.08em] text-[#acb0cd] leading-tight max-w-2xl mx-auto">
             North America,<br className="hidden md:block" /> Curated Around You

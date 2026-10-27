@@ -28,13 +28,26 @@ export const metadata = {
   title: 'North America | Qualityacht',
 };
 
-export default function NorthAmericaPage() {
+// Props (client 2026-10-27) : reutilisee par /charters/day-charter/north-america,
+// comme la page Bahamas pour /charters/day-charter/bahamas. Sans props : inchange.
+export default function NorthAmericaPage({
+  quoteHref = '/request-quote',
+  heroOverTitle = null,
+  quoteLabel = 'Design Your Charter',
+  heroRuleColor = null,
+  heroVideo = `${HERO}/hero.mp4`,
+  heroPoster = `${HERO}/poster.jpg`,
+  regionLinkBase = '/charters/destinations/north-america',
+  eclatMedia = null,
+}) {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
       <VideoHero
-        videoLandscape={`${HERO}/hero.mp4`}
-        posterLandscape={`${HERO}/poster.jpg`}
+        videoLandscape={heroVideo}
+        posterLandscape={heroPoster}
         kicker="Qualityacht · North America"
+        overTitle={heroOverTitle}
+        ruleColor={heroRuleColor}
         title="North America"
         subtitle="The Ultimate Luxury Yachting Destination"
         align="center"
@@ -42,10 +55,10 @@ export default function NorthAmericaPage() {
       >
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="/request-quote"
+            href={quoteHref}
             className="inline-flex min-h-[48px] max-w-full items-center justify-center text-center rounded-full border border-[#C0C0C0] bg-[#26272a] px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#c2622a] shadow-[0_0_18px_rgba(192,192,192,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#c2622a] hover:shadow-[0_0_24px_rgba(194,98,42,0.45)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2622a]"
           >
-            Design Your Charter
+            {quoteLabel}
           </Link>
           <Link
             href="/contact"
@@ -57,8 +70,8 @@ export default function NorthAmericaPage() {
       </VideoHero>
       {/* Cases des regions (client 2026-10-15), comme les cases Bahamas. */}
       {/* Eclat (cartes flottantes), comme la page Bahamas : juste sous le hero. */}
-      <NorthAmericaEclat />
-      <NorthAmericaRegionCards />
+      <NorthAmericaEclat media={eclatMedia} />
+      <NorthAmericaRegionCards linkBase={regionLinkBase} />
       <NorthAmericaRegions />
       <BahamasPopularDestinations items={NA_FLOWERS} />
       <NorthAmericaCta />
