@@ -26,15 +26,14 @@ const EVENTS = NORTH_AMERICA_EVENTS.map((e) => ({ ...e, img: SECTOR_IMAGES[e.sec
 export default function EventsNorthAmericaPage() {
   return (
     <main>
-      <section className="relative pt-[70px] md:pt-0 overflow-hidden h-[60vh] md:h-[82vh] bg-[#26272a]">
-        <style>{`
-          .events-hero-zoom { animation: eventsHeroZoom 9s ease-in-out infinite alternate; will-change: transform; }
-          @keyframes eventsHeroZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
-          @media (prefers-reduced-motion: reduce) { .events-hero-zoom { animation: none !important; } }
-        `}</style>
-        <Image src={HERO} alt="Exclusive Event Experiences" fill priority sizes="100vw" className="object-cover object-center saturate-[1.4] contrast-[1.1] brightness-[1.03] events-hero-zoom" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-3/5 bg-gradient-to-t from-[#26272a] via-[#26272a]/70 to-transparent" />
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-end text-center px-6 pb-8 md:pb-12">
+      {/* HERO (client 2026-10-27) : photo entiere (ratio naturel, sans zoom ni recadrage)
+          et titre centre sur la photo ; sur mobile le texte passe sous la photo. */}
+      <section className="relative pt-[70px] bg-[#26272a]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={HERO} alt="Exclusive Event Experiences" className="block w-full h-auto saturate-[1.4] contrast-[1.1] brightness-[1.03]" />
+        <div className="pointer-events-none hidden md:block absolute inset-x-0 top-[70px] bottom-0 z-10 bg-[#26272a]/35" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-1/4 bg-gradient-to-t from-[#26272a] to-transparent" />
+        <div className="relative md:absolute md:inset-x-0 md:top-[70px] md:bottom-0 z-20 flex flex-col items-center justify-center text-center px-6 py-8 md:py-0">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">North America · Cultural & Nautical Calendar</p>
           <h1 className="trajan-regular text-3xl md:text-5xl lg:text-6xl uppercase tracking-[0.1em] text-[#C0C0C0] leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">Exclusive Event Experiences</h1>
           <div className="relative w-28 md:w-40 h-5 mt-4"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
