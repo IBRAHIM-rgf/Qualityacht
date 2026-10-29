@@ -595,6 +595,13 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
                   {total}<span className="text-sm text-[#acb0cd]/50"> {unitLabel[p.unit] || ''}</span>
                 </p>
               )}
+              {/* Day Charter : devises cochees + heure supplementaire (client 2026-10-29) */}
+              {s._alt?.length > 0 && (
+                <p className="text-sm text-[#acb0cd]/70 -mt-2">≈ {s._alt.join('  ·  ')}</p>
+              )}
+              {s._extraHour && (
+                <p className="text-sm text-[#acb0cd]/80 -mt-2">+ {s._extraHour} per additional hour</p>
+              )}
               {/* Tarifs admin : APA / VAT en sus, coches dans l'admin */}
               {(s._apa || s._vat) && (
                 <p className="text-[11px] uppercase tracking-[0.25em] text-[#acb0cd]/70 -mt-2">
