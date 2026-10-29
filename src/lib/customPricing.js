@@ -147,7 +147,31 @@ function normalizeDayRate(r) {
     location: String(r.location || '').trim(),
     apa: r.apa === true || r.apa === 'true',
     vat: r.vat === true || r.vat === 'true',
+    // Heure supplementaire (client 2026-10-29) : prix d'une heure en plus, facultatif.
+    extraHour: toAmount(r.extraHour),
+    // Devises cochees (client 2026-10-29) : le meme prix affiche aussi dans ces devises
+    // (montants convertis dans l'admin, modifiables). [{ currency, price, extraHour }]
+    alt: normalizeAlt(r.alt, PRICING_CURRENCIES.includes(r.currency) ? r.currency : 'EUR'),
   };
+}
+
+function toAmount(v) {
+  const n = Number(String(v ?? '').replace(/[\s'’]/g, '').replace(',', '.'));
+  return Number.isFinite(n) && n > 0 ? Math.round(n) : null;
+}
+
+function normalizeAlt(raw, main) {
+  if (!Array.isArray(raw)) return [];
+  const seen = new Set([main]);
+  const out = [];
+  for (const a of raw) {
+    if (!a || !PRICING_CURRENCIES.includes(a.currency) || seen.has(a.currency)) continue;
+    const price = toAmount(a.price);
+    if (!price) continue;
+    seen.add(a.currency);
+    out.push({ currency: a.currency, price, extraHour: toAmount(a.extraHour) });
+  }
+  return out;
 }
 
 /** Normalise la valeur brute ; renvoie toujours un objet complet. */
@@ -210,6 +234,8 @@ export function dayCharterRatesForDisplay(dc) {
     location: r.location,
     apa: r.apa,
     vat: r.vat,
+    extraHour: r.extraHour ? formatCustomPrice(r.extraHour, r.currency) : '',
+    alt: (r.alt || []).map((a) => formatCustomPrice(a.price, a.currency)),
   }));
 }
 
@@ -227,6 +253,8 @@ function rateToPricingInfo(r) {
     _apa: r.apa,
     _vat: r.vat,
     _custom: true,
+    _extraHour: r.extraHour ? formatCustomPrice(r.extraHour, r.currency) : '',
+    _alt: (r.alt || []).map((a) => formatCustomPrice(a.price, a.currency)),
   };
 }
 

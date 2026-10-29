@@ -41,14 +41,17 @@ const TEXT_KEYS = OVERRIDE_TEXT_FIELDS.map(([k]) => k);
 // Hebergeurs d'images autorises par next.config.js (images.remotePatterns). Une photo
 // ailleurs ferait planter la fiche du site : elle est ignoree a l'affichage et signalee
 // dans l'admin.
-const IMAGE_HOSTS = ['images.unsplash.com', 'firebasestorage.googleapis.com', 'api.ankor.io', 'cdn.ankor.io'];
+// radar.ankor.io (liens copies depuis Ankor) et Vercel Blob (photos importees depuis
+// l'ordinateur) ajoutes le 2026-10-29.
+const IMAGE_HOSTS = ['images.unsplash.com', 'firebasestorage.googleapis.com', 'api.ankor.io', 'cdn.ankor.io', 'radar.ankor.io'];
+const IMAGE_HOST_SUFFIXES = ['.public.blob.vercel-storage.com'];
 export function isSupportedImage(src) {
   const s = String(src || '').trim();
   if (!s) return false;
   if (!/^https?:\/\//i.test(s)) return s.startsWith('/media/'); // cle Ankor relative
   try {
     const u = new URL(s);
-    return u.protocol === 'https:' && IMAGE_HOSTS.includes(u.hostname);
+    return u.protocol === 'https:' && (IMAGE_HOSTS.includes(u.hostname) || IMAGE_HOST_SUFFIXES.some((x) => u.hostname.endsWith(x)));
   } catch { return false; }
 }
 
