@@ -285,11 +285,89 @@ function PricingEditor({ rates, onChange }) {
 // Day Charter (client 2026-09-30) : case a cocher ; cochee, le yacht apparait
 // dans le parcours Day Charter du site. Plusieurs prix possibles (client 2026-10-02),
 // chacun avec sa periode (dates) et son lieu.
-const EMPTY_DAY_RATE = { price: '', currency: 'EUR', from: '', to: '', location: '', apa: false, vat: false };
+const EMPTY_DAY_RATE = { price: '', currency: 'EUR', from: '', to: '', location: '', apa: false, vat: false, extraHour: '', alt: [] };
 
 function dayCharterToForm(raw) {
   const d = normalizeDayCharter(raw);
-  return { enabled: d.enabled, rates: d.rates.map((r) => ({ ...r, price: String(r.price) })) };
+  return {
+    enabled: d.enabled,
+    rates: d.rates.map((r) => ({
+      ...r,
+      price: String(r.price),
+      extraHour: r.extraHour ? String(r.extraHour) : '',
+      alt: (r.alt || []).map((a) => ({ ...a, price: String(a.price), extraHour: a.extraHour ? String(a.extraHour) : '' })),
+    })),
+  };
+}
+
+// Devises cochees (client 2026-10-29) : conversion automatique au cours du jour
+// (BCE, via frankfurter.app), arrondie a la centaine, puis modifiable a la main.
+async function fetchRate(from, to) {
+  const res = await fetch(`https://api.frankfurter.app/latest?from=${from}&to=${to}`);
+  if (!res.ok) throw new Error('rate');
+  const data = await res.json();
+  const r = data?.rates?.[to];
+  if (!r) throw new Error('rate');
+  return r;
+}
+const roundTo = (n, step) => Math.round(n / step) * step;
+const toNum = (v) => Number(String(v ?? '').replace(/[\s'’]/g, '').replace(',', '.'));
+
+function DayRateCurrencies({ rate, onChange }) {
+  const [busy, setBusy] = useState('');
+  const [err, setErr] = useState('');
+  const main = rate.currency || 'EUR';
+  const alt = Array.isArray(rate.alt) ? rate.alt.filter((a) => a.currency !== main) : [];
+  const toggle = async (cur, on) => {
+    setErr('');
+    if (!on) { onChange(alt.filter((a) => a.currency !== cur)); return; }
+    const entry = { currency: cur, price: '', extraHour: '' };
+    try {
+      setBusy(cur);
+      const fx = await fetchRate(main, cur);
+      const p = toNum(rate.price);
+      const h = toNum(rate.extraHour);
+      if (p > 0) entry.price = String(roundTo(p * fx, 100));
+      if (h > 0) entry.extraHour = String(roundTo(h * fx, 10));
+    } catch {
+      setErr('Conversion indisponible : saisis le montant à la main.');
+    } finally {
+      setBusy('');
+    }
+    onChange([...alt, entry]);
+  };
+  const update = (cur, patch) => onChange(alt.map((a) => (a.currency === cur ? { ...a, ...patch } : a)));
+  return (
+    <div className="space-y-2">
+      <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50">Afficher aussi en</label>
+      <div className="flex flex-wrap gap-4">
+        {PRICING_CURRENCIES.filter((c) => c !== main).map((c) => (
+          <label key={c} className="flex items-center gap-2 text-sm cursor-pointer">
+            <input type="checkbox" checked={alt.some((a) => a.currency === c)} disabled={busy === c}
+              onChange={(e) => toggle(c, e.target.checked)} className="w-4 h-4 accent-[#B03E00]" />
+            <span className="text-[#acb0cd]">{c}</span>
+          </label>
+        ))}
+      </div>
+      {err && <p className="text-[#e3a892] text-xs">{err}</p>}
+      {alt.map((a) => (
+        <div key={a.currency} className="grid grid-cols-[60px_1fr_1fr] gap-2 items-end">
+          <span className="text-[#acb0cd] text-sm pb-2">{a.currency}</span>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Prix (par jour)</label>
+            <input type="text" inputMode="numeric" value={a.price ?? ''} onChange={(e) => update(a.currency, { price: e.target.value })} className={RATE_INPUT} />
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Heure supplémentaire</label>
+            <input type="text" inputMode="numeric" value={a.extraHour ?? ''} onChange={(e) => update(a.currency, { extraHour: e.target.value })} className={RATE_INPUT} />
+          </div>
+        </div>
+      ))}
+      {alt.length > 0 && (
+        <p className="text-[#acb0cd]/50 text-xs">Montants convertis au cours du jour, arrondis : modifiables. Affichés sur le site sous le prix principal (≈).</p>
+      )}
+    </div>
+  );
 }
 
 function DayCharterEditor({ value, onChange }) {
@@ -337,6 +415,13 @@ function DayCharterEditor({ value, onChange }) {
                 <input type="text" value={r.location || ''} onChange={(e) => update(i, { location: e.target.value })}
                   placeholder="Saint-Tropez" className={RATE_INPUT} />
               </div>
+              {/* Heure supplementaire (client 2026-10-29) : prix d'une heure en plus, facultatif. */}
+              <div>
+                <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Heure supplémentaire (prix par heure en plus, facultatif)</label>
+                <input type="text" inputMode="numeric" value={r.extraHour ?? ''} onChange={(e) => update(i, { extraHour: e.target.value })}
+                  placeholder="1500" className={RATE_INPUT} />
+              </div>
+              <DayRateCurrencies rate={r} onChange={(alt) => update(i, { alt })} />
               <div className="flex flex-wrap gap-5">
                 <label className="flex items-center gap-2 text-sm cursor-pointer">
                   <input type="checkbox" checked={!!r.apa} onChange={(e) => update(i, { apa: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
@@ -398,8 +483,23 @@ function ChipListEditor({ label, items, onChange, placeholder }) {
   );
 }
 
+// Import depuis l'ordinateur (client 2026-10-29) : envoi direct vers Vercel Blob,
+// l'adresse obtenue est ajoutee a la liste comme un lien.
+async function uploadPhotos(files) {
+  const { upload } = await import('@vercel/blob/client');
+  const urls = [];
+  for (const file of files) {
+    const safe = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, '-');
+    const blob = await upload(`yachts/${safe}`, file, { access: 'public', handleUploadUrl: '/api/admin/upload' });
+    urls.push(blob.url);
+  }
+  return urls;
+}
+
 function ImagesEditor({ images, onChange }) {
   const [draft, setDraft] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [uploadErr, setUploadErr] = useState('');
   const list = images || [];
   const move = (i, d) => {
     const j = i + d;
@@ -417,7 +517,7 @@ function ImagesEditor({ images, onChange }) {
   return (
     <div>
       <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Photos (la 1ère = photo principale)</label>
-      <p className="text-[#acb0cd]/50 text-xs mb-2">Liens acceptés sur le site : photos Ankor, Unsplash (images.unsplash.com) ou Firebase Storage.</p>
+      <p className="text-[#acb0cd]/50 text-xs mb-2">Liens acceptés sur le site : photos Ankor (api, cdn ou radar.ankor.io), Unsplash, Firebase Storage, ou photos importées depuis l'ordinateur.</p>
       {list.length === 0 && <p className="text-[#acb0cd]/40 text-xs italic mb-2">Aucune photo.</p>}
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-2">
         {list.map((src, i) => (
@@ -443,7 +543,28 @@ function ImagesEditor({ images, onChange }) {
           className="px-3 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 text-sm flex items-center gap-1 whitespace-nowrap">
           <Plus className="w-4 h-4" /> Ajouter
         </button>
+        <label className={`px-3 py-2 rounded-lg border border-[#C0C0C0]/40 text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] text-sm flex items-center gap-1 whitespace-nowrap cursor-pointer ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+          {uploading ? 'Envoi…' : 'Importer depuis l\u2019ordinateur'}
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple className="hidden"
+            onChange={async (e) => {
+              const files = Array.from(e.target.files || []);
+              e.target.value = '';
+              if (!files.length) return;
+              setUploadErr('');
+              setUploading(true);
+              try {
+                const urls = await uploadPhotos(files);
+                onChange([...list, ...urls]);
+              } catch (err) {
+                console.error(err);
+                setUploadErr("L'import a échoué. Vérifie que le stockage photos est bien relié au site.");
+              } finally {
+                setUploading(false);
+              }
+            }} />
+        </label>
       </div>
+      {uploadErr && <p className="text-[#e3a892] text-xs mt-2">{uploadErr}</p>}
     </div>
   );
 }
