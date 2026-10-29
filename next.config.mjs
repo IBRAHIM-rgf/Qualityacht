@@ -24,6 +24,18 @@ const nextConfig = {
           hostname: 'cdn.ankor.io',
           pathname: '/**',
         },
+        // Liens photo copies depuis Ankor (client 2026-10-29).
+        {
+          protocol: 'https',
+          hostname: 'radar.ankor.io',
+          pathname: '/media/**',
+        },
+        // Photos importees depuis l'ordinateur dans l'admin (Vercel Blob, 2026-10-29).
+        {
+          protocol: 'https',
+          hostname: '*.public.blob.vercel-storage.com',
+          pathname: '/**',
+        },
       ],
     },
     // Adresses SEO halal (client 2026-10-23) : anciennes adresses -> nouvelles (301).
