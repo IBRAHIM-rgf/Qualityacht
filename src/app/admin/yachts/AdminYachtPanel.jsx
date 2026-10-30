@@ -509,7 +509,9 @@ function ImagesEditor({ images, onChange }) {
     onChange(next);
   };
   const add = () => {
-    const v = draft.trim();
+    // radar.ankor.io demande d'etre connecte a Ankor : on enregistre l'adresse publique
+    // api.ankor.io de la meme photo (client 2026-10-29).
+    const v = draft.trim().replace(/^https:\/\/radar\.ankor\.io\/media\//, 'https://api.ankor.io/media/');
     if (!v) return;
     onChange([...list, v]);
     setDraft('');
