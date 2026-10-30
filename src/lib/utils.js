@@ -248,9 +248,11 @@ export function getAnkorImageUrl(imageUrl, variant = '640w') {
   // Variants: blur, 108w, 320w, 640w, 960w, 1280w, 2560w
   const urlWithVariant = imageUrl.replace('{imageVariant}', variant);
 
-  // Si l'URL commence déjà par http, la retourner telle quelle
+  // Si l'URL commence déjà par http, la retourner telle quelle.
+  // Liens radar.ankor.io (copies depuis l'interface Ankor, client 2026-10-29) : radar
+  // exige d'etre connecte a Ankor, la meme photo est servie publiquement par api.ankor.io.
   if (urlWithVariant.startsWith('http')) {
-    return urlWithVariant;
+    return urlWithVariant.replace(/^https:\/\/radar\.ankor\.io\/media\//, 'https://api.ankor.io/media/');
   }
 
   // Sinon, ajouter le baseUrl

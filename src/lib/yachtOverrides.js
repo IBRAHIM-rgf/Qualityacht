@@ -55,6 +55,11 @@ export function isSupportedImage(src) {
   } catch { return false; }
 }
 
+// radar.ankor.io exige d'etre connecte a Ankor : meme photo via api.ankor.io (2026-10-29).
+function publicAnkorUrl(src) {
+  return String(src).replace(/^https:\/\/radar\.ankor\.io\/media\//, 'https://api.ankor.io/media/');
+}
+
 function parse(raw) {
   if (!raw) return {};
   if (typeof raw === 'string') { try { return JSON.parse(raw) || {}; } catch { return {}; } }
@@ -196,7 +201,7 @@ export function applyOverridesToCard(yacht, rawOv) {
     y.destinations = ov.location ? [ov.location] : undefined;
   }
   if (ov.description !== undefined) y.description = ov.description || undefined;
-  if (ov.images) y.images = ov.images.filter(isSupportedImage);
+  if (ov.images) y.images = ov.images.filter(isSupportedImage).map(publicAnkorUrl);
   y.overrides = ov;
   return y;
 }
@@ -233,7 +238,7 @@ export function applyOverridesToDetail(base, rawOv) {
   if (ov.location !== undefined) {
     bp.basePort = ov.location ? { ...(bp.basePort || {}), name: ov.location } : undefined;
   }
-  if (ov.images) bp.images = ov.images.filter(isSupportedImage);
+  if (ov.images) bp.images = ov.images.filter(isSupportedImage).map(publicAnkorUrl);
   if (ov.amenities) bp.amenities = ov.amenities.map((label) => ({ label }));
   if (ov.entertainment) bp.entertainment = ov.entertainment;
   if (ov.tenders) bp.tenders = ov.tenders;
