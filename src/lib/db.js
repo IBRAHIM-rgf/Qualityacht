@@ -3,6 +3,7 @@
 import { neon } from '@neondatabase/serverless';
 import { revalidateTag } from 'next/cache';
 import { customPricingToAnkor, applyCustomPricingToYacht, normalizeDayCharter } from './customPricing';
+import { normalizeCharterPrices } from './charterPrices';
 import { applyOverridesToDetail, normalizeOverrides } from './yachtOverrides';
 
 // Les listes publiques de yachts sont mises en cache 1 h (lib/yachts.js, tag
@@ -172,8 +173,8 @@ export async function updateYachtEnrichedData(yacht_id, data) {
   const hasDayCharter = day_charter && typeof day_charter === 'object' && !Array.isArray(day_charter);
   // Modele tarifaire charter (client 2026-10-15) : objet complet a chaque sauvegarde.
   const hasCharterModel = charter_model && typeof charter_model === 'object' && !Array.isArray(charter_model);
-  // Tarifs admin (saison / region) : tableau complet a chaque sauvegarde ([] = efface).
-  const hasCustomPricing = Array.isArray(custom_pricing);
+  // Prix admin : objet complet par type de charter a chaque sauvegarde (client 2026-10-31).
+  const hasCustomPricing = !!custom_pricing && typeof custom_pricing === 'object';
   // Multi-selection : quand les listes sont fournies, la valeur unique suit le premier choix
   // (chaine vide = « aucune », qui vide aussi la colonne unique).
   const hasRegions = Array.isArray(regions);
@@ -419,7 +420,9 @@ export async function getSelectionYachtFullByName(name) {
     // Fiche modifiee dans l'admin : les champs modifies remplacent ceux d'Ankor.
     const base = applyOverridesToDetail(base0, r.overrides);
     // Day Charter (case + prix admin), utilise par la fiche dans ce parcours.
-    base.dayCharter = normalizeDayCharter(r.day_charter);
+    base.dayCharter = normalizeDayCharter(r.day_charter, r.custom_pricing);
+    // Fiches de prix par type de charter (client 2026-10-31) : section « Charter Prices ».
+    base.charterPrices = normalizeCharterPrices(r.custom_pricing, r.day_charter);
     // Tarifs saisis dans l'admin : ils remplacent le pricing Ankor de la fiche.
     const customAnkor = customPricingToAnkor(r.custom_pricing);
     if (!customAnkor) return base;

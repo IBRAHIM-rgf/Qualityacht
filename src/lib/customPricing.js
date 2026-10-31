@@ -1,70 +1,34 @@
-// src/lib/customPricing.js — Tarifs saisis dans l'admin (par saison / région).
-//
-// Stockage : colonne jsonb `custom_pricing` de yacht_selections, tableau de cartes :
-//   { group: 'summer'|'winter', title, subtitle, price, currency, unit: 'WEEK'|'DAY', zones: [],
-//     apa: bool, vat: bool }   (apa / vat coches = « + APA » / « + VAT », en sus du prix)
-// `price` est en unites de devise (ex. 495000), pas en centimes.
-//
-// Quand un yacht a au moins une carte, ces tarifs remplacent ceux d'Ankor :
-//  - fiche detail : convertis au format Ankor `pricing.pricingInfo` (le rendu
-//    « Regions and Rates » existant s'applique tel quel) ;
+// src/lib/customPricing.js — Prix saisis dans l'admin (colonne jsonb `custom_pricing`).
+// Quand un yacht a au moins une carte de prix, ces prix remplacent ceux d'Ankor :
+//  - fiche detail : section « Charter Prices » (onglets par type de charter) ;
 //  - cartes des listes : « Price : <prix le plus bas> /week ».
 // Aucun acces BDD ici : module partage serveur / client.
 
+// Depuis le 2026-10-31 : fiches de prix par type de charter (lib/charterPrices.js).
+// Ce module garde ses fonctions pour les listes et la fiche, a partir de ce modele.
+import { normalizeCharterPrices, flatRates, rateTitle, formatPriceAmount, RATE_CURRENCIES } from './charterPrices';
+
 export const PRICING_GROUPS = ['summer', 'winter'];
-export const PRICING_UNITS = ['WEEK', 'DAY'];
-export const PRICING_CURRENCIES = ['EUR', 'USD', 'GBP', 'CHF'];
+export const PRICING_CURRENCIES = RATE_CURRENCIES.map((c) => c.code);
 
-const SYMBOLS = { EUR: '€', USD: '$', GBP: '£', CHF: 'CHF' };
-
-function cleanZones(zones) {
-  const list = Array.isArray(zones)
-    ? zones
-    : String(zones || '').split(/[,\n;]/);
-  const seen = new Set();
-  const out = [];
-  for (const z of list) {
-    const label = String(z || '').trim();
-    if (!label) continue;
-    const key = label.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(label);
-  }
-  return out;
-}
-
-/** Normalise une valeur brute (jsonb, string JSON, tableau) en tableau de cartes valides. */
-export function normalizeCustomPricing(raw) {
-  let arr = raw;
-  if (typeof arr === 'string') {
-    try { arr = JSON.parse(arr); } catch { arr = []; }
-  }
-  if (!Array.isArray(arr)) return [];
-  const out = [];
-  for (const row of arr) {
-    if (!row || typeof row !== 'object') continue;
-    const price = Number(String(row.price ?? '').replace(/[\s'’]/g, '').replace(',', '.'));
-    const title = String(row.title || '').trim();
-    if (!title || !Number.isFinite(price) || price <= 0) continue;
-    out.push({
-      group: PRICING_GROUPS.includes(row.group) ? row.group : 'summer',
-      title,
-      subtitle: String(row.subtitle || '').trim(),
-      price: Math.round(price),
-      currency: PRICING_CURRENCIES.includes(row.currency) ? row.currency : 'EUR',
-      unit: PRICING_UNITS.includes(row.unit) ? row.unit : 'WEEK',
-      zones: cleanZones(row.zones),
-      apa: row.apa === true || row.apa === 'true',
-      vat: row.vat === true || row.vat === 'true',
-    });
-  }
-  return out;
+/** Toutes les cartes de prix a plat (tous types), format simple des listes. */
+export function normalizeCustomPricing(raw, legacyDayRaw = null) {
+  return flatRates(normalizeCharterPrices(raw, legacyDayRaw)).map((r) => ({
+    group: /winter/i.test(r.period) && !/summer/i.test(r.period) ? 'winter' : 'summer',
+    title: rateTitle(r),
+    subtitle: r.subtitle,
+    price: r.price,
+    currency: r.currency,
+    unit: r.unit,
+    zones: r.zones,
+    apa: r.apa,
+    vat: r.vat,
+    type: r.type,
+  }));
 }
 
 export function formatCustomPrice(amount, currency = 'EUR') {
-  const n = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(amount);
-  return `${n} ${SYMBOLS[currency] || currency}`;
+  return formatPriceAmount(amount, currency);
 }
 
 /** Carte la moins chere (priorite semaine, sinon jour). */
@@ -122,67 +86,31 @@ export function applyCustomPricingToYacht(yacht, rows) {
   };
 }
 
-// ── Day Charter (client 2026-09-30, plusieurs prix 2026-10-02) ──
-// Colonne jsonb `day_charter` de yacht_selections :
-//   { enabled: bool, rates: [{ price, currency, from, to, location, apa, vat }] }
-// `from` / `to` = dates « AAAA-MM-JJ » (facultatives), `location` = lieu en texte libre.
-// Case cochee dans l'admin = le yacht apparait dans le parcours Day Charter,
-// avec ses prix a la journee (visibles uniquement dans ce parcours).
-// Compatibilite : l'ancien format { price, currency, apa, vat } devient un seul prix ;
-// price / currency / apa / vat restent exposes = ceux du prix le plus bas.
+// ── Day Charter ──
+// Colonne jsonb `day_charter` : { enabled } = case « Day Charter » de l'admin (le yacht
+// apparait dans le parcours Day Charter). Depuis le 2026-10-31, ses prix sont ceux de
+// l'onglet « Day Charter » des fiches de prix (custom_pricing) ; les anciens prix
+// stockes dans day_charter sont repris tant que l'onglet Day est vide.
 
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-
-function normalizeDayRate(r) {
-  if (!r || typeof r !== 'object') return null;
-  const price = Number(String(r.price ?? '').replace(/[\s'’]/g, '').replace(',', '.'));
-  if (!Number.isFinite(price) || price <= 0) return null;
-  const from = ISO_DATE.test(String(r.from || '')) ? String(r.from) : '';
-  const to = ISO_DATE.test(String(r.to || '')) ? String(r.to) : '';
-  return {
-    price: Math.round(price),
-    currency: PRICING_CURRENCIES.includes(r.currency) ? r.currency : 'EUR',
-    from,
-    to,
-    location: String(r.location || '').trim(),
-    apa: r.apa === true || r.apa === 'true',
-    vat: r.vat === true || r.vat === 'true',
-    // Heure supplementaire (client 2026-10-29) : prix d'une heure en plus, facultatif.
-    extraHour: toAmount(r.extraHour),
-    // Devises cochees (client 2026-10-29) : le meme prix affiche aussi dans ces devises
-    // (montants convertis dans l'admin, modifiables). [{ currency, price, extraHour }]
-    alt: normalizeAlt(r.alt, PRICING_CURRENCIES.includes(r.currency) ? r.currency : 'EUR'),
-  };
-}
-
-function toAmount(v) {
-  const n = Number(String(v ?? '').replace(/[\s'’]/g, '').replace(',', '.'));
-  return Number.isFinite(n) && n > 0 ? Math.round(n) : null;
-}
-
-function normalizeAlt(raw, main) {
-  if (!Array.isArray(raw)) return [];
-  const seen = new Set([main]);
-  const out = [];
-  for (const a of raw) {
-    if (!a || !PRICING_CURRENCIES.includes(a.currency) || seen.has(a.currency)) continue;
-    const price = toAmount(a.price);
-    if (!price) continue;
-    seen.add(a.currency);
-    out.push({ currency: a.currency, price, extraHour: toAmount(a.extraHour) });
-  }
-  return out;
-}
-
-/** Normalise la valeur brute ; renvoie toujours un objet complet. */
-export function normalizeDayCharter(raw) {
+/** Normalise ; renvoie toujours un objet complet (prix = onglet Day). */
+export function normalizeDayCharter(raw, pricingRaw = null) {
   let v = raw;
   if (typeof v === 'string') {
     try { v = JSON.parse(v); } catch { v = null; }
   }
   if (!v || typeof v !== 'object' || Array.isArray(v)) v = {};
-  const source = Array.isArray(v.rates) ? v.rates : (v.price !== undefined && v.price !== null && v.price !== '' ? [v] : []);
-  const rates = source.map(normalizeDayRate).filter(Boolean);
+  const day = normalizeCharterPrices(pricingRaw, v).day;
+  const rates = day.rates.map((r) => ({
+    price: r.price,
+    currency: r.currency,
+    from: '',
+    to: '',
+    location: rateTitle(r),
+    zones: r.zones,
+    unit: r.unit,
+    apa: r.apa,
+    vat: r.vat,
+  }));
   const low = rates.reduce((m, r) => (m == null || r.price < m.price ? r : m), null);
   return {
     enabled: v.enabled === true || v.enabled === 'true',
@@ -234,8 +162,6 @@ export function dayCharterRatesForDisplay(dc) {
     location: r.location,
     apa: r.apa,
     vat: r.vat,
-    extraHour: r.extraHour ? formatCustomPrice(r.extraHour, r.currency) : '',
-    alt: (r.alt || []).map((a) => formatCustomPrice(a.price, a.currency)),
   }));
 }
 
@@ -253,8 +179,6 @@ function rateToPricingInfo(r) {
     _apa: r.apa,
     _vat: r.vat,
     _custom: true,
-    _extraHour: r.extraHour ? formatCustomPrice(r.extraHour, r.currency) : '',
-    _alt: (r.alt || []).map((a) => formatCustomPrice(a.price, a.currency)),
   };
 }
 

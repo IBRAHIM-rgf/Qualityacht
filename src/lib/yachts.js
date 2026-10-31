@@ -17,7 +17,7 @@ function withCustomPricing(list, selections) {
     // Fiche modifiee dans l'admin (client 2026-10-02) : champs modifies prioritaires.
     const edited = applyOverridesToCard(y, sel?.overrides);
     const priced = applyCustomPricingToYacht(edited, sel?.custom_pricing);
-    return { ...priced, dayCharter: normalizeDayCharter(sel?.day_charter) };
+    return { ...priced, dayCharter: normalizeDayCharter(sel?.day_charter, sel?.custom_pricing) };
   });
 }
 
