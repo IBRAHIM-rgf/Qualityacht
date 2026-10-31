@@ -12,7 +12,8 @@ import {
   Database, Globe, Loader2, Users,
 } from 'lucide-react';
 import { HANDICAPS_BY_CAT, HANDICAP_LABELS, parseHandicaps } from '@/lib/handicaps';
-import { normalizeCustomPricing, normalizeDayCharter, PRICING_CURRENCIES } from '@/lib/customPricing';
+import { normalizeDayCharter } from '@/lib/customPricing';
+import { CHARTER_TYPES, RATE_PERIODS, RATE_TITLES_1, RATE_TITLES_2, RATE_CURRENCIES, RATE_UNITS, TAX_FIELDS, defaultUnitFor, normalizeCharterPrices, hasAnyPrice } from '@/lib/charterPrices';
 import { normalizeCharterModel } from '@/lib/charterModel';
 import CharterModelEditor from './CharterModelEditor';
 import { OVERRIDE_TEXT_FIELDS, normalizeOverrides, mergeSourceAndOverrides, diffOverrides, isSupportedImage } from '@/lib/yachtOverrides';
@@ -178,10 +179,10 @@ function adaptYacht(s) {
     groups_allowed: s.groups_allowed,
     water_toys: s.water_toys,
     extra_info: s.extra_info,
-    // Tarifs saison / region saisis dans l'admin (voir lib/customPricing.js).
-    custom_pricing: normalizeCustomPricing(s.custom_pricing),
-    // Day Charter : case + prix a la journee (client 2026-09-30).
-    day_charter: normalizeDayCharter(s.day_charter),
+    // Prix par type de charter (valeur brute, voir lib/charterPrices.js).
+    custom_pricing: s.custom_pricing ?? null,
+    // Day Charter : case + anciens prix (repris dans l'onglet Day).
+    day_charter: s.day_charter ?? null,
     // Modele tarifaire charter (client 2026-10-15), admin uniquement.
     charter_model: normalizeCharterModel(s.charter_model),
     overrides: ov,
@@ -189,257 +190,194 @@ function adaptYacht(s) {
 }
 
 // ════════════════════════════════════════════════════════════
-// TARIFS SAISON / RÉGION (éditeur de cartes « Regions and Rates »)
+// FICHES DE PRIX PAR TYPE DE CHARTER (client 2026-10-31)
+// 5 onglets (Weekly / Day / Half-day / Hours / Transfer), meme structure :
+// Rates, Included / Extras, Taxes & Gratuity. Voir lib/charterPrices.js.
+// « Rate » n'existe que dans l'admin ; le site affiche « Charter Prices ».
 // ════════════════════════════════════════════════════════════
-const EMPTY_RATE = { group: 'summer', title: '', subtitle: '', price: '', currency: 'EUR', unit: 'WEEK', zones: '', apa: false, vat: false };
 const RATE_INPUT = 'w-full px-3 py-2 bg-[#2a2a30] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] text-sm focus:border-[#B03E00] outline-none';
+const RATE_LABEL = 'block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1';
 
-// Ligne d'edition : `zones` est une chaine (virgules) le temps de la saisie.
-function ratesToForm(rows) {
-  return normalizeCustomPricing(rows).map((r) => ({ ...r, price: String(r.price), zones: r.zones.join(', ') }));
+function emptyRateFor(typeKey) {
+  return { period: 'Summer', title1: '', title2: '', subtitle: '', price: '', currency: 'EUR', unit: defaultUnitFor(typeKey), zones: '', apa: false, vat: false };
 }
 
-function PricingEditor({ rates, onChange }) {
-  const update = (i, patch) => onChange(rates.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
-  const remove = (i) => onChange(rates.filter((_, idx) => idx !== i));
-  const add = () => onChange([...rates, { ...EMPTY_RATE }]);
-  const groupLabel = { summer: 'Summer', winter: 'Winter' };
+// Valeur stockee (ou anciennes donnees) -> formulaire (textes le temps de la saisie).
+function pricesToForm(raw, legacyDayRaw = null) {
+  const n = normalizeCharterPrices(raw, legacyDayRaw);
+  const out = {};
+  for (const t of CHARTER_TYPES) {
+    const v = n[t.key];
+    out[t.key] = {
+      rates: v.rates.map((r) => ({ ...r, price: String(r.price), zones: r.zones.join(', ') })),
+      included: v.included.join('; '),
+      extras: v.extras.join('; '),
+      taxes: { ...v.taxes },
+    };
+  }
+  return out;
+}
+
+function ChoiceChips({ options, value, onChange, allowNone }) {
   return (
-    <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-3">
-      <p className="text-[#acb0cd]/60 text-xs">
-        Chaque carte apparaît dans « Regions and Rates » sur la fiche du bateau. Dès qu'une carte est
-        saisie, ces tarifs remplacent ceux d'Ankor ; le prix le plus bas devient le prix de la liste.
-      </p>
-      {rates.length === 0 && (
-        <p className="text-[#acb0cd]/40 text-xs italic">Aucun tarif saisi — les tarifs Ankor s'affichent.</p>
-      )}
-      {rates.map((r, i) => (
-        <div key={i} className="rounded-lg border border-[#C0C0C0]/20 p-3 space-y-2 relative">
-          <button type="button" onClick={() => remove(i)} title="Supprimer cette carte"
-            className="absolute top-2 right-2 text-[#acb0cd]/50 hover:text-[#e3a892]">
-            <X className="w-4 h-4" />
+    <div className="flex flex-wrap gap-1.5">
+      {options.map((o) => {
+        const on = value === o;
+        return (
+          <button key={o} type="button" onClick={() => onChange(on && allowNone ? '' : o)}
+            className={`px-2.5 py-1 rounded-full text-xs border transition-colors ${on ? 'bg-[#B03E00] border-[#B03E00] text-[#26272a] font-semibold' : 'bg-[#2a2a30] border-[#C0C0C0]/30 text-[#acb0cd] hover:border-[#B03E00]'}`}>
+            {o}
           </button>
-          <div className="grid sm:grid-cols-[110px_1fr_1fr] gap-2">
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Période</label>
-              <select value={r.group} onChange={(e) => update(i, { group: e.target.value })} className={RATE_INPUT}>
-                {Object.entries(groupLabel).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Titre</label>
-              <input type="text" value={r.title} onChange={(e) => update(i, { title: e.target.value })}
-                placeholder="Mediterranean High Season" className={RATE_INPUT} />
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Sous-titre (optionnel)</label>
-              <input type="text" value={r.subtitle} onChange={(e) => update(i, { subtitle: e.target.value })}
-                placeholder="May" className={RATE_INPUT} />
-            </div>
-          </div>
-          <div className="grid sm:grid-cols-[1fr_100px_110px] gap-2">
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Prix</label>
-              <input type="text" inputMode="numeric" value={r.price} onChange={(e) => update(i, { price: e.target.value })}
-                placeholder="495000" className={RATE_INPUT} />
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Devise</label>
-              <select value={r.currency} onChange={(e) => update(i, { currency: e.target.value })} className={RATE_INPUT}>
-                {PRICING_CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Unité</label>
-              <select value={r.unit} onChange={(e) => update(i, { unit: e.target.value })} className={RATE_INPUT}>
-                <option value="WEEK">Week</option>
-                <option value="DAY">Day</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Zones (séparées par des virgules)</label>
-            <input type="text" value={r.zones} onChange={(e) => update(i, { zones: e.target.value })}
-              placeholder="Balearic Sea, Corsica, France, Italy" className={RATE_INPUT} />
-          </div>
-          <div className="flex flex-wrap gap-5">
-            <label className="flex items-center gap-2 text-sm cursor-pointer">
-              <input type="checkbox" checked={!!r.apa} onChange={(e) => update(i, { apa: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
-              <span className="text-[#acb0cd]">+ APA <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
-            </label>
-            <label className="flex items-center gap-2 text-sm cursor-pointer">
-              <input type="checkbox" checked={!!r.vat} onChange={(e) => update(i, { vat: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
-              <span className="text-[#acb0cd]">+ VAT <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
-            </label>
-          </div>
-        </div>
-      ))}
-      <button type="button" onClick={add}
-        className="px-4 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 text-sm font-medium flex items-center gap-1">
-        <Plus className="w-4 h-4" /> Ajouter une carte de tarif
-      </button>
+        );
+      })}
     </div>
   );
 }
 
-// Day Charter (client 2026-09-30) : case a cocher ; cochee, le yacht apparait
-// dans le parcours Day Charter du site. Plusieurs prix possibles (client 2026-10-02),
-// chacun avec sa periode (dates) et son lieu.
-const EMPTY_DAY_RATE = { price: '', currency: 'EUR', from: '', to: '', location: '', apa: false, vat: false, extraHour: '', alt: [] };
-
-function dayCharterToForm(raw) {
-  const d = normalizeDayCharter(raw);
-  return {
-    enabled: d.enabled,
-    rates: d.rates.map((r) => ({
-      ...r,
-      price: String(r.price),
-      extraHour: r.extraHour ? String(r.extraHour) : '',
-      alt: (r.alt || []).map((a) => ({ ...a, price: String(a.price), extraHour: a.extraHour ? String(a.extraHour) : '' })),
-    })),
-  };
-}
-
-// Devises cochees (client 2026-10-29) : conversion automatique au cours du jour
-// (BCE, via frankfurter.app), arrondie a la centaine, puis modifiable a la main.
-async function fetchRate(from, to) {
-  const res = await fetch(`https://api.frankfurter.app/latest?from=${from}&to=${to}`);
-  if (!res.ok) throw new Error('rate');
-  const data = await res.json();
-  const r = data?.rates?.[to];
-  if (!r) throw new Error('rate');
-  return r;
-}
-const roundTo = (n, step) => Math.round(n / step) * step;
-const toNum = (v) => Number(String(v ?? '').replace(/[\s'’]/g, '').replace(',', '.'));
-
-function DayRateCurrencies({ rate, onChange }) {
-  const [busy, setBusy] = useState('');
-  const [err, setErr] = useState('');
-  const main = rate.currency || 'EUR';
-  const alt = Array.isArray(rate.alt) ? rate.alt.filter((a) => a.currency !== main) : [];
-  const toggle = async (cur, on) => {
-    setErr('');
-    if (!on) { onChange(alt.filter((a) => a.currency !== cur)); return; }
-    const entry = { currency: cur, price: '', extraHour: '' };
-    try {
-      setBusy(cur);
-      const fx = await fetchRate(main, cur);
-      const p = toNum(rate.price);
-      const h = toNum(rate.extraHour);
-      if (p > 0) entry.price = String(roundTo(p * fx, 100));
-      if (h > 0) entry.extraHour = String(roundTo(h * fx, 10));
-    } catch {
-      setErr('Conversion indisponible : saisis le montant à la main.');
-    } finally {
-      setBusy('');
-    }
-    onChange([...alt, entry]);
-  };
-  const update = (cur, patch) => onChange(alt.map((a) => (a.currency === cur ? { ...a, ...patch } : a)));
+function RateRow({ r, index, typeKey, onChange, onRemove }) {
+  const set = (patch) => onChange({ ...r, ...patch });
   return (
-    <div className="space-y-2">
-      <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50">Afficher aussi en</label>
-      <div className="flex flex-wrap gap-4">
-        {PRICING_CURRENCIES.filter((c) => c !== main).map((c) => (
-          <label key={c} className="flex items-center gap-2 text-sm cursor-pointer">
-            <input type="checkbox" checked={alt.some((a) => a.currency === c)} disabled={busy === c}
-              onChange={(e) => toggle(c, e.target.checked)} className="w-4 h-4 accent-[#B03E00]" />
-            <span className="text-[#acb0cd]">{c}</span>
-          </label>
+    <div className="rounded-lg border border-[#C0C0C0]/20 p-3 space-y-3 relative">
+      <div className="flex items-center justify-between">
+        <span className="px-2.5 py-0.5 rounded-full bg-[#B03E00] text-[#26272a] text-[11px] font-semibold uppercase tracking-wider">Rate {index + 1}</span>
+        <button type="button" onClick={onRemove} title="Supprimer" className="text-[#acb0cd]/50 hover:text-[#e3a892]">
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+      <div>
+        <label className={RATE_LABEL}>Period</label>
+        <select value={r.period} onChange={(e) => set({ period: e.target.value })} className={RATE_INPUT}>
+          {RATE_PERIODS.map((p) => <option key={p} value={p}>{p}</option>)}
+        </select>
+      </div>
+      <div>
+        <label className={RATE_LABEL}>Title 1 (obligatoire)</label>
+        <ChoiceChips options={RATE_TITLES_1} value={r.title1} onChange={(title1) => set({ title1, legacyTitle: '' })} />
+        {!r.title1 && r.legacyTitle && (
+          <p className="text-[#acb0cd]/50 text-xs mt-1">Ancien titre : « {r.legacyTitle} » — choisis un Title 1 pour le remplacer.</p>
+        )}
+      </div>
+      <div>
+        <label className={RATE_LABEL}>Title 2 (Region)</label>
+        <ChoiceChips options={RATE_TITLES_2} value={r.title2} onChange={(title2) => set({ title2 })} allowNone />
+      </div>
+      <div>
+        <label className={RATE_LABEL}>Sub-title (facultatif)</label>
+        <input type="text" value={r.subtitle || ''} onChange={(e) => set({ subtitle: e.target.value })} placeholder="May" className={RATE_INPUT} />
+      </div>
+      <div className="grid sm:grid-cols-[1fr_120px_170px] gap-2">
+        <div>
+          <label className={RATE_LABEL}>Price</label>
+          <input type="text" inputMode="numeric" value={r.price} onChange={(e) => set({ price: e.target.value })} className={RATE_INPUT} />
+        </div>
+        <div>
+          <label className={RATE_LABEL}>Currency</label>
+          <select value={r.currency} onChange={(e) => set({ currency: e.target.value })} className={RATE_INPUT}>
+            {RATE_CURRENCIES.map((c) => <option key={c.code} value={c.code}>{c.label}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className={RATE_LABEL}>Unit</label>
+          <select value={r.unit || defaultUnitFor(typeKey)} onChange={(e) => set({ unit: e.target.value })} className={RATE_INPUT}>
+            {RATE_UNITS.map((u) => <option key={u.code} value={u.code}>{u.label}</option>)}
+          </select>
+        </div>
+      </div>
+      <div>
+        <label className={RATE_LABEL}>Zones (séparées par des virgules)</label>
+        <input type="text" value={r.zones} onChange={(e) => set({ zones: e.target.value })} className={RATE_INPUT} />
+      </div>
+      <div className="flex flex-wrap gap-5">
+        <label className="flex items-center gap-2 text-sm cursor-pointer">
+          <input type="checkbox" checked={!!r.apa} onChange={(e) => set({ apa: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+          <span className="text-[#acb0cd]">+ APA <span className="text-[#acb0cd]/50 text-xs">(excluded, shown on the card)</span></span>
+        </label>
+        <label className="flex items-center gap-2 text-sm cursor-pointer">
+          <input type="checkbox" checked={!!r.vat} onChange={(e) => set({ vat: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+          <span className="text-[#acb0cd]">+ VAT <span className="text-[#acb0cd]/50 text-xs">(excluded, shown on the card)</span></span>
+        </label>
+      </div>
+    </div>
+  );
+}
+
+function CharterPricesEditor({ value, onChange }) {
+  const [tab, setTab] = useState(CHARTER_TYPES[0].key);
+  const cur = value[tab];
+  const setCur = (patch) => onChange({ ...value, [tab]: { ...cur, ...patch } });
+  const rates = cur.rates;
+  return (
+    <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-4">
+      <div className="flex flex-wrap gap-2">
+        {CHARTER_TYPES.map((t) => {
+          const n = value[t.key].rates.length;
+          return (
+            <button key={t.key} type="button" onClick={() => setTab(t.key)}
+              className={`px-3 py-1.5 rounded-full text-xs uppercase tracking-wider transition-colors ${tab === t.key ? 'bg-[#B03E00] text-[#26272a] font-semibold border border-[#B03E00]' : 'bg-[#2a2a30] text-[#acb0cd] border border-[#C0C0C0]/25 hover:border-[#B03E00]'}`}>
+              {t.label}{n ? ` (${n})` : ''}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 02 — RATES */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-[#B03E00] text-xs font-semibold uppercase tracking-[0.2em]">02 — Rates</span>
+          <span className="text-[#acb0cd]/60 text-xs">{rates.length} rate(s)</span>
+        </div>
+        {rates.map((r, i) => (
+          <RateRow key={i} r={r} index={i} typeKey={tab}
+            onChange={(nr) => setCur({ rates: rates.map((x, idx) => (idx === i ? nr : x)) })}
+            onRemove={() => setCur({ rates: rates.filter((_, idx) => idx !== i) })} />
+        ))}
+        <button type="button" onClick={() => setCur({ rates: [...rates, emptyRateFor(tab)] })}
+          className="px-4 py-2 rounded-lg bg-[#B03E00] text-[#26272a] hover:bg-[#c2622a] text-sm font-semibold flex items-center gap-1">
+          <Plus className="w-4 h-4" /> Add a rate
+        </button>
+      </div>
+
+      {/* Included / Extras */}
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label className={RATE_LABEL}>✔ Included (séparés par ;)</label>
+          <textarea rows={3} value={cur.included} onChange={(e) => setCur({ included: e.target.value })} className={RATE_INPUT} />
+        </div>
+        <div>
+          <label className={RATE_LABEL}>+ Extras (séparés par ;)</label>
+          <textarea rows={3} value={cur.extras} onChange={(e) => setCur({ extras: e.target.value })} className={RATE_INPUT} />
+        </div>
+      </div>
+
+      {/* Taxes & Gratuity */}
+      <div className="space-y-2">
+        <span className={RATE_LABEL}>Taxes &amp; Gratuity</span>
+        {TAX_FIELDS.map((tf) => (
+          <div key={tf.key} className="flex items-center gap-2">
+            <span className="text-[#acb0cd] text-sm flex-1">{tf.label} :</span>
+            <input type="text" inputMode="decimal" value={cur.taxes[tf.key] ?? ''}
+              onChange={(e) => setCur({ taxes: { ...cur.taxes, [tf.key]: e.target.value } })}
+              className={RATE_INPUT.replace('w-full', 'w-24 shrink-0') + ' text-right'} />
+            <span className="text-[#acb0cd] text-sm">%</span>
+          </div>
         ))}
       </div>
-      {err && <p className="text-[#e3a892] text-xs">{err}</p>}
-      {alt.map((a) => (
-        <div key={a.currency} className="grid grid-cols-[60px_1fr_1fr] gap-2 items-end">
-          <span className="text-[#acb0cd] text-sm pb-2">{a.currency}</span>
-          <div>
-            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Prix (par jour)</label>
-            <input type="text" inputMode="numeric" value={a.price ?? ''} onChange={(e) => update(a.currency, { price: e.target.value })} className={RATE_INPUT} />
-          </div>
-          <div>
-            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Heure supplémentaire</label>
-            <input type="text" inputMode="numeric" value={a.extraHour ?? ''} onChange={(e) => update(a.currency, { extraHour: e.target.value })} className={RATE_INPUT} />
-          </div>
-        </div>
-      ))}
-      {alt.length > 0 && (
-        <p className="text-[#acb0cd]/50 text-xs">Montants convertis au cours du jour, arrondis : modifiables. Affichés sur le site sous le prix principal (≈).</p>
-      )}
     </div>
   );
 }
 
+// Day Charter : case a cocher ; cochee, le yacht apparait dans le parcours Day Charter
+// du site. Ses prix sont ceux de l'onglet « Day Charter » ci-dessus (client 2026-10-31).
 function DayCharterEditor({ value, onChange }) {
-  const rates = Array.isArray(value.rates) ? value.rates : [];
-  const set = (patch) => onChange({ ...value, ...patch });
-  const update = (i, patch) => set({ rates: rates.map((r, idx) => (idx === i ? { ...r, ...patch } : r)) });
-  const remove = (i) => set({ rates: rates.filter((_, idx) => idx !== i) });
-  const add = () => set({ rates: [...rates, { ...EMPTY_DAY_RATE }] });
   return (
-    <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-3">
+    <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-2">
       <label className="flex items-center gap-2 text-sm cursor-pointer">
-        <input type="checkbox" checked={!!value.enabled} onChange={(e) => set({ enabled: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
+        <input type="checkbox" checked={!!value.enabled} onChange={(e) => onChange({ ...value, enabled: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
         <span className="text-[#acb0cd] font-medium">Day Charter</span>
       </label>
       <p className="text-[#acb0cd]/60 text-xs">
-        Cochée : le bateau apparaît dans la section Day Charter du site (seuls les bateaux cochés y
-        apparaissent) avec tous les prix ci-dessous (prix, lieu), dans ce parcours uniquement.
+        Cochée : le bateau apparaît dans la section Day Charter du site, avec les prix de l'onglet « Day Charter ».
       </p>
-      {value.enabled && (
-        <>
-          {rates.length === 0 && (
-            <p className="text-[#acb0cd]/40 text-xs italic">Aucun prix saisi — ajoute au moins un prix.</p>
-          )}
-          {rates.map((r, i) => (
-            <div key={i} className="rounded-lg border border-[#C0C0C0]/20 p-3 space-y-2 relative">
-              <button type="button" onClick={() => remove(i)} title="Supprimer ce prix"
-                className="absolute top-2 right-2 text-[#acb0cd]/50 hover:text-[#e3a892]">
-                <X className="w-4 h-4" />
-              </button>
-              <div className="grid sm:grid-cols-[1fr_100px] gap-2 pr-6">
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Prix (par jour)</label>
-                  <input type="text" inputMode="numeric" value={r.price ?? ''} onChange={(e) => update(i, { price: e.target.value })}
-                    placeholder="12000" className={RATE_INPUT} />
-                </div>
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Devise</label>
-                  <select value={r.currency || 'EUR'} onChange={(e) => update(i, { currency: e.target.value })} className={RATE_INPUT}>
-                    {PRICING_CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Lieu</label>
-                <input type="text" value={r.location || ''} onChange={(e) => update(i, { location: e.target.value })}
-                  placeholder="Saint-Tropez" className={RATE_INPUT} />
-              </div>
-              {/* Heure supplementaire (client 2026-10-29) : prix d'une heure en plus, facultatif. */}
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1">Heure supplémentaire (prix par heure en plus, facultatif)</label>
-                <input type="text" inputMode="numeric" value={r.extraHour ?? ''} onChange={(e) => update(i, { extraHour: e.target.value })}
-                  placeholder="1500" className={RATE_INPUT} />
-              </div>
-              <DayRateCurrencies rate={r} onChange={(alt) => update(i, { alt })} />
-              <div className="flex flex-wrap gap-5">
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input type="checkbox" checked={!!r.apa} onChange={(e) => update(i, { apa: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
-                  <span className="text-[#acb0cd]">+ APA <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
-                </label>
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input type="checkbox" checked={!!r.vat} onChange={(e) => update(i, { vat: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
-                  <span className="text-[#acb0cd]">+ VAT <span className="text-[#acb0cd]/50 text-xs">(en sus, affiché sur la carte)</span></span>
-                </label>
-              </div>
-            </div>
-          ))}
-          <button type="button" onClick={add}
-            className="px-4 py-2 rounded-lg border border-[#B03E00] text-[#B03E00] hover:bg-[#B03E00]/15 text-sm font-medium flex items-center gap-1">
-            <Plus className="w-4 h-4" /> Ajouter un prix
-          </button>
-        </>
-      )}
     </div>
   );
 }
@@ -1389,8 +1327,8 @@ function EditModal({ yacht, onClose, onSave }) {
     groups_allowed: !!yacht.groups_allowed,
     water_toys: !!yacht.water_toys,
     extra_info: yacht.extra_info || '',
-    custom_pricing: ratesToForm(yacht.custom_pricing),
-    day_charter: dayCharterToForm(yacht.day_charter),
+    custom_pricing: pricesToForm(yacht.custom_pricing, yacht.day_charter),
+    day_charter: { enabled: normalizeDayCharter(yacht.day_charter).enabled },
     charter_model: normalizeCharterModel(yacht.charter_model),
   });
   const [saving, setSaving] = useState(false);
@@ -1411,8 +1349,8 @@ function EditModal({ yacht, onClose, onSave }) {
         if (!alive) return;
         setDetails({ loading: false, error: false, source: data.source });
         setInfo(mergeSourceAndOverrides(data.source, data.overrides));
-        if (!normalizeCustomPricing(yacht.custom_pricing).length && Array.isArray(data.ankorRates) && data.ankorRates.length) {
-          setForm((f) => ({ ...f, custom_pricing: data.ankorRates }));
+        if (!hasAnyPrice(normalizeCharterPrices(yacht.custom_pricing, yacht.day_charter)) && Array.isArray(data.ankorRates) && data.ankorRates.length) {
+          setForm((f) => ({ ...f, custom_pricing: pricesToForm(data.ankorRates) }));
           setPricingPrefilled(true);
         }
       } catch (e) {
@@ -1420,7 +1358,7 @@ function EditModal({ yacht, onClose, onSave }) {
       }
     })();
     return () => { alive = false; };
-  }, [yacht.id, yacht.custom_pricing]);
+  }, [yacht.id, yacht.custom_pricing, yacht.day_charter]);
 
   const hasCategory = (id) => form.categories.includes(id);
   const toggleCategory = (id) => setForm((f) => ({
@@ -1446,11 +1384,11 @@ function EditModal({ yacht, onClose, onSave }) {
 
   const save = async () => {
     setSaving(true);
-    // Les lignes incompletes (sans titre ou sans prix) sont ignorees.
+    // Les lignes incompletes (sans Title 1 ou sans prix) sont ignorees (lib/charterPrices.js).
     const updates = {
       ...form,
-      custom_pricing: normalizeCustomPricing(form.custom_pricing),
-      day_charter: normalizeDayCharter(form.day_charter),
+      custom_pricing: { version: 2, types: form.custom_pricing },
+      day_charter: { enabled: !!form.day_charter.enabled },
       charter_model: normalizeCharterModel(form.charter_model),
     };
     // Tarifs Ankor seulement pre-remplis et non modifies : on ne touche a rien.
@@ -1500,18 +1438,18 @@ function EditModal({ yacht, onClose, onSave }) {
             <input type="text" value={form.custom_price} onChange={e => setForm({ ...form, custom_price: e.target.value })}
               className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none" />
           </div>
-          {/* Tarifs par saison / région → section « Regions and Rates » de la fiche */}
+          {/* Prix par type de charter (client 2026-10-31) → section « Charter Prices » de la fiche */}
           <div>
-            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Tarifs par saison et région</label>
+            <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Prix par type de charter</label>
             {pricingPrefilled && !pricingTouched && (
               <p className="text-[#acb0cd]/60 text-xs mb-2">
-                Tarifs pré-remplis depuis Ankor. Tant que tu ne les modifies pas, rien ne change ; dès que tu en modifies un,
-                ces cartes remplacent les tarifs Ankor sur le site.
+                Prix pré-remplis depuis Ankor. Tant que tu ne les modifies pas, rien ne change ; dès que tu en modifies un,
+                ces prix remplacent ceux d'Ankor sur le site.
               </p>
             )}
-            <PricingEditor rates={form.custom_pricing} onChange={(custom_pricing) => { setPricingTouched(true); setForm((f) => ({ ...f, custom_pricing })); }} />
+            <CharterPricesEditor value={form.custom_pricing} onChange={(custom_pricing) => { setPricingTouched(true); setForm((f) => ({ ...f, custom_pricing })); }} />
           </div>
-          {/* Day Charter : case + prix a la journee (parcours Day Charter uniquement) */}
+          {/* Day Charter : case seule (les prix sont dans l'onglet Day Charter ci-dessus) */}
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Day Charter</label>
             <DayCharterEditor value={form.day_charter} onChange={(day_charter) => setForm((f) => ({ ...f, day_charter }))} />
