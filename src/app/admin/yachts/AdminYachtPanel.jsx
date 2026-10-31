@@ -1,7 +1,8 @@
 'use client';
 
 // Admin yachts v2 — branché sur la BDD réelle.
-// Structure : Dashboard (stats permanentes) + 3 onglets (Ankor / BDD / Publiés) + modal édition.
+// Structure (client 2026-10-31) : design « Calque Central Agent » — KPI + 4 onglets
+// (Catalogue Ankor / Nouveau yacht / Tous les yachts / Yachts publiés) + modale édition.
 // Remplace le wizard 5 étapes précédent. Pour la démo standalone : /admin/yachts-mock
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
@@ -13,7 +14,9 @@ import {
 } from 'lucide-react';
 import { HANDICAPS_BY_CAT, HANDICAP_LABELS, parseHandicaps } from '@/lib/handicaps';
 import { normalizeDayCharter } from '@/lib/customPricing';
-import { CHARTER_TYPES, RATE_PERIODS, RATE_TITLES_1, RATE_TITLES_2, RATE_CURRENCIES, RATE_UNITS, TAX_FIELDS, defaultUnitFor, normalizeCharterPrices, hasAnyPrice } from '@/lib/charterPrices';
+import { normalizeCharterPrices, hasAnyPrice } from '@/lib/charterPrices';
+import CharterPricesEditor, { pricesToForm } from './CharterPricesEditor';
+import CatalogueView from './CatalogueView';
 import { normalizeCharterModel } from '@/lib/charterModel';
 import CharterModelEditor from './CharterModelEditor';
 import { OVERRIDE_TEXT_FIELDS, normalizeOverrides, mergeSourceAndOverrides, diffOverrides, isSupportedImage } from '@/lib/yachtOverrides';
@@ -162,6 +165,9 @@ function adaptYacht(s) {
     length: light.length || cached.length,
     guests: light.guests || cached.guests || cached.capacity,
     cabins: light.cabins || cached.cabins,
+    year: light.year || cached.year,
+    crew: light.crew || cached.crew,
+    make: light.make || cached.make,
     region: s.region,
     sub_region: s.sub_region,
     // Multi-selection (client 2026-09-10) : listes, repli sur la valeur unique.
@@ -189,182 +195,8 @@ function adaptYacht(s) {
   };
 }
 
-// ════════════════════════════════════════════════════════════
-// FICHES DE PRIX PAR TYPE DE CHARTER (client 2026-10-31)
-// 5 onglets (Weekly / Day / Half-day / Hours / Transfer), meme structure :
-// Rates, Included / Extras, Taxes & Gratuity. Voir lib/charterPrices.js.
-// « Rate » n'existe que dans l'admin ; le site affiche « Charter Prices ».
-// ════════════════════════════════════════════════════════════
+// Fiches de prix par type de charter : voir CharterPricesEditor.jsx (design calque).
 const RATE_INPUT = 'w-full px-3 py-2 bg-[#2a2a30] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] text-sm focus:border-[#B03E00] outline-none';
-const RATE_LABEL = 'block text-[10px] uppercase tracking-wider text-[#acb0cd]/50 mb-1';
-
-function emptyRateFor(typeKey) {
-  return { period: 'Summer', title1: '', title2: '', subtitle: '', price: '', currency: 'EUR', unit: defaultUnitFor(typeKey), zones: '', apa: false, vat: false };
-}
-
-// Valeur stockee (ou anciennes donnees) -> formulaire (textes le temps de la saisie).
-function pricesToForm(raw, legacyDayRaw = null) {
-  const n = normalizeCharterPrices(raw, legacyDayRaw);
-  const out = {};
-  for (const t of CHARTER_TYPES) {
-    const v = n[t.key];
-    out[t.key] = {
-      rates: v.rates.map((r) => ({ ...r, price: String(r.price), zones: r.zones.join(', ') })),
-      included: v.included.join('; '),
-      extras: v.extras.join('; '),
-      taxes: { ...v.taxes },
-    };
-  }
-  return out;
-}
-
-function ChoiceChips({ options, value, onChange, allowNone }) {
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      {options.map((o) => {
-        const on = value === o;
-        return (
-          <button key={o} type="button" onClick={() => onChange(on && allowNone ? '' : o)}
-            className={`px-2.5 py-1 rounded-full text-xs border transition-colors ${on ? 'bg-[#B03E00] border-[#B03E00] text-[#26272a] font-semibold' : 'bg-[#2a2a30] border-[#C0C0C0]/30 text-[#acb0cd] hover:border-[#B03E00]'}`}>
-            {o}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function RateRow({ r, index, typeKey, onChange, onRemove }) {
-  const set = (patch) => onChange({ ...r, ...patch });
-  return (
-    <div className="rounded-lg border border-[#C0C0C0]/20 p-3 space-y-3 relative">
-      <div className="flex items-center justify-between">
-        <span className="px-2.5 py-0.5 rounded-full bg-[#B03E00] text-[#26272a] text-[11px] font-semibold uppercase tracking-wider">Rate {index + 1}</span>
-        <button type="button" onClick={onRemove} title="Supprimer" className="text-[#acb0cd]/50 hover:text-[#e3a892]">
-          <X className="w-4 h-4" />
-        </button>
-      </div>
-      <div>
-        <label className={RATE_LABEL}>Period</label>
-        <select value={r.period} onChange={(e) => set({ period: e.target.value })} className={RATE_INPUT}>
-          {RATE_PERIODS.map((p) => <option key={p} value={p}>{p}</option>)}
-        </select>
-      </div>
-      <div>
-        <label className={RATE_LABEL}>Title 1 (obligatoire)</label>
-        <ChoiceChips options={RATE_TITLES_1} value={r.title1} onChange={(title1) => set({ title1, legacyTitle: '' })} />
-        {!r.title1 && r.legacyTitle && (
-          <p className="text-[#acb0cd]/50 text-xs mt-1">Ancien titre : « {r.legacyTitle} » — choisis un Title 1 pour le remplacer.</p>
-        )}
-      </div>
-      <div>
-        <label className={RATE_LABEL}>Title 2 (Region)</label>
-        <ChoiceChips options={RATE_TITLES_2} value={r.title2} onChange={(title2) => set({ title2 })} allowNone />
-      </div>
-      <div>
-        <label className={RATE_LABEL}>Sub-title (facultatif)</label>
-        <input type="text" value={r.subtitle || ''} onChange={(e) => set({ subtitle: e.target.value })} placeholder="May" className={RATE_INPUT} />
-      </div>
-      <div className="grid sm:grid-cols-[1fr_120px_170px] gap-2">
-        <div>
-          <label className={RATE_LABEL}>Price</label>
-          <input type="text" inputMode="numeric" value={r.price} onChange={(e) => set({ price: e.target.value })} className={RATE_INPUT} />
-        </div>
-        <div>
-          <label className={RATE_LABEL}>Currency</label>
-          <select value={r.currency} onChange={(e) => set({ currency: e.target.value })} className={RATE_INPUT}>
-            {RATE_CURRENCIES.map((c) => <option key={c.code} value={c.code}>{c.label}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className={RATE_LABEL}>Unit</label>
-          <select value={r.unit || defaultUnitFor(typeKey)} onChange={(e) => set({ unit: e.target.value })} className={RATE_INPUT}>
-            {RATE_UNITS.map((u) => <option key={u.code} value={u.code}>{u.label}</option>)}
-          </select>
-        </div>
-      </div>
-      <div>
-        <label className={RATE_LABEL}>Zones (séparées par des virgules)</label>
-        <input type="text" value={r.zones} onChange={(e) => set({ zones: e.target.value })} className={RATE_INPUT} />
-      </div>
-      <div className="flex flex-wrap gap-5">
-        <label className="flex items-center gap-2 text-sm cursor-pointer">
-          <input type="checkbox" checked={!!r.apa} onChange={(e) => set({ apa: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
-          <span className="text-[#acb0cd]">+ APA <span className="text-[#acb0cd]/50 text-xs">(excluded, shown on the card)</span></span>
-        </label>
-        <label className="flex items-center gap-2 text-sm cursor-pointer">
-          <input type="checkbox" checked={!!r.vat} onChange={(e) => set({ vat: e.target.checked })} className="w-4 h-4 accent-[#B03E00]" />
-          <span className="text-[#acb0cd]">+ VAT <span className="text-[#acb0cd]/50 text-xs">(excluded, shown on the card)</span></span>
-        </label>
-      </div>
-    </div>
-  );
-}
-
-function CharterPricesEditor({ value, onChange }) {
-  const [tab, setTab] = useState(CHARTER_TYPES[0].key);
-  const cur = value[tab];
-  const setCur = (patch) => onChange({ ...value, [tab]: { ...cur, ...patch } });
-  const rates = cur.rates;
-  return (
-    <div className="bg-[#3a3b3f] rounded-lg p-3 space-y-4">
-      <div className="flex flex-wrap gap-2">
-        {CHARTER_TYPES.map((t) => {
-          const n = value[t.key].rates.length;
-          return (
-            <button key={t.key} type="button" onClick={() => setTab(t.key)}
-              className={`px-3 py-1.5 rounded-full text-xs uppercase tracking-wider transition-colors ${tab === t.key ? 'bg-[#B03E00] text-[#26272a] font-semibold border border-[#B03E00]' : 'bg-[#2a2a30] text-[#acb0cd] border border-[#C0C0C0]/25 hover:border-[#B03E00]'}`}>
-              {t.label}{n ? ` (${n})` : ''}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* 02 — RATES */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-[#B03E00] text-xs font-semibold uppercase tracking-[0.2em]">02 — Rates</span>
-          <span className="text-[#acb0cd]/60 text-xs">{rates.length} rate(s)</span>
-        </div>
-        {rates.map((r, i) => (
-          <RateRow key={i} r={r} index={i} typeKey={tab}
-            onChange={(nr) => setCur({ rates: rates.map((x, idx) => (idx === i ? nr : x)) })}
-            onRemove={() => setCur({ rates: rates.filter((_, idx) => idx !== i) })} />
-        ))}
-        <button type="button" onClick={() => setCur({ rates: [...rates, emptyRateFor(tab)] })}
-          className="px-4 py-2 rounded-lg bg-[#B03E00] text-[#26272a] hover:bg-[#c2622a] text-sm font-semibold flex items-center gap-1">
-          <Plus className="w-4 h-4" /> Add a rate
-        </button>
-      </div>
-
-      {/* Included / Extras */}
-      <div className="grid sm:grid-cols-2 gap-3">
-        <div>
-          <label className={RATE_LABEL}>✔ Included (séparés par ;)</label>
-          <textarea rows={3} value={cur.included} onChange={(e) => setCur({ included: e.target.value })} className={RATE_INPUT} />
-        </div>
-        <div>
-          <label className={RATE_LABEL}>+ Extras (séparés par ;)</label>
-          <textarea rows={3} value={cur.extras} onChange={(e) => setCur({ extras: e.target.value })} className={RATE_INPUT} />
-        </div>
-      </div>
-
-      {/* Taxes & Gratuity */}
-      <div className="space-y-2">
-        <span className={RATE_LABEL}>Taxes &amp; Gratuity</span>
-        {TAX_FIELDS.map((tf) => (
-          <div key={tf.key} className="flex items-center gap-2">
-            <span className="text-[#acb0cd] text-sm flex-1">{tf.label} :</span>
-            <input type="text" inputMode="decimal" value={cur.taxes[tf.key] ?? ''}
-              onChange={(e) => setCur({ taxes: { ...cur.taxes, [tf.key]: e.target.value } })}
-              className={RATE_INPUT.replace('w-full', 'w-24 shrink-0') + ' text-right'} />
-            <span className="text-[#acb0cd] text-sm">%</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 // Day Charter : case a cocher ; cochee, le yacht apparait dans le parcours Day Charter
 // du site. Ses prix sont ceux de l'onglet « Day Charter » ci-dessus (client 2026-10-31).
@@ -581,99 +413,6 @@ function YachtInfoEditor({ info, source, onChange }) {
 // ════════════════════════════════════════════════════════════
 // DASHBOARD
 // ════════════════════════════════════════════════════════════
-function Dashboard({ yachts }) {
-  const stats = useMemo(() => {
-    const total = yachts.length;
-    const visible = yachts.filter(y => y.is_visible).length;
-    const hidden = total - visible;
-    const featured = yachts.filter(y => y.is_featured && y.is_visible).length;
-    const byRegion = {};
-    const bySubRegion = {};
-    const byCategory = {};
-    for (const y of yachts) {
-      const r = (y.regions && y.regions[0]) || y.region || '_none';
-      byRegion[r] = (byRegion[r] || 0) + 1;
-      for (const sr of (y.sub_regions && y.sub_regions.length ? y.sub_regions : (y.sub_region ? [y.sub_region] : []))) bySubRegion[sr] = (bySubRegion[sr] || 0) + 1;
-      for (const c of (y.categories || [])) byCategory[c] = (byCategory[c] || 0) + 1;
-    }
-    return { total, visible, hidden, featured, byRegion, bySubRegion, byCategory };
-  }, [yachts]);
-
-  return (
-    <div className="bg-[#2a2a30] rounded-2xl border border-[#C0C0C0]/20 p-5 md:p-6 mb-6">
-      <div className="flex items-center gap-2 mb-4">
-        <Database className="w-5 h-5 text-[#B03E00]" />
-        <h2 className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] text-[#C0C0C0]">État de la base</h2>
-      </div>
-
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-        <div className="rounded-xl bg-[#3a3b3f] border border-[#C0C0C0]/20 p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[#acb0cd]/60">En BDD</p>
-          <p className="trajan-regular text-3xl text-[#C0C0C0]">{stats.total}</p>
-          <p className="text-xs text-[#acb0cd]/50">bateaux au total</p>
-        </div>
-        <div className="rounded-xl bg-[#B03E00]/10 border border-[#B03E00]/40 p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[#B03E00]">Publiés</p>
-          <p className="trajan-regular text-3xl text-[#C0C0C0]">{stats.visible}</p>
-          <p className="text-xs text-[#acb0cd]/70">visibles sur le site</p>
-        </div>
-        <div className="rounded-xl bg-[#3a3b3f] border border-[#C0C0C0]/20 p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[#acb0cd]/60">En stock</p>
-          <p className="trajan-regular text-3xl text-[#acb0cd]/70">{stats.hidden}</p>
-          <p className="text-xs text-[#acb0cd]/50">cachés au public</p>
-        </div>
-        <div className="rounded-xl bg-[#3a3b3f] border border-[#C0C0C0]/20 p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[#acb0cd]/60">Featured ★</p>
-          <p className="trajan-regular text-3xl text-[#C0C0C0]">{stats.featured}</p>
-          <p className="text-xs text-[#acb0cd]/50">mis en avant</p>
-        </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-2">Répartition par région</p>
-          <div className="flex flex-wrap gap-2">
-            {Object.keys(stats.byRegion).length === 0 && <span className="text-[#acb0cd]/50 text-xs italic">—</span>}
-            {Object.entries(stats.byRegion).map(([r, count]) => (
-              <span key={r} className="px-3 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#3a3b3f] text-xs">
-                <span className="text-[#acb0cd]">{r === '_none' ? 'Sans région' : (REGION_LABELS[r] || r)}</span>
-                <span className="text-[#B03E00] font-bold ml-2">{count}</span>
-              </span>
-            ))}
-          </div>
-        </div>
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-2">Répartition par sous-région</p>
-          <div className="flex flex-wrap gap-2">
-            {Object.keys(stats.bySubRegion).length === 0 ? (
-              <span className="text-[#acb0cd]/50 text-xs italic">Aucune sous-région assignée</span>
-            ) : Object.entries(stats.bySubRegion).map(([s, count]) => (
-              <span key={s} className="px-3 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#3a3b3f] text-xs">
-                <span className="text-[#acb0cd]">{SUB_REGION_LABELS[s] || s}</span>
-                <span className="text-[#B03E00] font-bold ml-2">{count}</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-4">
-        <p className="text-[10px] uppercase tracking-[0.2em] text-[#acb0cd]/60 mb-2">Répartition par catégorie charter</p>
-        <div className="flex flex-wrap gap-2">
-          {Object.keys(stats.byCategory).length === 0 ? (
-            <span className="text-[#acb0cd]/50 text-xs italic">Aucune catégorie assignée</span>
-          ) : Object.entries(stats.byCategory).map(([c, count]) => (
-            <span key={c} className="px-3 py-1.5 rounded-full border border-[#C0C0C0]/30 bg-[#3a3b3f] text-xs">
-              <span className="text-[#acb0cd]">{CATEGORY_LABELS[c] || c}</span>
-              <span className="text-[#B03E00] font-bold ml-2">{count}</span>
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ════════════════════════════════════════════════════════════
 // ONGLET 1 — Recherche Ankor (vrai endpoint)
 // ════════════════════════════════════════════════════════════
@@ -1152,168 +891,6 @@ function ManualAddTab({ onAdd }) {
 // ════════════════════════════════════════════════════════════
 // ONGLET 2 — Catalogue BDD (toggle visible)
 // ════════════════════════════════════════════════════════════
-function BddCatalogueTab({ yachts, onToggleVisible, onToggleFeatured, onDelete, onEdit }) {
-  const [filterRegion, setFilterRegion] = useState('');
-  const [filterVisibility, setFilterVisibility] = useState('all');
-  const [search, setSearch] = useState('');
-
-  const filtered = useMemo(() => yachts.filter(y => {
-    if (filterRegion && !(y.regions || []).includes(filterRegion) && y.region !== filterRegion) return false;
-    if (filterVisibility === 'visible' && !y.is_visible) return false;
-    if (filterVisibility === 'hidden' && y.is_visible) return false;
-    if (search && !(y.name || '').toLowerCase().includes(search.toLowerCase())) return false;
-    return true;
-  }), [yachts, filterRegion, filterVisibility, search]);
-
-  const allRegions = useMemo(() => [...new Set(yachts.flatMap(y => (y.regions && y.regions.length ? y.regions : [y.region])).filter(Boolean))].sort(), [yachts]);
-
-  return (
-    <div>
-      <div className="bg-[#2a2a30] border border-[#C0C0C0]/20 rounded-2xl p-5 mb-4">
-        <div className="flex items-start gap-3 mb-4">
-          <Database className="w-6 h-6 text-[#B03E00] shrink-0" />
-          <div>
-            <h3 className="trajan-regular text-base uppercase tracking-wider text-[#C0C0C0] mb-1">Mes bateaux en BDD</h3>
-            <p className="text-sm text-[#acb0cd]/70">
-              Tous les yachts en base. Toggle <strong className="text-[#B03E00]">Publié</strong> pour les afficher/cacher sur le site.
-              L'édition (titre, prix, photos…) se fait sur l'onglet <strong>Mes bateaux publiés</strong>.
-            </p>
-          </div>
-        </div>
-        <div className="grid sm:grid-cols-3 gap-3">
-          <input
-            type="text" value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Rechercher par nom…"
-            className="px-4 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-xl text-[#acb0cd] text-sm focus:border-[#B03E00] outline-none"
-          />
-          <select value={filterRegion} onChange={e => setFilterRegion(e.target.value)}
-            className="px-4 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-xl text-[#acb0cd] text-sm">
-            <option value="">Toutes régions ({allRegions.length})</option>
-            {allRegions.map(r => <option key={r} value={r}>{REGION_LABELS[r] || r}</option>)}
-          </select>
-          <select value={filterVisibility} onChange={e => setFilterVisibility(e.target.value)}
-            className="px-4 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-xl text-[#acb0cd] text-sm">
-            <option value="all">Visibles + En stock</option>
-            <option value="visible">Publiés uniquement</option>
-            <option value="hidden">En stock uniquement</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="text-xs text-[#acb0cd]/60 mb-2 px-1">{filtered.length} bateau{filtered.length > 1 ? 'x' : ''} sur {yachts.length}</div>
-
-      <div className="space-y-2 max-h-[800px] overflow-y-auto pr-1">
-        {filtered.length === 0 ? (
-          <div className="text-center py-12 text-[#acb0cd]/50">Aucun bateau ne correspond.</div>
-        ) : filtered.map(y => (
-          <div key={y.id} className={`flex items-center gap-3 p-3 rounded-xl border ${y.is_visible ? 'border-[#B03E00]/40 bg-[#B03E00]/5' : 'border-[#C0C0C0]/20 bg-[#2a2a30]'}`}>
-            <Image src={y.image} alt={y.name} width={80} height={56} className="rounded-lg object-cover h-14 shrink-0" unoptimized />
-            <div className="flex-1 min-w-0">
-              <h4 className="text-[#C0C0C0] font-medium flex items-center gap-2 truncate">
-                {y.name}
-                {y.is_featured && <Star className="w-3 h-3 text-[#B03E00] shrink-0" fill="currentColor" />}
-              </h4>
-              <div className="flex flex-wrap gap-3 text-xs text-[#acb0cd]/70 mt-1">
-                {y.length && <span>{y.length}</span>}
-                {y.guests && <span>{y.guests} guests</span>}
-                {y.cabins && <span>{y.cabins} cabines</span>}
-                {(y.regions || []).length > 0 && <span className="text-[#B03E00]">{y.regions.map(r => REGION_LABELS[r] || r).join(', ')}</span>}
-                {(y.sub_regions || []).length > 0 && <span className="text-[#B03E00]/70">› {y.sub_regions.map(sr => SUB_REGION_LABELS[sr] || sr).join(', ')}</span>}
-              </div>
-            </div>
-
-            <button
-              onClick={() => onToggleVisible(y)}
-              className={`px-3 py-2 rounded-xl text-xs uppercase tracking-wider font-medium flex items-center gap-2 shrink-0 ${
-                y.is_visible
-                  ? 'bg-[#B03E00]/20 border border-[#B03E00] text-[#B03E00]'
-                  : 'bg-[#3a3b3f] border border-[#C0C0C0]/30 text-[#acb0cd]/70 hover:border-[#B03E00] hover:text-[#B03E00]'
-              }`}
-              title={y.is_visible ? 'Cliquer pour cacher' : 'Cliquer pour publier'}
-            >
-              {y.is_visible ? <><Eye className="w-4 h-4" /> Publié</> : <><EyeOff className="w-4 h-4" /> En stock</>}
-            </button>
-
-            <button onClick={() => onToggleFeatured(y)} disabled={!y.is_visible}
-              className={`p-2 rounded-lg shrink-0 ${y.is_visible ? (y.is_featured ? 'text-[#B03E00]' : 'text-[#acb0cd]/50 hover:text-[#B03E00]') : 'text-[#acb0cd]/20 cursor-not-allowed'}`}
-              title={y.is_visible ? 'Mettre en avant' : 'Publie d\'abord'}>
-              <Star className="w-4 h-4" fill={y.is_featured ? 'currentColor' : 'none'} />
-            </button>
-
-            <button onClick={() => y.is_visible && onEdit(y)} disabled={!y.is_visible}
-              className={`p-2 rounded-lg shrink-0 ${y.is_visible ? 'text-[#acb0cd] hover:text-[#B03E00]' : 'text-[#acb0cd]/20 cursor-not-allowed'}`}
-              title={y.is_visible ? 'Éditer' : 'Publie d\'abord pour éditer'}>
-              <Edit3 className="w-4 h-4" />
-            </button>
-
-            <button onClick={() => onDelete(y)}
-              className="p-2 rounded-lg text-[#acb0cd]/50 hover:text-red-400 shrink-0"
-              title="Supprimer définitivement de la BDD">
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ════════════════════════════════════════════════════════════
-// ONGLET 3 — Publiés (édition)
-// ════════════════════════════════════════════════════════════
-function VisibleEditTab({ yachts, onEdit }) {
-  const visible = useMemo(() => yachts.filter(y => y.is_visible), [yachts]);
-
-  return (
-    <div>
-      <div className="bg-[#2a2a30] border border-[#C0C0C0]/20 rounded-2xl p-5 mb-4">
-        <div className="flex items-start gap-3">
-          <Eye className="w-6 h-6 text-[#B03E00] shrink-0" />
-          <div>
-            <h3 className="trajan-regular text-base uppercase tracking-wider text-[#C0C0C0] mb-1">Mes bateaux publiés</h3>
-            <p className="text-sm text-[#acb0cd]/70">
-              Édition complète : titre custom, description, prix affiché, options, région/sous-région.
-              Pour cacher un yacht, va dans <strong>Mes bateaux en BDD</strong>.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="text-xs text-[#acb0cd]/60 mb-2 px-1">{visible.length} bateau{visible.length > 1 ? 'x' : ''} publié{visible.length > 1 ? 's' : ''}</div>
-
-      <div className="grid md:grid-cols-2 gap-3 max-h-[800px] overflow-y-auto pr-1">
-        {visible.length === 0 ? (
-          <div className="col-span-2 text-center py-12 text-[#acb0cd]/50">
-            Aucun bateau publié. Va dans <strong>Mes bateaux en BDD</strong> pour en publier.
-          </div>
-        ) : visible.map(y => (
-          <button key={y.id} onClick={() => onEdit(y)}
-            className="flex items-center gap-3 p-4 rounded-xl border border-[#B03E00]/30 bg-[#B03E00]/5 text-left hover:bg-[#B03E00]/10 hover:border-[#B03E00] transition-colors">
-            <Image src={y.image} alt={y.name} width={100} height={70} className="rounded-lg object-cover h-16 shrink-0" unoptimized />
-            <div className="flex-1 min-w-0">
-              <h4 className="text-[#C0C0C0] font-medium flex items-center gap-2 truncate">
-                {y.name}
-                {y.is_featured && <Star className="w-3 h-3 text-[#B03E00] shrink-0" fill="currentColor" />}
-              </h4>
-              {y.custom_title && <p className="text-xs text-[#acb0cd] italic truncate">« {y.custom_title} »</p>}
-              <div className="flex flex-wrap gap-2 text-xs text-[#acb0cd]/70 mt-1">
-                {y.length && <span>{y.length}</span>}
-                {y.guests && <span>{y.guests} guests</span>}
-                {(y.regions || []).length > 0 && <span>{y.regions.map(r => REGION_LABELS[r] || r).join(', ')}</span>}
-              </div>
-              {y.custom_price && <p className="text-[#B03E00] font-bold text-sm mt-1">{y.custom_price}</p>}
-            </div>
-            <Edit3 className="w-5 h-5 text-[#B03E00] shrink-0" />
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ════════════════════════════════════════════════════════════
-// MODAL Édition
-// ════════════════════════════════════════════════════════════
 function EditModal({ yacht, onClose, onSave }) {
   const [form, setForm] = useState({
     custom_title: yacht.custom_title || '',
@@ -1401,13 +978,13 @@ function EditModal({ yacht, onClose, onSave }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-[#2a2a30] rounded-2xl border border-[#C0C0C0]/30 max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-        <div className="p-5 border-b border-[#C0C0C0]/20 flex items-center justify-between sticky top-0 bg-[#2a2a30]">
-          <h3 className="trajan-regular text-lg uppercase tracking-wider text-[#C0C0C0]">Éditer {yacht.name}</h3>
-          <button onClick={onClose} className="text-[#acb0cd]/60 hover:text-white"><X className="w-5 h-5" /></button>
+    <div className="ovl open" onClick={onClose}>
+      <div className="modal" style={{ maxWidth: 760 }} onClick={e => e.stopPropagation()}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <h3 style={{ marginBottom: 0 }}>Modifier — {yacht.name}</h3>
+          <button type="button" className="ic" onClick={onClose}>✕</button>
         </div>
-        <div className="p-5 space-y-4">
+        <div className="space-y-4">
           {/* Fiche bateau : toutes les informations, pre-remplies et modifiables */}
           <div>
             <label className="block text-[10px] uppercase tracking-wider text-[#acb0cd]/60 mb-2">Informations du bateau</label>
@@ -1553,13 +1130,13 @@ function EditModal({ yacht, onClose, onSave }) {
               className="w-full px-3 py-2 bg-[#3a3b3f] border border-[#C0C0C0]/30 rounded-lg text-[#acb0cd] focus:border-[#B03E00] outline-none resize-y" />
           </div>
         </div>
-        <div className="p-5 border-t border-[#C0C0C0]/20 flex justify-end gap-2 sticky bottom-0 bg-[#2a2a30]">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-[#C0C0C0]/30 text-[#acb0cd] hover:border-[#B03E00] hover:text-[#B03E00] text-sm">Annuler</button>
-          <button onClick={save} disabled={saving}
-            className="px-6 py-2 rounded-xl border-2 border-[#B03E00] bg-[#B03E00]/20 text-[#B03E00] hover:bg-[#B03E00]/30 disabled:opacity-50 text-sm uppercase tracking-wider font-medium flex items-center gap-2">
-            {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-            Sauvegarder
-          </button>
+        <div className="mfoot" style={{ justifyContent: 'flex-end' }}>
+          <div className="r">
+            <button type="button" className="btn-sec" onClick={onClose}>Annuler</button>
+            <button type="button" className="btn-primary" onClick={save} disabled={saving}>
+              {saving ? 'Enregistrement…' : 'Enregistrer'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1633,7 +1210,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
           body: JSON.stringify({ action: 'visibility', yacht_id: yacht.id, is_visible: false }),
         });
         await reload();
-        alert(`${yacht.name} ajouté en stock. Va dans "Mes bateaux en BDD" pour le publier.`);
+        alert(`${yacht.name} ajouté en stock. Va dans « Tous les yachts » pour le publier.`);
       } else {
         // Sans cette branche, un echec serveur ne produisait AUCUN retour visible :
         // le bouton paraissait mort. On remonte l'erreur comme sur l'ajout manuel.
@@ -1682,7 +1259,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
           body: JSON.stringify({ action: 'visibility', yacht_id, is_visible: false }),
         });
         await reload();
-        alert(`${yacht_name} ajouté en stock. Va dans "Mes bateaux en BDD" pour le publier.`);
+        alert(`${yacht_name} ajouté en stock. Va dans « Tous les yachts » pour le publier.`);
       } else {
         const err = await res.json().catch(() => ({}));
         alert(`Erreur lors de l'ajout : ${err.error || res.status}`);
@@ -1736,56 +1313,74 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
     } catch (e) { console.error(e); }
   };
 
+  // Fiche detail : enregistrement des tarifs (meme route que la modale).
+  const onSavePricing = async (id, custom_pricing) => {
+    try {
+      await fetch('/api/admin/yachts', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'enrich', yacht_id: id, custom_pricing }),
+      });
+      setRawYachts(prev => prev.map(s => s.yacht_id === id ? { ...s, custom_pricing } : s));
+    } catch (e) { console.error(e); }
+  };
+
+  // KPI cliquable = filtre statut (comme le calque).
+  const [stateFilter, setStateFilter] = useState('');
+  const kpi = {
+    all: yachts.length,
+    pub: yachts.filter(y => y.is_visible).length,
+    stock: yachts.filter(y => !y.is_visible).length,
+    feat: yachts.filter(y => y.is_featured).length,
+  };
+
   const TABS = [
-    { id: 'ankor', label: 'Recherche Ankor', icon: Globe, desc: 'Catalogue externe à importer' },
-    { id: 'manual', label: 'Ajout manuel', icon: Plus, desc: 'Navire hors catalogue Ankor' },
-    { id: 'bdd', label: 'Mes bateaux en BDD', icon: Database, desc: 'Toute la base · publier/cacher' },
-    { id: 'visible', label: 'Mes bateaux publiés', icon: Eye, desc: 'Édition complète des publiés' },
+    { id: 'ankor', n: '🌐 Catalogue Ankor', s: 'Import depuis le catalogue externe' },
+    { id: 'manual', n: '+ Nouveau yacht', s: 'Navire hors catalogue Ankor' },
+    { id: 'bdd', n: '📋 Tous les yachts', s: 'Gestion complète · publier / cacher' },
+    { id: 'visible', n: 'Yachts publiés', s: 'Édition complète des publiés' },
   ];
 
   return (
     <div>
-      {/* Indicateur multi-admin */}
-      {activeAdmins > 1 ? (
-        <div className="mb-4 rounded-xl border border-amber-700/50 bg-amber-900/20 px-4 py-3 flex items-center gap-3">
-          <Users className="w-5 h-5 text-amber-400 shrink-0" />
-          <div className="text-sm text-amber-200">
-            <strong className="text-amber-300">{activeAdmins} sessions admin actives</strong> en ce moment.
-            <span className="ml-1 text-amber-200/70">Attention à ne pas éditer le même yacht en simultané (le dernier qui sauvegarde écrase l'autre).</span>
-          </div>
-        </div>
-      ) : (
-        <div className="mb-4 inline-flex items-center gap-2 text-xs text-[#acb0cd]/50">
-          <Users className="w-3 h-3" />
-          <span>1 session admin active (toi)</span>
-        </div>
-      )}
-
-      <Dashboard yachts={yachts} />
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
-        {TABS.map(tab => {
-          const Icon = tab.icon;
-          const active = activeTab === tab.id;
-          return (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              className={`p-4 rounded-xl border-2 text-left transition-all ${
-                active ? 'border-[#B03E00] bg-[#B03E00]/10' : 'border-[#C0C0C0]/20 bg-[#2a2a30] hover:border-[#B03E00]/40'
-              }`}>
-              <div className="flex items-center gap-2 mb-1">
-                <Icon className={`w-4 h-4 ${active ? 'text-[#B03E00]' : 'text-[#acb0cd]/60'}`} />
-                <h3 className={`text-xs md:text-sm uppercase tracking-wider font-medium ${active ? 'text-[#B03E00]' : 'text-[#acb0cd]'}`}>{tab.label}</h3>
-              </div>
-              <p className={`text-[10px] md:text-xs ${active ? 'text-[#acb0cd]' : 'text-[#acb0cd]/50'}`}>{tab.desc}</p>
-            </button>
-          );
-        })}
+      <div className="session">
+        {activeAdmins > 1
+          ? <>👤 <b>{activeAdmins} sessions admin actives</b> en ce moment — attention à ne pas éditer le même yacht en simultané (le dernier qui sauvegarde écrase l'autre).</>
+          : <>👤 1 session admin active (<b>toi</b>)</>}
       </div>
 
-      {activeTab === 'ankor' && <AnkorSearchTab existingIds={existingIds} onAdd={onAddFromAnkor} />}
-      {activeTab === 'manual' && <ManualAddTab onAdd={onAddManual} />}
-      {activeTab === 'bdd' && <BddCatalogueTab yachts={yachts} onToggleVisible={onToggleVisible} onToggleFeatured={onToggleFeatured} onDelete={onDelete} onEdit={(y) => setEditingYacht(y)} />}
-      {activeTab === 'visible' && <VisibleEditTab yachts={yachts} onEdit={(y) => setEditingYacht(y)} />}
+      {/* ===== KPI ===== */}
+      <div className="kpis" style={{ gridTemplateColumns: 'repeat(4,1fr)' }}>
+        {[['all', 'yachts au total', ''], ['pub', 'visibles sur le site', 'pub'], ['stock', 'cachés au public', 'stock'], ['feat', 'mis en avant', 'feat']].map(([k, l, cls]) => (
+          <div key={k} className={`kpi ${cls} ${(k === 'all' && !stateFilter) || stateFilter === k ? 'active' : ''}`}
+            onClick={() => { setStateFilter(k === 'all' ? '' : k); if (activeTab !== 'bdd' && activeTab !== 'visible') setActiveTab('bdd'); }}>
+            <div className="v">{kpi[k]}</div><div className="l">{l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ===== TABS ===== */}
+      <div className="tabs">
+        {TABS.map(tab => (
+          <div key={tab.id} className={`tab ${activeTab === tab.id ? 'active' : ''}`} onClick={() => setActiveTab(tab.id)}>
+            <div className="n">{tab.n}</div><div className="s">{tab.s}</div>
+          </div>
+        ))}
+      </div>
+
+      {(activeTab === 'ankor' || activeTab === 'manual') && (
+        <div className="filters">
+          {activeTab === 'ankor' && <AnkorSearchTab existingIds={existingIds} onAdd={onAddFromAnkor} />}
+          {activeTab === 'manual' && <ManualAddTab onAdd={onAddManual} />}
+        </div>
+      )}
+      {(activeTab === 'bdd' || activeTab === 'visible') && (
+        <CatalogueView key={activeTab} yachts={yachts} pubOnly={activeTab === 'visible'}
+          stateFilter={stateFilter} setStateFilter={setStateFilter}
+          regionLabels={REGION_LABELS} subRegionLabels={SUB_REGION_LABELS}
+          onToggleVisible={onToggleVisible} onToggleFeatured={onToggleFeatured} onDelete={onDelete}
+          onEdit={(y) => setEditingYacht(y)} onSavePricing={onSavePricing} />
+      )}
 
       {editingYacht && <EditModal yacht={editingYacht} onClose={() => setEditingYacht(null)} onSave={onSaveEdit} />}
     </div>

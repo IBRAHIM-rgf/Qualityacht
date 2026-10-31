@@ -38,7 +38,7 @@ export default function AdminLogoutButton() {
         type="button"
         onClick={logout}
         disabled={loading}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:border-red-500 hover:text-red-400 disabled:opacity-60 text-sm font-medium transition-colors whitespace-nowrap"
+        className="btn-ghost inline-flex items-center gap-2 disabled:opacity-60 whitespace-nowrap"
       >
         <LogOut className="w-4 h-4" aria-hidden />
         {loading ? 'Deconnexion…' : 'Deconnexion'}
