@@ -162,9 +162,6 @@ export default function YachtCardV2({ yacht, accentColor }) {
               {yacht.dayPrices.map((r, i) => (
                 <p key={i} className=" text-sm">
                   Price : <span className="font-semibold">{r.price}/day</span>
-                  {/* Devises cochees + heure supplementaire (client 2026-10-29) */}
-                  {r.alt?.length > 0 && <span className="block text-xs opacity-75">≈ {r.alt.join(' · ')}</span>}
-                  {r.extraHour && <span className="block text-xs opacity-75">+ {r.extraHour} per additional hour</span>}
                   {(r.location || r.period) && (
                     <span className="block text-xs opacity-75">{[r.location, r.period].filter(Boolean).join(' · ')}</span>
                   )}
