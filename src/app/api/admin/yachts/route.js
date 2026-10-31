@@ -162,7 +162,7 @@ export async function PATCH(request) {
     ensureV3Schema,
   } = await import('@/lib/db');
     const { extractLightData, inferAnkorRegion } = await import('@/lib/yachtCache');
-    const { normalizeCustomPricing, normalizeDayCharter } = await import('@/lib/customPricing');
+    const { serializeCharterPrices } = await import('@/lib/charterPrices');
     const { normalizeCharterModel } = await import('@/lib/charterModel');
     // Meme garantie que sur le POST : les mises a jour ecrivent aussi dans
     // `regions` / `sub_regions`.
@@ -240,10 +240,10 @@ export async function PATCH(request) {
           groups_allowed,
           water_toys,
           extra_info,
-          // Tarifs saison / region : tableau normalise ([] efface), undefined = inchange.
-          custom_pricing: Array.isArray(custom_pricing) ? normalizeCustomPricing(custom_pricing) : undefined,
-          // Day Charter : objet normalise, undefined = inchange.
-          day_charter: day_charter && typeof day_charter === 'object' ? normalizeDayCharter(day_charter) : undefined,
+          // Fiches de prix par type de charter (client 2026-10-31) : objet complet, undefined = inchange.
+          custom_pricing: custom_pricing && typeof custom_pricing === 'object' && !Array.isArray(custom_pricing) ? serializeCharterPrices(custom_pricing) : undefined,
+          // Day Charter : seule la case est stockee ici (les prix sont dans l'onglet Day).
+          day_charter: day_charter && typeof day_charter === 'object' ? { enabled: day_charter.enabled === true } : undefined,
           // Modele tarifaire charter (client 2026-10-15) : objet normalise, undefined = inchange.
           charter_model: charter_model && typeof charter_model === 'object' && !Array.isArray(charter_model) ? normalizeCharterModel(charter_model) : undefined,
           // Fiche bateau : champs modifies uniquement ({} = retour aux donnees d'origine), undefined = inchange.
