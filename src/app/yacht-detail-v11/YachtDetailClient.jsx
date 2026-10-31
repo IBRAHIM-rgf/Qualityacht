@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { addToCart, toCartEntry } from '@/lib/quoteCart';
 import { useDayCharterJourney } from '@/lib/dayCharterJourney';
 import { dayCharterToPricingInfo, dayCharterToPricingInfos, formatDayCharterPrice } from '@/lib/customPricing';
+import { CHARTER_TYPES, TAX_FIELDS, hasAnyPrice, rateTitle, formatPriceAmount, unitSuffix } from '@/lib/charterPrices';
 import { getAnkorImageUrl } from '@/lib/utils';
 import {
   Ruler, Users, BedDouble, Anchor, Calendar, ChevronLeft, ChevronRight, X, Map as MapIcon,
@@ -159,6 +160,102 @@ function ReserveButton({ yacht, bp, full, imgs, variant = 'top' }) {
       </span>
       <span className="trajan-regular text-base md:text-lg uppercase tracking-[0.15em] mt-1" style={{ color: '#C0C0C0' }}>{yacht.name}</span>
     </button>
+  );
+}
+
+// ══ CHARTER PRICES (client 2026-10-31) ══
+// Prix saisis dans l'admin, par type de charter : onglets (seulement ceux qui ont des
+// prix), cards de prix centrees, Included / Extras et Taxes & Gratuity de l'onglet.
+// Le mot « Rate » n'apparait jamais sur le site.
+function CharterPricesSection({ prices, initialTab }) {
+  const tabs = CHARTER_TYPES.filter((t) => prices[t.key]?.rates?.length > 0);
+  const [tab, setTab] = useState(tabs.some((t) => t.key === initialTab) ? initialTab : tabs[0]?.key);
+  if (!tabs.length) return null;
+  const cur = prices[tab] || prices[tabs[0].key];
+  const taxes = TAX_FIELDS.filter((tf) => cur.taxes?.[tf.key] !== '' && cur.taxes?.[tf.key] != null);
+  return (
+    <div className="max-w-5xl mx-auto px-5 md:px-10 pb-12 md:pb-16">
+      <div className="text-center mb-8">
+        <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Charter Prices</h2>
+        <div className="relative w-32 h-6 mx-auto mt-3"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
+      </div>
+      {tabs.length > 1 && (
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          {tabs.map((t) => (
+            <button key={t.key} type="button" onClick={() => setTab(t.key)}
+              className={`px-5 py-2 rounded-full text-xs md:text-sm uppercase tracking-[0.18em] transition-colors ${tab === t.key ? 'bg-[#B03E00] border border-[#B03E00] text-[#26272a] font-semibold' : 'bg-[#3a3b3f] border border-[#C0C0C0]/30 text-[#acb0cd] hover:border-[#B03E00]'}`}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      )}
+      {tabs.length === 1 && (
+        <p className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#C0C0C0] text-center mb-6">{tabs[0].label}</p>
+      )}
+      <div className="flex flex-wrap justify-center gap-5">
+        {cur.rates.map((r, i) => (
+          <div key={i} className="w-full md:w-[calc(50%-10px)] rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] p-6 flex flex-col items-center gap-4 text-center">
+            <div>
+              {r.period && <p className="text-[10px] uppercase tracking-[0.25em] text-[#B03E00] mb-2">{r.period}</p>}
+              <h3 className="trajan-regular text-base md:text-lg uppercase tracking-[0.12em] text-[#C0C0C0]">{rateTitle(r)}</h3>
+              {r.subtitle && <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-[#acb0cd]/70 mt-1">{r.subtitle}</p>}
+            </div>
+            <p className="trajan-regular text-2xl md:text-3xl text-[#C0C0C0]">
+              {formatPriceAmount(r.price, r.currency)}<span className="text-sm text-[#acb0cd]/50"> {unitSuffix(r.unit)}</span>
+            </p>
+            {(r.apa || r.vat) && (
+              <p className="text-[11px] uppercase tracking-[0.25em] text-[#acb0cd]/70 -mt-2">
+                {[r.apa && '+ APA', r.vat && '+ VAT'].filter(Boolean).join('  ·  ')}
+              </p>
+            )}
+            {r.zones.length > 0 && (
+              <div className="w-full">
+                <p className="text-[10px] uppercase tracking-[0.25em] text-[#B03E00] mb-2">Zones</p>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {r.zones.map((z) => (
+                    <span key={z} className="inline-block px-3 py-1.5 rounded-full border border-[#C0C0C0]/40 bg-[#26272a] text-[#acb0cd] text-xs">{z}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      {(cur.included.length > 0 || cur.extras.length > 0 || taxes.length > 0) && (
+        <div className="flex flex-wrap justify-center gap-5 mt-8">
+          {cur.included.length > 0 && (
+            <div className="w-full md:w-[calc(50%-10px)] rounded-xl border border-[#C0C0C0]/40 bg-[#3a3b3f] p-6">
+              <p className="trajan-regular text-sm uppercase tracking-[0.2em] text-[#C0C0C0] text-center mb-4">Included</p>
+              <ul className="space-y-2">
+                {cur.included.map((x) => (
+                  <li key={x} className="flex gap-2 text-sm text-[#acb0cd]"><span className="text-[#B03E00]">✔</span><span>{x}</span></li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {cur.extras.length > 0 && (
+            <div className="w-full md:w-[calc(50%-10px)] rounded-xl border border-[#C0C0C0]/40 bg-[#3a3b3f] p-6">
+              <p className="trajan-regular text-sm uppercase tracking-[0.2em] text-[#C0C0C0] text-center mb-4">Extras</p>
+              <ul className="space-y-2">
+                {cur.extras.map((x) => (
+                  <li key={x} className="flex gap-2 text-sm text-[#acb0cd]"><span className="text-[#B03E00]">+</span><span>{x}</span></li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {taxes.length > 0 && (
+            <div className="w-full md:w-[calc(50%-10px)] rounded-xl border border-[#C0C0C0]/40 bg-[#3a3b3f] p-6">
+              <p className="trajan-regular text-sm uppercase tracking-[0.2em] text-[#C0C0C0] text-center mb-4">Taxes &amp; Gratuity</p>
+              <ul className="space-y-2">
+                {taxes.map((tf) => (
+                  <li key={tf.key} className="flex justify-between gap-4 text-sm text-[#acb0cd]"><span>{tf.label}</span><span className="text-[#C0C0C0]">{cur.taxes[tf.key]} %</span></li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -471,7 +568,9 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
       {/* ══ REGIONS AND RATES (regroupé par unité Ankor : Weekly / Daily / Hourly,
             avec sous-regroupement Summer / Winter pour Weekly, et regroupement
             par tranches de guests pour les saisons type "X Pax" / "X Guests") ══ */}
-      {seasons.length > 0 && (() => {
+      {hasAnyPrice(yacht.charterPrices) ? (
+        <CharterPricesSection prices={yacht.charterPrices} initialTab={dayMode ? 'day' : 'weekly'} />
+      ) : seasons.length > 0 && (() => {
         const expandName = (n) => (n || '')
           .replace(/\bMed\b/gi, 'Mediterranean')
           .replace(/\bCarib\b/gi, 'Caribbean')
@@ -560,7 +659,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
                   {titleInfo && (
                     <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-[#acb0cd]/70 mt-1">{titleInfo}</p>
                   )}
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mt-2">Rates by guests</p>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mt-2">Prices by guests</p>
                 </div>
                 <div className="w-full">
                   <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 items-center">
@@ -595,13 +694,6 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
                   {total}<span className="text-sm text-[#acb0cd]/50"> {unitLabel[p.unit] || ''}</span>
                 </p>
               )}
-              {/* Day Charter : devises cochees + heure supplementaire (client 2026-10-29) */}
-              {s._alt?.length > 0 && (
-                <p className="text-sm text-[#acb0cd]/70 -mt-2">≈ {s._alt.join('  ·  ')}</p>
-              )}
-              {s._extraHour && (
-                <p className="text-sm text-[#acb0cd]/80 -mt-2">+ {s._extraHour} per additional hour</p>
-              )}
               {/* Tarifs admin : APA / VAT en sus, coches dans l'admin */}
               {(s._apa || s._vat) && (
                 <p className="text-[11px] uppercase tracking-[0.25em] text-[#acb0cd]/70 -mt-2">
@@ -618,7 +710,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         return (
           <div className="max-w-5xl mx-auto px-5 md:px-10 pb-12 md:pb-16">
             <div className="text-center mb-8">
-              <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Regions and Rates</h2>
+              <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Charter Prices</h2>
               <div className="relative w-32 h-6 mx-auto mt-3"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
             </div>
             <div className="space-y-12">
