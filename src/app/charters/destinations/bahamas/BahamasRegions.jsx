@@ -7,6 +7,7 @@
 // Donnees : fichier client « Bahamas_8_Groupes2.xlsx » (8 groupes, 2026-09-27).
 // Coordonnees : positions approximatives de chaque lieu (carte affichee au zoom 5).
 
+import { FaqJsonLd } from '@/components/seo/JsonLd';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { MapPin } from 'lucide-react';
@@ -178,6 +179,8 @@ export function BahamasCtaAndFaq({
       <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg="/images/nuagesAncien.png">
         <div className="max-w-7xl mx-auto">
           <RevealBlock label="Frequently Asked Questions" title="Your Luxury Yacht Charter, Explained" sub="" useTitleLine />
+          {/* FAQ pour Google (SEO etape 4) : memes questions que celles affichees. */}
+          <FaqJsonLd items={faqItems} />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
             {faqItems.map((item, i) => (
               <div key={i} className={faqItems.length % 3 !== 0 && i === faqItems.length - 1 ? 'md:col-start-2' : ''}>
