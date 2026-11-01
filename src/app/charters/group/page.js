@@ -1,6 +1,10 @@
+import { seo } from '@/lib/seoMeta';
 import ItemsGrid from "../../components/ItemsGrid";
 import { destinations } from "../destinationsData";
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/charters/group');
 // Hero : nouvelle photo fournie par la cliente. Le badge present dans l'image
 // fait partie du media client : il n'est ni retire ni retouche.
 //
