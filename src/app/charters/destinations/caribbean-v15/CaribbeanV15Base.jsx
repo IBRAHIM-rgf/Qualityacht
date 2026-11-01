@@ -1,5 +1,6 @@
 'use client';
 
+import { FaqJsonLd } from '@/components/seo/JsonLd';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
@@ -1000,6 +1001,8 @@ export default function CaribbeanV15Page({
               sub=""
               useTitleLine
             />
+            {/* FAQ pour Google (SEO etape 4) : memes questions que celles affichees. */}
+            <FaqJsonLd items={faqItems} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
               {faqItems.map((item, i) => (
                 <div key={i} className={faqItems.length % 3 !== 0 && i === faqItems.length - 1 ? 'md:col-start-2' : ''}>
