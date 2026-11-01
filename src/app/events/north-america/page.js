@@ -1,6 +1,7 @@
 // /events/north-america — Events North America (PDF client 2026-10-23), calquee sur
 // /events/bahamas : meme hero, meme carte + filtres + cards. Carrousel sous le hero
 // (18 photos client 2026-11-01, comme Bahamas). Hero = photo fournie par le client (2026-10-27).
+import { seo } from '@/lib/seoMeta';
 import Image from "next/image";
 import Link from "next/link";
 import CaribbeanEventsMap from "../CaribbeanEventsMap";
@@ -8,6 +9,7 @@ import EventsCarousel from "../caribbean/EventsCarousel";
 import { NORTH_AMERICA_EVENTS, NORTH_AMERICA_SECTORS } from "./north-america-events";
 
 export const metadata = {
+  ...seo('/events/north-america'),
   title: "North America Events | Qualityacht",
 };
 
