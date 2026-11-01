@@ -3,9 +3,11 @@
 // /charters/destinations/bahamas, avec « Last Minute » en blanc au-dessus du
 // titre (comme « Day Charter »), le sous-titre « The Bahamas, Ready When You Are » et le CTA
 // « Design Your Last Minute Charter ».
+import { seo } from '@/lib/seoMeta';
 import BahamasRoutePage from '../../destinations/bahamas/page';
 
 export const metadata = {
+  ...seo('/charters/last-minute/bahamas'),
   title: 'Last-Minute Charter — The Bahamas | Qualityacht',
 };
 
