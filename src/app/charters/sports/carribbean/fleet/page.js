@@ -1,10 +1,12 @@
 // /charters/sports/carribbean/fleet — bouton « Explore the Caribbean Fleet » de /charters/sports/carribbean
 // (client 2026-10-04) : uniquement les bateaux coches « Sport Yacht Charter » + Caribbean dans l'admin.
+import { seo } from '@/lib/seoMeta';
 import { CategoryFleetPage } from '../../../_shared/categoryCasePages';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
+  ...seo('/charters/sports/carribbean/fleet'),
   title: 'Caribbean Sports Yacht Charters — Fleet | Qualityacht',
 };
 
