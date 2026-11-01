@@ -1,3 +1,4 @@
+import { seo } from '@/lib/seoMeta';
 import Text4Images2Section from "../components/sections/new/Text4Images2Section";
 import Text4ImagesSection from "../components/sections/new/Text4Images";
 import Text2imagesSection from "../components/sections/new/text2images";
@@ -9,6 +10,9 @@ import TestimonialsSlider from "../components/sections/common/TestimonialsSlider
 import ThreeColumnFeatures from "../components/sections/common/ThreeColumnFeatures";
 import TimelineSection from "../components/sections/common/TimelineSection";
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/management');
 // Copie du JSON directement dans la page
 const managementSections = [
   {
