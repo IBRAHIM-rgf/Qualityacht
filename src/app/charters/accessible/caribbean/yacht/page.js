@@ -2,11 +2,15 @@
 // correspondants" de la page accessible (/charters/accessible/caribbean).
 // Réutilise le même composant que "Explore Yacht" (caribbean-v15), filtré via ?handicap=<id>.
 
+import { seo } from '@/lib/seoMeta';
 import ExploreYachtClient from '../../../destinations/caribbean-v15/exploreyacht/ExploreYachtClient';
 import { fetchVisibleYachtsForDestination } from '@/lib/yachts';
 import { getYachtSelections } from '@/lib/db';
 import { parseHandicaps, getHandicapById } from '@/lib/handicaps';
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/charters/accessible/caribbean/yacht');
 export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }) {
