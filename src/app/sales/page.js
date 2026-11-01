@@ -1,7 +1,11 @@
+import { seo } from '@/lib/seoMeta';
 import Image from "next/image";
 import Link from "next/link";
 import ItemsGrid from "../components/ItemsGrid";
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/sales');
 const salesItems = [
 	{
 		title: "Motor Yacht Sales",
