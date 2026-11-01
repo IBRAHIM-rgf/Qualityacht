@@ -6,7 +6,8 @@
 //  - kind 'pets'   : colonne pets_allowed (page Pet-Friendly) ;
 //  - kind 'groups' : colonne groups_allowed (page Group Charter).
 // Fishing et Ghost : enregistres, sans section du site pour l'instant.
-// Suivi des envois (✉ + date) : yacht_selections.admin_extra.mails[key] = 'JJ/MM/AAAA'.
+// Suivi des envois (✉ + date) : yacht_selections.admin_extra.mails[key] = 'JJ/MM/AAAA'
+// ('' = enveloppe cochee sans date ; cle absente = enveloppe non cochee).
 // Catamaran, Classic Sailing Yacht, Trimaran, Traditional Sailboat : retirees puis
 // remises le meme jour a la demande du client (2026-11-01).
 
@@ -58,7 +59,8 @@ export function normalizeAdminExtra(raw) {
   const mails = {};
   const keys = new Set(ADMIN_CATEGORIES.map((c) => c.key));
   for (const [k, d] of Object.entries(v.mails || {})) {
-    if (keys.has(k) && /^\d{2}\/\d{2}\/\d{4}$/.test(String(d))) mails[k] = String(d);
+    // '' = enveloppe cochee sans date (client 2026-11-01).
+    if (keys.has(k) && (d === '' || /^\d{2}\/\d{2}\/\d{4}$/.test(String(d)))) mails[k] = String(d);
   }
   const ca = {};
   for (const f of ['name', 'company', 'location', 'phone', 'website']) {
