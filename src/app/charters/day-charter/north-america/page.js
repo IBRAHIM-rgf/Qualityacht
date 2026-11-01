@@ -3,6 +3,7 @@
 // /charters/day-charter/bahamas : rendu identique a /charters/destinations/north-america,
 // avec « Day Charter » au-dessus du titre, le CTA « Create Your Day at Sea » (?day=1),
 // la video hero fournie par le client et les cases vers les bateaux Day Charter.
+import { seo } from '@/lib/seoMeta';
 import NorthAmericaPage from '../../destinations/north-america/page';
 
 const HERO = '/media/client/2026-10-27/day-charter-north-america';
@@ -18,6 +19,7 @@ const ECLAT_MEDIA = [
 ];
 
 export const metadata = {
+  ...seo('/charters/day-charter/north-america'),
   title: 'Day Charter North America | Qualityacht',
 };
 
