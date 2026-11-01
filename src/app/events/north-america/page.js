@@ -1,14 +1,37 @@
 // /events/north-america — Events North America (PDF client 2026-10-23), calquee sur
-// /events/bahamas : meme hero, meme carte + filtres + cards. Pas de carrousel (aucune
-// photo fournie) . Hero = photo fournie par le client (2026-10-27).
+// /events/bahamas : meme hero, meme carte + filtres + cards. Carrousel sous le hero
+// (18 photos client 2026-11-01, comme Bahamas). Hero = photo fournie par le client (2026-10-27).
 import Image from "next/image";
 import Link from "next/link";
 import CaribbeanEventsMap from "../CaribbeanEventsMap";
+import EventsCarousel from "../caribbean/EventsCarousel";
 import { NORTH_AMERICA_EVENTS, NORTH_AMERICA_SECTORS } from "./north-america-events";
 
 export const metadata = {
   title: "North America Events | Qualityacht",
 };
+
+const CD = "/media/client/2026-11-01/events-north-america-carousel";
+const CAROUSEL = [
+  { src: `${CD}/ena-01.jpg`, alt: "Carved totem pole" },
+  { src: `${CD}/ena-02.jpg`, alt: "Traditional Mexican table setting" },
+  { src: `${CD}/ena-03.jpg`, alt: "Jaguar dancer in ceremonial costume" },
+  { src: `${CD}/ena-04.jpg`, alt: "Flamingos by the water" },
+  { src: `${CD}/ena-05.jpg`, alt: "Folkloric dancers in colorful dresses" },
+  { src: `${CD}/ena-06.jpg`, alt: "Character hot-air balloon" },
+  { src: `${CD}/ena-07.jpg`, alt: "Classic car at sunset" },
+  { src: `${CD}/ena-08.jpg`, alt: "Aerial view of a catamaran" },
+  { src: `${CD}/ena-09.jpg`, alt: "Warrior with painted face" },
+  { src: `${CD}/ena-10.jpg`, alt: "Castle fireworks show" },
+  { src: `${CD}/ena-11.jpg`, alt: "Man on the beach" },
+  { src: `${CD}/ena-12.jpg`, alt: "Norteño band performing" },
+  { src: `${CD}/ena-13.jpg`, alt: "City skyline at sunset" },
+  { src: `${CD}/ena-14.jpg`, alt: "Live concert" },
+  { src: `${CD}/ena-15.jpg`, alt: "Fair with a Ferris wheel" },
+  { src: `${CD}/ena-16.jpg`, alt: "Catrina in Day of the Dead makeup" },
+  { src: `${CD}/ena-17.jpg`, alt: "Diver in an aquarium" },
+  { src: `${CD}/ena-18.jpg`, alt: "Statue of Liberty" },
+];
 
 const HERO = "/media/client/2026-10-27/events-north-america-hero.jpg";
 
@@ -51,6 +74,11 @@ export default function EventsNorthAmericaPage() {
           </div>
         </div>
       </section>
+
+      {/* Carrousel SOUS le hero, comme sur /events/bahamas. */}
+      <div className="relative z-10">
+        <EventsCarousel photos={CAROUSEL} label="North America events in pictures" />
+      </div>
 
       {/* Carte -> filtres (secteur + categorie) -> cards, comme Caraibes. */}
       <CaribbeanEventsMap
