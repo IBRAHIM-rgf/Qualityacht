@@ -535,6 +535,21 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
     setSaving(false);
     setDirty(false);
   };
+  // Enveloppe = case a cocher a part (client 2026-11-01) : toujours visible, independante
+  // de la case de categorie ; cochee, elle affiche la date d'envoi (mails[key], '' = sans date).
+  const envTick = (key) => {
+    const on = key in mails;
+    return (
+      <span className={`envtick ${on ? 'on' : ''}`} title="Envoi" onClick={(e) => {
+        e.preventDefault(); e.stopPropagation();
+        const m = { ...mails };
+        if (on) delete m[key]; else m[key] = '';
+        setMails(m); setDirty(true);
+      }}>
+        <input type="checkbox" checked={on} readOnly tabIndex={-1} />{ENV}
+      </span>
+    );
+  };
   // Case de categorie (grille et cadre Last Minute).
   const renderCase = (c) => (
     <label key={c.key} className={`cat ${catOn[c.key] ? 'on' : ''}`}>
@@ -543,12 +558,14 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
       <span className="lb">{c.label}<small>{ROUTE_OF(c)}</small></span>
       {c.env && (
         <span className="suivi">
-          {ENV}
-          <span className="date" onClick={(e) => {
-            e.preventDefault(); e.stopPropagation();
-            const r = e.currentTarget.getBoundingClientRect();
-            setDp({ key: c.key, left: r.left, top: r.bottom + 6 });
-          }}><span style={{ marginRight: 4 }}>📅</span>{mails[c.key] || '—'}</span>
+          {envTick(c.key)}
+          {c.key in mails && (
+            <span className="date" onClick={(e) => {
+              e.preventDefault(); e.stopPropagation();
+              const r = e.currentTarget.getBoundingClientRect();
+              setDp({ key: c.key, left: r.left, top: r.bottom + 6 });
+            }}><span style={{ marginRight: 4 }}>📅</span>{mails[c.key] || '—'}</span>
+          )}
         </span>
       )}
     </label>
@@ -645,12 +662,13 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
                           <label key={s.key} className={`chk ${catOn[s.key] ? 'on' : ''}`}>
                             <input type="checkbox" checked={!!catOn[s.key]} onChange={(e) => { setCatOn({ ...catOn, [s.key]: e.target.checked }); setDirty(true); }} />
                             {s.icon ? `${s.icon} ` : ''}{s.label}
-                            {s.env && (
+                            {s.env && envTick(s.key)}
+                            {s.env && s.key in mails && (
                               <span className="date" onClick={(e) => {
                                 e.preventDefault(); e.stopPropagation();
                                 const r = e.currentTarget.getBoundingClientRect();
                                 setDp({ key: s.key, left: r.left, top: r.bottom + 6 });
-                              }}>{ENV} 📅 {mails[s.key] || '—'}</span>
+                              }}>📅 {mails[s.key] || '—'}</span>
                             )}
                           </label>
                         ))}
@@ -747,7 +765,7 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
       {dp && (
         <DatePicker at={dp} onClose={() => setDp(null)}
           onPick={(d) => { setMails({ ...mails, [dp.key]: d }); setDirty(true); setDp(null); }}
-          onClear={() => { const m = { ...mails }; delete m[dp.key]; setMails(m); setDirty(true); setDp(null); }} />
+          onClear={() => { setMails({ ...mails, [dp.key]: '' }); setDirty(true); setDp(null); }} />
       )}
 
       {/* Contact du central agent — section repliee, sans titre, strictement interne */}
