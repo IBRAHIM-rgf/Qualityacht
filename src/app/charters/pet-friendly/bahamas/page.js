@@ -2,9 +2,11 @@
 // Page Pet-Friendly Bahamas (client 2026-10-01) : uniquement le hero et les
 // 2 sections avec les 3 photos du client (deplaces depuis /charters/pet-friendly),
 // titre adapte aux Bahamas, meme presentation que la page Pet-Friendly Caraibes.
+import { seo } from '@/lib/seoMeta';
 import PetFriendlyIntro from '../PetFriendlyIntro';
 
 export const metadata = {
+  ...seo('/charters/pet-friendly/bahamas'),
   title: 'Pet-Friendly Charter — The Bahamas | Qualityacht',
 };
 
