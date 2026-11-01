@@ -70,7 +70,7 @@ export function caseMetadata(region, slug, label) {
 }
 
 /** Page d'une case : category = cle de categorie admin, dayCharter = case Day Charter. */
-export async function CaseYachtsPage({ region, slug, category = null, dayCharter = false }) {
+export async function CaseYachtsPage({ region, slug, category = null, dayCharter = false, groups = false }) {
   const c = findCase(region, slug);
   if (!c) notFound();
   const { region: r, key, ...rest } = c;
@@ -78,7 +78,7 @@ export async function CaseYachtsPage({ region, slug, category = null, dayCharter
     ...rest,
     titleLgClass: c.name.length > 20 ? 'lg:text-5xl' : 'lg:text-7xl',
   };
-  const yachts = await getCategoryYachts({ region: r, subRegion: key, category, dayCharter });
+  const yachts = await getCategoryYachts({ region: r, subRegion: key, category, dayCharter, groups });
   return <SubregionClient {...config} initialData={yachts} totalYachts={yachts.length} />;
 }
 
