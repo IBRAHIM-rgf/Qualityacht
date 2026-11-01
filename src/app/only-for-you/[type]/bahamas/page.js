@@ -12,9 +12,10 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }) {
   const { type } = await params;
-  if (type === 'regatta') return { title: 'Bahamas Sailing Regattas — 2026 | Qualityacht' };
+  // Descriptions Google (SEO etape 3, client 2026-11-01).
+  if (type === 'regatta') return { title: 'Bahamas Sailing Regattas — 2026 | Qualityacht', description: 'The 2026 calendar of sailing regattas in the Bahamas, with private yacht charters by Qualityacht.' };
   const boat = getSailingTypeBySlug(type);
-  return boat ? { title: `${boat.name} — Bahamas | Qualityacht` } : {};
+  return boat ? { title: `${boat.name} — Bahamas | Qualityacht`, description: `${boat.name} charters in the Bahamas. ${boat.tagline}. Browse the yachts available and request a quote.` } : {};
 }
 
 // Hero fourni par le client (2026-10-09) : voilier au coucher du soleil.
