@@ -11,6 +11,7 @@ import { destinations } from "../destinationsData";
 // accessible et pet-friendly. ItemsGrid, partage, n'est pas touche.
 const GROUP_GUIDES = {
   "Caraïbes": "/charters/group/carribbean",
+  Bahamas: "/charters/group/bahamas",
 };
 
 const groupItems = destinations.map((d) =>
