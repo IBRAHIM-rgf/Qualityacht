@@ -16,7 +16,22 @@ export async function generateMetadata({ searchParams }) {
   const name = params?.name;
   if (!name) return {};
   const url = `/yacht-detail-v11?name=${encodeURIComponent(name)}`;
-  return { alternates: { canonical: url }, openGraph: { url } };
+  // Titre et description Google par bateau (SEO etape 3, client 2026-11-01).
+  let yacht = null;
+  try { yacht = await getSelectionYachtFullByName(name); } catch { yacht = null; }
+  const n = yacht?.name || name;
+  const facts = [
+    yacht?.length ? `${yacht.length}` : '',
+    yacht?.type ? `${yacht.type} yacht` : 'yacht',
+  ].filter(Boolean).join(' ');
+  const guests = yacht?.guests || yacht?.capacity;
+  const cap = [guests ? `up to ${guests} guests` : '', yacht?.cabins ? `${yacht.cabins} cabins` : ''].filter(Boolean).join(', ');
+  return {
+    title: `${n} — Luxury Yacht Charter | Qualityacht`,
+    description: `${n}: ${facts} for private charter${cap ? `, ${cap}` : ''}. View photos, specifications and rates, and request a quote.`,
+    alternates: { canonical: url },
+    openGraph: { url },
+  };
 }
 
 // Prix normalisé en cents (day prioritaire ; week → /7 pour estimer un day)
