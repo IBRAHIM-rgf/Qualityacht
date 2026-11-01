@@ -1,14 +1,29 @@
 // /sitemap.xml — SEO etape 1 (client 2026-11-01).
 // Pages publiques du site + pages des cases (Caraibes, Bahamas, North America), silo Halal
 // et types Only for You. Exclues : admin, pages de test et anciennes versions (-v1, -v2…),
-// anciennes adresses /charters/halal (redirigees vers /halal-yacht-charter).
+// anciennes adresses /charters/halal et /charters/destinations/caribbean (redirections).
+// Fiches bateaux publiees ajoutees depuis la base.
 import { CARIBBEAN_SUBREGIONS } from './charters/_shared/caribbeanSubregions';
 import { GROUPS, groupSlug } from './charters/destinations/bahamas/bahamasGroups';
 import { NA_GROUPS } from './charters/destinations/north-america/northAmericaGroups';
 import { SILO } from './halal-yacht-charter/_silo/content';
 import { sailingTypes } from './only-for-you/data';
+import { getYachtSelections } from '@/lib/db';
+
+// Regenere au plus une fois par heure (fiches des bateaux publies).
+export const revalidate = 3600;
 
 const BASE = 'https://www.qualityacht.ch';
+
+// Vraies pages du site sous un nom de version (liens du menu, des cartes, des fiches) :
+// gardees dans le sitemap (client 2026-11-01).
+const LIVE_VERSION_ROUTES = [
+  '/charters/destinations/caribbean-v15',
+  '/charters/destinations/caribbean-v15/exploreyacht',
+  ...['greater-antilles', 'leeward-islands', 'leeward-antilles', 'windward-islands', 'turks-caicos', 'trinidad-tobago', 'grand-cayman', 'emerging-destinations']
+    .map((s) => `/charters/destinations/carabbean/${s}-v11`),
+  '/request-quote-test-v10',
+];
 
 const STATIC_ROUTES = [
   '/',
@@ -37,7 +52,6 @@ const STATIC_ROUTES = [
   '/charters/destinations/arctic',
   '/charters/destinations/arctic-northern-europe',
   '/charters/destinations/bahamas',
-  '/charters/destinations/caribbean',
   '/charters/destinations/central-america',
   '/charters/destinations/east-asia',
   '/charters/destinations/eastern-mediterranean',
@@ -123,17 +137,28 @@ const STATIC_ROUTES = [
   '/yachts',
 ];
 
-export default function sitemap() {
+export default async function sitemap() {
+  // Fiches des bateaux publies : /yacht-detail-v11?name=<nom>. Base indisponible = sans fiches.
+  let yachtPages = [];
+  try {
+    const rows = await getYachtSelections();
+    yachtPages = (rows || []).filter((r) => r.is_visible && r.yacht_name)
+      .map((r) => `/yacht-detail-v11?name=${encodeURIComponent(r.yacht_name)}`);
+  } catch {
+    yachtPages = [];
+  }
   const caribbean = CARIBBEAN_SUBREGIONS.map((s) => s.slug);
   const bahamas = GROUPS.map((g) => groupSlug(g.name));
   const northAmerica = NA_GROUPS.map((g) => g.slug);
   const routes = [
     ...STATIC_ROUTES,
+    ...LIVE_VERSION_ROUTES,
     ...['last-minute/caribbean', 'only-couple/carribbean', 'group/carribbean'].flatMap((p) => caribbean.map((s) => `/charters/${p}/${s}`)),
     ...['destinations/bahamas', 'day-charter/bahamas', 'last-minute/bahamas', 'only-couple/bahamas', 'group/bahamas'].flatMap((p) => bahamas.map((s) => `/charters/${p}/${s}`)),
     ...['destinations/north-america', 'day-charter/north-america'].flatMap((p) => northAmerica.map((s) => `/charters/${p}/${s}`)),
     ...Object.keys(SILO).map((s) => `/halal-yacht-charter/${s}`),
     ...sailingTypes.flatMap((t) => [`/only-for-you/${t.slug}`, `/only-for-you/${t.slug}/carribbean`, `/only-for-you/${t.slug}/bahamas`]),
+    ...yachtPages,
   ];
   const now = new Date();
   return [...new Set(routes)].map((path) => ({
