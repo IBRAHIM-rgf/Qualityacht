@@ -1,6 +1,7 @@
 // /events/bahamas — Events Bahamas (client 2026-10-12), calquee sur /events/caribbean :
 // meme hero (photo fournie par le client, sur-titre, titre, sous-titre, 2 boutons).
 // + carrousel photos (client 2026-10-12). Le calendrier des evenements sera ajoute quand le client aura fourni la liste.
+import { seo } from '@/lib/seoMeta';
 import Image from "next/image";
 import Link from "next/link";
 import EventsCarousel from "../caribbean/EventsCarousel";
@@ -8,6 +9,7 @@ import CaribbeanEventsMap from "../CaribbeanEventsMap";
 import { BAHAMAS_EVENTS, BAHAMAS_SECTORS } from "./bahamas-events";
 
 export const metadata = {
+  ...seo('/events/bahamas'),
   title: "Bahamas Events | Qualityacht",
 };
 
