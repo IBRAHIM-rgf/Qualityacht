@@ -3,6 +3,7 @@
 // Bandeau CTA « Ready to Sail » + FAQ du hub /charters : copie conforme de la
 // fin de page Caraibes (caribbean-v15), memes textes, meme photo, meme lien
 // (client 2026-09-29, alignement sur le modele Caribbean).
+import { FaqJsonLd } from '@/components/seo/JsonLd';
 import {
   StBarthBandeau, CloudSection, RevealBlock, FaqItem, faqItems,
 } from './destinations/caribbean-v15/CaribbeanV15Base';
@@ -34,6 +35,8 @@ export default function ChartersCtaAndFaq() {
       <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg="/images/nuagesAncien.png">
         <div className="max-w-7xl mx-auto">
           <RevealBlock label="Frequently Asked Questions" title="Your Luxury Yacht Charter, Explained" sub="" useTitleLine />
+          {/* FAQ pour Google (SEO etape 4) : memes questions que celles affichees. */}
+          <FaqJsonLd items={faqItems} />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
             {faqItems.map((item, i) => (
               <div key={i} className={faqItems.length % 3 !== 0 && i === faqItems.length - 1 ? 'md:col-start-2' : ''}>
