@@ -9,6 +9,16 @@ import YachtDetailClient from './YachtDetailClient';
 
 export const dynamic = 'force-dynamic';
 
+// SEO (client 2026-11-01) : l'adresse declaree a Google inclut le nom du bateau, sinon
+// toutes les fiches seraient vues comme une seule page /yacht-detail-v11.
+export async function generateMetadata({ searchParams }) {
+  const params = await searchParams;
+  const name = params?.name;
+  if (!name) return {};
+  const url = `/yacht-detail-v11?name=${encodeURIComponent(name)}`;
+  return { alternates: { canonical: url }, openGraph: { url } };
+}
+
 // Prix normalisé en cents (day prioritaire ; week → /7 pour estimer un day)
 function yachtPriceCents(y) {
   const p = y?.full?.pricing || y?._rawPricing || y?.pricing;
