@@ -26,6 +26,8 @@ export async function generateMetadata({ params }) {
   if (!found) return {};
   return {
     title: `${found.group.name} — Bahamas Yacht Charter | Qualityacht`,
+    // Description Google (SEO etape 3, client 2026-11-01).
+    description: `Private yacht charters in ${found.group.name}, the Bahamas. Browse the yachts available and request a quote for your dates.`,
   };
 }
 
