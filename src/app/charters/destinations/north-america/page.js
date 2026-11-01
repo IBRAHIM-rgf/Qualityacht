@@ -3,6 +3,7 @@
 // sous-titre, 2 boutons) puis « Destinations by Region » (fichier client).
 // Remplace l'ancienne liste de yachts (l'API renvoyait une erreur pour cette destination).
 
+import { seo } from '@/lib/seoMeta';
 import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
 import NorthAmericaRegions from './NorthAmericaRegions';
@@ -25,6 +26,7 @@ const NA_FLOWERS = [
 const HERO = '/media/client/2026-10-23/north-america-hero';
 
 export const metadata = {
+  ...seo('/charters/destinations/north-america'),
   title: 'North America | Qualityacht',
 };
 
