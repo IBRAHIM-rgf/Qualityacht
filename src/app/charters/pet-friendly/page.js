@@ -1,6 +1,10 @@
+import { seo } from '@/lib/seoMeta';
 import ItemsGrid from "../../components/ItemsGrid";
 import { destinations } from "../destinationsData";
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/charters/pet-friendly');
 // Hero : photo du dalmatien fournie par la cliente, optimisee en WebP
 // (4928x3264 et 1,9 Mo -> 2200px et 337 Ko).
 //
