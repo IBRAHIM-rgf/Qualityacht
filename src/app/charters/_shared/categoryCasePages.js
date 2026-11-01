@@ -66,7 +66,11 @@ function findCase(region, slug) {
 /** Titre d'onglet : « <case> — <parcours> | Qualityacht ». */
 export function caseMetadata(region, slug, label) {
   const c = findCase(region, slug);
-  return c ? { title: `${c.name} — ${label} | Qualityacht` } : {};
+  // Description Google (SEO etape 3, client 2026-11-01).
+  return c ? {
+    title: `${c.name} — ${label} | Qualityacht`,
+    description: `${label}: browse the private yachts available in ${c.name} and request a quote for your dates.`,
+  } : {};
 }
 
 /** Page d'une case : category = cle de categorie admin, dayCharter = case Day Charter. */
