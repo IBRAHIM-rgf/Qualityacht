@@ -14,7 +14,11 @@ const findGroup = (slug) => NA_GROUPS.find((g) => g.slug === slug) || null;
 export async function generateMetadata({ params }) {
   const { group: slug } = await params;
   const g = findGroup(slug);
-  return g ? { title: `${g.name} — North America Yacht Charter | Qualityacht` } : {};
+  // Description Google (SEO etape 3, client 2026-11-01).
+  return g ? {
+    title: `${g.name} — North America Yacht Charter | Qualityacht`,
+    description: `Private yacht charters in ${g.name}, North America. Browse the yachts available and request a quote for your dates.`,
+  } : {};
 }
 
 export default async function NorthAmericaRegionPage({ params }) {
