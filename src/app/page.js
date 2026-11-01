@@ -1,3 +1,4 @@
+import { seo } from '@/lib/seoMeta';
 import HeroBaner from "@/app/components/sections/home/heroBaner";
 import WorldClassExperience from "./components/sections/home/WorldClassExperience";
 import ServicesGrid from "./components/sections/home/services";
@@ -7,6 +8,9 @@ import GridLosange  from "./components/sections/home/gridlosange";
 import LosangesuitePcontact from "./components/sections/home/gridlosange2";
 import Luxuryandcontactsection from "./components/sections/home/luxuryandcontactsection";
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/');
 export default function Home() {
   return (
     // overflow-x-clip (et non -hidden) : -hidden faisait de cette div une zone qui
