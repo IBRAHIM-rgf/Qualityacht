@@ -165,7 +165,10 @@ export async function updateYachtEnrichedData(yacht_id, data) {
     day_charter = null,
     charter_model = null,
     overrides = null,
+    admin_extra = null,
   } = data;
+  // Admin uniquement (client 2026-11-01) : objet complet a chaque sauvegarde.
+  const hasAdminExtra = admin_extra && typeof admin_extra === 'object' && !Array.isArray(admin_extra);
   // Fiche bateau modifiee dans l'admin (client 2026-10-02) : objet complet des champs
   // modifies a chaque sauvegarde ({} = tout revient aux donnees d'origine).
   const hasOverrides = overrides && typeof overrides === 'object' && !Array.isArray(overrides);
@@ -208,6 +211,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
         custom_pricing = COALESCE(${hasCustomPricing ? JSON.stringify(custom_pricing) : null}::jsonb, custom_pricing),
         day_charter = COALESCE(${hasDayCharter ? JSON.stringify(day_charter) : null}::jsonb, day_charter),
         charter_model = COALESCE(${hasCharterModel ? JSON.stringify(charter_model) : null}::jsonb, charter_model),
+        admin_extra = COALESCE(${hasAdminExtra ? JSON.stringify(admin_extra) : null}::jsonb, admin_extra),
         overrides = COALESCE(${hasOverrides ? JSON.stringify(normalizeOverrides(overrides)) : null}::jsonb, overrides),
         updated_at = NOW()
       WHERE yacht_id = ${yacht_id}
@@ -342,7 +346,7 @@ export async function getSelectedYachtsWithData() {
         category, categories, handicaps, tags, custom_title, custom_description, custom_price,
         custom_highlights, internal_notes, cached_data, light_data, ankor_region,
         region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info,
-        custom_pricing, day_charter, charter_model, overrides, created_at, updated_at
+        custom_pricing, day_charter, charter_model, overrides, admin_extra, created_at, updated_at
       FROM yacht_selections
       ORDER BY display_order ASC
     `;
@@ -561,6 +565,9 @@ export async function ensureV3Schema() {
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS overrides JSONB DEFAULT '{}'::jsonb`;
   // Modele tarifaire charter (client 2026-10-15) : voir lib/charterModel.js. Admin uniquement.
   await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS charter_model JSONB DEFAULT '{}'::jsonb`;
+  // Admin uniquement (client 2026-11-01) : suivi des envois par categorie + contact du
+  // central agent (interne, jamais publie). Voir lib/adminCategories.js.
+  await sql`ALTER TABLE yacht_selections ADD COLUMN IF NOT EXISTS admin_extra JSONB DEFAULT '{}'::jsonb`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_ankor_region ON yacht_selections(ankor_region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_region ON yacht_selections(region)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_yacht_sel_sub_region ON yacht_selections(sub_region)`;

@@ -9,7 +9,7 @@
 // Anciennes donnees (tableau de cartes « Tarifs » + prix Day Charter) : reprises
 // automatiquement (semaine -> Weekly, jour -> Day). Le titre libre d'une ancienne
 // carte reste affiche (legacyTitle) tant que Title 1 n'est pas choisi.
-// Le mot « Rate » n'est utilise que dans l'admin ; le site affiche « Prices ».
+// Le mot « Rate(s) » est garde partout, admin et site (client 2026-11-01).
 // Aucun acces BDD ici : module partage serveur / client.
 
 export const CHARTER_TYPES = [
