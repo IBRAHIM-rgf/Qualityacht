@@ -5,12 +5,14 @@
 // Destinations, bandeau CTA, FAQ). Les 8 cases ouvrent la page bateaux Only Couple de
 // chaque groupe d'iles.
 
+import { seo } from '@/lib/seoMeta';
 import OnlyCoupleHeroTriptych from '../carribbean/OnlyCoupleHeroTriptych';
 import { CloudSection } from '../../destinations/caribbean-v15/CaribbeanV15Base';
 import { BahamasIslandsGrid, BahamasDestinationsByRegion, BahamasCtaAndFaq } from '../../destinations/bahamas/BahamasRegions';
 import BahamasPopularDestinations from '../../destinations/bahamas/BahamasPopularDestinations';
 
 export const metadata = {
+  ...seo('/charters/only-couple/bahamas'),
   title: 'Only Couple Charter — The Bahamas | Qualityacht',
 };
 
