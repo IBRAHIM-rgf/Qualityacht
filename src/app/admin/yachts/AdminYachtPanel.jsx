@@ -1381,7 +1381,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
       {(activeTab === 'bdd' || activeTab === 'visible') && (
         <CatalogueView key={activeTab} yachts={yachts} pubOnly={activeTab === 'visible'}
           stateFilter={stateFilter} setStateFilter={setStateFilter}
-          regionLabels={REGION_LABELS} subRegionLabels={SUB_REGION_LABELS}
+          regionLabels={REGION_LABELS} subRegionLabels={SUB_REGION_LABELS} subRegionsByRegion={SUB_REGIONS_BY_REGION}
           onToggleVisible={onToggleVisible} onToggleFeatured={onToggleFeatured} onDelete={onDelete}
           onEdit={(y) => setEditingYacht(y)} onSaveFiche={onSaveFiche} />
       )}

@@ -322,3 +322,15 @@
 .qa-admin .kv input{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font-size:12.5px;outline:none;font-weight:600}
 .qa-admin .kv input:focus{border-color:var(--blue)}
 .qa-admin .dp.fixed{position:fixed}
+
+/* Cases deployees Only for You / Accessible (client 2026-11-01) */
+.qa-admin .catx{grid-column:1/-1;background:var(--panel);border:1px solid var(--blue);border-radius:9px;padding:12px 14px;display:flex;flex-direction:column;gap:14px}
+.qa-admin .catx-t{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.qa-admin .catx-st{font-size:11px;font-weight:600;color:var(--muted2);margin:6px 0 5px}
+.qa-admin .catx-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:5px 14px}
+.qa-admin .catx-full{grid-column:1/-1}
+.qa-admin .catx-subs{margin:5px 0 4px 24px}
+.qa-admin .catx .chk{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);cursor:pointer}
+.qa-admin .catx .chk.on{color:var(--blue);font-weight:600}
+.qa-admin .catx .chk input{accent-color:var(--blue);width:14px;height:14px;flex:none}
+.qa-admin .catx .chk .date{font-size:11px;color:var(--muted2);font-weight:400;cursor:pointer}

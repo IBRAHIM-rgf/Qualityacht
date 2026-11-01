@@ -6,12 +6,16 @@
 // tant que leurs donnees n'existent pas) : disponibilites / Timeline / calendrier,
 // contact du central agent, colonnes d'emails, brochure / pieces jointes.
 
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { getAnkorImageUrl } from '@/lib/utils';
 import { normalizeCharterPrices, formatPriceAmount, hasAnyPrice } from '@/lib/charterPrices';
 import { mergeSourceAndOverrides } from '@/lib/yachtOverrides';
 import CharterPricesEditor, { pricesToForm } from './CharterPricesEditor';
 import { ADMIN_CATEGORIES, ICON_COLUMNS, isCategoryOn } from '@/lib/adminCategories';
+import { HANDICAPS_BY_CAT } from '@/lib/handicaps';
+
+// Sous-categories affichees seulement dans la case deployee de leur categorie (client 2026-11-01).
+const SUB_OF = { 'only-for-you/sport-classic': 'only-for-you', 'only-for-you/regatta': 'only-for-you' };
 
 // Icones d'en-tete de la table admin (client 2026-11-01) : oreiller vert olive = Sleeps,
 // porte claire = Cabins. Page d'administration uniquement.
@@ -103,7 +107,7 @@ const lenTxt = (y) => (y.lenM ? `${y.lenM}m (${y.lenFt}ft)` : (y.length || '—'
 const EMPTY_ADV = { lmin: '', lmax: '', cmin: '', cmax: '', bmin: '', bmax: '', kmin: '', kmax: '' };
 
 export default function CatalogueView({
-  yachts: rawList, pubOnly, stateFilter, setStateFilter, regionLabels, subRegionLabels,
+  yachts: rawList, pubOnly, stateFilter, setStateFilter, regionLabels, subRegionLabels, subRegionsByRegion = {},
   onToggleVisible, onToggleFeatured, onDelete, onEdit, onSaveFiche,
 }) {
   const list0 = useMemo(() => rawList.map(enrich), [rawList]);
@@ -202,6 +206,7 @@ export default function CatalogueView({
   if (detailYacht) {
     return (
       <DetailPage y={detailYacht} regLabel={regLabel} subLabel={subLabel} onBack={() => setDetailId(null)}
+        regionLabels={regionLabels} subRegionsByRegion={subRegionsByRegion}
         onEdit={onEdit} onToggleVisible={onToggleVisible} onSaveFiche={onSaveFiche} />
     );
   }
@@ -464,7 +469,7 @@ function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onTogg
 }
 
 // ── Fiche detail ──
-function DetailPage({ y, regLabel, subLabel, onBack, onEdit, onToggleVisible, onSaveFiche }) {
+function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegion = {}, onBack, onEdit, onToggleVisible, onSaveFiche }) {
   const [info, setInfo] = useState(null);
   const [hero, setHero] = useState(0);
   const [open, setOpen] = useState({ desc: false, spec: true });
@@ -480,6 +485,10 @@ function DetailPage({ y, regLabel, subLabel, onBack, onEdit, onToggleVisible, on
   });
   const [mails, setMails] = useState(() => ({ ...(y.admin_extra?.mails || {}) }));
   const [ca, setCa] = useState(() => ({ ...(y.admin_extra?.ca || {}) }));
+  // Regions / sous-regions du bateau (liste unique, la meme que la fenetre « Modifier »)
+  // et handicaps : modifiables depuis les cases deployees Only for You / Accessible.
+  const [regs, setRegs] = useState(() => ({ regions: [...(y.regions || [])], sub_regions: [...(y.sub_regions || [])] }));
+  const [handis, setHandis] = useState(() => [...(y.handicaps || [])]);
   const [catsOpen, setCatsOpen] = useState(true);
   const [caOpen, setCaOpen] = useState(false);
   const [dp, setDp] = useState(null); // { key, left, top }
@@ -516,6 +525,9 @@ function DetailPage({ y, regLabel, subLabel, onBack, onEdit, onToggleVisible, on
       pets_allowed: !!catOn.pets,
       groups_allowed: !!catOn.group,
       admin_extra: { mails, ca },
+      regions: regs.regions,
+      sub_regions: regs.sub_regions,
+      handicaps: handis,
     });
     setSaving(false);
     setDirty(false);
@@ -598,8 +610,9 @@ function DetailPage({ y, regLabel, subLabel, onBack, onEdit, onToggleVisible, on
         </div>
         <div className="ab">
           <div className="catgrid">
-            {ADMIN_CATEGORIES.map((c) => (
-              <label key={c.key} className={`cat ${catOn[c.key] ? 'on' : ''}`}>
+            {ADMIN_CATEGORIES.filter((c) => !SUB_OF[c.key]).map((c) => (
+              <Fragment key={c.key}>
+              <label className={`cat ${catOn[c.key] ? 'on' : ''}`}>
                 <input type="checkbox" checked={!!catOn[c.key]} onChange={(e) => { setCatOn({ ...catOn, [c.key]: e.target.checked }); setDirty(true); }} />
                 <span className="ico">{c.icon}</span>
                 <span className="lb">{c.label}<small>{ROUTE_OF(c)}</small></span>
@@ -614,6 +627,92 @@ function DetailPage({ y, regLabel, subLabel, onBack, onEdit, onToggleVisible, on
                   </span>
                 )}
               </label>
+              {/* Only for You / Accessible : case deployee (sous-categories + regions), client 2026-11-01 */}
+              {catOn[c.key] && (c.key === 'only-for-you' || c.key === 'accessible') && (
+                <div className="catx">
+                  {c.key === 'only-for-you' && (
+                    <div className="catx-b">
+                      <div className="catx-t">Sous-catégories</div>
+                      <div className="catx-g">
+                        {ADMIN_CATEGORIES.filter((s) => SUB_OF[s.key] === 'only-for-you').map((s) => (
+                          <label key={s.key} className={`chk ${catOn[s.key] ? 'on' : ''}`}>
+                            <input type="checkbox" checked={!!catOn[s.key]} onChange={(e) => { setCatOn({ ...catOn, [s.key]: e.target.checked }); setDirty(true); }} />
+                            {s.icon ? `${s.icon} ` : ''}{s.label}
+                            {s.env && (
+                              <span className="date" onClick={(e) => {
+                                e.preventDefault(); e.stopPropagation();
+                                const r = e.currentTarget.getBoundingClientRect();
+                                setDp({ key: s.key, left: r.left, top: r.bottom + 6 });
+                              }}>{ENV} 📅 {mails[s.key] || '—'}</span>
+                            )}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {c.key === 'accessible' && (
+                    <div className="catx-b">
+                      <div className="catx-t">Sous-catégories — handicaps accommodés</div>
+                      {HANDICAPS_BY_CAT.map((sec) => (
+                        <div key={sec.id} className="catx-sec">
+                          <div className="catx-st">{sec.label}</div>
+                          <div className="catx-g">
+                            {sec.items.map((h) => {
+                              const on = handis.includes(h.id);
+                              return (
+                                <label key={h.id} className={`chk ${on ? 'on' : ''}`}>
+                                  <input type="checkbox" checked={on} onChange={() => { setHandis(on ? handis.filter((x) => x !== h.id) : [...handis, h.id]); setDirty(true); }} />
+                                  {h.type}
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="catx-b">
+                    <div className="catx-t">Régions et sous-régions du bateau</div>
+                    <div className="catx-g">
+                      {Object.entries(regionLabels).map(([rid, rl]) => {
+                        const on = regs.regions.includes(rid);
+                        const subs = subRegionsByRegion[rid] || [];
+                        return (
+                          <div key={rid} className={on && subs.length ? 'catx-full' : ''}>
+                            <label className={`chk ${on ? 'on' : ''}`}>
+                              <input type="checkbox" checked={on} onChange={() => {
+                                // Region decochee -> ses sous-regions aussi (comme la fenetre « Modifier »).
+                                setRegs(on
+                                  ? { regions: regs.regions.filter((r) => r !== rid), sub_regions: regs.sub_regions.filter((sr) => !subs.includes(sr)) }
+                                  : { ...regs, regions: [...regs.regions, rid] });
+                                setDirty(true);
+                              }} />
+                              {rl}
+                            </label>
+                            {on && subs.length > 0 && (
+                              <div className="catx-g catx-subs">
+                                {subs.map((sid) => {
+                                  const son = regs.sub_regions.includes(sid);
+                                  return (
+                                    <label key={sid} className={`chk ${son ? 'on' : ''}`}>
+                                      <input type="checkbox" checked={son} onChange={() => {
+                                        setRegs({ ...regs, sub_regions: son ? regs.sub_regions.filter((x) => x !== sid) : [...regs.sub_regions, sid] });
+                                        setDirty(true);
+                                      }} />
+                                      {subLabel(sid)}
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+              </Fragment>
             ))}
           </div>
           <div className="note">Case cochée = ajout automatique à la section. ✉ + 📅 = date du dernier envoi (clic, aucune saisie). 👻 présente sans section.</div>
