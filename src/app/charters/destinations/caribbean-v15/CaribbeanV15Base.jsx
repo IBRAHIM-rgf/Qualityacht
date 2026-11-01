@@ -565,6 +565,25 @@ function BurntLine() {
 }
 
 // ── Section fond ───────────────────────────────────────────────────────────────
+/** Grille des 8 cases « Caribbean Islands » seule (parcours Group, client 2026-11-01) :
+ *  meme rendu que dans la page, chaque case ouvre `${hrefBase}/<sous-region>`. */
+export function CaribbeanIslandsGrid({ hrefBase }) {
+  const cards = caribbeanIslands.map((c) => ({ ...c, href: caribbeanCaseHref(hrefBase, c.name) || c.href }));
+  return (
+    <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg="/images/services-bg.png">
+      <div className="max-w-7xl mx-auto">
+        <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
+          {cards.slice(0, 4).map((island, i) => <DestCard key={i} index={i} {...island} />)}
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
+          {cards.slice(4, 8).map((island, i) => <DestCard key={i} index={4 + i} {...island} />)}
+        </div>
+      </div>
+    </CloudSection>
+  );
+}
+
 export function CloudSection({ children, className = '', bg = '/images/services-bg.png', gray = false, id }) {
   return (
     <div id={id} className={`relative ${className}`}>
