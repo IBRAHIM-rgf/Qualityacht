@@ -1,8 +1,12 @@
+import { seo } from '@/lib/seoMeta';
 import Image from "next/image";
 import Link from "next/link";
 import { destinations } from "../destinationsData";
 import SportsHeroTriptych from "./SportsHeroTriptych";
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/charters/sports');
 // ItemsGrid rend toujours son propre <h1>. Comme le hero triptyque porte deja le
 // H1 « Sports Yacht Charter », le brancher ici en aurait produit deux — or le
 // brief en exige un seul. ItemsGrid etant partage par onze routes, il n'est pas
