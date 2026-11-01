@@ -3,11 +3,13 @@
 // (/only-for-you/<type>, ?type=<slug> pre-selectionne le filtre « Boat Class »).
 // Logique commune a toutes les destinations : ../OnlyForYouRegionYachts.
 
+import { seo } from '@/lib/seoMeta';
 import OnlyForYouRegionYachts from '../OnlyForYouRegionYachts';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
+  ...seo('/only-for-you/caribbean'),
   title: 'Only for You — The Caribbean | Qualityacht',
 };
 
