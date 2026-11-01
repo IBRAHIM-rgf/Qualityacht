@@ -330,7 +330,7 @@
 .qa-admin .catx-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:5px 14px}
 .qa-admin .catx-full{grid-column:1/-1}
 .qa-admin .catx-subs{margin:5px 0 4px 24px}
-.qa-admin .catx .chk{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);cursor:pointer}
-.qa-admin .catx .chk.on{color:var(--blue);font-weight:600}
-.qa-admin .catx .chk input{accent-color:var(--blue);width:14px;height:14px;flex:none}
+.qa-admin .catx .chk,.qa-admin .regframe .chk{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);cursor:pointer}
+.qa-admin .catx .chk.on,.qa-admin .regframe .chk.on{color:var(--blue);font-weight:600}
+.qa-admin .catx .chk input,.qa-admin .regframe .chk input{accent-color:var(--blue);width:14px;height:14px;flex:none}
 .qa-admin .catx .chk .date{font-size:11px;color:var(--muted2);font-weight:400;cursor:pointer}

@@ -98,14 +98,18 @@ const SUB_REGIONS_BY_REGION = {
 // (clés préfixées 'only-for-you/...'). Les clés sont stockées à plat dans categories[].
 const CHARTER_CATEGORIES = [
   // Liste definitive (client 2026-11-01), voir lib/adminCategories.js. Pets et Group =
-  // cases « pets_allowed » / « groups_allowed » de la fiche. Retirees : Catamaran,
-  // Classic Sailing Yacht, Trimaran, Traditional Sailboat.
+  // cases « pets_allowed » / « groups_allowed » de la fiche. Sous-categories Only for You
+  // toutes remises (client 2026-11-01).
   { id: 'only-for-couple', label: 'Only for Couple' },
   {
     id: 'only-for-you', label: 'Only for You',
     subs: [
-      { id: 'only-for-you/sport-classic', label: 'Sport Classic Yacht' },
-      { id: 'only-for-you/regatta',       label: 'Sailboat Regatta' },
+      { id: 'only-for-you/classic-sailing-yacht', label: 'Classic Sailing Yacht' },
+      { id: 'only-for-you/catamaran',             label: 'Catamaran' },
+      { id: 'only-for-you/trimaran',              label: 'Trimaran' },
+      { id: 'only-for-you/sport-classic',         label: 'Sport Classic Yacht' },
+      { id: 'only-for-you/traditional',           label: 'Traditional Sailboat' },
+      { id: 'only-for-you/regatta',               label: 'Sailboat Regatta' },
     ],
   },
   { id: 'last-minute',  label: 'Last Minute Charter' },
