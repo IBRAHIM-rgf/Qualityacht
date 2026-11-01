@@ -5,12 +5,16 @@
 // Les props servent au parcours Day Charter (/charters/day-charter/bahamas),
 // comme pour les Caraibes ; les defauts laissent cette page inchangee.
 
+import { seo } from '@/lib/seoMeta';
 import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
 import { BahamasIslandsGrid, BahamasDestinationsByRegion, BahamasCtaAndFaq } from './BahamasRegions';
 import BahamasPopularDestinations from './BahamasPopularDestinations';
 import BahamasEclat from './BahamasEclat';
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/charters/destinations/bahamas');
 const HERO = '/media/client/lydie/2026-09-27/bahamas-hero';
 
 export default function BahamasRoutePage({
