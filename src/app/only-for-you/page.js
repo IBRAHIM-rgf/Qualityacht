@@ -1,7 +1,11 @@
+import { seo } from '@/lib/seoMeta';
 import Image from "next/image";
 import Link from "next/link";
 import TypewriterIntro from "./TypewriterIntro";
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/only-for-you');
 // Cards voiliers (cliquables → pages rentals).
 const sailingRentalItems = [
   { title: "Classic Sailing Yacht Charter", image: "/images/sailing/classique4.jpg",          href: "/only-for-you/classic-sailing-yacht" },
