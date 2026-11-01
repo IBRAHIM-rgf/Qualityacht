@@ -1,8 +1,12 @@
 // src/app/yachts/page.js
 
+import { seo } from '@/lib/seoMeta';
 import YachtPageClient from './YachtPageClient';
 import { fetchVisibleYachts } from '@/lib/yachts';
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/yachts');
 export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }) {
