@@ -50,6 +50,9 @@ const trajanBold = localFont({
 });
 
 export const metadata = {
+  // SEO etape 1 (client 2026-11-01) : adresse principale du site, base de toutes les URL
+  // de metadonnees (canonical, Open Graph, images).
+  metadataBase: new URL("https://www.qualityacht.ch"),
   title: "Qualityacht - Luxury Yacht Charters",
   keywords: "yacht, luxury, charter, sailing, adventure, travel, bespoke services, yacht management, yacht sales",
   authors: [{ name: "Qualityacht" }],
@@ -58,7 +61,7 @@ export const metadata = {
   openGraph: {
     title: "Qualityacht - Luxury Yacht Charters",
     description: "Explore the world of luxury yacht charters with Qualityacht. Experience bespoke services, adrenaline, elegance, and discovery.",
-    url: "https://mamzellehazel.vercel.app",
+    url: "./",
     siteName: "Qualityacht",
     images: [
       {
@@ -97,12 +100,10 @@ export const metadata = {
   manifest: "/manifest.json",
   category: "Travel & Leisure", 
   description: "Explore the world of luxury yacht charters with Qualityacht. Experience bespoke services, adrenaline, elegance, and discovery.",
+  // Canonical = adresse de la page elle-meme sur qualityacht.ch (avant : ancienne adresse
+  // Vercel pour toutes les pages). Liens /en et /fr retires : ces pages n'existent pas.
   alternates: {
-    canonical: "https://mamzellehazel.vercel.app",
-    languages: {
-      "en-US": "https://mamzellehazel.vercel.app/en",
-      "fr-FR": "https://mamzellehazel.vercel.app/fr",
-    },
+    canonical: "./",
   },
   verification: {
     google: "google-site-verification-code",
