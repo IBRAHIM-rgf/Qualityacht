@@ -2,8 +2,12 @@
 // Page Bahamas du parcours Day Charter : rendu identique a
 // /charters/destinations/bahamas, avec « Day Charter » au-dessus du titre et le
 // CTA « Create Your Day at Sea » (?day=1), comme /charters/day-charter/caribbean.
+import { seo } from '@/lib/seoMeta';
 import BahamasRoutePage from '../../destinations/bahamas/page';
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/charters/day-charter/bahamas');
 export default function DayCharterBahamasPage() {
   return (
     <BahamasRoutePage
