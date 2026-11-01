@@ -11,6 +11,7 @@
 
 import HeroVideo from './HeroVideo';
 import GroupGallery from './GroupGallery';
+import { CaribbeanIslandsGrid } from '../../destinations/caribbean-v15/CaribbeanV15Base';
 
 export const metadata = {
   title: 'Group Yacht Charters in the Caribbean | Qualityacht',
@@ -69,6 +70,9 @@ export default function GroupCaribbeanPage() {
 
       {/* ══ COMPOSITION EDITORIALE ══ */}
       <GroupGallery />
+
+      {/* ══ DESTINATIONS (client 2026-11-01) : 8 cases -> bateaux coches Group de chaque sous-region ══ */}
+      <CaribbeanIslandsGrid hrefBase="/charters/group/carribbean" />
 
       {/* ══ CE QUE NOUS ORGANISONS ══ */}
       <section className="px-6 md:px-14 pb-20 md:pb-28">
