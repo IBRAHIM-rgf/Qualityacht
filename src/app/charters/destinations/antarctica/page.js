@@ -4,6 +4,7 @@
 // ajoutees quand le client aura fourni leur contenu.
 // (Republie 2026-10-10 : le deploiement de la video avait fini apres celui de la page.)
 
+import { seo } from '@/lib/seoMeta';
 import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
 import AntarcticaRegions from './AntarcticaRegions';
@@ -11,6 +12,7 @@ import AntarcticaRegions from './AntarcticaRegions';
 const HERO = '/media/client/2026-10-10/antarctica-hero';
 
 export const metadata = {
+  ...seo('/charters/destinations/antarctica'),
   title: 'Antarctica | Qualityacht',
 };
 
