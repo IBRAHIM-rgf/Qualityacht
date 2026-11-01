@@ -3,11 +3,15 @@
 // version Caraïbes (client 2026-10-02) : yachts selectionnes pour les Bahamas.
 // Réutilise le même composant que "Explore Yacht" (caribbean-v15), filtré via ?handicap=<id>.
 
+import { seo } from '@/lib/seoMeta';
 import ExploreYachtClient from '../../../destinations/caribbean-v15/exploreyacht/ExploreYachtClient';
 import { fetchVisibleYachtsForSubRegion } from '@/lib/yachts';
 import { getYachtSelections } from '@/lib/db';
 import { parseHandicaps, getHandicapById } from '@/lib/handicaps';
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/charters/accessible/bahamas/yacht');
 export const dynamic = 'force-dynamic';
 
 // Filtre destination : pas de sous-regions Bahamas dans ce filtre.
