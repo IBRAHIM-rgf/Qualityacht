@@ -1,6 +1,10 @@
+import { seo } from '@/lib/seoMeta';
 import ItemsGrid from "../../components/ItemsGrid";
 import { destinations } from "../destinationsData";
 
+
+// Titre et description Google (SEO etape 3, client 2026-11-01).
+export const metadata = seo('/charters/last-minute');
 // "Caraibes en premier" : seule region avec une page Last-Minute dediee pour l'instant
 // (cf. meme pattern que /charters/accessible) ; ajouter les autres ici au fur et a
 // mesure (cle = titre exact dans destinationsData).
