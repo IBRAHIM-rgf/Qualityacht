@@ -1,10 +1,12 @@
 // /charters/sports/bahamas/fleet — bouton « Explore the Bahamas Fleet » de /charters/sports/bahamas
 // (client 2026-10-04) : uniquement les bateaux coches « Sport Yacht Charter » + Bahamas dans l'admin.
+import { seo } from '@/lib/seoMeta';
 import { CategoryFleetPage } from '../../../_shared/categoryCasePages';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
+  ...seo('/charters/sports/bahamas/fleet'),
   title: 'Bahamas Sports Yacht Charters — Fleet | Qualityacht',
 };
 
