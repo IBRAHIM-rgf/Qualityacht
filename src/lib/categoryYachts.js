@@ -2,7 +2,8 @@
 // sous-region (client 2026-10-04) : pages ouvertes par les 8 cases des pages Day Charter,
 // Last Minute, Only Couple (Caraibes / Bahamas) et flottes Sports.
 // Bateau retenu : visible + region cochee + sous-region cochee (si demandee)
-// + categorie cochee (si demandee) + case Day Charter cochee (si dayCharter).
+// + categorie cochee (si demandee) + case Day Charter cochee (si dayCharter)
+// + case Group cochee (si groups).
 
 import { fetchVisibleYachts, selectionRegions, selectionSubRegions } from '@/lib/yachts';
 import { getYachtSelections } from '@/lib/db';
@@ -13,7 +14,7 @@ function parseList(raw) {
   return [];
 }
 
-export async function getCategoryYachts({ region, subRegion = null, category = null, dayCharter = false }) {
+export async function getCategoryYachts({ region, subRegion = null, category = null, dayCharter = false, groups = false }) {
   try {
     const selections = await getYachtSelections();
     const ids = new Set(
@@ -22,6 +23,8 @@ export async function getCategoryYachts({ region, subRegion = null, category = n
           if (!s.is_visible || !selectionRegions(s).includes(region)) return false;
           if (subRegion && !selectionSubRegions(s).includes(subRegion)) return false;
           if (category && !parseList(s.categories).includes(category)) return false;
+          // Parcours Group (client 2026-11-01) : case « Group » de l'admin (colonne groups_allowed).
+          if (groups && !s.groups_allowed) return false;
           return true;
         })
         .map((s) => s.yacht_id)
