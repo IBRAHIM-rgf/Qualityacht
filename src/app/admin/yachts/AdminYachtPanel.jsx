@@ -17,6 +17,7 @@ import { normalizeDayCharter } from '@/lib/customPricing';
 import { normalizeCharterPrices, hasAnyPrice } from '@/lib/charterPrices';
 import CharterPricesEditor, { pricesToForm } from './CharterPricesEditor';
 import CatalogueView from './CatalogueView';
+import { cleanCategories, normalizeAdminExtra } from '@/lib/adminCategories';
 import { normalizeCharterModel } from '@/lib/charterModel';
 import CharterModelEditor from './CharterModelEditor';
 import { OVERRIDE_TEXT_FIELDS, normalizeOverrides, mergeSourceAndOverrides, diffOverrides, isSupportedImage } from '@/lib/yachtOverrides';
@@ -96,24 +97,25 @@ const SUB_REGIONS_BY_REGION = {
 // Un yacht peut appartenir à plusieurs catégories. 'Only for You' a des sous-catégories
 // (clés préfixées 'only-for-you/...'). Les clés sont stockées à plat dans categories[].
 const CHARTER_CATEGORIES = [
+  // Liste definitive (client 2026-11-01), voir lib/adminCategories.js. Pets et Group =
+  // cases « pets_allowed » / « groups_allowed » de la fiche. Retirees : Catamaran,
+  // Classic Sailing Yacht, Trimaran, Traditional Sailboat.
   { id: 'only-for-couple', label: 'Only for Couple' },
   {
     id: 'only-for-you', label: 'Only for You',
     subs: [
-      { id: 'only-for-you/classic-sailing-yacht', label: 'Classic Sailing Yacht' },
-      { id: 'only-for-you/catamaran',             label: 'Catamaran' },
-      { id: 'only-for-you/trimaran',              label: 'Trimaran' },
-      { id: 'only-for-you/sport-classic',         label: 'Sport Classic Yacht' },
-      { id: 'only-for-you/traditional',           label: 'Traditional Sailboat' },
-      { id: 'only-for-you/regatta',               label: 'Sailboat Regatta' },
+      { id: 'only-for-you/sport-classic', label: 'Sport Classic Yacht' },
+      { id: 'only-for-you/regatta',       label: 'Sailboat Regatta' },
     ],
   },
   { id: 'last-minute',  label: 'Last Minute Charter' },
   { id: 'accessible',   label: 'Accessible Yacht Charter' },
   // Halal (client 2026-10-04) : listes « Halal-Friendly Yachts » des pages Halal.
-  { id: 'halal',        label: 'Halal Charter' },
+  { id: 'halal',        label: 'Halal' },
+  { id: 'fishing',      label: 'Fishing' },
   // Sport (client 2026-10-04) : flottes « Explore the ... Fleet » des pages Sports.
-  { id: 'sport',        label: 'Sport Yacht Charter' },
+  { id: 'sport',        label: 'Sport Yacht' },
+  { id: 'ghost',        label: 'Ghost' },
 ];
 
 // Map clé → libellé lisible (sections + sous-catégories).
@@ -179,7 +181,9 @@ function adaptYacht(s) {
     custom_title: s.custom_title || '',
     custom_price: s.custom_price || '',
     custom_description: s.custom_description || '',
-    categories: parseCategories(s.categories),
+    categories: cleanCategories(parseCategories(s.categories)),
+    // Suivi des envois + contact central agent (admin uniquement, client 2026-11-01).
+    admin_extra: normalizeAdminExtra(s.admin_extra),
     handicaps: parseHandicaps(s.handicaps),
     pets_allowed: s.pets_allowed,
     groups_allowed: s.groups_allowed,
@@ -1313,15 +1317,15 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
     } catch (e) { console.error(e); }
   };
 
-  // Fiche detail : enregistrement des tarifs (meme route que la modale).
-  const onSavePricing = async (id, custom_pricing) => {
+  // Fiche detail : enregistrement (tarifs, categories, suivi des envois, contact CA).
+  const onSaveFiche = async (id, patch) => {
     try {
       await fetch('/api/admin/yachts', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'enrich', yacht_id: id, custom_pricing }),
+        body: JSON.stringify({ action: 'enrich', yacht_id: id, ...patch }),
       });
-      setRawYachts(prev => prev.map(s => s.yacht_id === id ? { ...s, custom_pricing } : s));
+      setRawYachts(prev => prev.map(s => s.yacht_id === id ? { ...s, ...patch } : s));
     } catch (e) { console.error(e); }
   };
 
@@ -1379,7 +1383,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
           stateFilter={stateFilter} setStateFilter={setStateFilter}
           regionLabels={REGION_LABELS} subRegionLabels={SUB_REGION_LABELS}
           onToggleVisible={onToggleVisible} onToggleFeatured={onToggleFeatured} onDelete={onDelete}
-          onEdit={(y) => setEditingYacht(y)} onSavePricing={onSavePricing} />
+          onEdit={(y) => setEditingYacht(y)} onSaveFiche={onSaveFiche} />
       )}
 
       {editingYacht && <EditModal yacht={editingYacht} onClose={() => setEditingYacht(null)} onSave={onSaveEdit} />}

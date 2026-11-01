@@ -11,6 +11,56 @@ import { getAnkorImageUrl } from '@/lib/utils';
 import { normalizeCharterPrices, formatPriceAmount, hasAnyPrice } from '@/lib/charterPrices';
 import { mergeSourceAndOverrides } from '@/lib/yachtOverrides';
 import CharterPricesEditor, { pricesToForm } from './CharterPricesEditor';
+import { ADMIN_CATEGORIES, ICON_COLUMNS, isCategoryOn } from '@/lib/adminCategories';
+
+// Icones d'en-tete de la table admin (client 2026-11-01) : oreiller vert olive = Sleeps,
+// porte claire = Cabins. Page d'administration uniquement.
+const ICO_PILLOW = (
+  <svg width="17" height="17" viewBox="0 0 24 24" aria-label="Sleeps"><rect x="3" y="6" width="18" height="12" rx="5.5" fill="#6b8e23" stroke="#556b2f" strokeWidth="1.5" /><path d="M5 8.5 Q12 11.5 19 8.5" stroke="#a9c25d" strokeWidth="1.5" fill="none" /></svg>
+);
+const ICO_DOOR = (
+  <svg width="17" height="17" viewBox="0 0 24 24" aria-label="Cabins"><rect x="6" y="2.5" width="12" height="19" rx="1.5" fill="#e8d9ae" stroke="#a08c5a" strokeWidth="1.5" /><rect x="4" y="2.5" width="16" height="19" rx="1.5" fill="none" stroke="#a08c5a" strokeWidth="1.5" /><circle cx="14.8" cy="12" r="1" fill="#a08c5a" /></svg>
+);
+const ENV = (
+  <svg className="env" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 7l10 6L22 7" /></svg>
+);
+
+// Section du site ouverte par chaque case (texte d'aide sous le libelle).
+const ROUTE_OF = (c) => (c.noSection ? '— (aucune section, icône présente)' : c.label);
+
+// Date-picker « clic uniquement » (aucune saisie clavier), comme le calque.
+const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+function DatePicker({ at, onPick, onClear, onClose }) {
+  const now = new Date();
+  const [y, setY] = useState(now.getFullYear());
+  const [m, setM] = useState(now.getMonth());
+  useEffect(() => {
+    const h = (e) => { if (!e.target.closest('.dp') && !e.target.closest('.date')) onClose(); };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
+  }, [onClose]);
+  const first = new Date(y, m, 1).getDay();
+  const dim = new Date(y, m + 1, 0).getDate();
+  const prev = () => { if (m === 0) { setM(11); setY(y - 1); } else setM(m - 1); };
+  const next = () => { if (m === 11) { setM(0); setY(y + 1); } else setM(m + 1); };
+  return (
+    <div className="dp fixed" style={{ left: Math.max(10, Math.min(at.left, window.innerWidth - 270)), top: at.top }}>
+      <div className="dp-top"><button type="button" onClick={prev}>‹</button><span className="lbl">{MOIS[m]} {y}</span><button type="button" onClick={next}>›</button></div>
+      <div className="dp-grid">
+        {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((d, i) => <div key={i} className="dp-dow">{d}</div>)}
+        {Array.from({ length: first }, (_, i) => <div key={`e${i}`} />)}
+        {Array.from({ length: dim }, (_, i) => i + 1).map((d) => {
+          const isT = now.getFullYear() === y && now.getMonth() === m && now.getDate() === d;
+          return <div key={d} className={`dp-d ${isT ? 'today' : ''}`} onClick={() => onPick(`${String(d).padStart(2, '0')}/${String(m + 1).padStart(2, '0')}/${y}`)}>{d}</div>;
+        })}
+      </div>
+      <div className="dp-foot">
+        <button type="button" onClick={() => { setY(now.getFullYear()); setM(now.getMonth()); }}>Today</button>
+        <button type="button" onClick={onClear}>Effacer</button>
+      </div>
+    </div>
+  );
+}
 
 const num = (v) => {
   const n = parseFloat(String(v ?? '').replace(',', '.'));
@@ -54,7 +104,7 @@ const EMPTY_ADV = { lmin: '', lmax: '', cmin: '', cmax: '', bmin: '', bmax: '', 
 
 export default function CatalogueView({
   yachts: rawList, pubOnly, stateFilter, setStateFilter, regionLabels, subRegionLabels,
-  onToggleVisible, onToggleFeatured, onDelete, onEdit, onSavePricing,
+  onToggleVisible, onToggleFeatured, onDelete, onEdit, onSaveFiche,
 }) {
   const list0 = useMemo(() => rawList.map(enrich), [rawList]);
 
@@ -152,7 +202,7 @@ export default function CatalogueView({
   if (detailYacht) {
     return (
       <DetailPage y={detailYacht} regLabel={regLabel} subLabel={subLabel} onBack={() => setDetailId(null)}
-        onEdit={onEdit} onToggleVisible={onToggleVisible} onSavePricing={onSavePricing} />
+        onEdit={onEdit} onToggleVisible={onToggleVisible} onSaveFiche={onSaveFiche} />
     );
   }
 
@@ -287,11 +337,13 @@ export default function CatalogueView({
             <thead>
               <tr>
                 <th style={{ width: 20 }} /><th>Yacht Name</th><th>Charter</th><th>Term Price</th><th>Day Price</th>
-                <th>Length</th><th>Sleeps</th><th>Cabins</th><th>Statut</th><th>Actions</th>
+                <th>Length</th><th className="fi">{ICO_PILLOW}</th><th className="fi">{ICO_DOOR}</th>
+                {ICON_COLUMNS.map((c) => <th key={c.key} className="fi" title={c.label} style={c.key === 'only-for-couple' ? { color: '#f27bb4' } : undefined}>{c.icon}</th>)}
+                <th>Statut</th><th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {sorted.length === 0 && (<tr><td colSpan={10} className="empty">Aucun yacht ne correspond aux filtres.</td></tr>)}
+              {sorted.length === 0 && (<tr><td colSpan={10 + ICON_COLUMNS.length} className="empty">Aucun yacht ne correspond aux filtres.</td></tr>)}
               {sorted.map((y) => (
                 <FragmentRow key={y.id} y={y} expanded={expanded === y.id}
                   onExpand={() => setExpanded(expanded === y.id ? null : y.id)}
@@ -370,6 +422,11 @@ function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onTogg
         <td>{lenTxt(y)}</td>
         <td>{y.sleeps ?? '—'}</td>
         <td>{y.cabinsN ?? '—'}</td>
+        {ICON_COLUMNS.map((c) => (
+          <td key={c.key} className="fc" title={y.admin_extra?.mails?.[c.key] ? `${c.label} — ${y.admin_extra.mails[c.key]}` : c.label}>
+            {isCategoryOn(y, c) ? <>{c.icon} {ENV}</> : ''}
+          </td>
+        ))}
         <td><span className={`pill ${y.is_visible ? 'pub' : 'stock'}`} onClick={() => onToggleVisible(y)}>{y.is_visible ? 'PUBLIÉ' : 'EN STOCK'}</span></td>
         <td>
           <button type="button" className={`ic star ${y.is_featured ? 'on' : ''}`} title="Featured" onClick={() => onToggleFeatured(y)}>★</button>
@@ -379,7 +436,7 @@ function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onTogg
       </tr>
       {expanded && (
         <tr className="expand">
-          <td colSpan={10}>
+          <td colSpan={10 + ICON_COLUMNS.length}>
             <div className="in">
               <div className="xgrid">
                 <div><div className="k">Région</div><div className="v">{y.regions.map(regLabel).join(', ') || '—'}</div></div>
@@ -387,6 +444,12 @@ function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onTogg
                 <div><div className="k">Build Year</div><div className="v">{y.year || '—'}</div></div>
                 <div><div className="k">Crew</div><div className="v">{y.crew || '—'}</div></div>
                 <div><div className="k">Builder</div><div className="v">{y.make || '—'}</div></div>
+                <div style={{ gridColumn: '1/-1', display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', paddingTop: 6, borderTop: '1px dashed var(--border-soft)' }}>
+                  <span style={{ fontSize: 10, color: 'var(--muted2)', textTransform: 'uppercase', letterSpacing: '.5px' }}>Suivi des envois</span>
+                  {ICON_COLUMNS.map((c) => (
+                    <span key={c.key} className="mailchip" title={c.label}>{c.icon} {ENV} {y.admin_extra?.mails?.[c.key] || '—'}</span>
+                  ))}
+                </div>
               </div>
               <div className="xact">
                 <button type="button" className="btn-sec blue" onClick={onOpen}>Fiche détail</button>
@@ -401,13 +464,25 @@ function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onTogg
 }
 
 // ── Fiche detail ──
-function DetailPage({ y, regLabel, subLabel, onBack, onEdit, onToggleVisible, onSavePricing }) {
+function DetailPage({ y, regLabel, subLabel, onBack, onEdit, onToggleVisible, onSaveFiche }) {
   const [info, setInfo] = useState(null);
   const [hero, setHero] = useState(0);
   const [open, setOpen] = useState({ desc: false, spec: true });
   const [prices, setPrices] = useState(() => pricesToForm(y.custom_pricing, y.day_charter));
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
+  // Categories charter (cases = ajout automatique a la section du site) + suivi des envois
+  // + contact central agent (interne). Client 2026-11-01.
+  const [catOn, setCatOn] = useState(() => {
+    const o = {};
+    for (const c of ADMIN_CATEGORIES) o[c.key] = isCategoryOn(y, c);
+    return o;
+  });
+  const [mails, setMails] = useState(() => ({ ...(y.admin_extra?.mails || {}) }));
+  const [ca, setCa] = useState(() => ({ ...(y.admin_extra?.ca || {}) }));
+  const [catsOpen, setCatsOpen] = useState(true);
+  const [caOpen, setCaOpen] = useState(false);
+  const [dp, setDp] = useState(null); // { key, left, top }
 
   useEffect(() => {
     let alive = true;
@@ -433,10 +508,19 @@ function DetailPage({ y, regLabel, subLabel, onBack, onEdit, onToggleVisible, on
   const imgs = (info?.images?.length ? info.images : (y.image ? [y.image] : [])).map((i) => getAnkorImageUrl(i, '1280w') || i);
   const save = async () => {
     setSaving(true);
-    await onSavePricing(y.id, { version: 2, types: prices });
+    const others = (y.categories || []).filter((k) => !ADMIN_CATEGORIES.some((c) => c.key === k));
+    const categories = [...others, ...ADMIN_CATEGORIES.filter((c) => c.kind === 'cat' && catOn[c.key]).map((c) => c.key)];
+    await onSaveFiche(y.id, {
+      custom_pricing: { version: 2, types: prices },
+      categories,
+      pets_allowed: !!catOn.pets,
+      groups_allowed: !!catOn.group,
+      admin_extra: { mails, ca },
+    });
     setSaving(false);
     setDirty(false);
   };
+  const nbOn = ADMIN_CATEGORIES.filter((c) => catOn[c.key]).length;
   const kv = (k, v) => (v ? <div className="kv" key={k}><span className="k">{k}</span><span className="v">{v}</span></div> : null);
   const i = info || {};
 
@@ -505,6 +589,54 @@ function DetailPage({ y, regLabel, subLabel, onBack, onEdit, onToggleVisible, on
       </div>
 
       <CharterPricesEditor value={prices} onChange={(v) => { setPrices(v); setDirty(true); }} />
+
+      {/* Categories Charter — case cochee = ajout automatique a la section du site */}
+      <div className={`acc ${catsOpen ? 'open' : ''}`}>
+        <div className="ah" onClick={() => setCatsOpen((o) => !o)}>
+          <span>🏷️ Categories Charter — site sections</span>
+          <span style={{ display: 'flex', gap: 10, alignItems: 'center' }}><span className="tagcount">{nbOn} cochée(s)</span><span className="fl">▼</span></span>
+        </div>
+        <div className="ab">
+          <div className="catgrid">
+            {ADMIN_CATEGORIES.map((c) => (
+              <label key={c.key} className={`cat ${catOn[c.key] ? 'on' : ''}`}>
+                <input type="checkbox" checked={!!catOn[c.key]} onChange={(e) => { setCatOn({ ...catOn, [c.key]: e.target.checked }); setDirty(true); }} />
+                <span className="ico">{c.icon}</span>
+                <span className="lb">{c.label}<small>{ROUTE_OF(c)}</small></span>
+                {c.env && (
+                  <span className="suivi">
+                    {ENV}
+                    <span className="date" onClick={(e) => {
+                      e.preventDefault(); e.stopPropagation();
+                      const r = e.currentTarget.getBoundingClientRect();
+                      setDp({ key: c.key, left: r.left, top: r.bottom + 6 });
+                    }}><span style={{ marginRight: 4 }}>📅</span>{mails[c.key] || '—'}</span>
+                  </span>
+                )}
+              </label>
+            ))}
+          </div>
+          <div className="note">Case cochée = ajout automatique à la section. ✉ + 📅 = date du dernier envoi (clic, aucune saisie). 👻 présente sans section.</div>
+        </div>
+      </div>
+      {dp && (
+        <DatePicker at={dp} onClose={() => setDp(null)}
+          onPick={(d) => { setMails({ ...mails, [dp.key]: d }); setDirty(true); setDp(null); }}
+          onClear={() => { const m = { ...mails }; delete m[dp.key]; setMails(m); setDirty(true); setDp(null); }} />
+      )}
+
+      {/* Contact du central agent — section repliee, sans titre, strictement interne */}
+      <div className={`acc ${caOpen ? 'open' : ''}`}>
+        <div className="ah" onClick={() => setCaOpen((o) => !o)}><span /><span className="fl">▼</span></div>
+        <div className="ab">
+          <div className="priv-note">⛔ Jamais publié pour les clients sur le site — interne uniquement.</div>
+          {[['name', '👤 Name'], ['company', '🏢 Company'], ['location', '📍 Location'], ['phone', '📞 Phone'], ['website', '🌐 Website']].map(([k, l]) => (
+            <div key={k} className="kv"><span className="k">{l}</span>
+              <input value={ca[k] || ''} onChange={(e) => { setCa({ ...ca, [k]: e.target.value }); setDirty(true); }} /></div>
+          ))}
+        </div>
+      </div>
+
       <div className="mfoot" style={{ justifyContent: 'flex-end' }}>
         <button type="button" className="btn-primary" disabled={saving || !dirty} style={!dirty ? { opacity: 0.5 } : undefined} onClick={save}>
           {saving ? 'Enregistrement…' : 'Enregistrer'}
