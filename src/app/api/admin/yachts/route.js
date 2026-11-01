@@ -163,6 +163,7 @@ export async function PATCH(request) {
   } = await import('@/lib/db');
     const { extractLightData, inferAnkorRegion } = await import('@/lib/yachtCache');
     const { serializeCharterPrices } = await import('@/lib/charterPrices');
+    const { cleanCategories, normalizeAdminExtra } = await import('@/lib/adminCategories');
     const { normalizeCharterModel } = await import('@/lib/charterModel');
     // Meme garantie que sur le POST : les mises a jour ecrivent aussi dans
     // `regions` / `sub_regions`.
@@ -220,6 +221,7 @@ export async function PATCH(request) {
           day_charter,
           charter_model,
           overrides,
+          admin_extra,
         } = data;
         if (!yacht_id) {
           return NextResponse.json({ error: 'yacht_id requis' }, { status: 400 });
@@ -229,7 +231,8 @@ export async function PATCH(request) {
           custom_description,
           custom_price,
           category,
-          categories,
+          // Liste definitive des categories (client 2026-11-01) : cles retirees effacees.
+          categories: Array.isArray(categories) ? cleanCategories(categories) : categories,
           handicaps,
           internal_notes,
           region,
@@ -248,6 +251,8 @@ export async function PATCH(request) {
           charter_model: charter_model && typeof charter_model === 'object' && !Array.isArray(charter_model) ? normalizeCharterModel(charter_model) : undefined,
           // Fiche bateau : champs modifies uniquement ({} = retour aux donnees d'origine), undefined = inchange.
           overrides: overrides && typeof overrides === 'object' && !Array.isArray(overrides) ? overrides : undefined,
+          // Suivi des envois + contact central agent (admin uniquement), undefined = inchange.
+          admin_extra: admin_extra && typeof admin_extra === 'object' && !Array.isArray(admin_extra) ? normalizeAdminExtra(admin_extra) : undefined,
         });
         return NextResponse.json({ success: true, selection: result });
       }
