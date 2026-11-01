@@ -176,7 +176,7 @@ function CharterPricesSection({ prices, initialTab }) {
   return (
     <div className="max-w-5xl mx-auto px-5 md:px-10 pb-12 md:pb-16">
       <div className="text-center mb-8">
-        <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Charter Prices</h2>
+        <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Regions and Rates</h2>
         <div className="relative w-32 h-6 mx-auto mt-3"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
       </div>
       {tabs.length > 1 && (
@@ -659,7 +659,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
                   {titleInfo && (
                     <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-[#acb0cd]/70 mt-1">{titleInfo}</p>
                   )}
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mt-2">Prices by guests</p>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-[#B03E00] mt-2">Rates by guests</p>
                 </div>
                 <div className="w-full">
                   <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 items-center">
@@ -710,7 +710,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
         return (
           <div className="max-w-5xl mx-auto px-5 md:px-10 pb-12 md:pb-16">
             <div className="text-center mb-8">
-              <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Charter Prices</h2>
+              <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Regions and Rates</h2>
               <div className="relative w-32 h-6 mx-auto mt-3"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
             </div>
             <div className="space-y-12">
