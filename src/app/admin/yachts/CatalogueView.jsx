@@ -486,6 +486,7 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
     return o;
   });
   const [mails, setMails] = useState(() => ({ ...(y.admin_extra?.mails || {}) }));
+  const [red, setRed] = useState(() => ({ ...(y.admin_extra?.red || {}) }));
   const [ca, setCa] = useState(() => ({ ...(y.admin_extra?.ca || {}) }));
   // Regions / sous-regions du bateau (liste unique, la meme que la fenetre « Modifier »)
   // et handicaps : modifiables depuis les cases deployees Only for You / Accessible.
@@ -527,7 +528,7 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
       categories,
       pets_allowed: !!catOn.pets,
       groups_allowed: !!catOn.group,
-      admin_extra: { mails, ca },
+      admin_extra: { mails, red, ca },
       regions: regs.regions,
       sub_regions: regs.sub_regions,
       handicaps: handis,
@@ -535,16 +536,29 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
     setSaving(false);
     setDirty(false);
   };
-  // Enveloppe = case a cocher a part (client 2026-11-01) : toujours visible, independante
-  // de la case de categorie ; cochee, elle affiche la date d'envoi (mails[key], '' = sans date).
-  const envTick = (key) => {
+  // Suivi des envois (client 2026-11-02) : cadre a part dans Categories Charter. Chaque
+  // icone ouvre deux enveloppes cochables et independantes : verte (+ date d'envoi,
+  // mails[key], '' = sans date) et rouge (red[key]).
+  const [openIco, setOpenIco] = useState({});
+  const greenTick = (key) => {
     const on = key in mails;
     return (
-      <span className={`envtick ${on ? 'on' : ''}`} title="Envoi" onClick={(e) => {
-        e.preventDefault(); e.stopPropagation();
+      <span className={`envtick green ${on ? 'on' : ''}`} title="Enveloppe verte" onClick={() => {
         const m = { ...mails };
         if (on) delete m[key]; else m[key] = '';
         setMails(m); setDirty(true);
+      }}>
+        <input type="checkbox" checked={on} readOnly tabIndex={-1} />{ENV}
+      </span>
+    );
+  };
+  const redTick = (key) => {
+    const on = !!red[key];
+    return (
+      <span className={`envtick red ${on ? 'on' : ''}`} title="Enveloppe rouge" onClick={() => {
+        const r = { ...red };
+        if (on) delete r[key]; else r[key] = true;
+        setRed(r); setDirty(true);
       }}>
         <input type="checkbox" checked={on} readOnly tabIndex={-1} />{ENV}
       </span>
@@ -556,18 +570,6 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
       <input type="checkbox" checked={!!catOn[c.key]} onChange={(e) => { setCatOn({ ...catOn, [c.key]: e.target.checked }); setDirty(true); }} />
       <span className="ico">{c.icon}</span>
       <span className="lb">{c.label}<small>{ROUTE_OF(c)}</small></span>
-      {c.env && (
-        <span className="suivi">
-          {envTick(c.key)}
-          {c.key in mails && (
-            <span className="date" onClick={(e) => {
-              e.preventDefault(); e.stopPropagation();
-              const r = e.currentTarget.getBoundingClientRect();
-              setDp({ key: c.key, left: r.left, top: r.bottom + 6 });
-            }}><span style={{ marginRight: 4 }}>📅</span>{mails[c.key] || '—'}</span>
-          )}
-        </span>
-      )}
     </label>
   );
   const nbOn = ADMIN_CATEGORIES.filter((c) => catOn[c.key]).length;
@@ -672,14 +674,6 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
                           <label key={s.key} className={`chk ${catOn[s.key] ? 'on' : ''}`}>
                             <input type="checkbox" checked={!!catOn[s.key]} onChange={(e) => { setCatOn({ ...catOn, [s.key]: e.target.checked }); setDirty(true); }} />
                             {s.icon ? `${s.icon} ` : ''}{s.label}
-                            {s.env && envTick(s.key)}
-                            {s.env && s.key in mails && (
-                              <span className="date" onClick={(e) => {
-                                e.preventDefault(); e.stopPropagation();
-                                const r = e.currentTarget.getBoundingClientRect();
-                                setDp({ key: s.key, left: r.left, top: r.bottom + 6 });
-                              }}>📅 {mails[s.key] || '—'}</span>
-                            )}
                           </label>
                         ))}
                       </div>
@@ -711,7 +705,38 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
               </Fragment>
             ))}
           </div>
-          <div className="note">Case cochée = ajout automatique à la section. ✉ + 📅 = date du dernier envoi (clic, aucune saisie). 👻 présente sans section.</div>
+          {/* Suivi des envois (client 2026-11-02) */}
+          <div className="envcard">
+            <div className="catx-t">✉ Suivi des envois</div>
+            <div className="envgrid">
+              {ICON_COLUMNS.map((c) => {
+                const open = !!openIco[c.key];
+                const marked = (c.key in mails) || !!red[c.key];
+                return (
+                  <div key={c.key} className={`envico ${open ? 'open' : ''} ${marked ? 'marked' : ''}`}>
+                    <button type="button" className="envico-b" title={c.label} onClick={() => setOpenIco({ ...openIco, [c.key]: !open })}>
+                      <span className="i">{c.icon}</span>
+                    </button>
+                    {open && (
+                      <div className="envico-p">
+                        <div className="envrow">
+                          {greenTick(c.key)}
+                          {c.key in mails && (
+                            <span className="date" onClick={(e) => {
+                              const r = e.currentTarget.getBoundingClientRect();
+                              setDp({ key: c.key, left: r.left, top: r.bottom + 6 });
+                            }}>📅 {mails[c.key] || '—'}</span>
+                          )}
+                        </div>
+                        <div className="envrow">{redTick(c.key)}</div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="note">Case cochée = ajout automatique à la section. ✉ Suivi des envois : clic sur une icône = enveloppe verte (+ 📅 date) et enveloppe rouge, cochables séparément. 👻 présente sans section.</div>
         </div>
       </div>
       {/* Last Minute Charter — cadre a part (client 2026-11-01) */}
