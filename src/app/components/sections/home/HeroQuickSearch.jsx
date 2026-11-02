@@ -20,6 +20,8 @@ const DESTINATIONS = [
   { value: 'caribbean', label: 'Caribbean' },
   // Bahamas (client 2026-10-06).
   { value: 'bahamas', label: 'Bahamas' },
+  // North America (client 2026-11-02).
+  { value: 'north-america', label: 'North America' },
 ];
 
 const GUESTS = [
