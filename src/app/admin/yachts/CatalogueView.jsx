@@ -588,11 +588,21 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
           <button type="button" className="btn-sec" onClick={() => onToggleVisible(y)}>{y.is_visible ? 'Publié sur le site' : 'Cacher'}</button>
         </div>
       </div>
-      <div className="hero" style={imgs[hero] ? { backgroundImage: `url("${imgs[hero]}")`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined} />
+      {/* Photos (client 2026-11-02) : photo entiere (sans recadrage) et toutes les photos en vignettes. */}
+      {imgs[hero] ? (
+        <div className="hero hero-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={imgs[hero]} alt={y.name} />
+        </div>
+      ) : <div className="hero" />}
       {imgs.length > 1 && (
-        <div className="thumbs">
-          {imgs.slice(0, 8).map((src, k) => (
-            <div key={k} onClick={() => setHero(k)} style={{ backgroundImage: `url("${src}")`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        <div className="thumbs thumbs-all">
+          <div className="thumbs-n">{hero + 1} / {imgs.length}</div>
+          {imgs.map((src, k) => (
+            <div key={k} className={k === hero ? 'on' : ''} onClick={() => setHero(k)}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt="" loading="lazy" />
+            </div>
           ))}
         </div>
       )}
