@@ -51,7 +51,7 @@ export function isCategoryOn(y, c) {
   return (y.categories || []).includes(c.key);
 }
 
-/** admin_extra normalise : { mails: { key: 'JJ/MM/AAAA' }, ca: { name, company, location, phone, website } }. */
+/** admin_extra normalise : { mails: { key: 'JJ/MM/AAAA' | '' }, red: { key: true }, ca: { name, company, location, phone, website } }. */
 export function normalizeAdminExtra(raw) {
   let v = raw;
   if (typeof v === 'string') { try { v = JSON.parse(v); } catch { v = null; } }
@@ -62,10 +62,15 @@ export function normalizeAdminExtra(raw) {
     // '' = enveloppe cochee sans date (client 2026-11-01).
     if (keys.has(k) && (d === '' || /^\d{2}\/\d{2}\/\d{4}$/.test(String(d)))) mails[k] = String(d);
   }
+  // Enveloppe rouge (client 2026-11-02) : red[key] = true.
+  const red = {};
+  for (const [k, on] of Object.entries(v.red || {})) {
+    if (keys.has(k) && on === true) red[k] = true;
+  }
   const ca = {};
   for (const f of ['name', 'company', 'location', 'phone', 'website']) {
     const s = String((v.ca || {})[f] || '').trim().slice(0, 200);
     if (s) ca[f] = s;
   }
-  return { mails, ca };
+  return { mails, red, ca };
 }
