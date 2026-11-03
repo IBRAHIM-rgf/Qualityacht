@@ -162,7 +162,7 @@ export async function PATCH(request) {
     ensureV3Schema,
   } = await import('@/lib/db');
     const { extractLightData, inferAnkorRegion } = await import('@/lib/yachtCache');
-    const { serializeCharterPrices } = await import('@/lib/charterPrices');
+    const { serializeCharterPrices, normalizeCharterPrices } = await import('@/lib/charterPrices');
     const { cleanCategories, normalizeAdminExtra } = await import('@/lib/adminCategories');
     const { normalizeCharterModel } = await import('@/lib/charterModel');
     // Meme garantie que sur le POST : les mises a jour ecrivent aussi dans
@@ -244,7 +244,10 @@ export async function PATCH(request) {
           water_toys,
           extra_info,
           // Fiches de prix par type de charter (client 2026-10-31) : objet complet, undefined = inchange.
-          custom_pricing: custom_pricing && typeof custom_pricing === 'object' && !Array.isArray(custom_pricing) ? serializeCharterPrices(custom_pricing) : undefined,
+          // Tableau = cartes de tarifs Ankor (pre-remplissage enregistre, client 2026-11-03).
+          custom_pricing: Array.isArray(custom_pricing)
+            ? serializeCharterPrices(normalizeCharterPrices(custom_pricing))
+            : (custom_pricing && typeof custom_pricing === 'object' ? serializeCharterPrices(custom_pricing) : undefined),
           // Day Charter : seule la case est stockee ici (les prix sont dans l'onglet Day).
           day_charter: day_charter && typeof day_charter === 'object' ? { enabled: day_charter.enabled === true } : undefined,
           // Modele tarifaire charter (client 2026-10-15) : objet normalise, undefined = inchange.
