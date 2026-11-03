@@ -97,6 +97,15 @@ const SUB_REGION_LABELS = {
   'turkey': 'Turkey',
   'egypt': 'Egypt',
   'east-tunisia': 'Tunisia (East Med)',
+  // Ocean Indien (client 2026-11-03) : 8 regions de la liste client.
+  'maldives': 'Maldives',
+  'seychelles': 'Seychelles',
+  'mascarene-islands': 'Mascarene Islands',
+  'madagascar': 'Madagascar',
+  'mozambique': 'Mozambique',
+  'tanzania-east-africa': 'Tanzania / East Africa',
+  'sri-lanka': 'Sri Lanka',
+  'arabian-sea-gulf-of-oman': 'Arabian Sea / Gulf of Oman',
 };
 
 const SUB_REGIONS_BY_REGION = {
@@ -105,6 +114,7 @@ const SUB_REGIONS_BY_REGION = {
   'north-america': ['east-coast-us', 'west-coast-us', 'canada', 'miami', 'mexico'],
   'west-mediterranean': ['french-riviera-monaco', 'south-of-france', 'corsica', 'sardinia', 'balearic-islands', 'spain-mainland', 'italian-riviera-liguria', 'tuscany', 'lazio', 'campania', 'amalfi-coast', 'sicily-islands', 'gibraltar', 'morocco', 'tunisia'],
   'east-mediterranean': ['black-sea', 'croatia', 'cyprus', 'italy-east-coast', 'greece', 'crete', 'malta', 'montenegro', 'turkey', 'egypt', 'east-tunisia'],
+  'indian-ocean': ['maldives', 'seychelles', 'mascarene-islands', 'madagascar', 'mozambique', 'tanzania-east-africa', 'sri-lanka', 'arabian-sea-gulf-of-oman'],
 };
 
 // Axe "Catégories charter" — indépendant des régions géo, multi-sélection.
