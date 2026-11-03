@@ -363,3 +363,11 @@
 .qa-admin .envtick.green input{accent-color:#3fae6a}
 .qa-admin .envtick.red .env{color:#d94848}
 .qa-admin .envtick.red input{accent-color:#d94848}
+
+/* Table admin (client 2026-11-03) : enveloppes sous l'emoji, statut vertical, vedette champagne */
+.qa-admin .fc-in{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:22px}
+.qa-admin .fc-env{display:flex;gap:3px}
+.qa-admin .fc-env .g .env{color:#3fae6a}
+.qa-admin .fc-env .r .env{color:#d94848}
+.qa-admin .pill.pill-v{writing-mode:vertical-rl;transform:rotate(180deg);padding:8px 3px;line-height:1;white-space:nowrap}
+.qa-admin .yname .champ{color:#F2DFB4}

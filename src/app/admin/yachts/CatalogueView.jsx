@@ -343,7 +343,7 @@ export default function CatalogueView({
           <table>
             <thead>
               <tr>
-                <th style={{ width: 20 }} /><th>Yacht Name</th><th>Charter</th><th>Term Price</th><th>Day Price</th>
+                <th style={{ width: 20 }} /><th>Yacht Name</th><th>Charter</th><th>Term Price</th>
                 <th>Length</th><th className="fi">{ICO_PILLOW}</th><th className="fi">{ICO_DOOR}</th>
                 {ICON_COLUMNS.map((c) => <th key={c.key} className="fi" title={c.label} style={c.key === 'only-for-couple' ? { color: '#f27bb4' } : undefined}>{c.icon}</th>)}
                 <th>Statut</th><th>Actions</th>
@@ -420,21 +420,31 @@ function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onTogg
         <td>
           <div className="yname" onClick={onOpen}>
             <div className="ph" style={{ backgroundImage: `url("${y.image}")`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-            {y.name}{y.is_featured && <span style={{ color: '#f5b942' }}>★</span>}
+            {/* Bateau en vedette : nom couleur champagne (client 2026-11-03). */}
+            <span className={y.is_featured ? 'champ' : undefined}>{y.name}</span>{y.is_featured && <span style={{ color: '#f5b942' }}>★</span>}
           </div>
         </td>
         <td className="muted" style={{ fontWeight: 700, letterSpacing: 1 }}>{chStr(y) || '—'}</td>
         <td>{priceTxt(y.term)}</td>
-        <td>{priceTxt(y.day)}</td>
         <td>{lenTxt(y)}</td>
         <td>{y.sleeps ?? '—'}</td>
         <td>{y.cabinsN ?? '—'}</td>
         {ICON_COLUMNS.map((c) => (
           <td key={c.key} className="fc" title={y.admin_extra?.mails?.[c.key] ? `${c.label} — ${y.admin_extra.mails[c.key]}` : c.label}>
-            {isCategoryOn(y, c) ? <>{c.icon} {ENV}</> : ''}
+            {/* Emoji si la categorie est cochee ; dessous, enveloppe verte / rouge seulement
+                si elle est cochee dans « Suivi des envois » (client 2026-11-03). */}
+            <div className="fc-in">
+              {isCategoryOn(y, c) ? <span className="fc-ico">{c.icon}</span> : null}
+              {(c.key in (y.admin_extra?.mails || {}) || y.admin_extra?.red?.[c.key]) && (
+                <span className="fc-env">
+                  {c.key in (y.admin_extra?.mails || {}) && <span className="g">{ENV}</span>}
+                  {y.admin_extra?.red?.[c.key] && <span className="r">{ENV}</span>}
+                </span>
+              )}
+            </div>
           </td>
         ))}
-        <td><span className={`pill ${y.is_visible ? 'pub' : 'stock'}`} onClick={() => onToggleVisible(y)}>{y.is_visible ? 'PUBLIÉ' : 'EN STOCK'}</span></td>
+        <td><span className={`pill pill-v ${y.is_visible ? 'pub' : 'stock'}`} onClick={() => onToggleVisible(y)}>{y.is_visible ? 'PUBLIÉ' : 'EN STOCK'}</span></td>
         <td>
           <button type="button" className={`ic star ${y.is_featured ? 'on' : ''}`} title="Featured" onClick={() => onToggleFeatured(y)}>★</button>
           <button type="button" className="ic" title="Modifier" onClick={() => onEdit(y)}>✏️</button>
@@ -443,7 +453,7 @@ function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onTogg
       </tr>
       {expanded && (
         <tr className="expand">
-          <td colSpan={10 + ICON_COLUMNS.length}>
+          <td colSpan={9 + ICON_COLUMNS.length}>
             <div className="in">
               <div className="xgrid">
                 <div><div className="k">Région</div><div className="v">{y.regions.map(regLabel).join(', ') || '—'}</div></div>
