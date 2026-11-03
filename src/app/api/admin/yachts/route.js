@@ -172,6 +172,30 @@ export async function PATCH(request) {
     const { action } = data;
 
     switch (action) {
+      // Corbeille (client 2026-11-03) : le bateau est cache et range dans la corbeille ;
+      // « restore » le remet avec sa visibilite d'avant.
+      case 'trash':
+      case 'restore': {
+        const { yacht_id } = data;
+        if (!yacht_id) return NextResponse.json({ error: 'yacht_id requis' }, { status: 400 });
+        const { getYachtSelectionById } = await import('@/lib/db');
+        const row = await getYachtSelectionById(yacht_id);
+        if (!row) return NextResponse.json({ error: 'Yacht introuvable' }, { status: 404 });
+        const prev = normalizeAdminExtra(row.admin_extra);
+        if (action === 'trash') {
+          const extra = normalizeAdminExtra({ ...prev, trash: { at: new Date().toISOString(), wasVisible: !!row.is_visible } });
+          await updateYachtVisibility(yacht_id, false);
+          await updateYachtEnrichedData(yacht_id, { admin_extra: extra });
+          return NextResponse.json({ success: true, admin_extra: extra, is_visible: false });
+        }
+        const wasVisible = !!prev.trash?.wasVisible;
+        const { trash, ...rest } = prev;
+        const extra = normalizeAdminExtra(rest);
+        await updateYachtEnrichedData(yacht_id, { admin_extra: extra });
+        if (wasVisible) await updateYachtVisibility(yacht_id, true);
+        return NextResponse.json({ success: true, admin_extra: extra, is_visible: wasVisible });
+      }
+
       case 'visibility': {
         const { yacht_id, is_visible } = data;
         if (!yacht_id) {
@@ -226,6 +250,22 @@ export async function PATCH(request) {
         if (!yacht_id) {
           return NextResponse.json({ error: 'yacht_id requis' }, { status: 400 });
         }
+        // admin_extra (client 2026-11-03) : fusion avec l'existant (corbeille conservee) et
+        // « saved_by » = couleur de la personne qui enregistre la fiche + date/heure serveur.
+        let mergedAdminExtra;
+        const { saved_by } = data;
+        if ((admin_extra && typeof admin_extra === 'object' && !Array.isArray(admin_extra)) || saved_by) {
+          const { getYachtSelectionById } = await import('@/lib/db');
+          const row = await getYachtSelectionById(yacht_id);
+          const prev = normalizeAdminExtra(row?.admin_extra);
+          const next = admin_extra && typeof admin_extra === 'object' && !Array.isArray(admin_extra) ? admin_extra : {};
+          mergedAdminExtra = normalizeAdminExtra({
+            ...prev,
+            ...next,
+            trash: prev.trash,
+            saved: saved_by ? { color: saved_by, at: new Date().toISOString() } : prev.saved,
+          });
+        }
         const result = await updateYachtEnrichedData(yacht_id, {
           custom_title,
           custom_description,
@@ -255,7 +295,7 @@ export async function PATCH(request) {
           // Fiche bateau : champs modifies uniquement ({} = retour aux donnees d'origine), undefined = inchange.
           overrides: overrides && typeof overrides === 'object' && !Array.isArray(overrides) ? overrides : undefined,
           // Suivi des envois + contact central agent (admin uniquement), undefined = inchange.
-          admin_extra: admin_extra && typeof admin_extra === 'object' && !Array.isArray(admin_extra) ? normalizeAdminExtra(admin_extra) : undefined,
+          admin_extra: mergedAdminExtra,
         });
         return NextResponse.json({ success: true, selection: result });
       }
