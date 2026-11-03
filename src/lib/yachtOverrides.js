@@ -275,18 +275,32 @@ export function ankorPricingToRateRows(pricing) {
     const unit = p?.pricing?.unit;
     const currency = p?.pricing?.currency;
     const total = Number(p?.pricing?.total);
-    if (!['WEEK', 'DAY'].includes(unit) || !SUPPORTED_CURRENCIES.includes(currency) || !(total > 0)) continue;
+    // APA / VAT (client 2026-11-03) : lus dans les lignes de prix Ankor. Une ligne APA ou
+    // VAT, ou une condition « APA / VAT excluded », = a payer en plus -> case cochee, et le
+    // prix de la carte est alors le Charter Fee seul (sans ces lignes).
+    const lines = Array.isArray(p?.pricing?.lineItems) ? p.pricing.lineItems : [];
+    const txt = (li) => `${li?.item || ''} ${li?.conditions || ''}`.toLowerCase();
+    const isApa = (li) => /(^|[^a-z])apa([^a-z]|$)|advance provisioning/.test(txt(li));
+    const isVat = (li) => /(^|[^a-z])(vat|tva)([^a-z]|$)/.test(txt(li));
+    const apaLine = lines.find((li) => isApa(li) && Number(li?.amount) > 0);
+    const vatLine = lines.find((li) => isVat(li) && Number(li?.amount) > 0);
+    const condTxt = [p?.pricing?.conditions, ...lines.map((li) => li?.conditions)].filter(Boolean).join(' ').toLowerCase();
+    const apa = !!apaLine || /apa[^.]*excl/.test(condTxt);
+    const vat = !!vatLine || /(vat|tva)[^.]*excl/.test(condTxt);
+    const fee = Number(p?.pricing?.charterFee);
+    const base = (apa || vat) && fee > 0 ? fee : total;
+    if (!['WEEK', 'DAY'].includes(unit) || !SUPPORTED_CURRENCIES.includes(currency) || !(base > 0)) continue;
     const name = String(p?.name || '').trim() || (unit === 'DAY' ? 'Day Charter' : 'Weekly Charter');
     rows.push({
       group: guessGroup(p),
       title: name,
       subtitle: '',
-      price: String(Math.round(total / 100)),
+      price: String(Math.round(base / 100)),
       currency,
       unit,
       zones: labelList(p?.inclusionZones).join(', '),
-      apa: false,
-      vat: false,
+      apa,
+      vat,
     });
   }
   return rows;
