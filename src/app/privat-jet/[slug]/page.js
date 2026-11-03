@@ -18,6 +18,8 @@ function parseAirport(str) {
 }
 
 const CATEGORY_LABEL = {
+  // Ocean Indien (client 2026-11-03) : « small jets » teste avant « all jets » (sous-chaine).
+  'small jets': 'Small jets',
   'large jets': 'Large jets',
   'all jets': 'All jets',
   'medium/large jets': 'Medium & large jets',
@@ -37,6 +39,7 @@ function categoryLabel(size) {
 }
 function categoryRank(label) {
   const l = label.toLowerCase();
+  if (l.includes('small jets')) return 4;
   if (l.includes('large jets') && !l.includes('medium')) return 0;
   if (l.includes('all jets')) return 1;
   if (l.includes('medium & large') || l.includes('medium/large')) return 2;
