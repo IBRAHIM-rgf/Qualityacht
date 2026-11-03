@@ -61,6 +61,20 @@ export const northAmericaJetGroups = [
   { island: 'Oaxaca Pacific Coast', airports: ['Huatulco International Airport (HUX) — Huatulco — Light, Medium & Large Jets'] },
 ];
 
+// Aeroports Mediterranee Est (fichier client « private-jet-airports-eastern-mediterranean.html », 2026-11-03).
+export const easternMediterraneanJetGroups = [
+  { island: 'Black Sea', airports: ['Sochi International Airport (AER) — large jets', 'Burgas Airport (BOJ) — medium jets', 'Varna Airport (VAR) — medium jets', 'Constanta Airport (CND) — medium jets'] },
+  { island: 'Croatia', airports: ['Dubrovnik Airport (DBV) — large jets', 'Split Airport (SPU) — large jets', 'Zagreb Airport (ZAG) — large jets', 'Zadar Airport (ZAD) — medium jets', 'Pula Airport (PUY) — medium jets', 'Rijeka Airport (Krk) (RJK) — light jets', 'Losinj Airport (LSZ) — light jets'] },
+  { island: 'Cyprus', airports: ['Larnaca International Airport (LCA) — large jets', 'Paphos International Airport (PFO) — large jets', 'Ercan Airport (Northern Cyprus) (ECN) — medium jets'] },
+  { island: 'Italy – East Coast', airports: ['Venice Marco Polo Airport (VCE) — large jets', 'Bari Karol Wojtyla Airport (BRI) — large jets', 'Trieste Airport (TRS) — medium jets', 'Ravenna Airport (RAN) — light jets'] },
+  { island: 'Greece', airports: ['Athens International Airport (ATH) — large jets', 'Thessaloniki Airport (SKG) — large jets', 'Heraklion Airport (Crete) (HER) — large jets', 'Rhodes International Airport (RHO) — large jets', 'Mykonos Airport (JMK) — medium jets', 'Santorini Airport (JTR) — medium jets', 'Corfu Airport (CFU) — medium jets', 'Kos Airport (KGS) — medium jets', 'Chania Airport (Crete) (CHQ) — medium jets', 'Paros Airport (PAS) — light jets', 'Skiathos Airport (JSI) — light jets', 'Kefalonia Airport (EFL) — light jets', 'Zakynthos Airport (ZTH) — light jets', 'Preveza / Lefkada Airport (PVK) — light jets', 'Kalamata Airport (KLX) — light jets'] },
+  { island: 'Malta', airports: ['Malta International Airport (MLA) — large jets'] },
+  { island: 'Montenegro', airports: ['Podgorica Airport (TGD) — large jets', 'Tivat Airport (TIV) — medium jets', 'Dubrovnik Airport (Croatia – closest to Herceg Novi) (DBV) — light jets'] },
+  { island: 'Turkey', airports: ['Istanbul Airport (IST) — large jets', 'Antalya Airport (ANT) — large jets', 'Dalaman Airport (DLM) — large jets', 'Bodrum-Milas Airport (BJV) — medium jets', 'Izmir Airport (ADB) — medium jets', 'Sabiha Gokcen Airport (Istanbul) (SAW) — light jets', 'Gokcen Airport (near Bodrum) (BJV) — light jets'] },
+  { island: 'Egypt', airports: ['Hurghada International Airport (HRG) — large jets', 'Sharm El Sheikh International Airport (SSH) — large jets', 'Cairo International Airport (CAI) — large jets', 'Marsa Alam International Airport (RMF) — medium jets', 'Borg El Arab Airport (Alexandria) (HBE) — medium jets', 'El Gouna Airport (EGH) — light jets'] },
+  { island: 'Tunisia', airports: ['Tunis-Carthage Airport (TUN) — large jets', 'Enfidha-Hammamet Airport (NBE) — large jets', 'Djerba-Zarzis Airport (DJE) — medium jets', 'Monastir Airport (MIR) — medium jets', 'Sfax-Thyna Airport (SFA) — medium jets', 'Tabarka-Ain Draham Airport (TAE) — light jets', 'Tozeur-Nefta Airport (TOE) — light jets'] },
+];
+
 const comingSoon = [{ island: 'Coming Soon', airports: ['Information coming soon'] }];
 
 // Ordre identique à /charters/destinations
@@ -73,7 +87,7 @@ export const destinations = [
   { slug: 'bahamas',                name: 'Bahamas',                 image: '/images/private_jet/private_bahamas.jpeg',                heroImage: '/media/client/2026-10-09/hero-private-jet-bahamas.jpg', heroTitleClass: 'pb-16 md:pb-32',               groups: bahamasJetGroups },
   { slug: 'central-america',        name: 'Central America',         image: '/images/private_jet/private_central-america.jpeg',        heroImage: '/images/private_jet/hero/hero_central-america-v2.jpg',       groups: comingSoon },
   { slug: 'east-asia',              name: 'East Asia',               image: '/images/private_jet/private_east-asia.jpeg',              heroImage: '/images/private_jet/hero/hero_east-asia-v2.jpg',             groups: comingSoon },
-  { slug: 'eastern-mediterranean',  name: 'Eastern Mediterranean',   image: '/images/private_jet/private_eastern-mediterranean.jpeg', heroImage: '/images/private_jet/hero/hero_eastern-mediterranean.jpg', heroTitleClass: 'pb-16 md:pb-32', groups: comingSoon },
+  { slug: 'eastern-mediterranean',  name: 'Eastern Mediterranean',   image: '/images/private_jet/private_eastern-mediterranean.jpeg', heroImage: '/images/private_jet/hero/hero_eastern-mediterranean.jpg', heroTitleClass: 'pb-16 md:pb-32', groups: easternMediterraneanJetGroups },
   { slug: 'indian-ocean',           name: 'Indian Ocean',            image: '/images/private_jet/private_indian-ocean.jpeg',           heroImage: '/images/private_jet/hero/hero_indian-ocean-v2.jpg',          groups: comingSoon },
   { slug: 'indonesia',              name: 'Indonesia',               image: '/images/private_jet/private_indonesia.jpeg',              heroImage: '/images/private_jet/hero/hero_indonesia.jpeg',            groups: comingSoon },
   { slug: 'north-america',          name: 'North America',           image: '/images/private_jet/private_nordamerica.jpeg',            heroImage: '/images/private_jet/hero/hero_north-america-v2.png',         groups: northAmericaJetGroups },
