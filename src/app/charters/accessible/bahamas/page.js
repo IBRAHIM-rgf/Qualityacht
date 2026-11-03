@@ -345,12 +345,7 @@ export default function BahamasAccessibilityGuide() {
           <p className="text-sm text-[#acb0cd] truncate">
             Your choice: <span className="text-[#C0C0C0] font-semibold">{HANDICAP_LABELS[picked] || picked}</span>
           </p>
-          <button
-            onClick={seeMatchingYachts}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-[#C0C0C0]/40 text-[#c2622a] text-sm font-medium uppercase tracking-[0.12em] whitespace-nowrap hover:bg-[#B03E00] hover:text-white hover:border-[#B03E00] transition-colors"
-          >
-            View Yacht <ArrowRight size={15} />
-          </button>
+          {/* Bouton « View Yacht » retire (client 2026-11-03). */}
         </div>
       )}
     </div>
