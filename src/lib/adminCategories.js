@@ -51,6 +51,15 @@ export function isCategoryOn(y, c) {
   return (y.categories || []).includes(c.key);
 }
 
+// Couleurs d'enregistrement (client 2026-11-03) : une par personne de l'equipe.
+export const SAVE_COLORS = [
+  { key: 'fuchsia', label: 'Rose fuchsia', hex: '#FF2DA0' },
+  { key: 'green', label: 'Vert', hex: '#2ECC71' },
+  { key: 'red', label: 'Rouge', hex: '#E53935' },
+  { key: 'sky', label: 'Bleu ciel', hex: '#5BC0F8' },
+];
+export const saveColorHex = (key) => (SAVE_COLORS.find((c) => c.key === key) || {}).hex || null;
+
 /** admin_extra normalise : { mails: { key: 'JJ/MM/AAAA' | '' }, red: { key: true }, ca: { name, company, location, phone, website } }. */
 export function normalizeAdminExtra(raw) {
   let v = raw;
@@ -72,5 +81,12 @@ export function normalizeAdminExtra(raw) {
     const s = String((v.ca || {})[f] || '').trim().slice(0, 200);
     if (s) ca[f] = s;
   }
-  return { mails, red, ca };
+  // Dernier enregistrement de la fiche (client 2026-11-03) : couleur de la personne + date/heure.
+  const sv = v.saved && typeof v.saved === 'object' ? v.saved : null;
+  const saved = sv && SAVE_COLORS.some((c) => c.key === sv.color) && !Number.isNaN(Date.parse(sv.at))
+    ? { color: sv.color, at: new Date(sv.at).toISOString() } : null;
+  // Corbeille (client 2026-11-03) : date de mise a la corbeille + visibilite d'avant.
+  const tr = v.trash && typeof v.trash === 'object' ? v.trash : null;
+  const trash = tr && !Number.isNaN(Date.parse(tr.at)) ? { at: new Date(tr.at).toISOString(), wasVisible: tr.wasVisible === true } : null;
+  return { mails, red, ca, ...(saved ? { saved } : {}), ...(trash ? { trash } : {}) };
 }
