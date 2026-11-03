@@ -371,3 +371,12 @@
 .qa-admin .fc-env .r .env{color:#d94848}
 .qa-admin .pill.pill-v{writing-mode:vertical-rl;transform:rotate(180deg);padding:8px 3px;line-height:1;white-space:nowrap}
 .qa-admin .yname .champ{color:#F2DFB4}
+
+/* Qui enregistre (client 2026-11-03) */
+.qa-admin .savewho{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--border-soft);border-radius:9px;padding:10px 14px;margin-top:12px}
+.qa-admin .savewho-t{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2)}
+.qa-admin .savewho-c{display:flex;gap:10px}
+.qa-admin .savewho-b{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.qa-admin .savewho-b.on{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.35)}
+.qa-admin .savewho-last{font-size:12px;color:var(--muted2);display:flex;align-items:center;gap:6px;margin-left:auto}
+.qa-admin .savewho-last .dot{width:10px;height:10px;border-radius:50%;display:inline-block}

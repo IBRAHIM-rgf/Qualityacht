@@ -1184,7 +1184,11 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
   const [editingYacht, setEditingYacht] = useState(null);
   const [activeAdmins, setActiveAdmins] = useState(1);
 
-  const yachts = useMemo(() => rawYachts.map(adaptYacht), [rawYachts]);
+  // Corbeille (client 2026-11-03) : les bateaux mis a la corbeille sortent des listes.
+  const allYachts = useMemo(() => rawYachts.map(adaptYacht), [rawYachts]);
+  const yachts = useMemo(() => allYachts.filter((y) => !y.admin_extra?.trash), [allYachts]);
+  const trashed = useMemo(() => allYachts.filter((y) => y.admin_extra?.trash)
+    .sort((a, b) => String(b.admin_extra.trash.at).localeCompare(String(a.admin_extra.trash.at))), [allYachts]);
   const existingIds = useMemo(() => new Set(yachts.map(y => y.id)), [yachts]);
 
   // ── Heartbeat : ping toutes les 30s pour signaler qu'on est en ligne ──
@@ -1324,8 +1328,33 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
     } catch (e) { console.error(e); }
   };
 
+  // Corbeille (client 2026-11-03) : confirmation, puis le bateau est cache et range dans
+  // l'onglet « Corbeille » (restaurable). La suppression definitive se fait depuis la corbeille.
   const onDelete = async (y) => {
-    if (!confirm(`Supprimer définitivement ${y.name} de la BDD ?`)) return;
+    if (!confirm(`Mettre ${y.name} à la corbeille ?\n\nIl sera retiré du site et des listes. Tu pourras le restaurer depuis l'onglet « Corbeille ».`)) return;
+    try {
+      const res = await fetch('/api/admin/yachts', {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'trash', yacht_id: y.id }),
+      });
+      if (!res.ok) { alert(`Erreur lors de la mise à la corbeille de ${y.name}.`); return; }
+      const data = await res.json();
+      setRawYachts(prev => prev.map(s => s.yacht_id === y.id ? { ...s, is_visible: false, admin_extra: data.admin_extra } : s));
+    } catch (e) { console.error(e); }
+  };
+  const onRestore = async (y) => {
+    try {
+      const res = await fetch('/api/admin/yachts', {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'restore', yacht_id: y.id }),
+      });
+      if (!res.ok) { alert(`Erreur lors de la restauration de ${y.name}.`); return; }
+      const data = await res.json();
+      setRawYachts(prev => prev.map(s => s.yacht_id === y.id ? { ...s, is_visible: data.is_visible, admin_extra: data.admin_extra } : s));
+    } catch (e) { console.error(e); }
+  };
+  const onDeleteForever = async (y) => {
+    if (!confirm(`Supprimer définitivement ${y.name} ?\n\nCette action est irréversible.`)) return;
     try {
       await fetch(`/api/admin/yachts?yacht_id=${encodeURIComponent(y.id)}`, { method: 'DELETE' });
       setRawYachts(prev => prev.filter(s => s.yacht_id !== y.id));
@@ -1353,7 +1382,12 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'enrich', yacht_id: id, ...patch }),
       });
-      setRawYachts(prev => prev.map(s => s.yacht_id === id ? { ...s, ...patch } : s));
+      // Couleur + date du dernier enregistrement (client 2026-11-03), comme le serveur.
+      const { saved_by, ...rest } = patch;
+      setRawYachts(prev => prev.map(s => s.yacht_id === id ? {
+        ...s, ...rest,
+        admin_extra: { ...(rest.admin_extra || s.admin_extra || {}), trash: undefined, ...(saved_by ? { saved: { color: saved_by, at: new Date().toISOString() } } : {}) },
+      } : s));
     } catch (e) { console.error(e); }
   };
 
@@ -1371,6 +1405,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
     { id: 'manual', n: '+ Nouveau yacht', s: 'Navire hors catalogue Ankor' },
     { id: 'bdd', n: '📋 Tous les yachts', s: 'Gestion complète · publier / cacher' },
     { id: 'visible', n: 'Yachts publiés', s: 'Édition complète des publiés' },
+    { id: 'trash', n: `🗑️ Corbeille (${trashed.length})`, s: 'Yachts supprimés · restaurer' },
   ];
 
   return (
@@ -1412,6 +1447,33 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
           regionLabels={REGION_LABELS} subRegionLabels={SUB_REGION_LABELS} subRegionsByRegion={SUB_REGIONS_BY_REGION}
           onToggleVisible={onToggleVisible} onToggleFeatured={onToggleFeatured} onDelete={onDelete}
           onEdit={(y) => setEditingYacht(y)} onSaveFiche={onSaveFiche} />
+      )}
+
+      {activeTab === 'trash' && (
+        <div className="filters">
+          {trashed.length === 0 ? (
+            <div className="note" style={{ padding: 20, textAlign: 'center' }}>La corbeille est vide.</div>
+          ) : (
+            <div className="twrap">
+              <table>
+                <thead><tr><th>Yacht Name</th><th>Mis à la corbeille</th><th>Avant</th><th>Actions</th></tr></thead>
+                <tbody>
+                  {trashed.map((y) => (
+                    <tr key={y.id} className="mrow">
+                      <td><div className="yname"><div className="ph" style={{ backgroundImage: `url("${y.image}")`, backgroundSize: 'cover', backgroundPosition: 'center' }} />{y.name}</div></td>
+                      <td>{new Date(y.admin_extra.trash.at).toLocaleString('fr-CH', { dateStyle: 'short', timeStyle: 'short' })}</td>
+                      <td>{y.admin_extra.trash.wasVisible ? 'Publié' : 'En stock'}</td>
+                      <td>
+                        <button type="button" className="btn-sec" onClick={() => onRestore(y)}>↩︎ Restaurer</button>{' '}
+                        <button type="button" className="btn-sec" onClick={() => onDeleteForever(y)}>Supprimer définitivement</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       )}
 
       {editingYacht && <EditModal yacht={editingYacht} onClose={() => setEditingYacht(null)} onSave={onSaveEdit} />}

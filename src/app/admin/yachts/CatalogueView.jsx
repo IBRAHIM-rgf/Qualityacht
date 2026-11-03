@@ -11,7 +11,7 @@ import { getAnkorImageUrl } from '@/lib/utils';
 import { normalizeCharterPrices, formatPriceAmount, hasAnyPrice } from '@/lib/charterPrices';
 import { mergeSourceAndOverrides } from '@/lib/yachtOverrides';
 import CharterPricesEditor, { pricesToForm } from './CharterPricesEditor';
-import { ADMIN_CATEGORIES, ICON_COLUMNS, isCategoryOn } from '@/lib/adminCategories';
+import { ADMIN_CATEGORIES, ICON_COLUMNS, isCategoryOn, SAVE_COLORS, saveColorHex } from '@/lib/adminCategories';
 import { HANDICAPS_BY_CAT } from '@/lib/handicaps';
 
 // Sous-categories affichees seulement dans la case deployee de leur categorie (client 2026-11-01).
@@ -425,7 +425,9 @@ function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onTogg
           </div>
         </td>
         <td className="muted" style={{ fontWeight: 700, letterSpacing: 1 }}>{chStr(y) || '—'}</td>
-        <td>{priceTxt(y.term)}</td>
+        {/* Prix Week Charter : couleur de la personne qui a enregistre la fiche (client 2026-11-03). */}
+        <td title={y.admin_extra?.saved ? `Enregistré le ${new Date(y.admin_extra.saved.at).toLocaleString('fr-CH', { dateStyle: 'short', timeStyle: 'short' })}` : undefined}
+          style={saveColorHex(y.admin_extra?.saved?.color) ? { color: saveColorHex(y.admin_extra.saved.color), fontWeight: 700 } : undefined}>{priceTxt(y.term)}</td>
         <td>{lenTxt(y)}</td>
         <td>{y.sleeps ?? '—'}</td>
         <td>{y.cabinsN ?? '—'}</td>
@@ -503,6 +505,9 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
   const [regs, setRegs] = useState(() => ({ regions: [...(y.regions || [])], sub_regions: [...(y.sub_regions || [])] }));
   const [handis, setHandis] = useState(() => [...(y.handicaps || [])]);
   const [catsOpen, setCatsOpen] = useState(true);
+  // Couleur de la personne qui enregistre (obligatoire avant « Enregistrer », client 2026-11-03).
+  const [saveBy, setSaveBy] = useState('');
+  const [lastSaved, setLastSaved] = useState(() => y.admin_extra?.saved || null);
   const [regsOpen, setRegsOpen] = useState(true);
   const [caOpen, setCaOpen] = useState(false);
   const [dp, setDp] = useState(null); // { key, left, top }
@@ -539,12 +544,15 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
       pets_allowed: !!catOn.pets,
       groups_allowed: !!catOn.group,
       admin_extra: { mails, red, ca },
+      saved_by: saveBy,
       regions: regs.regions,
       sub_regions: regs.sub_regions,
       handicaps: handis,
     });
     setSaving(false);
     setDirty(false);
+    setLastSaved({ color: saveBy, at: new Date().toISOString() });
+    setSaveBy('');
   };
   // Suivi des envois (client 2026-11-02) : cadre a part dans Categories Charter. Chaque
   // icone ouvre deux enveloppes cochables et independantes : verte (+ date d'envoi,
@@ -825,8 +833,26 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
         </div>
       </div>
 
+      {/* Qui enregistre (client 2026-11-03) : une couleur par personne, obligatoire. */}
+      <div className="savewho">
+        <span className="savewho-t">Enregistré par</span>
+        <div className="savewho-c">
+          {SAVE_COLORS.map((c) => (
+            <button key={c.key} type="button" title={c.label} aria-label={c.label}
+              className={`savewho-b ${saveBy === c.key ? 'on' : ''}`} style={{ background: c.hex }}
+              onClick={() => setSaveBy(saveBy === c.key ? '' : c.key)} />
+          ))}
+        </div>
+        {lastSaved && (
+          <span className="savewho-last">
+            Dernier enregistrement : <span className="dot" style={{ background: saveColorHex(lastSaved.color) }} />
+            {new Date(lastSaved.at).toLocaleString('fr-CH', { dateStyle: 'short', timeStyle: 'short' })}
+          </span>
+        )}
+      </div>
       <div className="mfoot" style={{ justifyContent: 'flex-end' }}>
-        <button type="button" className="btn-primary" disabled={saving || !dirty} style={!dirty ? { opacity: 0.5 } : undefined} onClick={save}>
+        {!saveBy && dirty && <span className="note" style={{ marginRight: 12 }}>Choisis ta couleur pour enregistrer.</span>}
+        <button type="button" className="btn-primary" disabled={saving || !dirty || !saveBy} style={(!dirty || !saveBy) ? { opacity: 0.5 } : undefined} onClick={save}>
           {saving ? 'Enregistrement…' : 'Enregistrer'}
         </button>
       </div>
