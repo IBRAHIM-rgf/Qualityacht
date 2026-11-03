@@ -16,7 +16,10 @@ import { MapPin, Users, Ship, ArrowRight } from 'lucide-react';
  */
 
 const DESTINATIONS = [
-  { value: '', label: 'All destinations' },
+  // Valeur par defaut (masquee dans la liste) : meme libelle, aucune navigation.
+  { value: '', label: 'All destinations', hidden: true },
+  // Clic sur « All destinations » -> page Destinations (client 2026-11-03).
+  { value: 'all', label: 'All destinations' },
   { value: 'caribbean', label: 'Caribbean' },
   // Bahamas (client 2026-10-06).
   { value: 'bahamas', label: 'Bahamas' },
@@ -86,7 +89,9 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
   const fields = [
     {
       id: idFor('destination'), eyebrow: 'Where?', Icon: MapPin, name: 'destination',
-      value: destination, onChange: setDestination, options: DESTINATIONS, label: 'Destination',
+      value: destination,
+      onChange: (v) => { if (v === 'all') { router.push('/charters/destinations'); return; } setDestination(v); },
+      options: DESTINATIONS, label: 'Destination',
     },
     {
       id: idFor('capacity'), eyebrow: 'Who?', Icon: Users, name: 'capacity',
@@ -122,7 +127,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
                   className={`${selectClass} ${selectColorMobile} text-[16px] leading-snug`}
                 >
                   {options.map((o) => (
-                    <option key={o.value} value={o.value} className="bg-[#26272a]">
+                    <option key={o.value} value={o.value} hidden={o.hidden} className="bg-[#26272a]">
                       {o.label}
                     </option>
                   ))}
@@ -177,7 +182,7 @@ export default function HeroQuickSearch({ variant = 'desktop' }) {
                   className={`${selectClass} ${selectColorDesktop}`}
                 >
                   {options.map((o) => (
-                    <option key={o.value} value={o.value} className="bg-[#26272a]">
+                    <option key={o.value} value={o.value} hidden={o.hidden} className="bg-[#26272a]">
                       {o.label}
                     </option>
                   ))}
