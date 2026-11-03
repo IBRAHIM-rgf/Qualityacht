@@ -93,7 +93,8 @@ export default function NorthAmericaRegions() {
       <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
         <div className="max-w-7xl mx-auto">
           <RevealBlock label="Regions & Sub-Destinations" title="Destinations by Region" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6 items-start">
+          {/* Les 4 regions sur une seule ligne (client 2026-11-03). */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-6 items-start">
             {REGIONS.map((r) => <RegionGroup key={r.name} region={r} onSelect={setActive} />)}
           </div>
         </div>
