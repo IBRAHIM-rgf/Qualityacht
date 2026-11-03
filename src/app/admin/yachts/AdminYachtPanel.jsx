@@ -84,6 +84,19 @@ const SUB_REGION_LABELS = {
   'gibraltar': 'Gibraltar',
   'morocco': 'Morocco',
   'tunisia': 'Tunisia',
+  // Mediterranee Est (client 2026-11-03) : 11 pays de la liste client. Tunisie Est
+  // distincte de la Tunisie de la Mediterranee Ouest (cle unique par region).
+  'black-sea': 'Black Sea',
+  'croatia': 'Croatia',
+  'cyprus': 'Cyprus',
+  'italy-east-coast': 'Italy – East Coast',
+  'greece': 'Greece',
+  'crete': 'Crete',
+  'malta': 'Malta',
+  'montenegro': 'Montenegro',
+  'turkey': 'Turkey',
+  'egypt': 'Egypt',
+  'east-tunisia': 'Tunisia (East Med)',
 };
 
 const SUB_REGIONS_BY_REGION = {
@@ -91,6 +104,7 @@ const SUB_REGIONS_BY_REGION = {
   bahamas: ['nassau', 'grand-bahama', 'exumas', 'abacos', 'eleuthera', 'andros', 'bimini-berry', 'out-islands'],
   'north-america': ['east-coast-us', 'west-coast-us', 'canada', 'miami', 'mexico'],
   'west-mediterranean': ['french-riviera-monaco', 'south-of-france', 'corsica', 'sardinia', 'balearic-islands', 'spain-mainland', 'italian-riviera-liguria', 'tuscany', 'lazio', 'campania', 'amalfi-coast', 'sicily-islands', 'gibraltar', 'morocco', 'tunisia'],
+  'east-mediterranean': ['black-sea', 'croatia', 'cyprus', 'italy-east-coast', 'greece', 'crete', 'malta', 'montenegro', 'turkey', 'egypt', 'east-tunisia'],
 };
 
 // Axe "Catégories charter" — indépendant des régions géo, multi-sélection.
