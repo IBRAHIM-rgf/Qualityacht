@@ -17,8 +17,6 @@ export default function LastMinuteCaribbeanPage() {
       heroTitle="Last-Minute Charter"
       heroNode={<LastMinuteHero />}
       showShowcase
-      showcaseBandVideo="/media/quality/last-minute/band-1.mp4"
-      showcaseBandFull={false}
       showDescription={false}
       // 8 cases -> page bateaux Last Minute de chaque case (client 2026-10-04).
       islandHrefBase="/charters/last-minute/caribbean"
