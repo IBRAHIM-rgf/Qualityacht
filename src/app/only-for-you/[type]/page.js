@@ -181,8 +181,11 @@ export default function RentalTypePage({ params }) {
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             {/* The Caribbean : meme taille que les autres, en premier (client 2026-10-14) ; ouvre
                 les yachts Only for You aux Caraibes filtres sur ce type (client 2026-10-15). */}
-            {[{ title: 'The Caribbean', image: CARIBBEAN_IMAGE, href: `/only-for-you/caribbean?type=${type}` }, ...destinationItems
-              .filter((d) => !d.caribbean && !(type === 'regatta' && d.title === 'Bahamas'))]
+            {/* Meme ordre que la page Destinations (client 2026-11-04) : Caraibes a sa place
+                entre Northern Europe et Oceania. */}
+            {destinationItems
+              .filter((d) => !(type === 'regatta' && d.title === 'Bahamas'))
+              .map((d) => (d.caribbean ? { title: 'The Caribbean', image: CARIBBEAN_IMAGE, href: `/only-for-you/caribbean?type=${type}` } : d))
               .map((d) => (
                 // Chaque case ouvre sa page (client 2026-10-14).
                 <Link key={d.title} href={d.href || `/only-for-you/${type}/${d.slug}`} className={`group block rounded-2xl border border-[#C0C0C0]/25 bg-[#2e2f32] overflow-hidden transition-colors duration-300 hover:border-[#c2622a] ${FOCUS}`}>
