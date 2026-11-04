@@ -25,6 +25,8 @@ export const metadata = {
 
 // Hero : video du hero de /charters/destinations/north-america (pas de video halal dediee).
 const HERO = '/media/client/2026-10-23/north-america-hero';
+// Video hero halal North America fournie par le client (2026-11-04), sans le son.
+const HALAL_HERO = '/media/client/halal-north-america/2026-11-04';
 
 // Photos client du 2026-10-22, dans l'ordre donne : galerie 1 a 5, puis slide 1 a 3.
 const M = '/media/client/halal-north-america/2026-10-22';
@@ -87,8 +89,8 @@ export default async function HalalNorthAmericaPage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
       <HalalBahamasHero
-        video={`${HERO}/hero.mp4`}
-        poster={`${HERO}/poster.jpg`}
+        video={`${HALAL_HERO}/hero.mp4`}
+        poster={`${HALAL_HERO}/poster.jpg`}
         title="North America"
         subtitle="Private · Muslim-Friendly · Alcohol-Free"
       />
