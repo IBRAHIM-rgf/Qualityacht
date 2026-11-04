@@ -1,7 +1,7 @@
 // src/lib/charterPrices.js — Fiches de prix par type de charter (client 2026-10-31).
 //
 // Stockage : colonne jsonb `custom_pricing` de yacht_selections, objet :
-//   { version: 2, types: { weekly|day|halfday|hours|transfer: {
+//   { version: 2, types: { weekly|day|halfday|hours|sleepaboard|staysail|d3n2|d4n3|transfer: {
 //       rates: [{ period, title1, title2, subtitle, price, currency, unit, zones: [], apa, vat }],
 //       included: [], extras: [],
 //       taxes: { gratuity, flSales, bahamasSales, vat }   (pourcentages, '' = vide)
@@ -17,6 +17,11 @@ export const CHARTER_TYPES = [
   { key: 'day', label: 'Day Charter', unit: 'DAY' },
   { key: 'halfday', label: 'Half-day Charter', unit: 'HALFDAY' },
   { key: 'hours', label: 'Hours Charter', unit: 'HOURS' },
+  // Ajoutes juste apres Hours Charter (client 2026-11-04).
+  { key: 'sleepaboard', label: 'Sleep aboard the night before charter date', unit: 'NIGHT' },
+  { key: 'staysail', label: 'Stay and Sail Package', unit: 'PACKAGE' },
+  { key: 'd3n2', label: '3 days - 2 nights', unit: 'D3N2' },
+  { key: 'd4n3', label: '4 days - 3 nights', unit: 'D4N3' },
   { key: 'transfer', label: 'Transfer', unit: 'TRANSFER' },
 ];
 const TYPE_KEYS = CHARTER_TYPES.map((t) => t.key);
@@ -44,6 +49,9 @@ export const RATE_UNITS = [
   { code: 'HOURS', label: 'Hours', suffix: '/ hour' },
   { code: 'TRANSFER', label: 'Transfer', suffix: '/ transfer' },
   { code: 'NIGHT', label: 'Night', suffix: '/ night' },
+  { code: 'PACKAGE', label: 'Package', suffix: '/ package' },
+  { code: 'D3N2', label: '3 days - 2 nights', suffix: '/ 3 days - 2 nights' },
+  { code: 'D4N3', label: '4 days - 3 nights', suffix: '/ 4 days - 3 nights' },
 ];
 const UNIT_CODES = RATE_UNITS.map((u) => u.code);
 export const TAX_FIELDS = [
