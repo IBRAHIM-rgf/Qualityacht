@@ -9,6 +9,9 @@ import { applyOverridesToDetail, normalizeOverrides } from './yachtOverrides';
 // Les listes publiques de yachts sont mises en cache 1 h (lib/yachts.js, tag
 // 'yachts-visible'). Toute ecriture sur la selection invalide ce cache pour que
 // les changements faits dans l'admin soient visibles immediatement.
+// Correctif 2026-11-04 (prix ATLANTIC reste ancien dans la liste) : l'invalidation est
+// refaite APRES l'ecriture en base. Sinon une page ouverte pendant l'ecriture remettait
+// l'ancienne valeur en cache pour 1 h.
 function invalidateYachtsCache() {
   try { revalidateTag('yachts-visible'); } catch (e) { /* hors contexte requete : ignore */ }
 }
@@ -129,6 +132,7 @@ export async function addYachtToSelection(data) {
       ON CONFLICT (yacht_id) DO NOTHING
       RETURNING *
     `;
+    invalidateYachtsCache(); // apres l'ecriture (correctif 2026-11-04)
     return rows[0] || null;
   } catch (error) {
     console.error('Erreur addYachtToSelection:', error);
@@ -217,6 +221,7 @@ export async function updateYachtEnrichedData(yacht_id, data) {
       WHERE yacht_id = ${yacht_id}
       RETURNING *
     `;
+    invalidateYachtsCache(); // apres l'ecriture (correctif 2026-11-04)
     return rows[0];
   } catch (error) {
     console.error('Erreur updateYachtEnrichedData:', error);
@@ -236,6 +241,7 @@ export async function updateYachtVisibility(yacht_id, is_visible) {
       WHERE yacht_id = ${yacht_id}
       RETURNING *
     `;
+    invalidateYachtsCache(); // apres l'ecriture (correctif 2026-11-04)
     return rows[0];
   } catch (error) {
     console.error('Erreur updateYachtVisibility:', error);
@@ -255,6 +261,7 @@ export async function updateYachtFeatured(yacht_id, is_featured) {
       WHERE yacht_id = ${yacht_id}
       RETURNING *
     `;
+    invalidateYachtsCache(); // apres l'ecriture (correctif 2026-11-04)
     return rows[0];
   } catch (error) {
     console.error('Erreur updateYachtFeatured:', error);
@@ -275,6 +282,7 @@ export async function updateYachtOrder(updates) {
         WHERE yacht_id = ${yacht_id}
       `;
     }
+    invalidateYachtsCache(); // apres l'ecriture (correctif 2026-11-04)
     return { success: true };
   } catch (error) {
     console.error('Erreur updateYachtOrder:', error);
@@ -292,6 +300,7 @@ export async function removeYachtFromSelection(yacht_id) {
       DELETE FROM yacht_selections
       WHERE yacht_id = ${yacht_id}
     `;
+    invalidateYachtsCache(); // apres l'ecriture (correctif 2026-11-04)
     return { success: true };
   } catch (error) {
     console.error('Erreur removeYachtFromSelection:', error);
@@ -536,6 +545,7 @@ export async function bulkUpsertYachts(yachts) {
     }
   }
 
+  invalidateYachtsCache(); // apres l'ecriture (correctif 2026-11-04)
   return { inserted, updated, skipped, total: yachts.length };
 }
 
