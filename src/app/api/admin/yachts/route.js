@@ -287,7 +287,11 @@ export async function PATCH(request) {
           // Tableau = cartes de tarifs Ankor (pre-remplissage enregistre, client 2026-11-03).
           custom_pricing: Array.isArray(custom_pricing)
             ? serializeCharterPrices(normalizeCharterPrices(custom_pricing))
-            : (custom_pricing && typeof custom_pricing === 'object' ? serializeCharterPrices(custom_pricing) : undefined),
+            // Correctif 2026-11-04 : l'admin envoie { version: 2, types } ; on serialise les
+            // types (avant, l'objet etait re-enveloppe et tous les tarifs etaient effaces).
+            : (custom_pricing && typeof custom_pricing === 'object'
+              ? serializeCharterPrices(custom_pricing.types && typeof custom_pricing.types === 'object' ? custom_pricing.types : custom_pricing)
+              : undefined),
           // Day Charter : seule la case est stockee ici (les prix sont dans l'onglet Day).
           day_charter: day_charter && typeof day_charter === 'object' ? { enabled: day_charter.enabled === true } : undefined,
           // Modele tarifaire charter (client 2026-10-15) : objet normalise, undefined = inchange.
