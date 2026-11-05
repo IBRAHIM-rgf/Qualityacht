@@ -8,6 +8,7 @@ import { GROUPS, groupSlug } from './charters/destinations/bahamas/bahamasGroups
 import { NA_GROUPS } from './charters/destinations/north-america/northAmericaGroups';
 import { SILO } from './halal-yacht-charter/_silo/content';
 import { sailingTypes } from './only-for-you/data';
+import { ARTICLES } from './journal/articles';
 import { getYachtSelections } from '@/lib/db';
 
 // Regenere au plus une fois par heure (fiches des bateaux publies).
@@ -157,6 +158,9 @@ export default async function sitemap() {
     ...['destinations/bahamas', 'day-charter/bahamas', 'last-minute/bahamas', 'only-couple/bahamas', 'group/bahamas'].flatMap((p) => bahamas.map((s) => `/charters/${p}/${s}`)),
     ...['destinations/north-america', 'day-charter/north-america'].flatMap((p) => northAmerica.map((s) => `/charters/${p}/${s}`)),
     ...Object.keys(SILO).map((s) => `/halal-yacht-charter/${s}`),
+    // Journal (client 2026-11-05)
+    '/journal',
+    ...ARTICLES.map((a) => `/journal/${a.slug}`),
     ...sailingTypes.flatMap((t) => [`/only-for-you/${t.slug}`, `/only-for-you/${t.slug}/carribbean`, `/only-for-you/${t.slug}/bahamas`]),
     ...yachtPages,
   ];
