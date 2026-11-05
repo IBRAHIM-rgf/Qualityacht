@@ -7,7 +7,7 @@ import { Line } from './_shared';
 
 export const metadata = {
   title: 'Journal | Qualityacht',
-  description: 'Insights from an independent yacht charter broker in Zurich: halal charters, destinations, seasons and how to choose the right yacht.',
+  description: 'Insights from an independent yacht charter broker in Zurich: charter etiquette, destinations, seasons and how to choose the right yacht.',
   alternates: { canonical: 'https://www.qualityacht.ch/journal' },
 };
 

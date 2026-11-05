@@ -1,12 +1,11 @@
 // /journal/<slug> — article du Journal (client 2026-11-05).
 // Hero photo + H1, introduction, sections H2, FAQ (+ donnees structurees Article et
-// FAQPage), conclusion et demande de devis. Journal sans references religieuses
-// (client 2026-11-05) : pas de liens vers le silo halal (Ramadan, Eid...).
+// FAQPage), conclusion et demande de devis. Journal generaliste : aucun lien ni
+// composant du silo halal (decision client 2026-11-05).
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import HalalFaq from '../../charters/halal/HalalFaq';
-import { SiloCta, FaqJsonLd } from '../../halal-yacht-charter/_silo/SiloPage';
+import JournalFaq from '../JournalFaq';
 import { ARTICLES, getArticle, formatDate } from '../articles';
 import { Line, Rich } from '../_shared';
 
@@ -50,6 +49,35 @@ function ArticleJsonLd({ a }) {
     mainEntityOfPage: `${BASE}/journal/${a.slug}`,
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
+}
+
+function FaqJsonLd({ items }) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  };
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
+}
+
+function JournalCta() {
+  return (
+    <section className="bg-[#2e2f32] py-16 md:py-20 px-6 md:px-14">
+      <div className="max-w-2xl mx-auto text-center">
+        <p className="text-[11px] uppercase tracking-[0.3em] text-[#B87333] mb-3">Bespoke Enquiry</p>
+        <h2 className="trajan-regular text-2xl md:text-4xl uppercase tracking-[0.08em] text-[#C0C0C0] mb-4">Plan Your Charter</h2>
+        <p className="text-[#acb0cd] text-base md:text-lg leading-relaxed mb-8">
+          Tell us your dates, your guests and the experience you have in mind. We prepare every detail with you before you board.
+        </p>
+        <Link
+          href="/request-quote"
+          className="inline-flex items-center justify-center px-8 md:px-10 py-3 md:py-4 rounded-full border text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] trajan-regular text-[#c2622a] border-[#C0C0C0] bg-[#26272a] hover:bg-[#c2622a] hover:text-white hover:border-[#c2622a] transition-all duration-300"
+        >
+          Request Your Charter
+        </Link>
+      </div>
+    </section>
+  );
 }
 
 function Block({ title, paragraphs }) {
@@ -114,7 +142,7 @@ export default async function ArticlePage({ params }) {
           <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">Frequently Asked Questions</h2>
           <Line />
         </div>
-        <HalalFaq only extra={a.faq} />
+        <JournalFaq items={a.faq} />
       </section>
 
       {/* CONCLUSION */}
@@ -124,7 +152,7 @@ export default async function ArticlePage({ params }) {
         </div>
       </section>
 
-      <SiloCta />
+      <JournalCta />
     </div>
   );
 }
