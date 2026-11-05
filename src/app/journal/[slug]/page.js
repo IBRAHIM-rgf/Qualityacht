@@ -1,11 +1,12 @@
 // /journal/<slug> — article du Journal (client 2026-11-05).
 // Hero photo + H1, introduction, sections H2, FAQ (+ donnees structurees Article et
-// FAQPage), conclusion, demande de devis et liens vers le silo halal.
+// FAQPage), conclusion et demande de devis. Journal sans references religieuses
+// (client 2026-11-05) : pas de liens vers le silo halal (Ramadan, Eid...).
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import HalalFaq from '../../charters/halal/HalalFaq';
-import { SiloCta, SiloLinks, FaqJsonLd } from '../../halal-yacht-charter/_silo/SiloPage';
+import { SiloCta, FaqJsonLd } from '../../halal-yacht-charter/_silo/SiloPage';
 import { ARTICLES, getArticle, formatDate } from '../articles';
 import { Line, Rich } from '../_shared';
 
@@ -124,7 +125,6 @@ export default async function ArticlePage({ params }) {
       </section>
 
       <SiloCta />
-      <SiloLinks />
     </div>
   );
 }

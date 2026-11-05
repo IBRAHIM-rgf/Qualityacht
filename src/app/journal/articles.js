@@ -12,7 +12,7 @@ export const ARTICLES = [
     description:
       'A halal yacht charter is more than a yacht without alcohol. Here are the seven decisions behind it, where it works best, and when to book.',
     excerpt:
-      'A halal yacht charter is more than a yacht without alcohol. The seven decisions behind it, where it works best, and when to book for Eid al-Adha 2027.',
+      'A halal yacht charter is more than a yacht without alcohol. The seven decisions behind it, where it works best, and when to book for the 2027 season.',
     kicker: 'Halal Yacht Charter',
     hero: '/media/journal/halal-yacht-charter-hero.jpg',
     heroAlt: 'Private yacht cruising in open water',
@@ -38,10 +38,10 @@ export const ARTICLES = [
           [
             'A ',
             { text: 'halal yacht charter', href: '/halal-yacht-charter' },
-            ' is a private crewed charter prepared so that a Muslim family can spend the entire week on board without compromise on food, conduct, privacy or prayer.',
+            ' is a private crewed charter prepared so that a family can spend the entire week on board without compromise on food, drinks, conduct or privacy.',
           ],
           [
-            'In practice, that means every element of the week has been checked before the guests board: the crew, the galley, the provisioning, the layout of the yacht, a space for prayer, the itinerary, and the commitments made by the captain. None of these happens by default. Each one is a decision someone has to make, and confirm, in advance.',
+            'In practice, that means every element of the week has been checked before the guests board: the crew, the galley, the provisioning, the layout of the yacht, the daily rhythm on board, the itinerary, and the commitments made by the captain. None of these happens by default. Each one is a decision someone has to make, and confirm, in advance.',
           ],
           ['There is no official halal certification for yachts. What exists is preparation, and a broker who knows which questions to ask.'],
         ],
@@ -49,12 +49,12 @@ export const ARTICLES = [
       {
         title: 'The Seven Decisions Behind a Halal Charter',
         paragraphs: [
-          [{ b: '1. Crew briefing.' }, " The captain and crew are briefed before the charter: an alcohol-free week, including the crew's own areas, and modest conduct around the family. The crew also knows when guest areas are theirs and when they should step away."],
+          [{ b: '1. Crew briefing.' }, " The captain and crew are briefed before the charter: an alcohol-free week, including the crew's own areas, and discreet conduct around the family. The crew also knows when guest areas are theirs and when they should step away."],
           [{ b: '2. Galley reset.' }, ' Before the guests board, the galley is reset: no pork, no alcohol-based ingredients, and no cross-contamination from previous charters. The chef walks the family through the galley on arrival if they wish.'],
           [{ b: '3. Halal provisioning.' }, ' Meat is sourced from halal suppliers, with documentation available on request. Provisioning is arranged before departure, so the family never depends on what happens to be available in a small port.'],
           [{ b: '4. Privacy layout.' }, ' Not every yacht suits a family that values privacy. An enclosed sundeck, a swim platform facing open water, crew quarters away from guest areas and a tender for private shore visits make a real difference. This is a selection criterion, not a detail.'],
-          [{ b: '5. A space for prayer.' }, ' A quiet, clean space is identified with the captain in advance, and the bridge can provide the qibla direction at any anchorage. Prayer times are part of the daily rhythm, not an interruption to it.'],
-          [{ b: '6. Destination and itinerary.' }, " Anchorages are chosen with the family's needs in mind: halal food within reach ashore, a mosque nearby for Friday prayer, and a culture that welcomes Muslim guests."],
+          [{ b: '5. A calm daily rhythm.' }, " Meal times, quiet hours and moments of rest are agreed with the captain in advance, so the week follows the family's pace rather than the yacht's routine."],
+          [{ b: '6. Destination and itinerary.' }, " Anchorages are chosen with the family's needs in mind: halal food within reach ashore, calm bays away from the crowds, and destinations that welcome families."],
           [{ b: '7. Confirmation.' }, ' Every point above is confirmed with the captain before the family commits. A halal charter built on verbal assurances is a risk; one built on confirmed details is a plan.'],
           ['Together, these seven decisions are what separates a halal charter from a regular charter with the minibar removed.'],
         ],
@@ -63,17 +63,17 @@ export const ARTICLES = [
         title: 'Where Halal Charters Work Best',
         paragraphs: [
           ['Some destinations make a halal charter easy; others make it possible with good planning.'],
-          [{ b: 'Turkey (Bodrum, Göcek, Fethiye).' }, ' The most natural choice in the Mediterranean. Halal is the norm ashore, a mosque is within reach in every harbor town, and the coastline offers pine-lined coves and calm water, with short hops between anchorages.'],
+          [{ b: 'Turkey (Bodrum, Göcek, Fethiye).' }, ' The most natural choice in the Mediterranean. Halal is the norm ashore, and the coastline offers pine-lined coves and calm water, with short hops between anchorages.'],
           [{ b: 'Croatia and Greece.' }, ' Beautiful, private and well suited to families, but halal provisioning must be arranged ahead rather than sourced on the way. With a well-prepared galley and a carefully chosen itinerary, both work very well.'],
           [{ b: 'The Red Sea and the Maldives.' }, ' Halal is the default in these regions, and the water does the rest. Both are strong options outside the Mediterranean summer season.'],
           [{ b: 'The UAE and Oman.' }, ' For winter, the Gulf offers warm water, quiet anchorages and a halal environment throughout, from the Musandam fjords to the Omani coast.'],
         ],
       },
       {
-        title: 'When to Book: Eid al-Adha 2027 and the Early Season',
+        title: 'When to Book: The Early Season',
         paragraphs: [
-          ['Eid al-Adha 2027 is expected around May 16, subject to the moon sighting. For a Mediterranean charter, that is close to ideal: the water is warming, anchorages are quieter than in July and August, and families can combine the holiday with a week at sea.'],
-          ['The best yachts for early-season weeks are often committed months in advance. Families planning a charter around Eid usually decide between December and February. A good broker also builds in a day of flexibility on each side of the expected date, so a shift in the moon sighting does not compromise the plan.'],
+          ['For a Mediterranean charter, late May and June are close to ideal: the water is warming, anchorages are quieter than in July and August, and families can enjoy the coast before the summer peak.'],
+          ['The best yachts for early-season weeks are often committed months in advance. Families planning a charter for late spring usually decide between December and February, which leaves time to prepare every detail with the captain.'],
         ],
       },
       {
@@ -87,9 +87,9 @@ export const ARTICLES = [
     faq: [
       { q: 'Is a halal yacht charter more expensive than a regular charter?', a: "The yacht costs the same. What changes is the preparation: briefing the crew, resetting the galley, sourcing halal provisions and selecting the right itinerary. That work is part of the broker's role." },
       { q: 'Will the crew really respect an alcohol-free week?', a: 'Professional crews are used to adapting to their guests. The key is to brief them before the charter and to have the captain confirm the setup before you commit.' },
-      { q: 'Can we charter during Eid if the date is not confirmed yet?', a: 'Yes. The week can be booked around the expected date, with a day of flexibility on each side to absorb a change in the moon sighting.' },
+      { q: 'When should we book an early-season charter?', a: 'Ideally between December and February for late May or June. The best yachts are committed early, and it leaves time to confirm every detail with the captain.' },
       { q: 'Which destinations are easiest for a first halal charter?', a: 'Turkey is the simplest in the Mediterranean, since halal is the norm ashore. For winter, the UAE, Oman, the Red Sea and the Maldives are strong options.' },
-      { q: 'Is there a halal certification for yachts?', a: 'No official certification exists. What matters is preparation: confirmed details on the crew, the galley, the provisioning, privacy and prayer.' },
+      { q: 'Is there a halal certification for yachts?', a: 'No official certification exists. What matters is preparation: confirmed details on the crew, the galley, the provisioning and privacy.' },
     ],
     conclusion: {
       title: 'Plan Your Halal Charter',
