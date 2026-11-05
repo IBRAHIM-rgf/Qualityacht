@@ -1,4 +1,4 @@
-// Elements communs du Journal (client 2026-11-05) : texte enrichi des articles et filet
+// Elements communs de la section Editorial (client 2026-11-05) : texte enrichi des articles et filet
 // cuivre du site.
 import Image from 'next/image';
 import Link from 'next/link';

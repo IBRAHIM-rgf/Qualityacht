@@ -117,6 +117,8 @@ export default function Header() {
                 <li><Link href="/sales" className="hover:text-white transition">Sales</Link></li>
                 <li><Link href="/management" className="hover:text-white transition">Management</Link></li>
                 <li><Link href="/conciergery" className="hover:text-white transition">Conciergery</Link></li>
+                {/* Editorial (client 2026-11-05) */}
+                <li><Link href="/editorial" className="hover:text-white transition">Editorial</Link></li>
               </ul>
             </div>
 

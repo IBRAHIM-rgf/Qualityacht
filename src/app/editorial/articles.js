@@ -1,12 +1,23 @@
-// ══ Journal Qualityacht (client 2026-11-05) ══
-// Articles du blog /journal : sujets generaux de yachting, sans halal ni religion
-// (decision client 2026-11-05). Textes rediges par Claude, valides par le client avant
+// ══ Editorial Qualityacht (client 2026-11-05) ══
+// Articles de la section /editorial (modele Burgess / Edmiston) : sujets generaux de
+// yachting, sans halal ni religion (decision client 2026-11-05). Chaque article a une
+// rubrique (voir CATEGORIES) et vit a /editorial/<rubrique>/<slug>. Textes rediges par Claude, valides par le client avant
 // publication. Un paragraphe = un tableau de segments : texte simple, { b } (gras),
 // { text, href } (lien).
+
+export const CATEGORIES = [
+  { slug: 'charter-guide', label: 'Charter Guide', intro: 'Practical advice for planning and enjoying a crewed yacht charter.' },
+  { slug: 'destinations', label: 'Destinations', intro: "Regions, coves and seasons, seen through an independent broker's eyes." },
+  { slug: 'news', label: 'News', intro: 'The latest from Qualityacht: new yachts, shows and events.' },
+  { slug: 'lifestyle', label: 'Lifestyle', intro: 'The art of private yachting, on board and ashore.' },
+];
+
+export const getCategory = (slug) => CATEGORIES.find((c) => c.slug === slug);
 
 export const ARTICLES = [
   {
     slug: 'yacht-charter-etiquette',
+    category: 'charter-guide',
     date: '2026-11-05',
     title: 'Yacht Charter Etiquette: What First-Time Guests Should Know',
     seoTitle: 'Yacht Charter Etiquette: What First-Time Guests Should Know | Qualityacht',
@@ -14,8 +25,7 @@ export const ARTICLES = [
       'Shoes off, soft luggage, crew areas, gratuity: the unwritten rules of a crewed yacht charter, explained by an independent broker.',
     excerpt:
       'Shoes off, soft luggage, crew areas and gratuity: the unwritten rules of a crewed yacht charter, explained by an independent broker.',
-    kicker: 'Charter Guide',
-    hero: '/media/journal/yacht-charter-etiquette-hero.jpg',
+    hero: '/media/editorial/yacht-charter-etiquette-hero.jpg',
     heroAlt: 'Shaded deck with a dining table set on a private yacht',
     intro: [
       ['A crewed yacht is a private home, a working vessel and a five-star hotel at the same time. Most of its rules are never written down, yet every captain and crew member expects guests to know them.'],
@@ -89,7 +99,12 @@ export const ARTICLES = [
   },
 ];
 
-export const getArticle = (slug) => ARTICLES.find((a) => a.slug === slug);
+export const getArticle = (category, slug) => ARTICLES.find((a) => a.category === category && a.slug === slug);
+
+export const articleUrl = (a) => `/editorial/${a.category}/${a.slug}`;
+
+export const sortedArticles = (category = null) =>
+  ARTICLES.filter((a) => !category || a.category === category).sort((a, b) => b.date.localeCompare(a.date));
 
 export function formatDate(iso) {
   const [y, m, d] = iso.split('-').map(Number);

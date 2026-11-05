@@ -1,25 +1,25 @@
-// /journal/<slug> — article du Journal (client 2026-11-05).
+// /editorial/<rubrique>/<slug> — article Editorial (client 2026-11-05).
 // Hero photo + H1, introduction, sections H2, FAQ (+ donnees structurees Article et
-// FAQPage), conclusion et demande de devis. Journal generaliste : aucun lien ni
+// FAQPage), conclusion et demande de devis. Section generaliste : aucun lien ni
 // composant du silo halal (decision client 2026-11-05).
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import JournalFaq from '../JournalFaq';
-import { ARTICLES, getArticle, formatDate } from '../articles';
-import { Line, Rich } from '../_shared';
+import EditorialFaq from '../../EditorialFaq';
+import { ARTICLES, getArticle, getCategory, articleUrl, formatDate } from '../../articles';
+import { Line, Rich } from '../../_shared';
 
 const BASE = 'https://www.qualityacht.ch';
 
 export function generateStaticParams() {
-  return ARTICLES.map((a) => ({ slug: a.slug }));
+  return ARTICLES.map((a) => ({ category: a.category, slug: a.slug }));
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const a = getArticle(slug);
+  const { category, slug } = await params;
+  const a = getArticle(category, slug);
   if (!a) return {};
-  const url = `${BASE}/journal/${a.slug}`;
+  const url = `${BASE}${articleUrl(a)}`;
   return {
     title: a.seoTitle,
     description: a.description,
@@ -46,7 +46,7 @@ function ArticleJsonLd({ a }) {
     dateModified: a.date,
     author: { '@type': 'Organization', name: 'Qualityacht', url: BASE },
     publisher: { '@type': 'Organization', name: 'Qualityacht', url: BASE },
-    mainEntityOfPage: `${BASE}/journal/${a.slug}`,
+    mainEntityOfPage: `${BASE}${articleUrl(a)}`,
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
@@ -60,7 +60,7 @@ function FaqJsonLd({ items }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
-function JournalCta() {
+function EditorialCta() {
   return (
     <section className="bg-[#2e2f32] py-16 md:py-20 px-6 md:px-14">
       <div className="max-w-2xl mx-auto text-center">
@@ -97,9 +97,10 @@ function Block({ title, paragraphs }) {
 }
 
 export default async function ArticlePage({ params }) {
-  const { slug } = await params;
-  const a = getArticle(slug);
+  const { category, slug } = await params;
+  const a = getArticle(category, slug);
   if (!a) notFound();
+  const cat = getCategory(a.category);
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
       <ArticleJsonLd a={a} />
@@ -111,7 +112,9 @@ export default async function ArticlePage({ params }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#26272a] via-[#26272a]/45 to-transparent" />
         <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-6 pb-10 md:pb-14">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#B87333] mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-            <Link href="/journal" className="hover:text-[#c2622a] transition-colors">Journal</Link> · {a.kicker}
+            <Link href="/editorial" className="hover:text-[#c2622a] transition-colors">Editorial</Link>
+            {' · '}
+            <Link href={`/editorial/${cat.slug}`} className="hover:text-[#c2622a] transition-colors">{cat.label}</Link>
           </p>
           <h1 className="trajan-regular text-2xl md:text-4xl lg:text-5xl uppercase tracking-[0.08em] text-[#C0C0C0] leading-tight max-w-4xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
             {a.title}
@@ -142,7 +145,7 @@ export default async function ArticlePage({ params }) {
           <h2 className="trajan-regular text-xl md:text-3xl uppercase tracking-[0.1em] text-[#C0C0C0]">Frequently Asked Questions</h2>
           <Line />
         </div>
-        <JournalFaq items={a.faq} />
+        <EditorialFaq items={a.faq} />
       </section>
 
       {/* CONCLUSION */}
@@ -152,7 +155,7 @@ export default async function ArticlePage({ params }) {
         </div>
       </section>
 
-      <JournalCta />
+      <EditorialCta />
     </div>
   );
 }

@@ -32,8 +32,8 @@ export default function Footer() {
             <li><Link href="/charters">Yacht Charter</Link></li>
             <li><Link href="/sales">Sales</Link></li>
             <li><Link href="/management">Management</Link></li>
-            {/* Journal (client 2026-11-05) : lien en pied de page uniquement. */}
-            <li><Link href="/journal">Journal</Link></li>
+            {/* Editorial (client 2026-11-05) : aussi dans le menu principal. */}
+            <li><Link href="/editorial">Editorial</Link></li>
           </ul>
         </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-// FAQ depliable des articles du Journal (client 2026-11-05), meme style que les FAQ du site.
+// FAQ depliable des articles Editorial (client 2026-11-05), meme style que les FAQ du site.
 import { useState } from 'react';
 
 function FaqItem({ q, a }) {
@@ -27,7 +27,7 @@ function FaqItem({ q, a }) {
   );
 }
 
-export default function JournalFaq({ items = [] }) {
+export default function EditorialFaq({ items = [] }) {
   return (
     <div className="max-w-3xl mx-auto">
       {items.map((item) => <FaqItem key={item.q} {...item} />)}
