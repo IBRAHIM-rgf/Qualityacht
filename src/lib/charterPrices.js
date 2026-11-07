@@ -68,8 +68,23 @@ export function formatPriceAmount(amount, currency = 'EUR') {
   return `${n} ${SYMBOLS[currency] || currency}`;
 }
 
-export function unitSuffix(unit) {
+// Hours Charter (client 2026-11-07) : nombre d'heures au choix, de 1 h a 10 h.
+export const HOURS_CHOICES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+export function unitSuffix(unit, hours = null) {
+  const h = Number(hours);
+  if (unit === 'HOURS' && HOURS_CHOICES.includes(h)) return `/ ${h} ${h === 1 ? 'hour' : 'hours'}`;
   return (RATE_UNITS.find((u) => u.code === unit) || {}).suffix || '';
+}
+
+/**
+ * Montant colle (client 2026-11-07) : sans virgule, sans point et sans les centimes.
+ * « 137,000.00 » -> « 137000 » ; « 137.000 » -> « 137000 » ; « 25 500,50 € » -> « 25500 ».
+ */
+export function cleanPriceInput(v) {
+  let s = String(v ?? '').trim();
+  s = s.replace(/[.,]\d{1,2}(?=\D*$)/, '');
+  return s.replace(/\D/g, '');
 }
 
 export function defaultUnitFor(typeKey) {
@@ -77,7 +92,7 @@ export function defaultUnitFor(typeKey) {
 }
 
 function toAmount(v) {
-  const n = Number(String(v ?? '').replace(/[\s'’]/g, '').replace(',', '.'));
+  const n = typeof v === 'number' ? v : Number(cleanPriceInput(v));
   return Number.isFinite(n) && n > 0 ? Math.round(n) : null;
 }
 
@@ -116,6 +131,7 @@ function normalizeRate(r, typeKey) {
     price,
     currency: CURRENCY_CODES.includes(r.currency) ? r.currency : 'EUR',
     unit: UNIT_CODES.includes(r.unit) ? r.unit : defaultUnitFor(typeKey),
+    ...(HOURS_CHOICES.includes(Number(r.hours)) ? { hours: Number(r.hours) } : {}),
     zones: splitList(r.zones, /[,\n]/),
     apa: r.apa === true || r.apa === 'true',
     vat: r.vat === true || r.vat === 'true',
