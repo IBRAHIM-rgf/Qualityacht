@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import {
   CHARTER_TYPES, RATE_PERIODS, RATE_TITLES_1, RATE_TITLES_2, RATE_CURRENCIES, RATE_UNITS,
-  TAX_FIELDS, defaultUnitFor, normalizeCharterPrices,
+  TAX_FIELDS, defaultUnitFor, normalizeCharterPrices, HOURS_CHOICES, cleanPriceInput,
 } from '@/lib/charterPrices';
 
 function emptyRateFor(typeKey) {
@@ -69,10 +69,19 @@ function RateCard({ r, index, typeKey, onChange, onRemove }) {
         <label>Sub-title (optional)</label>
         <input value={r.subtitle || ''} onChange={(e) => set({ subtitle: e.target.value })} placeholder="May" />
       </div>
+      {typeKey === 'hours' && (
+        <div className="mf">
+          <label>Hours</label>
+          {/* Nombre d'heures, de 1 h a 10 h (client 2026-11-07). */}
+          <Chips options={HOURS_CHOICES.map((h) => `${h} h`)} value={r.hours ? `${r.hours} h` : ''}
+            onChange={(v) => set({ hours: v ? Number(v.replace(' h', '')) : '' })} allowNone />
+        </div>
+      )}
       <div className="pr-row3">
         <div className="mf">
           <label>Price</label>
-          <input type="text" inputMode="numeric" value={r.price ?? ''} onChange={(e) => set({ price: e.target.value })} />
+          {/* Montant colle : sans virgule, sans point, sans centimes (client 2026-11-07). */}
+          <input type="text" inputMode="numeric" value={r.price ?? ''} onChange={(e) => set({ price: cleanPriceInput(e.target.value) })} />
         </div>
         <div className="mf">
           <label>Currency</label>
