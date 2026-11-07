@@ -201,7 +201,7 @@ function CharterPricesSection({ prices, initialTab }) {
               {r.subtitle && <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-[#acb0cd]/70 mt-1">{r.subtitle}</p>}
             </div>
             <p className="trajan-regular text-2xl md:text-3xl text-[#C0C0C0]">
-              {formatPriceAmount(r.price, r.currency)}<span className="text-sm text-[#acb0cd]/50"> {unitSuffix(r.unit)}</span>
+              {formatPriceAmount(r.price, r.currency)}<span className="text-sm text-[#acb0cd]/50"> {unitSuffix(r.unit, r.hours)}</span>
             </p>
             {(r.apa || r.vat) && (
               <p className="text-[11px] uppercase tracking-[0.25em] text-[#acb0cd]/70 -mt-2">
