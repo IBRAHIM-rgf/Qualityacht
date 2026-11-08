@@ -67,6 +67,7 @@ const STATIC_ROUTES = [
   '/charters/destinations/western-mediterranean',
   '/charters/group',
   '/charters/group/bahamas',
+  '/charters/group/north-america',
   '/charters/group/carribbean',
   '/charters/last-minute',
   '/charters/last-minute/bahamas',
@@ -156,7 +157,7 @@ export default async function sitemap() {
     ...LIVE_VERSION_ROUTES,
     ...['last-minute/caribbean', 'only-couple/carribbean', 'group/carribbean'].flatMap((p) => caribbean.map((s) => `/charters/${p}/${s}`)),
     ...['destinations/bahamas', 'day-charter/bahamas', 'last-minute/bahamas', 'only-couple/bahamas', 'group/bahamas'].flatMap((p) => bahamas.map((s) => `/charters/${p}/${s}`)),
-    ...['destinations/north-america', 'day-charter/north-america'].flatMap((p) => northAmerica.map((s) => `/charters/${p}/${s}`)),
+    ...['destinations/north-america', 'day-charter/north-america', 'group/north-america'].flatMap((p) => northAmerica.map((s) => `/charters/${p}/${s}`)),
     ...Object.keys(SILO).map((s) => `/halal-yacht-charter/${s}`),
     // Editorial (client 2026-11-05) : rubriques avec au moins un article + articles
     '/editorial',
