@@ -16,6 +16,8 @@ export const metadata = seo('/charters/group');
 const GROUP_GUIDES = {
   "Caraïbes": "/charters/group/carribbean",
   Bahamas: "/charters/group/bahamas",
+  // Group North America (client 2026-11-08).
+  "North America": "/charters/group/north-america",
 };
 
 const groupItems = destinations.map((d) =>
