@@ -5,6 +5,7 @@
 // Fiches bateaux publiees ajoutees depuis la base.
 import { CARIBBEAN_SUBREGIONS } from './charters/_shared/caribbeanSubregions';
 import { GROUPS, groupSlug } from './charters/destinations/bahamas/bahamasGroups';
+import { IO_GROUPS } from './charters/destinations/indian-ocean/indianOceanGroups';
 import { NA_GROUPS } from './charters/destinations/north-america/northAmericaGroups';
 import { SILO } from './halal-yacht-charter/_silo/content';
 import { sailingTypes } from './only-for-you/data';
@@ -158,6 +159,8 @@ export default async function sitemap() {
     ...['last-minute/caribbean', 'only-couple/carribbean', 'group/carribbean'].flatMap((p) => caribbean.map((s) => `/charters/${p}/${s}`)),
     ...['destinations/bahamas', 'day-charter/bahamas', 'last-minute/bahamas', 'only-couple/bahamas', 'group/bahamas'].flatMap((p) => bahamas.map((s) => `/charters/${p}/${s}`)),
     ...['destinations/north-america', 'day-charter/north-america', 'group/north-america'].flatMap((p) => northAmerica.map((s) => `/charters/${p}/${s}`)),
+    // Indian Ocean (client 2026-11-09) : pages des 7 cases.
+    ...IO_GROUPS.map((g) => `/charters/destinations/indian-ocean/${g.slug}`),
     ...Object.keys(SILO).map((s) => `/halal-yacht-charter/${s}`),
     // Editorial (client 2026-11-05) : rubriques avec au moins un article + articles
     '/editorial',
