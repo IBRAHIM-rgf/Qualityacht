@@ -57,7 +57,7 @@ function RateCard({ r, index, typeKey, onChange, onRemove }) {
         </select>
       </div>
       <div className="mf">
-        <label>Title — 1 (required)</label>
+        <label>Title — 1</label>
         <Chips options={RATE_TITLES_1} value={r.title1} onChange={(title1) => set({ title1, legacyTitle: '' })} />
         {!r.title1 && r.legacyTitle && <span className="pr-note">« {r.legacyTitle} »</span>}
       </div>
