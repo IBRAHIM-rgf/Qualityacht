@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { addToCart, toCartEntry } from '@/lib/quoteCart';
 import { useDayCharterJourney } from '@/lib/dayCharterJourney';
 import { dayCharterToPricingInfo, dayCharterToPricingInfos, formatDayCharterPrice } from '@/lib/customPricing';
-import { CHARTER_TYPES, TAX_FIELDS, hasAnyPrice, rateTitle, formatPriceAmount, unitSuffix } from '@/lib/charterPrices';
+import { TAX_FIELDS, hasAnyPrice, rateTitle, formatPriceAmount, unitSuffix, rateTypesWithRates } from '@/lib/charterPrices';
 import { getAnkorImageUrl } from '@/lib/utils';
 import {
   Ruler, Users, BedDouble, Anchor, Calendar, ChevronLeft, ChevronRight, X, Map as MapIcon,
@@ -164,34 +164,31 @@ function ReserveButton({ yacht, bp, full, imgs, variant = 'top' }) {
 }
 
 // ══ CHARTER PRICES (client 2026-10-31) ══
-// Prix saisis dans l'admin, par type de charter : onglets (seulement ceux qui ont des
-// prix), cards de prix centrees, Included / Extras et Taxes & Gratuity de l'onglet.
-// Le mot « Rate » n'apparait jamais sur le site.
-function CharterPricesSection({ prices, initialTab }) {
-  const tabs = CHARTER_TYPES.filter((t) => prices[t.key]?.rates?.length > 0);
-  const [tab, setTab] = useState(tabs.some((t) => t.key === initialTab) ? initialTab : tabs[0]?.key);
-  if (!tabs.length) return null;
-  const cur = prices[tab] || prices[tabs[0].key];
-  const taxes = TAX_FIELDS.filter((tf) => cur.taxes?.[tf.key] !== '' && cur.taxes?.[tf.key] != null);
+// Prix saisis dans l'admin, par type de charter. Client 2026-11-09 : TOUTES les fiches
+// sont affichees, sans onglet qui en cache : Week, puis Day Charter, puis tous les
+// autres types (rateTypesWithRates). Chaque type a ses cards de prix, puis Included /
+// Extras et Taxes & Gratuity. Le mot « Rate » n'apparait jamais sur le site.
+function CharterPricesSection({ prices }) {
+  const types = rateTypesWithRates(prices);
+  if (!types.length) return null;
   return (
     <div className="max-w-5xl mx-auto px-5 md:px-10 pb-12 md:pb-16">
       <div className="text-center mb-8">
         <h2 className="trajan-regular text-2xl md:text-3xl uppercase tracking-[0.12em] text-[#C0C0C0]">Regions and Rates</h2>
         <div className="relative w-32 h-6 mx-auto mt-3"><Image src="/images/title-line.png" alt="" fill className="object-contain" /></div>
       </div>
-      {tabs.length > 1 && (
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {tabs.map((t) => (
-            <button key={t.key} type="button" onClick={() => setTab(t.key)}
-              className={`px-5 py-2 rounded-full text-xs md:text-sm uppercase tracking-[0.18em] transition-colors ${tab === t.key ? 'bg-[#B03E00] border border-[#B03E00] text-[#26272a] font-semibold' : 'bg-[#3a3b3f] border border-[#C0C0C0]/30 text-[#acb0cd] hover:border-[#B03E00]'}`}>
-              {t.label}
-            </button>
-          ))}
-        </div>
-      )}
-      {tabs.length === 1 && (
-        <p className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#C0C0C0] text-center mb-6">{tabs[0].label}</p>
-      )}
+      <div className="space-y-12">
+        {types.map((t) => <CharterTypeBlock key={t.key} label={t.label} cur={prices[t.key]} />)}
+      </div>
+    </div>
+  );
+}
+
+function CharterTypeBlock({ label, cur }) {
+  const taxes = TAX_FIELDS.filter((tf) => cur.taxes?.[tf.key] !== '' && cur.taxes?.[tf.key] != null);
+  return (
+    <section data-charter-type={label}>
+      <p className="trajan-regular text-xl md:text-2xl uppercase tracking-[0.2em] text-[#C0C0C0] text-center mb-6">{label}</p>
       <div className="flex flex-wrap justify-center gap-5">
         {cur.rates.map((r, i) => (
           <div key={i} className="w-full md:w-[calc(50%-10px)] rounded-xl border border-[#C0C0C0] bg-[#3a3b3f] p-6 flex flex-col items-center gap-4 text-center">
@@ -255,7 +252,7 @@ function CharterPricesSection({ prices, initialTab }) {
           )}
         </div>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -569,7 +566,7 @@ export default function YachtDetailClient({ yacht, similar = [] }) {
             avec sous-regroupement Summer / Winter pour Weekly, et regroupement
             par tranches de guests pour les saisons type "X Pax" / "X Guests") ══ */}
       {hasAnyPrice(yacht.charterPrices) ? (
-        <CharterPricesSection prices={yacht.charterPrices} initialTab={dayMode ? 'day' : 'weekly'} />
+        <CharterPricesSection prices={yacht.charterPrices} />
       ) : seasons.length > 0 && (() => {
         const expandName = (n) => (n || '')
           .replace(/\bMed\b/gi, 'Mediterranean')
