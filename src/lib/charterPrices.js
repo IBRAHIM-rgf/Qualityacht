@@ -116,18 +116,28 @@ function splitList(v, sep) {
   return out;
 }
 
+// Dates collees depuis Ankor (client 2026-11-09) : « (RepeatsEvery Year) » -> « (Repeats Every Year) ».
+export function cleanSubtitle(v) {
+  return String(v || '')
+    .replace(/repeats\s*every\s*year/gi, 'Repeats Every Year')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
 function normalizeRate(r, typeKey) {
   if (!r || typeof r !== 'object') return null;
   const price = toAmount(r.price);
   const title1 = RATE_TITLES_1.includes(r.title1) ? r.title1 : '';
   const legacyTitle = String(r.legacyTitle || '').trim();
-  if (!price || (!title1 && !legacyTitle)) return null;
+  // Client 2026-11-09 : toute fiche avec un prix est gardee et affichee, meme sans
+  // Title 1 (avant, une fiche Day / Hours… sans Title 1 etait ecartee sans message).
+  if (!price) return null;
   return {
     period: RATE_PERIODS.includes(r.period) ? r.period : '',
     title1,
     title2: RATE_TITLES_2.includes(r.title2) ? r.title2 : '',
     ...(legacyTitle && !title1 ? { legacyTitle } : {}),
-    subtitle: String(r.subtitle || '').trim(),
+    subtitle: cleanSubtitle(r.subtitle),
     price,
     currency: CURRENCY_CODES.includes(r.currency) ? r.currency : 'EUR',
     unit: UNIT_CODES.includes(r.unit) ? r.unit : defaultUnitFor(typeKey),
@@ -252,5 +262,17 @@ export function flatRates(prices) {
 /** Titre affiche d'une carte. */
 export function rateTitle(r) {
   if (r.title1) return [r.title1, r.title2].filter(Boolean).join(' — ');
-  return r.legacyTitle || '';
+  return r.legacyTitle || r.title2 || '';
+}
+
+/**
+ * Types de charter qui ont au moins une fiche, dans l'ordre d'affichage du site
+ * (client 2026-11-09) : Week, puis Day Charter, puis tous les autres types, sans exception.
+ */
+export function rateTypesWithRates(prices) {
+  if (!prices) return [];
+  const order = ['weekly', 'day', ...TYPE_KEYS.filter((k) => k !== 'weekly' && k !== 'day')];
+  return order
+    .map((k) => CHARTER_TYPES.find((t) => t.key === k))
+    .filter((t) => t && prices[t.key]?.rates?.length > 0);
 }
