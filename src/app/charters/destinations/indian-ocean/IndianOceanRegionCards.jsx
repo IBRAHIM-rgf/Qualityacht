@@ -14,7 +14,7 @@ export default function IndianOceanRegionCards({ linkBase = '/charters/destinati
       `}</style>
       <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
         <div className="max-w-7xl mx-auto">
-          <RevealBlock label="Explore" title="Indian Ocean Regions" />
+          <RevealBlock label="Explore" title="Indian Ocean" />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px">
             {IO_GROUPS.map((g, i) => (
               <DestCard key={g.slug} index={i} name={g.name} image={g.photoFiltered || g.photo || IO_CARD_PHOTO} imageOld={g.photo || IO_CARD_PHOTO}
