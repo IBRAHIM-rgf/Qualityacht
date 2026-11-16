@@ -276,3 +276,14 @@ export function rateTypesWithRates(prices) {
     .map((k) => CHARTER_TYPES.find((t) => t.key === k))
     .filter((t) => t && prices[t.key]?.rates?.length > 0);
 }
+
+/**
+ * Informations manquantes dans les fiches (client 2026-11-16) : aucune fiche, ou une fiche
+ * sans dates (Sub-title), sans lieux (Zones) ou sans prix. Sert a faire clignoter le nom
+ * du bateau dans l'admin tant que ce n'est pas complete.
+ */
+export function missingRateInfo(prices) {
+  const all = flatRates(prices);
+  if (!all.length) return true;
+  return all.some((r) => !r.price || !String(r.subtitle || '').trim() || !(r.zones || []).length);
+}

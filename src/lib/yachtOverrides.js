@@ -305,3 +305,82 @@ export function ankorPricingToRateRows(pricing) {
   }
   return rows;
 }
+
+// ── Tarifs Ankor -> fiches par type de charter (client 2026-11-16) ──
+// Quand un bateau est ajoute, toutes ses fiches Ankor sont reprises dans la bonne
+// section de la fiche admin : Week, Day Charter, Half-day, Hours. Chaque fiche garde
+// le nom Ankor (titre), ses dates (sous-titre, « Repeats Every Year » si elles reviennent
+// chaque annee), son prix, sa devise, ses zones et les cases APA / VAT.
+const ANKOR_UNIT_TO_TYPE = {
+  WEEK: ['weekly', 'WEEK'],
+  DAY: ['day', 'DAY'],
+  HALF_DAY: ['halfday', 'HALFDAY'],
+  HALFDAY: ['halfday', 'HALFDAY'],
+  HOUR: ['hours', 'HOURS'],
+  HOURS: ['hours', 'HOURS'],
+};
+const RATE_CURRENCY_CODES = ['EUR', 'USD', 'GBP', 'AED', 'AUD', 'CHF'];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+function fmtDay(iso) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return `${String(d.getUTCDate()).padStart(2, '0')} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
+/** Dates Ankor -> « 01 May 2026 – 14 December 2026 (Repeats Every Year) ». */
+export function ankorDatesSubtitle(effectiveDates, now = new Date()) {
+  const list = (Array.isArray(effectiveDates) ? effectiveDates : []).filter((d) => d?.from && d?.to)
+    .sort((a, b) => new Date(a.from) - new Date(b.from));
+  if (!list.length) return '';
+  const current = list.find((d) => new Date(d.to) >= now) || list[list.length - 1];
+  const md = (iso) => { const d = new Date(iso); return `${d.getUTCMonth()}-${d.getUTCDate()}`; };
+  const repeats = list.length > 1 && list.every((d) => md(d.from) === md(list[0].from) && md(d.to) === md(list[0].to));
+  return `${fmtDay(current.from)} – ${fmtDay(current.to)}${repeats ? ' (Repeats Every Year)' : ''}`;
+}
+
+function ankorPeriod(p) {
+  const name = String(p?.name || '');
+  if (/christmas|xmas/i.test(name) && /new\s*year|nye/i.test(name)) return 'Christmas / New Year';
+  if (/christmas|xmas/i.test(name)) return 'Christmas';
+  if (/new\s*year|nye/i.test(name)) return 'New Year';
+  return guessGroup(p) === 'winter' ? 'Winter' : 'Summer';
+}
+
+/** pricing Ankor -> { weekly, day, halfday, hours } (format lib/charterPrices, avant normalisation). */
+export function ankorPricingToCharterTypes(pricing) {
+  const list = Array.isArray(pricing?.pricingInfo) ? pricing.pricingInfo : [];
+  const out = {};
+  for (const p of list) {
+    const map = ANKOR_UNIT_TO_TYPE[String(p?.pricing?.unit || '').toUpperCase()];
+    const currency = p?.pricing?.currency;
+    if (!map || !RATE_CURRENCY_CODES.includes(currency)) continue;
+    const lines = Array.isArray(p?.pricing?.lineItems) ? p.pricing.lineItems : [];
+    const txt = (li) => `${li?.item || ''} ${li?.conditions || ''}`.toLowerCase();
+    const isApa = (li) => /(^|[^a-z])apa([^a-z]|$)|advance provisioning/.test(txt(li));
+    const isVat = (li) => /(^|[^a-z])(vat|tva)([^a-z]|$)/.test(txt(li));
+    const condTxt = [p?.pricing?.conditions, ...lines.map((li) => li?.conditions)].filter(Boolean).join(' ').toLowerCase();
+    const apa = lines.some((li) => isApa(li) && (Number(li?.amount) > 0 || Number(li?.quantity) > 0)) || /apa[^.]*excl/.test(condTxt);
+    const vat = lines.some((li) => isVat(li) && (Number(li?.amount) > 0 || Number(li?.quantity) > 0)) || /(vat|tva)[^.]*excl/.test(condTxt);
+    const total = Number(p?.pricing?.total);
+    const fee = Number(p?.pricing?.charterFee);
+    const base = (apa || vat) && fee > 0 ? fee : total;
+    if (!(base > 0)) continue;
+    const [typeKey, unit] = map;
+    const name = String(p?.name || '').trim();
+    (out[typeKey] ||= { rates: [] }).rates.push({
+      period: ankorPeriod(p),
+      title1: '',
+      title2: '',
+      legacyTitle: name,
+      subtitle: ankorDatesSubtitle(p?.effectiveDates),
+      price: Math.round(base / 100),
+      currency,
+      unit,
+      zones: labelList(p?.inclusionZones),
+      apa,
+      vat,
+    });
+  }
+  return out;
+}

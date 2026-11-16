@@ -88,5 +88,8 @@ export function normalizeAdminExtra(raw) {
   // Corbeille (client 2026-11-03) : date de mise a la corbeille + visibilite d'avant.
   const tr = v.trash && typeof v.trash === 'object' ? v.trash : null;
   const trash = tr && !Number.isNaN(Date.parse(tr.at)) ? { at: new Date(tr.at).toISOString(), wasVisible: tr.wasVisible === true } : null;
-  return { mails, red, ca, ...(saved ? { saved } : {}), ...(trash ? { trash } : {}) };
+  // Bateau ajoute par Claude (client 2026-11-16) : cadre orange dans le tableau admin.
+  const cl = v.claude && typeof v.claude === 'object' ? v.claude : null;
+  const claude = cl && !Number.isNaN(Date.parse(cl.at)) ? { at: new Date(cl.at).toISOString() } : null;
+  return { mails, red, ca, ...(saved ? { saved } : {}), ...(trash ? { trash } : {}), ...(claude ? { claude } : {}) };
 }
