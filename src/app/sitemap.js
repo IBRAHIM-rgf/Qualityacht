@@ -99,6 +99,7 @@ const STATIC_ROUTES = [
   '/halal-yacht-charter/caribbean',
   '/halal-yacht-charter/faq',
   '/halal-yacht-charter/usa',
+  '/halal-yacht-charter/indian-ocean',
   '/historic-sites',
   '/historic-sites/bahamas',
   '/historic-sites/bahamas/cycling',
