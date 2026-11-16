@@ -380,3 +380,11 @@
 .qa-admin .savewho-b.on{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.35)}
 .qa-admin .savewho-last{font-size:12px;color:var(--muted2);display:flex;align-items:center;gap:6px;margin-left:auto}
 .qa-admin .savewho-last .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+/* Bateaux ajoutes par Claude (client 2026-11-16) : cadre orange ; nom clignotant si une
+   fiche de tarif est incomplete. */
+.qa-admin tr.mrow.claude-add{outline:2px solid #FF8C1A;outline-offset:-2px}
+.qa-admin tr.mrow.claude-add td{background:rgba(255,140,26,.06)}
+@keyframes qa-blink{0%,100%{opacity:1}50%{opacity:.2}}
+.qa-admin .yname .blink{color:#FF8C1A;animation:qa-blink 1s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.qa-admin .yname .blink{animation:none;text-decoration:underline wavy #FF8C1A}}

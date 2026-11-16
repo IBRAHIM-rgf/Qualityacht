@@ -958,8 +958,9 @@ function EditModal({ yacht, onClose, onSave }) {
         if (!alive) return;
         setDetails({ loading: false, error: false, source: data.source });
         setInfo(mergeSourceAndOverrides(data.source, data.overrides));
-        if (!hasAnyPrice(normalizeCharterPrices(yacht.custom_pricing, yacht.day_charter)) && Array.isArray(data.ankorRates) && data.ankorRates.length) {
-          setForm((f) => ({ ...f, custom_pricing: pricesToForm(data.ankorRates) }));
+        const ankorTypes = data.ankorPrices && Object.keys(data.ankorPrices).length ? { version: 2, types: data.ankorPrices } : null;
+        if (!hasAnyPrice(normalizeCharterPrices(yacht.custom_pricing, yacht.day_charter)) && (ankorTypes || (Array.isArray(data.ankorRates) && data.ankorRates.length))) {
+          setForm((f) => ({ ...f, custom_pricing: pricesToForm(ankorTypes || data.ankorRates) }));
           setPricingPrefilled(true);
         }
       } catch (e) {
@@ -1386,7 +1387,7 @@ export default function AdminYachtPanel({ initialSelections, initialStats }) {
       const { saved_by, ...rest } = patch;
       setRawYachts(prev => prev.map(s => s.yacht_id === id ? {
         ...s, ...rest,
-        admin_extra: { ...(rest.admin_extra || s.admin_extra || {}), trash: undefined, ...(saved_by ? { saved: { color: saved_by, at: new Date().toISOString() } } : {}) },
+        admin_extra: { ...(s.admin_extra || {}), ...(rest.admin_extra || {}), trash: undefined, ...(saved_by ? { saved: { color: saved_by, at: new Date().toISOString() } } : {}) },
       } : s));
     } catch (e) { console.error(e); }
   };

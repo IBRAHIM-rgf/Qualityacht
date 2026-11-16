@@ -8,7 +8,7 @@
 
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { getAnkorImageUrl } from '@/lib/utils';
-import { normalizeCharterPrices, formatPriceAmount, hasAnyPrice } from '@/lib/charterPrices';
+import { normalizeCharterPrices, formatPriceAmount, hasAnyPrice, missingRateInfo } from '@/lib/charterPrices';
 import { mergeSourceAndOverrides } from '@/lib/yachtOverrides';
 import CharterPricesEditor, { pricesToForm } from './CharterPricesEditor';
 import { ADMIN_CATEGORIES, ICON_COLUMNS, isCategoryOn, SAVE_COLORS, saveColorHex } from '@/lib/adminCategories';
@@ -415,13 +415,16 @@ export default function CatalogueView({
 function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onToggleVisible, onToggleFeatured, onDelete, onEdit }) {
   return (
     <>
-      <tr className="mrow">
+      {/* Bateau ajoute par Claude : cadre orange ; nom qui clignote tant qu'une fiche de
+          tarif manque de dates, de lieux ou de prix (client 2026-11-16). */}
+      <tr className={`mrow ${y.admin_extra?.claude ? 'claude-add' : ''}`}>
         <td className="chev" onClick={onExpand}>{expanded ? '▼' : '▶'}</td>
         <td>
           <div className="yname" onClick={onOpen}>
             <div className="ph" style={{ backgroundImage: `url("${y.image}")`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
             {/* Bateau en vedette : nom couleur champagne (client 2026-11-03). */}
-            <span className={y.is_featured ? 'champ' : undefined}>{y.name}</span>{y.is_featured && <span style={{ color: '#f5b942' }}>★</span>}
+            <span className={[y.is_featured ? 'champ' : '', y.admin_extra?.claude && missingRateInfo(normalizeCharterPrices(y.custom_pricing, y.day_charter)) ? 'blink' : ''].filter(Boolean).join(' ') || undefined}
+              title={y.admin_extra?.claude && missingRateInfo(normalizeCharterPrices(y.custom_pricing, y.day_charter)) ? 'Informations de tarif incomplètes (dates, lieux ou prix)' : undefined}>{y.name}</span>{y.is_featured && <span style={{ color: '#f5b942' }}>★</span>}
           </div>
         </td>
         <td className="muted" style={{ fontWeight: 700, letterSpacing: 1 }}>{chStr(y) || '—'}</td>
@@ -523,8 +526,10 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
         if (!alive) return;
         setInfo(mergeSourceAndOverrides(data.source, data.overrides));
         // Tarifs Ankor pre-remplis quand aucun tarif n'est saisi (enregistres seulement sur « Enregistrer »).
-        if (!hasAnyPrice(normalizeCharterPrices(y.custom_pricing, y.day_charter)) && Array.isArray(data.ankorRates) && data.ankorRates.length) {
-          setPrices(pricesToForm(data.ankorRates));
+        // Toutes les fiches Ankor (Week, Day, Half-day, Hours), client 2026-11-16 ; ancien format en repli.
+        const ankorTypes = data.ankorPrices && Object.keys(data.ankorPrices).length ? { version: 2, types: data.ankorPrices } : null;
+        if (!hasAnyPrice(normalizeCharterPrices(y.custom_pricing, y.day_charter)) && (ankorTypes || (Array.isArray(data.ankorRates) && data.ankorRates.length))) {
+          setPrices(pricesToForm(ankorTypes || data.ankorRates));
         }
       } catch {
         if (alive) setInfo({});
