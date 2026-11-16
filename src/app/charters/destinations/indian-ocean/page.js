@@ -12,10 +12,12 @@ import IndianOceanRegionCards from './IndianOceanRegionCards';
 import IndianOceanRegions from './IndianOceanRegions';
 import IndianOceanCta from './IndianOceanCta';
 import BahamasPopularDestinations from '../bahamas/BahamasPopularDestinations';
-import { IO_CARD_PHOTO } from './indianOceanGroups';
 
 // Titre et description Google (SEO etape 3, client 2026-11-01).
 export const metadata = seo('/charters/destinations/indian-ocean');
+
+// Video hero du client (2026-11-16), reencodee pour le web (H.264 1920px, sans le son).
+const HERO = '/media/client/2026-11-16/indian-ocean-hero';
 
 // Ronds fleurs (client 2026-11-16), meme section que North America : photo filtree au
 // repos, couleur au survol. Ordre du client.
@@ -32,7 +34,8 @@ export default function IndianOceanPage() {
   return (
     <div className="bg-[#26272a] text-[#acb0cd] overflow-x-clip">
       <VideoHero
-        posterLandscape={IO_CARD_PHOTO}
+        videoLandscape={`${HERO}/hero.mp4`}
+        posterLandscape={`${HERO}/poster.jpg`}
         kicker="Qualityacht · Indian Ocean"
         title="Indian Ocean"
         subtitle="The Ultimate Luxury Yachting Destination"
