@@ -5,7 +5,6 @@
 import { notFound } from 'next/navigation';
 import SubregionClient from '../../carabbean/_shared/SubregionClient';
 import { IO_GROUPS, IO_CARD_PHOTO } from '../indianOceanGroups';
-import { fetchVisibleYachtsForSubRegion } from '@/lib/yachts';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,11 +33,6 @@ export default async function IndianOceanRegionPage({ params }) {
     guideArticle: g.name === 'Maldives' || g.name === 'Seychelles' || g.name === 'Mascarene Islands' ? 'the' : '',
     titleLgClass: g.name.length > 20 ? 'lg:text-5xl' : 'lg:text-7xl',
   };
-  try {
-    const { yachts, totalYachts } = await fetchVisibleYachtsForSubRegion('indian-ocean', g.key);
-    return <SubregionClient {...config} initialData={yachts} totalYachts={totalYachts} />;
-  } catch (error) {
-    console.error('Indian Ocean region page error:', error);
-    return <SubregionClient {...config} initialData={[]} totalYachts={0} />;
-  }
+  // Pas de bateaux pour le moment (client 2026-11-16) : liste vide sur les 7 pages.
+  return <SubregionClient {...config} initialData={[]} totalYachts={0} />;
 }
