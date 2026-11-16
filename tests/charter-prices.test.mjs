@@ -58,3 +58,37 @@ test('dates Ankor : espace entre Repeats et Every Year', () => {
   assert.equal(cleanSubtitle('01 May 2026 14 December 2026 (RepeatsEvery Year)'), '01 May 2026 14 December 2026 (Repeats Every Year)');
   assert.equal(cleanSubtitle('01 January 2026 31 December 2026  Repeats Every Year'), '01 January 2026 31 December 2026 Repeats Every Year');
 });
+
+// Client 2026-11-16 : les fiches Ankor sont reprises dans chaque section (Week, Day, Hours…).
+import { ankorPricingToCharterTypes, ankorDatesSubtitle } from '../src/lib/yachtOverrides.js';
+
+test('fiches Ankor reparties par section, avec dates et APA', () => {
+  const pricing = { pricingInfo: [
+    { name: '1.01 - 11.01', pricing: { unit: 'WEEK', currency: 'EUR', total: 990000, charterFee: 990000, lineItems: [{ item: 'Charter Fee', amount: 990000, quantity: 1, conditions: 'Weekly' }] },
+      effectiveDates: [{ from: '2025-01-01T00:00:00.000Z', to: '2025-01-11T23:59:59.999Z' }, { from: '2026-01-01T00:00:00.000Z', to: '2026-01-11T23:59:59.999Z' }, { from: '2027-01-01T00:00:00.000Z', to: '2027-01-11T23:59:59.999Z' }],
+      inclusionZones: [{ label: 'Zanzibar' }] },
+    { name: 'Day', pricing: { unit: 'DAY', currency: 'USD', total: 1350000, charterFee: 1000000, lineItems: [{ item: 'Charter Fee', amount: 1000000, quantity: 1 }, { item: 'APA', quantity: 0.35, conditions: '+fuel' }] }, effectiveDates: [] },
+    { name: '4 hours', pricing: { unit: 'HOUR', currency: 'USD', total: 300000 }, effectiveDates: [] },
+  ] };
+  const types = ankorPricingToCharterTypes(pricing);
+  const prices = normalizeCharterPrices({ version: 2, types });
+  assert.deepEqual(rateTypesWithRates(prices).map((t) => t.key), ['weekly', 'day', 'hours']);
+  assert.equal(prices.weekly.rates[0].price, 9900);
+  assert.deepEqual(prices.weekly.rates[0].zones, ['Zanzibar']);
+  assert.match(prices.weekly.rates[0].subtitle, /January 20\d\d – 11 January 20\d\d \(Repeats Every Year\)/);
+  assert.equal(prices.day.rates[0].apa, true);
+  assert.equal(prices.day.rates[0].price, 10000);
+});
+
+test('dates Ankor sans repetition', () => {
+  assert.equal(ankorDatesSubtitle([{ from: '2026-05-01T00:00:00Z', to: '2026-12-14T23:59:59Z' }], new Date('2026-06-01')), '01 May 2026 – 14 December 2026');
+});
+
+import { missingRateInfo } from '../src/lib/charterPrices.js';
+test('bateau a completer : fiche sans dates ou sans lieux', () => {
+  const ok = normalizeCharterPrices({ version: 2, types: { weekly: { rates: [{ price: 100, unit: 'WEEK', subtitle: '01 May 2026 – 14 December 2026', zones: ['Seychelles'] }] } } });
+  assert.equal(missingRateInfo(ok), false);
+  const noZones = normalizeCharterPrices({ version: 2, types: { day: { rates: [{ price: 100, unit: 'DAY', subtitle: '01 May 2026', zones: [] }] } } });
+  assert.equal(missingRateInfo(noZones), true);
+  assert.equal(missingRateInfo(normalizeCharterPrices(null)), true);
+});
