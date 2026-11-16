@@ -10,7 +10,7 @@ export const IO_CARD_PHOTO = '/images/destinations/animals/Indian-Ocean.jpg';
 
 // Photos client (2026-11-15) : photoFiltered = image au repos (filtree) ; photo = image
 // coloree au survol et en hero de la page de la region. Mascarene Islands et Tanzania /
-// East Africa gardent la photo provisoire en attendant leurs photos.
+// East Africa : photos client du 2026-11-16.
 const C = '/media/client/2026-11-15/indian-ocean-cards';
 
 export const IO_GROUPS = [
@@ -18,13 +18,13 @@ export const IO_GROUPS = [
     places: ['North Malé Atoll', 'South Malé Atoll', 'North Ari Atoll', 'South Ari Atoll', 'Baa Atoll', 'Vaavu Atoll', 'Dhaalu Atoll', 'Thaa Atoll', 'Laamu Atoll', 'Addu Atoll'] },
   { name: 'Seychelles', key: 'seychelles', slug: 'seychelles', photo: `${C}/seychelles.jpg`, photoFiltered: `${C}/seychelles-filtered.jpg`,
     places: ['Mahé', 'Praslin', 'La Digue', 'Silhouette', 'Curieuse', 'Sainte Anne Marine Park', 'Amirantes', 'Alphonse Group', 'Farquhar Group', 'Cosmoledo', 'Astove', 'Aldabra'] },
-  { name: 'Mascarene Islands', key: 'mascarene-islands', slug: 'mascarene-islands',
+  { name: 'Mascarene Islands', key: 'mascarene-islands', slug: 'mascarene-islands', photo: `${C}/mascarene-islands.jpg`, photoFiltered: `${C}/mascarene-islands-filtered.jpg`,
     places: ['Mauritius', 'Rodrigues', 'Réunion', 'Mayotte'] },
   { name: 'Madagascar', key: 'madagascar', slug: 'madagascar', photo: `${C}/madagascar.jpg`, photoFiltered: `${C}/madagascar-filtered.jpg`,
     places: ['Nosy Be', 'Mitsio Archipelago', 'Radama Islands', 'Nosy Iranja', 'Diego-Suarez / Antsiranana Bay', 'Sainte-Marie Island', 'Southwest Coast'] },
   { name: 'Mozambique', key: 'mozambique', slug: 'mozambique', photo: `${C}/mozambique.jpg`, photoFiltered: `${C}/mozambique-filtered.jpg`,
     places: ['Bazaruto Archipelago', 'Quirimbas Archipelago', 'Inhambane Coast', 'Pemba Coast'] },
-  { name: 'Tanzania / East Africa', key: 'tanzania-east-africa', slug: 'tanzania-east-africa',
+  { name: 'Tanzania / East Africa', key: 'tanzania-east-africa', slug: 'tanzania-east-africa', photo: `${C}/tanzania-east-africa.jpg`, photoFiltered: `${C}/tanzania-east-africa-filtered.webp`,
     places: ['Zanzibar Archipelago', 'Pemba Island', 'Mafia Island', 'Mainland Tanzanian Coast'] },
   { name: 'Sri Lanka', key: 'sri-lanka', slug: 'sri-lanka', photo: `${C}/sri-lanka.jpg`, photoFiltered: `${C}/sri-lanka-filtered.jpg`,
     places: ['Colombo', 'Galle', 'Mirissa', 'Trincomalee', 'Pasikuda', 'Jaffna Region'] },
