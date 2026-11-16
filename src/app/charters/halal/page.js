@@ -12,7 +12,7 @@ export const metadata = {
 };
 
 // Adresses SEO (client 2026-10-23) ; les anciennes /charters/halal/... redirigent (next.config.mjs).
-const HALAL_PAGES = { 'Caraïbes': '/halal-yacht-charter/caribbean', Bahamas: '/halal-yacht-charter/bahamas', 'North America': '/halal-yacht-charter/usa' };
+const HALAL_PAGES = { 'Caraïbes': '/halal-yacht-charter/caribbean', Bahamas: '/halal-yacht-charter/bahamas', 'North America': '/halal-yacht-charter/usa', 'Indian Ocean': '/halal-yacht-charter/indian-ocean' };
 
 const HERO_IMAGE = '/images/halal/7945425-portrait-3138562.jpg';
 
