@@ -97,6 +97,7 @@ const nextConfig = {
         { source: '/charters/halal/caribbean', destination: '/halal-yacht-charter/caribbean', permanent: true },
         { source: '/charters/halal/bahamas', destination: '/halal-yacht-charter/bahamas', permanent: true },
         { source: '/charters/halal/north-america', destination: '/halal-yacht-charter/usa', permanent: true },
+        { source: '/charters/halal/indian-ocean', destination: '/halal-yacht-charter/indian-ocean', permanent: true },
       ];
     },
     async headers() {
