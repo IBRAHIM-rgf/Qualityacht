@@ -11,10 +11,22 @@ import VideoHero from '@/components/vibe/VideoHero';
 import IndianOceanRegionCards from './IndianOceanRegionCards';
 import IndianOceanRegions from './IndianOceanRegions';
 import IndianOceanCta from './IndianOceanCta';
+import BahamasPopularDestinations from '../bahamas/BahamasPopularDestinations';
 import { IO_CARD_PHOTO } from './indianOceanGroups';
 
 // Titre et description Google (SEO etape 3, client 2026-11-01).
 export const metadata = seo('/charters/destinations/indian-ocean');
+
+// Ronds fleurs (client 2026-11-16), meme section que North America : photo filtree au
+// repos, couleur au survol. Ordre du client.
+const F = '/media/client/2026-11-16/indian-ocean-flowers';
+const IO_FLOWERS = [
+  { name: 'Seychelles', slug: 'seychelles', rest: `${F}/seychelles-filtered.webp`, hover: `${F}/seychelles-color.webp` },
+  { name: 'Maldives', slug: 'maldives', rest: `${F}/maldives-filtered.webp`, hover: `${F}/maldives-color.webp` },
+  { name: 'Mauritius', slug: 'mauritius', rest: `${F}/mauritius-filtered.webp`, hover: `${F}/mauritius-color.webp` },
+  { name: 'Zanzibar', slug: 'zanzibar', rest: `${F}/zanzibar-filtered.webp`, hover: `${F}/zanzibar-color.jpg` },
+  { name: 'Madagascar', slug: 'madagascar', rest: `${F}/madagascar-filtered.webp`, hover: `${F}/madagascar-color.webp` },
+];
 
 export default function IndianOceanPage() {
   return (
@@ -44,6 +56,7 @@ export default function IndianOceanPage() {
       </VideoHero>
       <IndianOceanRegionCards />
       <IndianOceanRegions />
+      <BahamasPopularDestinations items={IO_FLOWERS} />
       <IndianOceanCta />
     </div>
   );
