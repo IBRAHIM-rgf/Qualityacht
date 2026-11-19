@@ -4,17 +4,15 @@
 // 2 blocs sans case vide : 7B (carre, rectangle, carre / 4 carres) puis
 // 7F (4 carres / 2 carres + rectangle a droite).
 // Image filtree au repos, image reelle au survol (comme Indian Ocean).
-// Pas de page de region : la case s'eclaire seulement (pas de lien).
+// Chaque case ouvre sa page de region (client 2026-11-19).
 import { CloudSection, RevealBlock } from '../caribbean-v15/CaribbeanV15Base';
 import MosaicCards from '../_shared/MosaicCards';
+import { ARCTIC_GROUPS, ARCTIC_CARD_PHOTO } from './arcticGroups';
 
-const PROVISIONAL = '/images/destinations/cards/arctic-card.webp';
-
-const CARDS = [
-  'Greenland', 'Svalbard', 'Northern Norway', 'Canadian Arctic', 'Northwest Passage', 'Arctic Alaska', 'Iceland',
-  'Jan Mayen', 'North Atlantic Extensions', 'Russian Arctic — Special Enquiry', 'Alaska — Yacht Charter Confirmed',
-  'Canada — Yacht Charter Confirmed', 'Arctic Canada — Expedition Only', 'Pacific Northwest–Alaska Corridor',
-].map((name) => ({ name, image: PROVISIONAL, imageOld: PROVISIONAL }));
+const CARDS = ARCTIC_GROUPS.map((g) => ({
+  name: g.name, image: g.photoFiltered || g.photo || ARCTIC_CARD_PHOTO, imageOld: g.photo || ARCTIC_CARD_PHOTO,
+  href: `/charters/destinations/arctic/${g.slug}`,
+}));
 
 export default function ArcticRegionCards() {
   return (

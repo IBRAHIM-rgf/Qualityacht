@@ -1,10 +1,10 @@
-// /charters/destinations/arctic — bateaux publies dans l'admin avec la region « arctic »
-// cochee (client 2026-11-01, comme Caribbean et Bahamas).
+// /charters/destinations/arctic — page destination Arctic, comme Indian Ocean (client
+// 2026-11-19) : hero, cases (chacune ouvre sa page de region), Destinations by Region.
+// La liste des bateaux en bas de page a ete retiree (client 2026-11-19).
 // Hero video (client 2026-11-18), comme la page Antarctica.
 import { seo } from '@/lib/seoMeta';
 import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
-import RegionYachtsPage from '../_shared/RegionYachtsPage';
 import ArcticRegions from './ArcticRegions';
 import ArcticRegionCards from './ArcticRegionCards';
 
@@ -43,11 +43,9 @@ export default function Page() {
           </div>
         </VideoHero>
       </div>
-      {/* Grille « Destinations by Region » (client 2026-11-17) au-dessus des bateaux. */}
       {/* Cases Arctic (client 2026-11-19), comme Indian Ocean. */}
       <ArcticRegionCards />
       <ArcticRegions />
-      <RegionYachtsPage region="arctic" />
     </>
   );
 }
