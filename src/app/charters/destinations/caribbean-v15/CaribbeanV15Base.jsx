@@ -387,7 +387,7 @@ function CircleCard({ name, image, nameBelow = false }) {
 
 // ── Modal carte : un point sur l'île cliquée ──────────────────────────────────
 // Leaflet chargé via CDN (comme test-region-map). island = { name, coords }.
-export function IslandMapModal({ island, onClose }) {
+export function IslandMapModal({ island, onClose, children }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const [leafletReady, setLeafletReady] = useState(false);
@@ -491,6 +491,8 @@ export function IslandMapModal({ island, onClose }) {
             </div>
           )}
         </div>
+        {/* Contenu optionnel sous la carte (ex. statut d'acces Arctic, 2026-11-17). */}
+        {children}
       </div>
     </div>
   );
