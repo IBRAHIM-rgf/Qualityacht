@@ -99,16 +99,17 @@ export function BahamasIslandsGrid({ sub = 'The most sought-after islands for lu
     const photo = caribbeanIslands[i % caribbeanIslands.length];
     return { name: g.name, image: photo.image, imageOld: photo.imageOld };
   });
-  const rows = [0, 4].map((start) => cards.slice(start, start + 4));
   return (
     <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
       <div className="max-w-7xl mx-auto">
         <RevealBlock label="Explore" title="Bahamas Islands" sub={sub} />
-        {rows.map((row, r) => (
-          <div key={r} className={`grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 ${r < rows.length - 1 ? 'mb-px' : ''}`}>
-            {row.map((c, i) => <DestCard key={c.name} index={r * 4 + i} {...c} />)}
-          </div>
-        ))}
+        {/* Grille sans case vide (client 2026-11-19) : 3 colonnes, rectangle a gauche en
+            ligne 1 puis 2 lignes de 3 ; telephone : 2 colonnes de carres. */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/10">
+          {cards.map((c, i) => (
+            <div key={c.name} className={i === 0 ? 'md:col-span-2' : ''}><DestCard index={i} {...c} /></div>
+          ))}
+        </div>
       </div>
     </CloudSection>
   );
