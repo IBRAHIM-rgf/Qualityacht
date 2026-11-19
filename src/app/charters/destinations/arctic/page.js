@@ -6,6 +6,7 @@ import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
 import RegionYachtsPage from '../_shared/RegionYachtsPage';
 import ArcticRegions from './ArcticRegions';
+import ArcticRegionCards from './ArcticRegionCards';
 
 const HERO = '/media/client/2026-11-18/arctic-hero';
 
@@ -43,6 +44,8 @@ export default function Page() {
         </VideoHero>
       </div>
       {/* Grille « Destinations by Region » (client 2026-11-17) au-dessus des bateaux. */}
+      {/* Cases Arctic (client 2026-11-19), comme Indian Ocean. */}
+      <ArcticRegionCards />
       <ArcticRegions />
       <RegionYachtsPage region="arctic" />
     </>
