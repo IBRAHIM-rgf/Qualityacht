@@ -2,7 +2,8 @@
 
 // Cases des regions Indian Ocean (client 2026-11-09), comme les cases North America :
 // meme carte (DestCard), chaque case ouvre la page de sa region.
-import { DestCard, CloudSection, RevealBlock } from '../caribbean-v15/CaribbeanV15Base';
+import { CloudSection, RevealBlock } from '../caribbean-v15/CaribbeanV15Base';
+import MosaicCards from '../_shared/MosaicCards';
 import { IO_GROUPS, IO_CARD_PHOTO } from './indianOceanGroups';
 
 export default function IndianOceanRegionCards({ linkBase = '/charters/destinations/indian-ocean' }) {
@@ -15,12 +16,10 @@ export default function IndianOceanRegionCards({ linkBase = '/charters/destinati
       <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
         <div className="max-w-7xl mx-auto">
           <RevealBlock label="Explore" title="Indian Ocean" />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px">
-            {IO_GROUPS.map((g, i) => (
-              <DestCard key={g.slug} index={i} name={g.name} image={g.photoFiltered || g.photo || IO_CARD_PHOTO} imageOld={g.photo || IO_CARD_PHOTO}
-                href={`${linkBase}/${g.slug}`} />
-            ))}
-          </div>
+          {/* Variante 7B (client 2026-11-19) : carre, rectangle, carre / 4 carres. */}
+          <MosaicCards cols={4} wide={[1]} cards={IO_GROUPS.map((g) => ({
+            name: g.name, image: g.photoFiltered || g.photo || IO_CARD_PHOTO, imageOld: g.photo || IO_CARD_PHOTO, href: `${linkBase}/${g.slug}`,
+          }))} />
         </div>
       </CloudSection>
     </>
