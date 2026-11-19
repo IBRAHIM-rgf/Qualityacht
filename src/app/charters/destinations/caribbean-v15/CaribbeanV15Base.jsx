@@ -578,11 +578,12 @@ export function CaribbeanIslandsGrid({ hrefBase }) {
     <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg="/images/services-bg.png">
       <div className="max-w-7xl mx-auto">
         <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
-          {cards.slice(0, 4).map((island, i) => <DestCard key={i} index={i} {...island} />)}
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
-          {cards.slice(4, 8).map((island, i) => <DestCard key={i} index={4 + i} {...island} />)}
+        {/* Grille sans case vide (client 2026-11-19) : 3 colonnes, rectangle a gauche
+            en ligne 1 puis 2 lignes de 3 ; telephone : 2 colonnes de carres. */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/10">
+          {cards.slice(0, 8).map((island, i) => (
+            <div key={i} className={i === 0 ? 'md:col-span-2' : ''}><DestCard index={i} {...island} /></div>
+          ))}
         </div>
       </div>
     </CloudSection>
@@ -915,13 +916,12 @@ export default function CaribbeanV15Page({
         <CloudSection id="explore-caribbean-islands" className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16" bg={grayClouds ? '/images/nuagesAncien.png' : '/images/services-bg.png'} gray={grayClouds}>
           <div className="max-w-7xl mx-auto">
             <RevealBlock label="Explore" title="Caribbean Islands" sub="The most sought-after islands for luxury yacht charters" />
-            {/* Ligne 1 : 2 col mobile / 4 col desktop */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 mb-px">
-              {islandCards.slice(0, 4).map((island, i) => <DestCard key={i} index={i} {...island} />)}
-            </div>
-            {/* Ligne 2 : 2 col mobile / 4 col desktop */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10">
-              {islandCards.slice(4, 8).map((island, i) => <DestCard key={i} index={4 + i} {...island} />)}
+            {/* Grille sans case vide (client 2026-11-19) : 3 colonnes, rectangle a gauche
+                en ligne 1 puis 2 lignes de 3 ; telephone : 2 colonnes de carres. */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/10">
+              {islandCards.slice(0, 8).map((island, i) => (
+                <div key={i} className={i === 0 ? 'md:col-span-2' : ''}><DestCard index={i} {...island} /></div>
+              ))}
             </div>
           </div>
         </CloudSection>
