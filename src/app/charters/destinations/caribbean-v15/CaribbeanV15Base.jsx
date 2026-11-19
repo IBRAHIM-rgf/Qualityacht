@@ -255,7 +255,9 @@ export function DestCard({ name, image, imageOld, href, index = 0 }) {
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
       <div className={`absolute bottom-0 left-0 right-0 h-px bg-[#c2622a] transition-opacity duration-[3000ms] ${lit ? 'opacity-100' : 'opacity-0'}`} />
       <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5">
-        <h3 className={`trajan-regular text-xs md:text-sm uppercase tracking-[0.15em] transition-colors duration-[3000ms] ${lit ? 'text-[#c2622a]' : 'text-[#acb0cd]'}`}>
+        {/* Noms plus affiches sur les cases (client 2026-11-19, toutes les grilles) :
+            garde pour l'accessibilite et le referencement, invisible a l'ecran. */}
+        <h3 className="sr-only">
           {name}
         </h3>
       </div>
