@@ -5,6 +5,7 @@ import { seo } from '@/lib/seoMeta';
 import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
 import RegionYachtsPage from '../_shared/RegionYachtsPage';
+import ArcticRegions from './ArcticRegions';
 
 const HERO = '/media/client/2026-11-18/arctic-hero';
 
@@ -41,6 +42,8 @@ export default function Page() {
           </div>
         </VideoHero>
       </div>
+      {/* Grille « Destinations by Region » (client 2026-11-17) au-dessus des bateaux. */}
+      <ArcticRegions />
       <RegionYachtsPage region="arctic" />
     </>
   );
