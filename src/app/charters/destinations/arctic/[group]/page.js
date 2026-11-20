@@ -41,4 +41,4 @@ export default async function ArcticRegionPage({ params }) {
     console.error('Arctic region page error:', error);
     return <SubregionClient {...config} initialData={[]} totalYachts={0} />;
   }
-}}
+}
