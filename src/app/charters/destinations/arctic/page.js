@@ -7,8 +7,20 @@ import Link from 'next/link';
 import VideoHero from '@/components/vibe/VideoHero';
 import ArcticRegions from './ArcticRegions';
 import ArcticRegionCards from './ArcticRegionCards';
+import BahamasPopularDestinations from '../bahamas/BahamasPopularDestinations';
 
 const HERO = '/media/client/2026-11-18/arctic-hero';
+
+// Ronds fleurs (client 2026-11-20), comme Indian Ocean : photo filtree au repos,
+// couleur au survol. Ordre du client.
+const F = '/media/client/2026-11-20/arctic-flowers';
+const ARCTIC_FLOWERS = [
+  { name: 'Greenland', slug: 'greenland', rest: `${F}/greenland-filtered.webp`, hover: `${F}/greenland-color.webp` },
+  { name: 'Svalbard', slug: 'svalbard', rest: `${F}/svalbard-filtered.webp`, hover: `${F}/svalbard-color.webp` },
+  { name: 'Northern Norway', slug: 'northern-norway', rest: `${F}/northern-norway-filtered.webp`, hover: `${F}/northern-norway-color.webp` },
+  { name: 'Iceland', slug: 'iceland', rest: `${F}/iceland-filtered.webp`, hover: `${F}/iceland-color.webp` },
+  { name: 'Canadian Arctic', slug: 'canadian-arctic', rest: `${F}/canadian-arctic-filtered.webp`, hover: `${F}/canadian-arctic-color.webp` },
+];
 
 // Titre et description Google (SEO etape 3, client 2026-11-01).
 export const metadata = seo('/charters/destinations/arctic');
@@ -46,6 +58,7 @@ export default function Page() {
       {/* Cases Arctic (client 2026-11-19), comme Indian Ocean. */}
       <ArcticRegionCards />
       <ArcticRegions />
+      <BahamasPopularDestinations items={ARCTIC_FLOWERS} />
     </>
   );
 }
