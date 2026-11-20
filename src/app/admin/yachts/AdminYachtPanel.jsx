@@ -106,6 +106,21 @@ const SUB_REGION_LABELS = {
   'tanzania-east-africa': 'Tanzania / East Africa',
   'sri-lanka': 'Sri Lanka',
   'arabian-sea-gulf-of-oman': 'Arabian Sea / Gulf of Oman',
+  // Arctique (client 2026-11-20) : les 14 cases de la page Arctic.
+  'greenland': 'Greenland',
+  'svalbard': 'Svalbard',
+  'northern-norway': 'Northern Norway',
+  'canadian-arctic': 'Canadian Arctic',
+  'northwest-passage': 'Northwest Passage',
+  'arctic-alaska': 'Arctic Alaska',
+  'iceland': 'Iceland',
+  'jan-mayen': 'Jan Mayen',
+  'north-atlantic-extensions': 'North Atlantic Extensions',
+  'russian-arctic': 'Russian Arctic — Special Enquiry',
+  'alaska-yacht-charter': 'Alaska — Yacht Charter Confirmed',
+  'canada-yacht-charter': 'Canada — Yacht Charter Confirmed',
+  'arctic-canada-expedition': 'Arctic Canada — Expedition Only',
+  'pacific-northwest-alaska-corridor': 'Pacific Northwest–Alaska Corridor',
 };
 
 const SUB_REGIONS_BY_REGION = {
@@ -115,6 +130,7 @@ const SUB_REGIONS_BY_REGION = {
   'west-mediterranean': ['french-riviera-monaco', 'south-of-france', 'corsica', 'sardinia', 'balearic-islands', 'spain-mainland', 'italian-riviera-liguria', 'tuscany', 'lazio', 'campania', 'amalfi-coast', 'sicily-islands', 'gibraltar', 'morocco', 'tunisia'],
   'east-mediterranean': ['black-sea', 'croatia', 'cyprus', 'italy-east-coast', 'greece', 'crete', 'malta', 'montenegro', 'turkey', 'egypt', 'east-tunisia'],
   'indian-ocean': ['maldives', 'seychelles', 'mascarene-islands', 'madagascar', 'mozambique', 'tanzania-east-africa', 'sri-lanka', 'arabian-sea-gulf-of-oman'],
+  arctic: ['greenland', 'svalbard', 'northern-norway', 'canadian-arctic', 'northwest-passage', 'arctic-alaska', 'iceland', 'jan-mayen', 'north-atlantic-extensions', 'russian-arctic', 'alaska-yacht-charter', 'canada-yacht-charter', 'arctic-canada-expedition', 'pacific-northwest-alaska-corridor'],
 };
 
 // Axe "Catégories charter" — indépendant des régions géo, multi-sélection.
