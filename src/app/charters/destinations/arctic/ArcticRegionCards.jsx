@@ -7,11 +7,17 @@
 // Chaque case ouvre sa page de region.
 import { CloudSection, RevealBlock } from '../caribbean-v15/CaribbeanV15Base';
 import MosaicCards from '../_shared/MosaicCards';
-import { ARCTIC_GROUPS, ARCTIC_CARD_SLUGS, ARCTIC_CARD_PHOTO } from './arcticGroups';
+import { ARCTIC_GROUPS, ARCTIC_CARD_SLUGS, ARCTIC_CARD_PHOTO, ARCTIC_CARDS_2 } from './arcticGroups';
 
 const CARDS = ARCTIC_CARD_SLUGS.map((slug) => ARCTIC_GROUPS.find((g) => g.slug === slug)).map((g) => ({
   name: g.name, image: g.photoFiltered || ARCTIC_CARD_PHOTO, imageOld: g.photo || ARCTIC_CARD_PHOTO,
   href: `/charters/destinations/arctic/${g.slug}`,
+}));
+
+// 2e grille (client 2026-11-20) a la suite de la 1re : meme style, rectangle = Canada
+// (ligne 2, 2e position).
+const CARDS_2 = ARCTIC_CARDS_2.map((c) => ({
+  name: c.label, image: c.photoFiltered, imageOld: c.photo, href: `/charters/destinations/arctic/${c.slug}`,
 }));
 
 export default function ArcticRegionCards() {
@@ -25,6 +31,7 @@ export default function ArcticRegionCards() {
         <div className="max-w-7xl mx-auto">
           <RevealBlock label="Explore" title="The Arctic" />
           <MosaicCards cols={4} wide={[1]} mobileOne gapClass="gap-1" className="bg-[#1a1d21]" cards={CARDS} />
+          <MosaicCards cols={4} wide={[5]} mobileOne gapClass="gap-1" className="bg-[#1a1d21] mt-1" cards={CARDS_2} offset={7} />
         </div>
       </CloudSection>
     </>
