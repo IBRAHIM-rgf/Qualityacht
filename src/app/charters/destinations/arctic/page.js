@@ -8,6 +8,7 @@ import VideoHero from '@/components/vibe/VideoHero';
 import ArcticRegions from './ArcticRegions';
 import ArcticRegionCards from './ArcticRegionCards';
 import BahamasPopularDestinations from '../bahamas/BahamasPopularDestinations';
+import ArcticCta from './ArcticCta';
 
 const HERO = '/media/client/2026-11-18/arctic-hero';
 
@@ -59,6 +60,8 @@ export default function Page() {
       <ArcticRegionCards />
       <ArcticRegions />
       <BahamasPopularDestinations items={ARCTIC_FLOWERS} />
+      {/* Image du bas + CTA (client 2026-11-21), comme Antarctica. */}
+      <ArcticCta />
     </>
   );
 }
