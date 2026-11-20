@@ -1,5 +1,6 @@
 // Cases « Arctic » (client 2026-11-19) : 14 regions dans l'ordre du client ; chaque case
-// ouvre /charters/destinations/arctic/<slug> (page de region, sans bateaux pour l'instant).
+// ouvre /charters/destinations/arctic/<slug>, avec les bateaux publies de la sous-region
+// (admin : region « Arctique » + sous-region `key`).
 // Module sans 'use client' : partage avec les pages serveur.
 
 // Photo provisoire (image Arctic deja sur le site) en attendant les photos du client.
@@ -29,18 +30,18 @@ export const ARCTIC_CARDS_2 = [
 ];
 
 export const ARCTIC_GROUPS = [
-  { name: 'Greenland', slug: 'greenland', ...ph('greenland'), places: ['West Greenland — Disko Bay & Ilulissat', 'East Greenland — Scoresby Sund', 'Northwest Greenland'] },
-  { name: 'Svalbard', slug: 'svalbard', ...ph('svalbard'), places: ['Longyearbyen', 'Spitsbergen', 'Svalbard Archipelago'] },
-  { name: 'Northern Norway', slug: 'northern-norway', ...ph('northern-norway'), places: ['Tromsø', 'Northern Norway Fjords', 'Norwegian Arctic Coast'] },
-  { name: 'Canadian Arctic', slug: 'canadian-arctic', ...ph('canadian-arctic'), places: ['Baffin Island', 'Pond Inlet', 'Baffin Bay', 'Devon Island', 'Dundas Harbour', 'Beechey Island', 'Resolute', 'Cambridge Bay', 'Amundsen Gulf'] },
-  { name: 'Northwest Passage', slug: 'northwest-passage', ...ph('northwest-passage'), places: ['Eastern Northwest Passage', 'Pond Inlet – Cambridge Bay', 'Full Northwest Passage'] },
-  { name: 'Arctic Alaska', slug: 'arctic-alaska', places: ['Nome — Gateway', 'Bering Strait', 'Chukchi Sea', 'Alaska North Coast', 'Beaufort Sea'] },
-  { name: 'Iceland', slug: 'iceland', ...ph('iceland'), places: ['Reykjavík', 'Westfjords', 'North Iceland', 'Snæfellsnes', 'Iceland Circumnavigation'] },
-  { name: 'Jan Mayen', slug: 'jan-mayen', ...ph2('jan-mayen'), places: ['Jan Mayen Island'] },
-  { name: 'North Atlantic Extensions', slug: 'north-atlantic-extensions', ...ph('north-atlantic-extensions'), places: ['Faroe Islands', 'Shetland Islands', 'Labrador & Torngat Mountains'] },
-  { name: 'Russian Arctic — Special Enquiry', slug: 'russian-arctic', ...ph2('russian-arctic'), places: ['Franz Josef Land', 'Bell Island', 'Cape Flora', 'Hall Island & Cape Tegetthoff', 'Northeast Passage'] },
-  { name: 'Alaska — Yacht Charter Confirmed', slug: 'alaska', ...ph2('alaska'), places: ['Juneau', 'Glacier Bay', 'Tracy Arm', 'Endicott Arm', 'Inside Passage', 'Admiralty Island', 'Frederick Sound', 'Icy Strait', 'Sitka', 'Petersburg', 'Ketchikan', 'Prince William Sound', 'Kenai Peninsula', 'Misty Fjords'] },
-  { name: 'Canada — Yacht Charter Confirmed', slug: 'canada', ...ph2('canada'), places: ['British Columbia’s Inside Passage', 'Desolation Sound', 'Great Bear Rainforest', 'Haida Gwaii', 'Vancouver Island', 'Gulf Islands', 'Broughton Archipelago', 'Johnstone Strait', 'Princess Louisa Inlet', 'Clayoquot Sound', 'Barkley Sound', 'Queen Charlotte Strait', 'Discovery Islands'] },
-  { name: 'Arctic Canada — Expedition Only', slug: 'arctic-canada', ...ph2('arctic-canada'), places: ['Northwest Passage, Canada', 'Baffin Island, Nunavut', 'Iqaluit', 'Pond Inlet', 'Clyde River', 'Resolute', 'Cambridge Bay', 'Sirmilik National Park', 'Torngat Mountains National Park', 'Hudson Bay', 'Churchill', 'Nunavik', 'Labrador Coast'] },
-  { name: 'Pacific Northwest–Alaska Corridor', slug: 'pacific-northwest-alaska-corridor', ...ph2('pacific-northwest-alaska-corridor'), places: ['British Columbia’s Inside Passage to Southeast Alaska', 'Vancouver–Juneau–Ketchikan route'] },
+  { name: 'Greenland', slug: 'greenland', key: 'greenland', ...ph('greenland'), places: ['West Greenland — Disko Bay & Ilulissat', 'East Greenland — Scoresby Sund', 'Northwest Greenland'] },
+  { name: 'Svalbard', slug: 'svalbard', key: 'svalbard', ...ph('svalbard'), places: ['Longyearbyen', 'Spitsbergen', 'Svalbard Archipelago'] },
+  { name: 'Northern Norway', slug: 'northern-norway', key: 'northern-norway', ...ph('northern-norway'), places: ['Tromsø', 'Northern Norway Fjords', 'Norwegian Arctic Coast'] },
+  { name: 'Canadian Arctic', slug: 'canadian-arctic', key: 'canadian-arctic', ...ph('canadian-arctic'), places: ['Baffin Island', 'Pond Inlet', 'Baffin Bay', 'Devon Island', 'Dundas Harbour', 'Beechey Island', 'Resolute', 'Cambridge Bay', 'Amundsen Gulf'] },
+  { name: 'Northwest Passage', slug: 'northwest-passage', key: 'northwest-passage', ...ph('northwest-passage'), places: ['Eastern Northwest Passage', 'Pond Inlet – Cambridge Bay', 'Full Northwest Passage'] },
+  { name: 'Arctic Alaska', slug: 'arctic-alaska', key: 'arctic-alaska', places: ['Nome — Gateway', 'Bering Strait', 'Chukchi Sea', 'Alaska North Coast', 'Beaufort Sea'] },
+  { name: 'Iceland', slug: 'iceland', key: 'iceland', ...ph('iceland'), places: ['Reykjavík', 'Westfjords', 'North Iceland', 'Snæfellsnes', 'Iceland Circumnavigation'] },
+  { name: 'Jan Mayen', slug: 'jan-mayen', key: 'jan-mayen', ...ph2('jan-mayen'), places: ['Jan Mayen Island'] },
+  { name: 'North Atlantic Extensions', slug: 'north-atlantic-extensions', key: 'north-atlantic-extensions', ...ph('north-atlantic-extensions'), places: ['Faroe Islands', 'Shetland Islands', 'Labrador & Torngat Mountains'] },
+  { name: 'Russian Arctic — Special Enquiry', slug: 'russian-arctic', key: 'russian-arctic', ...ph2('russian-arctic'), places: ['Franz Josef Land', 'Bell Island', 'Cape Flora', 'Hall Island & Cape Tegetthoff', 'Northeast Passage'] },
+  { name: 'Alaska — Yacht Charter Confirmed', slug: 'alaska', key: 'alaska-yacht-charter', ...ph2('alaska'), places: ['Juneau', 'Glacier Bay', 'Tracy Arm', 'Endicott Arm', 'Inside Passage', 'Admiralty Island', 'Frederick Sound', 'Icy Strait', 'Sitka', 'Petersburg', 'Ketchikan', 'Prince William Sound', 'Kenai Peninsula', 'Misty Fjords'] },
+  { name: 'Canada — Yacht Charter Confirmed', slug: 'canada', key: 'canada-yacht-charter', ...ph2('canada'), places: ['British Columbia’s Inside Passage', 'Desolation Sound', 'Great Bear Rainforest', 'Haida Gwaii', 'Vancouver Island', 'Gulf Islands', 'Broughton Archipelago', 'Johnstone Strait', 'Princess Louisa Inlet', 'Clayoquot Sound', 'Barkley Sound', 'Queen Charlotte Strait', 'Discovery Islands'] },
+  { name: 'Arctic Canada — Expedition Only', slug: 'arctic-canada', key: 'arctic-canada-expedition', ...ph2('arctic-canada'), places: ['Northwest Passage, Canada', 'Baffin Island, Nunavut', 'Iqaluit', 'Pond Inlet', 'Clyde River', 'Resolute', 'Cambridge Bay', 'Sirmilik National Park', 'Torngat Mountains National Park', 'Hudson Bay', 'Churchill', 'Nunavik', 'Labrador Coast'] },
+  { name: 'Pacific Northwest–Alaska Corridor', slug: 'pacific-northwest-alaska-corridor', key: 'pacific-northwest-alaska-corridor', ...ph2('pacific-northwest-alaska-corridor'), places: ['British Columbia’s Inside Passage to Southeast Alaska', 'Vancouver–Juneau–Ketchikan route'] },
 ];
