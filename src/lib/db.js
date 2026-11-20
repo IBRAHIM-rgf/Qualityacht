@@ -354,7 +354,7 @@ export async function getSelectedYachtsWithData() {
         yacht_id, yacht_name, is_visible, is_featured, display_order,
         category, categories, handicaps, tags, custom_title, custom_description, custom_price,
         custom_highlights, internal_notes, cached_data, light_data, ankor_region,
-        region, sub_region, pets_allowed, groups_allowed, water_toys, extra_info,
+        region, sub_region, regions, sub_regions, pets_allowed, groups_allowed, water_toys, extra_info,
         custom_pricing, day_charter, charter_model, overrides, admin_extra, created_at, updated_at
       FROM yacht_selections
       ORDER BY display_order ASC
