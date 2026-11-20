@@ -1,16 +1,16 @@
 'use client';
 
-// Cases « Arctic » (client 2026-11-19) : 14 destinations, dans l'ordre du client,
-// 2 blocs sans case vide : 7B (carre, rectangle, carre / 4 carres) puis
-// 7F (4 carres / 2 carres + rectangle a droite).
-// Image filtree au repos, image reelle au survol (comme Indian Ocean).
-// Chaque case ouvre sa page de region (client 2026-11-19).
+// Cases « Arctic » (client 2026-11-20) : 7 cases, 4 colonnes, espace 4 px, fond #1a1d21,
+// sans case vide. Ligne 1 : Svalbard | Canadian Arctic (rectangle) | Northern Norway ;
+// ligne 2 : Northwest Passage | Greenland | Iceland | North Atlantic Extensions.
+// Photo floue au repos, reelle au survol, nom en bas a gauche. Telephone : 1 colonne.
+// Chaque case ouvre sa page de region.
 import { CloudSection, RevealBlock } from '../caribbean-v15/CaribbeanV15Base';
 import MosaicCards from '../_shared/MosaicCards';
-import { ARCTIC_GROUPS, ARCTIC_CARD_PHOTO } from './arcticGroups';
+import { ARCTIC_GROUPS, ARCTIC_CARD_SLUGS, ARCTIC_CARD_PHOTO } from './arcticGroups';
 
-const CARDS = ARCTIC_GROUPS.map((g) => ({
-  name: g.name, image: g.photoFiltered || g.photo || ARCTIC_CARD_PHOTO, imageOld: g.photo || ARCTIC_CARD_PHOTO,
+const CARDS = ARCTIC_CARD_SLUGS.map((slug) => ARCTIC_GROUPS.find((g) => g.slug === slug)).map((g) => ({
+  name: g.name, image: g.photoFiltered || ARCTIC_CARD_PHOTO, imageOld: g.photo || ARCTIC_CARD_PHOTO,
   href: `/charters/destinations/arctic/${g.slug}`,
 }));
 
@@ -24,10 +24,7 @@ export default function ArcticRegionCards() {
       <CloudSection className="bg-[#26272a] py-12 md:py-20 px-4 md:px-16">
         <div className="max-w-7xl mx-auto">
           <RevealBlock label="Explore" title="The Arctic" />
-          <div className="space-y-px">
-            <MosaicCards cols={4} wide={[1]} cards={CARDS.slice(0, 7)} />
-            <MosaicCards cols={4} wide={[6]} cards={CARDS.slice(7)} offset={7} />
-          </div>
+          <MosaicCards cols={4} wide={[1]} mobileOne gapClass="gap-1" className="bg-[#1a1d21]" cards={CARDS} />
         </div>
       </CloudSection>
     </>
