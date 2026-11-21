@@ -27,6 +27,8 @@ import { OVERRIDE_TEXT_FIELDS, normalizeOverrides, mergeSourceAndOverrides, diff
 // ════════════════════════════════════════════════════════════
 const REGION_LABELS = {
   'arctic': 'Arctique',
+  // Antarctique (client 2026-11-21) : 3 sous-regions = les 3 cases de la page Antarctica.
+  'antarctica': 'Antarctique',
   'bahamas': 'Bahamas',
   'central-america': 'Amérique Centrale',
   'east-asia': "Asie de l'Est",
@@ -121,6 +123,10 @@ const SUB_REGION_LABELS = {
   'canada-yacht-charter': 'Canada — Yacht Charter Confirmed',
   'arctic-canada-expedition': 'Arctic Canada — Expedition Only',
   'pacific-northwest-alaska-corridor': 'Pacific Northwest–Alaska Corridor',
+  // Antarctique (client 2026-11-21).
+  'antarctica-peninsula-region': 'Antarctica',
+  'argentina': 'Argentina',
+  'chile': 'Chile',
 };
 
 const SUB_REGIONS_BY_REGION = {
@@ -130,6 +136,7 @@ const SUB_REGIONS_BY_REGION = {
   'west-mediterranean': ['french-riviera-monaco', 'south-of-france', 'corsica', 'sardinia', 'balearic-islands', 'spain-mainland', 'italian-riviera-liguria', 'tuscany', 'lazio', 'campania', 'amalfi-coast', 'sicily-islands', 'gibraltar', 'morocco', 'tunisia'],
   'east-mediterranean': ['black-sea', 'croatia', 'cyprus', 'italy-east-coast', 'greece', 'crete', 'malta', 'montenegro', 'turkey', 'egypt', 'east-tunisia'],
   'indian-ocean': ['maldives', 'seychelles', 'mascarene-islands', 'madagascar', 'mozambique', 'tanzania-east-africa', 'sri-lanka', 'arabian-sea-gulf-of-oman'],
+  antarctica: ['antarctica-peninsula-region', 'argentina', 'chile'],
   arctic: ['greenland', 'svalbard', 'northern-norway', 'canadian-arctic', 'northwest-passage', 'arctic-alaska', 'iceland', 'jan-mayen', 'north-atlantic-extensions', 'russian-arctic', 'alaska-yacht-charter', 'canada-yacht-charter', 'arctic-canada-expedition', 'pacific-northwest-alaska-corridor'],
 };
 
