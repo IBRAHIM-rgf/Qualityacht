@@ -10,6 +10,7 @@ import VideoHero from '@/components/vibe/VideoHero';
 import AntarcticaRegions from './AntarcticaRegions';
 import AntarcticaRegionCards from './AntarcticaRegionCards';
 import AntarcticaCta from './AntarcticaCta';
+import AntarcticaEclat from './AntarcticaEclat';
 
 const HERO = '/media/client/2026-10-10/antarctica-hero';
 
@@ -45,6 +46,8 @@ export default function AntarcticaPage() {
           </Link>
         </div>
       </VideoHero>
+      {/* Eclat (cartes flottantes), comme North America : juste sous le hero (client 2026-11-22). */}
+      <AntarcticaEclat />
       {/* Cases Antarctica / Argentina / Chile (client 2026-11-17), comme Indian Ocean. */}
       <AntarcticaRegionCards />
       {/* Destinations by Region (client 2026-10-15), comme North America. */}
