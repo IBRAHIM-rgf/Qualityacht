@@ -12,6 +12,8 @@
 // Le mot « Rate(s) » est garde partout, admin et site (client 2026-11-01).
 // Aucun acces BDD ici : module partage serveur / client.
 
+import { regionById } from './regionConfig';
+
 export const CHARTER_TYPES = [
   { key: 'weekly', label: 'Weekly Charter', unit: 'WEEK' },
   { key: 'day', label: 'Day Charter', unit: 'DAY' },
@@ -28,11 +30,14 @@ const TYPE_KEYS = CHARTER_TYPES.map((t) => t.key);
 
 export const RATE_PERIODS = ['Summer', 'Winter', 'Summer / Winter', 'Christmas', 'New Year', 'Christmas / New Year', 'Holiday'];
 export const RATE_TITLES_1 = ['High Season', 'Low Season', 'High Season / Low Season'];
-export const RATE_TITLES_2 = [
-  'Arctic', 'Central America', 'East Mediterranean', 'Indonesia', 'Pacific Ocean', 'South East Asia',
-  'Africa', 'Caribbean', 'Bahamas', 'East Asia', 'Indian Ocean', 'North America', 'Gulf of Oman',
-  'West Mediterranean', 'Northern Europe', 'Oceania',
+// Libelles anglais tires de la source unique des regions (lib/regionConfig.js).
+// Antarctica = la meme region que « Antarctique » de l'admin (id antarctica).
+export const RATE_TITLES_2_IDS = [
+  'arctic', 'antarctica', 'central-america', 'east-mediterranean', 'indonesia', 'pacific-ocean', 'south-east-asia',
+  'africa', 'caribbean', 'bahamas', 'east-asia', 'indian-ocean', 'north-america', 'arabian-gulf',
+  'west-mediterranean', 'northern-europe', 'oceania',
 ];
+export const RATE_TITLES_2 = RATE_TITLES_2_IDS.map((id) => regionById(id).en);
 export const RATE_CURRENCIES = [
   { code: 'EUR', label: 'EUR €' },
   { code: 'USD', label: 'USD $' },
