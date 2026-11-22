@@ -384,3 +384,56 @@ export function ankorPricingToCharterTypes(pricing) {
   }
   return out;
 }
+
+// ══ Availability Period (client 2026-11-22, admin seulement) ══
+// Les periodes Ankor : (1) dates de chaque tarif, (2) passages des descriptions qui
+// citent une periode (mois, dates). Lecture seule, rien n'est enregistre.
+// Mois avec majuscule (evite « you may »).
+const MONTH_RE = /\b(Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sep(t(ember)?)?|Oct(ober)?|Nov(ember)?|Dec(ember)?|JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\b/;
+const DATE_RE = /\b\d{1,2}[./-]\d{1,2}[./-](\d{2}|\d{4})\b|\b\d{4}-\d{2}-\d{2}\b/;
+const SEASON_RE = /\b(summer|winter|spring|autumn|fall|season|high season|low season|available|availability)\b/i;
+
+function periodSnippets(text) {
+  const t = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!t) return [];
+  return t.split(/(?<=[.!?;])\s+|\n+/)
+    .map((s) => s.trim())
+    .filter((s) => s && (MONTH_RE.test(s) || DATE_RE.test(s)) && (DATE_RE.test(s) || /\b(19|20)\d{2}\b/.test(s) || SEASON_RE.test(s) || /\b(to|until|through|from|–|-)\b/i.test(s)))
+    .map((s) => (s.length > 260 ? `${s.slice(0, 257)}…` : s));
+}
+
+/** -> { rates: [{ name, period }], descriptions: [{ from, text }] } */
+export function ankorAvailability(pricing, yachtDescription = '') {
+  const list = Array.isArray(pricing?.pricingInfo) ? pricing.pricingInfo : [];
+  const rates = [];
+  const seen = new Set();
+  for (const p of list) {
+    const dates = (Array.isArray(p?.effectiveDates) ? p.effectiveDates : []).filter((d) => d?.from && d?.to)
+      .sort((a, b) => new Date(a.from) - new Date(b.from));
+    for (const d of dates) {
+      const period = `${fmtDay(d.from)} – ${fmtDay(d.to)}`;
+      const key = `${p?.name}|${period}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      rates.push({ name: String(p?.name || ''), period, from: d.from });
+    }
+  }
+  rates.sort((a, b) => new Date(a.from) - new Date(b.from));
+  const descriptions = [];
+  const seenTxt = new Set();
+  const push = (from, text) => {
+    for (const s of periodSnippets(text)) {
+      if (seenTxt.has(s)) continue;
+      seenTxt.add(s);
+      descriptions.push({ from, text: s });
+    }
+  };
+  push('Yacht description', yachtDescription);
+  for (const p of list) {
+    const name = String(p?.name || 'Rate');
+    push(name, p?.description);
+    push(name, p?.pricing?.note);
+    for (const li of (Array.isArray(p?.pricing?.lineItems) ? p.pricing.lineItems : [])) push(name, li?.conditions);
+  }
+  return { rates: rates.map(({ name, period }) => ({ name, period })), descriptions };
+}
