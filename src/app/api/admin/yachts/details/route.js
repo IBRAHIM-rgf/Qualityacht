@@ -11,7 +11,7 @@ export async function GET(request) {
 
   try {
     const { ensureV3Schema, getYachtSelectionById } = await import('@/lib/db');
-    const { extractYachtSource, normalizeOverrides, ankorPricingToRateRows, ankorPricingToCharterTypes } = await import('@/lib/yachtOverrides');
+    const { extractYachtSource, normalizeOverrides, ankorPricingToRateRows, ankorPricingToCharterTypes, ankorAvailability } = await import('@/lib/yachtOverrides');
     await ensureV3Schema();
 
     const { searchParams } = new URL(request.url);
@@ -45,6 +45,8 @@ export async function GET(request) {
       ankorRates: ankorPricingToRateRows(_pricing),
       // Toutes les fiches Ankor par type de charter (client 2026-11-16).
       ankorPrices: ankorPricingToCharterTypes(_pricing),
+      // Availability Period (client 2026-11-22) : dates des tarifs + periodes citees dans les descriptions.
+      ankorAvailability: ankorAvailability(_pricing, source.description),
     });
   } catch (error) {
     console.error('Erreur GET /api/admin/yachts/details:', error);
