@@ -11,6 +11,7 @@ import { getAnkorImageUrl } from '@/lib/utils';
 import { normalizeCharterPrices, formatPriceAmount, hasAnyPrice, missingRateInfo } from '@/lib/charterPrices';
 import { mergeSourceAndOverrides } from '@/lib/yachtOverrides';
 import CharterPricesEditor, { pricesToForm } from './CharterPricesEditor';
+import AvailabilityCard from './AvailabilityCard';
 import { ADMIN_CATEGORIES, ICON_COLUMNS, isCategoryOn, SAVE_COLORS, saveColorHex } from '@/lib/adminCategories';
 import { HANDICAPS_BY_CAT } from '@/lib/handicaps';
 
@@ -195,7 +196,11 @@ export default function CatalogueView({
 
   const regionCounts = useMemo(() => {
     const c = {};
-    for (const y of list0) { const r = y.regions[0] || '_none'; c[r] = (c[r] || 0) + 1; }
+    // Chaque region cochee du bateau compte (pas seulement la 1re), client 2026-11-22.
+    for (const y of list0) {
+      if (!y.regions.length) { c._none = (c._none || 0) + 1; continue; }
+      for (const r of y.regions) c[r] = (c[r] || 0) + 1;
+    }
     return c;
   }, [list0]);
   const subCounts = useMemo(() => {
@@ -281,7 +286,8 @@ export default function CatalogueView({
             <label>Région</label>
             <select value={region} onChange={(e) => { setRegion(e.target.value); setSubFilter(''); }}>
               <option value="">Toutes régions</option>
-              {Object.keys(regionCounts).filter((r) => r !== '_none').map((r) => <option key={r} value={r}>{regLabel(r)}</option>)}
+              {/* Toutes les regions de l'admin, meme sans bateau (ex. Antarctique), client 2026-11-22. */}
+              {Object.keys(regionLabels).map((r) => <option key={r} value={r}>{regLabel(r)}{regionCounts[r] ? ` (${regionCounts[r]})` : ''}</option>)}
             </select>
           </div>
           <div className="f">
@@ -514,6 +520,7 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
   const [regsOpen, setRegsOpen] = useState(true);
   const [caOpen, setCaOpen] = useState(false);
   const [dp, setDp] = useState(null); // { key, left, top }
+  const [avail, setAvail] = useState(null); // Availability Period (client 2026-11-22)
 
   useEffect(() => {
     let alive = true;
@@ -525,6 +532,7 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
         const data = await res.json();
         if (!alive) return;
         setInfo(mergeSourceAndOverrides(data.source, data.overrides));
+        setAvail(data.ankorAvailability || { rates: [], descriptions: [] });
         // Tarifs Ankor pre-remplis quand aucun tarif n'est saisi (enregistres seulement sur « Enregistrer »).
         // Toutes les fiches Ankor (Week, Day, Half-day, Hours), client 2026-11-16 ; ancien format en repli.
         const ankorTypes = data.ankorPrices && Object.keys(data.ankorPrices).length ? { version: 2, types: data.ankorPrices } : null;
@@ -532,7 +540,7 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
           setPrices(pricesToForm(ankorTypes || data.ankorRates));
         }
       } catch {
-        if (alive) setInfo({});
+        if (alive) { setInfo({}); setAvail({ rates: [], descriptions: [] }); }
       }
     })();
     return () => { alive = false; };
@@ -674,6 +682,8 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
       </div>
 
       <CharterPricesEditor value={prices} onChange={(v) => { setPrices(v); setDirty(true); }} />
+
+      <AvailabilityCard data={avail} />
 
       {/* Categories Charter — case cochee = ajout automatique a la section du site */}
       <div className={`acc ${catsOpen ? 'open' : ''}`}>

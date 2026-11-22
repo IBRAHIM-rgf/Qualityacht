@@ -16,6 +16,7 @@ import { HANDICAPS_BY_CAT, HANDICAP_LABELS, parseHandicaps } from '@/lib/handica
 import { normalizeDayCharter } from '@/lib/customPricing';
 import { normalizeCharterPrices, hasAnyPrice } from '@/lib/charterPrices';
 import CharterPricesEditor, { pricesToForm } from './CharterPricesEditor';
+import AvailabilityCard from './AvailabilityCard';
 import CatalogueView from './CatalogueView';
 import { cleanCategories, normalizeAdminExtra } from '@/lib/adminCategories';
 import { normalizeCharterModel } from '@/lib/charterModel';
@@ -981,7 +982,7 @@ function EditModal({ yacht, onClose, onSave }) {
         if (!res.ok) throw new Error(String(res.status));
         const data = await res.json();
         if (!alive) return;
-        setDetails({ loading: false, error: false, source: data.source });
+        setDetails({ loading: false, error: false, source: data.source, availability: data.ankorAvailability || { rates: [], descriptions: [] } });
         setInfo(mergeSourceAndOverrides(data.source, data.overrides));
         const ankorTypes = data.ankorPrices && Object.keys(data.ankorPrices).length ? { version: 2, types: data.ankorPrices } : null;
         if (!hasAnyPrice(normalizeCharterPrices(yacht.custom_pricing, yacht.day_charter)) && (ankorTypes || (Array.isArray(data.ankorRates) && data.ankorRates.length))) {
@@ -1083,6 +1084,7 @@ function EditModal({ yacht, onClose, onSave }) {
               </p>
             )}
             <CharterPricesEditor value={form.custom_pricing} onChange={(custom_pricing) => { setPricingTouched(true); setForm((f) => ({ ...f, custom_pricing })); }} />
+            <AvailabilityCard data={details.loading ? null : (details.availability || { rates: [], descriptions: [] })} />
           </div>
           {/* Day Charter : case seule (les prix sont dans l'onglet Day Charter ci-dessus) */}
           <div>
