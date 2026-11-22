@@ -22,30 +22,13 @@ import { cleanCategories, normalizeAdminExtra } from '@/lib/adminCategories';
 import { normalizeCharterModel } from '@/lib/charterModel';
 import CharterModelEditor from './CharterModelEditor';
 import { OVERRIDE_TEXT_FIELDS, normalizeOverrides, mergeSourceAndOverrides, diffOverrides, isSupportedImage } from '@/lib/yachtOverrides';
+import { REGION_LABELS_FR, regionColor } from '@/lib/regionConfig';
 
 // ════════════════════════════════════════════════════════════
 // CONSTANTES
 // ════════════════════════════════════════════════════════════
-const REGION_LABELS = {
-  'arctic': 'Arctique',
-  // Antarctique (client 2026-11-22) : 5 sous-regions = les 5 regions de la grille Antarctica.
-  'antarctica': 'Antarctique',
-  'bahamas': 'Bahamas',
-  'central-america': 'Amérique Centrale',
-  'east-asia': "Asie de l'Est",
-  'east-mediterranean': 'Méditerranée Est',
-  'indian-ocean': 'Océan Indien',
-  'indonesia': 'Indonésie',
-  'north-america': 'Amérique du Nord',
-  'pacific-ocean': 'Océan Pacifique',
-  'arabian-gulf': "Golfe d'Oman",
-  'south-east-asia': 'Asie du Sud-Est',
-  'west-mediterranean': 'Méditerranée Ouest',
-  'africa': 'Afrique',
-  'northern-europe': 'Europe du Nord',
-  'caribbean': 'Caraïbes',
-  'oceania': 'Océanie',
-};
+// Regions : source unique (identifiant, libelles FR / EN, couleur) dans lib/regionConfig.js.
+const REGION_LABELS = REGION_LABELS_FR;
 
 const SUB_REGION_LABELS = {
   'greater-antilles': 'Greater Antilles',
@@ -632,7 +615,8 @@ function RegionCheckboxes({ regions, subRegions, onChange }) {
             <div key={id} className={subs.length && on ? 'sm:col-span-2' : ''}>
               <label className="flex items-center gap-2 text-sm cursor-pointer">
                 <input type="checkbox" checked={on} onChange={() => toggleRegion(id)} className="w-4 h-4 accent-[#B03E00]" />
-                <span className={on ? 'text-[#B03E00] font-medium' : 'text-[#acb0cd]'}>{label}</span>
+                {/* Texte a la couleur de la region (client 2026-11-22). */}
+                <span className={on ? 'font-semibold' : ''} style={{ color: regionColor(id) || '#acb0cd' }}>{label}</span>
               </label>
               {on && subs.length > 0 && (
                 <div className="mt-1.5 mb-1 ml-6 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">

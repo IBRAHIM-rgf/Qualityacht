@@ -14,6 +14,7 @@ import CharterPricesEditor, { pricesToForm } from './CharterPricesEditor';
 import AvailabilityCard from './AvailabilityCard';
 import { ADMIN_CATEGORIES, ICON_COLUMNS, isCategoryOn, SAVE_COLORS, saveColorHex } from '@/lib/adminCategories';
 import { HANDICAPS_BY_CAT } from '@/lib/handicaps';
+import { regionById, regionColor, yachtRegionIds } from '@/lib/regionConfig';
 
 // Sous-categories affichees seulement dans la case deployee de leur categorie (client 2026-11-01).
 const SUB_OF = Object.fromEntries(ADMIN_CATEGORIES.filter((c) => c.key.startsWith('only-for-you/')).map((c) => [c.key, 'only-for-you']));
@@ -418,13 +419,40 @@ export default function CatalogueView({
   );
 }
 
+// Indicateurs de regions a la place de la fleche (client 2026-11-22) : une petite
+// fleche par region (des carres au-dela de 4), a la couleur de la region, dans
+// l'espace de l'ancienne fleche. Le clic / Entree deplie toujours la ligne.
+// Info-bulle au survol et au focus clavier. Sans region : la fleche grise d'origine.
+function RegionMarks({ ids, expanded }) {
+  if (!ids.length) {
+    return <span className="rg-none" role="button" tabIndex={0} aria-expanded={expanded} aria-label={expanded ? 'Replier' : 'Déplier'}>{expanded ? '▼' : '▶'}</span>;
+  }
+  const squares = ids.length > 4;
+  return (
+    <span className={`rg-marks ${squares ? 'sq' : ''} ${expanded ? 'open' : ''}`}>
+      {ids.map((id) => {
+        const r = regionById(id);
+        return (
+          <span key={id} className="rg-mk" tabIndex={0} role="button" aria-expanded={expanded}
+            aria-label={`${r.fr} — ${expanded ? 'replier' : 'déplier'}`} data-tip={r.fr} style={{ color: r.color }}>
+            {squares ? <i style={{ background: r.color }} /> : <b>▶</b>}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
 function FragmentRow({ y, expanded, onExpand, onOpen, regLabel, subLabel, onToggleVisible, onToggleFeatured, onDelete, onEdit }) {
   return (
     <>
       {/* Bateau ajoute par Claude : cadre orange ; nom qui clignote tant qu'une fiche de
           tarif manque de dates, de lieux ou de prix (client 2026-11-16). */}
       <tr className={`mrow ${y.admin_extra?.claude ? 'claude-add' : ''}`}>
-        <td className="chev" onClick={onExpand}>{expanded ? '▼' : '▶'}</td>
+        <td className="chev" onClick={onExpand}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExpand(); } }}>
+          <RegionMarks ids={yachtRegionIds(y.regions)} expanded={expanded} />
+        </td>
         <td>
           <div className="yname" onClick={onOpen}>
             <div className="ph" style={{ backgroundImage: `url("${y.image}")`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
@@ -805,7 +833,7 @@ function DetailPage({ y, regLabel, subLabel, regionLabels = {}, subRegionsByRegi
                           : { ...regs, regions: [...regs.regions, rid] });
                         setDirty(true);
                       }} />
-                      {rl}
+                      <span style={{ color: regionColor(rid) || undefined }}>{rl}</span>
                     </label>
                     {on && subs.length > 0 && (
                       <div className="catx-g catx-subs">

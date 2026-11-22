@@ -10,6 +10,7 @@ import {
   CHARTER_TYPES, RATE_PERIODS, RATE_TITLES_1, RATE_TITLES_2, RATE_CURRENCIES, RATE_UNITS,
   TAX_FIELDS, defaultUnitFor, normalizeCharterPrices, HOURS_CHOICES, cleanPriceInput,
 } from '@/lib/charterPrices';
+import { regionByEn } from '@/lib/regionConfig';
 
 function emptyRateFor(typeKey) {
   return { period: 'Summer', title1: '', title2: '', subtitle: '', price: '', currency: 'EUR', unit: defaultUnitFor(typeKey), zones: '', apa: false, vat: false };
@@ -31,11 +32,13 @@ export function pricesToForm(raw, legacyDayRaw = null) {
   return out;
 }
 
-function Chips({ options, value, onChange, allowNone }) {
+function Chips({ options, value, onChange, allowNone, colorFor }) {
   return (
     <div className="pr-chips">
       {options.map((o) => (
-        <span key={o} className={`cal-chip ${value === o ? 'on' : ''}`}
+        // colorFor : texte a la couleur de la region (meme source que l'admin et la liste).
+        <span key={o} className={`cal-chip ${value === o ? 'on' : ''}`} aria-pressed={value === o}
+          style={colorFor?.(o) ? { color: colorFor(o) } : undefined}
           onClick={() => onChange(value === o && allowNone ? '' : o)}>{o}</span>
       ))}
     </div>
@@ -63,7 +66,8 @@ function RateCard({ r, index, typeKey, onChange, onRemove }) {
       </div>
       <div className="mf">
         <label>Title — 2 (Region)</label>
-        <Chips options={RATE_TITLES_2} value={r.title2} onChange={(title2) => set({ title2 })} allowNone />
+        <Chips options={RATE_TITLES_2} value={r.title2} onChange={(title2) => set({ title2 })} allowNone
+          colorFor={(o) => regionByEn(o)?.color} />
       </div>
       <div className="mf">
         <label>Sub-title (optional)</label>

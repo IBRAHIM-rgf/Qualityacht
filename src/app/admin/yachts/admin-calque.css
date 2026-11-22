@@ -388,3 +388,16 @@
 @keyframes qa-blink{0%,100%{opacity:1}50%{opacity:.2}}
 .qa-admin .yname .blink{color:#FF8C1A;animation:qa-blink 1s ease-in-out infinite}
 @media (prefers-reduced-motion: reduce){.qa-admin .yname .blink{animation:none;text-decoration:underline wavy #FF8C1A}}
+
+/* Indicateurs de regions (client 2026-11-22) : dans la cellule de la fleche, sans
+   changer sa largeur (20px) ni la hauteur de la ligne. */
+.qa-admin .chev .rg-none{outline-offset:2px}
+.qa-admin .chev .rg-marks{display:flex;flex-direction:column;align-items:center;justify-content:center;width:20px;max-height:36px;overflow:visible}
+.qa-admin .chev .rg-marks.sq{flex-direction:row;flex-wrap:wrap;gap:1px;align-content:center;justify-content:flex-start}
+.qa-admin .chev .rg-mk{position:relative;display:block;font-size:8px;line-height:9px;height:9px;outline-offset:1px}
+.qa-admin .chev .rg-mk b{display:block;font-weight:400;transition:transform .2s}
+.qa-admin .chev .rg-marks.open .rg-mk b{transform:rotate(90deg)}
+.qa-admin .chev .rg-marks.sq .rg-mk{width:4px;height:4px;line-height:0}
+.qa-admin .chev .rg-marks.sq .rg-mk i{display:block;width:4px;height:4px;border-radius:1px}
+.qa-admin .chev .rg-mk:focus-visible{outline:1px solid currentColor}
+.qa-admin .chev .rg-mk[data-tip]:hover::after,.qa-admin .chev .rg-mk[data-tip]:focus-visible::after{content:attr(data-tip);position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);z-index:50;white-space:nowrap;background:#111318;color:currentColor;border:1px solid currentColor;border-radius:6px;padding:3px 8px;font-size:11px;line-height:1.3;font-weight:600;pointer-events:none}
