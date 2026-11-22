@@ -46,7 +46,7 @@ export default function AntarcticaPage() {
           </Link>
         </div>
       </VideoHero>
-      {/* Eclat (cartes flottantes), comme North America : juste sous le hero (client 2026-11-22). */}
+      {/* Eclat (cartes flottantes), comme North America : juste sous le hero (client 2026-11-22, publie). */}
       <AntarcticaEclat />
       {/* Cases Antarctica / Argentina / Chile (client 2026-11-17), comme Indian Ocean. */}
       <AntarcticaRegionCards />
