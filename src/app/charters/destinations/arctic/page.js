@@ -9,6 +9,7 @@ import ArcticRegions from './ArcticRegions';
 import ArcticRegionCards from './ArcticRegionCards';
 import BahamasPopularDestinations from '../bahamas/BahamasPopularDestinations';
 import ArcticCta from './ArcticCta';
+import ArcticEclat from './ArcticEclat';
 
 const HERO = '/media/client/2026-11-18/arctic-hero';
 
@@ -56,6 +57,8 @@ export default function Page() {
           </div>
         </VideoHero>
       </div>
+      {/* Eclat (cartes flottantes), comme Antarctica : juste sous le hero (client 2026-11-24). */}
+      <ArcticEclat />
       {/* Cases Arctic (client 2026-11-19), comme Indian Ocean. */}
       <ArcticRegionCards />
       <ArcticRegions />
