@@ -144,6 +144,34 @@ const SUB_REGION_LABELS = {
   'taiwan-penghu': 'Taiwan — Penghu',
   'taiwan-south-coast': 'Taiwan — South Coast',
   'china-hainan': 'China — Hainan',
+  // Pacific Ocean (client 2026-11-24) : les 27 groupes du client.
+  'french-polynesia-society-islands': 'French Polynesia — Society Islands',
+  'french-polynesia-tuamotu': 'French Polynesia — Tuamotu Islands',
+  'french-polynesia-marquesas': 'French Polynesia — Marquesas Islands',
+  'french-polynesia-austral': 'French Polynesia — Austral Islands',
+  'fiji-mamanuca': 'Fiji — Mamanuca Islands',
+  'fiji-yasawa': 'Fiji — Yasawa Islands',
+  'fiji-main-islands-lau': 'Fiji — Main Islands & Lau Group',
+  'tonga': 'Tonga',
+  'cook-islands': 'Cook Islands',
+  'samoa': 'Samoa',
+  'new-caledonia-southern-lagoon': 'New Caledonia — Southern Lagoon',
+  'new-caledonia-loyalty-islands': 'New Caledonia — Loyalty Islands',
+  'vanuatu': 'Vanuatu',
+  'solomon-islands': 'Solomon Islands',
+  'papua-new-guinea': 'Papua New Guinea',
+  'palau': 'Palau',
+  'marshall-islands-expeditions': 'Marshall Islands — Special Expeditions',
+  'kiribati-expeditions': 'Kiribati — Special Expeditions',
+  'hawaii': 'Hawaii',
+  'australia-queensland': 'Australia — Queensland',
+  'australia-east-coast': 'Australia — East Coast',
+  'new-zealand': 'New Zealand',
+  'galapagos-ecuador': 'Galápagos — Ecuador',
+  'mexican-pacific': 'Mexican Pacific',
+  'us-pacific-coast': 'United States — Pacific Coast',
+  'canada-pacific-coast': 'Canada — Pacific Coast',
+  'alaska-pacific-coast': 'Alaska — Pacific Coast',
 };
 
 const SUB_REGIONS_BY_REGION = {
@@ -156,6 +184,7 @@ const SUB_REGIONS_BY_REGION = {
   antarctica: ['argentina', 'chile', 'antarctica-peninsula-region', 'falkland-islands', 'south-georgia-sandwich'],
   'central-america': ['belize', 'costa-rica-north-pacific', 'costa-rica-central-south-pacific', 'panama-caribbean', 'panama-pacific', 'honduras', 'guatemala', 'nicaragua', 'el-salvador', 'brazil-costa-verde', 'brazil-rio-coast', 'brazil-sao-paulo-coast', 'brazil-bahia', 'brazil-special-expeditions'],
   'east-asia': ['japan-seto-inland-sea', 'japan-tokyo-sagami-bay', 'japan-ise-shima', 'japan-kyushu-yakushima', 'japan-okinawa-kerama', 'japan-southern-ryukyu', 'hong-kong-harbour-south-coast', 'hong-kong-sai-kung-geopark', 'hong-kong-western-islands', 'south-korea-busan-south-coast', 'south-korea-jeju', 'taiwan-north-coast', 'taiwan-penghu', 'taiwan-south-coast', 'china-hainan'],
+  'pacific-ocean': ['french-polynesia-society-islands', 'french-polynesia-tuamotu', 'french-polynesia-marquesas', 'french-polynesia-austral', 'fiji-mamanuca', 'fiji-yasawa', 'fiji-main-islands-lau', 'tonga', 'cook-islands', 'samoa', 'new-caledonia-southern-lagoon', 'new-caledonia-loyalty-islands', 'vanuatu', 'solomon-islands', 'papua-new-guinea', 'palau', 'marshall-islands-expeditions', 'kiribati-expeditions', 'hawaii', 'australia-queensland', 'australia-east-coast', 'new-zealand', 'galapagos-ecuador', 'mexican-pacific', 'us-pacific-coast', 'canada-pacific-coast', 'alaska-pacific-coast'],
   arctic: ['greenland', 'svalbard', 'northern-norway', 'canadian-arctic', 'northwest-passage', 'arctic-alaska', 'iceland', 'jan-mayen', 'north-atlantic-extensions', 'russian-arctic', 'alaska-yacht-charter', 'canada-yacht-charter', 'arctic-canada-expedition', 'pacific-northwest-alaska-corridor'],
 };
 
