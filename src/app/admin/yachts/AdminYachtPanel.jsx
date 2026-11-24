@@ -128,6 +128,22 @@ const SUB_REGION_LABELS = {
   'brazil-sao-paulo-coast': 'Brazil — São Paulo Coast',
   'brazil-bahia': 'Brazil — Bahia',
   'brazil-special-expeditions': 'Brazil — Special Expeditions',
+  // East Asia (client 2026-11-24) : les 15 groupes de navigation du client.
+  'japan-seto-inland-sea': 'Japan — Seto Inland Sea',
+  'japan-tokyo-sagami-bay': 'Japan — Tokyo & Sagami Bay',
+  'japan-ise-shima': 'Japan — Ise-Shima',
+  'japan-kyushu-yakushima': 'Japan — Kyushu & Yakushima',
+  'japan-okinawa-kerama': 'Japan — Okinawa & Kerama',
+  'japan-southern-ryukyu': 'Japan — Southern Ryukyu Islands',
+  'hong-kong-harbour-south-coast': 'Hong Kong — Harbour & South Coast',
+  'hong-kong-sai-kung-geopark': 'Hong Kong — Sai Kung & Geopark',
+  'hong-kong-western-islands': 'Hong Kong — Western Islands',
+  'south-korea-busan-south-coast': 'South Korea — Busan & South Coast',
+  'south-korea-jeju': 'South Korea — Jeju',
+  'taiwan-north-coast': 'Taiwan — North Coast',
+  'taiwan-penghu': 'Taiwan — Penghu',
+  'taiwan-south-coast': 'Taiwan — South Coast',
+  'china-hainan': 'China — Hainan',
 };
 
 const SUB_REGIONS_BY_REGION = {
@@ -139,6 +155,7 @@ const SUB_REGIONS_BY_REGION = {
   'indian-ocean': ['maldives', 'seychelles', 'mascarene-islands', 'madagascar', 'mozambique', 'tanzania-east-africa', 'sri-lanka', 'arabian-sea-gulf-of-oman'],
   antarctica: ['argentina', 'chile', 'antarctica-peninsula-region', 'falkland-islands', 'south-georgia-sandwich'],
   'central-america': ['belize', 'costa-rica-north-pacific', 'costa-rica-central-south-pacific', 'panama-caribbean', 'panama-pacific', 'honduras', 'guatemala', 'nicaragua', 'el-salvador', 'brazil-costa-verde', 'brazil-rio-coast', 'brazil-sao-paulo-coast', 'brazil-bahia', 'brazil-special-expeditions'],
+  'east-asia': ['japan-seto-inland-sea', 'japan-tokyo-sagami-bay', 'japan-ise-shima', 'japan-kyushu-yakushima', 'japan-okinawa-kerama', 'japan-southern-ryukyu', 'hong-kong-harbour-south-coast', 'hong-kong-sai-kung-geopark', 'hong-kong-western-islands', 'south-korea-busan-south-coast', 'south-korea-jeju', 'taiwan-north-coast', 'taiwan-penghu', 'taiwan-south-coast', 'china-hainan'],
   arctic: ['greenland', 'svalbard', 'northern-norway', 'canadian-arctic', 'northwest-passage', 'arctic-alaska', 'iceland', 'jan-mayen', 'north-atlantic-extensions', 'russian-arctic', 'alaska-yacht-charter', 'canada-yacht-charter', 'arctic-canada-expedition', 'pacific-northwest-alaska-corridor'],
 };
 
