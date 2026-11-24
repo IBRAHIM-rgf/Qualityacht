@@ -172,6 +172,21 @@ const SUB_REGION_LABELS = {
   'us-pacific-coast': 'United States — Pacific Coast',
   'canada-pacific-coast': 'Canada — Pacific Coast',
   'alaska-pacific-coast': 'Alaska — Pacific Coast',
+  // Golfe d'Oman (client 2026-11-24) : les 14 groupes du client.
+  'oman-muscat-coastal-bays': 'Oman — Muscat & Coastal Bays',
+  'oman-daymaniyat-islands': 'Oman — Daymaniyat Islands',
+  'oman-musandam': 'Oman — Musandam',
+  'oman-sur-eastern-coast': 'Oman — Sur & Eastern Coast',
+  'oman-dhofar-southern-coast': 'Oman — Dhofar & Southern Coast',
+  'uae-dubai': 'UAE — Dubai',
+  'uae-abu-dhabi': 'UAE — Abu Dhabi',
+  'uae-al-dhafra': 'UAE — Al Dhafra',
+  'uae-ras-al-khaimah': 'UAE — Ras Al Khaimah',
+  'uae-gulf-of-oman': 'UAE — Gulf of Oman',
+  'qatar': 'Qatar',
+  'bahrain': 'Bahrain',
+  'kuwait': 'Kuwait',
+  'saudi-arabia-gulf-coast': 'Saudi Arabia — Gulf Coast',
 };
 
 const SUB_REGIONS_BY_REGION = {
@@ -185,6 +200,7 @@ const SUB_REGIONS_BY_REGION = {
   'central-america': ['belize', 'costa-rica-north-pacific', 'costa-rica-central-south-pacific', 'panama-caribbean', 'panama-pacific', 'honduras', 'guatemala', 'nicaragua', 'el-salvador', 'brazil-costa-verde', 'brazil-rio-coast', 'brazil-sao-paulo-coast', 'brazil-bahia', 'brazil-special-expeditions'],
   'east-asia': ['japan-seto-inland-sea', 'japan-tokyo-sagami-bay', 'japan-ise-shima', 'japan-kyushu-yakushima', 'japan-okinawa-kerama', 'japan-southern-ryukyu', 'hong-kong-harbour-south-coast', 'hong-kong-sai-kung-geopark', 'hong-kong-western-islands', 'south-korea-busan-south-coast', 'south-korea-jeju', 'taiwan-north-coast', 'taiwan-penghu', 'taiwan-south-coast', 'china-hainan'],
   'pacific-ocean': ['french-polynesia-society-islands', 'french-polynesia-tuamotu', 'french-polynesia-marquesas', 'french-polynesia-austral', 'fiji-mamanuca', 'fiji-yasawa', 'fiji-main-islands-lau', 'tonga', 'cook-islands', 'samoa', 'new-caledonia-southern-lagoon', 'new-caledonia-loyalty-islands', 'vanuatu', 'solomon-islands', 'papua-new-guinea', 'palau', 'marshall-islands-expeditions', 'kiribati-expeditions', 'hawaii', 'australia-queensland', 'australia-east-coast', 'new-zealand', 'galapagos-ecuador', 'mexican-pacific', 'us-pacific-coast', 'canada-pacific-coast', 'alaska-pacific-coast'],
+  'arabian-gulf': ['oman-muscat-coastal-bays', 'oman-daymaniyat-islands', 'oman-musandam', 'oman-sur-eastern-coast', 'oman-dhofar-southern-coast', 'uae-dubai', 'uae-abu-dhabi', 'uae-al-dhafra', 'uae-ras-al-khaimah', 'uae-gulf-of-oman', 'qatar', 'bahrain', 'kuwait', 'saudi-arabia-gulf-coast'],
   arctic: ['greenland', 'svalbard', 'northern-norway', 'canadian-arctic', 'northwest-passage', 'arctic-alaska', 'iceland', 'jan-mayen', 'north-atlantic-extensions', 'russian-arctic', 'alaska-yacht-charter', 'canada-yacht-charter', 'arctic-canada-expedition', 'pacific-northwest-alaska-corridor'],
 };
 
