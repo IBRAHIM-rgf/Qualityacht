@@ -113,6 +113,21 @@ const SUB_REGION_LABELS = {
   'chile': 'Chile',
   'falkland-islands': 'Falkland Islands',
   'south-georgia-sandwich': 'South Georgia & the South Sandwich Islands',
+  // Central America (client 2026-11-24) : les 14 groupes de « Destinations by Region ».
+  'belize': 'Belize',
+  'costa-rica-north-pacific': 'Costa Rica — North Pacific',
+  'costa-rica-central-south-pacific': 'Costa Rica — Central & South Pacific',
+  'panama-caribbean': 'Panama — Caribbean',
+  'panama-pacific': 'Panama — Pacific',
+  'honduras': 'Honduras',
+  'guatemala': 'Guatemala',
+  'nicaragua': 'Nicaragua',
+  'el-salvador': 'El Salvador',
+  'brazil-costa-verde': 'Brazil — Costa Verde',
+  'brazil-rio-coast': 'Brazil — Rio de Janeiro Coast',
+  'brazil-sao-paulo-coast': 'Brazil — São Paulo Coast',
+  'brazil-bahia': 'Brazil — Bahia',
+  'brazil-special-expeditions': 'Brazil — Special Expeditions',
 };
 
 const SUB_REGIONS_BY_REGION = {
@@ -123,6 +138,7 @@ const SUB_REGIONS_BY_REGION = {
   'east-mediterranean': ['black-sea', 'croatia', 'cyprus', 'italy-east-coast', 'greece', 'crete', 'malta', 'montenegro', 'turkey', 'egypt', 'east-tunisia'],
   'indian-ocean': ['maldives', 'seychelles', 'mascarene-islands', 'madagascar', 'mozambique', 'tanzania-east-africa', 'sri-lanka', 'arabian-sea-gulf-of-oman'],
   antarctica: ['argentina', 'chile', 'antarctica-peninsula-region', 'falkland-islands', 'south-georgia-sandwich'],
+  'central-america': ['belize', 'costa-rica-north-pacific', 'costa-rica-central-south-pacific', 'panama-caribbean', 'panama-pacific', 'honduras', 'guatemala', 'nicaragua', 'el-salvador', 'brazil-costa-verde', 'brazil-rio-coast', 'brazil-sao-paulo-coast', 'brazil-bahia', 'brazil-special-expeditions'],
   arctic: ['greenland', 'svalbard', 'northern-norway', 'canadian-arctic', 'northwest-passage', 'arctic-alaska', 'iceland', 'jan-mayen', 'north-atlantic-extensions', 'russian-arctic', 'alaska-yacht-charter', 'canada-yacht-charter', 'arctic-canada-expedition', 'pacific-northwest-alaska-corridor'],
 };
 
