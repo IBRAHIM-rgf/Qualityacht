@@ -25,6 +25,9 @@ const DESTINATIONS = [
   { value: 'bahamas', label: 'Bahamas' },
   // North America (client 2026-11-02).
   { value: 'north-america', label: 'North America' },
+  // Antarctica et Arctic (client 2026-11-25).
+  { value: 'antarctica', label: 'Antarctica' },
+  { value: 'arctic', label: 'Arctic' },
 ];
 
 const GUESTS = [
