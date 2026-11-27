@@ -25,6 +25,8 @@ const REGIONS = [
   { name: 'West Coast United States', subs: [
     ['California', [['Newport Beach', 33.62, -117.93], ['San Francisco', 37.77, -122.42]]],
     ['Pacific Northwest', [['Seattle', 47.61, -122.33]]],
+    // Washington State (client 2026-11-27) : titre a part sous Pacific Northwest.
+    ['Washington State', [['Washington State', 47.75, -122.45]]],
   ] },
   { name: 'Canada', subs: [
     ['British Columbia', [['Victoria', 48.43, -123.37], ['Desolation Sound', 50.1, -124.75]]],
