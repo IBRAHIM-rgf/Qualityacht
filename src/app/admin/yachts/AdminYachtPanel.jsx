@@ -51,6 +51,7 @@ const SUB_REGION_LABELS = {
   // Amerique du Nord (client 2026-10-15) : cases de la page North America.
   'east-coast-us': 'East Coast United States',
   'west-coast-us': 'West Coast United States',
+  'washington-state': 'Washington State',
   'canada': 'Canada',
   'miami': 'Miami',
   'mexico': 'Mexico',
@@ -192,7 +193,7 @@ const SUB_REGION_LABELS = {
 const SUB_REGIONS_BY_REGION = {
   caribbean: ['greater-antilles', 'leeward-islands', 'windward-islands', 'leeward-antilles', 'turks-caicos', 'trinidad-tobago', 'bvi', 'grand-cayman', 'emerging-destinations'],
   bahamas: ['nassau', 'grand-bahama', 'exumas', 'abacos', 'eleuthera', 'andros', 'bimini-berry', 'out-islands'],
-  'north-america': ['east-coast-us', 'west-coast-us', 'canada', 'miami', 'mexico'],
+  'north-america': ['east-coast-us', 'west-coast-us', 'washington-state', 'canada', 'miami', 'mexico'],
   'west-mediterranean': ['french-riviera-monaco', 'south-of-france', 'corsica', 'sardinia', 'balearic-islands', 'spain-mainland', 'italian-riviera-liguria', 'tuscany', 'lazio', 'campania', 'amalfi-coast', 'sicily-islands', 'gibraltar', 'morocco', 'tunisia'],
   'east-mediterranean': ['black-sea', 'croatia', 'cyprus', 'italy-east-coast', 'greece', 'crete', 'malta', 'montenegro', 'turkey', 'egypt', 'east-tunisia'],
   'indian-ocean': ['maldives', 'seychelles', 'mascarene-islands', 'madagascar', 'mozambique', 'tanzania-east-africa', 'sri-lanka', 'arabian-sea-gulf-of-oman'],
